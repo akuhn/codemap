@@ -13,7 +13,6 @@ public class CacheMapTest {
 	@Test
 	public void example() {
 		Map<Integer,String> map = new CacheMap<Integer,String>() {
-			@Override
 			public String initialize(Integer key) {
 				return key.toString();
 			}
