@@ -11,10 +11,86 @@ import org.junit.Test;
 public class StringsTest {
 
 	@Test
+	public void testWords() {
+		String abc = "aaa aaa  aaa   aaa";
+		int index = 0; 
+		for (CharSequence line : words(abc)) {
+			assertEquals("aaa", line.toString());
+			index++;
+		}
+		assertEquals(4, index);
+	}
+	
+	@Test
+	public void testWords2() {
+		String abc = " aaa aaa aaa ";
+		int index = 0; 
+		for (CharSequence line : words(abc)) {
+			assertEquals("aaa", line.toString());
+			index++;
+		}
+		assertEquals(3, index);
+	}	
+	
+	@Test
+	public void testWords3() {
+		String abc = "    ";
+		assertFalse(words(abc).iterator().hasNext());
+	}	
+	
+	@Test
+	public void testWords4() {
+		String abc = "";
+		assertFalse(words(abc).iterator().hasNext());
+	}	
+
+	@Test
+	public void testLines() {
+		String abc = "aaa\naaa\naaa\naaa";
+		int index = 0; 
+		for (String line : lines(abc)) {
+			assertEquals("aaa", line);
+			index++;
+		}
+		assertEquals(4, index);
+	}
+	
+	@Test
+	public void testLines2() {
+		String abc = "aaa\naaa\naaa\n";
+		int index = 0; 
+		for (String line : lines(abc)) {
+			assertEquals("aaa", line);
+			index++;
+		}
+		assertEquals(3, index);
+	}
+	
+	@Test
+	public void testLines3() {
+		String abc = "\n\n\n";
+		int index = 0; 
+		for (String line : lines(abc)) {
+			assertEquals("", line);
+			index++;
+		}
+		assertEquals(3, index);
+	}
+	@Test
+	public void testLines4() {
+		String abc = "";
+		assertFalse(lines(abc).iterator().hasNext());
+	}
+
+	
+	
+	
+	
+	@Test
 	public void testForEach() {
 		String abc = "abcdef";
 		int index = 0; 
-		for (Character each : forEach(abc)) {
+		for (Character each : chars(abc)) {
 			assertEquals(abc.charAt(index++), each);
 		}
 		assertEquals(index, abc.length());
