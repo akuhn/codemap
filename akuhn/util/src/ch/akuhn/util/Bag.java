@@ -11,7 +11,7 @@ public class Bag<T> extends AbstractCollection<T> {
 		private int sum;
 
 		public Sum() {
-			this.sum = 1;
+			this.sum = 0;
 		}
 		
 		public int intValue() {
@@ -22,16 +22,28 @@ public class Bag<T> extends AbstractCollection<T> {
 			sum++;
 		}
 		
+		public void inc(int summand) {
+			sum += summand;
+		}
 	}
 	
 	@Override
 	public boolean add(T e) {
 		Sum sum = values.get(e);
 		if (sum == null) {
-			values.put(e, new Sum());
-		} else {
-			sum.inc();
-		}
+			values.put(e, sum = new Sum());
+		} 
+		sum.inc();
+		return true;
+	}
+	
+	public boolean add(T e, int occurrences) {
+		assert occurrences >= 0;
+		Sum sum = values.get(e);
+		if (sum == null) {
+			values.put(e, sum = new Sum());
+		} 
+		sum.inc(occurrences);
 		return true;
 	}
 
@@ -43,6 +55,11 @@ public class Bag<T> extends AbstractCollection<T> {
 	@Override
 	public boolean contains(Object o) {
 		return values.containsKey(o);
+	}
+	
+	public int occurrences(Object o) {
+		Sum sum = values.get(o);
+		return sum == null ? 0 : sum.intValue();
 	}
 
 	@Override
