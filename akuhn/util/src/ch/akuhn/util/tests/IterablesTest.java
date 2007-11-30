@@ -1,6 +1,6 @@
 package ch.akuhn.util.tests;
 
-import static ch.akuhn.util.Collections.select;
+import static ch.akuhn.util.Iterables.select;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import ch.akuhn.util.Predicate;
 
-public class CollectionsTest {
+public class IterablesTest {
 
 	@Test
 	public void testSelect() {
