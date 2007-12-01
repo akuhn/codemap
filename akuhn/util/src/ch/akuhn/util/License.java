@@ -1,28 +1,27 @@
-//  Copyright (c) 2007 Adrian Kuhn <akuhn(a)iam.unibe.ch>
-//
+//  Copyright (c) 1998-2007 Adrian Kuhn <akuhn(a)iam.unibe.ch>
+//  
 //  This file is part of "Adrian Kuhn's Utilities for Java".
-//
-//  "Adrian Kuhn's Utilities for Java" is free software: you can redistribute it
-//  and/or modify it under the terms of the GNU Lesser General Public License as
-//  published by the Free Software Foundation, either version 3 of the License,
-//  or (at your option) any later version.
-//
-//  "Adrian Kuhn's Utilities for Java" is distributed in the hope that it will be
-//  useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  
+//  "Adrian Kuhn's Utilities for Java" is free software: you can redistribute
+//  it and/or modify it under the terms of the GNU Lesser General Public License
+//  as published by the Free Software Foundation, either version 3 of the
+//  License, or (at your option) any later version.
+//  
+//  "Adrian Kuhn's Utilities for Java" is distributed in the hope that it will
+//  be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
 //  General Public License for more details.
-//
-//  You should have received a copy of the GNU Lesser General Public License along
-//  with "Adrian Kuhn's Utilities for Java". If not, see
+//  
+//  You should have received a copy of the GNU Lesser General Public License
+//  along with "Adrian Kuhn's Utilities for Java". If not, see
 //  <http://www.gnu.org/licenses/>.
-//
+//  
 
 package ch.akuhn.util;
 
 import static ch.akuhn.util.Files.endsWith;
 import static ch.akuhn.util.Files.files;
-import static ch.akuhn.util.Strings.lines;
-import static ch.akuhn.util.Strings.words;
+import static ch.akuhn.util.Strings.*;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -40,52 +39,55 @@ import java.util.List;
 
 public class License {
 
-	private final static String LGPL = "Copyright (c) 2007 Adrian Kuhn <akuhn(a)iam.unibe.ch>\n"
+	private final static String LGPL = "Copyright (c) %4$s %2$s <%3$s>\n"
 			+ "This file is part of %1$s.\n"
-			+ "%1$s is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n"
-			+ "%1$s is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.\n"
-			+ "You should have received a copy of the GNU Lesser General Public License along with %1$s.  If not, see <http://www.gnu.org/licenses/>.\n";
+			+ "%1$s is free software: you can redistribute it and/or modify it under the terms of the GNU %5$s General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n"
+			+ "%1$s is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU %5$s General Public License for more details.\n"
+			+ "You should have received a copy of the GNU %5$s General Public License along with %1$s.  If not, see <http://www.gnu.org/licenses/>.\n";
 
-	private static String breakAt76(String paragraph) {
-		StringBuilder builder = new StringBuilder();
-		int length = 0;
-		int breakAt = 80;
-		builder.append("// ");
-		for (String word : words(paragraph)) {
-			int newLength = length + 1 + word.length();
-			if (newLength > breakAt) {
-				builder.append("\n// ");
-				newLength = 4 + word.length();
-			}
-			builder.append(' ');
-			builder.append(word);
-			length = newLength;
-		}
-		return builder.toString();
-	}
+	public String appName;
+	public String author;
+	public String email;
+	public String year;
+	public boolean isLesser;
 
-	private static String getLGPL() {
+	private String getLGPL() {
 		StringBuilder builder;
+		String license;
 		// do the printf dance
 		builder = new StringBuilder();
 		Formatter formatter = new Formatter(builder);
-		formatter.format(LGPL, "\"Adrian Kuhn's Utilities for Java\"");
-		String license = builder.toString();
+		formatter.format(LGPL, appName, author, email, year, isLesser ? "Lesser" : "");
+		license = builder.toString();
 		// introduce line breaks
 		builder = new StringBuilder();
 		for (String line : lines(license)) {
-			builder.append(breakAt76(line));
-			builder.append("\n//\n");
+			builder.append(reformatParagraph(line));
+			builder.append("\n\n");
+		}
+		license = builder.toString();
+		// prepend // to each line
+		builder = new StringBuilder();
+		for (String line : lines(license)) {
+			builder.append("//  ");
+			builder.append(line);
+			builder.append('\n');
 		}
 		return builder.toString();
 	}
 
 	public static void main(String... strings) {
 		File root = new File("src");
-		process(root);
+		License gpl = new License();
+		gpl.appName = "\"Adrian Kuhn's Utilities for Java\"";
+		gpl.author = "Adrian Kuhn";
+		gpl.email = "akuhn(a)iam.unibe.ch";
+		gpl.year = "1998-2007";
+		gpl.isLesser = true;
+		gpl.process(root);
 	}
 
-	public static void process(File folder) {
+	public void process(File folder) {
 		for (File each : files(folder, endsWith(".java"))) {
 			List<String> lines = readLines(each);
 			updateLicense(lines);
@@ -93,7 +95,7 @@ public class License {
 		}
 	}
 
-	private static List<String> readLines(File each) {
+	private List<String> readLines(File each) {
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					new FileInputStream(each)));
@@ -110,10 +112,10 @@ public class License {
 		}
 	}
 
-	private static void updateLicense(List<String> lines) {
+	private void updateLicense(List<String> lines) {
 		for (Iterator<String> iterator = lines.iterator(); iterator.hasNext();) {
 			String line = iterator.next();
-			if (line.isEmpty() || line.startsWith("//")) {
+			if (line.isEmpty() || !line.startsWith("package")) {
 				iterator.remove();
 			} else {
 				break;
@@ -122,7 +124,7 @@ public class License {
 		lines.add(0, getLGPL());
 	}
 
-	private static void writeLines(File each, Collection<String> lines) {
+	private void writeLines(File each, Collection<String> lines) {
 		try {
 			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(each)));
