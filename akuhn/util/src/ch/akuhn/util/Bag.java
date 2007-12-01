@@ -23,7 +23,12 @@ import java.util.AbstractCollection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
+import java.util.Collections;
+import java.util.Set;
+/**
+ * A collection that contains unordered, duplicate elements.
+ * 
+ */
 public class Bag<T> extends AbstractCollection<T> {
 
 	private class Itr implements Iterator<T> {
@@ -55,7 +60,7 @@ public class Bag<T> extends AbstractCollection<T> {
 		private void prefetch() {
 			if (iter.hasNext()) {
 				curr = iter.next();
-				count = values.get(curr).intValue();
+				count = values.get(curr).value;
 			} else {
 				curr = null;
 			}
@@ -68,86 +73,196 @@ public class Bag<T> extends AbstractCollection<T> {
 
 	}
 
-	private static class Sum {
+	private static class Int {
 
-		private int sum;
+		public int value;
 
-		public Sum() {
-			this.sum = 0;
-		}
-
-		public void inc() {
-			sum++;
-		}
-
-		public void inc(int summand) {
-			sum += summand;
-		}
-
-		public int intValue() {
-			return sum;
-		}
 	}
 
-	private Map<T, Sum> values = new HashMap<T, Sum>();
+	private Map<T, Int> values = new HashMap<T, Int>();
 
+	/** Adds the specified element to this bag. <p>If, as a result of this call, the occurrences of the specified element exceed <tt>Integer.MAX_VALUE</tt>, 
+	 * the number of occurrences is set to <tt>Integer.MAX_VALUE</tt>.
+	 * 
+	 * @param e the element to be added to this bag.
+	 * @return <tt>true</tt> if the bag changes as a result of this call
+	 */
 	@Override
 	public boolean add(T e) {
-		Sum sum = values.get(e);
-		if (sum == null) {
-			values.put(e, sum = new Sum());
+		Int i = values.get(e);
+		if (i == null) {
+			values.put(e, i = new Int());
 		}
-		sum.inc();
+		if (i.value == Integer.MAX_VALUE) return false;
+		i.value++;
 		return true;
 	}
 
-	public boolean add(T e, int occurrences) {
-		assert occurrences >= 0;
-		Sum sum = values.get(e);
-		if (sum == null) {
-			values.put(e, sum = new Sum());
+	/** Adds <tt>n</tt> occurrences of the specified element to this bag.
+	 * <p>If, as a result of this call, the occurrences of the specified element exceed <tt>Integer.MAX_VALUE</tt>, 
+	 * the number of occurrences is set to <tt>Integer.MAX_VALUE</tt>.
+	 * 
+	 * @param e the element to be added <tt>n</tt> times to this bag.
+	 * @param n the number of times element <tt>e</tt> is to be added.
+	 * @return <tt>true</tt> if the bag changes as a result of this call
+	 */
+	public boolean add(T e, int n) {
+		if (n < 0) throw new IllegalArgumentException();
+		if (n == 0) return false;
+		Int i = values.get(e);
+		if (i == null) {
+			values.put(e, i = new Int());
 		}
-		sum.inc(occurrences);
+		if (i.value == Integer.MAX_VALUE) return false;
+		if (i.value > Integer.MAX_VALUE - n) {
+			i.value = Integer.MAX_VALUE;
+		} else {
+			i.value += n;
+		}
 		return true;
 	}
 
+	  /**
+     * Removes all of the elements from this bag.
+     * The bag will be empty after this method returns. */
 	@Override
 	public void clear() {
 		values.clear();
 	}
 
+	/** Returns <tt>true</tt> if this bag contains the specified element.
+    *
+    * @param o element whose presence in this collection is to be tested
+    * @return <tt>true</tt> if this bag contains the specified
+    *         element	
+    */         
 	@Override
 	public boolean contains(Object o) {
 		return values.containsKey(o);
 	}
 
+	/**
+     * Returns <tt>true</tt> if this bag contains no elements.
+     *
+     * @return <tt>true</tt> if this bag contains no elements
+     */
 	@Override
 	public boolean isEmpty() {
 		return values.isEmpty();
 	}
 
+	/**
+     * Returns an iterator over the elements in this collection.  There are no
+     * guarantees concerning the order in which the elements are returned.
+     *
+     * @return an <tt>Iterator</tt> over the elements in this collection
+     */
 	@Override
 	public Iterator<T> iterator() {
 		return new Itr();
 	}
+	
+	/** Return a <tt>Set</tt> view of the elements contained in this bag. The set is backed by the bag,
+	 * so changes to the bag are reflected in the set, but <i>not</i> vice-versa. 
+	 * 
+	 * @return an unmodifiable set view of the elements contained in this bag.
+	 */
+	public Set<T> elementSet() {
+		return Collections.unmodifiableSet(values.keySet());
+	}
+	
 
+	/** Returns the number of occurrences of the specified element in this bag.
+	 * 
+	 * @param o element whose occurrence in this bag is to be queried.
+	 * @return the number of occurrences of the specified element, otherwise <tt>0</tt>.
+	 */
 	public int occurrences(Object o) {
-		Sum sum = values.get(o);
-		return sum == null ? 0 : sum.intValue();
+		Int sum = values.get(o);
+		return sum == null ? 0 : sum.value;
+	}
+	
+	/** Returns the maximum number of occurrences of any element in this bag.
+	 * 
+	 * @return the maximum number of occurrences of any element, or <tt>0</tt> if this bag is empty.
+	 */
+	public int maxOccurrences() {
+		int max = 0;
+		for (Int each : values.values()) {
+			max = Math.max(max, each.value);
+		}
+		return max;
+	}
+	
+	/** Returns the element with most occurrences in this bag. There are no guarantees concerning the returned element, if there is more than one element
+     * that has the same number of most occurrences.
+     * 
+     * @return any of the elements with most occurrences, or <tt>null</tt> if the bag is empty.
+     */
+	public T mostOccurring() {
+		int max = 0;
+		T most = null;
+		for (Map.Entry<T, Int> each : values.entrySet()) {
+			if (max < (max = Math.max(max, each.getValue().value))) {
+				most = each.getKey();
+			}
+		}
+		return most;
 	}
 
+	/**
+     * Removes a single instance of the specified element from this
+     * bag, if it is present.
+     *
+     * @param o element to be removed from this bag, if present.
+     * @return <tt>true</tt> if an element was removed as a result of this call.
+	 */
 	@Override
 	public boolean remove(Object o) {
-		throw new UnsupportedOperationException();
+		Int i = values.get(o);
+		if (i == null) return false;
+		i.value--;
+		if (i.value == 0) {
+			values.remove(o);
+		}
+		return true;
+	}
+	
+	/**
+     * Removes all occurrences of the specified element from this
+     * bag.
+     *
+     * @param o elements to be removed from this bag, if present.
+     * @return <tt>true</tt> if elements were removed as a result of this call.
+	 */
+	public boolean removeEach(Object o) {
+		Int i = values.get(o);
+		if (i == null) return false;
+		values.remove(o);
+		return true;
 	}
 
-	@Override
+	/** Returns the number of elements in this bag. If this bag
+     * contains more than <tt>Integer.MAX_VALUE</tt> elements, returns
+     * <tt>Integer.MAX_VALUE</tt>.
+	 * 
+	 * @return the number of elements in this bag.
+	 */
 	public int size() {
 		int size = 0;
-		for (Sum sum : values.values()) {
-			size += sum.intValue();
+		for (Int i : values.values()) {
+			if (size > Integer.MAX_VALUE - i.value) return Integer.MAX_VALUE;
+			size += i.value;
 		}
 		return size;
 	}
 
+	/** Returns the number of unique elements in this bag.
+	 * 
+	 * @return the number of unique elements in this bag.
+	 */
+	public int elementSize() {
+		return values.size();
+	}
+	
 }

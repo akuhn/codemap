@@ -98,7 +98,84 @@ public class BagTest {
 		}
 		assertEquals(4, count);
 	}
+	
+	@Test
+	public void testAddOverflow() {
+		Bag<String> bag = new Bag<String>();
+		boolean changed =bag.add("A", Integer.MAX_VALUE - 2);
+		assertEquals(Integer.MAX_VALUE - 2, bag.occurrences("A"));
+		assertEquals(Integer.MAX_VALUE - 2, bag.size());
+		changed = bag.add("A");
+		assertEquals(true, changed);
+		assertEquals(Integer.MAX_VALUE - 1, bag.occurrences("A"));
+		assertEquals(Integer.MAX_VALUE - 1, bag.size());
+		changed = bag.add("A");
+		assertEquals(true, changed);
+		assertEquals(Integer.MAX_VALUE, bag.occurrences("A"));
+		assertEquals(Integer.MAX_VALUE, bag.size());
+		changed = bag.add("A");
+		assertEquals(false, changed);
+		assertEquals(Integer.MAX_VALUE, bag.occurrences("A"));
+		assertEquals(Integer.MAX_VALUE, bag.size());
+	}
 
+	@Test
+	public void testAddOccurrencesOverflow() {
+		Bag<String> bag = new Bag<String>();
+		boolean changed =bag.add("A", Integer.MAX_VALUE - 200);
+		assertEquals(Integer.MAX_VALUE - 200, bag.occurrences("A"));
+		assertEquals(Integer.MAX_VALUE - 200, bag.size());
+		changed = bag.add("A", 100);
+		assertEquals(true, changed);
+		assertEquals(Integer.MAX_VALUE - 100, bag.occurrences("A"));
+		assertEquals(Integer.MAX_VALUE - 100, bag.size());
+		changed = bag.add("A", 100);
+		assertEquals(true, changed);
+		assertEquals(Integer.MAX_VALUE, bag.occurrences("A"));
+		assertEquals(Integer.MAX_VALUE, bag.size());
+		changed = bag.add("A", 100);
+		assertEquals(false, changed);
+		assertEquals(Integer.MAX_VALUE, bag.occurrences("A"));
+		assertEquals(Integer.MAX_VALUE, bag.size());
+	}
+	
+	@Test
+	public void testAddOccurrencesOverflow2() {
+		Bag<String> bag = new Bag<String>();
+		boolean changed =bag.add("A", Integer.MAX_VALUE - 150);
+		assertEquals(Integer.MAX_VALUE - 150, bag.occurrences("A"));
+		assertEquals(Integer.MAX_VALUE - 150, bag.size());
+		changed = bag.add("A", 100);
+		assertEquals(true, changed);
+		assertEquals(Integer.MAX_VALUE - 50, bag.occurrences("A"));
+		assertEquals(Integer.MAX_VALUE - 50, bag.size());
+		changed = bag.add("A", 100);
+		assertEquals(true, changed);
+		assertEquals(Integer.MAX_VALUE, bag.occurrences("A"));
+		assertEquals(Integer.MAX_VALUE, bag.size());
+		changed = bag.add("A", 100);
+		assertEquals(false, changed);
+		assertEquals(Integer.MAX_VALUE, bag.occurrences("A"));
+		assertEquals(Integer.MAX_VALUE, bag.size());
+	}
+
+	@Test
+	public void testAddOccurrencesOverflow3() {
+		Bag<String> bag = new Bag<String>();
+		boolean changed =bag.add("A", Integer.MAX_VALUE - 200);
+		assertEquals(Integer.MAX_VALUE - 200, bag.occurrences("A"));
+		assertEquals(Integer.MAX_VALUE - 200, bag.size());
+		changed = bag.add("A", Integer.MAX_VALUE - 200);
+		assertEquals(true, changed);
+		assertEquals(Integer.MAX_VALUE, bag.occurrences("A"));
+		assertEquals(Integer.MAX_VALUE, bag.size());
+		changed = bag.add("A", Integer.MAX_VALUE - 200);
+ 		assertEquals(false, changed);
+		assertEquals(Integer.MAX_VALUE, bag.occurrences("A"));
+		assertEquals(Integer.MAX_VALUE, bag.size());
+	}
+	
+	
 	@Test
 	public void testEmptyBag() {
 		Bag<String> bag = new Bag<String>();
