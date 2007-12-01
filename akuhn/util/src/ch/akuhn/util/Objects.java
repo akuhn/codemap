@@ -19,6 +19,10 @@
 
 package ch.akuhn.util;
 
+/** Static methods that operate on or return objects in general.
+ * 
+ *
+ */
 public abstract class Objects {
 
 	public static void out(Object object) {

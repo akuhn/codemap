@@ -26,6 +26,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+/** Static methods that operate on or return iterables, that is, collection.
+ * 
+ *
+ */
 public class Iterables {
 
 	public static <A> boolean allSatisfy(Iterable<A> coll, Predicate<A> block) {
@@ -102,17 +106,8 @@ public class Iterables {
 		return value;
 	}
 
-	private static <A> Predicate<A> not(final Predicate<A> block) {
-		return new Predicate<A>() {
-			@Override
-			public boolean is(A a) {
-				return !block.is(a);
-			}
-		};
-	}
-
 	public static <A> Collection<A> reject(Iterable<A> coll, Predicate<A> block) {
-		return select(coll, not(block));
+		return select(coll, Predicates.not(block));
 	}
 
 	public static <A> void remove(Iterable<A> coll, Predicate<A> block) {
@@ -126,7 +121,7 @@ public class Iterables {
 
 	public static <A> List<List<A>> runsFailing(Iterable<A> coll,
 			Predicate<A> block) {
-		return runsSatisfying(coll, not(block));
+		return runsSatisfying(coll, Predicates.not(block));
 	}
 
 	public static <A> List<List<A>> runsSatisfying(Iterable<A> coll,

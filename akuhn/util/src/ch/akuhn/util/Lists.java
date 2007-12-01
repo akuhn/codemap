@@ -21,6 +21,10 @@ package ch.akuhn.util;
 
 import java.util.List;
 
+/** Static methods that operate on or return lists.
+ * 
+ *
+ */
 public class Lists {
 
 	public static <A> int atFirst(List<A> list, Predicate<A> block) {

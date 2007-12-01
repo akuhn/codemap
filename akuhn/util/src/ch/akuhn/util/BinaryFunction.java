@@ -19,7 +19,15 @@
 
 package ch.akuhn.util;
 
-public interface BinaryFunction<T, A, B> {
+/**
+ * A block with two arguments and any return value.
+ * 
+ * @author akuhn
+ *
+ * @param <T> type of return value.
+ * @param <A> type of first parameter.
+ * @param <B> type of second parameter.
+ */public interface BinaryFunction<T, A, B> {
 
 	public T eval(A a, B b);
 

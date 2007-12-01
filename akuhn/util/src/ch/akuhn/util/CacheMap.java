@@ -21,6 +21,10 @@ package ch.akuhn.util;
 
 import java.util.HashMap;
 
+/**
+ * A map that knows how to initialize missing mapping.
+ * 
+ */
 public abstract class CacheMap<K, V> extends HashMap<K, V> {
 
 	public CacheMap() {

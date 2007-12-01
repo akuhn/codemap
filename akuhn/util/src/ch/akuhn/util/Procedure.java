@@ -19,6 +19,13 @@
 
 package ch.akuhn.util;
 
+/**
+ * A block with one argument and no return value.
+ * 
+ * @author akuhn
+ *
+ * @param <A> type of argument.
+ */
 public interface Procedure<A> {
 
 	public void run(A a);

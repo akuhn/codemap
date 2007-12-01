@@ -30,6 +30,10 @@ import java.nio.charset.CharsetDecoder;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/** Static methods that operate on or return strings.
+ * 
+ *
+ */
 public abstract class Strings {
 
 	public final static Iterable<CharSequence> camelCase(

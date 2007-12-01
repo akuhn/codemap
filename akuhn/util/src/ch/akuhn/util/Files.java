@@ -26,6 +26,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
+/** Static methods that operate on or return files.
+ * 
+ *
+ */
 public class Files {
 
 	public static FileFilter endsWith(final String suffix) {

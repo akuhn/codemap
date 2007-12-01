@@ -19,6 +19,12 @@
 
 package ch.akuhn.util;
 
+/**
+ * A block with one argument and any return value.
+ *
+ * @param <T> type of return value.
+ * @param <A> type of argument.
+ */
 public interface Function<T, A> {
 
 	public T eval(A a);
