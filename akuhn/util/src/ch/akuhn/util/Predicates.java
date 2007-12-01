@@ -13,6 +13,15 @@ public class Predicates {
 		};
 	}
 	
+	public static <A> Predicate<A> instanceOf(final Class<?> jazz) {
+		return new Predicate<A>() {
+			@Override
+			public boolean is(A a) {
+				return a == null || jazz.isAssignableFrom(a.getClass());
+			}
+		};
+	}
+
 	public static <A> Predicate<A> notNull() {
 		return new Predicate<A>() {
 			@Override
