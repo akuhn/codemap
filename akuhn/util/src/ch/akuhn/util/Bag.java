@@ -19,7 +19,6 @@
 
 package ch.akuhn.util;
 
-import java.util.AbstractCollection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -29,7 +28,7 @@ import java.util.Set;
  * A collection that contains unordered, duplicate elements.
  * 
  */
-public class Bag<T> extends AbstractCollection<T> {
+public class Bag<T> extends MAbstractCollection<T> {
 
 	private class Itr implements Iterator<T> {
 

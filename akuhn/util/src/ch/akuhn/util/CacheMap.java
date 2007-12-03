@@ -27,6 +27,15 @@ import java.util.HashMap;
  */
 public abstract class CacheMap<K, V> extends HashMap<K, V> {
 
+	public static <A,T> CacheMap<A, T> with(final Function<T, A> block) {
+		return new CacheMap<A, T>() {
+			@Override
+			public T initialize(A key) {
+				return block.eval(key);
+			}
+		};
+	}
+	
 	public CacheMap() {
 		super();
 	}

@@ -19,18 +19,31 @@
 
 package ch.akuhn.util.tests;
 
-import static ch.akuhn.util.Iterables.select;
+import static ch.akuhn.util.Magic.*;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.junit.Test;
 
+import ch.akuhn.util.Magic;
 import ch.akuhn.util.Predicate;
 
-public class IterablesTest {
+public class BlocksTest {
 
+	@SuppressWarnings("unchecked")
+	@Test
+	public void testSelectInstanceOf() {
+		Collection<Object> coll = (List<Object>) asList(1, "A", 2, "B", 3);
+		Collection<Object> reply = select(coll, Magic.instanceOf(String.class));
+		assertEquals(reply, asList("A", "B"));
+		reply = select(coll, Magic.instanceOf(Number.class));
+		assertEquals(reply, asList(1,2,3));
+	}
+	
+	
 	@Test
 	public void testSelect() {
 		Collection<Integer> coll = asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
@@ -42,5 +55,9 @@ public class IterablesTest {
 		});
 		assertEquals(reply, asList(1, 3, 5, 7, 9));
 	}
+	
+	
+	
+	
 
 }
