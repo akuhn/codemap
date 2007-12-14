@@ -115,7 +115,7 @@ public class License {
 	private void updateLicense(List<String> lines) {
 		for (Iterator<String> iterator = lines.iterator(); iterator.hasNext();) {
 			String line = iterator.next();
-			if (line.isEmpty() || !line.startsWith("package")) {
+			if (line.isEmpty() || line.startsWith("//")) {
 				iterator.remove();
 			} else {
 				break;
