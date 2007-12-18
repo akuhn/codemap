@@ -41,12 +41,12 @@ public class Bag<T> extends MAbstractCollection<T> {
 			this.prefetch();
 		}
 
-		@Override
+		
 		public boolean hasNext() {
 			return count > 0 || iter.hasNext();
 		}
 
-		@Override
+		
 		public T next() {
 			if (count <= 0)
 				this.prefetch();
@@ -65,7 +65,7 @@ public class Bag<T> extends MAbstractCollection<T> {
 			}
 		}
 
-		@Override
+		
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}

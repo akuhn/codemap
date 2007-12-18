@@ -48,7 +48,7 @@ public class BlocksTest {
 	public void testSelect() {
 		Collection<Integer> coll = asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 		Collection<Integer> reply = select(coll, new Predicate<Integer>() {
-			@Override
+			
 			public boolean is(Integer a) {
 				return a % 2 == 1;
 			}

@@ -49,22 +49,22 @@ public class Magic {
 	public static <T> Iterable<T> iter(final T... elements) {
 		return new Iterable<T>() {
 
-			@Override
+			
 			public Iterator<T> iterator() {
 				return new Iterator<T>() {
 					private int index = 0;
-					@Override
+					
 					public boolean hasNext() {
 						return index < elements.length;
 					}
 
-					@Override
+					
 					public T next() {
 						if (index >= elements.length) throw new NoSuchElementException();
 						return elements[index++];
 					}
 
-					@Override
+					
 					public void remove() {
 						throw new UnsupportedOperationException();
 					}
@@ -280,7 +280,7 @@ public class Magic {
 	public static <A> Predicate<A> isEqual(final A expected) {
 		if (expected == null) return isNull();
 		return new Predicate<A>() {
-			@Override
+			
 			public boolean is(A a) {
 				return expected.equals(a);
 			}
@@ -289,7 +289,7 @@ public class Magic {
 
 	public static <A> Predicate<A> isNull() {
 		return new Predicate<A>() {
-			@Override
+			
 			public boolean is(A a) {
 				return null == a;
 			}
@@ -298,7 +298,7 @@ public class Magic {
 
 	public static <A> Predicate<A> instanceOf(final Class<?> jazz) {
 		return new Predicate<A>() {
-			@Override
+			
 			public boolean is(A a) {
 				return a == null || jazz.isAssignableFrom(a.getClass());
 			}
@@ -307,7 +307,7 @@ public class Magic {
 
 	public static <A> Predicate<A> notNull() {
 		return new Predicate<A>() {
-			@Override
+			
 			public boolean is(A a) {
 				return null != a;
 			}
@@ -316,7 +316,7 @@ public class Magic {
 
 	public static <A> Predicate<A> not(final Predicate<A> block) {
 		return new Predicate<A>() {
-			@Override
+			
 			public boolean is(A a) {
 				return !block.is(a);
 			}
@@ -328,7 +328,7 @@ public class Magic {
 	 */
 	public static <A> Predicate<A> and(final Predicate<A>... blocks) {
 		return new Predicate<A>() {
-			@Override
+			
 			public boolean is(A a) {
 				boolean bool = true;
 				for (int n = 0; n < blocks.length; n++) {
@@ -345,7 +345,7 @@ public class Magic {
 	 */
 	public static <A> Predicate<A> or(final Predicate<A>... blocks) {
 		return new Predicate<A>() {
-			@Override
+			
 			public boolean is(A a) {
 				boolean bool = false;
 				for (int n = 0; n < blocks.length; n++) {

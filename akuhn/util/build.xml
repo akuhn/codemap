@@ -6,6 +6,11 @@
         	<fileset dir="bin" includes="**/*.class COPYING*"/>
         	<fileset dir="src" includes="**/*.java"/>
         </jar>	
+    	<zipfileset id="files" src="akuhn-util.jar"/>
+    	<pathconvert property="listing" refid="files" pathsep="${line.separator}">
+    		<globmapper from="${basedir}${file.separator}*" to="*"/>
+    	</pathconvert>	
+    	<echo message="${listing}"/>
     </target>
 
 </project>

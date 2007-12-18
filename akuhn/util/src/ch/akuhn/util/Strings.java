@@ -75,22 +75,22 @@ public abstract class Strings {
 
 	public static final Iterable<Character> chars(final CharSequence string) {
 		return new Iterable<Character>() {
-			@Override
+			
 			public Iterator<Character> iterator() {
 				return new Iterator<Character>() {
 					private int index = 0;
 
-					@Override
+					
 					public boolean hasNext() {
 						return index < string.length();
 					}
 
-					@Override
+					
 					public Character next() {
 						return string.charAt(index++);
 					}
 
-					@Override
+					
 					public void remove() {
 						throw new UnsupportedOperationException();
 					}
@@ -149,12 +149,12 @@ public abstract class Strings {
 	public static final Iterable<String> letters(final CharSequence string) {
 		return new Iterable<String>() {
 
-			@Override
+			
 			public Iterator<String> iterator() {
 				return new Iterator<String>() {
 					private int index = 0;
 
-					@Override
+					
 					public boolean hasNext() {
 						for (; index < string.length(); index++) {
 							if (Character.isLetter(string.charAt(index))) {
@@ -164,7 +164,7 @@ public abstract class Strings {
 						return false;
 					}
 
-					@Override
+					
 					public String next() {
 						while (true) {
 							if (index >= string.length())
@@ -181,7 +181,7 @@ public abstract class Strings {
 						return string.subSequence(mark, index).toString();
 					}
 
-					@Override
+					
 					public void remove() {
 						throw new UnsupportedOperationException();
 					}
@@ -193,17 +193,17 @@ public abstract class Strings {
 
 	public static final Iterable<String> lines(final CharSequence string) {
 		return new Iterable<String>() {
-			@Override
+			
 			public Iterator<String> iterator() {
 				return new Iterator<String>() {
 					private int index = 0;
 
-					@Override
+					
 					public boolean hasNext() {
 						return index < string.length();
 					}
 
-					@Override
+					
 					public String next() {
 						if (index >= string.length())
 							throw new NoSuchElementException();
@@ -216,7 +216,7 @@ public abstract class Strings {
 						return string.subSequence(mark, index++).toString();
 					}
 
-					@Override
+					
 					public void remove() {
 						throw new UnsupportedOperationException();
 					}
@@ -235,12 +235,12 @@ public abstract class Strings {
 	public static final Iterable<String> words(final CharSequence string) {
 		return new Iterable<String>() {
 
-			@Override
+			
 			public Iterator<String> iterator() {
 				return new Iterator<String>() {
 					private int index = 0;
 
-					@Override
+					
 					public boolean hasNext() {
 						for (; index < string.length(); index++) {
 							if (!Character.isWhitespace(string.charAt(index))) {
@@ -250,7 +250,7 @@ public abstract class Strings {
 						return false;
 					}
 
-					@Override
+					
 					public String next() {
 						while (true) {
 							if (index >= string.length())
@@ -267,7 +267,7 @@ public abstract class Strings {
 						return string.subSequence(mark, index).toString();
 					}
 
-					@Override
+					
 					public void remove() {
 						throw new UnsupportedOperationException();
 					}

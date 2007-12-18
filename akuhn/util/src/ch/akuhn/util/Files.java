@@ -34,7 +34,7 @@ public class Files {
 
 	public static FileFilter endsWith(final String suffix) {
 		return new FileFilter() {
-			@Override
+			
 			public boolean accept(File file) {
 				return file.getName().endsWith(suffix);
 			}
@@ -45,7 +45,7 @@ public class Files {
 			final FileFilter filter) {
 		return new Iterable<File>() {
 
-			@Override
+			
 			public Iterator<File> iterator() {
 				return new Iterator<File>() {
 					private Deque<File> queue = new LinkedList<File>();
@@ -54,13 +54,13 @@ public class Files {
 						processDirectories();
 					}
 
-					@Override
+					
 					public boolean hasNext() {
 						this.processDirectories();
 						return !queue.isEmpty();
 					}
 
-					@Override
+					
 					public File next() {
 						this.processDirectories();
 						if (queue.isEmpty())
@@ -82,7 +82,7 @@ public class Files {
 						}
 					}
 
-					@Override
+					
 					public void remove() {
 						throw new UnsupportedOperationException();
 					}
