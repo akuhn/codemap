@@ -24,6 +24,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Collections;
 import java.util.Set;
+
+import ch.akuhn.blocks.MAbstractCollection;
 /**
  * A collection that contains unordered, duplicate elements.
  * 

@@ -21,6 +21,8 @@ package ch.akuhn.util;
 
 import java.util.HashMap;
 
+import ch.akuhn.blocks.Function;
+
 /**
  * A map that knows how to initialize missing mapping.
  * 

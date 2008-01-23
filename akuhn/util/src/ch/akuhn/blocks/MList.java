@@ -17,17 +17,15 @@
 //  <http://www.gnu.org/licenses/>.
 //  
 
-package ch.akuhn.util;
+package ch.akuhn.blocks;
 
-/**
- * A block with one argument and no return value.
- * 
- * @author akuhn
- *
- * @param <A> type of argument.
- */
-public interface Procedure<A> {
+import java.util.List;
 
-	public void run(A a);
+
+public interface MList<T> extends List<T>, MCollection<T> {
+
+	public List<List<T>> runsSatisfying(Predicate<T> block);
+	
+	public List<List<T>> runsFailing(Predicate<T> block);
 
 }

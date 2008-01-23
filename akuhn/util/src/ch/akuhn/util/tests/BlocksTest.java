@@ -19,7 +19,6 @@
 
 package ch.akuhn.util.tests;
 
-import static ch.akuhn.util.Magic.*;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 
@@ -28,8 +27,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import ch.akuhn.util.Magic;
-import ch.akuhn.util.Predicate;
+import ch.akuhn.blocks.Blocks;
+import ch.akuhn.blocks.Predicate;
 
 public class BlocksTest {
 
@@ -37,9 +36,9 @@ public class BlocksTest {
 	@Test
 	public void testSelectInstanceOf() {
 		Collection<Object> coll = (List<Object>) asList(1, "A", 2, "B", 3);
-		Collection<Object> reply = select(coll, Magic.instanceOf(String.class));
+		Collection<Object> reply = Blocks.select(coll, Blocks.instanceOf(String.class));
 		assertEquals(reply, asList("A", "B"));
-		reply = select(coll, Magic.instanceOf(Number.class));
+		reply = Blocks.select(coll, Blocks.instanceOf(Number.class));
 		assertEquals(reply, asList(1,2,3));
 	}
 	
@@ -47,7 +46,7 @@ public class BlocksTest {
 	@Test
 	public void testSelect() {
 		Collection<Integer> coll = asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-		Collection<Integer> reply = select(coll, new Predicate<Integer>() {
+		Collection<Integer> reply = Blocks.select(coll, new Predicate<Integer>() {
 			
 			public boolean is(Integer a) {
 				return a % 2 == 1;

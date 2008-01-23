@@ -17,16 +17,17 @@
 //  <http://www.gnu.org/licenses/>.
 //  
 
-package ch.akuhn.util;
+package ch.akuhn.blocks;
 
-/** 
- * A block with one argument and boolean return value.
+/**
+ * A block with one argument and no return value.
  * 
+ * @author akuhn
  *
  * @param <A> type of argument.
  */
-public interface Predicate<A> {
+public interface Procedure<A> {
 
-	public boolean is(A a);
+	public void run(A a);
 
 }

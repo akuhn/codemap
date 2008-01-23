@@ -17,18 +17,16 @@
 //  <http://www.gnu.org/licenses/>.
 //  
 
-package ch.akuhn.util;
+package ch.akuhn.blocks;
 
 /**
- * A block with two arguments and any return value.
- * 
- * @author akuhn
+ * A block with one argument and any return value.
  *
  * @param <T> type of return value.
- * @param <A> type of first parameter.
- * @param <B> type of second parameter.
- */public interface BinaryFunction<T, A, B> {
+ * @param <A> type of argument.
+ */
+public interface Function<T, A> {
 
-	public T eval(A a, B b);
+	public T eval(A a);
 
 }

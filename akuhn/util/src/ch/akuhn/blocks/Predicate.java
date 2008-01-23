@@ -17,16 +17,16 @@
 //  <http://www.gnu.org/licenses/>.
 //  
 
-package ch.akuhn.util;
+package ch.akuhn.blocks;
 
-/**
- * A block with one argument and any return value.
+/** 
+ * A block with one argument and boolean return value.
+ * 
  *
- * @param <T> type of return value.
  * @param <A> type of argument.
  */
-public interface Function<T, A> {
+public interface Predicate<A> {
 
-	public T eval(A a);
+	public boolean is(A a);
 
 }
