@@ -19,8 +19,14 @@
 
 package ch.akuhn.util;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -104,6 +110,28 @@ public class Files {
 		for (File each : files(".", endsWith(".class"))) {
 			System.out.println(each);
 		}
+	}
+	
+	public static Appendable appendable(String filename) {
+		return appendable(new File(filename));
+	}
+	
+	public static Appendable appendable(File file) {
+		try {
+			return new PrintWriter(new OutputStreamWriter(new FileOutputStream(file)));
+		} catch (FileNotFoundException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+	
+	public static void close(Appendable appendable) {
+		if (appendable instanceof Closeable) {
+			try {
+				((Closeable) appendable).close();
+			} catch (IOException ex) {
+				throw new RuntimeException(ex);
+			}
+		}		
 	}
 
 }
