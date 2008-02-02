@@ -1,4 +1,4 @@
-//  Copyright (c) 1998-2007 Adrian Kuhn <akuhn(a)iam.unibe.ch>
+//  Copyright (c) 1998-2008 Adrian Kuhn <akuhn(a)iam.unibe.ch>
 //  
 //  This file is part of "Adrian Kuhn's Utilities for Java".
 //  
@@ -33,7 +33,6 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 /** Static methods that operate on or return files.
- * 
  *
  */
 public class Files {
@@ -47,7 +46,7 @@ public class Files {
 		};
 	}
 
-	public static Iterable<File> files(final File folder,
+	public static Iterable<File> all(final File folder,
 			final FileFilter filter) {
 		return new Iterable<File>() {
 
@@ -98,25 +97,41 @@ public class Files {
 		};
 	}
 
-	public static Iterable<File> files(String filename) {
-		return files(new File(filename), null);
+	public static Iterable<File> all(String filename) {
+		return all(new File(filename));
 	}
 
-	public static Iterable<File> files(String filename, FileFilter filter) {
-		return files(new File(filename), filter);
+	public static Iterable<File> all(File file) {
+		return all(file, (FileFilter) null);
+	}
+	
+	
+	public static Iterable<File> all(String filename, FileFilter filter) {
+		return all(new File(filename), filter);
+	}
+	
+	public static Iterable<File> all(File file, String pattern) {
+		if (pattern.equals("*")) return all(file);
+		if (pattern.lastIndexOf('*') != 0) throw //TODO support other patterns
+				new UnsupportedOperationException("Patterns other than \"*abc\" not yet supported.");
+		return all(file, endsWith(pattern.substring(1)));
 	}
 
+	public static Iterable<File> all(String filename, String pattern) {
+		return all(new File(filename), pattern);
+	}
+	
 	public static void main(String... argh) {
-		for (File each : files(".", endsWith(".class"))) {
+		for (File each : all(".", endsWith(".class"))) {
 			System.out.println(each);
 		}
 	}
 	
-	public static Appendable appendable(String filename) {
-		return appendable(new File(filename));
+	public static Appendable openWrite(String filename) {
+		return openWrite(new File(filename));
 	}
 	
-	public static Appendable appendable(File file) {
+	public static Appendable openWrite(File file) {
 		try {
 			return new PrintWriter(new OutputStreamWriter(new FileOutputStream(file)));
 		} catch (FileNotFoundException ex) {
@@ -133,5 +148,13 @@ public class Files {
 			}
 		}		
 	}
+	
+	public static CharSequence openRead(String filename) {
+		return Strings.fromFile(filename);
+	}
 
+	public static CharSequence openRead(File file) {
+		return Strings.fromFile(file);
+	}
+	
 }

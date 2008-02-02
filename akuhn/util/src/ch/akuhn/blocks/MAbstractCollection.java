@@ -1,4 +1,4 @@
-//  Copyright (c) 1998-2007 Adrian Kuhn <akuhn(a)iam.unibe.ch>
+//  Copyright (c) 1998-2008 Adrian Kuhn <akuhn(a)iam.unibe.ch>
 //  
 //  This file is part of "Adrian Kuhn's Utilities for Java".
 //  
@@ -21,8 +21,6 @@ package ch.akuhn.blocks;
 
 import java.util.AbstractCollection;
 import java.util.Collection;
-
-import ch.akuhn.util.Magic;
 
 public abstract class MAbstractCollection<T> extends AbstractCollection<T> implements
 		MCollection<T> {

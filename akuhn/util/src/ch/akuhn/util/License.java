@@ -1,4 +1,4 @@
-//  Copyright (c) 1998-2007 Adrian Kuhn <akuhn(a)iam.unibe.ch>
+//  Copyright (c) 1998-2008 Adrian Kuhn <akuhn(a)iam.unibe.ch>
 //  
 //  This file is part of "Adrian Kuhn's Utilities for Java".
 //  
@@ -19,8 +19,7 @@
 
 package ch.akuhn.util;
 
-import static ch.akuhn.util.Files.endsWith;
-import static ch.akuhn.util.Files.files;
+import static ch.akuhn.util.Files.all;
 import static ch.akuhn.util.Strings.*;
 
 import java.io.BufferedReader;
@@ -82,13 +81,13 @@ public class License {
 		gpl.appName = "\"Adrian Kuhn's Utilities for Java\"";
 		gpl.author = "Adrian Kuhn";
 		gpl.email = "akuhn(a)iam.unibe.ch";
-		gpl.year = "1998-2007";
+		gpl.year = "1998-2008";
 		gpl.isLesser = true;
 		gpl.process(root);
 	}
 
 	public void process(File folder) {
-		for (File each : files(folder, endsWith(".java"))) {
+		for (File each : all(folder, "*.java")) {
 			List<String> lines = readLines(each);
 			updateLicense(lines);
 			writeLines(each, lines);

@@ -1,4 +1,4 @@
-//  Copyright (c) 1998-2007 Adrian Kuhn <akuhn(a)iam.unibe.ch>
+//  Copyright (c) 1998-2008 Adrian Kuhn <akuhn(a)iam.unibe.ch>
 //  
 //  This file is part of "Adrian Kuhn's Utilities for Java".
 //  
@@ -21,10 +21,13 @@ package ch.akuhn.util;
 
 public class ArgumentScanner {
 
+	@SuppressWarnings("unused")
 	private Object main;
 	
 	public ArgumentScanner(Object main) {
 		this.main = main;
 	}
+	
+	// TODO implement this class!!!
 	
 }
