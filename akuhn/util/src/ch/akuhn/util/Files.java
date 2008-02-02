@@ -27,7 +27,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -53,7 +52,7 @@ public class Files {
 			
 			public Iterator<File> iterator() {
 				return new Iterator<File>() {
-					private Deque<File> queue = new LinkedList<File>();
+					private LinkedList<File> queue = new LinkedList<File>();
 					{
 						queue.offer(folder);
 						processDirectories();
