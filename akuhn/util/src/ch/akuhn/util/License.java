@@ -38,25 +38,39 @@ import java.util.List;
 
 public class License {
 
-	private final static String LGPL = "Copyright (c) %4$s %2$s <%3$s>\n"
+	public enum Kind {
+		GPL("Copyright (c) %4$s %2$s <%3$s>\n"
 			+ "This file is part of %1$s.\n"
-			+ "%1$s is free software: you can redistribute it and/or modify it under the terms of the GNU %5$s General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n"
-			+ "%1$s is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU %5$s General Public License for more details.\n"
-			+ "You should have received a copy of the GNU %5$s General Public License along with %1$s.  If not, see <http://www.gnu.org/licenses/>.\n";
-
+			+ "%1$s is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n"
+			+ "%1$s is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.\n"
+			+ "You should have received a copy of the GNU General Public License along with %1$s.  If not, see <http://www.gnu.org/licenses/>.\n"),
+		LESSER_GPL("Copyright (c) %4$s %2$s <%3$s>\n"
+				+ "This file is part of %1$s.\n"
+				+ "%1$s is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n"
+				+ "%1$s is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.\n"
+				+ "You should have received a copy of the GNU Lesser General Public License along with %1$s.  If not, see <http://www.gnu.org/licenses/>.\n"),
+		PROPRIETARY("Copyright (c) %4$s %2$s <%3$s>\n"
+				+ "This file is part of %1$s.\n"
+				+ "PROPRIETARY/CONFIDENTIAL SOFTWARE. Use at your own risk.");
+		public final String template;
+		private Kind(String template) {
+			this.template = template;
+		}
+	}
+	
 	public String appName;
 	public String author;
 	public String email;
 	public String year;
-	public boolean isLesser;
+	public Kind kind;
 
-	private String getLGPL() {
+	private String getLicenseNote() {
 		StringBuilder builder;
 		String license;
 		// do the printf dance
 		builder = new StringBuilder();
 		Formatter formatter = new Formatter(builder);
-		formatter.format(LGPL, appName, author, email, year, isLesser ? "Lesser" : "");
+		formatter.format(kind.template, appName, author, email, year);
 		license = builder.toString();
 		// introduce line breaks
 		builder = new StringBuilder();
@@ -77,13 +91,13 @@ public class License {
 
 	public static void main(String... strings) {
 		File root = new File("src");
-		License gpl = new License();
-		gpl.appName = "\"Adrian Kuhn's Utilities for Java\"";
-		gpl.author = "Adrian Kuhn";
-		gpl.email = "akuhn(a)iam.unibe.ch";
-		gpl.year = "1998-2008";
-		gpl.isLesser = true;
-		gpl.process(root);
+		License l = new License();
+		l.kind = Kind.LESSER_GPL;
+		l.appName = "\"Adrian Kuhn's Utilities for Java\"";
+		l.author = "Adrian Kuhn";
+		l.email = "akuhn(a)iam.unibe.ch";
+		l.year = "1998-2008";
+		l.process(root);
 	}
 
 	public void process(File folder) {
@@ -120,7 +134,7 @@ public class License {
 				break;
 			}
 		}
-		lines.add(0, getLGPL());
+		lines.add(0, getLicenseNote());
 	}
 
 	private void writeLines(File each, Collection<String> lines) {
@@ -137,4 +151,5 @@ public class License {
 			throw new RuntimeException(e);
 		}
 	}
+
 }
