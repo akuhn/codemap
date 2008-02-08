@@ -19,6 +19,8 @@
 
 package ch.akuhn.util;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 import ch.akuhn.blocks.Function;
@@ -29,6 +31,32 @@ import ch.akuhn.blocks.Function;
  */
 public abstract class CacheMap<K, V> extends HashMap<K, V> {
 
+	public static <A,T> CacheMap<A,T> instances(final Class<? extends T> instanceClass) {
+		return new CacheMap<A,T>() {
+			@Override
+			public T initialize(A key) {
+				return createInstanceOf(instanceClass, key);
+			}
+		};
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static <A,T> T createInstanceOf(Class<T> instanceClass, A argument) {
+		try {
+			Constructor<T>[] inits = instanceClass.getDeclaredConstructors();
+			for (Constructor<T> each : inits) {
+				Class<?>[] params = each.getParameterTypes();
+				if (params.length == 1 && params[0].isAssignableFrom(argument.getClass())) {
+					each.setAccessible(true);
+					return each.newInstance(argument);
+				}
+			}
+			return instanceClass.newInstance();
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+	
 	public static <A,T> CacheMap<A, T> with(final Function<T, A> block) {
 		return new CacheMap<A, T>() {
 			@Override
