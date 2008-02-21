@@ -39,6 +39,10 @@ import java.util.List;
 public class License {
 
 	public enum Kind {
+		// %1$s = appName
+		// %2$s = author
+		// %3$s = email
+		// %4$s = year
 		GPL("Copyright (c) %4$s %2$s <%3$s>\n"
 			+ "This file is part of %1$s.\n"
 			+ "%1$s is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.\n"
@@ -51,7 +55,12 @@ public class License {
 				+ "You should have received a copy of the GNU Lesser General Public License along with %1$s.  If not, see <http://www.gnu.org/licenses/>.\n"),
 		PROPRIETARY("Copyright (c) %4$s %2$s <%3$s>\n"
 				+ "This file is part of %1$s.\n"
-				+ "PROPRIETARY/CONFIDENTIAL SOFTWARE. Use at your own risk.");
+				+ "PROPRIETARY/CONFIDENTIAL SOFTWARE. Use at your own risk."),
+		EPL("Copyright (c) %4$s %2$s\n" 
+				+ "This file is part of %1$s.\n"
+				+ "All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html\n"
+				+ "Contributors: %2$s <%3$s>\n"),
+		; // end of license list
 		public final String template;
 		private Kind(String template) {
 			this.template = template;
