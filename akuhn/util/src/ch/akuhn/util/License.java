@@ -99,13 +99,13 @@ public class License {
 	}
 
 	public static void main(String... strings) {
-		File root = new File("src");
+		File root = new File("../ch.unibe.iam.scg.eccrawler/src");
 		License l = new License();
-		l.kind = Kind.LESSER_GPL;
-		l.appName = "\"Adrian Kuhn's Utilities for Java\"";
-		l.author = "Adrian Kuhn";
-		l.email = "akuhn(a)iam.unibe.ch";
-		l.year = "1998-2008";
+		l.kind = Kind.EPL;
+		l.appName = "ECCrawler";
+		l.author = "Manuel Friedli";
+		l.email = "manuel.friedli(a)students.unibe.ch";
+		l.year = "2007-2008";
 		l.process(root);
 	}
 

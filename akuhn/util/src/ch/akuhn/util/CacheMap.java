@@ -43,7 +43,7 @@ public abstract class CacheMap<K, V> extends HashMap<K, V> {
 	@SuppressWarnings("unchecked")
 	private static <A,T> T createInstanceOf(Class<T> instanceClass, A argument) {
 		try {
-			Constructor<T>[] inits = instanceClass.getDeclaredConstructors();
+			Constructor<T>[] inits = (Constructor<T>[]) instanceClass.getDeclaredConstructors();
 			for (Constructor<T> each : inits) {
 				Class<?>[] params = each.getParameterTypes();
 				if (params.length == 1 && params[0].isAssignableFrom(argument.getClass())) {
