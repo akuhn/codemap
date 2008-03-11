@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
  * <pre>Generator<Integer> fibonacci = new Generator<Integer>() {
  *	@Override
  *	public void run() {
- *		int a, b = 1;
+ *		int a = 0, b = 1;
  *		while (true) {
  *			a = b + (b = a);
  *			yield(a);
