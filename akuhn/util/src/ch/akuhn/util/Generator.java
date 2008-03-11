@@ -42,7 +42,9 @@ public abstract class Generator<T> implements Iterable<T> {
 	private synchronized Object take() {
 		while (drop == EMPTY) {
 			try { wait(); }
-			catch (InterruptedException ex) { }
+			catch (InterruptedException ex) {
+				Thread.currentThread().interrupt();
+			}
 		}
 		Object temp = drop;
 		if (drop != DONE) drop = EMPTY;
@@ -57,7 +59,9 @@ public abstract class Generator<T> implements Iterable<T> {
 		notifyAll();
 		while (drop != EMPTY) {
 			try { wait(); }
-			catch (InterruptedException ex) { }
+			catch (InterruptedException ex) { 
+				Thread.currentThread().interrupt();
+			}
 		}
 	}
 	
