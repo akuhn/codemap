@@ -34,7 +34,7 @@ import java.util.NoSuchElementException;
 /** Static methods that operate on or return files.
  *
  */
-public class Files {
+public abstract class Files {
 
 	public static FileFilter endsWith(final String suffix) {
 		return new FileFilter() {

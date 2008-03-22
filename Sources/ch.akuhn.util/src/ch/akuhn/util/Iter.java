@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
  * @author Adrian Kuhn
  * 
  */
-public class Iter {
+public abstract class Iter {
 
 	/** Returns first element or fail.
 	 * 
@@ -80,6 +80,7 @@ public class Iter {
 					}
 
 					public Integer next() {
+						if (!(current < n)) throw new NoSuchElementException();
 						return current++;
 					}
 
@@ -147,6 +148,32 @@ public class Iter {
 		};
 	}
 
+	public static <E> Iterable<E> iter(final E... elements) {
+		return new Iterable<E>() {
+			public Iterator<E> iterator() {
+				return new Iterator<E>() {
+					private int index = 0;
+					
+					public boolean hasNext() {
+						return index < elements.length;
+					}
+					
+					public E next() {
+						if (index >= elements.length) throw new NoSuchElementException();
+						return elements[index++];
+					}
+					
+					public void remove() {
+						throw new UnsupportedOperationException();
+					}
+				};
+			}
+			
+		};
+	}
+
+	
+	
 	private Iter() {
 		// static class
 	}

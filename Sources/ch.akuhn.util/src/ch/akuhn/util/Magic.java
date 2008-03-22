@@ -31,59 +31,36 @@ import java.util.Set;
  * 
  *
  */
-public class Magic {
+public abstract class Magic {
 
-	public static <T> List<T> asList(T... elements) {
+	public static <E> List<E> list(E... elements) {
 		return Arrays.asList(elements);
 	}
 	
-	public static <T> Set<T> asSet(T... elements) {
-		return new HashSet<T>(Arrays.asList(elements));
-	}
-	
-	
-	public static <T> Iterable<T> iter(final T... elements) {
-		return new Iterable<T>() {
-
-			
-			public Iterator<T> iterator() {
-				return new Iterator<T>() {
-					private int index = 0;
-					
-					public boolean hasNext() {
-						return index < elements.length;
-					}
-
-					
-					public T next() {
-						if (index >= elements.length) throw new NoSuchElementException();
-						return elements[index++];
-					}
-
-					
-					public void remove() {
-						throw new UnsupportedOperationException();
-					}
-					
-				};
-			}
-			
-		};
+	public static <E> Set<E> set(E... elements) {
+		return new HashSet<E>(Arrays.asList(elements));
 	}
 
-
-
-	public static <T> T last(List<T> list) {
+	public static <E> E last(List<E> list) {
 		return list.get(list.size() - 1);
 	}
 
+	public static void out(Object object, Object... objects) {
+		System.out.println(object);
+		for (Object o : objects) {
+			System.out.print(", ");
+			System.out.print(o);
+		}
+	}
+	
+	
 	public static void out(Object object) {
 		System.out.println(object);
 	}
 	
-	public static <T> void  out(Iterable<T> iterable) {
+	public static <E> void  out(Iterable<E> iterable) {
 		System.out.print("[");
-		Iterator<T> it = iterable.iterator(); 
+		Iterator<E> it = iterable.iterator(); 
 		while (it.hasNext()) {
 			System.out.print(it.next());
 			if (it.hasNext()) 
