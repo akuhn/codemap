@@ -16,7 +16,7 @@
 //  along with ch.akuhn.util. If not, see <http://www.gnu.org/licenses/>.
 //  
 
-package ch.akuhn.blocks;
+package magic.blocks;
 
 import java.util.AbstractCollection;
 import java.util.Collection;

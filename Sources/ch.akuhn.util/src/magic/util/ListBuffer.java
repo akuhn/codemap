@@ -16,11 +16,12 @@
 //  along with ch.akuhn.util. If not, see <http://www.gnu.org/licenses/>.
 //  
 
-package ch.akuhn.util;
+package magic.util;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
 
 /** A class for constructing lists by appending elements. Modelled after
  *  java.lang.StringBuffer.

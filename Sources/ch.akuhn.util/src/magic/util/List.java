@@ -16,7 +16,7 @@
 //  along with ch.akuhn.util. If not, see <http://www.gnu.org/licenses/>.
 //  
 
-package ch.akuhn.util;
+package magic.util;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.AbstractCollection;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
+
 
 /** A class for generic linked lists. Links are supposed to be
  *  immutable, the only exception being the incremental construction of

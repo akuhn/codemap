@@ -16,13 +16,13 @@
 //  along with ch.akuhn.util. If not, see <http://www.gnu.org/licenses/>.
 //  
 
-package ch.akuhn.util;
+package magic.util;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
-import ch.akuhn.blocks.Function;
+import magic.blocks.Function;
+
 
 /**
  * A map that knows how to initialize missing mapping.

@@ -16,15 +16,16 @@
 //  along with ch.akuhn.util. If not, see <http://www.gnu.org/licenses/>.
 //  
 
-package ch.akuhn.blocks;
+package magic.blocks;
 
-import java.util.List;
+/** 
+ * A block with one argument and boolean return value.
+ * 
+ *
+ * @param <A> type of argument.
+ */
+public interface Predicate<A> {
 
-
-public interface MList<T> extends List<T>, MCollection<T> {
-
-	public List<List<T>> runsSatisfying(Predicate<T> block);
-	
-	public List<List<T>> runsFailing(Predicate<T> block);
+	public boolean is(A a);
 
 }

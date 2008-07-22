@@ -24,17 +24,18 @@ import static org.junit.Assert.assertEquals;
 import java.util.Collection;
 import java.util.List;
 
+import magic.blocks.Blocks;
+import magic.blocks.Predicate;
+
 import org.junit.Test;
 
-import ch.akuhn.blocks.Blocks;
-import ch.akuhn.blocks.Predicate;
 
 public class BlocksTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testSelectInstanceOf() {
-		Collection<Object> coll = (List<Object>) asList(1, "A", 2, "B", 3);
+		Collection coll = (List) asList(1, "A", 2, "B", 3);
 		Collection<Object> reply = Blocks.select(coll, Blocks.instanceOf(String.class));
 		assertEquals(reply, asList("A", "B"));
 		reply = Blocks.select(coll, Blocks.instanceOf(Number.class));

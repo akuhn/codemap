@@ -18,8 +18,8 @@
 
 package ch.akuhn.util;
 
-import static ch.akuhn.util.Files.all;
-import static ch.akuhn.util.Strings.*;
+import static magic.Files.all;
+import static magic.Strings.*;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

@@ -16,10 +16,13 @@
 //  along with ch.akuhn.util. If not, see <http://www.gnu.org/licenses/>.
 //  
 
-package ch.akuhn.util;
+package magic;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
+import magic.util.Pair;
+
 
 /**
  * Static methods that operate on or return Iterables.

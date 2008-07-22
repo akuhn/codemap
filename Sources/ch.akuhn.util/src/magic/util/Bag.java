@@ -16,20 +16,20 @@
 //  along with ch.akuhn.util. If not, see <http://www.gnu.org/licenses/>.
 //  
 
-package ch.akuhn.util;
+package magic.util;
 
+import java.util.AbstractCollection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Collections;
 import java.util.Set;
 
-import ch.akuhn.blocks.MAbstractCollection;
 /**
  * A collection that contains unordered, duplicate elements.
  * 
  */
-public class Bag<T> extends MAbstractCollection<T> {
+public class Bag<T> extends AbstractCollection<T> {
 
 	private class Itr implements Iterator<T> {
 

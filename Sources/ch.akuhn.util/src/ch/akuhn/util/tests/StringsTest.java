@@ -18,10 +18,10 @@
 
 package ch.akuhn.util.tests;
 
-import static ch.akuhn.util.Strings.camelCase;
-import static ch.akuhn.util.Strings.chars;
-import static ch.akuhn.util.Strings.lines;
-import static ch.akuhn.util.Strings.words;
+import static magic.Strings.camelCase;
+import static magic.Strings.chars;
+import static magic.Strings.lines;
+import static magic.Strings.words;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

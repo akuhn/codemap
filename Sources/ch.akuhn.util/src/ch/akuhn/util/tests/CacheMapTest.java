@@ -24,10 +24,11 @@ import static org.junit.Assert.assertSame;
 
 import java.util.Map;
 
+import magic.util.CacheMap;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
-import ch.akuhn.util.CacheMap;
 
 public class CacheMapTest {
 

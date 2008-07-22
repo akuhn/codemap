@@ -16,18 +16,17 @@
 //  along with ch.akuhn.util. If not, see <http://www.gnu.org/licenses/>.
 //  
 
-package ch.akuhn.blocks;
+package magic.blocks;
 
 /**
- * A block with two arguments and any return value.
+ * A block with one argument and no return value.
  * 
  * @author akuhn
  *
- * @param <T> type of return value.
- * @param <A> type of first parameter.
- * @param <B> type of second parameter.
- */public interface BinaryFunction<T, A, B> {
+ * @param <A> type of argument.
+ */
+public interface Procedure<A> {
 
-	public T eval(A a, B b);
+	public void run(A a);
 
 }

@@ -16,7 +16,7 @@
 //  along with ch.akuhn.util. If not, see <http://www.gnu.org/licenses/>.
 //  
 
-package ch.akuhn.util;
+package magic;
 
 import java.io.Closeable;
 import java.io.File;
@@ -29,6 +29,7 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
+
 
 /** Static methods that operate on or return files.
  *

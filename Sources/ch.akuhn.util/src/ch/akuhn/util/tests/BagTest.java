@@ -22,9 +22,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Iterator;
 
+import magic.util.Bag;
+
 import org.junit.Test;
 
-import ch.akuhn.util.Bag;
 
 public class BagTest {
 

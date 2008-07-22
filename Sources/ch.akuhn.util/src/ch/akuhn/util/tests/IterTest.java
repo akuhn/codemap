@@ -22,10 +22,11 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
+import magic.Iter;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.akuhn.util.Iter;
 
 public class IterTest {
 
