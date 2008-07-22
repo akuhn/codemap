@@ -16,7 +16,7 @@
 //  along with ch.akuhn.util. If not, see <http://www.gnu.org/licenses/>.
 //  
 
-package magic;
+package magic.util;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

@@ -18,6 +18,8 @@
 
 package magic;
 
+import static java.lang.Character.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -28,6 +30,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
+import magic.util.SimpleIter;
 
 /** Static methods that operate on or return strings.
  * 
@@ -74,22 +78,15 @@ public abstract class Strings {
 
 	public static final Iterable<Character> chars(final CharSequence string) {
 		return new Iterable<Character>() {
-			
 			public Iterator<Character> iterator() {
 				return new Iterator<Character>() {
 					private int index = 0;
-
-					
 					public boolean hasNext() {
 						return index < string.length();
 					}
-
-					
 					public Character next() {
 						return string.charAt(index++);
 					}
-
-					
 					public void remove() {
 						throw new UnsupportedOperationException();
 					}
@@ -146,138 +143,62 @@ public abstract class Strings {
 	}
 
 	public static final Iterable<String> letters(final CharSequence string) {
-		return new Iterable<String>() {
-
-			
-			public Iterator<String> iterator() {
-				return new Iterator<String>() {
-					private int index = 0;
-
-					
-					public boolean hasNext() {
-						for (; index < string.length(); index++) {
-							if (Character.isLetter(string.charAt(index))) {
-								return true;
-							}
-						}
-						return false;
-					}
-
-					
-					public String next() {
-						while (true) {
-							if (index >= string.length())
-								throw new NoSuchElementException();
-							if (Character.isLetter(string.charAt(index)))
-								break;
-							index++;
-						}
-						int mark = index;
-						for (; index < string.length(); index++) {
-							if (!Character.isLetter(string.charAt(index)))
-								break;
-						}
-						return string.subSequence(mark, index).toString();
-					}
-
-					
-					public void remove() {
-						throw new UnsupportedOperationException();
-					}
-				};
-			}
-
-		};
-	}
+        return new SimpleIter<String>() {
+            private int index = 0;
+            public String iterate() {
+                for (; index < string.length(); index++) {
+                    if (isLetter(string.charAt(index))) break;
+                }
+                if (index == string.length()) return done();
+                int mark = index;
+                for (; index < string.length(); index++) {
+                    if (isLetter(string.charAt(index))) break;
+                }
+                return string.subSequence(mark, index).toString(); 
+            }
+        };
+    }
 
 	public static final Iterable<String> lines(final CharSequence string) {
-		return new Iterable<String>() {
-			
-			public Iterator<String> iterator() {
-				return new Iterator<String>() {
-					private int index = 0;
-
-					
-					public boolean hasNext() {
-						return index < string.length();
-					}
-
-					
-					public String next() {
-						if (index >= string.length())
-							throw new NoSuchElementException();
-						int mark = index;
-						for (; index < string.length(); index++) {
-							char ch = string.charAt(index);
-							if (ch == '\n')
-								break;
-						}
-						return string.subSequence(mark, index++).toString();
-					}
-
-					
-					public void remove() {
-						throw new UnsupportedOperationException();
-					}
-				};
-			}
-		};
+	    return new SimpleIter<String>() {
+	        private int index = 0;
+            public String iterate() {
+                if (index >= string.length()) return done();
+                int mark = index;
+                for (; index < string.length(); index++) {
+                    if (string.charAt(index) == '\n') break;
+                }
+                return string.subSequence(mark, index++).toString();
+            }
+	    };
 	}
 
 	public static final String toUpperFirstChar(String string) {
-		StringBuilder builder = new StringBuilder(string.length());
-		builder.append(Character.toUpperCase(string.charAt(0)));
-		builder.append(string.substring(1));
-		return builder.toString();
+		StringBuilder $ = new StringBuilder(string.length());
+		$.append(toUpperCase(string.charAt(0)));
+		$.append(string.substring(1));
+		return $.toString();
 	}
 
 	public static final Iterable<String> words(final CharSequence string) {
-		return new Iterable<String>() {
-
-			
-			public Iterator<String> iterator() {
-				return new Iterator<String>() {
-					private int index = 0;
-
-					
-					public boolean hasNext() {
-						for (; index < string.length(); index++) {
-							if (!Character.isWhitespace(string.charAt(index))) {
-								return true;
-							}
-						}
-						return false;
-					}
-
-					
-					public String next() {
-						while (true) {
-							if (index >= string.length())
-								throw new NoSuchElementException();
-							if (!Character.isWhitespace(string.charAt(index)))
-								break;
-							index++;
-						}
-						int mark = index;
-						for (; index < string.length(); index++) {
-							if (Character.isWhitespace(string.charAt(index)))
-								break;
-						}
-						return string.subSequence(mark, index).toString();
-					}
-
-					
-					public void remove() {
-						throw new UnsupportedOperationException();
-					}
-				};
-			}
-
-		};
+	    return new SimpleIter<String>() {
+            private int index = 0;
+            public String iterate() {
+                for (; index < string.length(); index++) {
+                    if (!isWhitespace(string.charAt(index))) break;
+                }
+                if (index == string.length()) return done();
+                int mark = index;
+                for (; index < string.length(); index++) {
+                    if (isWhitespace(string.charAt(index))) break;
+                }
+                return string.subSequence(mark, index).toString(); 
+            }
+	    };
 	}
 
 	private Strings() {
-		throw new UnsupportedOperationException();
+		throw new AssertionError();
 	}
 
 	public static final String reformatParagraph(String paragraph) {

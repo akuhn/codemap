@@ -20,7 +20,7 @@ package magic.blocks;
 
 import java.util.*;
 
-import magic.Magic;
+import magic.Extensions;
 
 
 public class Blocks {
@@ -160,7 +160,7 @@ public class Blocks {
 	 */
 	public static <A> boolean contains(A[] array, A a) {
 		for (A each : array) {
-			if (Magic.isEqual(each, a)) return true;
+			if (Extensions.eq(each, a)) return true;
 		}
 		return false;
 	}

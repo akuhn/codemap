@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 
-import magic.Iter;
+import magic.Extensions;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -47,13 +47,13 @@ public class IterTest {
 	
 	@Test
 	public void cycleEmpty() {
-		Iterator<String> cycle = Iter.cycle(empty).iterator();
+		Iterator<String> cycle = Extensions.cycle(empty).iterator();
 		assertTrue(!cycle.hasNext());
 	}
 
 	@Test
 	public void cycleSingle() {
-		Iterator<String> cycle = Iter.cycle(single).iterator();
+		Iterator<String> cycle = Extensions.cycle(single).iterator();
 		assertTrue(cycle.hasNext());
 		assertEquals("boe", cycle.next());
 		assertTrue(cycle.hasNext());
@@ -64,7 +64,7 @@ public class IterTest {
 	
 	@Test
 	public void cycleMany() {
-		Iterator<String> cycle = Iter.cycle(many).iterator();
+		Iterator<String> cycle = Extensions.cycle(many).iterator();
 		assertTrue(cycle.hasNext());
 		assertEquals("foo", cycle.next());
 		assertTrue(cycle.hasNext());
@@ -77,7 +77,7 @@ public class IterTest {
 	
 	@Test
 	public void cycleSingleRemove() {
-		Iterator<String> cycle = Iter.cycle(single).iterator();
+		Iterator<String> cycle = Extensions.cycle(single).iterator();
 		assertTrue(cycle.hasNext());
 		assertEquals("boe", cycle.next());
 		assertTrue(cycle.hasNext());
