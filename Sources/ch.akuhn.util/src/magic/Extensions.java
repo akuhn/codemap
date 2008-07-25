@@ -18,6 +18,7 @@
 
 package magic;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -34,9 +35,17 @@ import magic.util.Pair;
  * @author Adrian Kuhn
  * 
  */
+@SuppressWarnings("unchecked")
 public abstract class Extensions {
 
-    private final static Object NONE = new Object();
+    //private final static Object NONE = new Object();
+
+    public static <T> T[] Array(Class<T> tClass, T t, T... ts) {
+        T[] $ = (T[]) Array.newInstance(tClass, ts.length + 1);
+        System.arraycopy(ts, 0, $, 1, ts.length);
+        $[0] = t;
+        return $;
+    }
     
 	/**
 	 * Iterate indefinitely over <code>iterable</code>.
