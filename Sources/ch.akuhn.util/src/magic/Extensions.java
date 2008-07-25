@@ -146,7 +146,7 @@ public abstract class Extensions {
 	    return $;
 	}
 	
-	public static <E> List<E> list(E... elements) {
+	public static <E> List<E> List(E... elements) {
     	return Arrays.asList(elements);
     }
 
@@ -236,7 +236,7 @@ public abstract class Extensions {
 		};
 	}
     
-    public static <E> Set<E> set(E... elements) {
+    public static <E> Set<E> Set(E... elements) {
     	return new HashSet<E>(Arrays.asList(elements));
     }
 
