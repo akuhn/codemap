@@ -47,6 +47,21 @@ public abstract class Extensions {
         return $;
     }
     
+    public static <T> T[] Array(T t, T... ts) {
+        return (T[]) Array(leastUpperBound(t.getClass(), ts), t, ts);
+    }
+    
+    public static Class<?> leastUpperBound(Class<?> initial, Object... os) {
+        Class $ =  initial;
+        for (Object o : os) {
+            while (!$.isAssignableFrom(o.getClass())) {
+                $ = $.getSuperclass();
+                if ($ == null) return Object.class; 
+            }
+        }
+        return $;
+    }
+    
 	/**
 	 * Iterate indefinitely over <code>iterable</code>.
 	 * 

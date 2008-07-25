@@ -16,7 +16,7 @@
 //  along with ch.akuhn.util. If not, see <http://www.gnu.org/licenses/>.
 //  
 
-package ch.akuhn.util.tests;
+package magic.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
