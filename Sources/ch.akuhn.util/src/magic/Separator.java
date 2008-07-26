@@ -1,7 +1,7 @@
 package magic;
 
 /**
- * Separates elements of a collection while printing it. Does not require
+ * Separates elements of a collection while printing. Does not require
  * special case treatment of first or last element. For example, the
  * following program prints a list of its arguments separated by commas,
  * without using any conditionals.
@@ -15,7 +15,7 @@ package magic;
  * It wraps a string that is returned on every call of toString() except
  * for the first call, which returns an empty string.
  * 
- * @author Yossil Gil
+ * @author Yossi Gil
  * 
  */
 public class Separator {
