@@ -21,12 +21,12 @@ public class Indent {
     }
     
     public void inc() {
-        s += s + tab;
+        s += tab;
     }
     
     public void dec() {
         if (done()) throw new IllegalStateException();
-        s += s.substring(0, s.length() - tab.length());
+        s = s.substring(0, s.length() - tab.length());
     }
     
     public String toString() {
