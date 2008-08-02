@@ -212,6 +212,10 @@ public abstract class Extensions {
         }
     }
 
+    public static void puts(String format, Object... objects) {
+        System.out.println(String.format(format, objects));
+    }
+    
     public static void puts(Object[] objects) {
         System.out.print("[");
         Separator s = new Separator();

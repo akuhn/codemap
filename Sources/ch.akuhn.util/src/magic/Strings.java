@@ -97,6 +97,7 @@ public abstract class Strings {
 
 	public static final CharSequence fromFile(File file) {
 		try {
+		    assert file.exists() : file;
 			// memory mapped file
 			FileInputStream input = new FileInputStream(file);
 			FileChannel channel = input.getChannel();
