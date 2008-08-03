@@ -19,7 +19,9 @@
 package magic;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -259,6 +261,13 @@ public abstract class Extensions {
     	return new HashSet<E>(Arrays.asList(elements));
     }
 
+    public static <E> Iterable<E> sorted(Iterable<E> iter) {
+        ArrayList<E> list = new ArrayList<E>();
+        for (E e : iter) list.add(e);
+        Collections.sort(list, null);
+        return list;
+    }
+    
     /** Iterate over all elements of <code>iterable</code>, except the first one.
 	 * 
 	 */

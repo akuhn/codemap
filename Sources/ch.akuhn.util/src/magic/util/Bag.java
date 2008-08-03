@@ -18,9 +18,15 @@
 
 package magic.util;
 
+import static magic.Extensions.sorted;
+
 import java.util.AbstractCollection;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Collections;
 import java.util.Set;
@@ -31,52 +37,38 @@ import java.util.Set;
  */
 public class Bag<T> extends AbstractCollection<T> {
 
-	private class Itr implements Iterator<T> {
+	private class Iter extends SimpleIter<T> {
 
-		private int count;
-		private T curr;
-		private Iterator<T> iter;
+        private int count;
+        private T curr;
+        private Iterator<T> iter;
 
-		public Itr() {
-			iter = values.keySet().iterator();
-			this.prefetch();
-		}
-
-		
-		public boolean hasNext() {
-			return count > 0 || iter.hasNext();
-		}
-
-		
-		public T next() {
-			if (count <= 0)
-				this.prefetch();
-			if (curr == null)
-				throw new UnsupportedOperationException();
-			count--;
-			return curr;
-		}
-
-		private void prefetch() {
-			if (iter.hasNext()) {
-				curr = iter.next();
-				count = values.get(curr).value;
-			} else {
-				curr = null;
-			}
-		}
-
-		
-		public void remove() {
-			throw new UnsupportedOperationException();
-		}
-
+        public Iter() {
+            iter = values.keySet().iterator();
+        }
+	    
+        @Override
+        public T iterate() {
+            while (count <= 0) {
+                if (!iter.hasNext()) return done();
+                curr = iter.next();
+                count = values.get(curr).value;
+            }
+            count--;
+            return curr;
+        }
+	    
 	}
 
 	private static class Int {
 
 		public int value;
 
+        @Override
+        public String toString() {
+            return Integer.toString(value);
+        }
+		
 	}
 
 	private Map<T, Int> values = new HashMap<T, Int>();
@@ -159,7 +151,7 @@ public class Bag<T> extends AbstractCollection<T> {
      */
 	@Override
 	public Iterator<T> iterator() {
-		return new Itr();
+		return new Iter();
 	}
 	
 	/** Return a <tt>Set</tt> view of the elements contained in this bag. The set is backed by the bag,
@@ -264,5 +256,29 @@ public class Bag<T> extends AbstractCollection<T> {
 	public int elementSize() {
 		return values.size();
 	}
-	
+
+    public Iterable<Count<T>> sortedCounts() {
+        return sorted(counts());
+    }
+    
+    public Set<Count<T>> counts() {
+        Set<Count<T>> counts = new HashSet<Count<T>>();
+        for (T t : values.keySet()) {
+            counts.add(new Count<T>(t, values.get(t).value));
+        }
+        return Collections.unmodifiableSet(counts);
+    }
+    
+    public static class Count<E> implements Comparable<Count<E>> {
+        public final E element;
+        public final int count;
+        private Count(E element, int count) {
+            this.element = element;
+            this.count = count;
+        }
+        public int compareTo(Count<E> o) {
+            return Integer.signum(o.count - count);
+        } 
+    }
+    
 }
