@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 /** Avoids void clutter in the presence of null. Your eyes do not deceive you,
- * this <i>is</i> indeed a monad for Java! Use it as follows.
+ * this is Haskell's maybe monad in Java. Use it as follows.
  * 
  * <pre>public static void main(String[] args) {
  *    for (String arg: Maybe.last(args)) {
