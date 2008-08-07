@@ -1,15 +1,27 @@
 package magic;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
-/** Maybe monad for Java.
+/** Avoids void clutter in the presence of null. Your eyes do not deceive you,
+ * this <i>is</i> indeed a monad for Java! Use it as follows.
+ * 
+ * <pre>public static void main(String[] args) {
+ *    for (String arg: Maybe.last(args)) {
+ *        puts(arg);
+ *    }
+ *}</pre>
  * 
  * @author Tony Morris, 2006/11/13
  * @author Daniel Spiewak, 2008/04/07
+ * @author Stephan Schmidt, 2008/08/06
  * @author Adrian Kuhn, 2008/08/08
+ * 
+ * @see http://blog.tmorris.net/maybe-in-java/
+ * @see http://www.codecommit.com/blog/scala/the-option-pattern
+ * @see http://stephan.reposita.org/archives/2008/08/06/for-hack-with-option-monad-in-java/
  *
- * @param <T>
  */
 public abstract class Maybe<T> implements Iterable<T> {
 
@@ -106,6 +118,45 @@ public abstract class Maybe<T> implements Iterable<T> {
 
     public static <T> Maybe<T> some(T t) {
         return new Some<T>(t);
+    }
+    
+    public static <T> Maybe<T> maybe(T t) {
+        return t == null ? Maybe.<T>none() : Maybe.<T>some(t);
+    }
+    
+    public static <T> Maybe<T> maybe(Maybe<T> maybe) {
+        return maybe;
+    }
+    
+    public static final <E> Maybe<E> first(E[] es) {
+        if (es.length == 0) return none();
+        return maybe(es[0]);
+    }
+
+    public static final <E> Maybe<E> first(Iterable<E> es) {
+        for (E e : es) return maybe(e);
+        return none();
+    }
+    
+    public static final <E> Maybe<E> first(List<E> es) {
+        if (!es.isEmpty()) return none();
+        return maybe(es.get(0));
+    }
+
+    public static final <E> Maybe<E> last(E[] es) {
+        if (es.length == 0) return none();
+        return maybe(es[es.length - 1]);
+    }
+
+    public static final <E> Maybe<E> last(Iterable<E> es) {
+        E $ = null;
+        for (E e : es) $ = e;
+        return maybe($);
+    }
+    
+    public static final <E> Maybe<E> last(List<E> es) {
+        if (!es.isEmpty()) return none();
+        return maybe(es.get(es.size() - 1));
     }
     
 }

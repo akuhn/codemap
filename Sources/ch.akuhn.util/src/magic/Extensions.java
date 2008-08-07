@@ -302,12 +302,4 @@ public abstract class Extensions {
 		throw new AssertionError();
 	}
     
-    public static <T> Maybe<T> none() {
-        return Maybe.<T>none();
-    }
-
-    public static <T> Maybe<T> some(T t) {
-        return Maybe.<T>some(t);
-    }
-    
 }
