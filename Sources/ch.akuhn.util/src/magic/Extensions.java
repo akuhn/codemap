@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import magic.Maybe.None;
+import magic.Maybe.Some;
 import magic.util.Pair;
 
 
@@ -299,5 +301,13 @@ public abstract class Extensions {
     private Extensions() {
 		throw new AssertionError();
 	}
+    
+    public static <T> Maybe<T> none() {
+        return Maybe.<T>none();
+    }
+
+    public static <T> Maybe<T> some(T t) {
+        return Maybe.<T>some(t);
+    }
     
 }
