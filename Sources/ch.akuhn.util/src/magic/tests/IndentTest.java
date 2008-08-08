@@ -6,63 +6,63 @@ import org.junit.runner.RunWith;
 import jexample.Depends;
 import jexample.JExampleRunner;
 
-import magic.Indent;
+import magic.Tab;
 
 
 @RunWith( JExampleRunner.class )
 public class IndentTest {
 
     @Test
-    public Indent testEmpty() {
-        Indent n = new Indent("abc");
+    public Tab testEmpty() {
+        Tab n = new Tab("abc");
         assertEquals("", n.toString());
-        assertEquals(true, n.done());
+        assertEquals(true, n.isEmpty());
         return n;
     }
     
     @Test
     @Depends("testEmpty")
-    public Indent testIncrement(Indent n) {
-        n.inc();
+    public Tab testIncrement(Tab n) {
+        n.more();
         assertEquals("abc", n.toString());
-        n.inc();
+        n.more();
         assertEquals("abcabc", n.toString());
-        n.inc();
+        n.more();
         assertEquals("abcabcabc", n.toString());
         return n;
     }
     
     @Test
     @Depends("testIncrement")
-    public Indent testDecrement(Indent n) {
+    public Tab testDecrement(Tab n) {
         assertEquals("abcabcabc", n.toString());
-        n.dec();
+        n.less();
         assertEquals("abcabc", n.toString());
-        n.dec();
+        n.less();
         assertEquals("abc", n.toString());
-        n.dec();
+        n.less();
         assertEquals("", n.toString());
         return n;
     }
     
     @Test
     @Depends("testDecrement")
-    public Indent testDone(Indent n) {
-        assertEquals(true, n.done());
+    public Tab testDone(Tab n) {
+        assertEquals(true, n.isEmpty());
         return n;
     }
     
     @Test
     @Depends("testIncrement")
-    public Indent testNotDone(Indent n) {
-        assertEquals(false, n.done());
+    public Tab testNotDone(Tab n) {
+        assertEquals(false, n.isEmpty());
         return n;
     }
     
     @Test(expected = IllegalStateException.class)
     @Depends("testDone")
-    public void testDecrementFailsWhenDone(Indent n) {
-        n.dec();
+    public void testDecrementFailsWhenDone(Tab n) {
+        n.less();
     }
     
 }

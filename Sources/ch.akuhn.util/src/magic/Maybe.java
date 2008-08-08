@@ -14,7 +14,7 @@ import java.util.NoSuchElementException;
  *}</pre>
  * 
  * @author Tony Morris, 2006/11/13
- * @author Daniel Spiewak, 2008/04/07
+ * @author Daniel Spiewak, 2008/08/07
  * @author Stephan Schmidt, 2008/08/06
  * @author Adrian Kuhn, 2008/08/08
  * 

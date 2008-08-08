@@ -2,30 +2,31 @@ package magic;
 
 /** Indents lines while printing them. 
  * 
- * @author Adrian Kuhn
- *
+ * @author Adrian Kuhn, 2008/07/21
+ * @author Thanks to Yossi Gil for pointing out better class and method names.
+
  */
 
-public class Indent {
+public class Tab {
 
     private String s;
     private final String tab;
     
-    public Indent() {
+    public Tab() {
         this("\t");
     }
     
-    public Indent(String tab) {
+    public Tab(String tab) {
         this.tab = tab;
         this.s = "";
     }
     
-    public void inc() {
+    public void more() {
         s += tab;
     }
     
-    public void dec() {
-        if (done()) throw new IllegalStateException();
+    public void less() {
+        if (isEmpty()) throw new IllegalStateException();
         s = s.substring(0, s.length() - tab.length());
     }
     
@@ -33,7 +34,7 @@ public class Indent {
         return s;
     }
     
-    public boolean done() {
+    public boolean isEmpty() {
         return s.length() == 0;
     }
     
