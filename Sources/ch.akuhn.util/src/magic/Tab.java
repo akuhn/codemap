@@ -21,13 +21,15 @@ public class Tab {
         this.s = "";
     }
     
-    public void more() {
+    public Tab more() {
         s += tab;
+        return this;
     }
     
-    public void less() {
+    public Tab less() {
         if (isEmpty()) throw new IllegalStateException();
         s = s.substring(0, s.length() - tab.length());
+        return this;
     }
     
     public String toString() {

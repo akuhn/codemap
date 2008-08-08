@@ -153,7 +153,7 @@ public abstract class Strings {
                 if (index == string.length()) return done();
                 int mark = index;
                 for (; index < string.length(); index++) {
-                    if (isLetter(string.charAt(index))) break;
+                    if (!isLetter(string.charAt(index))) break;
                 }
                 return string.subSequence(mark, index).toString(); 
             }
@@ -175,6 +175,7 @@ public abstract class Strings {
 	}
 
 	public static final String toUpperFirstChar(String string) {
+	    if (string == null || string.length() == 0) return string;
 		StringBuilder $ = new StringBuilder(string.length());
 		$.append(toUpperCase(string.charAt(0)));
 		$.append(string.substring(1));

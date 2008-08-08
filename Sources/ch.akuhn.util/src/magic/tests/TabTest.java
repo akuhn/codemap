@@ -4,14 +4,19 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import jexample.Depends;
-import jexample.JExampleRunner;
+import jexample.JExample;
 
 import magic.Tab;
 
 
-@RunWith( JExampleRunner.class )
-public class IndentTest {
+@RunWith( JExample.class )
+public class TabTest {
 
+    @Test
+    public void defaultValue() {
+        assertEquals("\t", new Tab().more().toString());
+    }
+    
     @Test
     public Tab testEmpty() {
         Tab n = new Tab("abc");

@@ -18,6 +18,7 @@
 
 package magic.tests;
 
+import static magic.Strings.letters;
 import static magic.Strings.camelCase;
 import static magic.Strings.chars;
 import static magic.Strings.lines;
@@ -29,11 +30,59 @@ import static org.junit.Assert.assertTrue;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import magic.Strings;
+
 import org.junit.Test;
 
 public class StringsTest {
 
-	@Test(expected = NoSuchElementException.class)
+    @Test(expected=UnsupportedOperationException.class)
+    public void unsupportedRemoveOnChars() {
+        chars("abcdef").iterator().remove();
+    }
+    
+    @Test(expected=UnsupportedOperationException.class)
+    public void unsupportedRemoveOnCamelCase() {
+        camelCase("fooBar").iterator().remove();
+    }
+
+    @Test
+    public void capticalize() {
+        assertEquals("Foo", Strings.toUpperFirstChar("foo"));
+        assertEquals("Foo", Strings.toUpperFirstChar("Foo"));
+    }
+    
+    @Test
+    public void capticalizeEmpty() {
+        assertEquals("", Strings.toUpperFirstChar(""));
+    }
+
+    @Test
+    public void letters() {
+        Iterator<String> $ = Strings.letters("To be, or not to be.").iterator();
+        assertEquals("To", $.next());
+        assertEquals("be", $.next());
+        assertEquals("or", $.next());
+        assertEquals("not", $.next());
+        assertEquals("to", $.next());
+        assertEquals("be", $.next());
+        assertEquals(false, $.hasNext());
+    }
+    
+    @Test
+    public void words() {
+        Iterator<String> $ = Strings.words("To be, or not to be.").iterator();
+        assertEquals("To", $.next());
+        assertEquals("be,", $.next());
+        assertEquals("or", $.next());
+        assertEquals("not", $.next());
+        assertEquals("to", $.next());
+        assertEquals("be.", $.next());
+        assertEquals(false, $.hasNext());
+    }
+    
+    
+    @Test(expected = NoSuchElementException.class)
 	public void emptyCamelCase() {
 		String foo = "";
 		Iterator<CharSequence> it = camelCase(foo).iterator();
@@ -138,7 +187,7 @@ public class StringsTest {
 	public void testWords() {
 		String abc = "aaa aaa  aaa   aaa";
 		int index = 0;
-		for (CharSequence line : words(abc)) {
+		for (CharSequence line : Strings.words(abc)) {
 			assertEquals("aaa", line.toString());
 			index++;
 		}
@@ -149,7 +198,7 @@ public class StringsTest {
 	public void testWords2() {
 		String abc = " aaa aaa aaa ";
 		int index = 0;
-		for (CharSequence line : words(abc)) {
+		for (CharSequence line : Strings.words(abc)) {
 			assertEquals("aaa", line.toString());
 			index++;
 		}
@@ -159,13 +208,13 @@ public class StringsTest {
 	@Test
 	public void testWords3() {
 		String abc = "    ";
-		assertFalse(words(abc).iterator().hasNext());
+		assertFalse(Strings.words(abc).iterator().hasNext());
 	}
 
 	@Test
 	public void testWords4() {
 		String abc = "";
-		assertFalse(words(abc).iterator().hasNext());
+		assertFalse(Strings.words(abc).iterator().hasNext());
 	}
 
 }

@@ -119,6 +119,18 @@ public class BagTest {
 		assertEquals(Integer.MAX_VALUE, bag.size());
 	}
 
+    @Test
+    public void addNone() {
+        Bag<String> bag = new Bag<String>();
+        assertEquals(false, bag.add("aaa", 0));
+    }
+	
+    @Test(expected = IllegalArgumentException.class)
+    public void removeDoesNotWorkLikeThat() {
+        Bag<String> bag = new Bag<String>();
+        assertEquals(false, bag.add("aaa", -1));
+    }
+	
 	@Test
 	public void testAddOccurrencesOverflow() {
 		Bag<String> bag = new Bag<String>();
