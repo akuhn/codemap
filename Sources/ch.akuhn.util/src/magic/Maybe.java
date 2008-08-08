@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
  * 
  * <pre>public static void main(String[] args) {
  *    for (String arg: Maybe.last(args)) {
- *        puts(arg);
+ *        System.out.println(arg);
  *    }
  *}</pre>
  * 
