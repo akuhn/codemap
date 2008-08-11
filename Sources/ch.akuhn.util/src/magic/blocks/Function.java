@@ -20,12 +20,14 @@ package magic.blocks;
 
 /**
  * A block with one argument and any return value.
- *
- * @param <T> type of return value.
- * @param <A> type of argument.
+ * 
+ * @param <T>
+ *            type of return value.
+ * @param <A>
+ *            type of argument.
  */
 public interface Function<T, A> {
 
-	public T eval(A a);
+	public T apply(A a);
 
 }

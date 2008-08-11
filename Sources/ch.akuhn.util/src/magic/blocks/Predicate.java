@@ -18,14 +18,15 @@
 
 package magic.blocks;
 
-/** 
+/**
  * A block with one argument and boolean return value.
  * 
- *
- * @param <A> type of argument.
+ * 
+ * @param <A>
+ *            type of argument.
  */
 public interface Predicate<A> {
 
-	public boolean is(A a);
+	public boolean apply(A a);
 
 }

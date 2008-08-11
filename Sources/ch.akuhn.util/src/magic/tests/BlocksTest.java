@@ -29,7 +29,6 @@ import magic.blocks.Predicate;
 
 import org.junit.Test;
 
-
 public class BlocksTest {
 
 	@SuppressWarnings("unchecked")
@@ -39,24 +38,19 @@ public class BlocksTest {
 		Collection<Object> reply = Blocks.select(coll, Blocks.instanceOf(String.class));
 		assertEquals(reply, asList("A", "B"));
 		reply = Blocks.select(coll, Blocks.instanceOf(Number.class));
-		assertEquals(reply, asList(1,2,3));
+		assertEquals(reply, asList(1, 2, 3));
 	}
-	
-	
+
 	@Test
 	public void testSelect() {
 		Collection<Integer> coll = asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 		Collection<Integer> reply = Blocks.select(coll, new Predicate<Integer>() {
-			
-			public boolean is(Integer a) {
+
+			public boolean apply(Integer a) {
 				return a % 2 == 1;
 			}
 		});
 		assertEquals(reply, asList(1, 3, 5, 7, 9));
 	}
-	
-	
-	
-	
 
 }

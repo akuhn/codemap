@@ -29,7 +29,6 @@ import magic.util.CacheMap;
 import org.junit.Ignore;
 import org.junit.Test;
 
-
 public class CacheMapTest {
 
 	@Test
@@ -44,10 +43,10 @@ public class CacheMapTest {
 		assertEquals(map.get(3), "3");
 		assertEquals(map.get(2), "2");
 	}
-	
+
 	@Test
 	public void instancesSimple() {
-		Map<String,Object> map = CacheMap.instances(Object.class);
+		Map<String, Object> map = CacheMap.instances(Object.class);
 		Object a = map.get("a");
 		Object b = map.get("b");
 		Object a2 = map.get("a");
@@ -57,10 +56,10 @@ public class CacheMapTest {
 		assertNotSame(b, c);
 		assertNotSame(c, a);
 	}
-	
+
 	@Test
 	public void instancesArgument() {
-		Map<String,Wrapper> map = CacheMap.instances(Wrapper.class);
+		Map<String, Wrapper> map = CacheMap.instances(Wrapper.class);
 		Wrapper a = map.get("a");
 		Wrapper b = map.get("b");
 		Wrapper a2 = map.get("a");
@@ -73,13 +72,13 @@ public class CacheMapTest {
 		assertEquals("b", b.delegate);
 		assertEquals("c", c.delegate);
 	}
-	
+
 	public static class Wrapper {
 		public Object delegate;
+
 		public Wrapper(Object delegate) {
 			this.delegate = delegate;
 		}
 	}
-	
 
 }

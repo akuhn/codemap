@@ -27,448 +27,492 @@ import java.util.AbstractCollection;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-
-/** A class for generic linked lists. Links are supposed to be
- *  immutable, the only exception being the incremental construction of
- *  lists via ListBuffers.   
- *  
- *  <p>Lists are always trailed by a sentinel element, whose head and tail
- *  are both null.
- *
+/**
+ * A class for generic linked lists. Links are supposed to be immutable, the
+ * only exception being the incremental construction of lists via ListBuffers.
+ * 
+ * <p>
+ * Lists are always trailed by a sentinel element, whose head and tail are both
+ * null.
+ * 
  */
 public class List<A> extends AbstractCollection<A> implements java.util.List<A> {
 
-    /** The first element of the list, supposed to be immutable.
-     */
-    public A head;
+	/**
+	 * The first element of the list, supposed to be immutable.
+	 */
+	public A head;
 
-    /** The remainder of the list except for its first element, supposed
-     *  to be immutable.
-     */
-    //@Deprecated
-    public List<A> tail;
+	/**
+	 * The remainder of the list except for its first element, supposed to be
+	 * immutable.
+	 */
+	// @Deprecated
+	public List<A> tail;
 
-    /** Construct a list given its head and tail.
-     */
-    List(A head, List<A> tail) {
-        this.tail = tail;
-        this.head = head;
-    }
+	/**
+	 * Construct a list given its head and tail.
+	 */
+	List(A head, List<A> tail) {
+		this.tail = tail;
+		this.head = head;
+	}
 
-    /** Construct an empty list.
-     */
-    @SuppressWarnings("unchecked")
-    public static <A> List<A> nil() {
-        return EMPTY_LIST;
-    }
-    @SuppressWarnings("unchecked")
-	private static List EMPTY_LIST = new List<Object>(null,null) {
-        public List<Object> setTail(List<Object> tail) {
-            throw new UnsupportedOperationException();
-        }
-        public boolean isEmpty() {
-            return true;
-        }
-    };
+	/**
+	 * Construct an empty list.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <A> List<A> nil() {
+		return EMPTY_LIST;
+	}
 
-    /** Construct a list consisting of given element.
-     */
-    public static <A> List<A> of(A x1) {
-        return new List<A>(x1, List.<A>nil());
-    }
+	@SuppressWarnings("unchecked")
+	private static List EMPTY_LIST = new List<Object>(null, null) {
+		public List<Object> setTail(List<Object> tail) {
+			throw new UnsupportedOperationException();
+		}
 
-    /** Construct a list consisting of given elements.
-     */
-    public static <A> List<A> of(A x1, A x2) {
-        return new List<A>(x1, of(x2));
-    }
+		public boolean isEmpty() {
+			return true;
+		}
+	};
 
-    /** Construct a list consisting of given elements.
-     */
-    public static <A> List<A> of(A x1, A x2, A x3) {
-        return new List<A>(x1, of(x2, x3));
-    }
+	/**
+	 * Construct a list consisting of given element.
+	 */
+	public static <A> List<A> of(A x1) {
+		return new List<A>(x1, List.<A> nil());
+	}
 
-    /** Construct a list consisting of given elements.
-     */
-    public static <A> List<A> of(A x1, A x2, A x3, A... rest) {
-        return new List<A>(x1, new List<A>(x2, new List<A>(x3, from(rest))));
-    }
+	/**
+	 * Construct a list consisting of given elements.
+	 */
+	public static <A> List<A> of(A x1, A x2) {
+		return new List<A>(x1, of(x2));
+	}
 
-    /**
-     * Construct a list consisting all elements of given array.
-     * @param array an array; if {@code null} return an empty list
-     */
-    public static <A> List<A> from(A[] array) {
-        List<A> xs = nil();
-        if (array != null)
-            for (int i = array.length - 1; i >= 0; i--)
-                xs = new List<A>(array[i], xs);
-        return xs;
-    }
+	/**
+	 * Construct a list consisting of given elements.
+	 */
+	public static <A> List<A> of(A x1, A x2, A x3) {
+		return new List<A>(x1, of(x2, x3));
+	}
 
-    /** Construct a list consisting of a given number of identical elements.
-     *  @param len    The number of elements in the list.
-     *  @param init   The value of each element.
-     */
-    @Deprecated
-    public static <A> List<A> fill(int len, A init) {
-        List<A> l = nil();
-        for (int i = 0; i < len; i++) l = new List<A>(init, l);
-        return l;
-    }
+	/**
+	 * Construct a list consisting of given elements.
+	 */
+	public static <A> List<A> of(A x1, A x2, A x3, A... rest) {
+		return new List<A>(x1, new List<A>(x2, new List<A>(x3, from(rest))));
+	}
 
-    /** Does list have no elements?
-     */
-    @Override
-    public boolean isEmpty() {
-        return tail == null;
-    }
+	/**
+	 * Construct a list consisting all elements of given array.
+	 * 
+	 * @param array
+	 *            an array; if {@code null} return an empty list
+	 */
+	public static <A> List<A> from(A[] array) {
+		List<A> xs = nil();
+		if (array != null)
+			for (int i = array.length - 1; i >= 0; i--)
+				xs = new List<A>(array[i], xs);
+		return xs;
+	}
 
-    /** Does list have elements?
-     */
-    //@Deprecated
-    public boolean nonEmpty() {
-        return tail != null;
-    }
+	/**
+	 * Construct a list consisting of a given number of identical elements.
+	 * 
+	 * @param len
+	 *            The number of elements in the list.
+	 * @param init
+	 *            The value of each element.
+	 */
+	@Deprecated
+	public static <A> List<A> fill(int len, A init) {
+		List<A> l = nil();
+		for (int i = 0; i < len; i++)
+			l = new List<A>(init, l);
+		return l;
+	}
 
-    /** Return the number of elements in this list.
-     */
-    //@Deprecated
-    public int length() {
-        List<A> l = this;
-        int len = 0;
-        while (l.tail != null) {
-            l = l.tail;
-            len++;
-        }
-        return len;
-    }
-    @Override
-    public int size() {
-        return length();
-    }
+	/**
+	 * Does list have no elements?
+	 */
+	@Override
+	public boolean isEmpty() {
+		return tail == null;
+	}
 
-    public List<A> setTail(List<A> tail) {
-        this.tail = tail;
-        return tail;
-    }
+	/**
+	 * Does list have elements?
+	 */
+	// @Deprecated
+	public boolean nonEmpty() {
+		return tail != null;
+	}
 
-    /** Prepend given element to front of list, forming and returning
-     *  a new list.
-     */
-    public List<A> prepend(A x) {
-        return new List<A>(x, this);
-    }
+	/**
+	 * Return the number of elements in this list.
+	 */
+	// @Deprecated
+	public int length() {
+		List<A> l = this;
+		int len = 0;
+		while (l.tail != null) {
+			l = l.tail;
+			len++;
+		}
+		return len;
+	}
 
-    /** Prepend given list of elements to front of list, forming and returning
-     *  a new list.
-     */
-    public List<A> prependList(List<A> xs) {
-        if (this.isEmpty()) return xs;
-        if (xs.isEmpty()) return this;
-        if (xs.tail.isEmpty()) return prepend(xs.head);
-        // return this.prependList(xs.tail).prepend(xs.head);
-        List<A> result = this;
-        List<A> rev = xs.reverse();
-        assert rev != xs;
-        // since xs.reverse() returned a new list, we can reuse the
-        // individual List objects, instead of allocating new ones.
-        while (rev.nonEmpty()) {
-            List<A> h = rev;
-            rev = rev.tail;
-            h.setTail(result);
-            result = h;
-        }
-        return result;
-    }
+	@Override
+	public int size() {
+		return length();
+	}
 
-    /** Reverse list.
-     * If the list is empty or a singleton, then the same list is returned.
-     * Otherwise a new list is formed.
-     */
-    public List<A> reverse() {
-        // if it is empty or a singleton, return itself
-        if (isEmpty() || tail.isEmpty())
-            return this;
+	public List<A> setTail(List<A> tail) {
+		this.tail = tail;
+		return tail;
+	}
 
-        List<A> rev = nil();
-        for (List<A> l = this; l.nonEmpty(); l = l.tail)
-            rev = new List<A>(l.head, rev);
-        return rev;
-    }
+	/**
+	 * Prepend given element to front of list, forming and returning a new list.
+	 */
+	public List<A> prepend(A x) {
+		return new List<A>(x, this);
+	}
 
-    /** Append given element at length, forming and returning
-     *  a new list.
-     */
-    public List<A> append(A x) {
-        return of(x).prependList(this);
-    }
+	/**
+	 * Prepend given list of elements to front of list, forming and returning a
+	 * new list.
+	 */
+	public List<A> prependList(List<A> xs) {
+		if (this.isEmpty())
+			return xs;
+		if (xs.isEmpty())
+			return this;
+		if (xs.tail.isEmpty())
+			return prepend(xs.head);
+		// return this.prependList(xs.tail).prepend(xs.head);
+		List<A> result = this;
+		List<A> rev = xs.reverse();
+		assert rev != xs;
+		// since xs.reverse() returned a new list, we can reuse the
+		// individual List objects, instead of allocating new ones.
+		while (rev.nonEmpty()) {
+			List<A> h = rev;
+			rev = rev.tail;
+			h.setTail(result);
+			result = h;
+		}
+		return result;
+	}
 
-    /** Append given list at length, forming and returning
-     *  a new list.
-     */
-    public List<A> appendList(List<A> x) {
-        return x.prependList(this);
-    }
+	/**
+	 * Reverse list. If the list is empty or a singleton, then the same list is
+	 * returned. Otherwise a new list is formed.
+	 */
+	public List<A> reverse() {
+		// if it is empty or a singleton, return itself
+		if (isEmpty() || tail.isEmpty())
+			return this;
 
-    /**
-     * Append given list buffer at length, forming and returning a new
-     * list.
-     */
-    public List<A> appendList(ListBuffer<A> x) {
-        return appendList(x.toList());
-    }
+		List<A> rev = nil();
+		for (List<A> l = this; l.nonEmpty(); l = l.tail)
+			rev = new List<A>(l.head, rev);
+		return rev;
+	}
 
-    /** Copy successive elements of this list into given vector until
-     *  list is exhausted or end of vector is reached.
-     */
-    @Override @SuppressWarnings("unchecked")
-    public <T> T[] toArray(T[] vec) {
-        int i = 0;
-        List<A> l = this;
-        Object[] dest = vec;
-        while (l.nonEmpty() && i < vec.length) {
-            dest[i] = l.head;
-            l = l.tail;
-            i++;
-        }
-        if (l.isEmpty()) {
-            if (i < vec.length)
-                vec[i] = null;
-            return vec;
-        }
+	/**
+	 * Append given element at length, forming and returning a new list.
+	 */
+	public List<A> append(A x) {
+		return of(x).prependList(this);
+	}
 
-        vec = (T[])Array.newInstance(vec.getClass().getComponentType(), size());
-        return toArray(vec);
-    }
+	/**
+	 * Append given list at length, forming and returning a new list.
+	 */
+	public List<A> appendList(List<A> x) {
+		return x.prependList(this);
+	}
 
-    public Object[] toArray() {
-        return toArray(new Object[size()]);
-    }
+	/**
+	 * Append given list buffer at length, forming and returning a new list.
+	 */
+	public List<A> appendList(ListBuffer<A> x) {
+		return appendList(x.toList());
+	}
 
-    /** Form a string listing all elements with given separator character.
-     */
-    public String toString(String sep) {
-        if (isEmpty()) {
-            return "";
-        } else {
-            StringBuffer buf = new StringBuffer();
-            buf.append(head);
-            for (List<A> l = tail; l.nonEmpty(); l = l.tail) {
-                buf.append(sep);
-                buf.append(l.head);
-            }
-            return buf.toString();
-        }
-    }
+	/**
+	 * Copy successive elements of this list into given vector until list is
+	 * exhausted or end of vector is reached.
+	 */
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> T[] toArray(T[] vec) {
+		int i = 0;
+		List<A> l = this;
+		Object[] dest = vec;
+		while (l.nonEmpty() && i < vec.length) {
+			dest[i] = l.head;
+			l = l.tail;
+			i++;
+		}
+		if (l.isEmpty()) {
+			if (i < vec.length)
+				vec[i] = null;
+			return vec;
+		}
 
-    /** Form a string listing all elements with comma as the separator character.
-     */
-    @Override
-    public String toString() {
-        return toString(",");
-    }
+		vec = (T[]) Array.newInstance(vec.getClass().getComponentType(), size());
+		return toArray(vec);
+	}
 
-    /** Compute a hash code, overrides Object
-     *  @see java.util.List#hashCode
-     */
-    @Override
-    public int hashCode() {
-        List<A> l = this;
-        int h = 1;
-        while (l.tail != null) {
-            h = h * 31 + (l.head == null ? 0 : l.head.hashCode());
-            l = l.tail;
-        }
-        return h;
-    }
+	public Object[] toArray() {
+		return toArray(new Object[size()]);
+	}
 
-    /** Is this list the same as other list?
-     *  @see java.util.List#equals
-     */
-    @Override
-    public boolean equals(Object other) {
-        if (other instanceof List<?>)
-            return equals(this, (List<?>)other);
-        if (other instanceof java.util.List<?>) {
-            List<A> t = this;
-            Iterator<?> oIter = ((java.util.List<?>) other).iterator();
-            while (t.tail != null && oIter.hasNext()) {
-                Object o = oIter.next();
-                if ( !(t.head == null ? o == null : t.head.equals(o)))
-                    return false;
-                t = t.tail;
-            }
-            return (t.isEmpty() && !oIter.hasNext());
-        }
-        return false;
-    }
+	/**
+	 * Form a string listing all elements with given separator character.
+	 */
+	public String toString(String sep) {
+		if (isEmpty()) {
+			return "";
+		} else {
+			StringBuffer buf = new StringBuffer();
+			buf.append(head);
+			for (List<A> l = tail; l.nonEmpty(); l = l.tail) {
+				buf.append(sep);
+				buf.append(l.head);
+			}
+			return buf.toString();
+		}
+	}
 
-    /** Are the two lists the same?
-     */
-    public static boolean equals(List<?> xs, List<?> ys) {
-        while (xs.tail != null && ys.tail != null) {
-            if (xs.head == null) {
-                if (ys.head != null) return false;
-            } else {
-                if (!xs.head.equals(ys.head)) return false;
-            }
-            xs = xs.tail;
-            ys = ys.tail;
-        }
-        return xs.tail == null && ys.tail == null;
-    }
+	/**
+	 * Form a string listing all elements with comma as the separator character.
+	 */
+	@Override
+	public String toString() {
+		return toString(",");
+	}
 
-    /** Does the list contain the specified element?
-     */
-    @Override
-    public boolean contains(Object x) {
-        List<A> l = this;
-        while (l.tail != null) {
-            if (x == null) {
-                if (l.head == null) return true;
-            } else {
-                if (l.head.equals(x)) return true;
-            }
-            l = l.tail;
-        }
-        return false;
-    }
+	/**
+	 * Compute a hash code, overrides Object
+	 * 
+	 * @see java.util.List#hashCode
+	 */
+	@Override
+	public int hashCode() {
+		List<A> l = this;
+		int h = 1;
+		while (l.tail != null) {
+			h = h * 31 + (l.head == null ? 0 : l.head.hashCode());
+			l = l.tail;
+		}
+		return h;
+	}
 
-    /** The last element in the list, if any, or null.
-     */
-    public A last() {
-        A last = null;
-        List<A> t = this;
-        while (t.tail != null) {
-            last = t.head;
-            t = t.tail;
-        }
-        return last;
-    }
+	/**
+	 * Is this list the same as other list?
+	 * 
+	 * @see java.util.List#equals
+	 */
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof List<?>)
+			return equals(this, (List<?>) other);
+		if (other instanceof java.util.List<?>) {
+			List<A> t = this;
+			Iterator<?> oIter = ((java.util.List<?>) other).iterator();
+			while (t.tail != null && oIter.hasNext()) {
+				Object o = oIter.next();
+				if (!(t.head == null ? o == null : t.head.equals(o)))
+					return false;
+				t = t.tail;
+			}
+			return (t.isEmpty() && !oIter.hasNext());
+		}
+		return false;
+	}
 
-    @SuppressWarnings("unchecked")
-    public static <T> List<T> convert(Class<T> klass, List<?> list) {
-        if (list == null)
-            return null;
-        for (Object o : list)
-            klass.cast(o);
-        return (List<T>)list;
-    }
+	/**
+	 * Are the two lists the same?
+	 */
+	public static boolean equals(List<?> xs, List<?> ys) {
+		while (xs.tail != null && ys.tail != null) {
+			if (xs.head == null) {
+				if (ys.head != null)
+					return false;
+			} else {
+				if (!xs.head.equals(ys.head))
+					return false;
+			}
+			xs = xs.tail;
+			ys = ys.tail;
+		}
+		return xs.tail == null && ys.tail == null;
+	}
 
-    @SuppressWarnings("unchecked")
+	/**
+	 * Does the list contain the specified element?
+	 */
+	@Override
+	public boolean contains(Object x) {
+		List<A> l = this;
+		while (l.tail != null) {
+			if (x == null) {
+				if (l.head == null)
+					return true;
+			} else {
+				if (l.head.equals(x))
+					return true;
+			}
+			l = l.tail;
+		}
+		return false;
+	}
+
+	/**
+	 * The last element in the list, if any, or null.
+	 */
+	public A last() {
+		A last = null;
+		List<A> t = this;
+		while (t.tail != null) {
+			last = t.head;
+			t = t.tail;
+		}
+		return last;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> List<T> convert(Class<T> klass, List<?> list) {
+		if (list == null)
+			return null;
+		for (Object o : list)
+			klass.cast(o);
+		return (List<T>) list;
+	}
+
+	@SuppressWarnings("unchecked")
 	private static Iterator EMPTYITERATOR = new Iterator() {
-            public boolean hasNext() {
-                return false;
-            }
-            public Object next() {
-                throw new java.util.NoSuchElementException();
-            }
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-        };
+		public boolean hasNext() {
+			return false;
+		}
 
-    @SuppressWarnings("unchecked")
-    private static <A> Iterator<A> emptyIterator() {
-        return EMPTYITERATOR;
-    }
+		public Object next() {
+			throw new java.util.NoSuchElementException();
+		}
 
-    @Override
-    public Iterator<A> iterator() {
-        if (tail == null)
-            return emptyIterator();
-        return new Iterator<A>() {
-            List<A> elems = List.this;
-            public boolean hasNext() {
-                return elems.tail != null;
-            }
-            public A next() {
-                if (elems.tail == null)
-                    throw new NoSuchElementException();
-                A result = elems.head;
-                elems = elems.tail;
-                return result;
-            }
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-        };
-    }
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+	};
 
-    public A get(int index) {
-        if (index < 0)
-            throw new IndexOutOfBoundsException(String.valueOf(index));
+	@SuppressWarnings("unchecked")
+	private static <A> Iterator<A> emptyIterator() {
+		return EMPTYITERATOR;
+	}
 
-        List<A> l = this;
-        for (int i = index; i-- > 0 && !l.isEmpty(); l = l.tail)
-            ;
+	@Override
+	public Iterator<A> iterator() {
+		if (tail == null)
+			return emptyIterator();
+		return new Iterator<A>() {
+			List<A> elems = List.this;
 
-        if (l.isEmpty())
-            throw new IndexOutOfBoundsException("Index: " + index + ", " +
-                                                "Size: " + size());
-        return l.head;
-    }
+			public boolean hasNext() {
+				return elems.tail != null;
+			}
 
-    public boolean addAll(int index, Collection<? extends A> c) {
-        if (c.isEmpty())
-            return false;
-        throw new UnsupportedOperationException();
-    }
+			public A next() {
+				if (elems.tail == null)
+					throw new NoSuchElementException();
+				A result = elems.head;
+				elems = elems.tail;
+				return result;
+			}
 
-    public A set(int index, A element) {
-        throw new UnsupportedOperationException();
-    }
+			public void remove() {
+				throw new UnsupportedOperationException();
+			}
+		};
+	}
 
-    public void add(int index, A element) {
-        throw new UnsupportedOperationException();
-    }
+	public A get(int index) {
+		if (index < 0)
+			throw new IndexOutOfBoundsException(String.valueOf(index));
 
-    public A remove(int index) {
-        throw new UnsupportedOperationException();
-    }
+		List<A> l = this;
+		for (int i = index; i-- > 0 && !l.isEmpty(); l = l.tail)
+			;
 
-    public int indexOf(Object o) {
-        int i = 0;
-        for (List<A> l = this; l.tail != null; l = l.tail, i++) {
-            if (l.head == null ? o == null : l.head.equals(o))
-                return i;
-        }
-        return -1;
-    }
+		if (l.isEmpty())
+			throw new IndexOutOfBoundsException("Index: " + index + ", " + "Size: " + size());
+		return l.head;
+	}
 
-    public int lastIndexOf(Object o) {
-        int last = -1;
-        int i = 0;
-        for (List<A> l = this; l.tail != null; l = l.tail, i++) {
-            if (l.head == null ? o == null : l.head.equals(o))
-                last = i;
-        }
-        return last;
-    }
+	public boolean addAll(int index, Collection<? extends A> c) {
+		if (c.isEmpty())
+			return false;
+		throw new UnsupportedOperationException();
+	}
 
-    public ListIterator<A> listIterator() {
-        return Collections.unmodifiableList(new ArrayList<A>(this)).listIterator();
-    }
+	public A set(int index, A element) {
+		throw new UnsupportedOperationException();
+	}
 
-    public ListIterator<A> listIterator(int index) {
-        return Collections.unmodifiableList(new ArrayList<A>(this)).listIterator(index);
-    }
+	public void add(int index, A element) {
+		throw new UnsupportedOperationException();
+	}
 
-    public java.util.List<A> subList(int fromIndex, int toIndex) {
-        if  (fromIndex < 0 || toIndex > size() || fromIndex > toIndex)
-            throw new IllegalArgumentException();
+	public A remove(int index) {
+		throw new UnsupportedOperationException();
+	}
 
-        ArrayList<A> a = new ArrayList<A>(toIndex - fromIndex);
-        int i = 0;
-        for (List<A> l = this; l.tail != null; l = l.tail, i++) {
-            if (i == toIndex)
-                break;
-            if (i >= fromIndex)
-                a.add(l.head);
-        }
+	public int indexOf(Object o) {
+		int i = 0;
+		for (List<A> l = this; l.tail != null; l = l.tail, i++) {
+			if (l.head == null ? o == null : l.head.equals(o))
+				return i;
+		}
+		return -1;
+	}
 
-        return Collections.unmodifiableList(a);
-    }
+	public int lastIndexOf(Object o) {
+		int last = -1;
+		int i = 0;
+		for (List<A> l = this; l.tail != null; l = l.tail, i++) {
+			if (l.head == null ? o == null : l.head.equals(o))
+				last = i;
+		}
+		return last;
+	}
+
+	public ListIterator<A> listIterator() {
+		return Collections.unmodifiableList(new ArrayList<A>(this)).listIterator();
+	}
+
+	public ListIterator<A> listIterator(int index) {
+		return Collections.unmodifiableList(new ArrayList<A>(this)).listIterator(index);
+	}
+
+	public java.util.List<A> subList(int fromIndex, int toIndex) {
+		if (fromIndex < 0 || toIndex > size() || fromIndex > toIndex)
+			throw new IllegalArgumentException();
+
+		ArrayList<A> a = new ArrayList<A>(toIndex - fromIndex);
+		int i = 0;
+		for (List<A> l = this; l.tail != null; l = l.tail, i++) {
+			if (i == toIndex)
+				break;
+			if (i >= fromIndex)
+				a.add(l.head);
+		}
+
+		return Collections.unmodifiableList(a);
+	}
+
 }

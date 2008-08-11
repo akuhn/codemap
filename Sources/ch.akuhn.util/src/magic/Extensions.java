@@ -28,10 +28,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import magic.Maybe.None;
-import magic.Maybe.Some;
 import magic.util.Pair;
-
 
 /**
  * Methods for static import.
@@ -42,30 +39,31 @@ import magic.util.Pair;
 @SuppressWarnings("unchecked")
 public abstract class Extensions {
 
-    //private final static Object NONE = new Object();
+	// private final static Object NONE = new Object();
 
-    public static <T> T[] Array(Class<T> tClass, T t, T... ts) {
-        T[] $ = (T[]) Array.newInstance(tClass, ts.length + 1);
-        System.arraycopy(ts, 0, $, 1, ts.length);
-        $[0] = t;
-        return $;
-    }
-    
-    public static <T> T[] Array(T t, T... ts) {
-        return (T[]) Array(leastUpperBound(t.getClass(), ts), t, ts);
-    }
-    
-    public static Class<?> leastUpperBound(Class<?> initial, Object... os) {
-        Class $ =  initial;
-        for (Object o : os) {
-            while (!$.isAssignableFrom(o.getClass())) {
-                $ = $.getSuperclass();
-                if ($ == null) return Object.class; 
-            }
-        }
-        return $;
-    }
-    
+	public static <T> T[] Array(Class<T> tClass, T t, T... ts) {
+		T[] $ = (T[]) Array.newInstance(tClass, ts.length + 1);
+		System.arraycopy(ts, 0, $, 1, ts.length);
+		$[0] = t;
+		return $;
+	}
+
+	public static <T> T[] Array(T t, T... ts) {
+		return (T[]) Array(leastUpperBound(t.getClass(), ts), t, ts);
+	}
+
+	public static Class<?> leastUpperBound(Class<?> initial, Object... os) {
+		Class $ = initial;
+		for (Object o : os) {
+			while (!$.isAssignableFrom(o.getClass())) {
+				$ = $.getSuperclass();
+				if ($ == null)
+					return Object.class;
+			}
+		}
+		return $;
+	}
+
 	/**
 	 * Iterate indefinitely over <code>iterable</code>.
 	 * 
@@ -75,14 +73,16 @@ public abstract class Extensions {
 			public Iterator<E> iterator() {
 				return new Iterator<E>() {
 					private Iterator<E> it = iterable.iterator();
-					
+
 					public boolean hasNext() {
-						if (!it.hasNext()) it = iterable.iterator();
+						if (!it.hasNext())
+							it = iterable.iterator();
 						return it.hasNext();
 					}
 
 					public E next() {
-						if (!it.hasNext()) it = iterable.iterator();
+						if (!it.hasNext())
+							it = iterable.iterator();
 						return it.next();
 					}
 
@@ -94,83 +94,92 @@ public abstract class Extensions {
 		};
 	}
 
-	/** Returns first element or fail.
+	/**
+	 * Returns first element or fail.
 	 * 
-	 * @throws NoSuchElementException if <code>iterable</code> has no elements
+	 * @throws NoSuchElementException
+	 *             if <code>iterable</code> has no elements
 	 */
 	public static final <E> E head(final Iterable<E> iterable) {
 		return iterable.iterator().next();
 	}
 
-	/** Returns first element or default value.
+	/**
+	 * Returns first element or default value.
 	 */
 	public static final <E> E head(final Iterable<E> iterable, final E defaultValue) {
 		Iterator<E> it = iterable.iterator();
 		return it.hasNext() ? it.next() : defaultValue;
 	}
 
-	/** Checks if <code>iterable</code> has no elements. 
+	/**
+	 * Checks if <code>iterable</code> has no elements.
 	 */
 	public static final boolean isEmpty(final Iterable<?> iterable) {
 		return !iterable.iterator().hasNext();
 	}
 
 	public static boolean eq(Object a, Object b) {
-        return a == null ? b == null : a.equals(b);
-    }
+		return a == null ? b == null : a.equals(b);
+	}
 
 	public static <E> Iterable<E> each(final Iterator<E> iter) {
-	    return new Iterable<E>() {
-	        public Iterator<E> iterator() {
-	            return iter;
-	        }
-	    };
+		return new Iterable<E>() {
+			public Iterator<E> iterator() {
+				return iter;
+			}
+		};
 	}
-	
+
 	public static <E> Iterable<E> each(final E... elements) {
 		return new Iterable<E>() {
 			public Iterator<E> iterator() {
 				return new Iterator<E>() {
 					private int index = 0;
-					
+
 					public boolean hasNext() {
 						return index < elements.length;
 					}
-					
+
 					public E next() {
-						if (index >= elements.length) throw new NoSuchElementException();
+						if (index >= elements.length)
+							throw new NoSuchElementException();
 						return elements[index++];
 					}
-					
+
 					public void remove() {
 						throw new UnsupportedOperationException();
 					}
 				};
 			}
-			
+
 		};
 	}
-	
+
 	public static <E> E last(E[] es) {
-        return es[es.length - 1];
-    }
+		return es[es.length - 1];
+	}
 
 	public static <E> E last(List<E> es) {
-    	return es.get(es.size() - 1);
-    }
+		return es.get(es.size() - 1);
+	}
 
 	public static <E> E last(Iterable<E> es) {
-	    E $ = null;
-	    for (E e : es) $ = e;
-	    return $;
+		E $ = null;
+		for (E e : es)
+			$ = e;
+		return $;
 	}
-	
-	public static <E> List<E> List(E... elements) {
-    	return Arrays.asList(elements);
-    }
 
-    /** Iterate over all consecutive pairs of <code>iterable</code>. 
-	 * @return if <code>iterable</code> has less than two elements, the returned iterable is empty.
+	public static <E> List<E> newList(E... elements) {
+		return Arrays.asList(elements);
+	}
+
+	/**
+	 * Iterate over all consecutive pairs of <code>iterable</code>.
+	 * 
+	 * @return if <code>iterable</code> has less than two elements, the returned
+	 *         iterable is empty.
 	 */
 	public static final <E> Iterable<Pair<E, E>> pairs(final Iterable<E> iterable) {
 		return new Iterable<Pair<E, E>>() {
@@ -195,45 +204,46 @@ public abstract class Extensions {
 		};
 	}
 
-    public static <E> void  puts(Iterable<E> iterable) {
-        System.out.print("[");
-        Separator s = new Separator();
-        for (Object o : iterable) {
-            System.out.print(s);
-            System.out.print(o);
-        }
-        System.out.println("]");
-    }
+	public static <E> void puts(Iterable<E> iterable) {
+		System.out.print("[");
+		Separator s = new Separator();
+		for (Object o : iterable) {
+			System.out.print(s);
+			System.out.print(o);
+		}
+		System.out.println("]");
+	}
 
-    public static void puts(Object object) {
-        System.out.println(object);
-    }
+	public static void puts(Object object) {
+		System.out.println(object);
+	}
 
-    public static void puts(Object object, Object... objects) {
-        System.out.println(object);
-        for (Object o : objects) {
-            System.out.println(o);
-        }
-    }
+	public static void puts(Object object, Object... objects) {
+		System.out.println(object);
+		for (Object o : objects) {
+			System.out.println(o);
+		}
+	}
 
-    public static void puts(String format, Object... objects) {
-        System.out.println(String.format(format, objects));
-    }
-    
-    public static void puts(Object[] objects) {
-        System.out.print("[");
-        Separator s = new Separator();
-        for (Object o : objects) {
-            System.out.print(s);
-            System.out.print(o);
-        }
-        System.out.println("]");
-    }
-    
-    
-    /** Iterate over integers 0 to <code>n</code>, excluding <code>n</code>.
+	public static void puts(String format, Object... objects) {
+		System.out.println(String.format(format, objects));
+	}
+
+	public static void puts(Object[] objects) {
+		System.out.print("[");
+		Separator s = new Separator();
+		for (Object o : objects) {
+			System.out.print(s);
+			System.out.print(o);
+		}
+		System.out.println("]");
+	}
+
+	/**
+	 * Iterate over integers 0 to <code>n</code>, excluding <code>n</code>.
 	 * 
-	 * @param n any integer.
+	 * @param n
+	 *            any integer.
 	 * @return if <code>n</code> is negative, the returned iterable is empty.
 	 */
 	public static final Iterable<Integer> range(final int n) {
@@ -247,7 +257,8 @@ public abstract class Extensions {
 					}
 
 					public Integer next() {
-						if (!(current < n)) throw new NoSuchElementException();
+						if (!(current < n))
+							throw new NoSuchElementException();
 						return current++;
 					}
 
@@ -258,19 +269,21 @@ public abstract class Extensions {
 			}
 		};
 	}
-    
-    public static <E> Set<E> Set(E... elements) {
-    	return new HashSet<E>(Arrays.asList(elements));
-    }
 
-    public static <E> Iterable<E> sorted(Iterable<E> iter) {
-        ArrayList<E> list = new ArrayList<E>();
-        for (E e : iter) list.add(e);
-        Collections.sort(list, null);
-        return list;
-    }
-    
-    /** Iterate over all elements of <code>iterable</code>, except the first one.
+	public static <E> Set<E> Set(E... elements) {
+		return new HashSet<E>(Arrays.asList(elements));
+	}
+
+	public static <E> Iterable<E> sorted(Iterable<E> iter) {
+		ArrayList<E> list = new ArrayList<E>();
+		for (E e : iter)
+			list.add(e);
+		Collections.sort(list, null);
+		return list;
+	}
+
+	/**
+	 * Iterate over all elements of <code>iterable</code>, except the first one.
 	 * 
 	 */
 	public static final <E> Iterable<E> tail(final Iterable<E> iterable) {
@@ -279,7 +292,8 @@ public abstract class Extensions {
 				return new Iterator<E>() {
 					private final Iterator<E> it = iterable.iterator();
 					{
-						if (it.hasNext()) it.next();
+						if (it.hasNext())
+							it.next();
 					};
 
 					public boolean hasNext() {
@@ -298,8 +312,8 @@ public abstract class Extensions {
 		};
 	}
 
-    private Extensions() {
+	private Extensions() {
 		throw new AssertionError();
 	}
-    
+
 }

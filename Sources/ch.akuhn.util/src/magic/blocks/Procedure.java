@@ -22,8 +22,9 @@ package magic.blocks;
  * A block with one argument and no return value.
  * 
  * @author akuhn
- *
- * @param <A> type of argument.
+ * 
+ * @param <A>
+ *            type of argument.
  */
 public interface Procedure<A> {
 

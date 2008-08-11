@@ -24,7 +24,7 @@ import java.lang.reflect.Constructor;
  * ACME = a factory making everything.
  * 
  * @author akuhn
- *
+ * 
  */
 public class Factory<T> {
 
@@ -32,7 +32,7 @@ public class Factory<T> {
 	private Constructor<T> takeOne;
 	private Constructor<T> takeTwo;
 	private Constructor<T> takeThree;
-	
+
 	public Factory(Class<T> type) {
 		this.type = type;
 		Constructor<?>[] all = type.getDeclaredConstructors();
@@ -40,19 +40,20 @@ public class Factory<T> {
 		this.takeTwo = searchConstructor(all, 2);
 		this.takeThree = searchConstructor(all, 3);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private static final <T> Constructor<T> searchConstructor(Constructor<?>[] all, int parameterLength) {
 		Constructor result = null;
 		for (Constructor init : all) {
 			if (init.getParameterTypes().length == parameterLength) {
-				if (result != null) throw new AssertionError("Ambigous constructor");
+				if (result != null)
+					throw new AssertionError("Ambigous constructor");
 				result = init;
 			}
 		}
 		return (Constructor<T>) result;
 	}
-	
+
 	public T create() {
 		try {
 			return type.newInstance();
@@ -60,7 +61,7 @@ public class Factory<T> {
 			throw new RuntimeException(ex);
 		}
 	}
-	
+
 	public T create(Object obj) {
 		try {
 			return takeOne.newInstance(obj);
@@ -84,6 +85,5 @@ public class Factory<T> {
 			throw new RuntimeException(ex);
 		}
 	}
-	
-	
+
 }

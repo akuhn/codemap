@@ -23,24 +23,23 @@ import java.util.HashMap;
 
 import magic.blocks.Function;
 
-
 /**
  * A map that knows how to initialize missing mapping.
  * 
  */
 public abstract class CacheMap<K, V> extends HashMap<K, V> {
 
-	public static <A,T> CacheMap<A,T> instances(final Class<? extends T> instanceClass) {
-		return new CacheMap<A,T>() {
+	public static <A, T> CacheMap<A, T> instances(final Class<? extends T> instanceClass) {
+		return new CacheMap<A, T>() {
 			@Override
 			public T initialize(A key) {
 				return createInstanceOf(instanceClass, key);
 			}
 		};
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	private static <A,T> T createInstanceOf(Class<T> instanceClass, A argument) {
+	private static <A, T> T createInstanceOf(Class<T> instanceClass, A argument) {
 		try {
 			Constructor<T>[] inits = (Constructor<T>[]) instanceClass.getDeclaredConstructors();
 			for (Constructor<T> each : inits) {
@@ -55,16 +54,16 @@ public abstract class CacheMap<K, V> extends HashMap<K, V> {
 			throw new RuntimeException(ex);
 		}
 	}
-	
-	public static <A,T> CacheMap<A, T> with(final Function<T, A> block) {
+
+	public static <A, T> CacheMap<A, T> with(final Function<T, A> block) {
 		return new CacheMap<A, T>() {
 			@Override
 			public T initialize(A key) {
-				return block.eval(key);
+				return block.apply(key);
 			}
 		};
 	}
-	
+
 	public CacheMap() {
 		super();
 	}

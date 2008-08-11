@@ -31,16 +31,20 @@ import java.nio.charset.CharsetDecoder;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import magic.util.SimpleIter;
+import magic.util.Provider;
 
-/** Static methods that operate on or return strings.
+/**
+ * Static methods that operate on or return strings.
  * 
- *
+ * 
  */
-public abstract class Strings {
+public final class Strings {
 
-	public final static Iterable<CharSequence> camelCase(
-			final CharSequence string) {
+	private Strings() {
+		assert false;
+	}
+
+	public final static Iterable<CharSequence> camelCase(final CharSequence string) {
 		return new Iterable<CharSequence>() {
 			public Iterator<CharSequence> iterator() {
 				return new Iterator<CharSequence>() {
@@ -58,8 +62,7 @@ public abstract class Strings {
 							char ch = string.charAt(index++);
 							boolean abbreviation = Character.isUpperCase(ch);
 							for (; index < string.length(); index++) {
-								if (abbreviation != Character
-										.isUpperCase(string.charAt(index)))
+								if (abbreviation != Character.isUpperCase(string.charAt(index)))
 									break;
 							}
 							if (abbreviation && index < string.length())
@@ -81,12 +84,15 @@ public abstract class Strings {
 			public Iterator<Character> iterator() {
 				return new Iterator<Character>() {
 					private int index = 0;
+
 					public boolean hasNext() {
 						return index < string.length();
 					}
+
 					public Character next() {
 						return string.charAt(index++);
 					}
+
 					public void remove() {
 						throw new UnsupportedOperationException();
 					}
@@ -97,13 +103,12 @@ public abstract class Strings {
 
 	public static final CharSequence fromFile(File file) {
 		try {
-		    assert file.exists() : file;
+			assert file.exists() : file;
 			// memory mapped file
 			FileInputStream input = new FileInputStream(file);
 			FileChannel channel = input.getChannel();
 			long fileLength = channel.size();
-			MappedByteBuffer buffer = channel.map(
-					FileChannel.MapMode.READ_ONLY, 0, fileLength);
+			MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, fileLength);
 			// character buffer
 			Charset charset = java.nio.charset.Charset.forName("UTF-8");
 			CharsetDecoder decoder = charset.newDecoder();
@@ -134,48 +139,55 @@ public abstract class Strings {
 		return builder.toString();
 	}
 
-	public static final boolean isAlphanumeric(String string) {
+	public static final boolean isAlphanumeric(final CharSequence string) {
 		for (int n = 0; n < string.length(); n++) {
-			if (!Character.isLetterOrDigit(string.charAt(n))
-					&& string.charAt(n) != '_')
+			if (!Character.isLetterOrDigit(string.charAt(n)) && string.charAt(n) != '_')
 				return false;
 		}
 		return true;
 	}
 
 	public static final Iterable<String> letters(final CharSequence string) {
-        return new SimpleIter<String>() {
-            private int index = 0;
-            public String iterate() {
-                for (; index < string.length(); index++) {
-                    if (isLetter(string.charAt(index))) break;
-                }
-                if (index == string.length()) return done();
-                int mark = index;
-                for (; index < string.length(); index++) {
-                    if (!isLetter(string.charAt(index))) break;
-                }
-                return string.subSequence(mark, index).toString(); 
-            }
-        };
-    }
+		return new Provider<String>() {
+			private int index = 0;
+
+			public String provide() {
+				for (; index < string.length(); index++) {
+					if (isLetter(string.charAt(index)))
+						break;
+				}
+				if (index == string.length())
+					return done();
+				int mark = index;
+				for (; index < string.length(); index++) {
+					if (!isLetter(string.charAt(index)))
+						break;
+				}
+				return string.subSequence(mark, index).toString();
+			}
+		};
+	}
 
 	public static final Iterable<String> lines(final CharSequence string) {
-	    return new SimpleIter<String>() {
-	        private int index = 0;
-            public String iterate() {
-                if (index >= string.length()) return done();
-                int mark = index;
-                for (; index < string.length(); index++) {
-                    if (string.charAt(index) == '\n') break;
-                }
-                return string.subSequence(mark, index++).toString();
-            }
-	    };
+		return new Provider<String>() {
+			private int index = 0;
+
+			public String provide() {
+				if (index >= string.length())
+					return done();
+				int mark = index;
+				for (; index < string.length(); index++) {
+					if (string.charAt(index) == '\n')
+						break;
+				}
+				return string.subSequence(mark, index++).toString();
+			}
+		};
 	}
 
 	public static final String toUpperFirstChar(String string) {
-	    if (string == null || string.length() == 0) return string;
+		if (string == null || string.length() == 0)
+			return string;
 		StringBuilder $ = new StringBuilder(string.length());
 		$.append(toUpperCase(string.charAt(0)));
 		$.append(string.substring(1));
@@ -183,31 +195,31 @@ public abstract class Strings {
 	}
 
 	public static final Iterable<String> words(final CharSequence string) {
-	    return new SimpleIter<String>() {
-            private int index = 0;
-            public String iterate() {
-                for (; index < string.length(); index++) {
-                    if (!isWhitespace(string.charAt(index))) break;
-                }
-                if (index == string.length()) return done();
-                int mark = index;
-                for (; index < string.length(); index++) {
-                    if (isWhitespace(string.charAt(index))) break;
-                }
-                return string.subSequence(mark, index).toString(); 
-            }
-	    };
+		return new Provider<String>() {
+			private int index = 0;
+
+			public String provide() {
+				for (; index < string.length(); index++) {
+					if (!isWhitespace(string.charAt(index)))
+						break;
+				}
+				if (index == string.length())
+					return done();
+				int mark = index;
+				for (; index < string.length(); index++) {
+					if (isWhitespace(string.charAt(index)))
+						break;
+				}
+				return string.subSequence(mark, index).toString();
+			}
+		};
 	}
 
-	private Strings() {
-		throw new AssertionError();
-	}
-
-	public static final String reformatParagraph(String paragraph) {
+	public static final String reformatParagraph(final CharSequence paragraph) {
 		return reformatParagraph(paragraph, 76);
 	}
-	
-	public static final String reformatParagraph(String paragraph, int breakAt) {
+
+	public static final String reformatParagraph(final CharSequence paragraph, int breakAt) {
 		StringBuilder builder = new StringBuilder();
 		int length = 0;
 		for (String word : words(paragraph)) {
@@ -222,6 +234,10 @@ public abstract class Strings {
 			length = newLength;
 		}
 		return builder.toString();
+	}
+
+	public static CharSequence lorem() {
+		return "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 	}
 
 }

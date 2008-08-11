@@ -27,7 +27,6 @@ import magic.Extensions;
 import org.junit.Before;
 import org.junit.Test;
 
-
 public class IterTest {
 
 	private Collection<String> empty;
@@ -44,7 +43,7 @@ public class IterTest {
 		many.add("bar");
 		many.add("qux");
 	}
-	
+
 	@Test
 	public void cycleEmpty() {
 		Iterator<String> cycle = Extensions.cycle(empty).iterator();
@@ -61,7 +60,7 @@ public class IterTest {
 		assertTrue(cycle.hasNext());
 		assertEquals("boe", cycle.next());
 	}
-	
+
 	@Test
 	public void cycleMany() {
 		Iterator<String> cycle = Extensions.cycle(many).iterator();
@@ -74,7 +73,7 @@ public class IterTest {
 		assertTrue(cycle.hasNext());
 		assertEquals("foo", cycle.next());
 	}
-	
+
 	@Test
 	public void cycleSingleRemove() {
 		Iterator<String> cycle = Extensions.cycle(single).iterator();
@@ -85,6 +84,5 @@ public class IterTest {
 		cycle.remove();
 		assertTrue(!cycle.hasNext());
 	}
-	
-	
+
 }

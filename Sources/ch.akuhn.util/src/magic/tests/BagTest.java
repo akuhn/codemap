@@ -26,7 +26,6 @@ import magic.util.Bag;
 
 import org.junit.Test;
 
-
 public class BagTest {
 
 	@Test
@@ -98,11 +97,11 @@ public class BagTest {
 		}
 		assertEquals(4, count);
 	}
-	
+
 	@Test
 	public void testAddOverflow() {
 		Bag<String> bag = new Bag<String>();
-		boolean changed =bag.add("A", Integer.MAX_VALUE - 2);
+		boolean changed = bag.add("A", Integer.MAX_VALUE - 2);
 		assertEquals(Integer.MAX_VALUE - 2, bag.occurrences("A"));
 		assertEquals(Integer.MAX_VALUE - 2, bag.size());
 		changed = bag.add("A");
@@ -119,22 +118,22 @@ public class BagTest {
 		assertEquals(Integer.MAX_VALUE, bag.size());
 	}
 
-    @Test
-    public void addNone() {
-        Bag<String> bag = new Bag<String>();
-        assertEquals(false, bag.add("aaa", 0));
-    }
-	
-    @Test(expected = IllegalArgumentException.class)
-    public void removeDoesNotWorkLikeThat() {
-        Bag<String> bag = new Bag<String>();
-        assertEquals(false, bag.add("aaa", -1));
-    }
-	
+	@Test
+	public void addNone() {
+		Bag<String> bag = new Bag<String>();
+		assertEquals(false, bag.add("aaa", 0));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void removeDoesNotWorkLikeThat() {
+		Bag<String> bag = new Bag<String>();
+		assertEquals(false, bag.add("aaa", -1));
+	}
+
 	@Test
 	public void testAddOccurrencesOverflow() {
 		Bag<String> bag = new Bag<String>();
-		boolean changed =bag.add("A", Integer.MAX_VALUE - 200);
+		boolean changed = bag.add("A", Integer.MAX_VALUE - 200);
 		assertEquals(Integer.MAX_VALUE - 200, bag.occurrences("A"));
 		assertEquals(Integer.MAX_VALUE - 200, bag.size());
 		changed = bag.add("A", 100);
@@ -150,11 +149,11 @@ public class BagTest {
 		assertEquals(Integer.MAX_VALUE, bag.occurrences("A"));
 		assertEquals(Integer.MAX_VALUE, bag.size());
 	}
-	
+
 	@Test
 	public void testAddOccurrencesOverflow2() {
 		Bag<String> bag = new Bag<String>();
-		boolean changed =bag.add("A", Integer.MAX_VALUE - 150);
+		boolean changed = bag.add("A", Integer.MAX_VALUE - 150);
 		assertEquals(Integer.MAX_VALUE - 150, bag.occurrences("A"));
 		assertEquals(Integer.MAX_VALUE - 150, bag.size());
 		changed = bag.add("A", 100);
@@ -174,7 +173,7 @@ public class BagTest {
 	@Test
 	public void testAddOccurrencesOverflow3() {
 		Bag<String> bag = new Bag<String>();
-		boolean changed =bag.add("A", Integer.MAX_VALUE - 200);
+		boolean changed = bag.add("A", Integer.MAX_VALUE - 200);
 		assertEquals(Integer.MAX_VALUE - 200, bag.occurrences("A"));
 		assertEquals(Integer.MAX_VALUE - 200, bag.size());
 		changed = bag.add("A", Integer.MAX_VALUE - 200);
@@ -182,12 +181,11 @@ public class BagTest {
 		assertEquals(Integer.MAX_VALUE, bag.occurrences("A"));
 		assertEquals(Integer.MAX_VALUE, bag.size());
 		changed = bag.add("A", Integer.MAX_VALUE - 200);
- 		assertEquals(false, changed);
+		assertEquals(false, changed);
 		assertEquals(Integer.MAX_VALUE, bag.occurrences("A"));
 		assertEquals(Integer.MAX_VALUE, bag.size());
 	}
-	
-	
+
 	@Test
 	public void testEmptyBag() {
 		Bag<String> bag = new Bag<String>();
