@@ -316,4 +316,28 @@ public abstract class Extensions {
 		throw new AssertionError();
 	}
 
+	public static <T> T[] newArray(T[] aaa, T[] bbb) {
+		T[] $ = (T[]) Array.newInstance(aaa.getClass().getComponentType(), aaa.length + bbb.length);
+		System.arraycopy(aaa, 0, $, 0, aaa.length);
+		System.arraycopy(bbb, 0, $, aaa.length, bbb.length);
+		return $;
+	}
+
+	public static <T> T[] newArray(T[] arr, T t) {
+		T[] $ = (T[]) Array.newInstance(arr.getClass().getComponentType(), arr.length + 1);
+		System.arraycopy(arr, 0, $, 0, arr.length);
+		$[arr.length] = t;
+		return $;
+	}
+
+	public static RuntimeException newRethrowable(Throwable cause) {
+		if (cause instanceof RuntimeException) throw (RuntimeException) cause;
+		if (cause instanceof Error) throw (Error) cause;
+		throw new RuntimeException(cause);
+	}
+
+	public static <T> Iterable<T> sort(Iterable<T> iter) {
+		return sorted(iter);
+	}
+	
 }

@@ -1,5 +1,7 @@
 package magic.blocks;
 
+import static java.lang.String.format;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -37,6 +39,14 @@ public class Methods {
 			if ($ != null) return $;
 			return context;
 		}
+
+		@Override
+		public String toString() {
+			return format("%s#%s%s", path, name, args == null ? "" : args);
+		}
+		
+		
+		
 	}
 	
 	private static final class StaticPredicate<T> implements Predicate<T> {
@@ -145,6 +155,19 @@ public class Methods {
 				throw new RuntimeException(ex);
 			}
 		}
+	}
+
+	public static Method fromName(String reference) {
+		return fromName(reference, caller());
 	}	
 
+	public static StackTraceElement caller() {
+		// getStackTrace()[0] --> Thread#getStackTrace
+		// getStackTrace()[1] --> Methods#caller
+		// getStackTrace()[2] --> active
+		// getStackTrace()[3] --> caller of active method
+		return Thread.currentThread().getStackTrace()[3];
+	}	
+	
+	
 }

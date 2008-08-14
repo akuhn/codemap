@@ -3,8 +3,7 @@ package magic.tests;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import jexample.Depends;
-import jexample.JExample;
+import jexample.*;
 
 import magic.Tab;
 
