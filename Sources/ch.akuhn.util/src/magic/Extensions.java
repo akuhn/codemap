@@ -331,9 +331,7 @@ public abstract class Extensions {
 	}
 
 	public static RuntimeException newRethrowable(Throwable cause) {
-		if (cause instanceof RuntimeException) throw (RuntimeException) cause;
-		if (cause instanceof Error) throw (Error) cause;
-		throw new RuntimeException(cause);
+		throw Throw.unchecked(cause);
 	}
 
 	public static <T> Iterable<T> sort(Iterable<T> iter) {

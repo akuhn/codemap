@@ -4,7 +4,7 @@ package magic;
  * Indents lines while printing them.
  * 
  * @author Adrian Kuhn, 2008/07/21
- * @author Thanks to Yossi Gil for pointing out better class and method names.
+ * @author Thanks to Yossi Gil for suggesting better class and method names.
  */
 
 public class Tab {

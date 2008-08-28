@@ -16,16 +16,14 @@ import java.util.NoSuchElementException;
  * 
  * </pre>
  * 
- * @author Tony Morris, 2006/11/13
- * @author Daniel Spiewak, 2008/08/07
- * @author Stephan Schmidt, 2008/08/06
  * @author Adrian Kuhn, 2008/08/08
+ * @author Inspired by work by Tony Morris, 2006/11/13
+ * @author Inspired by work by Daniel Spiewak, 2008/08/07
+ * @author Inspired by work by Stephan Schmidt, 2008/08/06
  * 
  * @see http://blog.tmorris.net/maybe-in-java/
  * @see http://www.codecommit.com/blog/scala/the-option-pattern
- * @see http
- *      ://stephan.reposita.org/archives/2008/08/06/for-hack-with-option-monad
- *      -in-java/
+ * @see http://stephan.reposita.org/archives/2008/08/06/for-hack-with-option-monad-in-java/
  * 
  */
 public abstract class Maybe<T> implements Iterable<T> {
