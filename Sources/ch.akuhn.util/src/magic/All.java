@@ -7,6 +7,10 @@ package magic;
  */
 public class All {
 
+	private All() {
+		throw new RuntimeException("Cannot instantiate.");
+	}
+	
 	public static boolean notNull(Object[] values) {
 		assert values != null;
 		for (Object o : values) {

@@ -26,9 +26,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.Set;
 
 import magic.util.Pair;
+import magic.util.Provider;
 
 /**
  * Methods for static import.
@@ -174,6 +176,13 @@ public abstract class Extensions {
 	public static <E> List<E> newList(E... elements) {
 		return Arrays.asList(elements);
 	}
+	
+	public static <E> List<E> newList(Iterable<E> iterable) {
+		ArrayList<E> list = new ArrayList<E>();
+		for (E each : iterable) list.add(each);
+		list.trimToSize();
+		return list;
+	}
 
 	/**
 	 * Iterate over all consecutive pairs of <code>iterable</code>.
@@ -224,7 +233,37 @@ public abstract class Extensions {
 			System.out.println(o);
 		}
 	}
+	
+	public static <T> T[] shuffle(T[] array) {
+		// Fisher-Yates algorithm 
+		Random random = new Random();
+        for (int n = array.length; n > 1;) {
+            int k = random.nextInt(n--);  
+            T temp = array[n];
+            array[n] = array[k];
+            array[k] = temp;
+        }
+        return array;
+	}
 
+	public static <T> Iterable<T> shuffle(final Iterable<T> iterable) {
+		// Fisher-Yates algorithm 
+		return new Provider<T>() {
+			Random random = new Random();
+			List<T> list = newList(iterable);
+			final int len = list.size();
+			int n = 0;
+			@Override
+			public T provide() {
+				if (n >= len) return done();
+				int s = random.nextInt(len - n) + n;
+				T temp = list.get(s);
+	            list.set(s, list.get(n++));
+	            return temp;
+			}
+		};
+	}
+	
 	public static void puts(String format, Object... objects) {
 		System.out.println(String.format(format, objects));
 	}

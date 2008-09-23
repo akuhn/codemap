@@ -18,6 +18,9 @@
 
 package magic.tests;
 
+import static magic.Extensions.newList;
+import static magic.Extensions.shuffle;
+import static magic.Extensions.sort;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -85,4 +88,13 @@ public class IterTest {
 		assertTrue(!cycle.hasNext());
 	}
 
+	@Test
+	public void sortIterable() {
+		List<Integer> a = newList(1, 2, 3, 4, 5, 6, 7, 8, 9);
+		Iterable<Integer> b = shuffle(a);
+		List<Integer> c = newList(b);
+		List<Integer> d = newList(sort(c));
+		assertEquals(a, d);
+	}
+	
 }
