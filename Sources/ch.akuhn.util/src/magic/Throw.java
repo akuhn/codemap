@@ -8,14 +8,14 @@ package magic;
 public class Throw {
 
     @SuppressWarnings("deprecation")
-    public static RuntimeException checked(Throwable cause) {
+    public static RuntimeException exception(Throwable cause) {
         if (cause instanceof RuntimeException) throw (RuntimeException) cause;
         if (cause instanceof Error) throw (Error) cause;
         Thread.currentThread().stop(cause);
-        throw unchecked(cause);
+        throw runtimeException(cause);
     }
     
-    public static RuntimeException unchecked(Throwable cause) {
+    public static RuntimeException runtimeException(Throwable cause) {
         if (cause instanceof RuntimeException) throw (RuntimeException) cause;
         if (cause instanceof Error) throw (Error) cause;
         throw new RuntimeException(cause);

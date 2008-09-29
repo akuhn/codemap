@@ -22,6 +22,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -129,6 +130,24 @@ public abstract class Extensions {
 		return new Iterable<E>() {
 			public Iterator<E> iterator() {
 				return iter;
+			}
+		};
+	}
+	
+	public static <E> Iterable<E> each(final Enumeration<E> enumeration) {
+		return new Iterable<E>() {
+			public Iterator<E> iterator() {
+				return new Iterator<E>() {
+					public boolean hasNext() {
+						return enumeration.hasMoreElements();
+					}
+					public E next() {
+						return enumeration.nextElement();
+					}
+					public void remove() {
+						throw new UnsupportedOperationException();
+					}	
+				};
 			}
 		};
 	}
@@ -380,7 +399,7 @@ public abstract class Extensions {
 	}
 
 	public static RuntimeException newRethrowable(Throwable cause) {
-		throw Throw.unchecked(cause);
+		throw Throw.runtimeException(cause);
 	}
 
 	public static <T> Iterable<T> sort(Iterable<T> iter) {
