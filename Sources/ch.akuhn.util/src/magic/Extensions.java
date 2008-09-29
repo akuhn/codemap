@@ -234,6 +234,16 @@ public abstract class Extensions {
 		}
 	}
 	
+	public static void puts(int[] more) {
+		System.out.print("#(");
+		Separator s = new Separator();
+		for (int each : more) {
+			System.out.print(s);
+			System.out.print(each);
+		}
+		System.out.println(")");
+	}
+
 	public static <T> T[] shuffle(T[] array) {
 		// Fisher-Yates algorithm 
 		Random random = new Random();
