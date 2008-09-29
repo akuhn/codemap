@@ -44,13 +44,12 @@ public class GeneratorExamples {
 	    System.out.println("done\n");
 
 	    Character[] array = { 'a', 'b', 'c', 'd', 'e', 'f' };
-	    
-	    int n = 0;
+	    int tally = 0;
 	    for (Character[] each : permute(array)) {
 	    	puts(each);
-	    	n++;
+	    	tally++;
 	    }
-	    puts(n);
+	    puts(tally);
 	    
 	}
 	

@@ -89,8 +89,12 @@ import java.util.NoSuchElementException;
  *        }
  *    };
  *}</pre>
- * 
+ *
+ * <b>NB:</b> this class makes use of Threads, you might want to double-check
+ * its source code before using it in a multi-threaded application.
+ *
  * @author Adrian Kuhn &lt;akuhn(at)iam.unibe.ch&gt;
+ * @see http://smallwiki.unibe.ch/adriankuhn/yield4java/ 
  * 
  */
 public abstract class Generator<T> implements Iterable<T> {
