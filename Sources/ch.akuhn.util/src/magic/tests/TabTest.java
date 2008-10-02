@@ -24,6 +24,17 @@ public class TabTest {
 	}
 
 	@Test
+	@Depends("#testEmpty")
+	public void testBeginEnd(Tab n) {
+		assertEquals("", n.toString());
+		assertEquals("", n.begin());
+		assertEquals("abc", n.toString());
+		assertEquals("abc", n.toString());
+		assertEquals("", n.end());
+		assertEquals("", n.toString());
+	}
+	
+	@Test
 	@Depends("testEmpty")
 	public Tab testIncrement(Tab n) {
 		n.more();
@@ -34,9 +45,9 @@ public class TabTest {
 		assertEquals("abcabcabc", n.toString());
 		return n;
 	}
-
+	
 	@Test
-	@Depends("testIncrement")
+	@Depends("#testIncrement")
 	public Tab testDecrement(Tab n) {
 		assertEquals("abcabcabc", n.toString());
 		n.less();
@@ -49,21 +60,21 @@ public class TabTest {
 	}
 
 	@Test
-	@Depends("testDecrement")
+	@Depends("#testDecrement")
 	public Tab testDone(Tab n) {
 		assertEquals(true, n.isEmpty());
 		return n;
 	}
 
 	@Test
-	@Depends("testIncrement")
+	@Depends("#testIncrement")
 	public Tab testNotDone(Tab n) {
 		assertEquals(false, n.isEmpty());
 		return n;
 	}
 
 	@Test(expected = IllegalStateException.class)
-	@Depends("testDone")
+	@Depends("#testDone")
 	public void testDecrementFailsWhenDone(Tab n) {
 		n.less();
 	}

@@ -32,7 +32,16 @@ public class Tab {
 		s = s.substring(0, s.length() - tab.length());
 		return this;
 	}
+	
+	public String begin() {
+		try { return toString(); }
+		finally { this.more(); }
+	}
 
+	public String end() {
+		return this.less().toString();
+	}
+	
 	public String toString() {
 		return s;
 	}
