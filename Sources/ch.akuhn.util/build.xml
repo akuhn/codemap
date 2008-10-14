@@ -2,8 +2,12 @@
 <project default="compress" basedir=".">
 
     <target name="compress" description="Compression target">
+    	<delete file="akuhn-util.jar"/>
         <jar jarfile="akuhn-util.jar">
-        	<fileset dir="bin" includes="**/*.class COPYING*"/>
+        	<fileset dir="bin">
+                <exclude name="**/tests/**/*.class"/>
+                <include name="**/*.class COPYING*"/>
+        	</fileset>
         	<fileset dir="src" includes="**/*.java"/>
         </jar>	
     	<zipfileset id="files" src="akuhn-util.jar"/>
