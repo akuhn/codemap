@@ -21,12 +21,9 @@ package magic.util;
 import static magic.Extensions.sorted;
 
 import java.util.AbstractCollection;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Collections;
 import java.util.Set;
@@ -255,7 +252,7 @@ public class Bag<T> extends AbstractCollection<T> {
 	 *            elements to be removed from this bag, if present.
 	 * @return <tt>true</tt> if elements were removed as a result of this call.
 	 */
-	public boolean removeEach(Object o) {
+	public boolean removeAllOccurrences(Object o) {
 		Int i = values.get(o);
 		if (i == null)
 			return false;
@@ -313,6 +310,14 @@ public class Bag<T> extends AbstractCollection<T> {
 		public int compareTo(Count<E> o) {
 			return Integer.signum(o.count - count);
 		}
+		
+		public String toString() {
+			return count + " x " + element;
+		}
+	}
+	
+	public IterableIterator<T> elements() {
+		return IterableIteratorFactory.create(values.keySet().iterator());
 	}
 
 }

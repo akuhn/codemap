@@ -3,37 +3,44 @@ package magic.util;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-@SuppressWarnings("unchecked")
-public abstract class Provider<E> implements Iterator<E>, Iterable<E> {
+public abstract class Provider<E> implements IterableIterator<E> {
 
-	private static final Object EMPTY = new Object();
-	private static final Object DONE = new Object();
-	private Object next = EMPTY;
+	public boolean hasMoreElements() {
+		return this.hasNext();
+	}
+
+	public E nextElement() {
+		return this.next;
+	}
+
+	private enum State { DONE, EMPTY, FAIL, READY }
+	
+	private E next = null;
+	private State state  = State.EMPTY;
 
 	public boolean hasNext() {
-		if (next == EMPTY)
-			update();
-		return next != DONE;
+	    if (state == State.FAIL) throw new IllegalStateException();
+	    switch (state) {
+	    	case DONE: return false;
+	    	case READY: return true;
+	        default: return computeNext();
+	    }
 	}
 
-	private void update() {
-		try {
-			next = provide();
-		} catch (Done done) {
-			if (done.owner != this)
-				throw done;
-			next = DONE;
+	private boolean computeNext() {
+		state = State.FAIL; 
+		next = provide();
+		if (state != State.DONE) {
+			state = State.READY;
+			return true;
 		}
-	}
-
+		return false;
+	}	
+	
 	public E next() {
-		if (next == EMPTY)
-			update();
-		if (next == DONE)
-			throw new NoSuchElementException();
-		Object $ = next;
-		next = EMPTY;
-		return (E) $;
+	    if (!hasNext()) throw new NoSuchElementException();
+	    state = State.EMPTY;
+	    return next;
 	}
 
 	public void remove() {
@@ -46,16 +53,9 @@ public abstract class Provider<E> implements Iterator<E>, Iterable<E> {
 
 	public abstract E provide();
 
-	public E done() {
-		throw new Done(this);
-	}
-
-	private static class Done extends NoSuchElementException {
-		private Provider owner;
-
-		public Done(Provider owner) {
-			this.owner = owner;
-		}
+	public final E done() {
+		state = State.DONE;
+		return null;
 	}
 
 }
