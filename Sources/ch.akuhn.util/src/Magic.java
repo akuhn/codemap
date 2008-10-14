@@ -1,11 +1,17 @@
-package magic;
 
-public class Version {
 
+public class Magic {
+
+	private final static String VERSION = "1.9.0";
+	
+	private final static String ID = "$Id$";
+	
 	private final static String LICENSE = 
 		"Copyright (c) 1998-2008 Adrian Kuhn <akuhn(a)students.unibe.ch>\n" + 
 		"\n" +
-		"This file is part of ch.akuhn.util.\n" +
+		"akuhn-util.jar v" + VERSION + "\n" +
+		"\n" +
+		ID + "\n" +
 		"\n" +
 		"ch.akuhn.util is free software: you can redistribute it and/or modify it\n" +
 		"under the terms of the GNU Lesser General Public License as published by the\n" +
@@ -22,9 +28,6 @@ public class Version {
 	
 	
 	public static void main(String[] args) {
-		System.out.println("ch.akuhn.util");
-		System.out.println("$Id$");
-		System.out.println("");
 		System.out.println(LICENSE);
 	}
 

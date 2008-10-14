@@ -4,10 +4,10 @@
     <target name="compress" description="Compression target">
     	<delete file="akuhn-util.jar"/>
         <jar jarfile="akuhn-util.jar">
-        	<fileset dir="bin">
-                <exclude name="**/tests/**/*.class"/>
-                <include name="**/*.class COPYING*"/>
-        	</fileset>
+        	<manifest>
+        	    <attribute name="Main-Class" value="Magic"/>
+        	</manifest>        	
+        	<fileset dir="bin" includes="**/*.class COPYING*" excludes="**/tests/*.class"/>
         	<fileset dir="src" includes="**/*.java"/>
         </jar>	
     	<zipfileset id="files" src="akuhn-util.jar"/>
@@ -15,9 +15,6 @@
     		<globmapper from="${basedir}${file.separator}*" to="*"/>
     	</pathconvert>	
     	<echo message="${listing}"/>
-    	<svn>
-    		<wcVersion/>
-    	</svn>
     </target>
 
 </project>
