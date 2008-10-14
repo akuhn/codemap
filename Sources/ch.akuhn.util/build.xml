@@ -15,6 +15,9 @@
     		<globmapper from="${basedir}${file.separator}*" to="*"/>
     	</pathconvert>	
     	<echo message="${listing}"/>
+    	<svn>
+    		<wcVersion/>
+    	</svn>
     </target>
 
 </project>
