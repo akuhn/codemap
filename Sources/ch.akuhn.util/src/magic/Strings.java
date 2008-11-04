@@ -246,5 +246,16 @@ public final class Strings {
 		}
 		return string;
 	}
+	
+	public static boolean containsWhitespace(String string) {
+		for (int n = 0; n < string.length(); n++) {
+			if (Character.isWhitespace(string.charAt(n))) return true;
+		}
+		return false;
+	};
+	
+	public static String encloseWith(String string, char ch) {
+		return Character.toString(ch) + string + ch; 
+	}
 
 }
