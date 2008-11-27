@@ -1,45 +1,45 @@
 <?xml version="1.0" ?>
-<project default="compress" basedir=".">
+<project default="package" basedir=".">
 
-    <target name="compress" depends="svnversion" description="Compression target">
-    	<delete dir="." includes="akuhn-util*.jar"/>
-        <jar jarfile="akuhn-util-0.5.${build.current.revision}.jar">
-        	<manifest>
-        	    <attribute name="Main-Class" value="Magic"/>
-        	</manifest>        	
-        	<fileset dir="bin" includes="**/*.class COPYING*" excludes="**/tests/*.class"/>
-        	<fileset dir="src" includes="**/*.java"/>
-        </jar>	
-    	<zipfileset id="files" src="akuhn-util-0.5.${build.current.revision}.jar"/>
-    	<pathconvert property="listing" refid="files" pathsep="${line.separator}">
-    		<globmapper from="${basedir}${file.separator}*" to="*"/>
-    	</pathconvert>	
-    	<echo message="${listing}"/>
-    </target>
+<!--from http://www.innovationontherun.com/creating-a-build-number-with-ant-and-subversion-->
+    <exec outputproperty="build.current.revision" executable="svnversion">
+      <arg line="-n -c" />
+      <redirector>
+        <outputfilterchain>
+          <tokenfilter>
+            <replaceregex pattern="^[0-9]*:?" replace="" flags="g"/>
+          </tokenfilter>
+        </outputfilterchain>
+      </redirector>
+    </exec>
+    <exec outputproperty="build.current.version" executable="svn">
+      <arg line="info" />
+      <redirector>
+        <outputfilterchain>
+          <linecontainsregexp><regexp pattern="^URL:" /></linecontainsregexp>
+          <tokenfilter>
+            <replaceregex pattern=".*\/([^\/]+)$" replace="\1" flags="g"/>
+          </tokenfilter>
+        </outputfilterchain>
+      </redirector>
+    </exec>
+    
+    <property name="package.name" value="akuhn-util-0.5.${build.current.revision}.jar"/>
 	
-    <target name="svnversion">
-    	<!-- http://www.innovationontherun.com/creating-a-build-number-with-ant-and-subversion/ -->
-    	<exec outputproperty="build.current.revision" executable="svnversion">
-    	         <arg line="-n -c" />
-    	         <redirector>
-    	           <outputfilterchain>
-    	             <tokenfilter>
-    	                 <replaceregex pattern="^[0-9]*:?" replace="" flags="g"/>
-    	             </tokenfilter>
-    	          </outputfilterchain>
-    	        </redirector>
-    	</exec>
-    	<exec outputproperty="build.current.version" executable="svn">
-    	  <arg line="info" />
-    	  <redirector>
-    	  <outputfilterchain>
-    	  <linecontainsregexp><regexp pattern="^URL:" /></linecontainsregexp>
-    	   <tokenfilter>
-    	     <replaceregex pattern=".*\/([^\/]+)$" replace="\1" flags="g"/>
-    	   </tokenfilter>
-    	  </outputfilterchain>
-    	</redirector>
-    	</exec>
-    </target>	
+    <target name="package" depends="" description="Compression target">
+      <delete dir="." includes="akuhn-util*.jar"/>
+      <jar jarfile="${package.name}">
+        <manifest>
+          <attribute name="Main-Class" value="Magic"/>
+        </manifest>        	
+        <fileset dir="bin" includes="**/*.class COPYING*" excludes="**/tests/*.class"/>
+        <fileset dir="src" includes="**/*.java"/>
+      </jar>	
+      <zipfileset id="files" src="${package.name}"/>
+      <pathconvert property="listing" refid="files" pathsep="${line.separator}">
+    	<globmapper from="${basedir}${file.separator}*" to="*"/>
+      </pathconvert>	
+      <echo message="${listing}"/>
+    </target>
 
 </project>
