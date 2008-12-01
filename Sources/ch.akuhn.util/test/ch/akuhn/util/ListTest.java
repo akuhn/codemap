@@ -1,4 +1,4 @@
-package ch.akuhn.util.tests;
+package ch.akuhn.util;
 
 import static org.junit.Assert.*;
 
@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 
 import ch.akuhn.util.List;
 
-import static ch.akuhn.util.tests.ListTest.Elem.*;
+import static ch.akuhn.util.ListTest.Elem.*;
 
 @RunWith(JExample.class)
 @SuppressWarnings("unchecked")
@@ -312,5 +312,26 @@ public class ListTest {
 		assertEquals(c, $[2]);
 		assertEquals(null, $[3]);
 	}
+	
+	@Test @Depends("new5tuple")
+	public void testSublist(List $5) {
+		java.util.List sub = $5.subList(1, 4);
+		assertEquals(3, sub.size());
+		assertEquals(b, sub.get(0));
+		assertEquals(c, sub.get(1));
+		assertEquals(d, sub.get(2));
+	}
+	
+	@Test @Depends("new5tuple")
+	public void testSublistEmpty(List $5) {
+		java.util.List sub = $5.subList(2, 2);
+		assertEquals(0, sub.size());
+	}	
+	
+	@Depends("new5tuple")
+	@Test(expected=IllegalArgumentException.class) 
+	public void testSublistNegative(List $5) {
+		java.util.List sub = $5.subList(4, 1);
+	}	
 	
 }

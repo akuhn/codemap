@@ -1,12 +1,14 @@
-package ch.akuhn.util.blocks;
+package ch.akuhn.util;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import ch.akuhn.util.blocks.Function;
+
 public class Collect {
 
-	private static class Collectable<T, A> implements Iterable<T> {
+	private static class Collectable<T,A> implements Iterable<T> {
 		private final Iterable<A> iterable;
 		private final Function<T, ? super A> func;
 
@@ -16,11 +18,11 @@ public class Collect {
 		}
 
 		public Iterator<T> iterator() {
-			return new Collector<T, A>(iterable.iterator(), func);
+			return new Collector<T,A>(iterable.iterator(), func);
 		}
 	}
 
-	private static class Collector<T, A> implements Iterator<T> {
+	private static class Collector<T,A> implements Iterator<T> {
 		private final Iterator<A> iterator;
 		private final Function<T, ? super A> func;
 
@@ -42,14 +44,22 @@ public class Collect {
 		}
 	}
 
-	public static <T, A> Iterable<T> all(Iterable<A> iterable, Function<T, ? super A> func) {
+	public static <T,A> Iterable<T> each(Iterable<A> iterable, Function<T, ? super A> func) {
 		return new Collectable<T, A>(iterable, func);
 	}
 	
-	public static <T, A> List<T> all(List<A> list, Function<T, ? super A> func) {
-		List<T> $ = new ArrayList<T>(list.size());
-		for (A a : list) $.add(func.apply(a));
-		return $;
+	public static <T,A> Iterable<T> each(Iterable<A> iter, String name) {
+		return Collect.each(iter, Methods.<T,A>asFunction(name));
+	}
+	
+	public static <T,A> List<T> each(List<A> list, Function<T, ? super A> func) {
+		List<T> reply = new ArrayList<T>(list.size());
+		for (A a : list) reply.add(func.apply(a));
+		return reply;
+	}
+
+	public static <T,A> List<T> each(List<A> list, String name) {
+		return Collect.each(list, Methods.<T,A>asFunction(name));
 	}
 	
 }

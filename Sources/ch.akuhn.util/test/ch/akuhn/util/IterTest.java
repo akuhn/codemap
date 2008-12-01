@@ -16,7 +16,7 @@
 //  along with ch.akuhn.util. If not, see <http://www.gnu.org/licenses/>.
 //  
 
-package ch.akuhn.util.tests;
+package ch.akuhn.util;
 
 import static ch.akuhn.util.Extensions.newList;
 import static ch.akuhn.util.Extensions.shuffle;
@@ -91,10 +91,10 @@ public class IterTest {
 
 	@Test
 	public void sortIterable() {
-		List<Integer> a = newList(1, 2, 3, 4, 5, 6, 7, 8, 9);
+		java.util.List<Integer> a = newList(1, 2, 3, 4, 5, 6, 7, 8, 9);
 		Iterable<Integer> b = shuffle(a);
-		List<Integer> c = newList(b);
-		List<Integer> d = newList(sort(c));
+		java.util.List<Integer> c = newList(b);
+		java.util.List<Integer> d = newList(sort(c));
 		assertEquals(a, d);
 	}
 	

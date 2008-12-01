@@ -1,7 +1,7 @@
-package ch.akuhn.util.tests;
+package ch.akuhn.util;
 
 import static ch.akuhn.util.Extensions.newList;
-import static ch.akuhn.util.blocks.Methods.newPredicate;
+import static ch.akuhn.util.Methods.newPredicate;
 import static org.junit.Assert.*;
 
 import java.util.Iterator;
@@ -9,8 +9,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import ch.akuhn.util.blocks.Methods;
-import ch.akuhn.util.blocks.Select;
+import ch.akuhn.util.Methods;
+import ch.akuhn.util.Select;
 
 
 public class SelectTest {

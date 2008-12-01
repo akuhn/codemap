@@ -16,7 +16,7 @@
 //  along with ch.akuhn.util. If not, see <http://www.gnu.org/licenses/>.
 //  
 
-package ch.akuhn.util.tests;
+package ch.akuhn.util;
 
 import static org.junit.Assert.assertEquals;
 

@@ -1,4 +1,4 @@
-package ch.akuhn.util.tests;
+package ch.akuhn.util;
 
 import org.junit.Test;
 

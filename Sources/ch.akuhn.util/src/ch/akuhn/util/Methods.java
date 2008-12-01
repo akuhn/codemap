@@ -1,54 +1,16 @@
-package ch.akuhn.util.blocks;
+package ch.akuhn.util;
 
-import static java.lang.String.format;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import ch.akuhn.util.blocks.Function;
+import ch.akuhn.util.blocks.Predicate;
+
 @SuppressWarnings("unchecked")
 public class Methods {
 
-	private static class MethodReference {
-		
-		public String path;
-		public String name;
-		public String[] args;
-		
-		public MethodReference(String reference) {
-			int n = reference.indexOf('#');
-			this.path = n < 0 ? null : reference.substring(0, n);
-			this.name = n < 0 ? reference : reference.substring(n + 1);
-		}
-
-		public Method resolve(Class context) {
-			Class jclass = resolveClass(context);
-			for (Method m : jclass.getMethods()) {
-				if (m.getName().equals(name)) return m;
-			}
-			throw new Error(String.format("Method %s not found in %s.", this, jclass));
-		}
-
-		private Class resolveClass(Class context) {
-			if (path == null) return context;
-			Class $ = findClass(path);
-			if ($ != null) return $;
-			$ = findClass(context.getPackage() + "." + path);
-			if ($ != null) return $;
-			$ = findClass("java.lang." + path);
-			if ($ != null) return $;
-			return context;
-		}
-
-		@Override
-		public String toString() {
-			return format("%s#%s%s", path, name, args == null ? "" : args);
-		}
-		
-		
-		
-	}
-	
 	private static final class StaticPredicate<T> implements Predicate<T> {
 		private Method m;
 		public StaticPredicate(Method m) {
@@ -91,7 +53,7 @@ public class Methods {
 		return ref.resolve(jclass);
 	}
 	
-	private static final Class findClass(String name) {
+	static final Class findClass(String name) {
 		try {
 			return Class.forName(name);
 		} catch (ClassNotFoundException ex) {
@@ -169,5 +131,31 @@ public class Methods {
 		return Thread.currentThread().getStackTrace()[3];
 	}	
 	
+	private static class DynamicFunction implements Function {
+
+		private final MethodReference ref;
+		
+		public DynamicFunction(String reference) {
+			this.ref = new MethodReference(reference);
+		}
+		
+		public Object apply(Object a) {
+			Method m = ref.resolve(a.getClass());
+			try {
+				return m.invoke(a);
+			} catch (IllegalArgumentException ex) {
+				throw Throw.exception(ex);
+			} catch (IllegalAccessException ex) {
+				throw Throw.exception(ex);
+			} catch (InvocationTargetException ex) {
+				throw Throw.exception(ex.getCause());
+			}
+		}
+		
+	}
+	
+	public static final <T,A> Function<T,A> asFunction(String name) {
+		return new DynamicFunction(name);
+	}
 	
 }

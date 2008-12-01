@@ -1,11 +1,11 @@
-package ch.akuhn.util.blocks;
+package ch.akuhn.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import ch.akuhn.util.Provider;
+import ch.akuhn.util.blocks.Predicate;
 
 
 public class Select {

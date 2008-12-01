@@ -1,6 +1,6 @@
-package ch.akuhn.util.tests;
+package ch.akuhn.util;
 
-import static ch.akuhn.util.blocks.Methods.newPredicate;
+import static ch.akuhn.util.Methods.newPredicate;
 import static org.junit.Assert.*;
 
 
