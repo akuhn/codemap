@@ -32,5 +32,9 @@ public class SparseMatrix {
 	public int rows() {
 		return rows.size();
 	}
+
+    public void add(int row, int column, int count) {
+        rows.get(row).add(column,count);
+    }
 	
 }

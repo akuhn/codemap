@@ -1,27 +1,40 @@
 package ch.akuhn.hapax;
 
-import java.util.ArrayList;
-import java.util.List;
+import ch.akuhn.util.Bag.Count;
 
-public class TermDocumentMatrix<T, D> extends SparseMatrix {
 
-	private List<D> documents; // columns
-	private List<T> terms; // rows
+public class TermDocumentMatrix extends SparseMatrix {
+
+	private Index<Document> documents; // columns
+	private Index<CharSequence> terms; // rows
 	
 	public TermDocumentMatrix() {
 		super(0,0);
-		this.terms = new ArrayList<T>();
-		this.documents = new ArrayList<D>();
+		this.terms = new Index<CharSequence>();
+		this.documents = new Index<Document>();
 	}
 	
-	public int addDocument(D document) {
-		documents.add(document);
-		return addColumn();
+	public int addDocument(Document document) {
+		int index = documents.add(document);
+		if (index == columns()) addColumn();
+		return index;
 	}
 	
-	public int addTerm(T term) {
-		terms.add(term);
-		return addRow();
-	}
-	
+    public int addTerm(CharSequence term) {
+        int index = terms.add(term);
+        if (index == rows()) addRow();
+        return index;
+    }
+    
+    public void addCorpus(Corpus corpus) {
+        for (Document document: corpus.documents()) {
+            int column = addDocument(document);
+            Terms terms = corpus.get(document);
+            for (Count<CharSequence> each: terms.counts()) {
+                int row = addTerm(each.element);
+                add(row,column,each.count);
+            }
+        }
+    }
+    
 }

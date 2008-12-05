@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="lib/jexample-4.4-r271.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ch.akuhn.util"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Query"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

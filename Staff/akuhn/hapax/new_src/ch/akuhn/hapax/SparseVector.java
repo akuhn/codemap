@@ -36,24 +36,25 @@ public class SparseVector {
 		if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer.toString(key));
 		int spot = Arrays.binarySearch(keys, 0, used, key);
 		if (spot >= 0) values[spot] = value;
-		else {
-			spot = -spot-1; 
-			// grow if reaching end of capacity
-			if (used == keys.length) {
-				int capacity = (keys.length * 3)/2 + 1;
-				keys = Arrays.copyOf(keys, capacity);
-				values = Arrays.copyOf(values, capacity);
-			}
-			// shift values if not appending
-			if (spot < used) { 
-				System.arraycopy(keys, spot, keys, spot+1, used-spot);
-				System.arraycopy(values, spot, values, spot+1, used-spot);
-			}
-			keys[spot] = key;
-			values[spot] = value;
-			used++;
-		}
+		else update(-1-spot, key, value);
 	}
+
+    private void update(int spot, int key, double value) {
+        // grow if reaching end of capacity
+        if (used == keys.length) {
+        	int capacity = (keys.length * 3)/2 + 1;
+        	keys = Arrays.copyOf(keys, capacity);
+        	values = Arrays.copyOf(values, capacity);
+        }
+        // shift values if not appending
+        if (spot < used) { 
+        	System.arraycopy(keys, spot, keys, spot+1, used-spot);
+        	System.arraycopy(values, spot, values, spot+1, used-spot);
+        }
+        keys[spot] = key;
+        values[spot] = value;
+        used++;
+    }
 	
 	public int size() {
 		return size;
@@ -62,5 +63,12 @@ public class SparseVector {
 	public int used() {
 		return used;
 	}
+
+    public void add(int key, double value) {
+        if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer.toString(key));
+        int spot = Arrays.binarySearch(keys, 0, used, key);
+        if (spot >= 0) values[spot] += value;
+        else update(-1-spot, key, value);
+    }
 	
 }
