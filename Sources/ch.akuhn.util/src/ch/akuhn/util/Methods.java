@@ -153,9 +153,36 @@ public class Methods {
 		}
 		
 	}
+
+	private static class DynamicPredicate implements Predicate {
+
+		private final MethodReference ref;
+		
+		public DynamicPredicate(String reference) {
+			this.ref = new MethodReference(reference);
+		}
+		
+		public boolean apply(Object a) {
+			Method m = ref.resolve(a.getClass());
+			try {
+				return (Boolean) m.invoke(a);
+			} catch (IllegalArgumentException ex) {
+				throw Throw.exception(ex);
+			} catch (IllegalAccessException ex) {
+				throw Throw.exception(ex);
+			} catch (InvocationTargetException ex) {
+				throw Throw.exception(ex.getCause());
+			}
+		}
+		
+	}	
 	
-	public static final <T,A> Function<T,A> asFunction(String name) {
-		return new DynamicFunction(name);
+	public static final <T,A> Function<T,A> asFunction(String reference) {
+		return new DynamicFunction(reference);
+	}
+
+	public static <T> Predicate<T> asPredicate(String reference) {
+		return new DynamicPredicate(reference);
 	}
 	
 }

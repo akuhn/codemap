@@ -26,9 +26,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
+import java.util.Queue;
 
 /**
  * Static methods that operate on or return files.
@@ -149,6 +152,54 @@ public abstract class Files {
 
 	public static CharSequence openRead(File file) {
 		return Strings.fromFile(file);
+	}
+	
+	public static IterableIterator<File> find(final File folder, String... extensions) {
+		return IterableIteratorFactory.create(new Find(folder, extensions));
+	}
+		
+	private static class Find implements Iterator<File> {
+
+		private Queue<File> queue;
+		private String[] extensions;
+
+		public Find(File folder, String... extensions) {
+			this.queue = new LinkedList<File>();
+			this.extensions = extensions;
+			this.queue.offer(folder);
+		}
+		
+		public boolean hasNext() {
+			pollFolders();
+			return !queue.isEmpty();
+		}
+
+		public File next() {
+			pollFolders();
+			if (queue.isEmpty()) throw new NoSuchElementException();
+			return queue.poll();
+		}
+
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+		
+		private void pollFolders() {
+			while (!queue.isEmpty()) {
+				if (!queue.peek().isDirectory()) break;
+				File next = queue.poll();
+				for (File each : next.listFiles()) {
+					if (include(each) || each.isDirectory()) queue.offer(each);
+				}
+			}
+		}
+
+		private boolean include(File file) {
+			String name = file.getName();
+			for (String each: extensions) if (name.endsWith(each)) return true;
+			return false;
+		}
+
 	}
 
 }

@@ -1,8 +1,20 @@
 <?xml version="1.0" ?>
 <project default="package" basedir=".">
 
-<!--from http://www.innovationontherun.com/creating-a-build-number-with-ant-and-subversion-->
-    <exec outputproperty="build.current.revision" executable="svnversion">
+    <target name="package">
+        <jar id="files" zipfile="${file.jar}">
+    	    <fileset dir="bin" excludes="**/*Test*"/>
+    	    <fileset dir="src" includes="ch/**/*.java"/>
+        </jar>
+    	<zipfileset id="files" src="${file.jar}"/>
+    	<pathconvert property="listing" refid="files" pathsep="${line.separator}">
+    		<globmapper from="${basedir}${file.separator}*" to="*"/>
+    	</pathconvert>	
+    	<echo message="${listing}"/>
+    </target>
+	
+    <!--from http://www.innovationontherun.com/creating-a-build-number-with-ant-and-subversion-->
+    <exec outputproperty="svnversion" executable="svnversion" dir="src">
       <arg line="-n -c" />
       <redirector>
         <outputfilterchain>
@@ -11,35 +23,9 @@
           </tokenfilter>
         </outputfilterchain>
       </redirector>
-    </exec>
-    <exec outputproperty="build.current.version" executable="svn">
-      <arg line="info" />
-      <redirector>
-        <outputfilterchain>
-          <linecontainsregexp><regexp pattern="^URL:" /></linecontainsregexp>
-          <tokenfilter>
-            <replaceregex pattern=".*\/([^\/]+)$" replace="\1" flags="g"/>
-          </tokenfilter>
-        </outputfilterchain>
-      </redirector>
-    </exec>
-    
-    <property name="package.name" value="akuhn-util-0.5.${build.current.revision}.jar"/>
-	
-    <target name="package" depends="" description="Compression target">
-      <delete dir="." includes="akuhn-util*.jar"/>
-      <jar jarfile="${package.name}">
-        <manifest>
-          <attribute name="Main-Class" value="Magic"/>
-        </manifest>        	
-        <fileset dir="bin" includes="**/*.class COPYING*" excludes="**/tests/*.class"/>
-        <fileset dir="src" includes="**/*.java"/>
-      </jar>	
-      <zipfileset id="files" src="${package.name}"/>
-      <pathconvert property="listing" refid="files" pathsep="${line.separator}">
-    	<globmapper from="${basedir}${file.separator}*" to="*"/>
-      </pathconvert>	
-      <echo message="${listing}"/>
-    </target>
+    </exec>	
 
+	<property name="file.jar" value="akuhn-util-r${svnversion}.jar"/>
+	
+	
 </project>

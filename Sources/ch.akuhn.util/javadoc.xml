@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="javadoc">
-    <target name="javadoc">
-        <javadoc access="public" author="true" classpath="C:\Program Files\Eclipse\eclipse-SDK-3.3.1-win32\eclipse\plugins\org.junit4_4.3.1\junit.jar" destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="ch.akuhn.util,ch.akuhn.util.tests" source="1.6" sourcepath="src" splitindex="true" use="true" version="true">
-            <link href="http://www.junit.org/junit/javadoc/4.3"/>
-            <link href="http://java.sun.com/javase/6/docs/api/"/>
-        </javadoc>
-    </target>
-</project>

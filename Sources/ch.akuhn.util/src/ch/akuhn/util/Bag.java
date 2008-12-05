@@ -21,6 +21,7 @@ package ch.akuhn.util;
 import static ch.akuhn.util.Extensions.sorted;
 
 import java.util.AbstractCollection;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -320,4 +321,15 @@ public class Bag<T> extends AbstractCollection<T> {
 		return IterableIteratorFactory.create(values.keySet().iterator());
 	}
 
+	@Override
+	public boolean addAll(Collection<? extends T> coll) {
+		if (!(coll instanceof Bag)) return super.addAll(coll);
+		Bag<? extends T> bag = (Bag<? extends T>) coll;
+		boolean changed = false;
+		for (Count<? extends T> each: bag.counts()) {
+			if (this.add(each.element, each.count)) changed = true;
+		}
+		return changed;
+	}
+	
 }

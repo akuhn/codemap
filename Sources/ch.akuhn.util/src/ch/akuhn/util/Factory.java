@@ -66,7 +66,7 @@ public class Factory<T> {
 		try {
 			return takeOne.newInstance(obj);
 		} catch (Exception ex) {
-			throw new RuntimeException(ex);
+			throw Throw.exception(ex);
 		}
 	}
 
@@ -74,7 +74,7 @@ public class Factory<T> {
 		try {
 			return takeTwo.newInstance(obj1, obj2);
 		} catch (Exception ex) {
-			throw new RuntimeException(ex);
+			throw Throw.exception(ex);
 		}
 	}
 
@@ -82,7 +82,7 @@ public class Factory<T> {
 		try {
 			return takeThree.newInstance(obj1, obj2, obj3);
 		} catch (Exception ex) {
-			throw new RuntimeException(ex);
+			throw Throw.exception(ex);
 		}
 	}
 
