@@ -16,13 +16,18 @@ public class TermDocumentMatrix extends SparseMatrix {
 	
 	public int addDocument(Document document) {
 		int index = documents.add(document);
-		if (index == columns()) addColumn();
+		if (index == columnSize()) addColumn();
 		return index;
 	}
 	
+    @Override
+    public String toString() {
+        return String.format("TermDocumentMatrix (%d terms, %d documents)", rowSize(), columnSize());
+    }
+
     public int addTerm(CharSequence term) {
         int index = terms.add(term);
-        if (index == rows()) addRow();
+        if (index == rowSize()) addRow();
         return index;
     }
     

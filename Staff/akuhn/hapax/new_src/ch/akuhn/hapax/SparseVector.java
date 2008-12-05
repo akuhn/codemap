@@ -4,6 +4,10 @@ import java.util.Arrays;
 
 public class SparseVector {
 
+    //public static int tally$grow = 0;
+    //public static int tally$insert = 0;
+    //public static int tally$total = 0;
+    
 	private int[] keys;
 	private int size, used;
 	
@@ -24,7 +28,7 @@ public class SparseVector {
 	public double get(int key) {
 		if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer.toString(key));
 		int spot = Arrays.binarySearch(keys, 0, used, key);
-		return spot < 0 ? 0.0d : values[spot];
+		return spot < 0 ? 0 : values[spot];
 	}
 	
 	public void resizeTo(int size) {
@@ -32,7 +36,7 @@ public class SparseVector {
 		this.size = size;
 	}
 	
-	public void set(int key, double value) {
+	public void put(int key, double value) {
 		if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer.toString(key));
 		int spot = Arrays.binarySearch(keys, 0, used, key);
 		if (spot >= 0) values[spot] = value;
@@ -42,12 +46,14 @@ public class SparseVector {
     private void update(int spot, int key, double value) {
         // grow if reaching end of capacity
         if (used == keys.length) {
+            //tally$grow++;
         	int capacity = (keys.length * 3)/2 + 1;
         	keys = Arrays.copyOf(keys, capacity);
         	values = Arrays.copyOf(values, capacity);
         }
         // shift values if not appending
         if (spot < used) { 
+            //tally$insert++;
         	System.arraycopy(keys, spot, keys, spot+1, used-spot);
         	System.arraycopy(values, spot, values, spot+1, used-spot);
         }
@@ -64,11 +70,36 @@ public class SparseVector {
 		return used;
 	}
 
-    public void add(int key, double value) {
+    public double add(int key, double value) {
         if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer.toString(key));
+        //tally$total++;
         int spot = Arrays.binarySearch(keys, 0, used, key);
-        if (spot >= 0) values[spot] += value;
-        else update(-1-spot, key, value);
+        if (spot >= 0) return values[spot] += value;
+        update(-1-spot, key, value);
+        return value;
+    }
+
+    public boolean isUsed(int key) {
+        return 0 <= Arrays.binarySearch(keys, 0, used, key);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof SparseVector && this.equals((SparseVector) obj);
+    }
+
+    public boolean equals(SparseVector v) {
+        return size == v.size && used == v.used 
+                && Arrays.equals(keys, v.keys) 
+                && Arrays.equals(values, values);
+    }
+
+    @Override
+    public int hashCode() {
+        // TODO Auto-generated method stub
+        return super.hashCode();
     }
 	
+    
+    
 }

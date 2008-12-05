@@ -1,23 +1,19 @@
 package ch.akuhn.hapax;
 
-import static ch.akuhn.util.query.Query.$result;
-import static ch.akuhn.util.query.Query.sum;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 import ch.akuhn.util.Files;
-import ch.akuhn.util.query.Inject;
-import ch.akuhn.util.query.Query;
-import ch.akuhn.util.query.Sum;
 
 public class Corpus {
 
 	private Map<Document,Terms> documents;
+	private Terms terms;
 	
 	public Corpus() {
 		this.documents = new HashMap<Document,Terms>();
+		this.terms = new Terms();
 	}
 
 	public Terms get(Document document) {
@@ -38,6 +34,7 @@ public class Corpus {
 			value = new Terms();
 			documents.put(document,value);
 		}
+		this.terms.addAll(terms);
 		value.addAll(terms);
 	}
 	
@@ -50,17 +47,16 @@ public class Corpus {
 	    return documents.keySet();
 	}
 	
-	public Terms allTerms() {
-	    Terms all = new Terms();
-	    for (Terms each: documents.values()) all.addAll(each);
-	    return all;
+	public Terms terms() {
+	    return terms;
 	}
 	
 	public int termSize() {
-	    for (Sum<Terms> each: sum(documents.values())) {
-	        each.sum += each.element.elementSize();
-	    }
-	    return $result();
+	    return terms.uniqueSize();
+	}
+	
+	public int documentSize() {
+	    return documents.size();
 	}
 	
 	public void scanFolder(File folder, String... extensions) {
