@@ -2,15 +2,18 @@
 <project default="package" basedir=".">
 
     <target name="package">
-        <jar id="files" zipfile="${file.jar}">
-    	    <fileset dir="bin" excludes="**/*Test*"/>
-    	    <fileset dir="src" includes="ch/**/*.java"/>
-        </jar>
-    	<zipfileset id="files" src="${file.jar}"/>
-    	<pathconvert property="listing" refid="files" pathsep="${line.separator}">
-    		<globmapper from="${basedir}${file.separator}*" to="*"/>
-    	</pathconvert>	
-    	<echo message="${listing}"/>
+      <jar id="files" zipfile="${file.jar}">
+        <fileset dir="bin">
+    	  <include name="ch/**/*.java"/>
+    	  <exclude name="**/*Test*"/>    	    	
+    	</fileset>
+    	<fileset dir="src" includes="ch/**/*.java"/>
+      </jar>
+      <zipfileset id="files" src="${file.jar}"/>
+      <pathconvert property="listing" refid="files" pathsep="${line.separator}">
+    	<globmapper from="${basedir}${file.separator}*" to="*"/>
+      </pathconvert>	
+      <echo message="${listing}"/>
     </target>
 	
     <!--from http://www.innovationontherun.com/creating-a-build-number-with-ant-and-subversion-->
@@ -25,7 +28,7 @@
       </redirector>
     </exec>	
 
-	<property name="file.jar" value="akuhn-util-r${svnversion}.jar"/>
+    <property name="file.jar" value="akuhn-util-r${svnversion}.jar"/>
 	
 	
 </project>
