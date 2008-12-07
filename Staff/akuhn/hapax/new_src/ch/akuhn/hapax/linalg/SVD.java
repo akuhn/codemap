@@ -52,6 +52,20 @@ public class SVD {
         return sim / (Math.sqrt(suma) * Math.sqrt(sumb));
     }
     
+    public double similarityV(int a, double[] pseudo) {
+        assert pseudo.length == s.length;
+        int dim = s.length;
+        double sim = 0;
+        double suma = 0;
+        double sumb = 0;
+        for (int n = 0; n < dim; n++) {
+            sim += Vt[n][a] * pseudo[n] * s[n] * s[n];
+            suma += Vt[n][a] * Vt[n][a] * s[n] * s[n];
+            sumb += pseudo[n] * pseudo[n] * s[n] * s[n];   
+        }
+        return sim / (Math.sqrt(suma) * Math.sqrt(sumb));
+    }
+    
     public double similarityUV(int a, int b) {
         int dim = s.length;
         double sim = 0;

@@ -30,5 +30,14 @@ public class Terms extends Bag<CharSequence> implements ScannerClient {
         }
         return terms;
     }
+
+    public Terms stem() {
+        Stemmer stemmer = new PorterStemmer();
+        Terms terms = new Terms();
+        for (Count<CharSequence> each: this.counts()) {
+            terms.add(stemmer.stem(each.element), each.count);
+        }
+        return terms;
+    }
     
 }

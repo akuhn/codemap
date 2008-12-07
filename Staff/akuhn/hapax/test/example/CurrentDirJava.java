@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 
 import ch.akuhn.hapax.corpus.Corpus;
+import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.index.GlobalWeighting;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.LocalWeighting;
@@ -50,6 +51,8 @@ public class CurrentDirJava {
         puts( lsi.rankDocumentsByTerm("bag") );
         puts( lsi.rankTermsByTerm("bag") );
         puts( lsi.rankDocumentsByTerm("famix") );
+        puts( lsi.rankDocumentsByQuery("split string by lower- and upper-case") );
+
         
     }
     

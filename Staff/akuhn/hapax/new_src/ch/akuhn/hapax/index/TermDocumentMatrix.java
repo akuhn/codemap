@@ -22,7 +22,8 @@ public class TermDocumentMatrix
 
     private Index<Document> documents; // columns
     private Index<CharSequence> terms; // rows
-
+    private double[] globalWeighting;
+    
     public TermDocumentMatrix() {
         super(0, 0);
         this.terms = new Index<CharSequence>();
@@ -66,13 +67,18 @@ public class TermDocumentMatrix
     
     public TermDocumentMatrix weight(LocalWeighting localWeighting, GlobalWeighting globalWeighting) {
         TermDocumentMatrix tdm = new TermDocumentMatrix(this.terms,this.documents);
+        tdm.globalWeighting = new double[termSize()];
         for (Each<Vector> row: Each.withIndex(rows())) {
-            double global = globalWeighting.weight(row.element);
+            double global = tdm.globalWeighting[row.index] = globalWeighting.weight(row.element);
             for (Entry column: row.element.entries()) {
                 tdm.put(row.index, column.index, localWeighting.weight(column.value) * global);
             }
         }
         return tdm;
+    }
+
+    private int termSize() {
+        return terms.size();
     }
 
     public TermDocumentMatrix rejectStopwords() {
@@ -146,7 +152,7 @@ public class TermDocumentMatrix
     
     public LatentSemanticIndex createIndex() {
         return new LatentSemanticIndex(documents.clone(), terms.clone(),
-                SVD.fromMatrix(this, 30));
+                globalWeighting, SVD.fromMatrix(this, 30));
     }
     
 }
