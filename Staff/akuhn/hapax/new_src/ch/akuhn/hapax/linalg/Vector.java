@@ -41,5 +41,11 @@ public abstract class Vector {
         for (Entry each: entries()) if (each.value != 0) count++;
         return count;
     }
+
+    public double sum() {
+        double sum = 0;
+        for (Entry each: entries()) sum += each.value;
+        return sum;
+    }
     
 }

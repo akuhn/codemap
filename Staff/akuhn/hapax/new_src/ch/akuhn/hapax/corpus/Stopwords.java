@@ -12,7 +12,7 @@ public class Stopwords extends HashSet<String> {
     public static final Stopwords BASIC_ENGLISH;
     static {
         BASIC_ENGLISH = new Stopwords();
-        BASIC_ENGLISH.readFromResource("hapax/resources/stopwords_SMART.txt");
+        BASIC_ENGLISH.readFromResource("ch/akuhn/hapax/resources/stopwords_SMART.txt");
     }
     
     public static boolean contains(String word) {

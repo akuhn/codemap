@@ -23,18 +23,18 @@ public class SparseMatrix
         extends Matrix {
 
     private int columns;
-    private List<SparseVector> rows;
+    private List<Vector> rows;
 
     public SparseMatrix(int rows, int columns) {
         this.columns = columns;
-        this.rows = new ArrayList<SparseVector>(rows);
+        this.rows = new ArrayList<Vector>(rows);
         for (int n = 0; n < rows; n++)
             addRow();
     }
 
     public SparseMatrix(double[][] values) {
         this.columns = values[0].length;
-        this.rows = new ArrayList<SparseVector>(values.length);
+        this.rows = new ArrayList<Vector>(values.length);
         for (double[] each : values)
             addRow(each);
     }
@@ -46,8 +46,8 @@ public class SparseMatrix
 
     protected int addColumn() {
         columns++;
-        for (SparseVector each : rows)
-            each.resizeTo(columns);
+        for (Vector each : rows)
+            ((SparseVector) each).resizeTo(columns);
         return columns - 1;
     }
 
@@ -82,7 +82,7 @@ public class SparseMatrix
     @Override
     public int used() {
         int used = 0;
-        for (SparseVector each : rows)
+        for (Vector each : rows)
             used += each.used();
         return used;
     }
@@ -104,7 +104,7 @@ public class SparseMatrix
         out.print(this.columnSize()).space();
         out.print(this.rowSize()).space();
         out.print(this.used()).cr();
-        for (SparseVector row : rows) {
+        for (Vector row : rows) {
             out.print(row.used()).cr();
             for (Entry each : row.entries()) {
                 out.print(each.index).space().print(each.value).cr();
@@ -158,7 +158,7 @@ public class SparseMatrix
 
     public double[][] asDenseDoubleDouble() {
         double[][] dense = new double[rowSize()][columnSize()];
-        for (Each<SparseVector> row : Each.withIndex(rows)) {
+        for (Each<Vector> row : Each.withIndex(rows)) {
             for (Entry column : row.element.entries()) {
                 dense[row.index][column.index] = column.value;
             }
@@ -217,8 +217,11 @@ public class SparseMatrix
 
     @Override
     public Iterable<Vector> rows() {
-        // TODO Auto-generated method stub
-        return null;
+        return rows;
+    }
+
+    protected void setRow(int row, Vector values) {
+        rows.set(row, values);
     }
 
 }

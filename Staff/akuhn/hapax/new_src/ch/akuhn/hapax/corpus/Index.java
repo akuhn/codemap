@@ -2,11 +2,12 @@ package ch.akuhn.hapax.corpus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 
-public class Index<E> {
+public class Index<E> implements Cloneable, Iterable<E> {
 
     private Map<E,Integer> map;
     private List<E> list;
@@ -14,6 +15,11 @@ public class Index<E> {
     public Index() {
         map = new HashMap<E,Integer>();
         list = new ArrayList<E>();
+    }
+    
+    public Index(Index<E> index) {
+        map = new HashMap<E,Integer>(index.map);
+        list = new ArrayList<E>(index.list);
     }
     
     public int add(E element) {
@@ -33,6 +39,20 @@ public class Index<E> {
     public int get(E element) {
         Integer index = map.get(element);
         return index == null ? -1 : index;
+    }
+
+    @Override
+    public Index<E> clone() {
+        return new Index<E>(this);
+    }
+
+    public int size() {
+        return list.size();
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        return list.iterator();
     }   
     
 }

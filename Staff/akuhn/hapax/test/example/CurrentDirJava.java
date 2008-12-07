@@ -12,6 +12,8 @@ import java.io.OutputStreamWriter;
 import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.linalg.SVD;
 import ch.akuhn.hapax.linalg.SparseVector;
+import ch.akuhn.hapax.lsi.GlobalWeighting;
+import ch.akuhn.hapax.lsi.LocalWeighting;
 import ch.akuhn.hapax.lsi.TermDocumentMatrix;
 
 
@@ -32,12 +34,17 @@ public class CurrentDirJava {
         
         puts( tdm );
         
-        //puts( SparseVector.tally$grow, SparseVector.tally$insert, SparseVector.tally$total );
-        
         puts( tdm.density() );
         
+        tdm = tdm.rejectAndWeight();
+        
+        puts( tdm );
+
+        puts( tdm.density() );
+
         SVD svd = SVD.fromMatrix(tdm, 20);
         
+
         puts( svd.time );
         puts( svd.Ut[0].length );
         puts( svd.Vt[0].length );
