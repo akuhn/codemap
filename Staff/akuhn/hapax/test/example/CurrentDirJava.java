@@ -13,6 +13,7 @@ import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.linalg.SVD;
 import ch.akuhn.hapax.linalg.SparseVector;
 import ch.akuhn.hapax.lsi.GlobalWeighting;
+import ch.akuhn.hapax.lsi.LatentSemanticIndex;
 import ch.akuhn.hapax.lsi.LocalWeighting;
 import ch.akuhn.hapax.lsi.TermDocumentMatrix;
 
@@ -42,12 +43,13 @@ public class CurrentDirJava {
 
         puts( tdm.density() );
 
-        SVD svd = SVD.fromMatrix(tdm, 20);
+        puts( tdm.terms().sortedCounts() );
         
+        LatentSemanticIndex lsi = tdm.createIndex();        
 
-        puts( svd.time );
-        puts( svd.Ut[0].length );
-        puts( svd.Vt[0].length );
+        puts( lsi.rankDocumentsByTerm("bag") );
+        puts( lsi.rankTermsByTerm("bag") );
+        puts( lsi.rankDocumentsByTerm("famix") );
         
     }
     

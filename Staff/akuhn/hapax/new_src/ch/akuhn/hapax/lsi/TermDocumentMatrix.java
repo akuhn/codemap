@@ -8,9 +8,11 @@ import ch.akuhn.hapax.corpus.PorterStemmer;
 import ch.akuhn.hapax.corpus.Stemmer;
 import ch.akuhn.hapax.corpus.Stopwords;
 import ch.akuhn.hapax.corpus.Terms;
+import ch.akuhn.hapax.linalg.SVD;
 import ch.akuhn.hapax.linalg.SparseMatrix;
 import ch.akuhn.hapax.linalg.Vector;
 import ch.akuhn.hapax.linalg.Vector.Entry;
+import ch.akuhn.util.Bag;
 import ch.akuhn.util.Pair;
 import ch.akuhn.util.Bag.Count;
 import ch.akuhn.util.query.Each;
@@ -107,17 +109,44 @@ public class TermDocumentMatrix
         return tdm;
     }
 
+    public TermDocumentMatrix toLowerCase() {
+        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<CharSequence>(), documents);
+        for (Pair<CharSequence,Vector> each: zip(terms,rows())) {
+            tdm.addTerm(each.fst.toString().toLowerCase(), each.snd);
+        }
+        return tdm;
+    }
+
     public TermDocumentMatrix stem() {
         return stem(new PorterStemmer());
     }
     
     public TermDocumentMatrix rejectAndWeight() {
-        return rejectHapaxes().rejectStopwords().stem().weight(LocalWeighting.TERM, GlobalWeighting.IDF);
+        return rejectHapaxes()
+                .toLowerCase()
+                .rejectStopwords()
+                .stem()
+                .weight(
+                    LocalWeighting.TERM, 
+                    GlobalWeighting.IDF);
     }
     
     private void addTerm(CharSequence term, Vector values) {
         int row = addTerm(term);
         this.setRow(row, values);
+    }
+
+    public Terms terms() {
+        Terms bag = new Terms();
+        for (Pair<CharSequence,Vector> each: zip(terms,rows())) {
+            bag.add(each.fst, (int) each.snd.sum());
+        }
+        return bag;
+    }
+    
+    public LatentSemanticIndex createIndex() {
+        return new LatentSemanticIndex(documents.clone(), terms.clone(),
+                SVD.fromMatrix(this, 30));
     }
     
 }

@@ -4,8 +4,15 @@ import java.io.File;
 
 public class Document {
 
-    public Document(File each) {
-        
+    private File file;
+
+    public Document(File file) {
+        this.file = file;
     }
 
+    @Override
+    public String toString() {
+        return file.getName();
+    }
+    
 }
