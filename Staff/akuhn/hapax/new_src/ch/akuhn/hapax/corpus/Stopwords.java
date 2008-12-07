@@ -1,4 +1,4 @@
-package ch.akuhn.hapax;
+package ch.akuhn.hapax.corpus;
 
 import java.util.HashSet;
 import java.util.Set;

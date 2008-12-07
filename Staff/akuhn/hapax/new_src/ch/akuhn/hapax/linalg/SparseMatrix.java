@@ -1,4 +1,4 @@
-package ch.akuhn.hapax;
+package ch.akuhn.hapax.linalg;
 
 import java.io.BufferedWriter;
 import java.io.DataOutput;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import ch.akuhn.hapax.SparseVector.Entry;
+import ch.akuhn.hapax.linalg.SparseVector.Entry;
 import ch.akuhn.util.Extensions;
 import ch.akuhn.util.Files;
 import ch.akuhn.util.PrintOn;

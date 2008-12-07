@@ -1,4 +1,4 @@
-package ch.akuhn.hapax;
+package ch.akuhn.hapax.linalg;
 
 public abstract class Matrix {
 

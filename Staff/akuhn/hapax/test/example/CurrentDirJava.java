@@ -9,9 +9,9 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 
-import ch.akuhn.hapax.Corpus;
-import ch.akuhn.hapax.SparseVector;
-import ch.akuhn.hapax.TermDocumentMatrix;
+import ch.akuhn.hapax.corpus.Corpus;
+import ch.akuhn.hapax.linalg.SparseVector;
+import ch.akuhn.hapax.lsi.TermDocumentMatrix;
 
 
 public class CurrentDirJava {

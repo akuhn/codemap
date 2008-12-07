@@ -1,4 +1,4 @@
-package ch.akuhn.hapax.svd;
+package ch.akuhn.hapax.linalg;
 
 import java.io.InputStream;
 import java.util.Scanner;

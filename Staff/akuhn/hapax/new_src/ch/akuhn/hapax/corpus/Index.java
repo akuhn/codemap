@@ -1,4 +1,4 @@
-package ch.akuhn.hapax;
+package ch.akuhn.hapax.corpus;
 
 import java.util.ArrayList;
 import java.util.HashMap;

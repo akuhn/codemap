@@ -1,4 +1,4 @@
-package ch.akuhn.hapax;
+package ch.akuhn.hapax.linalg;
 
 import java.util.Arrays;
 import java.util.Iterator;

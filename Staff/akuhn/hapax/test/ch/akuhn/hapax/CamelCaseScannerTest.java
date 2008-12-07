@@ -7,6 +7,10 @@ import java.util.List;
 
 import org.junit.Test;
 
+import ch.akuhn.hapax.corpus.CamelCaseScanner;
+import ch.akuhn.hapax.corpus.Scanner;
+import ch.akuhn.hapax.corpus.ScannerClient;
+
 
 public class CamelCaseScannerTest implements ScannerClient {
 

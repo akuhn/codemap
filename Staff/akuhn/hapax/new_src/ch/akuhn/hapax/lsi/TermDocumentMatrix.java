@@ -1,5 +1,10 @@
-package ch.akuhn.hapax;
+package ch.akuhn.hapax.lsi;
 
+import ch.akuhn.hapax.corpus.Corpus;
+import ch.akuhn.hapax.corpus.Document;
+import ch.akuhn.hapax.corpus.Index;
+import ch.akuhn.hapax.corpus.Terms;
+import ch.akuhn.hapax.linalg.SparseMatrix;
 import ch.akuhn.util.Bag.Count;
 
 
