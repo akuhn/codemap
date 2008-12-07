@@ -10,5 +10,5 @@ public interface Stemmer {
     };
 
     public CharSequence stem(CharSequence string);
-    
+
 }

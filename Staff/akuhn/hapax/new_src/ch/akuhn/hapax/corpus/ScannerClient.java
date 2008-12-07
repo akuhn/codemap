@@ -5,7 +5,7 @@ public interface ScannerClient {
     public static final ScannerClient DEBUG = new ScannerClient() {
         @Override
         public void yield(CharSequence term) {
-            System.out.println("\""+term+"\"");
+            System.out.println("\"" + term + "\"");
         }
     };
 
@@ -17,5 +17,5 @@ public interface ScannerClient {
     };
 
     public void yield(CharSequence term);
-    
+
 }

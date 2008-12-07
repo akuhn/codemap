@@ -11,17 +11,16 @@ import java.nio.charset.CharsetDecoder;
 
 import ch.akuhn.util.Throw;
 
-
 public abstract class Scanner implements Runnable {
 
     private static final int NONE = -1;
-    
+
     private CharBuffer buf;
     protected char ch;
     private ScannerClient client;
     private int mark;
-    
-	protected final void backtrack() {
+
+    protected final void backtrack() {
         buf.position(buf.position() - 1);
     }
 
@@ -33,8 +32,8 @@ public abstract class Scanner implements Runnable {
     public ScannerClient getClient() {
         return client;
     }
-	
-	protected final void mark() {
+
+    protected final void mark() {
         mark = buf.position();
     }
 
@@ -48,21 +47,21 @@ public abstract class Scanner implements Runnable {
             FileChannel channel = input.getChannel();
             long filesize = channel.size();
             MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, filesize);
-            //Charset charset = Charset.forName("UTF-8");
+            // Charset charset = Charset.forName("UTF-8");
             Charset charset = Charset.forName("ISO-8859-1");
             CharsetDecoder decoder = charset.newDecoder();
-            this.buf = decoder.decode(buffer);	
+            this.buf = decoder.decode(buffer);
             return this;
         } catch (Exception ex) {
             throw Throw.exception(ex);
         }
-	}
+    }
 
     public Scanner onString(String string) {
-		this.buf = CharBuffer.wrap(string);
-		return this;
-	}
-    
+        this.buf = CharBuffer.wrap(string);
+        return this;
+    }
+
     @Override
     public void run() {
         assert client != null && buf != null;
@@ -76,9 +75,9 @@ public abstract class Scanner implements Runnable {
             client.yield(buf.subSequence(0, buf.limit() - mark + 1));
         }
     }
-    
+
     protected abstract void scan() throws BufferUnderflowException;
-    
+
     protected final void yank() {
         int pos = buf.position();
         buf.position(mark - 1);

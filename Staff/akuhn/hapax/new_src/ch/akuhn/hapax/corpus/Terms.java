@@ -4,7 +4,8 @@ import java.io.File;
 
 import ch.akuhn.util.Bag;
 
-public class Terms extends Bag<CharSequence> implements ScannerClient {
+public class Terms
+        extends Bag<CharSequence> implements ScannerClient {
 
     public Terms() {
         // do nothing
@@ -21,7 +22,7 @@ public class Terms extends Bag<CharSequence> implements ScannerClient {
     public Terms stem() {
         Stemmer stemmer = new PorterStemmer();
         Terms terms = new Terms();
-        for (Count<CharSequence> each: this.counts()) {
+        for (Count<CharSequence> each : this.counts()) {
             terms.add(stemmer.stem(each.element), each.count);
         }
         return terms;
@@ -29,7 +30,7 @@ public class Terms extends Bag<CharSequence> implements ScannerClient {
 
     public Terms toLowerCase() {
         Terms terms = new Terms();
-        for (Count<CharSequence> each: this.counts()) {
+        for (Count<CharSequence> each : this.counts()) {
             terms.add(each.element.toString().toLowerCase(), each.count);
         }
         return terms;
@@ -39,5 +40,5 @@ public class Terms extends Bag<CharSequence> implements ScannerClient {
     public void yield(CharSequence term) {
         this.add(term);
     }
-    
+
 }

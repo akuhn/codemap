@@ -10,6 +10,7 @@ public class Times {
             public Iterator<Void> iterator() {
                 return new Iterator<Void>() {
                     private long n = 0;
+
                     @Override
                     public boolean hasNext() {
                         return n < times;
@@ -25,10 +26,10 @@ public class Times {
                     public void remove() {
                         throw new UnsupportedOperationException();
                     }
-                    
+
                 };
             }
         };
     }
-    
+
 }

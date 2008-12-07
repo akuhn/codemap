@@ -8,17 +8,16 @@ public enum LocalWeighting {
             return Math.signum(value);
         }
     },
-    LOG{
+    LOG {
         @Override
         public double weight(double value) {
             return Math.log(value);
         }
     },
-    NULL,
-    TERM;
-    
+    NULL, TERM;
+
     public double weight(double value) {
         return value;
     }
-    
+
 }

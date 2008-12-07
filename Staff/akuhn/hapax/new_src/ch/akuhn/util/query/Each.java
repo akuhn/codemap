@@ -4,8 +4,7 @@ import java.util.Iterator;
 
 public final class Each<T> {
 
-    private static class Iter<T> implements Iterable<Each<T>>,
-            Iterator<Each<T>> {
+    private static class Iter<T> implements Iterable<Each<T>>, Iterator<Each<T>> {
 
         private final Iterator<T> elements;
         private int index = 0;
@@ -35,6 +34,7 @@ public final class Each<T> {
         }
 
     }
+
     public static <T> Iterable<Each<T>> withIndex(Iterable<T> elements) {
         return new Iter<T>(elements.iterator());
     }
@@ -47,5 +47,5 @@ public final class Each<T> {
         this.index = index;
         this.element = element;
     }
-    
+
 }

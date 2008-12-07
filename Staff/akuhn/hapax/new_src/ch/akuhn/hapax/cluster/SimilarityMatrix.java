@@ -3,8 +3,8 @@ package ch.akuhn.hapax.cluster;
 import ch.akuhn.hapax.linalg.SymetricMatrix;
 import ch.akuhn.util.List;
 
-
-public class SimilarityMatrix<T> extends SymetricMatrix {
+public class SimilarityMatrix<T>
+        extends SymetricMatrix {
 
     private List<T> elements;
 
@@ -18,9 +18,9 @@ public class SimilarityMatrix<T> extends SymetricMatrix {
             }
         }
     }
-    
+
     public Iterable<T> elements() {
         return elements;
     }
-     
+
 }

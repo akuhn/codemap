@@ -16,14 +16,14 @@ public enum GlobalWeighting {
         public double weight(Vector term) {
             double gf = globalFrequency(term);
             double prop = 0;
-            for (Entry each: term.entries()) {
+            for (Entry each : term.entries()) {
                 if (each.value == 0) continue;
-                prop += (each.value / gf) * Math.log(each.value * gf); 
+                prop += (each.value / gf) * Math.log(each.value * gf);
             }
             return -prop;
         }
     },
-    GFIDF { 
+    GFIDF {
         @Override
         public double weight(Vector term) {
             return globalFrequency(term) / documentFrequency(term);
@@ -36,17 +36,17 @@ public enum GlobalWeighting {
         }
     },
     NULL;
-    
+
     public int documentFrequency(Vector term) {
         return term.used();
     }
-    
+
     public int globalFrequency(Vector term) {
         return (int) term.sum();
     }
-    
+
     public double weight(Vector term) {
         return 1.0d;
     }
-    
+
 }

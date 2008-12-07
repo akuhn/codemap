@@ -36,13 +36,12 @@ public class SparseMatrix
         System.arraycopy(array, 0, pick, 0, num);
         return pick;
     }
-    public static void randomStoreSparseOn(int rowSize, int columnSize,
-            double density, Appendable app) {
+
+    public static void randomStoreSparseOn(int rowSize, int columnSize, double density, Appendable app) {
         int num = (int) (rowSize * density);
         Random rand = new Random();
         PrintOn out = new PrintOn(app);
-        out.print(rowSize).space().print(columnSize).space().print(
-                num * columnSize).cr();
+        out.print(rowSize).space().print(columnSize).space().print(num * columnSize).cr();
         for (int column = 0; column < columnSize; column++) {
             int[] pick = randomNOutOfM(rand, num, rowSize);
             out.print(num).cr();
@@ -95,7 +94,8 @@ public class SparseMatrix
 
     protected void addToRow(int row, Vector values) {
         Vector v = rows.get(row);
-        for (Entry each: values.entries()) v.add(each.index, each.value);
+        for (Entry each : values.entries())
+            v.add(each.index, each.value);
     }
 
     public double[][] asDenseDoubleDouble() {
@@ -114,14 +114,14 @@ public class SparseMatrix
         return null;
     }
 
+    @Override
     public int columnSize() {
         return columns;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof SparseMatrix
-                && rows.equals(((SparseMatrix) obj).rows);
+        return obj instanceof SparseMatrix && rows.equals(((SparseMatrix) obj).rows);
     }
 
     @Override
@@ -145,8 +145,7 @@ public class SparseMatrix
         long num = (long) (rowSize * columnSize * density);
         Random rand = new Random();
         for (Void each : Times.repeat(num)) {
-            put(rand.nextInt(rowSize), rand.nextInt(columnSize), rand
-                    .nextFloat() * 20);
+            put(rand.nextInt(rowSize), rand.nextInt(columnSize), rand.nextFloat() * 20);
         }
     }
 
@@ -155,6 +154,7 @@ public class SparseMatrix
         return rows;
     }
 
+    @Override
     public int rowSize() {
         return rows.size();
     }
@@ -187,8 +187,7 @@ public class SparseMatrix
 
     public void storeBinaryOn(String fname) {
         try {
-            DataOutputStream out = new DataOutputStream(new FileOutputStream(
-                    fname));
+            DataOutputStream out = new DataOutputStream(new FileOutputStream(fname));
             storeBinaryOn(out);
         } catch (Exception ex) {
             throw Throw.exception(ex);
@@ -214,8 +213,7 @@ public class SparseMatrix
 
     public void storeSparseOn(String fname) {
         try {
-            storeSparseOn(new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(new File(fname)))));
+            storeSparseOn(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(fname)))));
         } catch (FileNotFoundException ex) {
             throw Throw.exception(ex);
         }

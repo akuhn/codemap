@@ -35,6 +35,7 @@ public class SparseVector
         }
 
     }
+
     private int[] keys;
     private int size, used;
 
@@ -61,8 +62,7 @@ public class SparseVector
 
     @Override
     public double add(int key, double value) {
-        if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer
-                .toString(key));
+        if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer.toString(key));
         // tally$total++;
         int spot = Arrays.binarySearch(keys, 0, used, key);
         if (spot >= 0) return values[spot] += value;
@@ -75,6 +75,7 @@ public class SparseVector
         return 0;
     }
 
+    @Override
     public Iterable<Entry> entries() {
         return new Iter();
     }
@@ -85,14 +86,12 @@ public class SparseVector
     }
 
     public boolean equals(SparseVector v) {
-        return size == v.size && used == v.used && Arrays.equals(keys, v.keys)
-                && Arrays.equals(values, values);
+        return size == v.size && used == v.used && Arrays.equals(keys, v.keys) && Arrays.equals(values, values);
     }
 
     @Override
     public double get(int key) {
-        if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer
-                .toString(key));
+        if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer.toString(key));
         int spot = Arrays.binarySearch(keys, 0, used, key);
         return spot < 0 ? 0 : values[spot];
     }
@@ -109,8 +108,7 @@ public class SparseVector
 
     @Override
     public double put(int key, double value) {
-        if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer
-                .toString(key));
+        if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer.toString(key));
         int spot = Arrays.binarySearch(keys, 0, used, key);
         if (spot >= 0) return values[spot] = value;
         else return update(-1 - spot, key, value);

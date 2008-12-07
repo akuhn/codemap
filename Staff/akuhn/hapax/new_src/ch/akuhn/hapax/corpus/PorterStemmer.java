@@ -7,11 +7,10 @@ public class PorterStemmer implements Stemmer {
 
     private SnowballStemmer stemmer = new porterStemmer();
 
-    
     public CharSequence stem(CharSequence string) {
         stemmer.setCurrent(string.toString());
         stemmer.stem();
         return stemmer.getCurrent();
     }
-    
+
 }

@@ -1,13 +1,14 @@
 package ch.akuhn.hapax.linalg;
 
-public class DenseMatrix extends Matrix {
+public class DenseMatrix
+        extends Matrix {
 
     private double[][] values;
-    
+
     public DenseMatrix(double[][] values) {
         this.values = values;
     }
-    
+
     public DenseMatrix(int rows, int columns) {
         values = new double[rows][columns];
     }
@@ -61,5 +62,5 @@ public class DenseMatrix extends Matrix {
         // TODO Auto-generated method stub
         return 0;
     }
-    
+
 }

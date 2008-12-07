@@ -14,5 +14,5 @@ public class Document {
     public String toString() {
         return file.getName();
     }
-    
+
 }

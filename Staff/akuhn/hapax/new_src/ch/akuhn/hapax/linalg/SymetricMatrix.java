@@ -1,24 +1,25 @@
 package ch.akuhn.hapax.linalg;
 
-public class SymetricMatrix extends Matrix {
+public class SymetricMatrix
+        extends Matrix {
 
     protected double[][] values;
-    
+
     public SymetricMatrix(int size) {
         values = new double[size][];
-        for (int n = 0; n < values.length; ) {
+        for (int n = 0; n < values.length;) {
             values[n] = new double[++n];
         }
-    }
-    
-    @Override
-    public int columnSize() {
-        return rowSize();
     }
 
     @Override
     public Iterable<Vector> columns() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int columnSize() {
+        return rowSize();
     }
 
     @Override
@@ -28,19 +29,17 @@ public class SymetricMatrix extends Matrix {
 
     @Override
     public double put(int row, int column, double value) {
-        return row > column 
-                ? (values[row][column] = value) 
-                : (values[column][row] = value);
-    }
-
-    @Override
-    public int rowSize() {
-        return values.length;
+        return row > column ? (values[row][column] = value) : (values[column][row] = value);
     }
 
     @Override
     public Iterable<Vector> rows() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int rowSize() {
+        return values.length;
     }
 
     @Override
