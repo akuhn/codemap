@@ -14,7 +14,7 @@
     </target>
 	
     <!--from http://www.innovationontherun.com/creating-a-build-number-with-ant-and-subversion-->
-    <exec outputproperty="svnversion" executable="svnversion" dir="src">
+    <exec outputproperty="svnversion" executable="svnversion" dir=".">
       <arg line="-n -c" />
       <redirector>
         <outputfilterchain>

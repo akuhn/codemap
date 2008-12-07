@@ -12,7 +12,6 @@ import ch.akuhn.hapax.linalg.SVD;
 import ch.akuhn.hapax.linalg.SparseMatrix;
 import ch.akuhn.hapax.linalg.Vector;
 import ch.akuhn.hapax.linalg.Vector.Entry;
-import ch.akuhn.util.Bag;
 import ch.akuhn.util.Pair;
 import ch.akuhn.util.Bag.Count;
 import ch.akuhn.util.query.Each;
@@ -21,8 +20,8 @@ public class TermDocumentMatrix
         extends SparseMatrix {
 
     private Index<Document> documents; // columns
-    private Index<CharSequence> terms; // rows
     private double[] globalWeighting;
+    private Index<CharSequence> terms; // rows
     
     public TermDocumentMatrix() {
         super(0, 0);
@@ -36,24 +35,6 @@ public class TermDocumentMatrix
         this.documents = documents.clone();
     }
 
-    public int addDocument(Document document) {
-        int index = documents.add(document);
-        if (index == columnSize()) addColumn();
-        return index;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("TermDocumentMatrix (%d terms, %d documents)",
-                rowSize(), columnSize());
-    }
-
-    public int addTerm(CharSequence term) {
-        int index = terms.add(term);
-        if (index == rowSize()) addRow();
-        return index;
-    }
-
     public void addCorpus(Corpus corpus) {
         for (Document document : corpus.documents()) {
             int column = addDocument(document);
@@ -64,21 +45,50 @@ public class TermDocumentMatrix
             }
         }
     }
-    
-    public TermDocumentMatrix weight(LocalWeighting localWeighting, GlobalWeighting globalWeighting) {
-        TermDocumentMatrix tdm = new TermDocumentMatrix(this.terms,this.documents);
-        tdm.globalWeighting = new double[termSize()];
-        for (Each<Vector> row: Each.withIndex(rows())) {
-            double global = tdm.globalWeighting[row.index] = globalWeighting.weight(row.element);
-            for (Entry column: row.element.entries()) {
-                tdm.put(row.index, column.index, localWeighting.weight(column.value) * global);
-            }
-        }
-        return tdm;
+
+    public int addDocument(Document document) {
+        int index = documents.add(document);
+        if (index == columnSize()) addColumn();
+        return index;
     }
 
-    private int termSize() {
-        return terms.size();
+    public int addTerm(CharSequence term) {
+        int index = terms.add(term);
+        if (index == rowSize()) addRow();
+        return index;
+    }
+
+    private void addTerm(CharSequence term, Vector values) {
+        int row = addTerm(term);
+        this.addToRow(row, values);
+    }
+    
+    public LatentSemanticIndex createIndex() {
+        return new LatentSemanticIndex(documents.clone(), terms.clone(),
+                globalWeighting, SVD.fromMatrix(this, 30));
+    }
+
+    public TermDocumentMatrix rejectAndWeight() {
+        return rejectHapaxes()
+                .toLowerCase()
+                .rejectStopwords()
+                .stem()
+                .weight(
+                    LocalWeighting.TERM, 
+                    GlobalWeighting.IDF);
+    }
+
+    public TermDocumentMatrix rejectHapaxes() {
+        return rejectLegomena(1);
+    }
+    
+    public TermDocumentMatrix rejectLegomena(int threshold) {
+        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<CharSequence>(), documents);
+        for (Pair<CharSequence,Vector> each: zip(terms,rows())) {
+            if (each.snd.used() <= threshold) continue;
+            tdm.addTerm(each.fst, each.snd);
+        }
+        return tdm;
     }
 
     public TermDocumentMatrix rejectStopwords() {
@@ -93,53 +103,17 @@ public class TermDocumentMatrix
         }
         return tdm;
     }
+    
+    public TermDocumentMatrix stem() {
+        return stem(new PorterStemmer());
+    }
 
-    public TermDocumentMatrix rejectLegomena(int threshold) {
-        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<CharSequence>(), documents);
-        for (Pair<CharSequence,Vector> each: zip(terms,rows())) {
-            if (each.snd.used() <= threshold) continue;
-            tdm.addTerm(each.fst, each.snd);
-        }
-        return tdm;
-    }
-    
-    public TermDocumentMatrix rejectHapaxes() {
-        return rejectLegomena(1);
-    }
-    
     public TermDocumentMatrix stem(Stemmer stemmer) {
         TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<CharSequence>(), documents);
         for (Pair<CharSequence,Vector> each: zip(terms,rows())) {
             tdm.addTerm(stemmer.stem(each.fst), each.snd);
         }
         return tdm;
-    }
-
-    public TermDocumentMatrix toLowerCase() {
-        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<CharSequence>(), documents);
-        for (Pair<CharSequence,Vector> each: zip(terms,rows())) {
-            tdm.addTerm(each.fst.toString().toLowerCase(), each.snd);
-        }
-        return tdm;
-    }
-
-    public TermDocumentMatrix stem() {
-        return stem(new PorterStemmer());
-    }
-    
-    public TermDocumentMatrix rejectAndWeight() {
-        return rejectHapaxes()
-                .toLowerCase()
-                .rejectStopwords()
-                .stem()
-                .weight(
-                    LocalWeighting.TERM, 
-                    GlobalWeighting.IDF);
-    }
-    
-    private void addTerm(CharSequence term, Vector values) {
-        int row = addTerm(term);
-        this.addToRow(row, values);
     }
 
     public Terms terms() {
@@ -150,9 +124,34 @@ public class TermDocumentMatrix
         return bag;
     }
     
-    public LatentSemanticIndex createIndex() {
-        return new LatentSemanticIndex(documents.clone(), terms.clone(),
-                globalWeighting, SVD.fromMatrix(this, 30));
+    private int termSize() {
+        return terms.size();
+    }
+    
+    public TermDocumentMatrix toLowerCase() {
+        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<CharSequence>(), documents);
+        for (Pair<CharSequence,Vector> each: zip(terms,rows())) {
+            tdm.addTerm(each.fst.toString().toLowerCase(), each.snd);
+        }
+        return tdm;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("TermDocumentMatrix (%d terms, %d documents)",
+                rowSize(), columnSize());
+    }
+    
+    public TermDocumentMatrix weight(LocalWeighting localWeighting, GlobalWeighting globalWeighting) {
+        TermDocumentMatrix tdm = new TermDocumentMatrix(this.terms,this.documents);
+        tdm.globalWeighting = new double[termSize()];
+        for (Each<Vector> row: Each.withIndex(rows())) {
+            double global = tdm.globalWeighting[row.index] = globalWeighting.weight(row.element);
+            for (Entry column: row.element.entries()) {
+                tdm.put(row.index, column.index, localWeighting.weight(column.value) * global);
+            }
+        }
+        return tdm;
     }
     
 }

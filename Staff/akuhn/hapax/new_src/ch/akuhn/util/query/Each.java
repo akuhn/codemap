@@ -4,18 +4,6 @@ import java.util.Iterator;
 
 public final class Each<T> {
 
-    public final int index;
-    public final T element;
-
-    public Each(int index, T element) {
-        this.index = index;
-        this.element = element;
-    }
-
-    public static <T> Iterable<Each<T>> withIndex(Iterable<T> elements) {
-        return new Iter<T>(elements.iterator());
-    }
-
     private static class Iter<T> implements Iterable<Each<T>>,
             Iterator<Each<T>> {
 
@@ -27,13 +15,13 @@ public final class Each<T> {
         }
 
         @Override
-        public Iterator<Each<T>> iterator() {
-            return this;
+        public boolean hasNext() {
+            return elements.hasNext();
         }
 
         @Override
-        public boolean hasNext() {
-            return elements.hasNext();
+        public Iterator<Each<T>> iterator() {
+            return this;
         }
 
         @Override
@@ -46,6 +34,18 @@ public final class Each<T> {
             throw new UnsupportedOperationException();
         }
 
+    }
+    public static <T> Iterable<Each<T>> withIndex(Iterable<T> elements) {
+        return new Iter<T>(elements.iterator());
+    }
+
+    public final T element;
+
+    public final int index;
+
+    public Each(int index, T element) {
+        this.index = index;
+        this.element = element;
     }
     
 }

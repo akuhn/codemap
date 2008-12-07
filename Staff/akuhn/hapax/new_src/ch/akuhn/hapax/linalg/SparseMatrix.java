@@ -22,15 +22,40 @@ import ch.akuhn.util.query.Times;
 public class SparseMatrix
         extends Matrix {
 
-    private int columns;
-    private List<Vector> rows;
-
-    public SparseMatrix(int rows, int columns) {
-        this.columns = columns;
-        this.rows = new ArrayList<Vector>(rows);
-        for (int n = 0; n < rows; n++)
-            addRow();
+    private static int[] randomNOutOfM(Random rand, int num, int total) {
+        int[] array = new int[total];
+        for (int n = 0; n < total; n++)
+            array[n] = n;
+        for (int n = array.length; n > 1;) {
+            int k = rand.nextInt(n--);
+            int temp = array[n];
+            array[n] = array[k];
+            array[k] = temp;
+        }
+        int[] pick = new int[num];
+        System.arraycopy(array, 0, pick, 0, num);
+        return pick;
     }
+    public static void randomStoreSparseOn(int rowSize, int columnSize,
+            double density, Appendable app) {
+        int num = (int) (rowSize * density);
+        Random rand = new Random();
+        PrintOn out = new PrintOn(app);
+        out.print(rowSize).space().print(columnSize).space().print(
+                num * columnSize).cr();
+        for (int column = 0; column < columnSize; column++) {
+            int[] pick = randomNOutOfM(rand, num, rowSize);
+            out.print(num).cr();
+            for (int i = 0; i < pick.length; i++) {
+                out.print(pick[i]).space().print(rand.nextInt(20)).cr();
+            }
+        }
+        Files.close(app);
+    }
+
+    private int columns;
+
+    private List<Vector> rows;
 
     public SparseMatrix(double[][] values) {
         this.columns = values[0].length;
@@ -39,9 +64,16 @@ public class SparseMatrix
             addRow(each);
     }
 
-    protected int addRow(double[] values) {
-        rows.add(new SparseVector(values));
-        return rowSize() - 1;
+    public SparseMatrix(int rows, int columns) {
+        this.columns = columns;
+        this.rows = new ArrayList<Vector>(rows);
+        for (int n = 0; n < rows; n++)
+            addRow();
+    }
+
+    @Override
+    public double add(int row, int column, double sum) {
+        return rows.get(row).add(column, sum);
     }
 
     protected int addColumn() {
@@ -56,22 +88,40 @@ public class SparseMatrix
         return rowSize() - 1;
     }
 
+    protected int addRow(double[] values) {
+        rows.add(new SparseVector(values));
+        return rowSize() - 1;
+    }
+
+    protected void addToRow(int row, Vector values) {
+        Vector v = rows.get(row);
+        for (Entry each: values.entries()) v.add(each.index, each.value);
+    }
+
+    public double[][] asDenseDoubleDouble() {
+        double[][] dense = new double[rowSize()][columnSize()];
+        for (Each<Vector> row : Each.withIndex(rows)) {
+            for (Entry column : row.element.entries()) {
+                dense[row.index][column.index] = column.value;
+            }
+        }
+        return dense;
+    }
+
+    @Override
+    public Iterable<Vector> columns() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     public int columnSize() {
         return columns;
     }
 
-    public int rowSize() {
-        return rows.size();
-    }
-
     @Override
-    public double add(int row, int column, double sum) {
-        return rows.get(row).add(column, sum);
-    }
-
-    @Override
-    public double put(int row, int column, double value) {
-        return rows.get(row).put(column, value);
+    public boolean equals(Object obj) {
+        return obj instanceof SparseMatrix
+                && rows.equals(((SparseMatrix) obj).rows);
     }
 
     @Override
@@ -80,37 +130,37 @@ public class SparseMatrix
     }
 
     @Override
-    public int used() {
-        int used = 0;
-        for (Vector each : rows)
-            used += each.used();
-        return used;
+    public int hashCode() {
+        return rows.hashCode();
     }
 
-    public void storeSparseOn(String fname) {
-        try {
-            storeSparseOn(new BufferedWriter(new OutputStreamWriter(
-                    new FileOutputStream(new File(fname)))));
-        } catch (FileNotFoundException ex) {
-            throw Throw.exception(ex);
+    @Override
+    public double put(int row, int column, double value) {
+        return rows.get(row).put(column, value);
+    }
+
+    public void randomFill(double density) {
+        int rowSize = rowSize();
+        int columnSize = columnSize();
+        long num = (long) (rowSize * columnSize * density);
+        Random rand = new Random();
+        for (Void each : Times.repeat(num)) {
+            put(rand.nextInt(rowSize), rand.nextInt(columnSize), rand
+                    .nextFloat() * 20);
         }
     }
 
-    /** @see http://tedlab.mit.edu/~dr/svdlibc/SVD_F_ST.html */
-    public void storeSparseOn(Appendable appendable) {
-        // this stores the transposed matrix, but as we will transpose it again
-        // when reading it, this can be done without loss of generality.
-        PrintOn out = new PrintOn(appendable);
-        out.print(this.columnSize()).space();
-        out.print(this.rowSize()).space();
-        out.print(this.used()).cr();
-        for (Vector row : rows) {
-            out.print(row.used()).cr();
-            for (Entry each : row.entries()) {
-                out.print(each.index).space().print(each.value).cr();
-            }
-        }
-        Files.close(appendable);
+    @Override
+    public Iterable<Vector> rows() {
+        return rows;
+    }
+
+    public int rowSize() {
+        return rows.size();
+    }
+
+    protected void setRow(int row, Vector values) {
+        rows.set(row, values);
     }
 
     public void storeBinaryOn(DataOutput out) throws IOException {
@@ -135,17 +185,6 @@ public class SparseMatrix
         Files.close(out);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof SparseMatrix
-                && rows.equals(((SparseMatrix) obj).rows);
-    }
-
-    @Override
-    public int hashCode() {
-        return rows.hashCode();
-    }
-
     public void storeBinaryOn(String fname) {
         try {
             DataOutputStream out = new DataOutputStream(new FileOutputStream(
@@ -156,77 +195,38 @@ public class SparseMatrix
         }
     }
 
-    public double[][] asDenseDoubleDouble() {
-        double[][] dense = new double[rowSize()][columnSize()];
-        for (Each<Vector> row : Each.withIndex(rows)) {
-            for (Entry column : row.element.entries()) {
-                dense[row.index][column.index] = column.value;
+    /** @see http://tedlab.mit.edu/~dr/svdlibc/SVD_F_ST.html */
+    public void storeSparseOn(Appendable appendable) {
+        // this stores the transposed matrix, but as we will transpose it again
+        // when reading it, this can be done without loss of generality.
+        PrintOn out = new PrintOn(appendable);
+        out.print(this.columnSize()).space();
+        out.print(this.rowSize()).space();
+        out.print(this.used()).cr();
+        for (Vector row : rows) {
+            out.print(row.used()).cr();
+            for (Entry each : row.entries()) {
+                out.print(each.index).space().print(each.value).cr();
             }
         }
-        return dense;
+        Files.close(appendable);
     }
 
-    public void randomFill(double density) {
-        int rowSize = rowSize();
-        int columnSize = columnSize();
-        long num = (long) (rowSize * columnSize * density);
-        Random rand = new Random();
-        for (Void each : Times.repeat(num)) {
-            put(rand.nextInt(rowSize), rand.nextInt(columnSize), rand
-                    .nextFloat() * 20);
+    public void storeSparseOn(String fname) {
+        try {
+            storeSparseOn(new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(new File(fname)))));
+        } catch (FileNotFoundException ex) {
+            throw Throw.exception(ex);
         }
-    }
-
-    public static void randomStoreSparseOn(int rowSize, int columnSize,
-            double density, Appendable app) {
-        int num = (int) (rowSize * density);
-        Random rand = new Random();
-        PrintOn out = new PrintOn(app);
-        out.print(rowSize).space().print(columnSize).space().print(
-                num * columnSize).cr();
-        for (int column = 0; column < columnSize; column++) {
-            int[] pick = randomNOutOfM(rand, num, rowSize);
-            out.print(num).cr();
-            for (int i = 0; i < pick.length; i++) {
-                out.print(pick[i]).space().print(rand.nextInt(20)).cr();
-            }
-        }
-        Files.close(app);
-    }
-
-    private static int[] randomNOutOfM(Random rand, int num, int total) {
-        int[] array = new int[total];
-        for (int n = 0; n < total; n++)
-            array[n] = n;
-        for (int n = array.length; n > 1;) {
-            int k = rand.nextInt(n--);
-            int temp = array[n];
-            array[n] = array[k];
-            array[k] = temp;
-        }
-        int[] pick = new int[num];
-        System.arraycopy(array, 0, pick, 0, num);
-        return pick;
     }
 
     @Override
-    public Iterable<Vector> columns() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Iterable<Vector> rows() {
-        return rows;
-    }
-
-    protected void setRow(int row, Vector values) {
-        rows.set(row, values);
-    }
-
-    protected void addToRow(int row, Vector values) {
-        Vector v = rows.get(row);
-        for (Entry each: values.entries()) v.add(each.index, each.value);
+    public int used() {
+        int used = 0;
+        for (Vector each : rows)
+            used += each.used();
+        return used;
     }
 
 }

@@ -5,19 +5,12 @@ import ch.akuhn.hapax.linalg.Vector.Entry;
 
 public enum GlobalWeighting {
 
-    GFIDF { 
+    ENTROPY1 {
         @Override
         public double weight(Vector term) {
-            return globalFrequency(term) / documentFrequency(term);
+            return 1 - (ENTROPY2.weight(term) / Math.log(term.size()));
         }
     },
-    IDF {
-        @Override
-        public double weight(Vector term) {
-            return Math.log((term.size() / documentFrequency(term)));
-        }
-    },
-    NULL,
     ENTROPY2 {
         @Override
         public double weight(Vector term) {
@@ -30,12 +23,19 @@ public enum GlobalWeighting {
             return -prop;
         }
     },
-    ENTROPY1 {
+    GFIDF { 
         @Override
         public double weight(Vector term) {
-            return 1 - (ENTROPY2.weight(term) / Math.log(term.size()));
+            return globalFrequency(term) / documentFrequency(term);
         }
-    };
+    },
+    IDF {
+        @Override
+        public double weight(Vector term) {
+            return Math.log((term.size() / documentFrequency(term)));
+        }
+    },
+    NULL;
     
     public int documentFrequency(Vector term) {
         return term.used();

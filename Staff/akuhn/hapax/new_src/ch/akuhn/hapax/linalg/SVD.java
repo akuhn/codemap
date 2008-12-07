@@ -4,16 +4,140 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 
 import ch.akuhn.util.Throw;
-import ch.akuhn.util.query.Times;
 
 
 public class SVD {
     
-    public float[] s;
-    public float[][] Ut;
-    public float[][] Vt;
-    public float time;
+    private class Gobbler extends StreamGobbler {
+        
+        public Gobbler(InputStream is) {
+            super(is);
+        }
+        
+        private void consume(String... words) {
+            for (int n = 0; n < words.length; n++) {
+                String next = $.next();
+                if (words[n] == null || words[n].equals(next)) continue;
+                //for (Void each: Times.repeat(100)) System.out.println($.next());
+                throw new Error("Expected " + words[n] + " but found " + next);
+            }
+        }
 
+        private int consumeInt(String... words) {
+            consume(words);
+            return $.nextInt();
+        }
+
+        private void gobbleFooter() {
+            consume("ELAPSED","CPU","TIME","=");
+            SVD.this.time = $.nextFloat();
+            consume("sec.");
+            consume("MULTIPLICATIONS","BY","A","=",null);
+            consume("MULTIPLICATIONS","BY","A^T","=",null);
+        }
+
+        private void gobbleHeader() {
+            consume("Loading","the","matrix...");
+            consume("Computing","the","SVD...");
+            consume("SOLVING","THE","[A^TA]","EIGENPROBLEM");
+            consume("NO.","OF","ROWS","=",null);
+            consume("NO.","OF","COLUMNS","=",null);
+            consume("NO.","OF","NON-ZERO","VALUES","=",null);
+            consume("MATRIX","DENSITY","=",null);
+            consume("MAX.","NO.","OF","LANCZOS","STEPS","=", null);
+            consume("MAX.","NO.","OF","EIGENPAIRS","=", null);
+            consume("LEFT","END","OF","THE","INTERVAL","=",null);
+            consume("RIGHT","END","OF","THE","INTERVAL","=",null);
+            consume("KAPPA","=",null);
+        }
+        
+        private void gobbleLeftSingularValues() {
+            consume("LEFT","SINGULAR","VECTORS","(transpose","of","U):");
+            int rows = $.nextInt();
+            int columns = $.nextInt();
+            SVD.this.Ut = new float[rows][columns];
+            for (int row = 0; row < rows; row++) {
+                for (int column = 0; column < columns; column++) {
+                    SVD.this.Ut[row][column] = $.nextFloat();
+                }
+            }
+        }
+
+        private void gobbleRightSingularValues() {
+            consume("RIGHT","SINGULAR","VECTORS","(transpose","of","V):");
+            int rows = $.nextInt();
+            int columns = $.nextInt();
+            SVD.this.Vt = new float[rows][columns];
+            for (int row = 0; row < rows; row++) {
+                for (int column = 0; column < columns; column++) {
+                    SVD.this.Vt[row][column] = $.nextFloat();
+                }
+            }
+        }
+
+        private void gobbleRitzValues() {
+            String next = $.next(); // either "NUMBER" or "TRANSPOSING"
+            if (next.equals("TRANSPOSING")) {
+                consume("THE","MATRIX","FOR","SPEED","NUMBER");
+            } else assert next.equals("NUMBER");
+            int skip = consumeInt("OF","LANCZOS","STEPS","=");
+            consumeInt("RITZ","VALUES","STABILIZED","=");
+            consume("COMPUTED","RITZ","VALUES","(ERROR","BNDS)");
+            for (int n = 0; n < skip; n++) {
+                consume(Integer.toString(n + 1),null,null,null);
+            }
+        }
+        
+        private void gobbleSingularValues() {
+            int len = consumeInt("SINGULAR","VALUES:");
+            SVD.this.s = new float[len];
+            for (int n = 0; n < len; n++) {
+                SVD.this.s[n] = $.nextFloat();
+            }
+        }
+        public void run() {
+            gobbleHeader();
+            gobbleRitzValues();
+            gobbleSingularValues();
+            gobbleLeftSingularValues();
+            gobbleRightSingularValues();
+            gobbleFooter();
+            if ($.hasNext()) throw new Error();
+        }
+        
+    }
+    public static SVD fromMatrix(SparseMatrix matrix, int dimensions) {
+        try {
+            String command = String.format("lib\\svd -d %d -v 3 -", dimensions);
+            Process proc = Runtime.getRuntime().exec(command);
+            SVD svd = new SVD();
+            new StreamGobbler(proc.getErrorStream()).start();            
+            svd.new Gobbler(proc.getInputStream()).start();
+            matrix.storeSparseOn(new OutputStreamWriter(proc.getOutputStream()));
+            int exit = proc.waitFor();
+            if (exit != 0) throw new Error();
+            return svd;
+        }    
+        catch (Exception ex) {
+            throw Throw.exception(ex);
+        }
+    }
+    public static SVD fromRandomMatrix(int rows, int columns, double density, int dimensions) {
+        try {
+            String command = String.format("lib\\svd -d %d -v 3 -", dimensions);
+            Process proc = Runtime.getRuntime().exec(command);
+            SVD svd = new SVD();
+            new StreamGobbler(proc.getErrorStream()).start();            
+            svd.new Gobbler(proc.getInputStream()).start();
+            SparseMatrix.randomStoreSparseOn(rows,columns,density,new OutputStreamWriter(proc.getOutputStream()));
+            int exit = proc.waitFor();
+            if (exit != 0) throw new Error();
+            return svd;
+        }    
+        catch (Exception ex) {
+            throw Throw.exception(ex);
+        }
+    }
     public static void main(String[] args) {
         // (20000, 1000, 0.01d, 50) -> 26.157 
         // (200000, 10000, 0.01d, 50) -> 3784.06 = 01:03'04.06"
@@ -25,6 +149,14 @@ public class SVD {
         System.out.println(svd.similarityVV(10, 15));
         System.out.println(svd.similarityUV(1500, 10));
     }
+
+    public float[] s;
+    
+    public float time;
+    
+    public float[][] Ut;
+    
+    public float[][] Vt;
     
     public double similarityUU(int a, int b) {
         int dim = s.length;
@@ -39,15 +171,15 @@ public class SVD {
         return (sim / (Math.sqrt(suma) * Math.sqrt(sumb)));
     }
     
-    public double similarityVV(int a, int b) {
+    public double similarityUV(int a, int b) {
         int dim = s.length;
         double sim = 0;
         double suma = 0;
         double sumb = 0;
         for (int n = 0; n < dim; n++) {
-            sim += Vt[n][a] * Vt[n][b] * s[n] * s[n];
-            suma += Vt[n][a] * Vt[n][a] * s[n] * s[n];
-            sumb += Vt[n][b] * Vt[n][b] * s[n] * s[n];   
+            sim += Ut[n][a] * Vt[n][b] * s[n];
+            suma += Ut[n][a] * Ut[n][a] * s[n];
+            sumb += Vt[n][b] * Vt[n][b] * s[n];   
         }
         return sim / (Math.sqrt(suma) * Math.sqrt(sumb));
     }
@@ -66,150 +198,17 @@ public class SVD {
         return sim / (Math.sqrt(suma) * Math.sqrt(sumb));
     }
     
-    public double similarityUV(int a, int b) {
+    public double similarityVV(int a, int b) {
         int dim = s.length;
         double sim = 0;
         double suma = 0;
         double sumb = 0;
         for (int n = 0; n < dim; n++) {
-            sim += Ut[n][a] * Vt[n][b] * s[n];
-            suma += Ut[n][a] * Ut[n][a] * s[n];
-            sumb += Vt[n][b] * Vt[n][b] * s[n];   
+            sim += Vt[n][a] * Vt[n][b] * s[n] * s[n];
+            suma += Vt[n][a] * Vt[n][a] * s[n] * s[n];
+            sumb += Vt[n][b] * Vt[n][b] * s[n] * s[n];   
         }
         return sim / (Math.sqrt(suma) * Math.sqrt(sumb));
-    }
-    
-    public static SVD fromRandomMatrix(int rows, int columns, double density, int dimensions) {
-        try {
-            String command = String.format("lib\\svd -d %d -v 3 -", dimensions);
-            Process proc = Runtime.getRuntime().exec(command);
-            SVD svd = new SVD();
-            new StreamGobbler(proc.getErrorStream()).start();            
-            svd.new Gobbler(proc.getInputStream()).start();
-            SparseMatrix.randomStoreSparseOn(rows,columns,density,new OutputStreamWriter(proc.getOutputStream()));
-            int exit = proc.waitFor();
-            if (exit != 0) throw new Error();
-            return svd;
-        }    
-        catch (Exception ex) {
-            throw Throw.exception(ex);
-        }
-    }
-    
-    public static SVD fromMatrix(SparseMatrix matrix, int dimensions) {
-        try {
-            String command = String.format("lib\\svd -d %d -v 3 -", dimensions);
-            Process proc = Runtime.getRuntime().exec(command);
-            SVD svd = new SVD();
-            new StreamGobbler(proc.getErrorStream()).start();            
-            svd.new Gobbler(proc.getInputStream()).start();
-            matrix.storeSparseOn(new OutputStreamWriter(proc.getOutputStream()));
-            int exit = proc.waitFor();
-            if (exit != 0) throw new Error();
-            return svd;
-        }    
-        catch (Exception ex) {
-            throw Throw.exception(ex);
-        }
-    }
-    
-    private class Gobbler extends StreamGobbler {
-        
-        public Gobbler(InputStream is) {
-            super(is);
-        }
-        
-        public void run() {
-            gobbleHeader();
-            gobbleRitzValues();
-            gobbleSingularValues();
-            gobbleLeftSingularValues();
-            gobbleRightSingularValues();
-            gobbleFooter();
-            if ($.hasNext()) throw new Error();
-        }
-
-        private void gobbleFooter() {
-            consume("ELAPSED","CPU","TIME","=");
-            SVD.this.time = $.nextFloat();
-            consume("sec.");
-            consume("MULTIPLICATIONS","BY","A","=",null);
-            consume("MULTIPLICATIONS","BY","A^T","=",null);
-        }
-
-        private void gobbleRightSingularValues() {
-            consume("RIGHT","SINGULAR","VECTORS","(transpose","of","V):");
-            int rows = $.nextInt();
-            int columns = $.nextInt();
-            SVD.this.Vt = new float[rows][columns];
-            for (int row = 0; row < rows; row++) {
-                for (int column = 0; column < columns; column++) {
-                    SVD.this.Vt[row][column] = $.nextFloat();
-                }
-            }
-        }
-
-        private void gobbleLeftSingularValues() {
-            consume("LEFT","SINGULAR","VECTORS","(transpose","of","U):");
-            int rows = $.nextInt();
-            int columns = $.nextInt();
-            SVD.this.Ut = new float[rows][columns];
-            for (int row = 0; row < rows; row++) {
-                for (int column = 0; column < columns; column++) {
-                    SVD.this.Ut[row][column] = $.nextFloat();
-                }
-            }
-        }
-        
-        private void gobbleSingularValues() {
-            int len = consumeInt("SINGULAR","VALUES:");
-            SVD.this.s = new float[len];
-            for (int n = 0; n < len; n++) {
-                SVD.this.s[n] = $.nextFloat();
-            }
-        }
-
-        private void gobbleRitzValues() {
-            String next = $.next(); // either "NUMBER" or "TRANSPOSING"
-            if (next.equals("TRANSPOSING")) {
-                consume("THE","MATRIX","FOR","SPEED","NUMBER");
-            } else assert next.equals("NUMBER");
-            int skip = consumeInt("OF","LANCZOS","STEPS","=");
-            consumeInt("RITZ","VALUES","STABILIZED","=");
-            consume("COMPUTED","RITZ","VALUES","(ERROR","BNDS)");
-            for (int n = 0; n < skip; n++) {
-                consume(Integer.toString(n + 1),null,null,null);
-            }
-        }
-
-        private void gobbleHeader() {
-            consume("Loading","the","matrix...");
-            consume("Computing","the","SVD...");
-            consume("SOLVING","THE","[A^TA]","EIGENPROBLEM");
-            consume("NO.","OF","ROWS","=",null);
-            consume("NO.","OF","COLUMNS","=",null);
-            consume("NO.","OF","NON-ZERO","VALUES","=",null);
-            consume("MATRIX","DENSITY","=",null);
-            consume("MAX.","NO.","OF","LANCZOS","STEPS","=", null);
-            consume("MAX.","NO.","OF","EIGENPAIRS","=", null);
-            consume("LEFT","END","OF","THE","INTERVAL","=",null);
-            consume("RIGHT","END","OF","THE","INTERVAL","=",null);
-            consume("KAPPA","=",null);
-        }
-        
-        private void consume(String... words) {
-            for (int n = 0; n < words.length; n++) {
-                String next = $.next();
-                if (words[n] == null || words[n].equals(next)) continue;
-                //for (Void each: Times.repeat(100)) System.out.println($.next());
-                throw new Error("Expected " + words[n] + " but found " + next);
-            }
-        }
-        private int consumeInt(String... words) {
-            consume(words);
-            return $.nextInt();
-        }
-        
     }
     
     

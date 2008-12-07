@@ -30,22 +30,22 @@ public abstract class Vector {
     
     public abstract int size();
     
+    public double sum() {
+        double sum = 0;
+        for (Entry each: entries()) sum += each.value;
+        return sum;
+    }
+    
     public double unit() {
         double sum = 0;
         for (Entry each: entries()) sum += each.value * each.value;
         return Math.sqrt(sum);
     }
-    
+
     public int used() {
         int count = 0;
         for (Entry each: entries()) if (each.value != 0) count++;
         return count;
-    }
-
-    public double sum() {
-        double sum = 0;
-        for (Entry each: entries()) sum += each.value;
-        return sum;
     }
     
 }

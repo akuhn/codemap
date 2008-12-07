@@ -9,8 +9,8 @@ import java.util.Map;
 
 public class Index<E> implements Cloneable, Iterable<E> {
 
-    private Map<E,Integer> map;
     private List<E> list;
+    private Map<E,Integer> map;
     
     public Index() {
         map = new HashMap<E,Integer>();
@@ -32,8 +32,9 @@ public class Index<E> implements Cloneable, Iterable<E> {
         return index;
     }
     
-    public E get(int index) {
-        return list.get(index);
+    @Override
+    public Index<E> clone() {
+        return new Index<E>(this);
     }
     
     public int get(E element) {
@@ -41,18 +42,17 @@ public class Index<E> implements Cloneable, Iterable<E> {
         return index == null ? -1 : index;
     }
 
-    @Override
-    public Index<E> clone() {
-        return new Index<E>(this);
-    }
-
-    public int size() {
-        return list.size();
+    public E get(int index) {
+        return list.get(index);
     }
 
     @Override
     public Iterator<E> iterator() {
         return list.iterator();
+    }
+
+    public int size() {
+        return list.size();
     }   
     
 }

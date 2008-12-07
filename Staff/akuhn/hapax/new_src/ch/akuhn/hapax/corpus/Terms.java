@@ -10,17 +10,21 @@ public class Terms extends Bag<CharSequence> implements ScannerClient {
         // do nothing
     }
 
-    public Terms(String text) {
-        new CamelCaseScanner().client(this).onString(text).run();
-    }
-
     public Terms(File file) {
         new CamelCaseScanner().client(this).onFile(file).run();
     }
 
-    @Override
-    public void yield(CharSequence term) {
-        this.add(term);
+    public Terms(String text) {
+        new CamelCaseScanner().client(this).onString(text).run();
+    }
+
+    public Terms stem() {
+        Stemmer stemmer = new PorterStemmer();
+        Terms terms = new Terms();
+        for (Count<CharSequence> each: this.counts()) {
+            terms.add(stemmer.stem(each.element), each.count);
+        }
+        return terms;
     }
 
     public Terms toLowerCase() {
@@ -31,13 +35,9 @@ public class Terms extends Bag<CharSequence> implements ScannerClient {
         return terms;
     }
 
-    public Terms stem() {
-        Stemmer stemmer = new PorterStemmer();
-        Terms terms = new Terms();
-        for (Count<CharSequence> each: this.counts()) {
-            terms.add(stemmer.stem(each.element), each.count);
-        }
-        return terms;
+    @Override
+    public void yield(CharSequence term) {
+        this.add(term);
     }
     
 }

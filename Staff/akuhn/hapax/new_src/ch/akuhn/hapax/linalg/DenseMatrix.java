@@ -18,14 +18,14 @@ public class DenseMatrix extends Matrix {
     }
 
     @Override
-    public int columnSize() {
-        return values[0].length;
-    }
-
-    @Override
     public Iterable<Vector> columns() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public int columnSize() {
+        return values[0].length;
     }
 
     @Override
@@ -46,14 +46,14 @@ public class DenseMatrix extends Matrix {
     }
 
     @Override
-    public int rowSize() {
-        return values.length;
-    }
-
-    @Override
     public Iterable<Vector> rows() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public int rowSize() {
+        return values.length;
     }
 
     @Override

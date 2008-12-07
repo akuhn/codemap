@@ -10,9 +10,9 @@ import ch.akuhn.util.query.Each;
 public class LatentSemanticIndex {
 
     private Index<Document> documents; 
-    private Index<CharSequence> terms;     
+    private double[] globalWeighting;     
     private SVD svd;
-    private double[] globalWeighting;
+    private Index<CharSequence> terms;
     
     public LatentSemanticIndex(Index<Document> documents,
             Index<CharSequence> terms, double[] globalWeighting, SVD svd) {
@@ -27,33 +27,6 @@ public class LatentSemanticIndex {
         this.globalWeighting = globalWeighting;
     }
 
-    public Ranking<Document> rankDocumentsByTerm(CharSequence term) {
-        Ranking<Document> ranking = new Ranking<Document>();
-        int n = terms.get(term);
-        for (Each<Document> each: Each.withIndex(documents)) {
-            ranking.add(each.element, svd.similarityUV(n, each.index));
-        }
-        return ranking.sort();
-    }
-    
-    public Ranking<CharSequence> rankTermsByTerm(CharSequence term) {
-        Ranking<CharSequence> ranking = new Ranking<CharSequence>();
-        int n = terms.get(term);
-        for (Each<CharSequence> each: Each.withIndex(terms)) {
-            ranking.add(each.element, svd.similarityUU(n, each.index));
-        }
-        return ranking.sort();
-    }
-
-    public Ranking<CharSequence> rankTermsByDocument(Document d) {
-        Ranking<CharSequence> ranking = new Ranking<CharSequence>();
-        int n = documents.get(d);
-        for (Each<CharSequence> each: Each.withIndex(terms)) {
-            ranking.add(each.element, svd.similarityUV(each.index, n));
-        }
-        return ranking.sort();
-    }
-    
     public double[] createPseudoDocument(String string) {
         // apply: CamelCaseScanner, PorterStemmer, toLowerCase, and weighting
         Terms query = new Terms(string).toLowerCase().stem();
@@ -72,6 +45,15 @@ public class LatentSemanticIndex {
         return pseudo;
     }
     
+    public Ranking<Document> rankDocumentsByDocument(Document d) {
+        Ranking<Document> ranking = new Ranking<Document>();
+        int n = documents.get(d);
+        for (Each<Document> each: Each.withIndex(documents)) {
+            ranking.add(each.element, svd.similarityVV(n, each.index));
+        }
+        return ranking.sort();
+    }
+
     public Ranking<Document> rankDocumentsByQuery(String query) {
         Ranking<Document> ranking = new Ranking<Document>();
         double[] pseudo = createPseudoDocument(query);
@@ -80,12 +62,30 @@ public class LatentSemanticIndex {
         }
         return ranking.sort();
     }
-
-    public Ranking<Document> rankDocumentsByDocument(Document d) {
+    
+    public Ranking<Document> rankDocumentsByTerm(CharSequence term) {
         Ranking<Document> ranking = new Ranking<Document>();
-        int n = documents.get(d);
+        int n = terms.get(term);
         for (Each<Document> each: Each.withIndex(documents)) {
-            ranking.add(each.element, svd.similarityVV(n, each.index));
+            ranking.add(each.element, svd.similarityUV(n, each.index));
+        }
+        return ranking.sort();
+    }
+    
+    public Ranking<CharSequence> rankTermsByDocument(Document d) {
+        Ranking<CharSequence> ranking = new Ranking<CharSequence>();
+        int n = documents.get(d);
+        for (Each<CharSequence> each: Each.withIndex(terms)) {
+            ranking.add(each.element, svd.similarityUV(each.index, n));
+        }
+        return ranking.sort();
+    }
+
+    public Ranking<CharSequence> rankTermsByTerm(CharSequence term) {
+        Ranking<CharSequence> ranking = new Ranking<CharSequence>();
+        int n = terms.get(term);
+        for (Each<CharSequence> each: Each.withIndex(terms)) {
+            ranking.add(each.element, svd.similarityUU(n, each.index));
         }
         return ranking.sort();
     }
