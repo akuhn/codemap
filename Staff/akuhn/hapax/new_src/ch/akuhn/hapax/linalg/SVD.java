@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 
 import ch.akuhn.util.Throw;
+import ch.akuhn.util.query.Times;
 
 
 public class SVD {
@@ -11,7 +12,7 @@ public class SVD {
     public float[] s;
     public float[][] Ut;
     public float[][] Vt;
-    public float time;   
+    public float time;
 
     public static void main(String[] args) {
         // (20000, 1000, 0.01d, 50) -> 26.157 
@@ -35,7 +36,7 @@ public class SVD {
             suma += Ut[n][a] * s[n] * Ut[n][a] * s[n];
             sumb += Ut[n][b] * s[n] * Ut[n][b] * s[n];   
         }
-        return sim / (Math.sqrt(suma) * Math.sqrt(sumb));
+        return (sim / (Math.sqrt(suma) * Math.sqrt(sumb)));
     }
     
     public double similarityVV(int a, int b) {
@@ -155,7 +156,11 @@ public class SVD {
         }
 
         private void gobbleRitzValues() {
-            int skip = consumeInt("NUMBER","OF","LANCZOS","STEPS","=");
+            String next = $.next(); // either "NUMBER" or "TRANSPOSING"
+            if (next.equals("TRANSPOSING")) {
+                consume("THE","MATRIX","FOR","SPEED","NUMBER");
+            } else assert next.equals("NUMBER");
+            int skip = consumeInt("OF","LANCZOS","STEPS","=");
             consumeInt("RITZ","VALUES","STABILIZED","=");
             consume("COMPUTED","RITZ","VALUES","(ERROR","BNDS)");
             for (int n = 0; n < skip; n++) {
@@ -182,6 +187,7 @@ public class SVD {
             for (int n = 0; n < words.length; n++) {
                 String next = $.next();
                 if (words[n] == null || words[n].equals(next)) continue;
+                //for (Void each: Times.repeat(100)) System.out.println($.next());
                 throw new Error("Expected " + words[n] + " but found " + next);
             }
         }

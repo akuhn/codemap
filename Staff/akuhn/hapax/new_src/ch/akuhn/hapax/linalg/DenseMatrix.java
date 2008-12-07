@@ -2,26 +2,24 @@ package ch.akuhn.hapax.linalg;
 
 public class DenseMatrix extends Matrix {
 
-    private float[][] values;
+    private double[][] values;
     
-    public DenseMatrix(float[][] values) {
+    public DenseMatrix(double[][] values) {
         this.values = values;
     }
     
     public DenseMatrix(int rows, int columns) {
-        values = new float[rows][columns];
+        values = new double[rows][columns];
     }
 
     @Override
-    public void add(int row, int column, float value) {
-        // TODO Auto-generated method stub
-        
+    public double add(int row, int column, double value) {
+        return values[row][column] += value;
     }
 
     @Override
     public int columnSize() {
-        // TODO Auto-generated method stub
-        return 0;
+        return values[0].length;
     }
 
     @Override
@@ -37,21 +35,19 @@ public class DenseMatrix extends Matrix {
     }
 
     @Override
-    public float get(int row, int column) {
+    public double get(int row, int column) {
         // TODO Auto-generated method stub
         return 0;
     }
 
     @Override
-    public void put(int row, int column, float value) {
-        // TODO Auto-generated method stub
-        
+    public double put(int row, int column, double value) {
+        return values[row][column] = value;
     }
 
     @Override
     public int rowSize() {
-        // TODO Auto-generated method stub
-        return 0;
+        return values.length;
     }
 
     @Override

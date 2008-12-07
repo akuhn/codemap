@@ -2,11 +2,11 @@ package ch.akuhn.hapax.linalg;
 
 public abstract class Matrix {
 
-    public abstract void put(int row, int column, float value);
+    public abstract double put(int row, int column, double value);
     
-    public abstract void add(int row, int column, float value);
+    public abstract double add(int row, int column, double value);
     
-    public abstract float get(int row, int column);
+    public abstract double get(int row, int column);
 
     public abstract int rowSize();
     
@@ -16,7 +16,9 @@ public abstract class Matrix {
     
     public abstract Iterable<Vector> columns();
     
-    public abstract double density();
+    public double density() {
+        return ((double) used()) / rowSize() / columnSize();
+    }
     
     public abstract int used();
     

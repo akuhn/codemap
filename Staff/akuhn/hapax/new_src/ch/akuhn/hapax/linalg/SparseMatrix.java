@@ -12,8 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import ch.akuhn.hapax.linalg.SparseVector.Entry;
-import ch.akuhn.util.Extensions;
+import ch.akuhn.hapax.linalg.Vector.Entry;
 import ch.akuhn.util.Files;
 import ch.akuhn.util.PrintOn;
 import ch.akuhn.util.Throw;
@@ -33,14 +32,14 @@ public class SparseMatrix
             addRow();
     }
 
-    public SparseMatrix(float[][] values) {
+    public SparseMatrix(double[][] values) {
         this.columns = values[0].length;
         this.rows = new ArrayList<SparseVector>(values.length);
-        for (float[] each : values)
+        for (double[] each : values)
             addRow(each);
     }
 
-    protected int addRow(float[] values) {
+    protected int addRow(double[] values) {
         rows.add(new SparseVector(values));
         return rowSize() - 1;
     }
@@ -65,27 +64,27 @@ public class SparseMatrix
         return rows.size();
     }
 
-    public void add(int row, int column, float sum) {
-        rows.get(row).add(column, sum);
+    @Override
+    public double add(int row, int column, double sum) {
+        return rows.get(row).add(column, sum);
     }
 
-    public void put(int row, int column, float value) {
-        rows.get(row).put(column, value);
+    @Override
+    public double put(int row, int column, double value) {
+        return rows.get(row).put(column, value);
     }
 
-    public float get(int row, int column) {
+    @Override
+    public double get(int row, int column) {
         return rows.get(row).get(column);
     }
 
+    @Override
     public int used() {
         int used = 0;
         for (SparseVector each : rows)
             used += each.used();
         return used;
-    }
-
-    public double density() {
-        return ((double) used()) / rowSize() / columnSize();
     }
 
     public void storeSparseOn(String fname) {

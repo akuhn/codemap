@@ -3,7 +3,8 @@ package ch.akuhn.hapax.linalg;
 import java.util.Arrays;
 import java.util.Iterator;
 
-public class SparseVector {
+public class SparseVector
+        extends Vector {
 
     // public static int tally$grow = 0;
     // public static int tally$insert = 0;
@@ -11,8 +12,7 @@ public class SparseVector {
 
     private int[] keys;
     private int size, used;
-
-    private float[] values;
+    private double[] values;
 
     public SparseVector(int size) {
         this(size, 10);
@@ -23,17 +23,18 @@ public class SparseVector {
         assert capacity >= 0;
         this.size = size;
         this.keys = new int[capacity];
-        this.values = new float[capacity];
+        this.values = new double[capacity];
     }
 
-    public SparseVector(float[] values) {
+    public SparseVector(double[] values) {
         this(values.length);
         for (int n = 0; n < values.length; n++) {
             if (values[n] != 0) put(n, values[n]);
         }
     }
 
-    public float get(int key) {
+    @Override
+    public double get(int key) {
         if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer
                 .toString(key));
         int spot = Arrays.binarySearch(keys, 0, used, key);
@@ -45,15 +46,16 @@ public class SparseVector {
         this.size = size;
     }
 
-    public void put(int key, float value) {
+    @Override
+    public double put(int key, double value) {
         if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer
                 .toString(key));
         int spot = Arrays.binarySearch(keys, 0, used, key);
-        if (spot >= 0) values[spot] = value;
-        else update(-1 - spot, key, value);
+        if (spot >= 0) return values[spot] = value;
+        else return update(-1 - spot, key, value);
     }
 
-    private void update(int spot, int key, float value) {
+    private double update(int spot, int key, double value) {
         // grow if reaching end of capacity
         if (used == keys.length) {
             // tally$grow++;
@@ -67,27 +69,29 @@ public class SparseVector {
             System.arraycopy(keys, spot, keys, spot + 1, used - spot);
             System.arraycopy(values, spot, values, spot + 1, used - spot);
         }
-        keys[spot] = key;
-        values[spot] = value;
         used++;
+        keys[spot] = key;
+        return values[spot] = value;
     }
 
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public int used() {
         return used;
     }
 
-    public double add(int key, float value) {
+    @Override
+    public double add(int key, double value) {
         if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer
                 .toString(key));
         // tally$total++;
         int spot = Arrays.binarySearch(keys, 0, used, key);
         if (spot >= 0) return values[spot] += value;
-        update(-1 - spot, key, value);
-        return value;
+        return update(-1 - spot, key, value);
     }
 
     public boolean isUsed(int key) {
@@ -111,47 +115,39 @@ public class SparseVector {
     }
 
     public Iterable<Entry> entries() {
-        return new Entry().iterable();
+        return new Iter();
     }
 
-    public final class Entry {
+    private final class Iter implements Iterable<Entry>, Iterator<Entry> {
 
-        public int index;
-        public double value;
+        private int spot = 0;
 
-        private Iterable<Entry> iterable() {
-            return new Iter();
+        @Override
+        public Iterator<Entry> iterator() {
+            return this;
         }
 
-        private final class Iter implements Iterable<Entry>, Iterator<Entry> {
-
-            private int spot = 0;
-
-            @Override
-            public Iterator<Entry> iterator() {
-                return this;
-            }
-
-            @Override
-            public boolean hasNext() {
-                return spot < used;
-            }
-
-            @Override
-            public Entry next() {
-                Entry.this.index = keys[spot];
-                Entry.this.value = values[spot];
-                spot++;
-                return Entry.this;
-            }
-
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-
+        @Override
+        public boolean hasNext() {
+            return spot < used;
         }
 
+        @Override
+        public Entry next() {
+            return new Entry(keys[spot], values[spot++]);
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+    @Override
+    public double density() {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }
