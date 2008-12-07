@@ -48,7 +48,8 @@ public abstract class Scanner implements Runnable {
             FileChannel channel = input.getChannel();
             long filesize = channel.size();
             MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, filesize);
-            Charset charset = Charset.forName("UTF-8");
+            //Charset charset = Charset.forName("UTF-8");
+            Charset charset = Charset.forName("ISO-8859-1");
             CharsetDecoder decoder = charset.newDecoder();
             this.buf = decoder.decode(buffer);	
             return this;

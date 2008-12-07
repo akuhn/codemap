@@ -64,6 +64,7 @@ public class Corpus {
 	}
 
     private void scanFile(File each) {
+        System.out.println(each);
         put(new Document(each), new Terms(each)); 
     }
 

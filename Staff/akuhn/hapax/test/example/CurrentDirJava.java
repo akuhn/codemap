@@ -2,7 +2,12 @@ package example;
 
 import static ch.akuhn.util.Extensions.puts;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.OutputStreamWriter;
 
 import ch.akuhn.hapax.Corpus;
 import ch.akuhn.hapax.SparseVector;
@@ -11,10 +16,10 @@ import ch.akuhn.hapax.TermDocumentMatrix;
 
 public class CurrentDirJava {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         
         Corpus corpus = new Corpus();
-        corpus.scanFolder(new File("."), ".java");
+        corpus.scanFolder(new File(".."), ".java");
         
         puts( corpus );
         
@@ -31,6 +36,8 @@ public class CurrentDirJava {
         puts( tdm.density() );
         
         tdm.storeSparseOn(System.out);
+        
+        tdm.storeSparseOn(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File("matrix.txt")))));
         
     }
     
