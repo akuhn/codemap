@@ -224,4 +224,9 @@ public class SparseMatrix
         rows.set(row, values);
     }
 
+    protected void addToRow(int row, Vector values) {
+        Vector v = rows.get(row);
+        for (Entry each: values.entries()) v.add(each.index, each.value);
+    }
+
 }

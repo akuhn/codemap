@@ -1,4 +1,4 @@
-package ch.akuhn.hapax.lsi;
+package ch.akuhn.hapax.index;
 
 public enum LocalWeighting {
 

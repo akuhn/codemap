@@ -1,4 +1,4 @@
-package ch.akuhn.hapax.lsi;
+package ch.akuhn.hapax.index;
 
 import static ch.akuhn.util.Pair.zip;
 import ch.akuhn.hapax.corpus.Corpus;
@@ -133,7 +133,7 @@ public class TermDocumentMatrix
     
     private void addTerm(CharSequence term, Vector values) {
         int row = addTerm(term);
-        this.setRow(row, values);
+        this.addToRow(row, values);
     }
 
     public Terms terms() {

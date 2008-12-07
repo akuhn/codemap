@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<project default="package" basedir=".">
+
+    <target name="package">
+        <jar id="files" zipfile="${file.jar}">
+    	    <fileset dir="bin" includes="ch/**/*.class"/>
+    	    <fileset dir="new_src" includes="ch/**/*.java"/>
+        </jar>
+    	<zipfileset id="files" src="${file.jar}"/>
+    	<pathconvert property="listing" refid="files" pathsep="${line.separator}">
+    		<globmapper from="${basedir}${file.separator}*" to="*"/>
+    	</pathconvert>	
+    	<echo message="${listing}"/>
+    </target>
+	
+    <!--from http://www.innovationontherun.com/creating-a-build-number-with-ant-and-subversion-->
+    <exec outputproperty="svnversion" executable="svnversion" dir="src">
+      <arg line="-n -c" />
+      <redirector>
+        <outputfilterchain>
+          <tokenfilter>
+            <replaceregex pattern="^[0-9]*:?" replace="" flags="g"/>
+          </tokenfilter>
+        </outputfilterchain>
+      </redirector>
+    </exec>	
+
+	<property name="file.jar" value="hapax-r${svnversion}.jar"/>
+	
+	
+</project>

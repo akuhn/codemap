@@ -10,12 +10,12 @@ import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 
 import ch.akuhn.hapax.corpus.Corpus;
+import ch.akuhn.hapax.index.GlobalWeighting;
+import ch.akuhn.hapax.index.LatentSemanticIndex;
+import ch.akuhn.hapax.index.LocalWeighting;
+import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.akuhn.hapax.linalg.SVD;
 import ch.akuhn.hapax.linalg.SparseVector;
-import ch.akuhn.hapax.lsi.GlobalWeighting;
-import ch.akuhn.hapax.lsi.LatentSemanticIndex;
-import ch.akuhn.hapax.lsi.LocalWeighting;
-import ch.akuhn.hapax.lsi.TermDocumentMatrix;
 
 
 public class CurrentDirJava {

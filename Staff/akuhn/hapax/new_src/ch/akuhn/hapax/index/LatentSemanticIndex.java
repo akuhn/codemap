@@ -1,4 +1,4 @@
-package ch.akuhn.hapax.lsi;
+package ch.akuhn.hapax.index;
 
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.corpus.Index;

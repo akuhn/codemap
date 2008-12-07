@@ -1,4 +1,4 @@
-package ch.akuhn.hapax.lsi;
+package ch.akuhn.hapax.index;
 
 import ch.akuhn.hapax.linalg.Vector;
 import ch.akuhn.hapax.linalg.Vector.Entry;

@@ -1,9 +1,9 @@
-package ch.akuhn.hapax.lsi;
+package ch.akuhn.hapax.index;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import ch.akuhn.hapax.lsi.Ranking.Rank;
+import ch.akuhn.hapax.index.Ranking.Rank;
 
 @SuppressWarnings("serial")
 public class Ranking<T> extends ArrayList<Rank<T>> {
