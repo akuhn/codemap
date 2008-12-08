@@ -4,7 +4,7 @@
     <target name="package">
         <jar id="files" zipfile="${file.jar}">
     	    <fileset dir="bin" includes="ch/**/*.class"/>
-    	    <fileset dir="new_src" includes="ch/**/*.java"/>
+    	    <fileset dir="src" includes="ch/**/*.java"/>
         </jar>
     	<zipfileset id="files" src="${file.jar}"/>
     	<pathconvert property="listing" refid="files" pathsep="${line.separator}">
