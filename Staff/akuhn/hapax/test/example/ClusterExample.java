@@ -4,17 +4,17 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.akuhn.hapax.cluster.ClusterMatrix;
-import ch.akuhn.hapax.cluster.Similarity;
+import ch.akuhn.hapax.cluster.ClusterEngine;
+import ch.akuhn.hapax.cluster.Distance;
 
 public class ClusterExample {
 
     public static void main(String[] args) {
 
-        Similarity<Point> sim = new Similarity<Point>() {
+        Distance<Point> sim = new Distance<Point>() {
             @Override
-            public double similarity(Point a, Point b) {
-                return -a.distance(b);
+            public double dist(Point a, Point b) {
+                return a.distance(b);
             }
         };
 
@@ -24,8 +24,8 @@ public class ClusterExample {
         points.add(new Point(2, 6));
         points.add(new Point(7, 8));
 
-        ClusterMatrix<Point> clusty = new ClusterMatrix<Point>(points, sim);
-        System.out.println(clusty.cluster());
+        ClusterEngine<Point> clusty = new ClusterEngine<Point>(points, sim);
+        System.out.println(clusty.dendrogram());
     }
 
 }

@@ -1,9 +1,9 @@
 package ch.akuhn.hapax.cluster;
 
-public abstract class Dendro<E> {
+public abstract class Dendrogram<E> {
 
     public static class Leaf<E>
-            extends Dendro<E> {
+            extends Dendrogram<E> {
 
         public final E element;
 
@@ -19,12 +19,12 @@ public abstract class Dendro<E> {
     }
 
     public static class Node<E>
-            extends Dendro<E> {
+            extends Dendrogram<E> {
 
-        public final Dendro<E> left, right;
+        public final Dendrogram<E> left, right;
         public final double threshold;
 
-        public Node(Dendro<E> left, Dendro<E> right, double threshold) {
+        public Node(Dendrogram<E> left, Dendrogram<E> right, double threshold) {
             this.left = left;
             this.right = right;
             this.threshold = threshold;
@@ -37,9 +37,9 @@ public abstract class Dendro<E> {
 
     }
 
-    public Dendro<E> parent;
+    public Dendrogram<E> parent;
 
-    public Dendro<E> merge(Dendro<E> dendro, double threshold) {
+    public Dendrogram<E> merge(Dendrogram<E> dendro, double threshold) {
         return new Node<E>(this, dendro, threshold);
     }
 
