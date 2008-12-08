@@ -23,75 +23,74 @@ import java.util.HashMap;
 
 import ch.akuhn.util.blocks.Function;
 
-
 /**
  * A map that knows how to initialize missing mapping.
  * 
  */
-public abstract class CacheMap<K, V> extends HashMap<K, V> {
+public abstract class CacheMap<K,V> extends HashMap<K,V> {
 
-	public static <A, T> CacheMap<A, T> instances(final Class<? extends T> instanceClass) {
-		return new CacheMap<A, T>() {
-			@Override
-			public T initialize(A key) {
-				return createInstanceOf(instanceClass, key);
-			}
-		};
-	}
+    @SuppressWarnings("unchecked")
+    private static <A,T> T createInstanceOf(Class<T> instanceClass, A argument) {
+        try {
+            Constructor<T>[] inits = (Constructor<T>[]) instanceClass.getDeclaredConstructors();
+            for (Constructor<T> each : inits) {
+                Class<?>[] params = each.getParameterTypes();
+                if (params.length == 1 && params[0].isAssignableFrom(argument.getClass())) {
+                    each.setAccessible(true);
+                    return each.newInstance(argument);
+                }
+            }
+            return instanceClass.newInstance();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	private static <A, T> T createInstanceOf(Class<T> instanceClass, A argument) {
-		try {
-			Constructor<T>[] inits = (Constructor<T>[]) instanceClass.getDeclaredConstructors();
-			for (Constructor<T> each : inits) {
-				Class<?>[] params = each.getParameterTypes();
-				if (params.length == 1 && params[0].isAssignableFrom(argument.getClass())) {
-					each.setAccessible(true);
-					return each.newInstance(argument);
-				}
-			}
-			return instanceClass.newInstance();
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+    public static <A,T> CacheMap<A,T> instances(final Class<? extends T> instanceClass) {
+        return new CacheMap<A,T>() {
+            @Override
+            public T initialize(A key) {
+                return createInstanceOf(instanceClass, key);
+            }
+        };
+    }
 
-	public static <A, T> CacheMap<A, T> with(final Function<T, A> block) {
-		return new CacheMap<A, T>() {
-			@Override
-			public T initialize(A key) {
-				return block.apply(key);
-			}
-		};
-	}
+    public static <A,T> CacheMap<A,T> with(final Function<T,A> block) {
+        return new CacheMap<A,T>() {
+            @Override
+            public T initialize(A key) {
+                return block.apply(key);
+            }
+        };
+    }
 
-	public CacheMap() {
-		super();
-	}
+    public CacheMap() {
+        super();
+    }
 
-	public CacheMap(HashMap<? extends K, ? extends V> m) {
-		super(m);
-	}
+    public CacheMap(HashMap<? extends K,? extends V> m) {
+        super(m);
+    }
 
-	public CacheMap(int initialCapacity) {
-		super(initialCapacity);
-	}
+    public CacheMap(int initialCapacity) {
+        super(initialCapacity);
+    }
 
-	public CacheMap(int initialCapacity, float loadFactor) {
-		super(initialCapacity, loadFactor);
-	}
+    public CacheMap(int initialCapacity, float loadFactor) {
+        super(initialCapacity, loadFactor);
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public V get(Object key) {
-		V value = super.get(key);
-		if (value == null) {
-			K k = (K) key;
-			super.put(k, value = initialize(k));
-		}
-		return value;
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public V get(Object key) {
+        V value = super.get(key);
+        if (value == null) {
+            K k = (K) key;
+            super.put(k, value = initialize(k));
+        }
+        return value;
+    }
 
-	public abstract V initialize(K key);
+    public abstract V initialize(K key);
 
 }

@@ -22,26 +22,26 @@ package ch.akuhn.util;
  */
 public class Separator {
 
-	private final String value;
-	private boolean omitNext;
+    private boolean omitNext;
+    private final String value;
 
-	public Separator() {
-		this(", ");
-	}
+    public Separator() {
+        this(", ");
+    }
 
-	public Separator(String value) {
-		this.value = value;
-		this.omitNext = true;
-	}
+    public Separator(String value) {
+        this.value = value;
+        this.omitNext = true;
+    }
 
-	public String toString() {
-		String $ = omitNext ? "" : value;
-		omitNext = false;
-		return $;
-	}
+    public void reset() {
+        omitNext = true;
+    }
 
-	public void reset() {
-		omitNext = true;
-	}
+    public String toString() {
+        String $ = omitNext ? "" : value;
+        omitNext = false;
+        return $;
+    }
 
 }

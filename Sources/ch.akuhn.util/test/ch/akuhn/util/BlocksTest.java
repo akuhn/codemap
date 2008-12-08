@@ -24,7 +24,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.Collection;
 import java.util.List;
 
-
 import org.junit.Test;
 
 import ch.akuhn.util.blocks.Blocks;
@@ -32,26 +31,26 @@ import ch.akuhn.util.blocks.Predicate;
 
 public class BlocksTest {
 
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testSelectInstanceOf() {
-		Collection coll = (List) asList(1, "A", 2, "B", 3);
-		Collection<Object> reply = Blocks.select(coll, Blocks.instanceOf(String.class));
-		assertEquals(reply, asList("A", "B"));
-		reply = Blocks.select(coll, Blocks.instanceOf(Number.class));
-		assertEquals(reply, asList(1, 2, 3));
-	}
+    @Test
+    public void testSelect() {
+        Collection<Integer> coll = asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        Collection<Integer> reply = Blocks.select(coll, new Predicate<Integer>() {
 
-	@Test
-	public void testSelect() {
-		Collection<Integer> coll = asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-		Collection<Integer> reply = Blocks.select(coll, new Predicate<Integer>() {
+            public boolean apply(Integer a) {
+                return a % 2 == 1;
+            }
+        });
+        assertEquals(reply, asList(1, 3, 5, 7, 9));
+    }
 
-			public boolean apply(Integer a) {
-				return a % 2 == 1;
-			}
-		});
-		assertEquals(reply, asList(1, 3, 5, 7, 9));
-	}
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSelectInstanceOf() {
+        Collection coll = (List) asList(1, "A", 2, "B", 3);
+        Collection<Object> reply = Blocks.select(coll, Blocks.instanceOf(String.class));
+        assertEquals(reply, asList("A", "B"));
+        reply = Blocks.select(coll, Blocks.instanceOf(Number.class));
+        assertEquals(reply, asList(1, 2, 3));
+    }
 
 }

@@ -5,57 +5,62 @@ import java.util.NoSuchElementException;
 
 public abstract class Provider<E> implements IterableIterator<E> {
 
-	public boolean hasMoreElements() {
-		return this.hasNext();
-	}
+    private enum State {
+        DONE, EMPTY, FAIL, READY
+    }
 
-	public E nextElement() {
-		return this.next;
-	}
+    private E next = null;
 
-	private enum State { DONE, EMPTY, FAIL, READY }
-	
-	private E next = null;
-	private State state  = State.EMPTY;
+    private State state = State.EMPTY;
 
-	public boolean hasNext() {
-	    if (state == State.FAIL) throw new IllegalStateException();
-	    switch (state) {
-	    	case DONE: return false;
-	    	case READY: return true;
-	        default: return computeNext();
-	    }
-	}
+    private final boolean computeNext() {
+        state = State.FAIL;
+        next = provide();
+        if (state != State.DONE) {
+            state = State.READY;
+            return true;
+        }
+        return false;
+    }
+    public final E done() {
+        state = State.DONE;
+        return null;
+    }
 
-	private boolean computeNext() {
-		state = State.FAIL; 
-		next = provide();
-		if (state != State.DONE) {
-			state = State.READY;
-			return true;
-		}
-		return false;
-	}	
-	
-	public E next() {
-	    if (!hasNext()) throw new NoSuchElementException();
-	    state = State.EMPTY;
-	    return next;
-	}
+    public final boolean hasMoreElements() {
+        return this.hasNext();
+    }
 
-	public void remove() {
-		throw new UnsupportedOperationException();
-	}
+    public final boolean hasNext() {
+        if (state == State.FAIL) throw new IllegalStateException();
+        switch (state) {
+        case DONE:
+            return false;
+        case READY:
+            return true;
+        default:
+            return computeNext();
+        }
+    }
 
-	public Iterator<E> iterator() {
-		return this;
-	}
+    public final Iterator<E> iterator() {
+        return this;
+    }
 
-	public abstract E provide();
+    public final E next() {
+        if (!hasNext()) throw new NoSuchElementException();
+        state = State.EMPTY;
+        return next;
+    }
 
-	public final E done() {
-		state = State.DONE;
-		return null;
-	}
+    public final E nextElement() {
+        return this.next;
+    }
+
+    public abstract E provide();
+
+    public final void remove() {
+        throw new UnsupportedOperationException();
+    }
 
 }

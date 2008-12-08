@@ -30,8 +30,8 @@ package ch.akuhn.util.blocks;
  * @param <B>
  *            type of second parameter.
  */
-public interface BinaryFunction<T, A, B> {
+public interface BinaryFunction<T,A,B> {
 
-	public T eval(A a, B b);
+    public T eval(A a, B b);
 
 }

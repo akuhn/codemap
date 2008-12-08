@@ -18,335 +18,330 @@
 
 package ch.akuhn.util.blocks;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 import ch.akuhn.util.Extensions;
 
-
 public class Blocks {
 
-	private Blocks() {
-		throw new UnsupportedOperationException();
-	}
+    /**
+     * Checks if all elements satisfy the specified predicate. Returns
+     * <tt>true</tt> if the collection is empty.
+     * 
+     */
+    public static <A> boolean allSatisfy(Iterable<A> coll, Predicate<A> block) {
+        for (A each : coll) {
+            if (!block.apply(each)) return false;
+        }
+        return true;
+    }
 
-	public static <A> Predicate<A> isEqual(final A expected) {
-		if (expected == null)
-			return isNull();
-		return new Predicate<A>() {
+    /**
+     * Combines the specified predicates to a logical <tt>AND</tt> expression.
+     * 
+     */
+    public static <A> Predicate<A> and(final Predicate<A>... blocks) {
+        return new Predicate<A>() {
 
-			public boolean apply(A a) {
-				return expected.equals(a);
-			}
-		};
-	}
+            public boolean apply(A a) {
+                boolean bool = true;
+                for (int n = 0; n < blocks.length; n++) {
+                    bool = bool && blocks[n].apply(a);
+                    if (!bool) return false;
+                }
+                return true;
+            }
+        };
+    }
 
-	public static <A> Predicate<A> isNull() {
-		return new Predicate<A>() {
+    /**
+     * Returns any element from the specified collection.
+     * 
+     * @throws NoSuchElementException
+     *             if the specified collection is empty.
+     * 
+     */
+    public static <T> T any(Iterable<T> coll) {
+        return coll.iterator().next();
+    }
 
-			public boolean apply(A a) {
-				return null == a;
-			}
-		};
-	}
+    /**
+     * Checks if at least one elements satisfy the specified predicate. Empty
+     * collections return <tt>false</tt>.
+     * 
+     */
+    public static <A> boolean anySatisfy(Iterable<A> coll, Predicate<A> block) {
+        for (A each : coll) {
+            if (block.apply(each)) return true;
+        }
+        return false;
+    }
 
-	public static <A> Predicate<A> instanceOf(final Class<?> jazz) {
-		return new Predicate<A>() {
+    public static <A> int atFirst(List<A> list, Predicate<A> block) {
+        for (int n = 0; n < list.size(); n++) {
+            if (block.apply(list.get(n))) return n;
+        }
+        return -1;
+    }
 
-			public boolean apply(A a) {
-				return a == null || jazz.isAssignableFrom(a.getClass());
-			}
-		};
-	}
+    public static <A> int atLast(List<A> list, Predicate<A> block) {
+        for (int n = list.size() - 1; n >= 0; n--) {
+            if (block.apply(list.get(n))) return n;
+        }
+        return -1;
+    }
 
-	public static <A> Predicate<A> notNull() {
-		return new Predicate<A>() {
+    /**
+     * Returns a new collection whose elements are the result of evaluating the
+     * specified function for each element of the receiving collection.
+     * 
+     */
+    public static <T,A> Collection<T> collect(Iterable<A> coll, Function<T,A> block) {
+        Collection<T> result = new ArrayList<T>();
+        for (A each : coll) {
+            result.add(block.apply(each));
+        }
+        return result;
+    }
 
-			public boolean apply(A a) {
-				return null != a;
-			}
-		};
-	}
+    /** Same as {@link collect}, but returns the results as set. */
+    public static <T,A> Set<T> collectAsSet(Iterable<A> coll, Function<T,A> block) {
+        Set<T> result = new HashSet<T>();
+        for (A each : coll) {
+            result.add(block.apply(each));
+        }
+        return result;
+    }
 
-	/**
-	 * Combines the specified predicates to a logical <tt>AND</tt> expression.
-	 * 
-	 */
-	public static <A> Predicate<A> and(final Predicate<A>... blocks) {
-		return new Predicate<A>() {
+    /**
+     * Checks if the specified array contains the specified element.
+     * 
+     */
+    public static <A> boolean contains(A[] array, A a) {
+        for (A each : array) {
+            if (Extensions.eq(each, a)) return true;
+        }
+        return false;
+    }
 
-			public boolean apply(A a) {
-				boolean bool = true;
-				for (int n = 0; n < blocks.length; n++) {
-					bool = bool && blocks[n].apply(a);
-					if (!bool)
-						return false;
-				}
-				return true;
-			}
-		};
-	}
+    /**
+     * Return the number of elements that satisfy the specified predicate.
+     * 
+     */
+    public static <A> int count(Iterable<A> coll, Predicate<A> block) {
+        int count = 0;
+        for (A each : coll) {
+            if (block.apply(each)) count++;
+        }
+        return count;
+    }
 
-	/**
-	 * Checks if all elements satisfy the specified predicate. Returns
-	 * <tt>true</tt> if the collection is empty.
-	 * 
-	 */
-	public static <A> boolean allSatisfy(Iterable<A> coll, Predicate<A> block) {
-		for (A each : coll) {
-			if (!block.apply(each))
-				return false;
-		}
-		return true;
-	}
+    /**
+     * Returns the first element that satisfies the specified predicate, or
+     * <tt>null</tt> if none such element is present
+     * 
+     */
+    public static <A> A detect(Iterable<A> coll, Predicate<A> block) {
+        for (A each : coll) {
+            if (block.apply(each)) return each;
+        }
+        return null;
+    }
 
-	/**
-	 * Returns any element from the specified collection.
-	 * 
-	 * @throws NoSuchElementException
-	 *             if the specified collection is empty.
-	 * 
-	 */
-	public static <T> T any(Iterable<T> coll) {
-		return coll.iterator().next();
-	}
+    public static <T> T first(List<T> list) {
+        return list.get(0);
+    }
 
-	/**
-	 * Checks if at least one elements satisfy the specified predicate. Empty
-	 * collections return <tt>false</tt>.
-	 * 
-	 */
-	public static <A> boolean anySatisfy(Iterable<A> coll, Predicate<A> block) {
-		for (A each : coll) {
-			if (block.apply(each))
-				return true;
-		}
-		return false;
-	}
+    /**
+     * Evaluates a block for each element of a collection.
+     * 
+     */
+    public static <A> void forEach(Iterable<A> coll, Procedure<A> block) {
+        for (A each : coll) {
+            block.run(each);
+        }
+    }
 
-	public static <A> int atFirst(List<A> list, Predicate<A> block) {
-		for (int n = 0; n < list.size(); n++) {
-			if (block.apply(list.get(n)))
-				return n;
-		}
-		return -1;
-	}
+    public static <T,A> Map<T,Collection<A>> groupedBy(Iterable<A> coll, Function<T,A> block) {
+        Map<T,Collection<A>> result = new HashMap<T,Collection<A>>();
+        for (A each : coll) {
+            T key = block.apply(each);
+            Collection<A> bucket = result.get(key);
+            if (bucket == null) result.put(key, bucket = new ArrayList<A>());
+            bucket.add(each);
+        }
+        return result;
+    }
 
-	public static <A> int atLast(List<A> list, Predicate<A> block) {
-		for (int n = list.size() - 1; n >= 0; n--) {
-			if (block.apply(list.get(n)))
-				return n;
-		}
-		return -1;
-	}
+    public static <T,A> T inject(Iterable<A> coll, T initialValue, BinaryFunction<T,T,A> block) {
+        T value = initialValue;
+        for (A each : coll) {
+            value = block.eval(value, each);
+        }
+        return value;
+    }
 
-	/**
-	 * Returns a new collection whose elements are the result of evaluating the
-	 * specified function for each element of the receiving collection.
-	 * 
-	 */
-	public static <T, A> Collection<T> collect(Iterable<A> coll, Function<T, A> block) {
-		Collection<T> result = new ArrayList<T>();
-		for (A each : coll) {
-			result.add(block.apply(each));
-		}
-		return result;
-	}
+    public static <A> Predicate<A> instanceOf(final Class<?> jazz) {
+        return new Predicate<A>() {
 
-	/** Same as {@link collect}, but returns the results as set. */
-	public static <T, A> Set<T> collectAsSet(Iterable<A> coll, Function<T, A> block) {
-		Set<T> result = new HashSet<T>();
-		for (A each : coll) {
-			result.add(block.apply(each));
-		}
-		return result;
-	}
+            public boolean apply(A a) {
+                return a == null || jazz.isAssignableFrom(a.getClass());
+            }
+        };
+    }
 
-	/**
-	 * Checks if the specified array contains the specified element.
-	 * 
-	 */
-	public static <A> boolean contains(A[] array, A a) {
-		for (A each : array) {
-			if (Extensions.eq(each, a))
-				return true;
-		}
-		return false;
-	}
+    public static <A> Predicate<A> isEqual(final A expected) {
+        if (expected == null) return isNull();
+        return new Predicate<A>() {
 
-	/**
-	 * Return the number of elements that satisfy the specified predicate.
-	 * 
-	 */
-	public static <A> int count(Iterable<A> coll, Predicate<A> block) {
-		int count = 0;
-		for (A each : coll) {
-			if (block.apply(each))
-				count++;
-		}
-		return count;
-	}
+            public boolean apply(A a) {
+                return expected.equals(a);
+            }
+        };
+    }
 
-	/**
-	 * Returns the first element that satisfies the specified predicate, or
-	 * <tt>null</tt> if none such element is present
-	 * 
-	 */
-	public static <A> A detect(Iterable<A> coll, Predicate<A> block) {
-		for (A each : coll) {
-			if (block.apply(each))
-				return each;
-		}
-		return null;
-	}
+    public static <A> Predicate<A> isNull() {
+        return new Predicate<A>() {
 
-	public static <T> T first(List<T> list) {
-		return list.get(0);
-	}
+            public boolean apply(A a) {
+                return null == a;
+            }
+        };
+    }
 
-	/**
-	 * Evaluates a block for each element of a collection.
-	 * 
-	 */
-	public static <A> void forEach(Iterable<A> coll, Procedure<A> block) {
-		for (A each : coll) {
-			block.run(each);
-		}
-	}
+    public static <A> Predicate<A> not(final Predicate<A> block) {
+        return new Predicate<A>() {
 
-	public static <T, A> Map<T, Collection<A>> groupedBy(Iterable<A> coll, Function<T, A> block) {
-		Map<T, Collection<A>> result = new HashMap<T, Collection<A>>();
-		for (A each : coll) {
-			T key = block.apply(each);
-			Collection<A> bucket = result.get(key);
-			if (bucket == null)
-				result.put(key, bucket = new ArrayList<A>());
-			bucket.add(each);
-		}
-		return result;
-	}
+            public boolean apply(A a) {
+                return !block.apply(a);
+            }
+        };
+    }
 
-	public static <T, A> T inject(Iterable<A> coll, T initialValue, BinaryFunction<T, T, A> block) {
-		T value = initialValue;
-		for (A each : coll) {
-			value = block.eval(value, each);
-		}
-		return value;
-	}
+    public static <A> Predicate<A> notNull() {
+        return new Predicate<A>() {
 
-	public static <A> Predicate<A> not(final Predicate<A> block) {
-		return new Predicate<A>() {
+            public boolean apply(A a) {
+                return null != a;
+            }
+        };
+    }
 
-			public boolean apply(A a) {
-				return !block.apply(a);
-			}
-		};
-	}
+    /**
+     * Combines the specified predicates to a logical <tt>OR</tt> expression.
+     * 
+     */
+    public static <A> Predicate<A> or(final Predicate<A>... blocks) {
+        return new Predicate<A>() {
 
-	/**
-	 * Combines the specified predicates to a logical <tt>OR</tt> expression.
-	 * 
-	 */
-	public static <A> Predicate<A> or(final Predicate<A>... blocks) {
-		return new Predicate<A>() {
+            public boolean apply(A a) {
+                boolean bool = false;
+                for (int n = 0; n < blocks.length; n++) {
+                    bool = bool || blocks[n].apply(a);
+                    if (bool) return true;
+                }
+                return false;
+            }
+        };
+    }
 
-			public boolean apply(A a) {
-				boolean bool = false;
-				for (int n = 0; n < blocks.length; n++) {
-					bool = bool || blocks[n].apply(a);
-					if (bool)
-						return true;
-				}
-				return false;
-			}
-		};
-	}
+    /**
+     * Returns all elements that do <i>not</i> satisfy the specified predicate.
+     * 
+     */
+    public static <A> Collection<A> reject(Iterable<A> coll, Predicate<A> block) {
+        return select(coll, not(block));
+    }
 
-	/**
-	 * Returns all elements that do <i>not</i> satisfy the specified predicate.
-	 * 
-	 */
-	public static <A> Collection<A> reject(Iterable<A> coll, Predicate<A> block) {
-		return select(coll, not(block));
-	}
+    /**
+     * Removes all elements from the receiving collection that satisfy the
+     * specified predicate.
+     * 
+     * @throws UnsupportedOperationException
+     *             if the receiving collection is unmodifiable.
+     */
+    public static <A> void remove(Iterable<A> coll, Predicate<A> block) {
+        for (Iterator<A> iterator = coll.iterator(); iterator.hasNext();) {
+            A each = iterator.next();
+            if (block.apply(each)) {
+                iterator.remove();
+            }
+        }
+    }
 
-	/**
-	 * Removes all elements from the receiving collection that satisfy the
-	 * specified predicate.
-	 * 
-	 * @throws UnsupportedOperationException
-	 *             if the receiving collection is unmodifiable.
-	 */
-	public static <A> void remove(Iterable<A> coll, Predicate<A> block) {
-		for (Iterator<A> iterator = coll.iterator(); iterator.hasNext();) {
-			A each = iterator.next();
-			if (block.apply(each)) {
-				iterator.remove();
-			}
-		}
-	}
+    /**
+     * Returns a list of all subsequences whose elements do <i>not</i> satisfy
+     * the specified predicate.
+     * 
+     */
+    public static <A> List<List<A>> runsFailing(Iterable<A> coll, Predicate<A> block) {
+        return runsSatisfying(coll, not(block));
+    }
 
-	/**
-	 * Return all elements that satisfy the specified predicate.
-	 * 
-	 */
-	public static <A> Collection<A> select(Iterable<A> coll, Predicate<A> block) {
-		Collection<A> result = new ArrayList<A>();
-		for (A each : coll) {
-			if (block.apply(each)) {
-				result.add(each);
-			}
-		}
-		return result;
-	}
+    /**
+     * Returns a list of all subsequences whose elements satisfy the specified
+     * predicate.
+     * 
+     */
+    public static <A> List<List<A>> runsSatisfying(Iterable<A> coll, Predicate<A> block) {
+        ArrayList<List<A>> result = new ArrayList<List<A>>();
+        ArrayList<A> run = null;
+        for (A each : coll) {
+            if (block.apply(each)) {
+                if (run == null) run = new ArrayList<A>();
+                run.add(each);
+            } else {
+                if (run != null) {
+                    run.trimToSize();
+                    result.add(run);
+                    run = null;
+                }
+            }
+        }
+        result.trimToSize();
+        return result;
+    }
 
-	/**
-	 * Same as {@link remove}, but returns the removed elements.
-	 * 
-	 */
-	public static <A> Collection<A> splice(Iterable<A> coll, Predicate<A> block) {
-		Collection<A> result = new ArrayList<A>();
-		for (Iterator<A> iterator = coll.iterator(); iterator.hasNext();) {
-			A each = iterator.next();
-			if (block.apply(each)) {
-				result.add(each);
-				iterator.remove();
-			}
-		}
-		return result;
-	}
+    /**
+     * Return all elements that satisfy the specified predicate.
+     * 
+     */
+    public static <A> Collection<A> select(Iterable<A> coll, Predicate<A> block) {
+        Collection<A> result = new ArrayList<A>();
+        for (A each : coll) {
+            if (block.apply(each)) {
+                result.add(each);
+            }
+        }
+        return result;
+    }
 
-	/**
-	 * Returns a list of all subsequences whose elements satisfy the specified
-	 * predicate.
-	 * 
-	 */
-	public static <A> List<List<A>> runsSatisfying(Iterable<A> coll, Predicate<A> block) {
-		ArrayList<List<A>> result = new ArrayList<List<A>>();
-		ArrayList<A> run = null;
-		for (A each : coll) {
-			if (block.apply(each)) {
-				if (run == null)
-					run = new ArrayList<A>();
-				run.add(each);
-			} else {
-				if (run != null) {
-					run.trimToSize();
-					result.add(run);
-					run = null;
-				}
-			}
-		}
-		result.trimToSize();
-		return result;
-	}
+    /**
+     * Same as {@link remove}, but returns the removed elements.
+     * 
+     */
+    public static <A> Collection<A> splice(Iterable<A> coll, Predicate<A> block) {
+        Collection<A> result = new ArrayList<A>();
+        for (Iterator<A> iterator = coll.iterator(); iterator.hasNext();) {
+            A each = iterator.next();
+            if (block.apply(each)) {
+                result.add(each);
+                iterator.remove();
+            }
+        }
+        return result;
+    }
 
-	/**
-	 * Returns a list of all subsequences whose elements do <i>not</i> satisfy
-	 * the specified predicate.
-	 * 
-	 */
-	public static <A> List<List<A>> runsFailing(Iterable<A> coll, Predicate<A> block) {
-		return runsSatisfying(coll, not(block));
-	}
+    private Blocks() {
+        throw new UnsupportedOperationException();
+    }
 
 }

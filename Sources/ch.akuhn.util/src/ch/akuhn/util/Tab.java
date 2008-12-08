@@ -9,45 +9,47 @@ package ch.akuhn.util;
 
 public class Tab {
 
-	private String s;
-	private final String tab;
+    private String s;
+    private final String tab;
 
-	public Tab() {
-		this("\t");
-	}
+    public Tab() {
+        this("\t");
+    }
 
-	public Tab(String tab) {
-		this.tab = tab;
-		this.s = "";
-	}
+    public Tab(String tab) {
+        this.tab = tab;
+        this.s = "";
+    }
 
-	public Tab more() {
-		s += tab;
-		return this;
-	}
+    public String begin() {
+        try {
+            return toString();
+        } finally {
+            this.more();
+        }
+    }
 
-	public Tab less() {
-		if (isEmpty())
-			throw new IllegalStateException();
-		s = s.substring(0, s.length() - tab.length());
-		return this;
-	}
-	
-	public String begin() {
-		try { return toString(); }
-		finally { this.more(); }
-	}
+    public String end() {
+        return this.less().toString();
+    }
 
-	public String end() {
-		return this.less().toString();
-	}
-	
-	public String toString() {
-		return s;
-	}
+    public boolean isEmpty() {
+        return s.length() == 0;
+    }
 
-	public boolean isEmpty() {
-		return s.length() == 0;
-	}
+    public Tab less() {
+        if (isEmpty()) throw new IllegalStateException();
+        s = s.substring(0, s.length() - tab.length());
+        return this;
+    }
+
+    public Tab more() {
+        s += tab;
+        return this;
+    }
+
+    public String toString() {
+        return s;
+    }
 
 }

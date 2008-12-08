@@ -26,8 +26,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -39,167 +37,164 @@ import java.util.Queue;
  */
 public abstract class Files {
 
-	public static FileFilter endsWith(final String suffix) {
-		return new FileFilter() {
+    private static class Find implements Iterator<File> {
 
-			public boolean accept(File file) {
-				return file.getName().endsWith(suffix);
-			}
-		};
-	}
+        private String[] extensions;
+        private Queue<File> queue;
 
-	public static Iterable<File> all(final File folder, final FileFilter filter) {
-		return new Iterable<File>() {
+        public Find(File folder, String... extensions) {
+            this.queue = new LinkedList<File>();
+            this.extensions = extensions;
+            this.queue.offer(folder);
+        }
 
-			public Iterator<File> iterator() {
-				return new Iterator<File>() {
-					private LinkedList<File> queue = new LinkedList<File>();
-					{
-						queue.offer(folder);
-						processDirectories();
-					}
+        public boolean hasNext() {
+            pollFolders();
+            return !queue.isEmpty();
+        }
 
-					public boolean hasNext() {
-						this.processDirectories();
-						return !queue.isEmpty();
-					}
+        private boolean include(File file) {
+            String name = file.getName();
+            for (String each : extensions)
+                if (name.endsWith(each)) return true;
+            return false;
+        }
 
-					public File next() {
-						this.processDirectories();
-						if (queue.isEmpty())
-							throw new NoSuchElementException();
-						return queue.poll();
-					}
+        public File next() {
+            pollFolders();
+            if (queue.isEmpty()) throw new NoSuchElementException();
+            return queue.poll();
+        }
 
-					private void processDirectories() {
-						while (!queue.isEmpty()) {
-							if (!queue.peek().isDirectory())
-								break;
-							File next = queue.poll();
-							for (File each : next.listFiles()) {
-								if (each.isDirectory() || filter == null || filter.accept(each)) {
-									queue.offer(each);
-								}
-							}
-						}
-					}
+        private void pollFolders() {
+            while (!queue.isEmpty()) {
+                if (!queue.peek().isDirectory()) break;
+                File next = queue.poll();
+                for (File each : next.listFiles()) {
+                    if (include(each) || each.isDirectory()) queue.offer(each);
+                }
+            }
+        }
 
-					public void remove() {
-						throw new UnsupportedOperationException();
-					}
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
 
-				};
-			}
-		};
-	}
+    }
 
-	public static Iterable<File> all(String filename) {
-		return all(new File(filename));
-	}
+    public static Iterable<File> all(File file) {
+        return all(file, (FileFilter) null);
+    }
 
-	public static Iterable<File> all(File file) {
-		return all(file, (FileFilter) null);
-	}
+    public static Iterable<File> all(final File folder, final FileFilter filter) {
+        return new Iterable<File>() {
 
-	public static Iterable<File> all(String filename, FileFilter filter) {
-		return all(new File(filename), filter);
-	}
+            public Iterator<File> iterator() {
+                return new Iterator<File>() {
+                    private LinkedList<File> queue = new LinkedList<File>();
+                    {
+                        queue.offer(folder);
+                        processDirectories();
+                    }
 
-	public static Iterable<File> all(File file, String pattern) {
-		if (pattern.equals("*"))
-			return all(file);
-		if (pattern.lastIndexOf('*') != 0)
-			throw // TODO support other patterns
-			new UnsupportedOperationException("Patterns other than \"*abc\" not yet supported.");
-		return all(file, endsWith(pattern.substring(1)));
-	}
+                    public boolean hasNext() {
+                        this.processDirectories();
+                        return !queue.isEmpty();
+                    }
 
-	public static Iterable<File> all(String filename, String pattern) {
-		return all(new File(filename), pattern);
-	}
+                    public File next() {
+                        this.processDirectories();
+                        if (queue.isEmpty()) throw new NoSuchElementException();
+                        return queue.poll();
+                    }
 
-	public static void main(String... argh) {
-		for (File each : all(".", endsWith(".class"))) {
-			System.out.println(each);
-		}
-	}
+                    private void processDirectories() {
+                        while (!queue.isEmpty()) {
+                            if (!queue.peek().isDirectory()) break;
+                            File next = queue.poll();
+                            for (File each : next.listFiles()) {
+                                if (each.isDirectory() || filter == null || filter.accept(each)) {
+                                    queue.offer(each);
+                                }
+                            }
+                        }
+                    }
 
-	public static Appendable openWrite(String filename) {
-		return openWrite(new File(filename));
-	}
+                    public void remove() {
+                        throw new UnsupportedOperationException();
+                    }
 
-	public static Appendable openWrite(File file) {
-		try {
-			return new PrintWriter(new OutputStreamWriter(new FileOutputStream(file)));
-		} catch (FileNotFoundException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
+                };
+            }
+        };
+    }
 
-	public static void close(Appendable appendable) {
-		if (appendable instanceof Closeable) {
-			try {
-				((Closeable) appendable).close();
-			} catch (IOException ex) {
-				throw new RuntimeException(ex);
-			}
-		}
-	}
+    public static Iterable<File> all(File file, String pattern) {
+        if (pattern.equals("*")) return all(file);
+        if (pattern.lastIndexOf('*') != 0) throw // TODO support other patterns
+        new UnsupportedOperationException("Patterns other than \"*abc\" not yet supported.");
+        return all(file, endsWith(pattern.substring(1)));
+    }
 
-	public static CharSequence openRead(String filename) {
-		return Strings.fromFile(filename);
-	}
+    public static Iterable<File> all(String filename) {
+        return all(new File(filename));
+    }
 
-	public static CharSequence openRead(File file) {
-		return Strings.fromFile(file);
-	}
-	
-	public static IterableIterator<File> find(final File folder, String... extensions) {
-		return IterableIteratorFactory.create(new Find(folder, extensions));
-	}
-		
-	private static class Find implements Iterator<File> {
+    public static Iterable<File> all(String filename, FileFilter filter) {
+        return all(new File(filename), filter);
+    }
 
-		private Queue<File> queue;
-		private String[] extensions;
+    public static Iterable<File> all(String filename, String pattern) {
+        return all(new File(filename), pattern);
+    }
 
-		public Find(File folder, String... extensions) {
-			this.queue = new LinkedList<File>();
-			this.extensions = extensions;
-			this.queue.offer(folder);
-		}
-		
-		public boolean hasNext() {
-			pollFolders();
-			return !queue.isEmpty();
-		}
+    public static void close(Object appendable) {
+        if (appendable instanceof Closeable) {
+            try {
+                ((Closeable) appendable).close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+    }
 
-		public File next() {
-			pollFolders();
-			if (queue.isEmpty()) throw new NoSuchElementException();
-			return queue.poll();
-		}
+    public static FileFilter endsWith(final String suffix) {
+        return new FileFilter() {
 
-		public void remove() {
-			throw new UnsupportedOperationException();
-		}
-		
-		private void pollFolders() {
-			while (!queue.isEmpty()) {
-				if (!queue.peek().isDirectory()) break;
-				File next = queue.poll();
-				for (File each : next.listFiles()) {
-					if (include(each) || each.isDirectory()) queue.offer(each);
-				}
-			}
-		}
+            public boolean accept(File file) {
+                return file.getName().endsWith(suffix);
+            }
+        };
+    }
 
-		private boolean include(File file) {
-			String name = file.getName();
-			for (String each: extensions) if (name.endsWith(each)) return true;
-			return false;
-		}
+    public static IterableIterator<File> find(final File folder, String... extensions) {
+        return IterableIteratorFactory.create(new Find(folder, extensions));
+    }
 
-	}
+    public static void main(String... argh) {
+        for (File each : all(".", endsWith(".class"))) {
+            System.out.println(each);
+        }
+    }
+
+    public static CharSequence openRead(File file) {
+        return Strings.fromFile(file);
+    }
+
+    public static CharSequence openRead(String filename) {
+        return Strings.fromFile(filename);
+    }
+
+    public static Appendable openWrite(File file) {
+        try {
+            return new PrintWriter(new OutputStreamWriter(new FileOutputStream(file)));
+        } catch (FileNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public static Appendable openWrite(String filename) {
+        return openWrite(new File(filename));
+    }
 
 }

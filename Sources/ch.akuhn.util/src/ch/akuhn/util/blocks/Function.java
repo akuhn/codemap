@@ -26,8 +26,8 @@ package ch.akuhn.util.blocks;
  * @param <A>
  *            type of argument.
  */
-public interface Function<T, A> {
+public interface Function<T,A> {
 
-	public T apply(A a);
+    public T apply(A a);
 
 }

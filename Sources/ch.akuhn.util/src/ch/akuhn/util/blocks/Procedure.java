@@ -28,6 +28,6 @@ package ch.akuhn.util.blocks;
  */
 public interface Procedure<A> {
 
-	public void run(A a);
+    public void run(A a);
 
 }

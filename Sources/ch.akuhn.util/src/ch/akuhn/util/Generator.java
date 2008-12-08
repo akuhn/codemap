@@ -30,14 +30,16 @@ import java.util.NoSuchElementException;
  * method. On the other hand, an generator may run forever and thus yield an
  * infinite sequence (see Example 1 for an example).
  * <p>
- * Please beware that calling {@link #hasNext()} on the generator (and thus
- * any use in a for-each loop) provokes a lookahead of one value. Therefore
- * you cannot repeatedly yield the same object, but rather, you must clone the
- * value on each yield statement (see Example 3 for an example). 
+ * Please beware that calling {@link #hasNext()} on the generator (and thus any
+ * use in a for-each loop) provokes a lookahead of one value. Therefore you
+ * cannot repeatedly yield the same object, but rather, you must clone the value
+ * on each yield statement (see Example 3 for an example).
  * <p>
  * <b>Example 1:</b> Yields an infinite sequence of fibonacci numbers.
- * <pre>Generator&lt;Integer&gt; fibonacci = new Generator&lt;Integer&gt;() {
- *    &#64;Override
+ * 
+ * <pre>
+ * Generator&lt;Integer&gt; fibonacci = new Generator&lt;Integer&gt;() {
+ *    &#064;Override
  *    public void run() {
  *        int a = 0, b = 1;
  *        while (true) {
@@ -45,38 +47,42 @@ import java.util.NoSuchElementException;
  *            yield(a); 
  *        }
  *    }
- *};
- *
- *for (int x : fibonacci) {
- *    if (x > 20000) break;
+ * ;
+ * or (int x : fibonacci) {
+ *    if (x &gt; 20000) break;
  *    System.out.println(x);
- *}</pre>
+ * 
+ * </pre>
  * <p>
  * <b>Example 2:</b> Yields all characters of the string "Hello, Worlds!".
- * <pre>Generator&lt;char&gt> hello = new Generator&lt;char&gt;() {
- *    &#64;Override
+ * 
+ * <pre>
+ * Generator&lt;char&amp;gt&gt; hello = new Generator&lt;char&gt;() {
+ *    &#064;Override
  *    public void run() {
- *        String str = "Hello, Worlds!";
- *        for (int n = 0; n < str.length; n++) {
+ *        String str = &quot;Hello, Worlds!&quot;;
+ *        for (int n = 0; n &lt; str.length; n++) {
  *            yield(str.atChar(n));
  *        }
  *    }
- *};
- *
- *for (char each : hello) {
+ * ;
+ * or (char each : hello) {
  *    System.out.println(each);
- *}</pre> 
+ * 
+ * </pre>
  * <p>
  * <b>Example 3:</b> Yields all perutations of an array.
- * <pre>public static &lt;T&gt; Generator&lt;T[]&gt; permute(final T[] a) {
+ * 
+ * <pre>
+ * public static &lt;T&gt; Generator&lt;T[]&gt; permute(final T[] a) {
  *    return new Generator&lt;T[]&gt;() {
- *        &#64;Override
+ *        &#064;Override
  *        public void run() {
  *            permute(a.length - 1);
  *        }
  *        private void permute(int n) {
  *            if (n == 0) yield(a.clone());
- *            else for (int k = n; k >= 0; k--) {
+ *            else for (int k = n; k &gt;= 0; k--) {
  *                swap(n,k);
  *                permute(n - 1);
  *                swap(n,k);
@@ -88,117 +94,109 @@ import java.util.NoSuchElementException;
  *            a[m] = temp;
  *        }
  *    };
- *}</pre>
- *
+ * 
+ * </pre>
+ * 
  * <b>NB:</b> this class makes use of Threads, you might want to double-check
  * its source code before using it in a multi-threaded application.
- *
+ * 
  * @author Adrian Kuhn &lt;akuhn(at)iam.unibe.ch&gt;
- * @see http://smallwiki.unibe.ch/adriankuhn/yield4java/ 
+ * @see http://smallwiki.unibe.ch/adriankuhn/yield4java/
  * 
  */
 public abstract class Generator<T> implements Iterable<T> {
 
-	public abstract void run();
+    private class Iter implements Iterator<T>, Runnable {
 
-	public Iterator<T> iterator() {
-		return new Iter();
-	}
+        private Object next = EMPTY;
 
-	private static final Object DONE = new Object();
-	private static final Object EMPTY = new Object();
-	private Object drop = EMPTY;
-	private Thread th = null;
+        public Iter() {
+            if (th != null) throw new IllegalStateException("Can not run coroutine twice");
+            th = new Thread(this);
+            th.setDaemon(true);
+            th.start();
+        }
 
-	private synchronized Object take() {
-		while (drop == EMPTY) {
-			try {
-				wait();
-			} catch (InterruptedException ex) {
-				Thread.currentThread().interrupt();
-			}
-		}
-		Object temp = drop;
-		if (drop != DONE)
-			drop = EMPTY;
-		notifyAll();
-		return temp;
-	}
+        @SuppressWarnings("deprecation")
+        @Override
+        protected void finalize() throws Throwable {
+            th.stop(); // let's commit suicide
+        }
 
-	private synchronized void put(Object value) {
-		if (drop == DONE)
-			throw new IllegalStateException();
-		if (drop != EMPTY)
-			throw new IllegalStateException();
-		drop = value;
-		notifyAll();
-		while (drop != EMPTY) {
-			try {
-				wait();
-			} catch (InterruptedException ex) {
-				Thread.currentThread().interrupt();
-			}
-		}
-	}
+        public boolean hasNext() {
+            if (next == EMPTY) next = take();
+            return next != DONE;
+        }
 
-	protected void yield(T value) {
-		put(value);
-	}
-	
-	public synchronized void done() {
-		if (drop == DONE)
-			throw new IllegalStateException();
-		if (drop != EMPTY)
-			throw new IllegalStateException();
-		drop = DONE;
-		notifyAll();
-	}
+        @SuppressWarnings("unchecked")
+        public T next() {
+            if (next == EMPTY) next = take();
+            if (next == DONE) throw new NoSuchElementException();
+            Object temp = next;
+            next = EMPTY;
+            return (T) temp;
+        }
 
-	private class Iter implements Iterator<T>, Runnable {
+        public void remove() {
+            throw new UnsupportedOperationException();
 
-		private Object next = EMPTY;
+        }
 
-		public Iter() {
-			if (th != null)
-				throw new IllegalStateException("Can not run coroutine twice");
-			th = new Thread(this);
-			th.setDaemon(true);
-			th.start();
-		}
+        public void run() {
+            Generator.this.run();
+            done();
+        }
 
-		public void run() {
-			Generator.this.run();
-			done();
-		}
+    }
 
-		public boolean hasNext() {
-			if (next == EMPTY)
-				next = take();
-			return next != DONE;
-		}
+    private static final Object DONE = new Object();
 
-		@SuppressWarnings("unchecked")
-		public T next() {
-			if (next == EMPTY)
-				next = take();
-			if (next == DONE)
-				throw new NoSuchElementException();
-			Object temp = next;
-			next = EMPTY;
-			return (T) temp;
-		}
+    private static final Object EMPTY = new Object();
+    private Object drop = EMPTY;
+    private Thread th = null;
+    public synchronized void done() {
+        if (drop == DONE) throw new IllegalStateException();
+        if (drop != EMPTY) throw new IllegalStateException();
+        drop = DONE;
+        notifyAll();
+    }
 
-		public void remove() {
-			throw new UnsupportedOperationException();
+    public Iterator<T> iterator() {
+        return new Iter();
+    }
 
-		}
+    private synchronized void put(Object value) {
+        if (drop == DONE) throw new IllegalStateException();
+        if (drop != EMPTY) throw new IllegalStateException();
+        drop = value;
+        notifyAll();
+        while (drop != EMPTY) {
+            try {
+                wait();
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }
+    }
 
-		@SuppressWarnings("deprecation")
-		@Override
-		protected void finalize() throws Throwable {
-			th.stop(); // let's commit suicide
-		}
+    public abstract void run();
 
-	}
+    private synchronized Object take() {
+        while (drop == EMPTY) {
+            try {
+                wait();
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        Object temp = drop;
+        if (drop != DONE) drop = EMPTY;
+        notifyAll();
+        return temp;
+    }
+
+    protected void yield(T value) {
+        put(value);
+    }
 
 }

@@ -22,13 +22,12 @@ import static ch.akuhn.util.Extensions.sorted;
 
 import java.util.AbstractCollection;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Collections;
 import java.util.Set;
+import java.util.Map.Entry;
 
 /**
  * A collection that contains unordered, duplicate elements.
@@ -59,11 +58,6 @@ public class Bag<T> extends AbstractCollection<T> {
         public int value;
 
         @Override
-        public String toString() {
-            return Integer.toString(value);
-        }
-
-        @Override
         public boolean equals(Object obj) {
             return (obj instanceof Int) && value == ((Int) obj).value;
         }
@@ -72,13 +66,15 @@ public class Bag<T> extends AbstractCollection<T> {
         public int hashCode() {
             return value;
         }
-        
-        
+
+        @Override
+        public String toString() {
+            return Integer.toString(value);
+        }
 
     }
 
-    private class Iter
-            extends Provider<T> {
+    private class Iter extends Provider<T> {
 
         private int count;
         private T curr;
@@ -101,7 +97,7 @@ public class Bag<T> extends AbstractCollection<T> {
 
     }
 
-    private Map<T, Int> values = new HashMap<T, Int>();
+    private Map<T,Int> values = new HashMap<T,Int>();
 
     /**
      * Adds the specified element to this bag.
@@ -206,13 +202,14 @@ public class Bag<T> extends AbstractCollection<T> {
         return Collections.unmodifiableSet(values.keySet());
     }
 
-    /**
-     * Returns the number of unique elements in this bag.
-     * 
-     * @return the number of unique elements in this bag.
-     */
-    public int uniqueSize() {
-        return values.size();
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Bag) && values.equals(((Bag<?>) obj).values);
+    }
+
+    @Override
+    public int hashCode() {
+        return values.hashCode();
     }
 
     /**
@@ -262,7 +259,7 @@ public class Bag<T> extends AbstractCollection<T> {
     public T mostOccurring() {
         int max = 0;
         T most = null;
-        for (Entry<T, Int> each : values.entrySet()) {
+        for (Entry<T,Int> each : values.entrySet()) {
             if (max < (max = Math.max(max, each.getValue().value))) {
                 most = each.getKey();
             }
@@ -334,16 +331,13 @@ public class Bag<T> extends AbstractCollection<T> {
         return sorted(counts());
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return (obj instanceof Bag) && values.equals(((Bag<?>) obj).values);
+    /**
+     * Returns the number of unique elements in this bag.
+     * 
+     * @return the number of unique elements in this bag.
+     */
+    public int uniqueSize() {
+        return values.size();
     }
-
-    @Override
-    public int hashCode() {
-        return values.hashCode();
-    }
-    
-    
 
 }

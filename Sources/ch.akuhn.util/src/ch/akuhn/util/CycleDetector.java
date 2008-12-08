@@ -15,96 +15,93 @@ import java.util.Stack;
  */
 public abstract class CycleDetector<E> {
 
-	private class Node {
+    @SuppressWarnings("serial")
+    private static class CycleFound extends Exception {
 
-		public int color = 0;
+    }
 
-		public final E payload;
+    private class Node {
 
-		public Node(E payload) {
-			this.payload = payload;
-		}
+        public int color = 0;
 
-		private final boolean isWhite() {
-			return color == 0;
-		}
+        public final E payload;
 
-		private final void beGray() {
-			color = 1;
-		}
+        public Node(E payload) {
+            this.payload = payload;
+        }
 
-		private final void beBlack() {
-			color = 2;
-		}
+        private final void beBlack() {
+            color = 2;
+        }
 
-		private final void cycle() throws CycleFound {
-			if (!isWhite())
-				return;
-			beGray();
-			path.push(this.payload);
-			for (Node n : children()) {
-				if (n.isGray())
-					throw new CycleFound();
-				if (n.isWhite())
-					n.cycle();
-			}
-			path.pop();
-			beBlack();
-		}
+        private final void beGray() {
+            color = 1;
+        }
 
-		private final boolean isGray() {
-			return color == 1;
-		}
+        private final Collection<Node> children() {
+            Collection<E> es = getChildren(payload);
+            Collection<Node> ns = new ArrayList(es.size());
+            for (E e : es) {
+                Node n = map.get(e);
+                assert n != null;
+                ns.add(n);
+            }
+            return ns;
+        }
 
-		private final Collection<Node> children() {
-			Collection<E> es = getChildren(payload);
-			Collection<Node> ns = new ArrayList(es.size());
-			for (E e : es) {
-				Node n = map.get(e);
-				assert n != null;
-				ns.add(n);
-			}
-			return ns;
-		}
+        private final void cycle() throws CycleFound {
+            if (!isWhite()) return;
+            beGray();
+            path.push(this.payload);
+            for (Node n : children()) {
+                if (n.isGray()) throw new CycleFound();
+                if (n.isWhite()) n.cycle();
+            }
+            path.pop();
+            beBlack();
+        }
 
-	}
+        private final boolean isGray() {
+            return color == 1;
+        }
 
-	private Stack<E> path = new Stack();
-	private Map<E, Node> map = new HashMap();
+        private final boolean isWhite() {
+            return color == 0;
+        }
 
-	public CycleDetector() {
-	}
+    }
+    private Map<E,Node> map = new HashMap();
 
-	public CycleDetector(Collection<E>... ess) {
-		for (Collection<E> es : ess)
-			for (E e : es)
-				put(e);
-	}
+    private Stack<E> path = new Stack();
 
-	public CycleDetector<E> put(E e) {
-		map.put(e, new Node(e));
-		return this;
-	}
+    public CycleDetector() {
+    }
 
-	public abstract Collection<E> getChildren(E payload);
+    public CycleDetector(Collection<E>... ess) {
+        for (Collection<E> es : ess)
+            for (E e : es)
+                put(e);
+    }
 
-	public List<E> getCycle() {
-		try {
-			for (Node n : map.values())
-				n.cycle();
-		} catch (CycleFound ex) {
-			return path;
-		}
-		return null;
-	}
+    public abstract Collection<E> getChildren(E payload);
 
-	@SuppressWarnings("serial")
-	private static class CycleFound extends Exception {
+    public List<E> getCycle() {
+        try {
+            for (Node n : map.values())
+                n.cycle();
+        } catch (CycleFound ex) {
+            return path;
+        }
+        return null;
+    }
 
-	}
+    public boolean hasCycle() {
+        return getCycle() != null;
+    }
 
-	public boolean hasCycle() {
-		return getCycle() != null;
-	}
+    public CycleDetector<E> put(E e) {
+        map.put(e, new Node(e));
+        return this;
+    }
 
 }

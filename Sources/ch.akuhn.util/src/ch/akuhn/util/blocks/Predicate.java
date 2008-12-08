@@ -27,6 +27,6 @@ package ch.akuhn.util.blocks;
  */
 public interface Predicate<A> {
 
-	public boolean apply(A a);
+    public boolean apply(A a);
 
 }
