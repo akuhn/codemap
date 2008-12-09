@@ -2,15 +2,19 @@
 <project default="package" basedir=".">
 
     <target name="package">
-        <jar id="files" zipfile="${file.jar}">
-    	    <fileset dir="bin" includes="ch/**/*.class"/>
-    	    <fileset dir="src" includes="ch/**/*.java"/>
-        </jar>
-    	<zipfileset id="files" src="${file.jar}"/>
-    	<pathconvert property="listing" refid="files" pathsep="${line.separator}">
-    		<globmapper from="${basedir}${file.separator}*" to="*"/>
-    	</pathconvert>	
-    	<echo message="${listing}"/>
+      <jar id="files" zipfile="${file.jar}">
+        <fileset dir="bin"><patternset refid="the.patternset"/></fileset>
+        <fileset dir="src"><patternset refid="the.patternset"/></fileset>
+        <fileset dir="../Query/bin"><patternset refid="the.patternset"/></fileset>
+        <fileset dir="../Query/src"><patternset refid="the.patternset"/></fileset>
+        <fileset dir="../ch.akuhn.util/bin"><patternset refid="the.patternset"/></fileset>
+        <fileset dir="../ch.akuhn.util/src"><patternset refid="the.patternset"/></fileset>
+      </jar>
+      <zipfileset id="files" src="${file.jar}"/>
+      <pathconvert property="listing" refid="files" pathsep="${line.separator}">
+    	<globmapper from="${basedir}${file.separator}*" to="*"/>
+      </pathconvert>	
+      <echo message="${listing}"/>
     </target>
 	
     <!--from http://www.innovationontherun.com/creating-a-build-number-with-ant-and-subversion-->
@@ -25,7 +29,16 @@
       </redirector>
     </exec>	
 
-	<property name="file.jar" value="hapax-r${svnversion}.jar"/>
+    <property name="file.jar" value="hapax-r${svnversion}.jar"/>
+    <property name="include.sources" value="off"/>
+    <property name="DONT-include.tests" value="off"/>
+
+    <patternset id="the.patternset">
+        <include name="COPYING*"/>
+        <include name="ch/**/*.java" if="include.sources"/>
+        <include name="ch/**/*.class"/>
+        <exclude name="**/*Test*" unless="include.tests"/>                   
+    </patternset>
 	
 	
 </project>

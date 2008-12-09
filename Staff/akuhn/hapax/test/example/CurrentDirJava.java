@@ -1,6 +1,6 @@
 package example;
 
-import static ch.akuhn.util.Extensions.puts;
+import static ch.akuhn.util.Out.puts;
 
 import java.io.File;
 import java.io.FileNotFoundException;

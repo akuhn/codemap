@@ -3,11 +3,11 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/Multivalent20060102.jar"/>
 	<classpathentry kind="lib" path="lib/snowball.jar"/>
 	<classpathentry kind="lib" path="lib/fame-r22726.jar"/>
 	<classpathentry kind="lib" path="lib/jexample-4.4-r271.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ch.akuhn.util"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ch.akuhn.util"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Query"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
