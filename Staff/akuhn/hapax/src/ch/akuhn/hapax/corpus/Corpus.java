@@ -8,11 +8,11 @@ import ch.akuhn.util.Files;
 
 public class Corpus {
 
-    private Map<Document, Terms> documents;
+    private Map<Document,Terms> documents;
     private Terms terms;
 
     public Corpus() {
-        this.documents = new HashMap<Document, Terms>();
+        this.documents = new HashMap<Document,Terms>();
         this.terms = new Terms();
     }
 
@@ -52,7 +52,7 @@ public class Corpus {
     }
 
     public void scanFolder(File folder, String... extensions) {
-        for (File each : Files.find(folder, extensions))
+        for (File each: Files.find(folder, extensions))
             scanFile(each);
     }
 

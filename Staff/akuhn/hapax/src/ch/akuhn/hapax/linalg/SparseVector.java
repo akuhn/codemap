@@ -1,10 +1,11 @@
 package ch.akuhn.hapax.linalg;
 
+import static ch.akuhn.util.Interval.range;
+
 import java.util.Arrays;
 import java.util.Iterator;
 
-public class SparseVector
-        extends Vector {
+public class SparseVector extends Vector {
 
     // public static int tally$grow = 0;
     // public static int tally$insert = 0;
@@ -43,7 +44,7 @@ public class SparseVector
 
     public SparseVector(double[] values) {
         this(values.length);
-        for (int n = 0; n < values.length; n++) {
+        for (int n: range(values.length)) {
             if (values[n] != 0) put(n, values[n]);
         }
     }

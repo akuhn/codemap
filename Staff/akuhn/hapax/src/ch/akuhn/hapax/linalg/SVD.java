@@ -1,5 +1,7 @@
 package ch.akuhn.hapax.linalg;
 
+import static ch.akuhn.util.Interval.range;
+
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 
@@ -7,20 +9,19 @@ import ch.akuhn.util.Throw;
 
 public class SVD {
 
-    private class Gobbler
-            extends StreamGobbler {
+    private class Gobbler extends StreamGobbler {
 
         public Gobbler(InputStream is) {
             super(is);
         }
 
         private void consume(String... words) {
-            for (int n = 0; n < words.length; n++) {
+            for (String word: words) {
                 String next = $.next();
-                if (words[n] == null || words[n].equals(next)) continue;
+                if (word == null || word.equals(next)) continue;
                 // for (Void each: Times.repeat(100))
                 // System.out.println($.next());
-                throw new Error("Expected " + words[n] + " but found " + next);
+                throw new Error("Expected " + word + " but found " + next);
             }
         }
 
@@ -57,8 +58,8 @@ public class SVD {
             int rows = $.nextInt();
             int columns = $.nextInt();
             SVD.this.Ut = new float[rows][columns];
-            for (int row = 0; row < rows; row++) {
-                for (int column = 0; column < columns; column++) {
+            for (int row: range(rows)) {
+                for (int column: range(columns)) {
                     SVD.this.Ut[row][column] = $.nextFloat();
                 }
             }
@@ -69,8 +70,8 @@ public class SVD {
             int rows = $.nextInt();
             int columns = $.nextInt();
             SVD.this.Vt = new float[rows][columns];
-            for (int row = 0; row < rows; row++) {
-                for (int column = 0; column < columns; column++) {
+            for (int row: range(rows)) {
+                for (int column: range(columns)) {
                     SVD.this.Vt[row][column] = $.nextFloat();
                 }
             }
@@ -84,7 +85,7 @@ public class SVD {
             int skip = consumeInt("OF", "LANCZOS", "STEPS", "=");
             consumeInt("RITZ", "VALUES", "STABILIZED", "=");
             consume("COMPUTED", "RITZ", "VALUES", "(ERROR", "BNDS)");
-            for (int n = 0; n < skip; n++) {
+            for (int n: range(skip)) {
                 consume(Integer.toString(n + 1), null, null, null);
             }
         }
@@ -92,11 +93,12 @@ public class SVD {
         private void gobbleSingularValues() {
             int len = consumeInt("SINGULAR", "VALUES:");
             SVD.this.s = new float[len];
-            for (int n = 0; n < len; n++) {
+            for (int n: range(len)) {
                 SVD.this.s[n] = $.nextFloat();
             }
         }
 
+        @Override
         public void run() {
             gobbleHeader();
             gobbleRitzValues();
@@ -166,7 +168,7 @@ public class SVD {
         double sim = 0;
         double suma = 0;
         double sumb = 0;
-        for (int n = 0; n < dim; n++) {
+        for (int n: range(dim)) {
             sim += Ut[n][a] * Ut[n][b] * s[n] * s[n];
             suma += Ut[n][a] * s[n] * Ut[n][a] * s[n];
             sumb += Ut[n][b] * s[n] * Ut[n][b] * s[n];
@@ -179,7 +181,7 @@ public class SVD {
         double sim = 0;
         double suma = 0;
         double sumb = 0;
-        for (int n = 0; n < dim; n++) {
+        for (int n: range(dim)) {
             sim += Ut[n][a] * Vt[n][b] * s[n];
             suma += Ut[n][a] * Ut[n][a] * s[n];
             sumb += Vt[n][b] * Vt[n][b] * s[n];
@@ -193,7 +195,7 @@ public class SVD {
         double sim = 0;
         double suma = 0;
         double sumb = 0;
-        for (int n = 0; n < dim; n++) {
+        for (int n: range(dim)) {
             sim += Vt[n][a] * pseudo[n] * s[n] * s[n];
             suma += Vt[n][a] * Vt[n][a] * s[n] * s[n];
             sumb += pseudo[n] * pseudo[n] * s[n] * s[n];
@@ -206,7 +208,7 @@ public class SVD {
         double sim = 0;
         double suma = 0;
         double sumb = 0;
-        for (int n = 0; n < dim; n++) {
+        for (int n: range(dim)) {
             sim += Vt[n][a] * Vt[n][b] * s[n] * s[n];
             suma += Vt[n][a] * Vt[n][a] * s[n] * s[n];
             sumb += Vt[n][b] * Vt[n][b] * s[n] * s[n];

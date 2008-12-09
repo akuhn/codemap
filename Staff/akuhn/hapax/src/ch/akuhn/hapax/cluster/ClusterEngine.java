@@ -1,5 +1,8 @@
 package ch.akuhn.hapax.cluster;
 
+import static ch.akuhn.util.Interval.range;
+import static java.lang.Math.min;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +13,8 @@ public class ClusterEngine<T> implements Runnable {
     private List<Dendrogram<T>> clusters;
     int pending, found_a, found_b;
     private ClusterEngineRow[] rows;
-    private double threshold;
     private boolean similarity;
+    private double threshold;
 
     private int[] todos;
 
@@ -23,17 +26,10 @@ public class ClusterEngine<T> implements Runnable {
         pending = todos.length;
     }
 
-    public void run() {
-        while (pending > 1) {
-            findMinimum();
-            mergeClusters();
-        }
-    }
-
     public Dendrogram<T> dendrogram() {
         this.run();
         Dendrogram<T> root = null;
-        for (int todo : todos) {
+        for (int todo: todos) {
             if (todo == DONE) continue;
             assert root == null;
             root = clusters.get(todo);
@@ -43,7 +39,7 @@ public class ClusterEngine<T> implements Runnable {
 
     private void findMinimum() {
         double min = Distance.INFINITY;
-        for (int todo : todos) {
+        for (int todo: todos) {
             if (todo == DONE) continue;
             ClusterEngineRow row = rows[todo];
             if (row.min() < min) {
@@ -61,16 +57,16 @@ public class ClusterEngine<T> implements Runnable {
 
     private void init_clusters(List<T> elements) {
         this.clusters = new ArrayList<Dendrogram<T>>();
-        for (T each : elements)
+        for (T each: elements)
             this.clusters.add(new Dendrogram.Leaf<T>(each));
     }
 
     private void init_rows(List<T> elements, Distance<T> dist) {
         this.rows = new ClusterEngineRow[elements.size()];
-        for (int row = 0; row < rows.length; row++) {
+        for (int row: range(rows.length)) {
             T element = elements.get(row);
             double[] values = new double[row];
-            for (int col = 0; col < values.length; col++) {
+            for (int col: range(values.length)) {
                 values[col] = dist.dist(element, elements.get(col));
             }
             rows[row] = new ClusterEngineRow(values);
@@ -78,18 +74,16 @@ public class ClusterEngine<T> implements Runnable {
     }
 
     private void init_todos() {
-        todos = new int[rows.length];
-        for (int n = 0; n < rows.length; n++)
-            todos[n] = n;
+        todos = range(rows.length).asArray();
     }
 
     private double linkage(int todo) {
-        return Math.min(get(found_a, todo), get(found_b, todo));
+        return min(get(found_a, todo), get(found_b, todo));
     }
 
     private void mergeClusters() {
         todos[found_b] = DONE;
-        for (int todo : todos) {
+        for (int todo: todos) {
             if (todo == DONE) continue;
             put(found_a, todo, linkage(todo));
             unset(found_b, todo);
@@ -103,6 +97,13 @@ public class ClusterEngine<T> implements Runnable {
     private double put(int row, int column, double min) {
         if (row == column) return 0;
         return row > column ? rows[row].set(column, min) : rows[column].set(row, min);
+    }
+
+    public void run() {
+        while (pending > 1) {
+            findMinimum();
+            mergeClusters();
+        }
     }
 
     private void unset(int row, int column) {
@@ -131,9 +132,17 @@ class ClusterEngineRow {
         return found;
     }
 
+    public double get(int index) {
+        return values[index];
+    }
+
     public double min() {
         if (found == NULL) update();
         return min;
+    }
+
+    public double set(int index, double value) {
+        return values[index] = value;
     }
 
     public void unset(int index) {
@@ -143,20 +152,12 @@ class ClusterEngineRow {
 
     private void update() {
         min = Distance.INFINITY;
-        for (int n = 0; n < values.length; n++) {
+        for (int n: range(values.length)) {
             if (values[n] < min) {
                 min = values[n];
                 found = n;
             }
         }
-    }
-
-    public double get(int index) {
-        return values[index];
-    }
-
-    public double set(int index, double value) {
-        return values[index] = value;
     }
 
 }

@@ -2,8 +2,7 @@ package ch.akuhn.hapax.cluster;
 
 public abstract class Dendrogram<E> {
 
-    public static class Leaf<E>
-            extends Dendrogram<E> {
+    public static class Leaf<E> extends Dendrogram<E> {
 
         public final E element;
 
@@ -18,8 +17,7 @@ public abstract class Dendrogram<E> {
 
     }
 
-    public static class Node<E>
-            extends Dendrogram<E> {
+    public static class Node<E> extends Dendrogram<E> {
 
         public final Dendrogram<E> left, right;
         public final double threshold;

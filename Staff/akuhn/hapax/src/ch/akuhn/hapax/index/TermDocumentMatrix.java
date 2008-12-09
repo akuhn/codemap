@@ -1,5 +1,6 @@
 package ch.akuhn.hapax.index;
 
+import static ch.akuhn.util.Each.withIndex;
 import static ch.akuhn.util.Pair.zip;
 import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.corpus.Document;
@@ -12,12 +13,11 @@ import ch.akuhn.hapax.linalg.SVD;
 import ch.akuhn.hapax.linalg.SparseMatrix;
 import ch.akuhn.hapax.linalg.Vector;
 import ch.akuhn.hapax.linalg.Vector.Entry;
+import ch.akuhn.util.Each;
 import ch.akuhn.util.Pair;
 import ch.akuhn.util.Bag.Count;
-import ch.akuhn.util.query.Each;
 
-public class TermDocumentMatrix
-        extends SparseMatrix {
+public class TermDocumentMatrix extends SparseMatrix {
 
     private Index<Document> documents; // columns
     private double[] globalWeighting;
@@ -36,10 +36,10 @@ public class TermDocumentMatrix
     }
 
     public void addCorpus(Corpus corpus) {
-        for (Document document : corpus.documents()) {
+        for (Document document: corpus.documents()) {
             int column = addDocument(document);
             Terms terms = corpus.get(document);
-            for (Count<CharSequence> each : terms.counts()) {
+            for (Count<CharSequence> each: terms.counts()) {
                 int row = addTerm(each.element);
                 add(row, column, each.count);
             }
@@ -77,7 +77,7 @@ public class TermDocumentMatrix
 
     public TermDocumentMatrix rejectLegomena(int threshold) {
         TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<CharSequence>(), documents);
-        for (Pair<CharSequence, Vector> each : zip(terms, rows())) {
+        for (Pair<CharSequence,Vector> each: zip(terms, rows())) {
             if (each.snd.used() <= threshold) continue;
             tdm.addTerm(each.fst, each.snd);
         }
@@ -90,7 +90,7 @@ public class TermDocumentMatrix
 
     public TermDocumentMatrix rejectStopwords(Stopwords stopwords) {
         TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<CharSequence>(), documents);
-        for (Pair<CharSequence, Vector> each : zip(terms, rows())) {
+        for (Pair<CharSequence,Vector> each: zip(terms, rows())) {
             if (stopwords.contains(each.fst)) continue;
             tdm.addTerm(each.fst, each.snd);
         }
@@ -103,7 +103,7 @@ public class TermDocumentMatrix
 
     public TermDocumentMatrix stem(Stemmer stemmer) {
         TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<CharSequence>(), documents);
-        for (Pair<CharSequence, Vector> each : zip(terms, rows())) {
+        for (Pair<CharSequence,Vector> each: zip(terms, rows())) {
             tdm.addTerm(stemmer.stem(each.fst), each.snd);
         }
         return tdm;
@@ -111,7 +111,7 @@ public class TermDocumentMatrix
 
     public Terms terms() {
         Terms bag = new Terms();
-        for (Pair<CharSequence, Vector> each : zip(terms, rows())) {
+        for (Pair<CharSequence,Vector> each: zip(terms, rows())) {
             bag.add(each.fst, (int) each.snd.sum());
         }
         return bag;
@@ -123,7 +123,7 @@ public class TermDocumentMatrix
 
     public TermDocumentMatrix toLowerCase() {
         TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<CharSequence>(), documents);
-        for (Pair<CharSequence, Vector> each : zip(terms, rows())) {
+        for (Pair<CharSequence,Vector> each: zip(terms, rows())) {
             tdm.addTerm(each.fst.toString().toLowerCase(), each.snd);
         }
         return tdm;
@@ -137,9 +137,9 @@ public class TermDocumentMatrix
     public TermDocumentMatrix weight(LocalWeighting localWeighting, GlobalWeighting globalWeighting) {
         TermDocumentMatrix tdm = new TermDocumentMatrix(this.terms, this.documents);
         tdm.globalWeighting = new double[termSize()];
-        for (Each<Vector> row : Each.withIndex(rows())) {
+        for (Each<Vector> row: withIndex(rows())) {
             double global = tdm.globalWeighting[row.index] = globalWeighting.weight(row.element);
-            for (Entry column : row.element.entries()) {
+            for (Entry column: row.element.entries()) {
                 tdm.put(row.index, column.index, localWeighting.weight(column.value) * global);
             }
         }

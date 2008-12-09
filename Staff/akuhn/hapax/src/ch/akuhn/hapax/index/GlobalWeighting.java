@@ -16,7 +16,7 @@ public enum GlobalWeighting {
         public double weight(Vector term) {
             double gf = globalFrequency(term);
             double prop = 0;
-            for (Entry each : term.entries()) {
+            for (Entry each: term.entries()) {
                 if (each.value == 0) continue;
                 prop += (each.value / gf) * Math.log(each.value * gf);
             }

@@ -9,15 +9,15 @@ import java.util.Map;
 public class Index<E> implements Cloneable, Iterable<E> {
 
     private List<E> list;
-    private Map<E, Integer> map;
+    private Map<E,Integer> map;
 
     public Index() {
-        map = new HashMap<E, Integer>();
+        map = new HashMap<E,Integer>();
         list = new ArrayList<E>();
     }
 
     public Index(Index<E> index) {
-        map = new HashMap<E, Integer>(index.map);
+        map = new HashMap<E,Integer>(index.map);
         list = new ArrayList<E>(index.list);
     }
 

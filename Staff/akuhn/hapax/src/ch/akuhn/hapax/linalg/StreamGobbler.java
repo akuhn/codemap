@@ -3,8 +3,7 @@ package ch.akuhn.hapax.linalg;
 import java.io.InputStream;
 import java.util.Scanner;
 
-public class StreamGobbler
-        extends Thread {
+public class StreamGobbler extends Thread {
 
     protected Scanner $;
 

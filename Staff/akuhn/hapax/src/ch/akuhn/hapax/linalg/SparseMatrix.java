@@ -1,52 +1,38 @@
 package ch.akuhn.hapax.linalg;
 
-import java.io.BufferedWriter;
+import static ch.akuhn.util.Each.withIndex;
+import static ch.akuhn.util.Get.shuffle;
+import static ch.akuhn.util.Get.take;
+import static ch.akuhn.util.Interval.range;
+import static ch.akuhn.util.Times.repeat;
+
 import java.io.DataOutput;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import ch.akuhn.hapax.linalg.Vector.Entry;
+import ch.akuhn.util.Each;
 import ch.akuhn.util.Files;
 import ch.akuhn.util.PrintOn;
 import ch.akuhn.util.Throw;
-import ch.akuhn.util.query.Each;
-import ch.akuhn.util.query.Times;
+import ch.akuhn.util.Times;
 
-public class SparseMatrix
-        extends Matrix {
-
-    private static int[] randomNOutOfM(Random rand, int num, int total) {
-        int[] array = new int[total];
-        for (int n = 0; n < total; n++)
-            array[n] = n;
-        for (int n = array.length; n > 1;) {
-            int k = rand.nextInt(n--);
-            int temp = array[n];
-            array[n] = array[k];
-            array[k] = temp;
-        }
-        int[] pick = new int[num];
-        System.arraycopy(array, 0, pick, 0, num);
-        return pick;
-    }
+public class SparseMatrix extends Matrix {
 
     public static void randomStoreSparseOn(int rowSize, int columnSize, double density, Appendable app) {
         int num = (int) (rowSize * density);
         Random rand = new Random();
         PrintOn out = new PrintOn(app);
         out.print(rowSize).space().print(columnSize).space().print(num * columnSize).cr();
-        for (int column = 0; column < columnSize; column++) {
-            int[] pick = randomNOutOfM(rand, num, rowSize);
+        for (@SuppressWarnings("unused")
+        int times: repeat(columnSize)) {
             out.print(num).cr();
-            for (int i = 0; i < pick.length; i++) {
-                out.print(pick[i]).space().print(rand.nextInt(20)).cr();
+            for (int element: take(num, shuffle(range(rowSize)))) {
+                out.print(element).space().print(rand.nextInt(20)).cr();
             }
         }
         Files.close(app);
@@ -59,14 +45,15 @@ public class SparseMatrix
     public SparseMatrix(double[][] values) {
         this.columns = values[0].length;
         this.rows = new ArrayList<Vector>(values.length);
-        for (double[] each : values)
+        for (double[] each: values)
             addRow(each);
     }
 
     public SparseMatrix(int rows, int columns) {
         this.columns = columns;
         this.rows = new ArrayList<Vector>(rows);
-        for (int n = 0; n < rows; n++)
+        for (@SuppressWarnings("unused")
+        int times: Times.repeat(rows))
             addRow();
     }
 
@@ -77,7 +64,7 @@ public class SparseMatrix
 
     protected int addColumn() {
         columns++;
-        for (Vector each : rows)
+        for (Vector each: rows)
             ((SparseVector) each).resizeTo(columns);
         return columns - 1;
     }
@@ -94,14 +81,14 @@ public class SparseMatrix
 
     protected void addToRow(int row, Vector values) {
         Vector v = rows.get(row);
-        for (Entry each : values.entries())
+        for (Entry each: values.entries())
             v.add(each.index, each.value);
     }
 
     public double[][] asDenseDoubleDouble() {
         double[][] dense = new double[rowSize()][columnSize()];
-        for (Each<Vector> row : Each.withIndex(rows)) {
-            for (Entry column : row.element.entries()) {
+        for (Each<Vector> row: withIndex(rows)) {
+            for (Entry column: row.element.entries()) {
                 dense[row.index][column.index] = column.value;
             }
         }
@@ -142,9 +129,10 @@ public class SparseMatrix
     public void randomFill(double density) {
         int rowSize = rowSize();
         int columnSize = columnSize();
-        long num = (long) (rowSize * columnSize * density);
+        int num = (int) (rowSize * columnSize * density);
         Random rand = new Random();
-        for (Void each : Times.repeat(num)) {
+        for (@SuppressWarnings("unused")
+        int times: repeat(num)) {
             put(rand.nextInt(rowSize), rand.nextInt(columnSize), rand.nextFloat() * 20);
         }
     }
@@ -167,19 +155,11 @@ public class SparseMatrix
         out.writeInt(this.rowSize());
         out.writeInt(this.columnSize());
         out.writeInt(this.used());
-        for (int col = 0; col < columnSize(); col++) {
-            int used = 0;
-            for (int row = 0; row < rowSize(); row++) {
-                double value = get(row, col);
-                if (value == 0) continue;
-                used++;
-            }
-            out.writeInt(used);
-            for (int row = 0; row < rowSize(); row++) {
-                double value = get(row, col);
-                if (value == 0) continue;
-                out.writeInt(row);
-                out.writeFloat((float) value);
+        for (Vector row: rows) {
+            out.writeInt(row.used());
+            for (Entry each: row.entries()) {
+                out.writeInt(each.index);
+                out.writeFloat((float) each.value);
             }
         }
         Files.close(out);
@@ -202,9 +182,9 @@ public class SparseMatrix
         out.print(this.columnSize()).space();
         out.print(this.rowSize()).space();
         out.print(this.used()).cr();
-        for (Vector row : rows) {
+        for (Vector row: rows) {
             out.print(row.used()).cr();
-            for (Entry each : row.entries()) {
+            for (Entry each: row.entries()) {
                 out.print(each.index).space().print(each.value).cr();
             }
         }
@@ -212,17 +192,13 @@ public class SparseMatrix
     }
 
     public void storeSparseOn(String fname) {
-        try {
-            storeSparseOn(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(fname)))));
-        } catch (FileNotFoundException ex) {
-            throw Throw.exception(ex);
-        }
+        storeSparseOn(Files.openWrite(fname));
     }
 
     @Override
     public int used() {
         int used = 0;
-        for (Vector each : rows)
+        for (Vector each: rows)
             used += each.used();
         return used;
     }

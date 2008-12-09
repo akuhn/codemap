@@ -1,7 +1,6 @@
 package ch.akuhn.hapax.linalg;
 
-public class DenseMatrix
-        extends Matrix {
+public class DenseMatrix extends Matrix {
 
     private double[][] values;
 

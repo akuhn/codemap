@@ -1,9 +1,10 @@
 package ch.akuhn.hapax.linalg;
 
+import static ch.akuhn.util.Interval.range;
+
 import java.util.Iterator;
 
-public class DenseVector
-        extends Vector {
+public class DenseVector extends Vector {
 
     private class Iter implements Iterable<Entry>, Iterator<Entry> {
 
@@ -46,7 +47,7 @@ public class DenseVector
     public double cosine(DenseVector other) {
         assert other.size() == this.size();
         double sum = 0;
-        for (int n = 0; n < values.length; n++)
+        for (int n: range(values.length))
             sum += values[n] * other.values[n];
         return sum / (this.unit() * other.unit());
     }
@@ -73,7 +74,7 @@ public class DenseVector
 
     public Vector times(double factor) {
         double[] times = new double[values.length];
-        for (int n = 0; n < values.length; n++)
+        for (int n: range(values.length))
             times[n] = values[n] * factor;
         return new DenseVector(times);
     }
@@ -82,8 +83,8 @@ public class DenseVector
     public double unit() {
         if (unit != 0) return unit;
         double qsum = 0;
-        for (int n = 0; n < values.length; n++)
-            qsum += values[n] * values[n];
+        for (double value: values)
+            qsum += value * value;
         if (qsum == 0) qsum = 1;
         return unit = Math.sqrt(qsum);
     }

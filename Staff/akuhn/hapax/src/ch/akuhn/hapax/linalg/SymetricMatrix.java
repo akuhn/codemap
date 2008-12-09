@@ -1,15 +1,15 @@
 package ch.akuhn.hapax.linalg;
 
-public class SymetricMatrix
-        extends Matrix {
+import static ch.akuhn.util.Interval.range;
+
+public class SymetricMatrix extends Matrix {
 
     protected double[][] values;
 
     public SymetricMatrix(int size) {
         values = new double[size][];
-        for (int n = 0; n < values.length;) {
-            values[n] = new double[++n];
-        }
+        for (int n: range(values.length))
+            values[n] = new double[n + 1];
     }
 
     @Override

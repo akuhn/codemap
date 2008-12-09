@@ -26,8 +26,7 @@ class Rank<T> implements Comparable<Rank<T>> {
 }
 
 @SuppressWarnings("serial")
-public class Ranking<T>
-        extends ArrayList<Rank<T>> {
+public class Ranking<T> extends ArrayList<Rank<T>> {
 
     public void add(T element, double rank) {
         this.add(new Rank<T>(element, rank));
