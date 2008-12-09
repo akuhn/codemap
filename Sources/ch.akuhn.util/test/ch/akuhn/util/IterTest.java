@@ -18,9 +18,6 @@
 
 package ch.akuhn.util;
 
-import static ch.akuhn.util.Extensions.newList;
-import static ch.akuhn.util.Extensions.shuffle;
-import static ch.akuhn.util.Extensions.sort;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -31,6 +28,8 @@ import java.util.Iterator;
 import org.junit.Before;
 import org.junit.Test;
 
+
+
 public class IterTest {
 
     private Collection<String> empty;
@@ -39,13 +38,13 @@ public class IterTest {
 
     @Test
     public void cycleEmpty() {
-        Iterator<String> cycle = Extensions.cycle(empty).iterator();
+        Iterator<String> cycle = Cycle.forever(empty).iterator();
         assertTrue(!cycle.hasNext());
     }
 
     @Test
     public void cycleMany() {
-        Iterator<String> cycle = Extensions.cycle(many).iterator();
+        Iterator<String> cycle = Cycle.forever(many).iterator();
         assertTrue(cycle.hasNext());
         assertEquals("foo", cycle.next());
         assertTrue(cycle.hasNext());
@@ -58,7 +57,7 @@ public class IterTest {
 
     @Test
     public void cycleSingle() {
-        Iterator<String> cycle = Extensions.cycle(single).iterator();
+        Iterator<String> cycle = Cycle.forever(single).iterator();
         assertTrue(cycle.hasNext());
         assertEquals("boe", cycle.next());
         assertTrue(cycle.hasNext());
@@ -69,7 +68,7 @@ public class IterTest {
 
     @Test
     public void cycleSingleRemove() {
-        Iterator<String> cycle = Extensions.cycle(single).iterator();
+        Iterator<String> cycle = Cycle.forever(single).iterator();
         assertTrue(cycle.hasNext());
         assertEquals("boe", cycle.next());
         assertTrue(cycle.hasNext());
@@ -91,10 +90,10 @@ public class IterTest {
 
     @Test
     public void sortIterable() {
-        java.util.List<Integer> a = newList(1, 2, 3, 4, 5, 6, 7, 8, 9);
-        Iterable<Integer> b = shuffle(a);
-        java.util.List<Integer> c = newList(b);
-        java.util.List<Integer> d = newList(sort(c));
+        java.util.List<Integer> a = As.list(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        Iterable<Integer> b = Get.shuffle(a);
+        java.util.List<Integer> c = As.list(b);
+        java.util.List<Integer> d = As.list(Get.sorted(c));
         assertEquals(a, d);
     }
 

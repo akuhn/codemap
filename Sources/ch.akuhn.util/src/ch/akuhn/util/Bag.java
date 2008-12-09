@@ -18,8 +18,6 @@
 
 package ch.akuhn.util;
 
-import static ch.akuhn.util.Extensions.sorted;
-
 import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.Collections;
@@ -328,7 +326,7 @@ public class Bag<T> extends AbstractCollection<T> {
     }
 
     public Iterable<Count<T>> sortedCounts() {
-        return sorted(counts());
+        return Get.sorted(counts());
     }
 
     /**

@@ -1,6 +1,5 @@
 package ch.akuhn.util;
 
-import static ch.akuhn.util.Extensions.puts;
 
 public class GeneratorExamples {
 
@@ -41,10 +40,10 @@ public class GeneratorExamples {
         Character[] array = { 'a', 'b', 'c', 'd', 'e', 'f' };
         int tally = 0;
         for (Character[] each : permute(array)) {
-            puts(each);
+            Out.puts(each);
             tally++;
         }
-        puts(tally);
+        Out.puts(tally);
 
     }
 

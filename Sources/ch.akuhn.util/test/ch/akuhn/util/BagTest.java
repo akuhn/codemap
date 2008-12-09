@@ -18,8 +18,6 @@
 
 package ch.akuhn.util;
 
-import static ch.akuhn.util.Extensions.newList;
-import static ch.akuhn.util.Extensions.sorted;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
@@ -31,13 +29,15 @@ import jexample.JExample;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+
+
 @RunWith(JExample.class)
 @SuppressWarnings("unchecked")
 public class BagTest {
 
     private static String sortedPrint(Iterator it) {
         Iterable iter = IterableIteratorFactory.create(it);
-        return newList(sorted(iter)).toString();
+        return As.list(Get.sorted(iter)).toString();
     }
 
     @Test

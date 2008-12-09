@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import ch.akuhn.util.Extensions;
+import ch.akuhn.util.Is;
 
 public class Blocks {
 
@@ -127,7 +127,7 @@ public class Blocks {
      */
     public static <A> boolean contains(A[] array, A a) {
         for (A each : array) {
-            if (Extensions.eq(each, a)) return true;
+            if (Is.equal(each, a)) return true;
         }
         return false;
     }
