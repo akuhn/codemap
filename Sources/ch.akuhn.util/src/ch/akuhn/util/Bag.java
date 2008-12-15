@@ -43,7 +43,14 @@ public class Bag<T> extends AbstractCollection<T> {
         }
 
         public int compareTo(Count<E> o) {
-            return Integer.signum(o.count - count);
+            int diff = o.count - count;
+            return diff == 0 ? compareElements(o) : diff;
+        }
+        
+        @SuppressWarnings("unchecked")
+        private int compareElements(Count<E> o) {
+            if (!(element instanceof Comparable)) return 0;
+            return ((Comparable<E>) element).compareTo(o.element);
         }
 
         public String toString() {
@@ -72,17 +79,16 @@ public class Bag<T> extends AbstractCollection<T> {
 
     }
 
-    private class Iter extends Provider<T> {
+    private class Iter extends Providable<T> {
 
         private int count;
         private T curr;
         private Iterator<T> iter;
 
-        public Iter() {
+        public void initialize() {
             iter = values.keySet().iterator();
         }
 
-        @Override
         public T provide() {
             while (count <= 0) {
                 if (!iter.hasNext()) return done();
@@ -173,10 +179,12 @@ public class Bag<T> extends AbstractCollection<T> {
         return values.containsKey(o);
     }
 
-    public IterableIterator<Count<T>> counts() {
-        final Iterator<T> iter = values.keySet().iterator();
-        return new Provider<Count<T>>() {
-            @Override
+    public Iterable<Count<T>> counts() {
+        return new Providable<Count<T>>() {
+            private Iterator<T> iter;
+            public void initialize() {
+                iter = values.keySet().iterator();
+            }
             public Count<T> provide() {
                 if (!iter.hasNext()) return this.done();
                 T next = iter.next();
@@ -185,7 +193,7 @@ public class Bag<T> extends AbstractCollection<T> {
         };
     }
 
-    public IterableIterator<T> elements() {
+    public Iterable<T> elements() {
         return IterableIteratorFactory.create(values.keySet().iterator());
     }
 
@@ -228,7 +236,7 @@ public class Bag<T> extends AbstractCollection<T> {
      */
     @Override
     public Iterator<T> iterator() {
-        return new Iter();
+        return new Iter().iterator();
     }
 
     /**

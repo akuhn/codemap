@@ -3,15 +3,15 @@ package ch.akuhn.util;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public abstract class Provider<E> implements IterableIterator<E> {
+public abstract class Providable<E> implements Iterable<E>, Iterator<E>, Cloneable {
 
     private enum State {
-        DONE, EMPTY, FAIL, READY
+        DONE, EMPTY, FAIL, READY, UNINITIALIZED 
     }
 
     private E next = null;
 
-    private State state = State.EMPTY;
+    private State state = State.UNINITIALIZED;
 
     private final boolean computeNext() {
         state = State.FAIL;
@@ -27,13 +27,11 @@ public abstract class Provider<E> implements IterableIterator<E> {
         return null;
     }
 
-    public final boolean hasMoreElements() {
-        return this.hasNext();
-    }
-
     public final boolean hasNext() {
-        if (state == State.FAIL) throw new IllegalStateException();
         switch (state) {
+        case FAIL:
+        case UNINITIALIZED:
+            throw new IllegalStateException(state.toString());
         case DONE:
             return false;
         case READY:
@@ -43,22 +41,34 @@ public abstract class Provider<E> implements IterableIterator<E> {
         }
     }
 
-    public final Iterator<E> iterator() {
-        return this;
-    }
+    public abstract void initialize();
 
+    public final Iterator<E> iterator() {
+        Providable<E> clone = maybeClone();
+        clone.state = State.FAIL;
+        clone.initialize();
+        clone.state = State.EMPTY;
+        return clone;
+    }
+    
+    @SuppressWarnings("unchecked")
+    private final Providable<E> maybeClone() {
+        if (state == State.UNINITIALIZED) return this;
+        try {
+            return (Providable<E>) super.clone();
+        } catch (CloneNotSupportedException ex) {
+            throw Throw.exception(ex);
+        }
+    }
+    
     public final E next() {
         if (!hasNext()) throw new NoSuchElementException();
         state = State.EMPTY;
         return next;
     }
 
-    public final E nextElement() {
-        return this.next;
-    }
-
     public abstract E provide();
-
+    
     public final void remove() {
         throw new UnsupportedOperationException();
     }

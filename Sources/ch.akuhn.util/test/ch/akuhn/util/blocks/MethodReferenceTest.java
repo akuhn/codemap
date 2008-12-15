@@ -1,4 +1,4 @@
-package ch.akuhn.util;
+package ch.akuhn.util.blocks;
 
 import static org.junit.Assert.assertEquals;
 

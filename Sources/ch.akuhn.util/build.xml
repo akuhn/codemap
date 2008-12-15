@@ -3,11 +3,10 @@
 
     <target name="package">
       <jar id="files" zipfile="${file.jar}">
-        <fileset dir="bin">
-    	  <include name="ch/**/*.java"/>
-    	  <exclude name="**/*Test*"/>    	    	
-    	</fileset>
-    	<fileset dir="src" includes="ch/**/*.java"/>
+        <fileset dir="bin"><patternset refid="the.patternset"/></fileset>
+        <fileset dir="src"><patternset refid="the.patternset"/></fileset>
+        <fileset dir="../Query/bin"><patternset refid="the.patternset"/></fileset>
+        <fileset dir="../Query/bin"><patternset refid="the.patternset"/></fileset>
       </jar>
       <zipfileset id="files" src="${file.jar}"/>
       <pathconvert property="listing" refid="files" pathsep="${line.separator}">
@@ -17,7 +16,7 @@
     </target>
 	
     <!--from http://www.innovationontherun.com/creating-a-build-number-with-ant-and-subversion-->
-    <exec outputproperty="svnversion" executable="svnversion" dir="src">
+    <exec outputproperty="svnversion" executable="svnversion" dir=".">
       <arg line="-n -c" />
       <redirector>
         <outputfilterchain>
@@ -29,6 +28,15 @@
     </exec>	
 
     <property name="file.jar" value="akuhn-util-r${svnversion}.jar"/>
+    <property name="include.sources" value="off"/>
+    <property name="DONT-include.tests" value="off"/>
+
+    <patternset id="the.patternset">
+        <include name="COPYING*"/>
+        <include name="ch/**/*.java" if="include.sources"/>
+        <include name="ch/**/*.class"/>
+        <exclude name="**/*Test*" unless="include.tests"/>                   
+    </patternset>
 	
 	
 </project>

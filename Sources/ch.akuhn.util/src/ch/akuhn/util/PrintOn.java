@@ -1,8 +1,9 @@
 package ch.akuhn.util;
 
+import java.io.Closeable;
 import java.io.IOException;
 
-public class PrintOn implements Appendable {
+public class PrintOn implements Appendable, Closeable {
 
     private Appendable buf;
 
@@ -66,8 +67,18 @@ public class PrintOn implements Appendable {
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return buf.toString();
+    }
+
+    public final void close() {
+        if (buf instanceof Closeable) {
+            try {
+                ((Closeable) buf).close();
+            } catch (IOException ex) {
+                throw Throw.exception(ex);
+            }
+        }
     }
 
 }

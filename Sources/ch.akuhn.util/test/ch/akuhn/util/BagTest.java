@@ -35,8 +35,7 @@ import org.junit.runner.RunWith;
 @SuppressWarnings("unchecked")
 public class BagTest {
 
-    private static String sortedPrint(Iterator it) {
-        Iterable iter = IterableIteratorFactory.create(it);
+    private static String sortedPrint(Iterable iter) {
         return As.list(Get.sorted(iter)).toString();
     }
 
@@ -156,14 +155,14 @@ public class BagTest {
     @Depends("#empty")
     public void iterateEmpty(Bag bag) {
         assertEquals(false, bag.iterator().hasNext());
-        assertEquals(false, bag.elements().hasNext());
-        assertEquals(false, bag.counts().hasNext());
+        assertEquals(false, bag.elements().iterator().hasNext());
+        assertEquals(false, bag.counts().iterator().hasNext());
     }
 
     @Test
     @Depends("#withAAA")
     public void iterateWithAAA(Bag bag) {
-        assertEquals("[A, A, A]", sortedPrint(bag.iterator()));
+        assertEquals("[A, A, A]", sortedPrint(bag));
         assertEquals("[A]", sortedPrint(bag.elements()));
         assertEquals("[3 x A]", sortedPrint(bag.counts()));
     }
@@ -171,7 +170,7 @@ public class BagTest {
     @Test
     @Depends("#withABC")
     public void iterateWithABC(Bag bag) {
-        assertEquals("[A, B, C]", sortedPrint(bag.iterator()));
+        assertEquals("[A, B, C]", sortedPrint(bag));
         assertEquals("[A, B, C]", sortedPrint(bag.elements()));
         assertEquals("[1 x A, 1 x B, 1 x C]", sortedPrint(bag.counts()));
     }
@@ -179,7 +178,7 @@ public class BagTest {
     @Test
     @Depends("#withMany")
     public void iterateWithMany(Bag bag) {
-        assertEquals("[A, A, A, A, B, C]", sortedPrint(bag.iterator()));
+        assertEquals("[A, A, A, A, B, C]", sortedPrint(bag));
         assertEquals("[A, B, C]", sortedPrint(bag.elements()));
         assertEquals("[4 x A, 1 x B, 1 x C]", sortedPrint(bag.counts()));
     }

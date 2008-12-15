@@ -133,15 +133,16 @@ public class Get {
     }
 
     public static <T> Iterable<T> shuffle(final Iterable<T> iterable) {
-        // Fisher-Yates algorithm
-        return new Provider<T>() {
-            
-            List<T> list = As.list(iterable);
-            final int len = list.size();
-            int n = 0;
-            Random random = new Random();
-    
-            @Override
+        return new Providable<T>() {
+            private Random random;
+            private List<T> list;
+            private int len, n;
+            public void initialize() {
+                random = new Random();
+                list = As.list(iterable);
+                len = list.size();
+                n = 0;
+            }
             public T provide() {
                 if (n >= len) return done();
                 int s = random.nextInt(len - n) + n;
@@ -162,6 +163,20 @@ public class Get {
             array[k] = temp;
         }
         return array;
+    }
+
+    public static <T> Iterable<T> take(final int num, final Iterable<T> iter) {
+        return new Providable<T>() {
+            private int count;
+            private Iterator<T> it;
+            public void initialize() {
+                count = num;
+                it = iter.iterator();
+            }
+            public T provide() {
+                return (count-- > 0 && it.hasNext()) ? it.next() : this.done();
+            }
+        };
     }
 
 }

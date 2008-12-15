@@ -40,7 +40,7 @@ public abstract class CycleDetector<E> {
 
         private final Collection<Node> children() {
             Collection<E> es = getChildren(payload);
-            Collection<Node> ns = new ArrayList(es.size());
+            Collection<Node> ns = new ArrayList<Node>(es.size());
             for (E e : es) {
                 Node n = map.get(e);
                 assert n != null;
@@ -70,9 +70,9 @@ public abstract class CycleDetector<E> {
         }
 
     }
-    private Map<E,Node> map = new HashMap();
+    private Map<E,Node> map = new HashMap<E,Node>();
 
-    private Stack<E> path = new Stack();
+    private Stack<E> path = new Stack<E>();
 
     public CycleDetector() {
     }

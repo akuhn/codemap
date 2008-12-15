@@ -9,6 +9,7 @@ import java.util.Set;
 
 public class As {
 
+    @SuppressWarnings("unchecked")
     public static <T> T[] array(Class<T> tClass, T t, T... ts) {
         T[] $ = (T[]) Array.newInstance(tClass, ts.length + 1);
         System.arraycopy(ts, 0, $, 1, ts.length);
@@ -16,10 +17,12 @@ public class As {
         return $;
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T[] array(T t, T... ts) {
         return (T[]) array(Extensions.leastUpperBound(t.getClass(), ts), t, ts);
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T[] array(T[] arr, T t) {
         T[] $ = (T[]) Array.newInstance(arr.getClass().getComponentType(), arr.length + 1);
         System.arraycopy(arr, 0, $, 0, arr.length);
@@ -27,6 +30,7 @@ public class As {
         return $;
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T[] array(T[] aaa, T[] bbb) {
         T[] $ = (T[]) Array.newInstance(aaa.getClass().getComponentType(), aaa.length + bbb.length);
         System.arraycopy(aaa, 0, $, 0, aaa.length);

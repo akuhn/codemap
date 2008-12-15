@@ -150,9 +150,11 @@ public final class Strings {
     }
 
     public static final Iterable<String> letters(final CharSequence string) {
-        return new Provider<String>() {
-            private int index = 0;
-
+        return new Providable<String>() {
+            private int index;
+            public void initialize() {
+                index = 0;
+            }
             public String provide() {
                 for (; index < string.length(); index++) {
                     if (isLetter(string.charAt(index))) break;
@@ -168,9 +170,11 @@ public final class Strings {
     }
 
     public static final Iterable<String> lines(final CharSequence string) {
-        return new Provider<String>() {
-            private int index = 0;
-
+        return new Providable<String>() {
+            private int index;
+            public void initialize() {
+                index = 0;
+            }
             public String provide() {
                 if (index >= string.length()) return done();
                 int mark = index;
@@ -223,9 +227,11 @@ public final class Strings {
     }
 
     public static final Iterable<String> words(final CharSequence string) {
-        return new Provider<String>() {
-            private int index = 0;
-
+        return new Providable<String>() {
+            private int index;
+            public void initialize() {
+                index = 0;
+            }
             public String provide() {
                 for (; index < string.length(); index++) {
                     if (!isWhitespace(string.charAt(index))) break;

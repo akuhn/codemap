@@ -30,7 +30,7 @@ import org.junit.Test;
 
 
 
-public class IterTest {
+public class CycleTest {
 
     private Collection<String> empty;
     private Collection<String> many;

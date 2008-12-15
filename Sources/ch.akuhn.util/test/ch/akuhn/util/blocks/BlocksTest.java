@@ -16,7 +16,7 @@
 //  along with ch.akuhn.util. If not, see <http://www.gnu.org/licenses/>.
 //  
 
-package ch.akuhn.util;
+package ch.akuhn.util.blocks;
 
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
