@@ -4,11 +4,11 @@ public interface Stemmer {
 
     public static final Stemmer NULL = new Stemmer() {
         @Override
-        public CharSequence stem(CharSequence string) {
-            return string;
+        public String stem(CharSequence string) {
+            return string.toString();
         }
     };
 
-    public CharSequence stem(CharSequence string);
+    public String stem(CharSequence string);
 
 }

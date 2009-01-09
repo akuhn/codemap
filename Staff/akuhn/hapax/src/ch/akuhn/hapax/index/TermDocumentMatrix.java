@@ -21,15 +21,15 @@ public class TermDocumentMatrix extends SparseMatrix {
 
     private Index<Document> documents; // columns
     private double[] globalWeighting;
-    private Index<CharSequence> terms; // rows
+    private Index<String> terms; // rows
 
     public TermDocumentMatrix() {
         super(0, 0);
-        this.terms = new Index<CharSequence>();
+        this.terms = new Index<String>();
         this.documents = new Index<Document>();
     }
 
-    public TermDocumentMatrix(Index<CharSequence> terms, Index<Document> documents) {
+    public TermDocumentMatrix(Index<String> terms, Index<Document> documents) {
         super(terms.size(), documents.size());
         this.terms = terms.clone();
         this.documents = documents.clone();
@@ -39,7 +39,7 @@ public class TermDocumentMatrix extends SparseMatrix {
         for (Document document: corpus.documents()) {
             int column = addDocument(document);
             Terms terms = corpus.get(document);
-            for (Count<CharSequence> each: terms.counts()) {
+            for (Count<String> each: terms.counts()) {
                 int row = addTerm(each.element);
                 add(row, column, each.count);
             }
@@ -52,13 +52,13 @@ public class TermDocumentMatrix extends SparseMatrix {
         return index;
     }
 
-    public int addTerm(CharSequence term) {
+    public int addTerm(String term) {
         int index = terms.add(term);
         if (index == rowSize()) addRow();
         return index;
     }
 
-    private void addTerm(CharSequence term, Vector values) {
+    private void addTerm(String term, Vector values) {
         int row = addTerm(term);
         this.addToRow(row, values);
     }
@@ -76,8 +76,8 @@ public class TermDocumentMatrix extends SparseMatrix {
     }
 
     public TermDocumentMatrix rejectLegomena(int threshold) {
-        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<CharSequence>(), documents);
-        for (Pair<CharSequence,Vector> each: zip(terms, rows())) {
+        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<String>(), documents);
+        for (Pair<String,Vector> each: zip(terms, rows())) {
             if (each.snd.used() <= threshold) continue;
             tdm.addTerm(each.fst, each.snd);
         }
@@ -89,8 +89,8 @@ public class TermDocumentMatrix extends SparseMatrix {
     }
 
     public TermDocumentMatrix rejectStopwords(Stopwords stopwords) {
-        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<CharSequence>(), documents);
-        for (Pair<CharSequence,Vector> each: zip(terms, rows())) {
+        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<String>(), documents);
+        for (Pair<String,Vector> each: zip(terms, rows())) {
             if (stopwords.contains(each.fst)) continue;
             tdm.addTerm(each.fst, each.snd);
         }
@@ -102,8 +102,8 @@ public class TermDocumentMatrix extends SparseMatrix {
     }
 
     public TermDocumentMatrix stem(Stemmer stemmer) {
-        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<CharSequence>(), documents);
-        for (Pair<CharSequence,Vector> each: zip(terms, rows())) {
+        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<String>(), documents);
+        for (Pair<String,Vector> each: zip(terms, rows())) {
             tdm.addTerm(stemmer.stem(each.fst), each.snd);
         }
         return tdm;
@@ -111,7 +111,7 @@ public class TermDocumentMatrix extends SparseMatrix {
 
     public Terms terms() {
         Terms bag = new Terms();
-        for (Pair<CharSequence,Vector> each: zip(terms, rows())) {
+        for (Pair<String,Vector> each: zip(terms, rows())) {
             bag.add(each.fst, (int) each.snd.sum());
         }
         return bag;
@@ -122,8 +122,8 @@ public class TermDocumentMatrix extends SparseMatrix {
     }
 
     public TermDocumentMatrix toLowerCase() {
-        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<CharSequence>(), documents);
-        for (Pair<CharSequence,Vector> each: zip(terms, rows())) {
+        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<String>(), documents);
+        for (Pair<String,Vector> each: zip(terms, rows())) {
             tdm.addTerm(each.fst.toString().toLowerCase(), each.snd);
         }
         return tdm;

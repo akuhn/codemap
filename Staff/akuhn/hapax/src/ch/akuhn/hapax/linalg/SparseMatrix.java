@@ -1,42 +1,16 @@
 package ch.akuhn.hapax.linalg;
 
 import static ch.akuhn.util.Each.withIndex;
-import static ch.akuhn.util.Get.shuffle;
-import static ch.akuhn.util.Get.take;
-import static ch.akuhn.util.Interval.range;
-import static ch.akuhn.util.Times.repeat;
 
-import java.io.DataOutput;
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import ch.akuhn.hapax.linalg.Vector.Entry;
 import ch.akuhn.util.Each;
-import ch.akuhn.util.Files;
-import ch.akuhn.util.PrintOn;
-import ch.akuhn.util.Throw;
 import ch.akuhn.util.Times;
 
-public class SparseMatrix extends Matrix {
 
-    public static void randomStoreSparseOn(int rowSize, int columnSize, double density, Appendable app) {
-        int num = (int) (rowSize * density);
-        Random rand = new Random();
-        PrintOn out = new PrintOn(app);
-        out.print(rowSize).space().print(columnSize).space().print(num * columnSize).cr();
-        for (@SuppressWarnings("unused")
-        int times: repeat(columnSize)) {
-            out.print(num).cr();
-            for (int element: take(num, shuffle(range(rowSize)))) {
-                out.print(element).space().print(rand.nextInt(20)).cr();
-            }
-        }
-        Files.close(app);
-    }
+public class SparseMatrix extends Matrix {
 
     private int columns;
 
@@ -126,17 +100,6 @@ public class SparseMatrix extends Matrix {
         return rows.get(row).put(column, value);
     }
 
-    public void randomFill(double density) {
-        int rowSize = rowSize();
-        int columnSize = columnSize();
-        int num = (int) (rowSize * columnSize * density);
-        Random rand = new Random();
-        for (@SuppressWarnings("unused")
-        int times: repeat(num)) {
-            put(rand.nextInt(rowSize), rand.nextInt(columnSize), rand.nextFloat() * 20);
-        }
-    }
-
     @Override
     public Iterable<Vector> rows() {
         return rows;
@@ -149,50 +112,6 @@ public class SparseMatrix extends Matrix {
 
     protected void setRow(int row, Vector values) {
         rows.set(row, values);
-    }
-
-    public void storeBinaryOn(DataOutput out) throws IOException {
-        out.writeInt(this.rowSize());
-        out.writeInt(this.columnSize());
-        out.writeInt(this.used());
-        for (Vector row: rows) {
-            out.writeInt(row.used());
-            for (Entry each: row.entries()) {
-                out.writeInt(each.index);
-                out.writeFloat((float) each.value);
-            }
-        }
-        Files.close(out);
-    }
-
-    public void storeBinaryOn(String fname) {
-        try {
-            DataOutputStream out = new DataOutputStream(new FileOutputStream(fname));
-            storeBinaryOn(out);
-        } catch (Exception ex) {
-            throw Throw.exception(ex);
-        }
-    }
-
-    /** @see http://tedlab.mit.edu/~dr/svdlibc/SVD_F_ST.html */
-    public void storeSparseOn(Appendable appendable) {
-        // this stores the transposed matrix, but as we will transpose it again
-        // when reading it, this can be done without loss of generality.
-        PrintOn out = new PrintOn(appendable);
-        out.print(this.columnSize()).space();
-        out.print(this.rowSize()).space();
-        out.print(this.used()).cr();
-        for (Vector row: rows) {
-            out.print(row.used()).cr();
-            for (Entry each: row.entries()) {
-                out.print(each.index).space().print(each.value).cr();
-            }
-        }
-        Files.close(appendable);
-    }
-
-    public void storeSparseOn(String fname) {
-        storeSparseOn(Files.openWrite(fname));
     }
 
     @Override

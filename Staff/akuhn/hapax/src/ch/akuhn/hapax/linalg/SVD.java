@@ -1,7 +1,9 @@
 package ch.akuhn.hapax.linalg;
 
 import static ch.akuhn.util.Interval.range;
+import static java.lang.String.format;
 
+import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 
@@ -111,48 +113,24 @@ public class SVD {
 
     }
 
-    public static SVD fromMatrix(SparseMatrix matrix, int dimensions) {
+    private String command(int dimensions) {
+        return format("%s -d %d -v 3 %s", fname(), dimensions, "-");
+    }
+    
+    private SVD decompose(Matrix matrix, int dimensions) {
         try {
-            String command = String.format("lib\\svd -d %d -v 3 -", dimensions);
+            String command = command(dimensions);
+            System.err.println(command);
             Process proc = Runtime.getRuntime().exec(command);
-            SVD svd = new SVD();
             new StreamGobbler(proc.getErrorStream()).start();
-            svd.new Gobbler(proc.getInputStream()).start();
+            new Gobbler(proc.getInputStream()).start();
             matrix.storeSparseOn(new OutputStreamWriter(proc.getOutputStream()));
             int exit = proc.waitFor();
-            if (exit != 0) throw new Error();
-            return svd;
+            if (exit != 0) throw new Error(command);
+            return this;
         } catch (Exception ex) {
             throw Throw.exception(ex);
         }
-    }
-
-    public static SVD fromRandomMatrix(int rows, int columns, double density, int dimensions) {
-        try {
-            String command = String.format("lib\\svd -d %d -v 3 -", dimensions);
-            Process proc = Runtime.getRuntime().exec(command);
-            SVD svd = new SVD();
-            new StreamGobbler(proc.getErrorStream()).start();
-            svd.new Gobbler(proc.getInputStream()).start();
-            SparseMatrix.randomStoreSparseOn(rows, columns, density, new OutputStreamWriter(proc.getOutputStream()));
-            int exit = proc.waitFor();
-            if (exit != 0) throw new Error();
-            return svd;
-        } catch (Exception ex) {
-            throw Throw.exception(ex);
-        }
-    }
-
-    public static void main(String[] args) {
-        // (20000, 1000, 0.01d, 50) -> 26.157
-        // (200000, 10000, 0.01d, 50) -> 3784.06 = 01:03'04.06"
-        SVD svd = SVD.fromRandomMatrix(2000, 100, 0.25d, 50);
-        System.out.println("Elapsed time: " + svd.time);
-        System.out.println(svd.Ut.length + " x " + svd.Ut[0].length);
-        System.out.println(svd.Vt.length + " x " + svd.Vt[0].length);
-        System.out.println(svd.similarityUU(1000, 1500));
-        System.out.println(svd.similarityVV(10, 15));
-        System.out.println(svd.similarityUV(1500, 10));
     }
 
     public float[] s;
@@ -214,6 +192,15 @@ public class SVD {
             sumb += Vt[n][b] * Vt[n][b] * s[n] * s[n];
         }
         return sim / (Math.sqrt(suma) * Math.sqrt(sumb));
+    }
+    
+    private static String fname() {
+        String fname = System.getenv("SVD");
+        return fname != null ? fname : "." + File.separator + "svd";
+    }
+
+    public static SVD fromMatrix(Matrix matrix, int dimensions) {
+        return new SVD().decompose(matrix, dimensions);
     }
 
 }

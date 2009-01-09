@@ -1,5 +1,6 @@
 package example;
 
+import static ch.akuhn.util.Get.take;
 import static ch.akuhn.util.Out.puts;
 
 import java.io.File;
@@ -8,13 +9,15 @@ import java.io.FileNotFoundException;
 import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
+import ch.akuhn.util.Get;
 
 public class CurrentDirJava {
 
     public static void main(String[] args) throws FileNotFoundException {
 
         Corpus corpus = new Corpus();
-        corpus.scanFolder(new File(".."), ".java");
+        corpus.scanFolder(new File("../Fame"), ".java");
+        corpus.scanFolder(new File("."), ".java");
 
         puts(corpus);
 
@@ -38,10 +41,10 @@ public class CurrentDirJava {
 
         LatentSemanticIndex lsi = tdm.createIndex();
 
-        puts(lsi.rankDocumentsByTerm("bag"));
-        puts(lsi.rankTermsByTerm("bag"));
-        puts(lsi.rankDocumentsByTerm("famix"));
-        puts(lsi.rankDocumentsByQuery("split string by lower- and upper-case"));
+        puts(take(10, lsi.rankDocumentsByTerm("bag")));
+        puts(take(10, lsi.rankTermsByTerm("bag")));
+        puts(take(10, lsi.rankDocumentsByTerm("famix")));
+        puts(take(10, lsi.rankDocumentsByQuery("split string by lower- and upper-case")));
 
     }
 

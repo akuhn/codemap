@@ -15,13 +15,18 @@ public abstract class Scanner implements Runnable {
 
     private static final int NONE = -1;
 
-    private CharBuffer buf;
+    private StringBuilder buf;
+    private CharBuffer in;
     protected char ch;
     private ScannerClient client;
     private int mark;
 
     protected final void backtrack() {
-        buf.position(buf.position() - 1);
+        in.position(in.position() - 1);
+        if (buf != null && buf.length() > 0) {
+            ch = buf.charAt(buf.length() - 1);
+            buf.setLength(buf.length() - 1);
+        }
     }
 
     public Scanner client(ScannerClient client) {
@@ -34,11 +39,13 @@ public abstract class Scanner implements Runnable {
     }
 
     protected final void mark() {
-        mark = buf.position();
+        mark = in.position();
+        buf = new StringBuilder();
     }
 
     protected final void next() throws BufferUnderflowException {
-        ch = buf.get();
+        if (buf != null) buf.append(ch);
+        ch = in.get();
     }
 
     public Scanner onFile(File file) {
@@ -50,7 +57,7 @@ public abstract class Scanner implements Runnable {
             // Charset charset = Charset.forName("UTF-8");
             Charset charset = Charset.forName("ISO-8859-1");
             CharsetDecoder decoder = charset.newDecoder();
-            this.buf = decoder.decode(buffer);
+            this.in = decoder.decode(buffer);
             return this;
         } catch (Exception ex) {
             throw Throw.exception(ex);
@@ -58,31 +65,29 @@ public abstract class Scanner implements Runnable {
     }
 
     public Scanner onString(String string) {
-        this.buf = CharBuffer.wrap(string);
+        this.in = CharBuffer.wrap(string);
         return this;
     }
 
     @Override
     public void run() {
-        assert client != null && buf != null;
+        assert client != null && in != null;
         try {
             mark = NONE;
             next();
             this.scan();
         } catch (BufferUnderflowException e) {
             if (mark == NONE) return;
-            buf.position(mark - 1);
-            client.yield(buf.subSequence(0, buf.limit() - mark + 1));
+            this.yank();
         }
     }
 
     protected abstract void scan() throws BufferUnderflowException;
 
     protected final void yank() {
-        int pos = buf.position();
-        buf.position(mark - 1);
-        client.yield(buf.subSequence(0, pos - mark));
-        buf.position(pos);
+        assert mark != NONE;
+        client.yield(buf.toString());
+        buf = null;
         mark = NONE;
     }
 

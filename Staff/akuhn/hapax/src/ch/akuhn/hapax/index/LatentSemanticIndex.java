@@ -14,18 +14,18 @@ public class LatentSemanticIndex {
     private Index<Document> documents;
     private double[] globalWeighting;
     private SVD svd;
-    private Index<CharSequence> terms;
+    private Index<String> terms;
 
-    public LatentSemanticIndex(Index<Document> documents, Index<CharSequence> terms, double[] globalWeighting, SVD svd) {
+    public LatentSemanticIndex(Index<Document> documents, Index<String> index, double[] globalWeighting, SVD svd) {
         this.documents = documents;
-        this.terms = terms;
+        this.terms = index;
         this.svd = svd;
-        if (svd.Ut[0].length != terms.size()) {
+        if (svd.Ut[0].length != index.size()) {
             float[][] temp = svd.Ut;
             svd.Ut = svd.Vt;
             svd.Vt = temp;
         }
-        assert svd.Ut[0].length == terms.size();
+        assert svd.Ut[0].length == index.size();
         assert svd.Vt[0].length == documents.size();
         this.globalWeighting = globalWeighting;
     }
@@ -34,7 +34,7 @@ public class LatentSemanticIndex {
         // apply: CamelCaseScanner, PorterStemmer, toLowerCase, and weighting
         Terms query = new Terms(string).toLowerCase().stem();
         double[] pseudo = new double[svd.s.length];
-        for (Count<CharSequence> each: query.counts()) {
+        for (Count<String> each: query.counts()) {
             int t0 = terms.get(each.element);
             if (t0 < 0) continue;
             double weight = each.count * (globalWeighting == null ? 1 : globalWeighting[t0]);
@@ -66,7 +66,7 @@ public class LatentSemanticIndex {
         return ranking.sort();
     }
 
-    public Ranking<Document> rankDocumentsByTerm(CharSequence term) {
+    public Ranking<Document> rankDocumentsByTerm(String term) {
         Ranking<Document> ranking = new Ranking<Document>();
         int n = terms.get(term);
         for (Each<Document> each: withIndex(documents)) {
@@ -78,16 +78,16 @@ public class LatentSemanticIndex {
     public Ranking<CharSequence> rankTermsByDocument(Document d) {
         Ranking<CharSequence> ranking = new Ranking<CharSequence>();
         int n = documents.get(d);
-        for (Each<CharSequence> each: withIndex(terms)) {
+        for (Each<String> each: withIndex(terms)) {
             ranking.add(each.element, svd.similarityUV(each.index, n));
         }
         return ranking.sort();
     }
 
-    public Ranking<CharSequence> rankTermsByTerm(CharSequence term) {
+    public Ranking<CharSequence> rankTermsByTerm(String term) {
         Ranking<CharSequence> ranking = new Ranking<CharSequence>();
         int n = terms.get(term);
-        for (Each<CharSequence> each: withIndex(terms)) {
+        for (Each<String> each: withIndex(terms)) {
             ranking.add(each.element, svd.similarityUU(n, each.index));
         }
         return ranking.sort();

@@ -55,7 +55,7 @@ public class PdfCasestudy implements Runnable {
         try {
             PDFExtractor pdf = new PDFExtractor(file.getAbsolutePath());
             Bag<String> terms = pdf.asBagOfTerms();
-            for (Iterator<String> it = terms.elements(); it.hasNext();) {
+            for (Iterator<String> it = terms.elements().iterator(); it.hasNext();) {
                 String each = it.next();
                 if (each.length() < 3 || BASIC_ENGLISH.contains(each)) it.remove();
             }
