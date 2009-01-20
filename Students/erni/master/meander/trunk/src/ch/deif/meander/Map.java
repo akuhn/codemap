@@ -4,6 +4,7 @@ import processing.core.PApplet;
 
 public class Map {
 
+    @SuppressWarnings("unused")
     private Pixel[][] array;
     private MapDescription description;    
 
@@ -13,8 +14,8 @@ public class Map {
     }
 
     public void drawOn(PApplet g) {
-        float width = description.getParameters().width;
-        float height = description.getParameters().height;
+        float width = getParameters().width;
+        float height = getParameters().height;
         g.background(204);
         g.stroke(0);
         g.noFill();
@@ -26,12 +27,16 @@ public class Map {
         }
     }
 
-    public int getWidth() {
-        return description.getParameters().width;
+    public Parameters getParameters() {
+        return description.getParameters();
     }
 
-    public int getHeight() {
-        return description.getParameters().height;
+    public Iterable<Location> locations() {
+        return description.locations();
     }
-    
+
+    public MapVisualization createVisualization() {
+        return new SketchVisualization(this);
+    }
+
 }

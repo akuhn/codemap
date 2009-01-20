@@ -2,8 +2,6 @@ package ch.deif.meander;
 
 import org.junit.Test;
 
-import processing.core.PImage;
-
 public class SimpleTest {
 
     @Test
@@ -15,7 +13,8 @@ public class SimpleTest {
                 new Location(+0.25f,+0.50f,100,"large"),
                 new Location(+0.50f,+0.00f,30,"right"));
         Map map = d.generateMap();
-        new PViewer(map);
+        MapVisualization viz = map.createVisualization();
+        new PViewer(viz);
     }
 
     public static void main(String[] args) {
