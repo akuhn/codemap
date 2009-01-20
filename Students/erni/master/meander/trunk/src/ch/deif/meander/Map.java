@@ -1,30 +1,20 @@
 package ch.deif.meander;
 
-import processing.core.PApplet;
+import java.util.Iterator;
+
+import ch.akuhn.util.Providable;
 
 public class Map {
 
-    @SuppressWarnings("unused")
-    private Pixel[][] array;
-    private MapDescription description;    
+    @SuppressWarnings("unused") double[][] DEM;
+    private MapDescription description;
+    public final int width, height;
 
     public Map(MapDescription description) {
         this.description = description;
-        array = new Pixel[description.getParameters().width][description.getParameters().height];
-    }
-
-    public void drawOn(PApplet g) {
-        float width = getParameters().width;
-        float height = getParameters().height;
-        g.background(204);
-        g.stroke(0);
-        g.noFill();
-        for (Location each: description.locations()) {
-            float x = (each.x + 1) * width / 2;
-            float y = (1 - each.y) * height / 2;
-            float r = each.height / 100 * width / 2.61f;
-            g.ellipse(x, y, r, r);
-        }
+        width = getParameters().width;
+        height = description.getParameters().height;
+        DEM = new double[width][height];
     }
 
     public Parameters getParameters() {
@@ -39,4 +29,21 @@ public class Map {
         return new SketchVisualization(this);
     }
 
+    public Iterable<Pixel> pixels() {
+        return new Providable<Pixel>() {
+            private int n, m;
+            @Override
+            public void initialize() {
+                n = m = 0;
+            }
+            @Override
+            public Pixel provide() {
+                if (n >= width) { n = 0; m++; }
+                if (m >= height) return done();
+                Pixel p = new Pixel(Map.this, n++, m);
+                return p;
+            }
+        };
+    }
+    
 }

@@ -17,8 +17,21 @@ public class SimpleTest {
         new PViewer(viz);
     }
 
+    @Test 
+    public void debugDEM() {
+        Parameters p = new Parameters();
+        p.useExample();
+        MapDescription d = new MapDescription(p,
+                new Location(-0.25f,+0.25f,40,"left"),
+                new Location(+0.25f,+0.50f,100,"large"),
+                new Location(+0.50f,+0.00f,30,"right"));
+        Map map = d.generateMap();
+        MapVisualization viz = new DebugDEMVisualization(map);
+        new PViewer(viz);
+    }
+    
     public static void main(String[] args) {
-        new SimpleTest().example();
+        new SimpleTest().debugDEM();
     }
     
 }
