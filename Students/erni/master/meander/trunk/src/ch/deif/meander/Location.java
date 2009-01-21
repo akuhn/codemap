@@ -4,11 +4,11 @@ import java.util.Collections;
 
 public class Location {
 
-    public float x, y;
-    public float height;
+    public double x, y;
+    public double height;
     public Document document;
     
-    public Location(float x, float y, float height, String document) {
+    public Location(double x, double y, double height, String document) {
         this.x = x;
         this.y = y;
         this.height = height;

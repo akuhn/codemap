@@ -11,14 +11,15 @@ public class SketchVisualization extends MapVisualization {
     public void draw() {
         float width = params.width;
         float height = params.height;
-        g.background(204);
-        g.stroke(0);
-        g.noFill();
+        background(204);
+        stroke(0);
+        noFill();
+        smooth();
         for (Location each: map.locations()) {
-            float x = (each.x + 1) * width / 2;
-            float y = (1 - each.y) * height / 2;
-            float r = each.height / 100 * width / 2.61f;
-            g.ellipse(x, y, r, r);
+            float x = (float) (each.x * width);
+            float y = (float) (each.y * height);
+            float r = (float) (each.height / 100 * width / 2.61f);
+            ellipse(x, y, r, r);
         }
     }
 

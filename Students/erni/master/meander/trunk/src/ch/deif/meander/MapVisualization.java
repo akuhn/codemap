@@ -14,6 +14,11 @@ public abstract class MapVisualization extends PApplet {
     }
     
     @Override
+    public void setup() {
+        frameRate(1);
+    }
+    
+    @Override
     public abstract void draw();
     
 }

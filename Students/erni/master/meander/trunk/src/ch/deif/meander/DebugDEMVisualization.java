@@ -1,6 +1,7 @@
 package ch.deif.meander;
 
 import processing.core.PImage;
+import ch.deif.meander.Map.Pixel;
 
 @SuppressWarnings("serial")
 public class DebugDEMVisualization extends MapVisualization {
@@ -15,9 +16,10 @@ public class DebugDEMVisualization extends MapVisualization {
         int[] pixels = img.pixels;
         int index = 0;
         for (Pixel p: map.pixels()) {
-            int gray = (int) Math.min(p.elevation() * 2, 255);
-            pixels[index++] = gray + gray << 8 + gray << 16;
+            //set(p.n, p.m, 255);//color((int) Math.min(p.elevation(), 255)));
+            pixels[index++] = (int) Math.min(p.elevation(), 255);
         }
+        img.updatePixels();
         image(img, 0, 0);
     }
 
