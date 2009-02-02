@@ -60,7 +60,7 @@ public class MapTest {
     @Depends("#fiveOnThreeMap")
     public Map mapWithDEM(Map map) {
         assertEquals(false, map.hasDEM());
-        new ElevationModelAlgorithm(map).run();
+        new DEMAlgorithm(map).run();
         assertEquals(true, map.hasDEM());
         return map;
     }

@@ -22,7 +22,7 @@ public class SandboxMain {
     @Test 
     public void debugDEM() {
         Map map = sample();
-        new ElevationModelAlgorithm(map).run();
+        new DEMAlgorithm(map).run();
         MapVisualization viz = new DebugDEMVisualization(map);
         new PViewer(viz);
     }
@@ -30,7 +30,9 @@ public class SandboxMain {
     @Test 
     public void hillshade() {
         Map map = sample();
-        new ElevationModelAlgorithm(map).run();
+        new DEMAlgorithm(map).run();
+        new HillshadeAlgorithm(map).run();
+        new ContourLineAlgorithm(map).run();
         MapVisualization viz = new HillshadeVisualization(map);
         new PViewer(viz);
     }

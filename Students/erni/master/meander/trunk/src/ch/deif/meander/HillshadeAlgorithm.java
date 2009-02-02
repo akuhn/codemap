@@ -12,7 +12,7 @@ public class HillshadeAlgorithm extends MapAlgorithm {
     public void run() {
         double zenithRad = 45 * Math.PI / 180;
         double azimuthRad = (315 - 180) * Math.PI / 180;
-        double z_factor = 0.3;
+        double z_factor = 0.5;
         for (Kernel k: map.kernels()) {
             double dx = (k.c + (2 * k.f) + k.i - (k.a + (2 * k.d) + k.g)) / 8 * 1;
             double dy = (k.g + (2 * k.h) + k.i - (k.a + (2 * k.b) + k.c)) / 8 * 1;

@@ -9,6 +9,7 @@ public class Map {
 
     private double[][] DEM;
     private double[][] hillshade;
+    private boolean[][] contours;
     public final int width, height;
     public Collection<Location> locations;
     private Parameters parameters;
@@ -28,6 +29,10 @@ public class Map {
         return DEM == null ? DEM = new double[width][height] : DEM;
     }
 
+    private boolean[][] getContours() {
+        return contours == null ? contours = new boolean[width][height] : contours;
+    }
+
     public Parameters getParameters() {
         return parameters;
     }
@@ -45,6 +50,10 @@ public class Map {
     }
 
     public Iterable<Pixel> pixels() {
+        return pixelsByRows();
+    }
+    
+    public Iterable<Pixel> pixelsByRows() {
         return new Providable<Pixel>() {
             private int n, m;
 
@@ -65,6 +74,28 @@ public class Map {
             }
         };
     }
+ 
+    public Iterable<Pixel> pixelsByColumns() {
+        return new Providable<Pixel>() {
+            private int n, m;
+
+            @Override
+            public void initialize() {
+                n = m = 0;
+            }
+
+            @Override
+            public Pixel provide() {
+                if (m >= height) {
+                    m = 0;
+                    n++;
+                }
+                if (n >= width) return done();
+                Pixel p = new Pixel(n, m++);
+                return p;
+            }
+        };
+    }    
     
     public Iterable<Kernel> kernels() {
         return new Providable<Kernel>() {
@@ -150,6 +181,18 @@ public class Map {
             return getDEM()[n][m];
         }
 
+        public double hillshade() {
+            return getHillshade()[n][m];
+        }
+        
+        public boolean hasContourLine() {
+            return getContours()[n][m];
+        }
+        
+        public void setContourLine(boolean bool) {
+            getContours()[n][m] = bool;
+        }
+        
     }
 
     public static MapBuilder builder() {
@@ -167,5 +210,5 @@ public class Map {
     public Object hasDEM() {
         return DEM != null;
     }
-
+    
 }
