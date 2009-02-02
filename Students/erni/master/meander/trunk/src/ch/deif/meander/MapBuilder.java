@@ -19,8 +19,8 @@ public class MapBuilder {
         return this;
     }
     
-    public MapBuilder location(double x, double y, double h, String name) {
-        locations.add(new Location(x, y, h, name));
+    public MapBuilder location(double xNormed, double yNormed, double h, String name) {
+        locations.add(new Location(xNormed, yNormed, h, name));
         return this;
     }
     

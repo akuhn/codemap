@@ -45,8 +45,8 @@ public class Map {
         return new SketchVisualization(this);
     }
     
-    public Pixel get(int n, int m) {
-        return new Pixel(n, m);
+    public Pixel get(int x, int y) {
+        return new Pixel(x, y);
     }
 
     public Iterable<Pixel> pixels() {
@@ -55,21 +55,21 @@ public class Map {
     
     public Iterable<Pixel> pixelsByRows() {
         return new Providable<Pixel>() {
-            private int n, m;
+            private int x, y;
 
             @Override
             public void initialize() {
-                n = m = 0;
+                x = y = 0;
             }
 
             @Override
             public Pixel provide() {
-                if (n >= width) {
-                    n = 0;
-                    m++;
+                if (x >= width) {
+                    x = 0;
+                    y++;
                 }
-                if (m >= height) return done();
-                Pixel p = new Pixel(n++, m);
+                if (y >= height) return done();
+                Pixel p = new Pixel(x++, y);
                 return p;
             }
         };
@@ -99,51 +99,51 @@ public class Map {
     
     public Iterable<Kernel> kernels() {
         return new Providable<Kernel>() {
-            private int n, m;
+            private int x, y;
 
             @Override
             public void initialize() {
-                n = m = 0;
+                x = y = 0;
             }
 
             @Override
             public Kernel provide() {
-                if (n >= width) {
-                    n = 0;
-                    m++;
+                if (x >= width) {
+                    x = 0;
+                    y++;
                 }
-                if (m >= height) return done();
-                Kernel k = new Kernel(n++, m);
+                if (y >= height) return done();
+                Kernel k = new Kernel(x++, y);
                 return k;
             }
         };
-        
     }
 
     public class Kernel extends Pixel {
         
-        public double a, b, c, d, e, f, g, h, i;
+        public double topLeft, top, topRight, left, here, right, 
+                bottomLeft, bottom, bottomRight;
         
-        public Kernel(int n, int m) {
-            super(n, m);
-            int top = (m == 0 ? 0 : m - 1);
-            int left = (n == 0 ? 0 : n - 1);
-            int bottom = (m == (height - 1) ? (height - 1) : m + 1);
-            int right = (n == (width - 1) ? (width - 1) : n + 1);
+        public Kernel(int x, int y) {
+            super(x, y);
+            int yTop = (y == 0 ? 0 : y - 1);
+            int xLeft = (x == 0 ? 0 : x - 1);
+            int yBottom = (y == (height - 1) ? (height - 1) : y + 1);
+            int xRight = (x == (width - 1) ? (width - 1) : x + 1);
 
-            a = getDEM()[left][top];
-            b = getDEM()[n][top];
-            c = getDEM()[right][top];
-            d = getDEM()[left][m];
-            e = getDEM()[n][m];
-            f = getDEM()[right][m];
-            g = getDEM()[left][bottom];
-            h = getDEM()[n][bottom];
-            i = getDEM()[right][bottom];
+            topLeft = getDEM()[xLeft][yTop];
+            top = getDEM()[x][yTop];
+            topRight = getDEM()[xRight][yTop];
+            left = getDEM()[xLeft][y];
+            here = getDEM()[x][y];
+            right = getDEM()[xRight][y];
+            bottomLeft = getDEM()[xLeft][yBottom];
+            bottom = getDEM()[x][yBottom];
+            bottomRight = getDEM()[xRight][yBottom];
         }
         
         public void setHillshade(double hillshade) {
-            getHillshade()[n][m] = hillshade;
+            getHillshade()[x][y] = hillshade;
         }
 
     }
@@ -155,42 +155,42 @@ public class Map {
     
     public class Pixel {
 
-        int n;
-        int m;
+        int x;
+        int y;
 
-        public Pixel(int n, int m) {
-            assert n < width && m < height : n + "," + m;
-            this.n = n;
-            this.m = m;
+        public Pixel(int x, int y) {
+            assert x < width && y < height : x + "," + y;
+            this.x = x;
+            this.y = y;
         }
 
-        public double x() {
-            return (double) n / (width - 1);
+        public double xNormed() {
+            return (double) x / (width - 1);
         }
 
-        public double y() {
-            return (double) m / (height - 1);
+        public double yNormed() {
+            return (double) y / (height - 1);
         }
 
-        public void add(double elevation) {
+        public void increaseElevation(double elevation) {
             if (elevation < 0) return;
-            getDEM()[n][m] += elevation;
+            getDEM()[x][y] += elevation;
         }
 
         public double elevation() {
-            return getDEM()[n][m];
+            return getDEM()[x][y];
         }
 
         public double hillshade() {
-            return getHillshade()[n][m];
+            return getHillshade()[x][y];
         }
         
         public boolean hasContourLine() {
-            return getContours()[n][m];
+            return getContours()[x][y];
         }
         
         public void setContourLine(boolean bool) {
-            getContours()[n][m] = bool;
+            getContours()[x][y] = bool;
         }
         
     }

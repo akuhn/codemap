@@ -34,26 +34,26 @@ public class MapTest {
         Iterator<Pixel> it = map.pixels().iterator();
         Pixel p;
         p = it.next();
-        assertEquals(0.0, p.x(), NaN);
-        assertEquals(0.0, p.y(), NaN);
+        assertEquals(0.0, p.xNormed(), NaN);
+        assertEquals(0.0, p.yNormed(), NaN);
         p = it.next();
-        assertEquals(0.25, p.x(), NaN);
-        assertEquals(0.0, p.y(), NaN);
+        assertEquals(0.25, p.xNormed(), NaN);
+        assertEquals(0.0, p.yNormed(), NaN);
         p = it.next();
-        assertEquals(0.5, p.x(), NaN);
-        assertEquals(0.0, p.y(), NaN);
+        assertEquals(0.5, p.xNormed(), NaN);
+        assertEquals(0.0, p.yNormed(), NaN);
         p = it.next();
-        assertEquals(0.75, p.x(), NaN);
-        assertEquals(0.0, p.y(), NaN);
+        assertEquals(0.75, p.xNormed(), NaN);
+        assertEquals(0.0, p.yNormed(), NaN);
         p = it.next();
-        assertEquals(1.0, p.x(), NaN);
-        assertEquals(0.0, p.y(), NaN);
+        assertEquals(1.0, p.xNormed(), NaN);
+        assertEquals(0.0, p.yNormed(), NaN);
         p = it.next();
-        assertEquals(0.0, p.x(), NaN);
-        assertEquals(0.5, p.y(), NaN);
+        assertEquals(0.0, p.xNormed(), NaN);
+        assertEquals(0.5, p.yNormed(), NaN);
         p = it.next();
-        assertEquals(0.25, p.x(), NaN);
-        assertEquals(0.5, p.y(), NaN);
+        assertEquals(0.25, p.xNormed(), NaN);
+        assertEquals(0.5, p.yNormed(), NaN);
     }
     
     @Test
@@ -70,8 +70,8 @@ public class MapTest {
     public void testPixelElevation(Map map) {
         Pixel p;
         p = map.get(2, 1);
-        assertEquals(0.5, p.x(), NaN);
-        assertEquals(0.5, p.y(), NaN);
+        assertEquals(0.5, p.xNormed(), NaN);
+        assertEquals(0.5, p.yNormed(), NaN);
         assertEquals(100, p.elevation(), 1e-2);
     }
     

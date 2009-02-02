@@ -10,7 +10,6 @@ public class WatershadeAlgorithm extends MapAlgorithm {
     @Override
     public void run() {
         // TODO Auto-generated method stub
-        
     }
 
 }

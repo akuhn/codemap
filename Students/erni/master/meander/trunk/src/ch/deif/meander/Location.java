@@ -4,13 +4,13 @@ import java.util.Collections;
 
 public class Location {
 
-    public double x, y;
+    public double xNormed, yNormed;
     public double height;
     public Document document;
     
-    public Location(double x, double y, double height, String document) {
-        this.x = x;
-        this.y = y;
+    public Location(double xNormed, double yNormed, double height, String document) {
+        this.xNormed = xNormed;
+        this.yNormed = yNormed;
         this.height = height;
         this.document = new Document(document, Collections.<String>emptySet());
     }
