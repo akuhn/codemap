@@ -27,8 +27,16 @@ public class SandboxMain {
         new PViewer(viz);
     }
     
+    @Test 
+    public void hillshade() {
+        Map map = sample();
+        new ElevationModelAlgorithm(map).run();
+        MapVisualization viz = new HillshadeVisualization(map);
+        new PViewer(viz);
+    }
+    
     public static void main(String[] args) {
-        new SandboxMain().debugDEM();
+        new SandboxMain().hillshade();
     }
     
 }

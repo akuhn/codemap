@@ -40,7 +40,7 @@ public class Map {
     }
     
     public Pixel get(int n, int m) {
-        return new Pixel(this, n, m);
+        return new Pixel(n, m);
     }
 
     public Iterable<Pixel> pixels() {
@@ -59,18 +59,65 @@ public class Map {
                     m++;
                 }
                 if (m >= height) return done();
-                Pixel p = new Pixel(Map.this, n++, m);
+                Pixel p = new Pixel(n++, m);
                 return p;
             }
         };
     }
+    
+    public Iterable<Kernel> kernels() {
+        return new Providable<Kernel>() {
+            private int n, m;
 
+            @Override
+            public void initialize() {
+                n = m = 0;
+            }
+
+            @Override
+            public Kernel provide() {
+                if (n >= width) {
+                    n = 0;
+                    m++;
+                }
+                if (m >= height) return done();
+                Kernel k = new Kernel(n++, m);
+                return k;
+            }
+        };
+        
+    }
+
+    public class Kernel extends Pixel {
+        
+        public double a, b, c, d, e, f, g, h, i;
+        
+        public Kernel(int n, int m) {
+            super(n, m);
+            int top = (m == 0 ? 0 : m - 1);
+            int left = (n == 0 ? 0 : n - 1);
+            int bottom = (m == (height - 1) ? (height - 1) : m + 1);
+            int right = (n == (width - 1) ? (width - 1) : n + 1);
+
+            a = getDEM()[left][top];
+            b = getDEM()[n][top];
+            c = getDEM()[right][top];
+            d = getDEM()[left][m];
+            e = getDEM()[n][m];
+            f = getDEM()[right][m];
+            g = getDEM()[left][bottom];
+            h = getDEM()[n][bottom];
+            i = getDEM()[right][bottom];
+        }
+        
+    }
+    
     public class Pixel {
 
         int n;
         int m;
 
-        public Pixel(Map map, int n, int m) {
+        public Pixel(int n, int m) {
             assert n < width && m < height : n + "," + m;
             this.n = n;
             this.m = m;
