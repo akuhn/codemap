@@ -8,6 +8,7 @@ import ch.akuhn.util.Providable;
 public class Map {
 
     private double[][] DEM;
+    private double[][] hillshade;
     public final int width, height;
     public Collection<Location> locations;
     private Parameters parameters;
@@ -110,7 +111,16 @@ public class Map {
             i = getDEM()[right][bottom];
         }
         
+        public void setHillshade(double hillshade) {
+            getHillshade()[n][m] = hillshade;
+        }
+
     }
+
+    private double[][] getHillshade() {
+        return hillshade == null ? hillshade = new double[width][height] : hillshade;
+    }
+    
     
     public class Pixel {
 

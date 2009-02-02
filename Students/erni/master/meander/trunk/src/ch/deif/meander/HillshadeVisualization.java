@@ -30,7 +30,6 @@ public class HillshadeVisualization extends MapVisualization {
             pixels[index++] = (int) Math.max(0, Math.min(color, 255));
         }
         img.updatePixels();
-        image(img, 0, 0);
-    }
+        image(img, 0, 0);    }
 
 }
