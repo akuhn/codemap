@@ -17,7 +17,7 @@ public class ElevationModelAlgorithm extends MapAlgorithm {
                 double dist = dist(each.x, each.y, p.x(), p.y());
                 dist = dist / each.height * 666; 
                 double elevation = each.height * Math.exp(-(dist*dist/2));
-                p.add(elevation * 2.55);
+                p.add(elevation);
             }
         }
     }
