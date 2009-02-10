@@ -21,11 +21,14 @@ public class HillshadeAlgorithm extends MapAlgorithm {
 
     @Override
     public void run() {
+        
+        double MAX = 0;
+        
         // zenith: height of sun over horizon (90 = horizon, 0 = zenith).
         double zenithRad = 45 * PI / 180;
         // azimuth: direction of sun on x-y-plane
         double azimuthRad = (315 - 180) * PI / 180;
-        double z_factor = 0.5;
+        double z_factor = 0.2;
         for (Kernel k: map.kernels()) {
             double dx = (k.topRight + (2 * k.right) + k.bottomRight - (k.topLeft + (2 * k.left) + k.bottomLeft)) / 8;
             double dy = (k.bottomLeft + (2 * k.bottom) + k.bottomRight - (k.topLeft + (2 * k.top) + k.topRight)) / 8;
@@ -34,7 +37,12 @@ public class HillshadeAlgorithm extends MapAlgorithm {
             double shading = (cos(zenithRad) * cos(slopeRad) 
                     + (sin(zenithRad) * sin(slopeRad) * cos(azimuthRad - aspectRad)));
             k.setHillshade(shading);
+            
+            MAX = Math.max(MAX, k.elevation());
+            
         }
+        
+        System.out.println("MAX= " + MAX);
     }
 
 }

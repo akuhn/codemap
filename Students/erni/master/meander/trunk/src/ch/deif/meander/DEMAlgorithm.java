@@ -4,7 +4,7 @@ import ch.deif.meander.Map.Pixel;
 
 public class DEMAlgorithm extends MapAlgorithm {
 
-    private static final int MAGIC_VALUE = 1000; // TODO
+    private static final int MAGIC_VALUE = 2000; // TODO
 
     public DEMAlgorithm(Map map) {
         super(map);

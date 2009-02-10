@@ -192,6 +192,10 @@ public class Map {
         public void setContourLine(boolean bool) {
             getContours()[x][y] = bool;
         }
+
+        public void normalizeElevation(double maxElevation) {
+            DEM[x][y] = 100.0 * (DEM[x][y] / maxElevation);
+        }
         
     }
 

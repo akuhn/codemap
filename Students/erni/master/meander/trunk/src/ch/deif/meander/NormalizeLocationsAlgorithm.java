@@ -9,20 +9,21 @@ public class NormalizeLocationsAlgorithm extends MapAlgorithm {
 	@Override
 	public void run() {
 		double minX, maxX, minY, maxY;
-		minX = minY = 0;
-		maxX = maxY = 0;
+		minX = minY = -3;
+		maxX = maxY = 3;
 		double maxHeight = 0; 
 		for (Location l: this.map.locations) {
-			minX = Math.min(l.xNormed, minX);
-			minY = Math.min(l.yNormed, minY);			
-			maxX = Math.max(l.xNormed, maxX);
-			maxY = Math.max(l.yNormed, maxY);
+			//minX = Math.min(l.xNormed, minX);
+			//minY = Math.min(l.yNormed, minY);			
+			//maxX = Math.max(l.xNormed, maxX);
+			//maxY = Math.max(l.yNormed, maxY);
 			maxHeight = Math.max(l.height, maxHeight);
 		}
+		double scale = Math.max((maxX - minX),(maxY -  minY));
 		for (Location l: this.map.locations) {
-			l.xNormed = (l.xNormed - minX)/(maxX - minX);
-			l.yNormed = (l.yNormed - minY)/(maxY -  minY);
-			l.height = l.height*100/maxHeight;
+			l.xNormed = (l.xNormed - minX)/scale;
+			l.yNormed = (l.yNormed - minY)/scale;
+			l.height = l.height * 100 / maxHeight;
 		}
 	}
 
