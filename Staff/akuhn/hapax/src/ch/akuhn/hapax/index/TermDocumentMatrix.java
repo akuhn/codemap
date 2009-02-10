@@ -38,8 +38,7 @@ public class TermDocumentMatrix extends SparseMatrix {
     public void addCorpus(Corpus corpus) {
         for (Document document: corpus.documents()) {
             int column = addDocument(document);
-            Terms terms = corpus.get(document);
-            for (Count<String> each: terms.counts()) {
+            for (Count<String> each: document.terms.counts()) {
                 int row = addTerm(each.element);
                 add(row, column, each.count);
             }
@@ -64,7 +63,11 @@ public class TermDocumentMatrix extends SparseMatrix {
     }
 
     public LatentSemanticIndex createIndex() {
-        return new LatentSemanticIndex(documents.clone(), terms.clone(), globalWeighting, SVD.fromMatrix(this, 30));
+        return this.createIndex(23); //TODO magic number
+    }
+
+    public LatentSemanticIndex createIndex(int dimensions) {
+        return new LatentSemanticIndex(documents.clone(), terms.clone(), globalWeighting, SVD.fromMatrix(this, dimensions));
     }
 
     public TermDocumentMatrix rejectAndWeight() {
@@ -146,4 +149,8 @@ public class TermDocumentMatrix extends SparseMatrix {
         return tdm;
     }
 
+    public Iterable<Document> documents() {
+        return documents;
+    }
+    
 }

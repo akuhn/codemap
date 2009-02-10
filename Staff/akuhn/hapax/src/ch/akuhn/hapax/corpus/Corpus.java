@@ -1,73 +1,49 @@
 package ch.akuhn.hapax.corpus;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import ch.akuhn.util.Files;
 
 public class Corpus {
 
-    private Map<Document,Terms> documents;
-    private Terms terms;
+    private Collection<Document> documents;
 
     public Corpus() {
-        this.documents = new HashMap<Document,Terms>();
-        this.terms = new Terms();
+        this.documents = new ArrayList<Document>();
     }
 
     public Iterable<Document> documents() {
-        return documents.keySet();
+        return documents;
     }
 
     public int documentSize() {
         return documents.size();
     }
 
-    public Terms get(Document document) {
-        return documents.get(document);
-    }
-
-    public void put(Document document) {
-        this.put(document, new Terms());
-    }
-
-    public void put(Document document, String content) {
-        this.put(document, new Terms(content));
-    }
-
-    public void put(Document document, Collection<String> strings) {
-        Terms value = documents.get(document);
-        if (value == null) {
-            value = new Terms();
-            documents.put(document, value);
-        }
-        this.terms.addAll(strings);
-        value.addAll(strings);
-    }
-
-    private void scanFile(File each) {
-        System.out.println(each);
-        put(new Document(each), new Terms(each));
+    public void add(Document document) {
+        documents.add(document);
     }
 
     public void scanFolder(File folder, String... extensions) {
         for (File each: Files.find(folder, extensions))
-            scanFile(each);
+            add(new Document(each));
     }
 
     public Terms terms() {
+        Terms terms = new Terms();
+        for (Document each: documents) terms.addAll(each.terms);
         return terms;
     }
 
     public int termSize() {
-        return terms.uniqueSize();
+        return terms().uniqueSize();
     }
 
     @Override
     public String toString() {
-        return String.format("Corpus (%d documents, %d terms)", documents.size(), termSize());
+        return String.format("Corpus (%d documents, %d terms)", documentSize(), termSize());
     }
 
 }
