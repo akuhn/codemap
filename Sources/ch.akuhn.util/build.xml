@@ -6,7 +6,7 @@
         <fileset dir="bin"><patternset refid="the.patternset"/></fileset>
         <fileset dir="src"><patternset refid="the.patternset"/></fileset>
         <fileset dir="../Query/bin"><patternset refid="the.patternset"/></fileset>
-        <fileset dir="../Query/bin"><patternset refid="the.patternset"/></fileset>
+        <fileset dir="../Query/src"><patternset refid="the.patternset"/></fileset>
       </jar>
       <zipfileset id="files" src="${file.jar}"/>
       <pathconvert property="listing" refid="files" pathsep="${line.separator}">
@@ -28,8 +28,8 @@
     </exec>	
 
     <property name="file.jar" value="akuhn-util-r${svnversion}.jar"/>
-    <property name="include.sources" value="off"/>
-    <property name="DONT-include.tests" value="off"/>
+    <property name="include.sources" value=""/>
+    <property name="DONT-include.tests" value=""/>
 
     <patternset id="the.patternset">
         <include name="COPYING*"/>
