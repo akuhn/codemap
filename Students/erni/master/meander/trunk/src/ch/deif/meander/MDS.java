@@ -1,6 +1,10 @@
 package ch.deif.meander;
 
+import static ch.akuhn.util.Interval.range;
+import static java.lang.String.format;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 
 import ch.akuhn.hapax.linalg.SymetricMatrix;
@@ -8,6 +12,31 @@ import ch.akuhn.hapax.util.StreamGobbler;
 import ch.akuhn.util.Throw;
 
 public class MDS {
+    
+    class Gobbler extends StreamGobbler {
+
+        public Gobbler(InputStream is) {
+            super(is);
+        }
+
+        @Override
+        public void run() {
+            r0 = consumeDouble("#", "corr(D,d):");
+            r = consumeDouble("#", "corr(D,d):");
+            for (int n: range(x.length)) {
+                x[n] = $.nextDouble();
+                y[n] = $.nextDouble();
+            }
+            expectEOF();
+        }
+
+    }
+    
+    
+    public double[] x, y;
+    public double r0;
+    public double r;
+
 
     private static String fname() {
         String fname = System.getenv("MDS");
@@ -38,10 +67,12 @@ public class MDS {
 
     private MDS compute(SymetricMatrix matrix) {
         try {
-            String command = fname();
+            x = new double[matrix.columnSize()];
+            y = new double[matrix.columnSize()];
+            String command = format("%s %d %f", fname(), 10, 0.1);
             Process proc = Runtime.getRuntime().exec(command);
             new StreamGobbler(proc.getErrorStream()).start();
-            new StreamGobbler(proc.getInputStream()).start();
+            new Gobbler(proc.getInputStream()).start();
             printMatrixOn(matrix, new PrintStream(proc.getOutputStream()));
             int exit = proc.waitFor();
             if (exit != 0) throw new Error(command);
