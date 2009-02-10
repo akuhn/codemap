@@ -44,4 +44,9 @@ public class HapaxDoc {
         }
     }
 
+    @Override
+    public String toString() {
+        return name + " (" + version + ")";
+    }
+
 }
