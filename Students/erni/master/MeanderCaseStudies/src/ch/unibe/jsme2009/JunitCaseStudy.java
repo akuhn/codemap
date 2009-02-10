@@ -39,6 +39,8 @@ public class JunitCaseStudy {
     public static void main(String[] args) {
         LatentSemanticIndex i = index();
         MDS mds = MDS.fromCorrelationMatrix(i.documentCorrelation());
+        System.out.println(mds.r0);
+        System.out.println(mds.r);
     }
     
 }
