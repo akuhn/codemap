@@ -69,17 +69,35 @@ public class MDS {
         try {
             x = new double[matrix.columnSize()];
             y = new double[matrix.columnSize()];
-            String command = format("%s %d %f", fname(), 10, 0.1);
+            //String command = format("%s %d %f", fname(), 10, 0.1);
+            String command = format("%s", fname());
             Process proc = Runtime.getRuntime().exec(command);
             new StreamGobbler(proc.getErrorStream()).start();
             new Gobbler(proc.getInputStream()).start();
             printMatrixOn(matrix, new PrintStream(proc.getOutputStream()));
-            int exit = proc.waitFor();
+            
+            int exit = fixBrokenWaitFor(proc);
             if (exit != 0) throw new Error(command);
         } catch (Exception ex) {
             throw Throw.exception(ex);
         }
         return this;
     }
+
+	private int fixBrokenWaitFor(Process proc) {
+		//int exit = proc.waitFor();
+		int exit = -1;
+		boolean done = false;
+		while(!done) {
+		    try {
+		    	exit = proc.exitValue();
+		    	done = true;
+		    } catch (IllegalThreadStateException e) {
+		    	//Thread.sleep(20);
+		    }
+		}
+		return exit;
+	}
+    
     
 }
