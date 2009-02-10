@@ -44,11 +44,17 @@ public class MDS {
     }
     
     private void printMatrixOn(SymetricMatrix matrix, PrintStream out) throws IOException {
+//        out.print('#'); 
+//        out.print(' ');
+//        out.print(-matrix.columnSize());
+//        out.print(' ');
+//        out.print(-matrix.rowSize());
+//        out.print('\n');
         out.print('#'); 
         out.print(' ');
-        out.print(-matrix.columnSize());
+        out.print(matrix.columnSize());
         out.print(' ');
-        out.print(-matrix.rowSize());
+        out.print(matrix.rowSize());
         out.print('\n');
         for (int n = 0; n < matrix.rowSize(); n++) {
             for (int m = 0; m < matrix.columnSize(); m++) {
@@ -70,7 +76,7 @@ public class MDS {
             x = new double[matrix.columnSize()];
             y = new double[matrix.columnSize()];
             //String command = format("%s %d %f", fname(), 10, 0.1);
-            String command = format("%s", fname());
+            String command = format("%s 50 1 0 1:8", fname());
             Process proc = Runtime.getRuntime().exec(command);
             new StreamGobbler(proc.getErrorStream()).start();
             new Gobbler(proc.getInputStream()).start();

@@ -53,9 +53,9 @@ public class MColor {
 	}
 	
 	public void darker(double factor) {
-		if ( factor < 0 || factor > 1) {
-			throw new IllegalArgumentException("Invalid factor, must be in range 0 to 1");
-		}
+		//if ( factor < 0 || factor > 1) {
+		//	throw new IllegalArgumentException("Invalid factor, must be in range 0 to 1");
+		//}
 		this.darkerInternal(factor);
 	}
 	

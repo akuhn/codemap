@@ -12,5 +12,4 @@ public class Location {
         this.height = height;
     }
     
-    
 }
