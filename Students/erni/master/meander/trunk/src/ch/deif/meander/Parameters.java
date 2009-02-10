@@ -10,9 +10,9 @@ public class Parameters {
     
     public ColorScheme colorScheme = ColorScheme.GREEN;
     
-    public int waterHeight = 4;
+    public int waterHeight = 5;
     public int contourLineStep = 10;
-    public int beachHeight = contourLineStep;    
+    public int beachHeight = 11;    
     
     public int numberOfLabels = 12;
     public int labelSize = 32;
