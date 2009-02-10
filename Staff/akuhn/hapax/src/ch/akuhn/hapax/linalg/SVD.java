@@ -196,7 +196,7 @@ public class SVD {
     
     private static String fname() {
         String fname = System.getenv("SVD");
-        return fname != null ? fname : "." + File.separator + "svd";
+        return fname != null ? fname : "svd";
     }
 
     public static SVD fromMatrix(Matrix matrix, int dimensions) {
