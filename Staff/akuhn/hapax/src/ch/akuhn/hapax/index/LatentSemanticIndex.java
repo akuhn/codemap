@@ -3,7 +3,6 @@ package ch.akuhn.hapax.index;
 import static ch.akuhn.util.Each.withIndex;
 import static ch.akuhn.util.Interval.range;
 import ch.akuhn.hapax.corpus.Document;
-import ch.akuhn.hapax.corpus.Index;
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.hapax.linalg.SVD;
 import ch.akuhn.hapax.linalg.SymetricMatrix;
@@ -12,10 +11,10 @@ import ch.akuhn.util.Bag.Count;
 
 public class LatentSemanticIndex {
 
-    private Index<Document> documents;
+    public final Index<Document> documents;
     private double[] globalWeighting;
     private SVD svd;
-    private Index<String> terms;
+    public final Index<String> terms;
 
     public LatentSemanticIndex(Index<Document> documents, Index<String> index, double[] globalWeighting, SVD svd) {
         this.documents = documents;

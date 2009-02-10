@@ -36,7 +36,7 @@ public class CurrentDirJava {
 
         puts(tdm.density());
 
-        puts(tdm.terms().sortedCounts());
+        puts(tdm.termBag().sortedCounts());
 
         LatentSemanticIndex lsi = tdm.createIndex();
 

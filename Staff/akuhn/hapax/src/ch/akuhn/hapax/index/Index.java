@@ -1,4 +1,4 @@
-package ch.akuhn.hapax.corpus;
+package ch.akuhn.hapax.index;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +21,7 @@ public class Index<E> implements Cloneable, Iterable<E> {
         list = new ArrayList<E>(index.list);
     }
 
-    public int add(E element) {
+    protected int add(E element) {
         Integer index = map.get(element);
         if (index == null) {
             index = list.size();

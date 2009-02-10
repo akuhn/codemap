@@ -4,7 +4,6 @@ import static ch.akuhn.util.Each.withIndex;
 import static ch.akuhn.util.Pair.zip;
 import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.corpus.Document;
-import ch.akuhn.hapax.corpus.Index;
 import ch.akuhn.hapax.corpus.PorterStemmer;
 import ch.akuhn.hapax.corpus.Stemmer;
 import ch.akuhn.hapax.corpus.Stopwords;
@@ -19,9 +18,9 @@ import ch.akuhn.util.Bag.Count;
 
 public class TermDocumentMatrix extends SparseMatrix {
 
-    private Index<Document> documents; // columns
+    public final Index<Document> documents; // columns
     private double[] globalWeighting;
-    private Index<String> terms; // rows
+    public final Index<String> terms; // rows
 
     public TermDocumentMatrix() {
         super(0, 0);
@@ -112,16 +111,12 @@ public class TermDocumentMatrix extends SparseMatrix {
         return tdm;
     }
 
-    public Terms terms() {
+    public Terms termBag() {
         Terms bag = new Terms();
         for (Pair<String,Vector> each: zip(terms, rows())) {
             bag.add(each.fst, (int) each.snd.sum());
         }
         return bag;
-    }
-
-    private int termSize() {
-        return terms.size();
     }
 
     public TermDocumentMatrix toLowerCase() {
@@ -139,7 +134,7 @@ public class TermDocumentMatrix extends SparseMatrix {
 
     public TermDocumentMatrix weight(LocalWeighting localWeighting, GlobalWeighting globalWeighting) {
         TermDocumentMatrix tdm = new TermDocumentMatrix(this.terms, this.documents);
-        tdm.globalWeighting = new double[termSize()];
+        tdm.globalWeighting = new double[terms.size()];
         for (Each<Vector> row: withIndex(rows())) {
             double global = tdm.globalWeighting[row.index] = globalWeighting.weight(row.element);
             for (Entry column: row.element.entries()) {
@@ -147,10 +142,6 @@ public class TermDocumentMatrix extends SparseMatrix {
             }
         }
         return tdm;
-    }
-
-    public Iterable<Document> documents() {
-        return documents;
     }
     
 }
