@@ -46,5 +46,4 @@ public class SymetricMatrix extends Matrix {
     public int used() {
         throw new UnsupportedOperationException();
     }
-
 }

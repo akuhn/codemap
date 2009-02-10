@@ -1,4 +1,4 @@
-package hapax.model;
+package ch.unibe.jsme2009;
 
 import static ch.akuhn.hapax.corpus.Stopwords.BASIC_ENGLISH;
 import static ch.akuhn.util.Files.openWrite;
@@ -36,7 +36,7 @@ public class PdfCasestudy implements Runnable {
 
     private void processPdfFile(File file) {
         System.out.println(file);
-        Document doc = new Document();
+        HapaxDoc doc = new HapaxDoc();
         doc.name = file.toString();
         doc.terms = safeExtractTerms(file);
         m.add(doc);

@@ -120,7 +120,7 @@ public class SVD {
     private SVD decompose(Matrix matrix, int dimensions) {
         try {
             String command = command(dimensions);
-            System.err.println(command);
+            //System.err.println(command);
             Process proc = Runtime.getRuntime().exec(command);
             new StreamGobbler(proc.getErrorStream()).start();
             new Gobbler(proc.getInputStream()).start();

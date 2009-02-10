@@ -1,4 +1,4 @@
-package hapax.model;
+package ch.unibe.jsme2009;
 
 import static org.junit.Assert.assertEquals;
 import jexample.Depends;
@@ -30,8 +30,8 @@ public class TermBagExample {
     }
 
     @Test
-    public Document emptyDocument() {
-        return new Document();
+    public HapaxDoc emptyDocument() {
+        return new HapaxDoc();
     }
 
     @Test
@@ -62,7 +62,7 @@ public class TermBagExample {
         assert t.model.size() == 0;
         t.model.importMSE(SOME_DOCUMENT);
         assert t.model.size() == 1;
-        Document d = (Document) t.model.getElements().iterator().next();
+        HapaxDoc d = (HapaxDoc) t.model.getElements().iterator().next();
         assert d.terms.size() == 6;
         assert d.terms.occurrences("be") == 2;
         assert d.terms.occurrences("to") == 2;
@@ -73,7 +73,7 @@ public class TermBagExample {
 
     @Test
     @Depends("emptyModel;emptyDocument")
-    public Repository modelWithEmptyDocument(Repository m, Document d) {
+    public Repository modelWithEmptyDocument(Repository m, HapaxDoc d) {
         m.add(d);
         assert m.size() == 1;
         return m;
@@ -81,15 +81,15 @@ public class TermBagExample {
 
     @Test
     @Depends("emptyModel;someDocument")
-    public Repository modelWithSomeDocument(Repository m, Document d) {
+    public Repository modelWithSomeDocument(Repository m, HapaxDoc d) {
         m.add(d);
         assert m.size() == 1;
         return m;
     }
 
     @Test
-    public Document someDocument() {
-        Document d = new Document();
+    public HapaxDoc someDocument() {
+        HapaxDoc d = new HapaxDoc();
         for (String each: Strings.letters("to be or not to be")) {
             d.terms.add(each);
         }
@@ -104,7 +104,7 @@ public class TermBagExample {
     @Test
     public Tower tower() {
         Tower t = new Tower();
-        t.metamodel.with(Document.class);
+        t.metamodel.with(HapaxDoc.class);
         assert t.metamodel.allPackageDescriptions().size() == 1;
         assert t.metamodel.allClassDescriptions().size() == 1;
         assert t.metamodel.allPropertyDescriptions().size() == 2;

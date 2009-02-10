@@ -2,17 +2,18 @@ package ch.akuhn.hapax.corpus;
 
 import java.io.File;
 
+
 public class Document {
 
-    private File file;
+    private Object file;
 
-    public Document(File file) {
+    public Document(Object file) {
         this.file = file;
     }
 
     @Override
     public String toString() {
-        return file.getName();
+        return (file instanceof File ? ((File) file).getName() : file.toString());
     }
 
 }

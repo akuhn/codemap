@@ -1,6 +1,7 @@
 package ch.akuhn.hapax.corpus;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,14 +37,14 @@ public class Corpus {
         this.put(document, new Terms(content));
     }
 
-    public void put(Document document, Terms terms) {
+    public void put(Document document, Collection<String> strings) {
         Terms value = documents.get(document);
         if (value == null) {
             value = new Terms();
             documents.put(document, value);
         }
-        this.terms.addAll(terms);
-        value.addAll(terms);
+        this.terms.addAll(strings);
+        value.addAll(strings);
     }
 
     private void scanFile(File each) {

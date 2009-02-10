@@ -1,4 +1,4 @@
-package hapax.model;
+package ch.unibe.jsme2009;
 
 import static ch.akuhn.util.Files.openWrite;
 import static ch.akuhn.util.Get.each;
@@ -77,7 +77,7 @@ public class Main implements Runnable {
         ZipEntry entry = null;
         while ((entry = in.getNextEntry()) != null) {
             if (isJavaFile(entry)) {
-                Document doc = new Document();
+                HapaxDoc doc = new HapaxDoc();
                 doc.name = entry.getName();
                 doc.version = version;
                 doc.terms = parseBag(in);
@@ -99,7 +99,7 @@ public class Main implements Runnable {
         ZipFile zip = new ZipFile(each);
         for (ZipEntry entry: each(zip.entries())) {
             if (isJavaFile(entry)) {
-                Document doc = new Document();
+                HapaxDoc doc = new HapaxDoc();
                 doc.name = entry.getName();
                 doc.version = version;
                 doc.terms = parseBag(zip.getInputStream(entry));

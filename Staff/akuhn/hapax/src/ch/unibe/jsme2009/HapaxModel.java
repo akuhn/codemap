@@ -1,11 +1,11 @@
-package hapax.model;
+package ch.unibe.jsme2009;
 
 import ch.akuhn.fame.MetaRepository;
 
 public class HapaxModel {
 
     public static void importInto(MetaRepository metamodel) {
-        metamodel.with(Document.class);
+        metamodel.with(HapaxDoc.class);
     }
 
     public static void main(String[] args) {

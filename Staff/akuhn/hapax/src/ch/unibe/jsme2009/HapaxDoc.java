@@ -1,4 +1,4 @@
-package hapax.model;
+package ch.unibe.jsme2009;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,7 +11,7 @@ import ch.akuhn.util.Bag;
 @FamePackage("Hapax")
 @FameDescription("Doc")
 @SuppressWarnings("unchecked")
-public class Document {
+public class HapaxDoc {
 
     @FameProperty
     public String contents;
@@ -35,8 +35,13 @@ public class Document {
         return coll;
     }
 
-    public void setTerms(Collection<String> junk) {
-        throw new UnsupportedOperationException();
+    public void setTerms(Collection<Object> encoded) {
+        terms = new Bag<String>();
+        int count = -1;
+        for (Object each: encoded) {
+            if (each instanceof Number) count = ((Number) each).intValue();
+            else terms.add((String) each, count);
+        }
     }
 
 }
