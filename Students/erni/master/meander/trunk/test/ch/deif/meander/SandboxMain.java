@@ -8,6 +8,7 @@ public class SandboxMain {
         return Map.builder()
             .size(640, 640)
             .location(0.375, 0.375, 40, "left")
+            .location(0.5, 0.375, 40, "aBitMoreLeft")
             .location(0.625, 0.250, 100,"large")
             .location(0.750, 0.500, 30,"right")
             .build();

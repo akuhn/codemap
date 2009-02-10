@@ -10,10 +10,11 @@ public class ContourLineAlgorithm extends MapAlgorithm {
 
     @Override
     public void run() {
+    	int step = map.getParameters().contourLineStep;
         for (Kernel k: map.kernels()) {
-            int top = (int) Math.floor(k.top / 10);
-            int left = (int) Math.floor(k.left / 10);
-            int here = (int) Math.floor(k.here / 10);
+            int top = (int) Math.floor(k.top / step);
+            int left = (int) Math.floor(k.left / step);
+            int here = (int) Math.floor(k.here / step);
             boolean coastline = here == 0 || left == 0 || top == 0;
             k.setContourLine((top != here || left != here) && !coastline);
         }

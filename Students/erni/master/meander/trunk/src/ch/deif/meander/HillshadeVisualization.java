@@ -1,7 +1,5 @@
 package ch.deif.meander;
 
-import static java.lang.Math.max;
-
 import java.awt.Color;
 
 import processing.core.PImage;
@@ -20,34 +18,22 @@ public class HillshadeVisualization extends MapVisualization {
         int[] pixels = img.pixels;
         int index = 0;
         for (Pixel p: map.pixels()) {
-            Color color = color(p);
-            color = shade(color, p.hillshade());
-            color = contour(color, p.hasContourLine());
-            pixels[index++] = color.getRGB();
+            MColor color = color(p);
+            color.darker(p.hillshade());
+            if (p.hasContourLine()) color.darker();
+            pixels[index++] = color.rgb();
         }
-        img.updatePixels();
-        image(img, 0, 0);    
+        //img.updatePixels();
+        //triangle(0, 0, 30, 30, 30, 0);
+        //line(20, 20, 50, 50);
+        image(img, 0, 0);
     }
 
-    private Color contour(Color color, boolean hasContourLine) {
-        return hasContourLine ? color.darker() : color;
+    private MColor color(Pixel p) {
+    	Parameters params = map.getParameters();
+    	double elevation = p.elevation();
+    	if (elevation > params.beachHeight) return MColor.GREEN();
+    	if (elevation > params.waterHeight) return MColor.YELLOW();
+    	return MColor.BLUE();
     }
-
-    private Color color(Pixel p) {
-        return p.elevation() > 10 ? Color.GREEN : Color.BLUE ;
-    }
-    
-    /**
-     * 
-     * @param hillshade a shading value between 0.0 and 1.0 
-     * (caution: may exceed this range by a small amount). 
-     */
-    private Color shade(Color color, double hillshade) {
-        // TODO can we avoid using Color?
-        return new Color(
-                max((int)(color.getRed() * hillshade), 0), 
-                max((int)(color.getGreen() * hillshade), 0),
-                max((int)(color.getBlue() * hillshade), 0));
-    }
-    
 }
