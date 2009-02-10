@@ -4,16 +4,15 @@ import ch.akuhn.fame.Tower;
 import ch.akuhn.fame.parser.InputSource;
 import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.corpus.Document;
-import ch.akuhn.hapax.corpus.Index;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
-import ch.akuhn.util.Out;
+import ch.deif.meander.MDS;
 
 
 public class JunitCaseStudy {
 
     public static final String FILENAME = 
-            "junit/model.h.mse";
+            "mse/junit_case.h.mse";
     
     public static Tower tower() {
         Tower t = new Tower();
@@ -38,7 +37,8 @@ public class JunitCaseStudy {
     }
     
     public static void main(String[] args) {
-        Out.puts(index());
+        LatentSemanticIndex i = index();
+        MDS mds = MDS.fromCorrelationMatrix(i.documentCorrelation());
     }
     
 }
