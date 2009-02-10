@@ -20,7 +20,7 @@ public class MapTest {
     public Map fiveOnThreeMap() {
          Map map = Map.builder()
              .size(5,3)
-             .location(0.5, 0.5, 100, "Foo")
+             .location(0.5, 0.5, 100)
              .build();
          assertEquals(5, map.width);
          assertEquals(3, map.height);
