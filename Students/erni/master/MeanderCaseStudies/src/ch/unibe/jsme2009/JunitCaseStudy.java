@@ -16,6 +16,7 @@ import ch.deif.meander.MDS;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
 import ch.deif.meander.MapVisualization;
+import ch.deif.meander.NormalizeElevationAlgorithm;
 import ch.deif.meander.NormalizeLocationsAlgorithm;
 import ch.deif.meander.PViewer;
 import ch.deif.meander.SketchVisualization;
@@ -50,7 +51,7 @@ public class JunitCaseStudy {
         System.out.println(mds.r0);
         System.out.println(mds.r);
         MapBuilder builder = Map.builder().size(512, 512);
-        for (Each<Document> each: withIndex(tdm.documents())) {
+        for (Each<Document> each: withIndex(tdm.documents)) {
             //System.out.printf("%f\t%f\t%s\n", mds.x[each.index], mds.y[each.index], each.element);
         	String name = each.element.toString();
         	if (name.endsWith(("(junit3.4.zip)"))) {
@@ -60,6 +61,7 @@ public class JunitCaseStudy {
         Map map = builder.build();
         new NormalizeLocationsAlgorithm(map).run();
         new DEMAlgorithm(map).run();
+        new NormalizeElevationAlgorithm(map).run();
         new HillshadeAlgorithm(map).run();
         new ContourLineAlgorithm(map).run();
         //MapVisualization viz = new SketchVisualization(map);
