@@ -3,33 +3,19 @@ package ch.akuhn.hapax.linalg;
 import static ch.akuhn.util.Interval.range;
 import static java.lang.String.format;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 
+
+import ch.akuhn.hapax.util.StreamGobbler;
 import ch.akuhn.util.Throw;
 
 public class SVD {
 
-    private class Gobbler extends StreamGobbler {
+    class Gobbler extends StreamGobbler {
 
         public Gobbler(InputStream is) {
             super(is);
-        }
-
-        private void consume(String... words) {
-            for (String word: words) {
-                String next = $.next();
-                if (word == null || word.equals(next)) continue;
-                // for (Void each: Times.repeat(100))
-                // System.out.println($.next());
-                throw new Error("Expected " + word + " but found " + next);
-            }
-        }
-
-        private int consumeInt(String... words) {
-            consume(words);
-            return $.nextInt();
         }
 
         private void gobbleFooter() {
@@ -108,7 +94,7 @@ public class SVD {
             gobbleLeftSingularValues();
             gobbleRightSingularValues();
             gobbleFooter();
-            if ($.hasNext()) throw new Error();
+            expectEOF();
         }
 
     }
@@ -119,13 +105,17 @@ public class SVD {
     
     private SVD decompose(Matrix matrix, int dimensions) {
         try {
+            StreamGobbler error, input;
             String command = command(dimensions);
-            //System.err.println(command);
             Process proc = Runtime.getRuntime().exec(command);
-            new StreamGobbler(proc.getErrorStream()).start();
-            new Gobbler(proc.getInputStream()).start();
+            error = new StreamGobbler(proc.getErrorStream());
+            input = new Gobbler(proc.getInputStream());
+            error.start();
+            input.start();
             matrix.storeSparseOn(new OutputStreamWriter(proc.getOutputStream()));
             int exit = proc.waitFor();
+            error.kill();
+            input.kill();
             if (exit != 0) throw new Error(command);
             return this;
         } catch (Exception ex) {
