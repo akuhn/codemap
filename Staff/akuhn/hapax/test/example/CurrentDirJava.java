@@ -9,7 +9,6 @@ import java.io.FileNotFoundException;
 import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
-import ch.akuhn.util.Get;
 
 public class CurrentDirJava {
 

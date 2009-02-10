@@ -36,6 +36,11 @@ public class StreamGobbler extends Thread {
         return $.nextInt();
     }
 
+    public double consumeDouble(String... words) {
+        consume(words);
+        return $.nextDouble();
+    }
+
     public void expectEOF() {
         if (running && $.hasNext()) throw new Error();
     }
