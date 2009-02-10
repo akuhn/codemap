@@ -12,6 +12,7 @@ public class MColorTest {
 	@Test
 	public void compareColorValues() {
 		assertEquals(Color.BLUE.getRGB(), MColor.BLUE().rgb());
+		assertEquals(new Color(123,123,123).getRGB(), new MColor(123, 123, 123).rgb());
 	}
 
 }

@@ -7,17 +7,16 @@ package ch.deif.meander;
  */
 public class MColor {
 	  
-    public static MColor GREEN() {
-    	return new MColor(0, 255, 0);
-    }
-    
-    public static MColor BLUE() {
-    	return new MColor(0, 0, 255);
-    }
-    
-    public static MColor YELLOW() {
-    	return new MColor(255, 255, 0);
-    }
+	public static MColor BLACK()	{return new MColor(0, 0, 0);}
+	public static MColor BLUE()		{return new MColor(0, 0, 255);}
+    public static MColor CYAN()		{return new MColor(0, 255, 255);}    	
+    public static MColor GREEN()	{return new MColor(0, 255, 0);}
+    public static MColor ORANGE()	{return new MColor(255, 200, 0);}
+    public static MColor MAGENTA()	{return new MColor(255, 0, 255);}        
+    public static MColor PINK()		{return new MColor(255, 175, 175);}    
+    public static MColor RED()		{return new MColor(255, 0, 0);}
+    public static MColor YELLOW()	{return new MColor(255, 255, 0);}
+    //public static MColor ()		{return new MColor();}    
 	
 	public int r;
 	public int g;
@@ -64,11 +63,6 @@ public class MColor {
 		r = (int) Math.max(r*factor, 0);
 		g = (int) Math.max(g*factor, 0);
 		b = (int) Math.max(b*factor, 0);		
-	}
-
-	public void shade(double hillshade) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
