@@ -79,7 +79,7 @@ public class Main implements Runnable {
             if (isJavaFile(entry)) {
                 HapaxDoc doc = new HapaxDoc();
                 doc.name = entry.getName();
-                doc.version = version;
+                doc.setVersion(version);
                 doc.terms = parseBag(in);
                 m.add(doc);
             }
@@ -101,7 +101,7 @@ public class Main implements Runnable {
             if (isJavaFile(entry)) {
                 HapaxDoc doc = new HapaxDoc();
                 doc.name = entry.getName();
-                doc.version = version;
+                doc.setVersion(version);
                 doc.terms = parseBag(zip.getInputStream(entry));
                 m.add(doc);
             }
@@ -118,7 +118,7 @@ public class Main implements Runnable {
         }
     }
 
-    @Override
+    //@Override
     public void run() {
         try {
             unsafeRun();

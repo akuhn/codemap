@@ -2,10 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="/Hapax"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/jexample-4.4-r271.jar"/>
-	<classpathentry kind="lib" path="lib/fame-r24832.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Meander"/>
 	<classpathentry kind="lib" path="/Meander/lib/core.jar" sourcepath="/Meander/lib/core.zip"/>
 	<classpathentry kind="output" path="bin"/>
