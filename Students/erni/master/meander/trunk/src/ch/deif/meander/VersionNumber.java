@@ -35,7 +35,7 @@ public class VersionNumber implements Comparable<VersionNumber> {
         return array;
     }
 
-    @Override
+    //@Override
     public int compareTo(VersionNumber other) {
         int len = min(this.numbers.length, other.numbers.length);
         for (int index = 0; index < len; index++) {

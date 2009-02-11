@@ -13,28 +13,28 @@ import ch.akuhn.fame.Tower;
 public class Serializer {
 
     @FameDescription("Location")
-    private static class MSELocation {
-        @FameProperty double x;
-        @FameProperty double y;
-        @FameProperty double height;
+    public static class MSELocation {
+        @FameProperty public double x;
+        @FameProperty public double y;
+        @FameProperty public double height;
     }
     
     @FameDescription("Document")
-    private static class MSEDocument {
-        @FameProperty String name;
+    public static class MSEDocument {
+        @FameProperty public String name;
     }
     
     @FameDescription("Release")
-    private static class MSERelease {
-        @FameProperty String name;
-        @FameProperty Collection<MSEDocument> documents;
-        @FameProperty Collection<MSELocation> locations;
+    public static class MSERelease {
+        @FameProperty public String name;
+        @FameProperty public Collection<MSEDocument> documents;
+        @FameProperty public Collection<MSELocation> locations;
     }
     
     @FameDescription("Project")
-    private static class MSEProject {
-        @FameProperty String name;
-        @FameProperty Collection<MSERelease> releases;
+    public static class MSEProject {
+        @FameProperty public String name;
+        @FameProperty public Collection<MSERelease> releases;
     }
 
     private Tower t = new Tower();
