@@ -10,22 +10,22 @@ public class DenseVector extends Vector {
 
         private int spot = 0;
 
-        @Override
+        //@Override
         public boolean hasNext() {
             return spot < values.length;
         }
 
-        @Override
+        //@Override
         public Iterator<Entry> iterator() {
             return this;
         }
 
-        @Override
+        //@Override
         public Entry next() {
             return new Entry(spot, values[spot++]);
         }
 
-        @Override
+        //@Override
         public void remove() {
             throw new UnsupportedOperationException();
         }

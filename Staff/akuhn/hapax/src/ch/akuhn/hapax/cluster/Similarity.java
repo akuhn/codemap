@@ -2,7 +2,7 @@ package ch.akuhn.hapax.cluster;
 
 public abstract class Similarity<T> implements Distance<T> {
 
-    @Override
+    //@Override
     public double dist(T a, T b) {
         return 1 - similarity(a, b);
     }

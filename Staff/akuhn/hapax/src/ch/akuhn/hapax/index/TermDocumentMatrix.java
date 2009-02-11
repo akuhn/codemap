@@ -66,7 +66,7 @@ public class TermDocumentMatrix extends SparseMatrix {
     }
 
     public LatentSemanticIndex createIndex(int dimensions) {
-        return new LatentSemanticIndex(documents.clone(), terms.clone(), globalWeighting, SVD.fromMatrix(this, dimensions));
+        return new LatentSemanticIndex(terms, documents, globalWeighting, new SVD(this, dimensions));
     }
 
     public TermDocumentMatrix rejectAndWeight() {

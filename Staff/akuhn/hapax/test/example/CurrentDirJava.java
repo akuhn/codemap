@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
+import ch.akuhn.hapax.util.Serialization;
 
 public class CurrentDirJava {
 
@@ -45,6 +46,18 @@ public class CurrentDirJava {
         puts(take(10, lsi.rankDocumentsByTerm("famix")));
         puts(take(10, lsi.rankDocumentsByQuery("split string by lower- and upper-case")));
 
+        Serialization mse;
+        
+        mse = new Serialization();
+        mse.add(lsi);
+        String string = mse.t.model.exportMSE();
+        
+        System.out.println(string);
+        
+        mse = new Serialization();
+        mse.t.model.importMSE(string);
+        System.out.println(mse.t.model.getElements());
+        
     }
 
 }

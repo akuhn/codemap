@@ -124,7 +124,7 @@ public class CamelCaseScannerTest implements ScannerClient {
         assertEquals("[Camel, Case, Scanner]", terms.toString());
     }
 
-    @Override
+    //@Override
     public void yield(CharSequence term) {
         terms.add(term.toString());
     }

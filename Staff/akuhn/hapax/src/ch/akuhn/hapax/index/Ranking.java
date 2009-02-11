@@ -13,7 +13,7 @@ class Rank<T> implements Comparable<Rank<T>> {
         this.rank = rank;
     }
 
-    @Override
+    //@Override
     public int compareTo(Rank<T> rank) {
         return (int) Math.signum(rank.rank - this.rank);
     }

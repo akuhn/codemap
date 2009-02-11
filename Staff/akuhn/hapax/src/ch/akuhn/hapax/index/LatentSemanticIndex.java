@@ -12,20 +12,17 @@ import ch.akuhn.util.Bag.Count;
 public class LatentSemanticIndex {
 
     public final Index<Document> documents;
-    private double[] globalWeighting;
-    private SVD svd;
+    public final double[] globalWeighting;
+    public final SVD svd; 
     public final Index<String> terms;
 
-    public LatentSemanticIndex(Index<Document> documents, Index<String> index, double[] globalWeighting, SVD svd) {
+    public LatentSemanticIndex(Index<String> terms, Index<Document> documents,
+            double[] globalWeighting, SVD svd) {
         this.documents = documents;
-        this.terms = index;
+        this.terms = terms;
+        if (svd.Ut[0].length != terms.size()) svd = svd.transposed();
         this.svd = svd;
-        if (svd.Ut[0].length != index.size()) {
-            float[][] temp = svd.Ut;
-            svd.Ut = svd.Vt;
-            svd.Vt = temp;
-        }
-        assert svd.Ut[0].length == index.size();
+        assert svd.Ut[0].length == terms.size();
         assert svd.Vt[0].length == documents.size();
         this.globalWeighting = globalWeighting;
     }

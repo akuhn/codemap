@@ -45,7 +45,7 @@ public class Index<E> implements Cloneable, Iterable<E> {
         return list.get(index);
     }
 
-    @Override
+    //@Override
     public Iterator<E> iterator() {
         return list.iterator();
     }

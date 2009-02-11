@@ -12,7 +12,7 @@ public class ClusterExample {
     public static void main(String[] args) {
 
         Distance<Point> sim = new Distance<Point>() {
-            @Override
+            //@Override
             public double dist(Point a, Point b) {
                 return a.distance(b);
             }

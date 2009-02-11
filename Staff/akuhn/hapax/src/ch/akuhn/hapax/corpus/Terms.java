@@ -40,7 +40,7 @@ public class Terms extends Bag<String> implements ScannerClient {
         return terms;
     }
 
-    @Override
+    //@Override
     public void yield(CharSequence term) {
         this.add(term.toString());
     }

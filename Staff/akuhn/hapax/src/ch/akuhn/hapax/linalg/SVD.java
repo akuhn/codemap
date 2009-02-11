@@ -2,11 +2,8 @@ package ch.akuhn.hapax.linalg;
 
 import static ch.akuhn.util.Interval.range;
 import static java.lang.String.format;
-
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
-
-
 import ch.akuhn.hapax.util.StreamGobbler;
 import ch.akuhn.util.Throw;
 
@@ -99,6 +96,14 @@ public class SVD {
 
     }
 
+    public SVD(float[] s, float[][] Ut, float[][] Vt) {
+        assert s.length == Ut.length;
+        assert s.length == Vt.length;
+        this.s = s;
+        this.Ut = Ut;
+        this.Vt = Vt; 
+    }
+
     private String command(int dimensions) {
         return format("%s -d %d -v 3 %s", fname(), dimensions, "-");
     }
@@ -137,9 +142,9 @@ public class SVD {
         double suma = 0;
         double sumb = 0;
         for (int n: range(dim)) {
-            sim += Ut[n][a] * Ut[n][b] * s[n] * s[n];
-            suma += Ut[n][a] * s[n] * Ut[n][a] * s[n];
-            sumb += Ut[n][b] * s[n] * Ut[n][b] * s[n];
+            sim += Ut[n][a] * Ut[n][b] * (s[n] * s[n]);
+            suma += Ut[n][a] * Ut[n][a] * (s[n] * s[n]);
+            sumb += Ut[n][b] * Ut[n][b] * (s[n] * s[n]);
         }
         return (sim / (Math.sqrt(suma) * Math.sqrt(sumb)));
     }
@@ -172,6 +177,8 @@ public class SVD {
     }
 
     public double similarityVV(int a, int b) {
+        assert a < Vt[0].length : a + " < " + Vt[0].length;
+        assert b < Vt[0].length : b + " < " + Vt[0].length;
         int dim = s.length;
         double sim = 0;
         double suma = 0;
@@ -189,8 +196,12 @@ public class SVD {
         return fname != null ? fname : "svd";
     }
 
-    public static SVD fromMatrix(Matrix matrix, int dimensions) {
-        return new SVD().decompose(matrix, dimensions);
+    public SVD(Matrix matrix, int dimensions) {
+        this.decompose(matrix, dimensions);
+    }
+
+    public SVD transposed() {
+        return new SVD(s, Vt, Ut); // swap Ut and Vt
     }
 
 }

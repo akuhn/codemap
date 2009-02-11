@@ -69,7 +69,7 @@ public abstract class Scanner implements Runnable {
         return this;
     }
 
-    @Override
+    //@Override
     public void run() {
         assert client != null && in != null;
         try {
