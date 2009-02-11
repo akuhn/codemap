@@ -21,8 +21,6 @@ package ch.akuhn.util;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 
-import ch.akuhn.util.blocks.Function;
-
 /**
  * A map that knows how to initialize missing mapping.
  * 
@@ -51,15 +49,6 @@ public abstract class CacheMap<K,V> extends HashMap<K,V> {
             @Override
             public T initialize(A key) {
                 return createInstanceOf(instanceClass, key);
-            }
-        };
-    }
-
-    public static <A,T> CacheMap<A,T> with(final Function<T,A> block) {
-        return new CacheMap<A,T>() {
-            @Override
-            public T initialize(A key) {
-                return block.apply(key);
             }
         };
     }
