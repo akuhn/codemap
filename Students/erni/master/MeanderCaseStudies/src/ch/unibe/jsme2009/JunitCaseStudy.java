@@ -1,7 +1,5 @@
 package ch.unibe.jsme2009;
 
-import java.util.Iterator;
-
 import ch.akuhn.fame.Repository;
 import ch.akuhn.fame.Tower;
 import ch.akuhn.fame.parser.InputSource;
@@ -12,6 +10,7 @@ import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.akuhn.util.Get;
 import ch.deif.meander.ContourLineAlgorithm;
 import ch.deif.meander.DEMAlgorithm;
+import ch.deif.meander.HausdorffDistance;
 import ch.deif.meander.HillshadeAlgorithm;
 import ch.deif.meander.HillshadeVisualization;
 import ch.deif.meander.MDS;
@@ -72,7 +71,8 @@ public class JunitCaseStudy {
     public static void main(String[] args) {
         
         boolean compute = !!!true;
-        boolean show = true;
+        boolean show = !!!true;
+        boolean dist = true;
         
         if (compute) {
             Repository model = locationsRepository();
@@ -97,6 +97,25 @@ public class JunitCaseStudy {
             //MapVisualization viz = new SketchVisualization(map);
             MapVisualization viz = new HillshadeVisualization(map);
             new PViewer(viz);     
+        }
+        if (dist) {
+            Serializer ser = new Serializer();
+            ser.model().importMSEFile("mse/junit_meander.mse");
+            MSEProject proj = ser.model().all(MSEProject.class).iterator().next();
+            Map map = null;
+            HausdorffDistance hausdroff = new HausdorffDistance();
+            for (MSERelease rel: proj.releases) {
+                MapBuilder builder = Map.builder();
+                for (MSELocation each: rel.locations) {
+                    builder.location(each.x, each.y, each.height);
+                }
+                Map each = builder.build();
+                if (map != null) {
+                    System.out.println("\t\t\t\t" + hausdroff.distance(map, each));
+                }
+                System.out.println(rel.name);
+                map = each;
+            }
         }
     }
     
