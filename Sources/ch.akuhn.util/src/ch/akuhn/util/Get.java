@@ -10,6 +10,15 @@ import java.util.Random;
 
 public class Get {
 
+    public static <E> E element(int index, Iterator<E> iter) {
+        for (int n = 0; n < index; n++) iter.next();
+        return iter.next();
+    }
+
+    public static <E> E element(int index, Iterable<E> elements) {
+        return Get.element(index, elements.iterator());
+    }    
+    
     public static <E> Iterable<E> each(final E... elements) {
         return new Iterable<E>() {
             public Iterator<E> iterator() {
