@@ -3,12 +3,12 @@ package ch.deif.meander;
 
 public class Location {
 
-    public double xNormed, yNormed;
+    public double x, y;
     public double height;
     
     public Location(double xNormed, double yNormed, double height) {
-        this.xNormed = xNormed;
-        this.yNormed = yNormed;
+        this.x = xNormed;
+        this.y = yNormed;
         this.height = height;
     }
     

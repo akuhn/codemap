@@ -203,11 +203,11 @@ public class Map {
         return new MapBuilder();
     }
     
-    public Object pixelSize() {
+    public int pixelSize() {
         return width * height;
     }
 
-    public Object locationSize() {
+    public int locationSize() {
         return locations.size();
     }
 

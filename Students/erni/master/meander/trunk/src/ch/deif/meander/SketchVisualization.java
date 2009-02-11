@@ -18,8 +18,8 @@ public class SketchVisualization extends MapVisualization {
         noFill();
         smooth();
         for (Location each: map.locations()) {
-            float x = (float) (each.xNormed * width);
-            float y = (float) (each.yNormed * height);
+            float x = (float) (each.x * width);
+            float y = (float) (each.y * height);
             float r = (float) (each.height / 100 * width / 2.61f);
             ellipse(x, y, r, r);
         }

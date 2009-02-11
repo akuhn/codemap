@@ -21,8 +21,8 @@ public class NormalizeLocationsAlgorithm extends MapAlgorithm {
 		}
 		double scale = Math.max((maxX - minX),(maxY -  minY));
 		for (Location l: this.map.locations) {
-			l.xNormed = (l.xNormed - minX)/scale;
-			l.yNormed = (l.yNormed - minY)/scale;
+			l.x = (l.x - minX)/scale;
+			l.y = (l.y - minY)/scale;
 			l.height = l.height * 100 / maxHeight;
 		}
 	}
