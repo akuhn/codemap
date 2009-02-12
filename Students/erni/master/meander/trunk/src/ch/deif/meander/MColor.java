@@ -48,8 +48,9 @@ public class MColor {
 	    return 	0xFF000000 | r << 16 | g << 8 | b;	
 	}
 	
-	public void darker() {
+	public MColor darker() {
 		this.darkerInternal(DEFAULT_FACTOR);
+		return this;
 	}
 	
 	public void darker(double factor) {

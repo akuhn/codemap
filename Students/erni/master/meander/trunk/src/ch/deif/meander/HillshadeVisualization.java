@@ -32,7 +32,7 @@ public class HillshadeVisualization extends MapVisualization {
     private MColor color(Pixel p) {
     	Parameters params = map.getParameters();
     	double elevation = p.elevation();
-    	if (elevation > params.beachHeight) return new MColor(245, 218, 0);
+    	if (elevation > params.beachHeight) return new MColor(196, 236, 0);
     	if (elevation > params.waterHeight) return new MColor(92, 142, 255);
     	return new MColor(0, 68, 255);
     }
