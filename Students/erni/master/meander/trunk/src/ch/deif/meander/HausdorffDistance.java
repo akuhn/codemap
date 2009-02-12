@@ -29,8 +29,20 @@ public class HausdorffDistance {
     public double d6(Map A, Map B) {
         double sum = 0;
         for (Location a: A.locations) {
-            // TODO do we need Kahan summation here?
+            // WAS do we need Kahan summation here? -- nope, we dont need, err = approx 1e-16 
             sum += d(a, B);
+        }
+        return sum / A.locationSize();
+    }
+
+    public double kahan_d6(Map A, Map B) {
+        double sum = 0;
+        double c = 0; // compensation
+        for (Location a: A.locations) {
+            double y = d(a, B) - c;
+            double t = sum + y;
+            c = (t - sum) -y;
+            sum = t;
         }
         return sum / A.locationSize();
     }
@@ -45,6 +57,10 @@ public class HausdorffDistance {
     
     public double distance(Map one, Map two) {
         return D22(one, two);
+    }
+    
+    public double kahan_D22(Map A, Map B) {
+        return Math.max(kahan_d6(A, B), kahan_d6(B, A));
     }
 
 }

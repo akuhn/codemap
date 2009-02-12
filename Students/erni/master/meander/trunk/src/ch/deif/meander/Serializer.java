@@ -8,6 +8,7 @@ import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.Repository;
 import ch.akuhn.fame.Tower;
+import ch.akuhn.util.Bag;
 
 @FamePackage("Meander")
 public class Serializer {
@@ -22,6 +23,27 @@ public class Serializer {
     @FameDescription("Document")
     public static class MSEDocument {
         @FameProperty public String name;
+        private Bag<String> terms;
+        @FameProperty
+        public Collection<?> getTerms() {
+            Collection<Object> coll = new ArrayList<Object>();
+            int count = -1;
+            for (Bag.Count<String> each: terms.sortedCounts()) {
+                if (each.count != count) coll.add(count = each.count);
+                coll.add(each.element);
+            }
+            return coll;
+        }
+
+        public void setTerms(Collection<Object> encoded) {
+            terms = new Bag<String>();
+            int count = -1;
+            for (Object each: encoded) {
+                if (each instanceof Number) count = ((Number) each).intValue();
+                else terms.add((String) each, count);
+            }
+        }
+
     }
     
     @FameDescription("Release")
@@ -75,6 +97,16 @@ public class Serializer {
         release.documents.add(document);
         release.locations.add(location);
         t.model.add(location, document);
+        return this;
+    }
+    
+    public Serializer document(String name, Bag<String> terms) {
+        assert release != null;
+        MSEDocument document = new MSEDocument();
+        document.name = name;
+        document.terms = terms;
+        release.documents.add(document);
+        t.model.add(document);
         return this;
     }
     
