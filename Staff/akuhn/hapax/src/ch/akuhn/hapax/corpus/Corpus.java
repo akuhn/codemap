@@ -26,6 +26,10 @@ public class Corpus {
     public void add(Document document) {
         documents.add(document);
     }
+    
+    public void addAll(Corpus other) {
+        for (Document each: other.documents) this.add(each);
+    }
 
     public void scanFolder(File folder, String... extensions) {
         for (File each: Files.find(folder, extensions))

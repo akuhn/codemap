@@ -17,7 +17,7 @@ public class SVD {
 
         private void gobbleFooter() {
             consume("ELAPSED", "CPU", "TIME", "=");
-            SVD.this.time = $.nextFloat();
+            SVD.this.time = scan.nextFloat();
             consume("sec.");
             consume("MULTIPLICATIONS", "BY", "A", "=", null);
             consume("MULTIPLICATIONS", "BY", "A^T", "=", null);
@@ -40,30 +40,30 @@ public class SVD {
 
         private void gobbleLeftSingularValues() {
             consume("LEFT", "SINGULAR", "VECTORS", "(transpose", "of", "U):");
-            int rows = $.nextInt();
-            int columns = $.nextInt();
+            int rows = scan.nextInt();
+            int columns = scan.nextInt();
             SVD.this.Ut = new float[rows][columns];
             for (int row: range(rows)) {
                 for (int column: range(columns)) {
-                    SVD.this.Ut[row][column] = $.nextFloat();
+                    SVD.this.Ut[row][column] = scan.nextFloat();
                 }
             }
         }
 
         private void gobbleRightSingularValues() {
             consume("RIGHT", "SINGULAR", "VECTORS", "(transpose", "of", "V):");
-            int rows = $.nextInt();
-            int columns = $.nextInt();
+            int rows = scan.nextInt();
+            int columns = scan.nextInt();
             SVD.this.Vt = new float[rows][columns];
             for (int row: range(rows)) {
                 for (int column: range(columns)) {
-                    SVD.this.Vt[row][column] = $.nextFloat();
+                    SVD.this.Vt[row][column] = scan.nextFloat();
                 }
             }
         }
 
         private void gobbleRitzValues() {
-            String next = $.next(); // either "NUMBER" or "TRANSPOSING"
+            String next = scan.next(); // either "NUMBER" or "TRANSPOSING"
             if (next.equals("TRANSPOSING")) {
                 consume("THE", "MATRIX", "FOR", "SPEED", "NUMBER");
             } else assert next.equals("NUMBER");
@@ -79,7 +79,7 @@ public class SVD {
             int len = consumeInt("SINGULAR", "VALUES:");
             SVD.this.s = new float[len];
             for (int n: range(len)) {
-                SVD.this.s[n] = $.nextFloat();
+                SVD.this.s[n] = scan.nextFloat();
             }
         }
 

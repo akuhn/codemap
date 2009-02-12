@@ -5,27 +5,44 @@ import java.util.Scanner;
 
 public class StreamGobbler extends Thread {
 
-    protected Scanner $;
+    protected Scanner scan;
+    private StringBuilder buf;
     private boolean running = true;
+    private boolean verbose = false;
 
     public StreamGobbler(InputStream is) {
-        this.$ = new Scanner(is);
+        this.scan = new Scanner(is);
+        this.buf = new StringBuilder();
     }
 
-    @Override
-    public void run() {
-        $.useDelimiter("\n+");
-        while (running && $.hasNext())
-            System.err.printf("%s\n", $.next());
+    public StreamGobbler silent() {
+        verbose = false;
+        return this;
     }
     
-    public void kill() {
+    public StreamGobbler verbose() {
+        verbose = true;
+        return this;
+    }
+    
+    @Override
+    public void run() {
+        scan.useDelimiter("\n+");
+        while (running && scan.hasNext()) {
+            String next = scan.next();
+            buf.append(next).append('\n');
+            if (verbose) System.err.printf("%s\n", next);
+        }
+    }
+    
+    public String kill() {
         running  = false;
+        return buf.toString();
     }
 
     public void consume(String... words) {
         for (String word: words) {
-            String next = $.next();
+            String next = scan.next();
             if (word == null || word.equals(next)) continue;
             throw new Error("Expected " + word + " but found " + next);
         }
@@ -33,16 +50,16 @@ public class StreamGobbler extends Thread {
 
     public int consumeInt(String... words) {
         consume(words);
-        return $.nextInt();
+        return scan.nextInt();
     }
 
     public double consumeDouble(String... words) {
         consume(words);
-        return $.nextDouble();
+        return scan.nextDouble();
     }
 
     public void expectEOF() {
-        if (running && $.hasNext()) throw new Error();
+        if (running && scan.hasNext()) throw new Error();
     }
 
 }
