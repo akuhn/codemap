@@ -3,11 +3,14 @@ package ch.akuhn.hapax.corpus;
 import java.io.File;
 import java.util.Collection;
 
+import ch.akuhn.util.Bag;
+
 
 public class Document {
 
     public Object handle;
     public Terms terms;
+    public VersionNumber version;
 
     public Document() {
         this(null, new Terms());
@@ -19,8 +22,13 @@ public class Document {
     }
     
     public Document(Object handle, Collection<String> terms) {
+        this(handle, terms, null);
+    }
+
+    public Document(Object handle, Collection<String> terms, VersionNumber versionNumber) {
         this.handle = handle;
         this.terms = new Terms(terms);
+        this.version = versionNumber;
     }
 
     @Override
