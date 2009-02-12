@@ -171,12 +171,6 @@ public abstract class Files {
         return IterableIteratorFactory.create(new Find(folder, extensions));
     }
 
-    public static void main(String... argh) {
-        for (File each : all(".", endsWith(".class"))) {
-            System.out.println(each);
-        }
-    }
-
     public static CharSequence openRead(File file) {
         return Strings.fromFile(file);
     }
@@ -195,6 +189,13 @@ public abstract class Files {
 
     public static Appendable openWrite(String filename) {
         return openWrite(new File(filename));
+    }
+
+    public static Object extension(String name) {
+        int index = name.lastIndexOf('.');
+        int slash = name.lastIndexOf('/');
+        if (index < slash || index < 0) return "";
+        return name.substring(index + 1);
     }
 
 }
