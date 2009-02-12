@@ -13,6 +13,7 @@ public class Map {
     public final int width, height;
     public Collection<Location> locations;
     private Parameters parameters;
+    public String name;
     
     public Map(Parameters parameters, Location... locations) {
         this(parameters, Arrays.asList(locations));

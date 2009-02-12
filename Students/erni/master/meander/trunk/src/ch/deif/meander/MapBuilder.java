@@ -9,6 +9,7 @@ public class MapBuilder {
 
     private Parameters params;
     private Collection<Location> locations;
+    private String name;
     
     public MapBuilder() {
         params = new Parameters();
@@ -34,7 +35,14 @@ public class MapBuilder {
     }
     
     public Map build() {
-        return new Map(params, locations);
+        Map map = new Map(params, locations);
+        map.name = name;
+        return map;
+    }
+
+    public MapBuilder name(String versionName) {
+        name = versionName;
+        return this;
     }
     
 }

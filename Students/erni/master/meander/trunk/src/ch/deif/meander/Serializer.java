@@ -24,7 +24,7 @@ public class Serializer {
     @FameDescription("Document")
     public static class MSEDocument {
         @FameProperty public String name;
-        private Bag<String> terms;
+        public Bag<String> terms;
         @FameProperty
         public Collection<?> getTerms() {
             if (terms == null) return Collections.EMPTY_LIST;
