@@ -16,7 +16,7 @@ public class CycleDetectorTest {
 
     static class CD extends CycleDetector<Integer> {
 
-        private Map<Integer,Collection<Integer>> data = new TreeMap();
+        private Map<Integer,Collection<Integer>> data = new TreeMap<Integer,Collection<Integer>>();
 
         @Override
         public Collection<Integer> getChildren(Integer key) {

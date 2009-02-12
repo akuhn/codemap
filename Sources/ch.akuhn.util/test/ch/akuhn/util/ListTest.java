@@ -304,6 +304,7 @@ public class ListTest {
     @Depends("new5tuple")
     @Test(expected = IllegalArgumentException.class)
     public void testSublistNegative(List $5) {
+        @SuppressWarnings("unused")
         java.util.List sub = $5.subList(4, 1);
     }
 

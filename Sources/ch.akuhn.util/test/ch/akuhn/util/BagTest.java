@@ -20,9 +20,6 @@ package ch.akuhn.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
-
-import java.util.Iterator;
-
 import jexample.Depends;
 import jexample.JExample;
 

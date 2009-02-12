@@ -1,6 +1,6 @@
 package ch.akuhn.util;
 
-import static ch.akuhn.util.Get.take;
+import static ch.akuhn.util.Get.first;
 import static ch.akuhn.util.Strings.letters;
 import static org.junit.Assert.assertEquals;
 
@@ -13,7 +13,7 @@ public class Lorem {
     public static final String IPSUM = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
     
     public static final Iterable<String> ipsum(int num) {
-        return take(num, letters(IPSUM));
+        return first(num, letters(IPSUM));
     }
     
     public static final Iterable<String> ipsum() {

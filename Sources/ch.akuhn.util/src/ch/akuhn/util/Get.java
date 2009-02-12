@@ -174,7 +174,7 @@ public class Get {
         return array;
     }
 
-    public static <T> Iterable<T> take(final int num, final Iterable<T> iter) {
+    public static <T> Iterable<T> first(final int num, final Iterable<T> iter) {
         return new Providable<T>() {
             private int count;
             private Iterator<T> it;
