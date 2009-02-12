@@ -3,6 +3,8 @@ package ch.deif.meander;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import ch.akuhn.hapax.corpus.Document;
+
 public class MapBuilder {
 
     private Parameters params;
@@ -21,6 +23,13 @@ public class MapBuilder {
     
     public MapBuilder location(double xNormed, double yNormed, double h) {
         locations.add(new Location(xNormed, yNormed, h));
+        return this;
+    }
+
+    public MapBuilder location(double xNormed, double yNormed, double h, Document document) {
+        Location loc = new Location(xNormed, yNormed, h);
+        loc.document = document;
+        locations.add(loc);
         return this;
     }
     
