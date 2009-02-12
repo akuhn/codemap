@@ -2,6 +2,7 @@ package ch.deif.meander;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
@@ -26,6 +27,7 @@ public class Serializer {
         private Bag<String> terms;
         @FameProperty
         public Collection<?> getTerms() {
+            if (terms == null) return Collections.EMPTY_LIST;
             Collection<Object> coll = new ArrayList<Object>();
             int count = -1;
             for (Bag.Count<String> each: terms.sortedCounts()) {
