@@ -13,6 +13,12 @@ public class Out {
     }
 
     public static <E> void puts(Iterable<E> iterable) {
+        for (Object o : iterable) {
+            System.out.println(o);
+        }
+    }
+    
+    public static <E> void p(Iterable<E> iterable) {
         System.out.print("[");
         Separator s = new Separator();
         for (Object o : iterable) {

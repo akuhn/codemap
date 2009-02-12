@@ -1,6 +1,7 @@
 package ch.akuhn.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -133,14 +134,14 @@ public class Get {
         };
     }
 
-    public static <E> Iterable<E> sorted(Iterable<E> iter) {
+    public static <E> List<E> sorted(Iterable<? extends E> iter) {
         ArrayList<E> list = new ArrayList<E>();
         for (E e : iter)
             list.add(e);
         Collections.sort(list, null);
         return list;
     }
-
+    
     public static <T> Iterable<T> shuffle(final Iterable<T> iterable) {
         return new Providable<T>() {
             private Random random;
