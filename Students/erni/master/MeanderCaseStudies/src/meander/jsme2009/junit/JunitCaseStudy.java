@@ -1,4 +1,4 @@
-package ch.unibe.jsme2009;
+package meander.jsme2009.junit;
 
 import ch.akuhn.fame.Repository;
 import ch.akuhn.fame.Tower;
@@ -24,6 +24,7 @@ import ch.deif.meander.Serializer;
 import ch.deif.meander.Serializer.MSELocation;
 import ch.deif.meander.Serializer.MSEProject;
 import ch.deif.meander.Serializer.MSERelease;
+import ch.unibe.jsme2009.HapaxDoc;
 
 
 public class JunitCaseStudy {

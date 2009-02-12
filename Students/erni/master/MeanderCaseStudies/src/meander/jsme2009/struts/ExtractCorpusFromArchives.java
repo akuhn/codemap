@@ -8,13 +8,13 @@ import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.util.Files;
 import ch.deif.meander.Serializer;
+import ch.deif.meander.Serializer.MSEDocument;
+import ch.deif.meander.Serializer.MSERelease;
 import ch.unibe.jsme2009.ZipFileParser;
 
 public class ExtractCorpusFromArchives {
 
     public static void main(String[] args) throws ZipException, IOException {
-        
-        // run with -Xmx256M
         
         Serializer ser = new Serializer();
         ser.project("Struts");
@@ -28,8 +28,11 @@ public class ExtractCorpusFromArchives {
                 System.out.println(ser.model().size());
             }
         }
+        // TODO implement #exportMSEZipFile
         ser.model().exportMSEFile("mse/struts_input.mse");
         
+        System.out.println("#release\t= " + ser.model().all(MSERelease.class).size());
+        System.out.println("#document\t= " + ser.model().all(MSEDocument.class).size());
         
     }
 

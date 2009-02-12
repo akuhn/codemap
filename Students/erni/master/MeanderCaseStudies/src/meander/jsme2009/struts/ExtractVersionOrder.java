@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Collections;
 import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
@@ -17,25 +15,49 @@ import ch.akuhn.fame.FameProperty;
 import ch.akuhn.util.Files;
 import ch.akuhn.util.Get;
 import ch.akuhn.util.Out;
+import ch.akuhn.util.Throw;
 
 @FamePackage("Meander")
-public class RecoverVersionOrderFromArchives {
+public class ExtractVersionOrder implements Runnable {
 
     public static void main(String[] args) throws ZipException, IOException {
-        
+        new ExtractVersionOrder().folder("data/groovy").run();
+    }
+
+    private String folderName;
+
+    private ExtractVersionOrder folder(String name) {
+        this.folderName = name;
+        return this;
+    }
+
+    public void run() {
+        try {
+            checkedRun();
+        } catch (Exception ex) {
+            throw Throw.exception(ex);
+        }
+    }
+    
+    public void checkedRun() throws Exception {
+    
         VersionOrder order = new VersionOrder();
         
-        for (File file: Files.all("data/struts")) {
+        for (File file: Files.all(folderName)) {
             if (file.getName().endsWith(".zip")) {
                 long min = Long.MAX_VALUE;
                 long max = Long.MIN_VALUE;
                 ZipFile zip = new ZipFile(file);
                 for (ZipEntry each: Get.each(zip.entries())) {
+                    if (each.isDirectory()) continue;
                     long time = each.getTime();
                     if (time == -1) continue;
                     min = Math.min(min, time);
                     max = Math.max(max, time);
+                    //System.out.println(new Date(time) + "\t" + each.getName());
                 }
+                //if (file.getName().contains("beta-2")) System.exit(-1);
+                
                 order.versions.add(new Version(file.getName(), max));
             }
         }
@@ -70,5 +92,5 @@ public class RecoverVersionOrderFromArchives {
             return new Date(time);
         }
     }
-    
+
 }
