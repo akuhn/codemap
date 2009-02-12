@@ -49,5 +49,13 @@ public class Terms extends Bag<String> implements ScannerClient {
     public void yield(CharSequence term) {
         this.add(term.toString());
     }
+    
+    public Terms intern() {
+        Terms terms = new Terms();
+        for (Count<String> each: this.counts()) {
+            terms.add(each.element.intern(), each.count);
+        }
+        return terms;
+    }
 
 }

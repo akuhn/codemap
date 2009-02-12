@@ -7,7 +7,7 @@ import java.util.Collection;
 public class Document {
 
     public Object handle;
-    public final Terms terms;
+    public Terms terms;
 
     public Document() {
         this(null, new Terms());
@@ -26,6 +26,13 @@ public class Document {
     @Override
     public String toString() {
         return (handle instanceof File ? ((File) handle).getName() : handle.toString());
+    }
+
+    public Document intern() {
+        Document document = new Document();
+        document.handle = this.handle;
+        document.terms = this.terms.intern();
+        return document;
     }
 
 }

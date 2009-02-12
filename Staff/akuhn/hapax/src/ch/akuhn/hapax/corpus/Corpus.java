@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import ch.akuhn.util.Files;
+import ch.akuhn.util.query.Collect;
 
 public class Corpus {
 
@@ -46,4 +47,14 @@ public class Corpus {
         return String.format("Corpus (%d documents, %d terms)", documentSize(), termSize());
     }
 
+    public Corpus intern() {
+        Corpus corpus = new Corpus();
+        Collect<Document> query = Collect.from(documents);
+        for (Collect<Document> each: query) {
+            each.yield = each.element.intern();
+        }
+        corpus.documents = query.result();
+        return corpus;
+    }
+    
 }
