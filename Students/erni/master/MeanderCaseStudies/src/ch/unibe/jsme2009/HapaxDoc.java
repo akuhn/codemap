@@ -6,8 +6,8 @@ import java.util.Collection;
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
+import ch.akuhn.hapax.corpus.VersionNumber;
 import ch.akuhn.util.Bag;
-import ch.deif.meander.VersionNumber;
 
 @FamePackage("Hapax")
 @FameDescription("Doc")

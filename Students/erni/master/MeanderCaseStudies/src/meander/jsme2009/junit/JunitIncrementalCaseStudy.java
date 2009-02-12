@@ -1,55 +1,57 @@
 package meander.jsme2009.junit;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import ch.akuhn.fame.Tower;
-import ch.akuhn.fame.parser.InputSource;
 import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.corpus.Document;
+import ch.akuhn.hapax.corpus.VersionNumber;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.akuhn.util.As;
-import ch.akuhn.util.Get;
 import ch.akuhn.util.query.Collect2;
 import ch.akuhn.util.query.Detect;
-import ch.deif.meander.HausdorffDistance;
 import ch.deif.meander.Location;
 import ch.deif.meander.MDS;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
+import ch.deif.meander.MapVisualization;
+import ch.deif.meander.NormalizeElevationAlgorithm;
+import ch.deif.meander.NormalizeLocationsAlgorithm;
+import ch.deif.meander.PViewer;
 import ch.deif.meander.Serializer;
+import ch.deif.meander.SketchVisualization;
+import ch.deif.meander.Serializer.MSEDocument;
 import ch.deif.meander.Serializer.MSEProject;
 import ch.deif.meander.Serializer.MSERelease;
-import ch.unibe.jsme2009.HapaxDoc;
 
 public class JunitIncrementalCaseStudy implements Runnable {
 
-    public final String FILENAME = "mse/junit_case.h.mse";
+    public final String FILENAME = "mse/junit_corpus.mse";
     private Corpus corpus;
-
-    public Tower tower() {
-        Tower t = new Tower();
-        t.metamodel.with(HapaxDoc.class);
-        t.model.importMSE(InputSource.fromFilename(FILENAME));
-        return t;
-    }
-
+ 
     public Corpus corpus(String versionName) {
-        Corpus c = new Corpus();
-        for (HapaxDoc each: Get.sorted(tower().model.all(HapaxDoc.class))) {
-            // System.out.println(each.version.string);
-            if (each.version.string.equals(versionName)) {
-                c.add(new Document(each, each.terms));
+        Serializer ser = new Serializer();
+        ser.model().importMSEFile(FILENAME);
+        MSEProject project = ser.model().all(MSEProject.class).iterator().next();
+        Corpus corpus = new Corpus();
+        for (MSERelease version: project.releases) {
+            if (!versionName.equals(version.name)) continue;
+            for (MSEDocument each: version.documents) {
+                assert each.name != null;
+                corpus.add(new Document(each.name, each.terms, new VersionNumber(version.name)));
             }
         }
-        return c;
+        return corpus;
     }
 
     public static void main(String[] args) {
         new JunitIncrementalCaseStudy().run();
     }
     
-    public void run() {
+    public Collection<Map> createMap() {
+        Collection<Map> maps = new ArrayList<Map>();
         Serializer ser = new Serializer();
         ser.model().importMSEFile("mse/junit_meander.mse");
         MSEProject proj = ser.model().all(MSEProject.class).iterator().next();
@@ -58,17 +60,20 @@ public class JunitIncrementalCaseStudy implements Runnable {
 
         for (MSERelease rel: proj.releases) {
             if (previous != null) {
-                Map newMap = nextMap(rel.name, previousMap);
-                System.out.println(rel.name);
-                System.out.println(new HausdorffDistance().distance(newMap, previousMap));
-                previousMap = newMap;
+                previousMap = nextMap(rel.name, previousMap);
             } else {
                 previousMap = firstMap(rel.name);
             }
+            maps.add(previousMap);
             previous = rel;
         }
+        return maps;
     }
 
+    public void run() {
+        new ComputeHausdorff(createMap()).run();
+    }
+    
     private Map firstMap(String versionName) {
         corpus = corpus(versionName);
         List<Document> tempDocuments = As.list(corpus.documents());
@@ -82,6 +87,7 @@ public class JunitIncrementalCaseStudy implements Runnable {
             int index = lsi.documents.get(each);
             builder.location(mds.x[index], mds.y[index], Math.sqrt(each.terms.size()), each);
         }
+        builder.name(versionName);
         return builder.build();
     }
 
@@ -103,9 +109,21 @@ public class JunitIncrementalCaseStudy implements Runnable {
             int index = lsi.documents.get(each);
             builder.location(mds.x[index], mds.y[index], Math.sqrt(each.terms.size()), each);
         }
+        builder.name(versionName);
         Map map =  builder.build();
         System.out.println("dim(map) = " + map.locationSize());
         return map;
+    }
+
+    public void show(Map map) {
+        new NormalizeLocationsAlgorithm(map).run();
+        //new DEMAlgorithm(map).run();
+        new NormalizeElevationAlgorithm(map).run();
+        //new HillshadeAlgorithm(map).run();
+        //new ContourLineAlgorithm(map).run();
+        MapVisualization viz = new SketchVisualization(map);
+        //MapVisualization viz = new HillshadeVisualization(map);
+        new PViewer(viz);     
     }
 
     private Iterable<Location> matchingLocations(LatentSemanticIndex lsi, Map previous) {
@@ -114,8 +132,8 @@ public class JunitIncrementalCaseStudy implements Runnable {
         for (Collect2<Document,Location> each: collect) {
             Detect<Location> match = Detect.from(previous.locations);
             for (Detect<Location> other: match) {
-                other.yield = norm(((HapaxDoc) other.element.document.handle).name).equals(
-                        norm(((HapaxDoc) each.element.handle).name));
+                other.yield = norm((String) other.element.document.handle).equals(
+                        norm((String) each.element.handle));
             }
             if (match.resultIfNone(null) == null) tally++; 
             collect.yield = match.resultIfNone(makeRandomLocation());
