@@ -26,8 +26,8 @@ public class MDS {
             r0 = consumeDouble("#", "corr(D,d):");
             r = consumeDouble("#", "corr(D,d):");
             for (int n: range(x.length)) {
-                x[n] = $.nextDouble();
-                y[n] = $.nextDouble();
+                x[n] = scan.nextDouble();
+                y[n] = scan.nextDouble();
             }
             expectEOF();
         }
@@ -92,7 +92,7 @@ public class MDS {
             // String command = format("%s %d %f", fname(), 10, 0.1);
             String command = format("%s 50 1 0 1:8", fname());
             Process proc = Runtime.getRuntime().exec(command);
-            new StreamGobbler(proc.getErrorStream()).start();
+            new StreamGobbler(proc.getErrorStream()).silent().start();
             new Gobbler(proc.getInputStream()).start();
             //System.out.println("HERE ------------------");
             //printMatrixOn(matrix, matchingLocations, System.out);
