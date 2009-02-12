@@ -1,6 +1,6 @@
 package example;
 
-import static ch.akuhn.util.Get.take;
+import static ch.akuhn.util.Get.first;
 import static ch.akuhn.util.Out.puts;
 
 import java.io.File;
@@ -41,10 +41,10 @@ public class CurrentDirJava {
 
         LatentSemanticIndex lsi = tdm.createIndex();
 
-        puts(take(10, lsi.rankDocumentsByTerm("bag")));
-        puts(take(10, lsi.rankTermsByTerm("bag")));
-        puts(take(10, lsi.rankDocumentsByTerm("famix")));
-        puts(take(10, lsi.rankDocumentsByQuery("split string by lower- and upper-case")));
+        puts(first(10, lsi.rankDocumentsByTerm("bag")));
+        puts(first(10, lsi.rankTermsByTerm("bag")));
+        puts(first(10, lsi.rankDocumentsByTerm("famix")));
+        puts(first(10, lsi.rankDocumentsByQuery("split string by lower- and upper-case")));
 
         Serialization mse;
         

@@ -1,6 +1,7 @@
 package ch.akuhn.hapax.corpus;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.Collection;
 
 import ch.akuhn.util.Bag;
@@ -21,6 +22,10 @@ public class Terms extends Bag<String> implements ScannerClient {
     
     public Terms(Collection<String> strings) {
         this.addAll(strings); // #addAll handles "instance of bag" special case
+    }
+
+    public Terms(InputStream stream) {
+        new CamelCaseScanner().client(this).onStream(stream).run();
     }
 
     public Terms stem() {

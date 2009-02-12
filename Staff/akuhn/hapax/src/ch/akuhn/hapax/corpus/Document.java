@@ -6,7 +6,7 @@ import java.util.Collection;
 
 public class Document {
 
-    public final Object handle;
+    public Object handle;
     public final Terms terms;
 
     public Document() {

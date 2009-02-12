@@ -73,10 +73,11 @@ public class Serialization {
     }
     
     public void add(LatentSemanticIndex index) {
-        MySVD svd = makeSVD(index.svd);
+        //MySVD svd = makeSVD(index.svd);
         //MyTermDocumentMatrix tdm = makeTDM(index.documents, index.terms, index.globalWeighting);
     }
         
+    @SuppressWarnings("unused")
     private MySVD makeSVD(SVD svd) {
         MySVD element = new MySVD();
         element.s = svd.s;
