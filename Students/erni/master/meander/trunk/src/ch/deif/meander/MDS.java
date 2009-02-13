@@ -5,13 +5,16 @@ import static java.lang.String.format;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 
 import ch.akuhn.hapax.linalg.SymetricMatrix;
 import ch.akuhn.hapax.util.StreamGobbler;
 import ch.akuhn.util.As;
 import ch.akuhn.util.Throw;
-import ch.deif.meander.util.TeePrintStream;
+import ch.deif.meander.util.TeeInputStream;
+import ch.deif.meander.util.TeeOutputStream;
+
 
 public class MDS {
 
@@ -83,24 +86,22 @@ public class MDS {
     }
 
     private MDS compute(SymetricMatrix matrix, Iterable<Location> matchingLocations) {
+        assert matchingLocations == null || matrix.rowSize() == As.list(matchingLocations).size();
+        boolean tee = true;
         try {
-            
-            assert matchingLocations == null || matrix.rowSize() == As.list(matchingLocations).size();
-            
             x = new double[matrix.columnSize()];
             y = new double[matrix.columnSize()];
-            // String command = format("%s %d %f", fname(), 10, 0.1);
             String command = format("%s 50 1 0 1:8", fname());
             Process proc = Runtime.getRuntime().exec(command);
-            new StreamGobbler(proc.getErrorStream()).silent().start();
-            new Gobbler(proc.getInputStream()).start();
-            //System.out.println("HERE ------------------");
-            //printMatrixOn(matrix, matchingLocations, System.out);
-            printMatrixOn(matrix, matchingLocations, 
-                    new PrintStream(proc.getOutputStream()));
-                    //new TeePrintStream(new PrintStream(proc.getOutputStream()),
-                    //        System.out));
-
+            InputStream err = proc.getErrorStream();
+            InputStream in = proc.getInputStream();
+            if (tee) err = new TeeInputStream(err, "error.log");
+            if (tee) in = new TeeInputStream(in, "input.log");
+            new StreamGobbler(err).silent().start();
+            new Gobbler(in).start();
+            OutputStream out = proc.getOutputStream();
+            if (tee) out = new TeeOutputStream(out, "output.log");
+            printMatrixOn(matrix, matchingLocations, new PrintStream(out));
             int exit = fixBrokenWaitFor(proc);
             if (exit != 0) throw new Error(command);
         } catch (Exception ex) {
