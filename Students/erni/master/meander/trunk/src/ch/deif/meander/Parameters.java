@@ -2,8 +2,6 @@ package ch.deif.meander;
 
 public class Parameters {
 
-    // TODO revise and actually use them!
-    
     public enum ColorScheme {
         NONE, GREEN, NEAREST_NEIGHBOUR, FILE_KIND, PACKAGE;
     }

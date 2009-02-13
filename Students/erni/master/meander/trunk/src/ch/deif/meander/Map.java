@@ -216,4 +216,16 @@ public class Map {
         return DEM != null;
     }
     
+    public MapVisualization getDefauVisualization() {
+        // TODO make all algorithms reentrant.
+        Map map = this;
+        new NormalizeLocationsAlgorithm(map).run();
+        new DEMAlgorithm(map).run();
+        new NormalizeElevationAlgorithm(map).run();
+        new HillshadeAlgorithm(map).run();
+        new ContourLineAlgorithm(map).run();
+        //return new SketchVisualization(map);
+        return new HillshadeVisualization(map);
+    }
+    
 }

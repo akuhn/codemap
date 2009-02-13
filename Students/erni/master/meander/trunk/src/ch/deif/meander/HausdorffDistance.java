@@ -52,11 +52,21 @@ public class HausdorffDistance {
     }
     
     public double D22(Map A, Map B) {
-        return Math.max(d6(A, B), d6(B, A));
+        double ab = d6(A, B);
+        double ba = d6(B, A);
+        //System.out.printf("# d(A,B) = %f; d(B,A) = %f\n", ab, ba);
+        return Math.max(ab, ba);
+    }
+    
+    public double D23(Map A, Map B) {
+        double ab = d6(A, B);
+        double ba = d6(B, A);
+        //System.out.printf("# d(A,B) = %f; d(B,A) = %f\n", ab, ba);
+        return ab + ba / 2;
     }
     
     public double distance(Map one, Map two) {
-        return D22(one, two);
+        return D23(one, two);
     }
     
     public double kahan_D22(Map A, Map B) {
