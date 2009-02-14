@@ -2,6 +2,8 @@ package ch.akuhn.util;
 
 public class Assert {
 
+    // TODO moar methods to check range of numebrs
+    
     public static final <T> T notNull(T t) {
         assert t != null;
         return t;

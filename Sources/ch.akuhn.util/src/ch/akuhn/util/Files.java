@@ -149,6 +149,7 @@ public abstract class Files {
     }
 
     public static void close(Object appendable) {
+        // Take into account that nice blog post
         if (appendable instanceof Closeable) {
             try {
                 ((Closeable) appendable).close();
