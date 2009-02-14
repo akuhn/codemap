@@ -8,10 +8,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.linalg.SymetricMatrix;
 import ch.akuhn.hapax.util.StreamGobbler;
 import ch.akuhn.util.As;
 import ch.akuhn.util.Throw;
+import ch.deif.meander.util.Delimiter;
 import ch.deif.meander.util.TeeInputStream;
 import ch.deif.meander.util.TeeOutputStream;
 
@@ -45,21 +47,22 @@ public class MDS {
         return fname != null ? fname : "hitmds2";
     }
 
-    private void printMatrixOn(SymetricMatrix matrix, Iterable<Location> locations, PrintStream out) throws IOException {
+    private void printMatrixOn(LatentSemanticIndex index, Iterable<Location> locations, PrintStream out) throws IOException {
         out.append('#');
         out.append(' ');
         // TODO should be negative numbers but results are nicer this way :-)
-        out.print(matrix.columnSize());
+        out.print(index.documents.size());
         out.append(' ');
-        out.print(matrix.rowSize());
+        out.print(index.documents.size());
         out.append('\n');
-        for (int n = 0; n < matrix.rowSize(); n++) {
-            for (int m = 0; m < matrix.columnSize(); m++) {
-                out.append(' ');
-                out.print((float) matrix.get(n, m));
-            }
-            out.append('\n');
+        Delimiter delim = new Delimiter(".", 10000, 120);
+        for (double value: index.documentCorrelations()) {
+            out.append(' ');
+            out.print((float) value);
+            if (delim.tally()) System.out.print(delim);
         }
+        System.out.println();
+        out.append('\n');
         if (locations == null) {
             out.print("# -2\n");
         } else {
@@ -77,31 +80,31 @@ public class MDS {
         out.close();
     }
 
-    public static MDS fromCorrelationMatrix(SymetricMatrix documentCorrelation) {
-        return new MDS().compute(documentCorrelation, null);
+    public static MDS fromCorrelationMatrix(LatentSemanticIndex index) {
+        return new MDS().compute(index, null);
     }
 
-    public static MDS fromCorrelationMatrix(SymetricMatrix documentCorrelation, Iterable<Location> matchingLocations) {
-        return new MDS().compute(documentCorrelation, matchingLocations);
+    public static MDS fromCorrelationMatrix(LatentSemanticIndex index, Iterable<Location> matchingLocations) {
+        return new MDS().compute(index, matchingLocations);
     }
 
-    private MDS compute(SymetricMatrix matrix, Iterable<Location> matchingLocations) {
-        assert matchingLocations == null || matrix.rowSize() == As.list(matchingLocations).size();
+    private MDS compute(LatentSemanticIndex index, Iterable<Location> matchingLocations) {
+        assert matchingLocations == null || index.documents.size() == As.list(matchingLocations).size();
         boolean tee = true;
         try {
-            x = new double[matrix.columnSize()];
-            y = new double[matrix.columnSize()];
+            x = new double[index.documents.size()];
+            y = new double[index.documents.size()];
             String command = format("%s 50 1 0 1:8", fname());
             Process proc = Runtime.getRuntime().exec(command);
             InputStream err = proc.getErrorStream();
             InputStream in = proc.getInputStream();
             if (tee) err = new TeeInputStream(err, "error.log");
             if (tee) in = new TeeInputStream(in, "input.log");
-            new StreamGobbler(err).silent().start();
+            new StreamGobbler(err).verbose().start();
             new Gobbler(in).start();
             OutputStream out = proc.getOutputStream();
             if (tee) out = new TeeOutputStream(out, "output.log");
-            printMatrixOn(matrix, matchingLocations, new PrintStream(out));
+            printMatrixOn(index, matchingLocations, new PrintStream(out));
             int exit = fixBrokenWaitFor(proc);
             if (exit != 0) throw new Error(command);
         } catch (Exception ex) {
