@@ -40,10 +40,9 @@ public class ComputeHausdorff implements Runnable {
         Map prev = null;
         HausdorffDistance hausdorff = new HausdorffDistance();
         for (Map each: maps) {
-            if (prev != null) {
-                System.out.println("\t\t\t\t" + hausdorff.distance(each, prev));
-            }
+            if (prev != null) System.out.println("\t\t\t\t" + hausdorff.distance(each, prev));
             System.out.println(each.name);
+            //each.getDefauVisualization().drawToPNG("junit-(%s)",each.name);
             prev = each;
         }
     }

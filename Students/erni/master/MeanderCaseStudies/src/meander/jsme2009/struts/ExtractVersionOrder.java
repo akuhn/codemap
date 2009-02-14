@@ -21,7 +21,8 @@ import ch.akuhn.util.Throw;
 public class ExtractVersionOrder implements Runnable {
 
     public static void main(String[] args) throws ZipException, IOException {
-        new ExtractVersionOrder().folder("data/groovy").run();
+//        new ExtractVersionOrder().folder("data/groovy").run();
+        new ExtractVersionOrder().folder("data/struts").run();
     }
 
     private String folderName;
@@ -86,7 +87,7 @@ public class ExtractVersionOrder implements Runnable {
         }
         @Override
         public String toString() {
-            return getDate() + "\t" + name;
+            return String.format("\"%s\",", name);
         }
         public Date getDate() {
             return new Date(time);

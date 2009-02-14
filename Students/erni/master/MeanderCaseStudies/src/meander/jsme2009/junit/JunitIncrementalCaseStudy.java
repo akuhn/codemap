@@ -115,16 +115,7 @@ public class JunitIncrementalCaseStudy implements Runnable {
         return map;
     }
 
-    public void show(Map map) {
-        new NormalizeLocationsAlgorithm(map).run();
-        //new DEMAlgorithm(map).run();
-        new NormalizeElevationAlgorithm(map).run();
-        //new HillshadeAlgorithm(map).run();
-        //new ContourLineAlgorithm(map).run();
-        MapVisualization viz = new SketchVisualization(map);
-        //MapVisualization viz = new HillshadeVisualization(map);
-        new PViewer(viz);     
-    }
+
 
     private Iterable<Location> matchingLocations(LatentSemanticIndex lsi, Map previous) {
         int tally = 0;

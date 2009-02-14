@@ -80,14 +80,14 @@ public class JunitCaseStudy {
     
     public static void main(String[] args) {
         
-        boolean compute = !!! true;
+        boolean compute = true;
         boolean show = !!! true;
-        boolean dist = true;
+        boolean dist = !!! true;
         int nth = 2;
         
         if (compute) {
             Repository model = locationsRepository();
-            model.exportMSEFile("mse/junit_meander.mse");
+            model.exportMSEFile("mse/junit_meander(2).mse");
         }
         if (show) {
             Serializer ser = new Serializer();
