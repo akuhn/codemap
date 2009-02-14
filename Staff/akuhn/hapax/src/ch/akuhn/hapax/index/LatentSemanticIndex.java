@@ -2,11 +2,16 @@ package ch.akuhn.hapax.index;
 
 import static ch.akuhn.util.Each.withIndex;
 import static ch.akuhn.util.Interval.range;
+
+import java.util.Iterator;
+
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.hapax.linalg.SVD;
 import ch.akuhn.hapax.linalg.SymetricMatrix;
 import ch.akuhn.util.Each;
+import ch.akuhn.util.EachXY;
+import ch.akuhn.util.Providable;
 import ch.akuhn.util.Bag.Count;
 
 public class LatentSemanticIndex {
@@ -98,6 +103,22 @@ public class LatentSemanticIndex {
             }
         }
         return correlation;
+    }
+    
+    public Iterable<Double> documentCorrelations() {
+        return new Providable<Double>() {
+            private Iterator<EachXY> iter;
+            @Override
+            public void initialize() {
+                iter = new EachXY(documents.size(), documents.size()).iterator();
+            }
+            @Override
+            public Double provide() {
+                if (!iter.hasNext()) return done();
+                EachXY each = iter.next();
+                return svd.similarityVV(each.x, each.y);
+            }      
+        };
     }
     
 }
