@@ -81,7 +81,7 @@ public class JunitIncrementalCaseStudy implements Runnable {
         tdm.addCorpus(corpus);
         tdm = tdm.rejectAndWeight();
         LatentSemanticIndex lsi = tdm.createIndex();
-        MDS mds = MDS.fromCorrelationMatrix(lsi.documentCorrelation());
+        MDS mds = MDS.fromCorrelationMatrix(lsi);
         MapBuilder builder = new MapBuilder();
         for (Document each: tempDocuments) {
             int index = lsi.documents.get(each);
@@ -100,7 +100,7 @@ public class JunitIncrementalCaseStudy implements Runnable {
         tdm.addCorpus(corpus);
         tdm = tdm.rejectAndWeight();
         LatentSemanticIndex lsi = tdm.createIndex();
-        MDS mds = MDS.fromCorrelationMatrix(lsi.documentCorrelation(), matchingLocations(lsi, previous));
+        MDS mds = MDS.fromCorrelationMatrix(lsi, matchingLocations(lsi, previous));
         
         System.out.println("dim(lsi) = " + lsi.documents.size());
         

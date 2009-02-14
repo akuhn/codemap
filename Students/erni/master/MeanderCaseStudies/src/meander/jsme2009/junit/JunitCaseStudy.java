@@ -61,7 +61,7 @@ public class JunitCaseStudy {
         System.out.println("Computing LSI...");
         LatentSemanticIndex i = tdm.createIndex();
         System.out.println("Computing MDS...");
-        MDS mds = MDS.fromCorrelationMatrix(i.documentCorrelation());
+        MDS mds = MDS.fromCorrelationMatrix(i);
         System.out.println("Done.");
         Serializer ser = new Serializer();
         ser.project("JUnit");
@@ -82,7 +82,7 @@ public class JunitCaseStudy {
         
         boolean compute = true;
         boolean show = !!! true;
-        boolean dist = !!! true;
+        boolean dist = true;
         int nth = 2;
         
         if (compute) {

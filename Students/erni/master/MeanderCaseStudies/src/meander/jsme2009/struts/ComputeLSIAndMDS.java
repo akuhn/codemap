@@ -61,13 +61,17 @@ public class ComputeLSIAndMDS {
                 ser.model().count(MSERelease.class));
         MSEProject project = ser.model().all(MSEProject.class).iterator().next();
         Corpus corpus = new Corpus();
+        int tally = 0;
         for (MSERelease version: project.releases) {
             if (!VERSIONS.contains(version.name)) continue;
             for (MSEDocument each: version.documents) {
                 assert each.name != null;
+                if ((tally++ % 10) != 0) continue;
                 corpus.add(new Document(each.name, each.terms, versionNumbers.get(version.name)));
             }
         }
+        System.out.printf("# num(doc) = %d\n", 
+                corpus.documentSize());
         return corpus;
     }
     
@@ -84,7 +88,7 @@ public class ComputeLSIAndMDS {
         for (Document each: i.documents) each.terms = null;
         System.gc();
         System.out.println("Computing MDS...");
-        MDS mds = MDS.fromCorrelationMatrix(i.documentCorrelation());
+        MDS mds = MDS.fromCorrelationMatrix(i);
         System.out.println("Done.");
         Serializer ser = new Serializer();
         ser.project("JUnit");
@@ -110,7 +114,7 @@ public class ComputeLSIAndMDS {
      }
  
     public static void main(String[] args) {
-        // Run with -Xmx400M for greater justice
+        // Run with -Xmx1200M for greater justice
         new ComputeLSIAndMDS().run();
     }
     
