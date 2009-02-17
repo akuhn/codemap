@@ -16,8 +16,8 @@ public class CurrentDirJava {
     public static void main(String[] args) throws FileNotFoundException {
 
         Corpus corpus = new Corpus();
-        corpus.scanFolder(new File("../Fame"), ".java");
-        corpus.scanFolder(new File("."), ".java");
+        corpus.importAllFiles(new File("../Fame"), ".java");
+        corpus.importAllFiles(new File("."), ".java");
 
         puts(corpus);
 

@@ -37,7 +37,7 @@ public class TermDocumentMatrix extends SparseMatrix {
     public void addCorpus(Corpus corpus) {
         for (Document document: corpus.documents()) {
             int column = addDocument(document);
-            for (Count<String> each: document.terms.counts()) {
+            for (Count<String> each: document.terms().counts()) {
                 int row = addTerm(each.element);
                 add(row, column, each.count);
             }

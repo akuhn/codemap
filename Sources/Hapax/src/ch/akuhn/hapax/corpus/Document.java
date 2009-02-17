@@ -1,46 +1,45 @@
 package ch.akuhn.hapax.corpus;
 
-import java.io.File;
 import java.util.Collection;
-
 
 
 public class Document {
 
-    public Object handle;
-    public Terms terms;
-    public int termSize;
-    public VersionNumber version;
+    private String name;
+    private Terms terms;
+    private int termSize;
+    private VersionNumber version;
 
-    public Document() {
-        this(null, new Terms());
-    }
-    
-    public Document(File file) {
-        this(file, new Terms(file), null);
-    }
-    
-    public Document(Object handle, Collection<String> terms) {
-        this(handle, terms, null);
+    public Document(String name, Collection<String> terms) {
+        this(name, null, terms);
     }
 
-    public Document(Object handle, Collection<String> terms, VersionNumber versionNumber) {
-        this.handle = handle;
+    public Document(String name, VersionNumber version, Collection<String> terms) {
+        this.name = name;
         this.terms = new Terms(terms);
         this.termSize = this.terms.size();
-        this.version = versionNumber;
+        this.version = version;
     }
 
     @Override
     public String toString() {
-        return (handle instanceof File ? ((File) handle).getName() : handle.toString());
+        return name;
     }
 
-    public Document intern() {
-        Document document = new Document();
-        document.handle = this.handle;
-        document.terms = this.terms.intern();
-        return document;
+    public String name() {
+        return name;
+    }
+
+    public Terms terms() {
+        return terms;
+    }
+
+    public int termSize() {
+        return termSize;
+    }
+
+    public VersionNumber version() {
+        return version;
     }
 
 }
