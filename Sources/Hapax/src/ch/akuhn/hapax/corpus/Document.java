@@ -21,8 +21,7 @@ public class Document {
     @FameProperty
     private VersionNumber version;
 
-    @SuppressWarnings("unused")
-    private Document() {
+    public Document() {
         // for Fame
     }
     

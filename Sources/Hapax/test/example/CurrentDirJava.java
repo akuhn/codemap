@@ -6,7 +6,8 @@ import static ch.akuhn.util.Out.puts;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import ch.akuhn.hapax.corpus.Corpus;
+import ch.akuhn.hapax.corpus.Importer;
+import ch.akuhn.hapax.corpus.TermBagCorpus;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.akuhn.hapax.util.Serialization;
@@ -15,9 +16,10 @@ public class CurrentDirJava {
 
     public static void main(String[] args) throws FileNotFoundException {
 
-        Corpus corpus = new Corpus();
-        corpus.importAllFiles(new File("../Fame"), ".java");
-        corpus.importAllFiles(new File("."), ".java");
+        TermBagCorpus corpus = new TermBagCorpus();
+        Importer importer = new Importer(corpus);
+        importer.importAllFiles(new File("../Fame"), ".java");
+        importer.importAllFiles(new File("."), ".java");
 
         puts(corpus);
 

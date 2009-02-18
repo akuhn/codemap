@@ -2,25 +2,33 @@ package ch.akuhn.hapax.index;
 
 import static ch.akuhn.util.Each.withIndex;
 import static ch.akuhn.util.Pair.zip;
+
+import java.util.Collection;
+import java.util.Map;
+
 import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.corpus.PorterStemmer;
 import ch.akuhn.hapax.corpus.Stemmer;
 import ch.akuhn.hapax.corpus.Stopwords;
 import ch.akuhn.hapax.corpus.Terms;
+import ch.akuhn.hapax.corpus.VersionNumber;
 import ch.akuhn.hapax.linalg.SVD;
 import ch.akuhn.hapax.linalg.SparseMatrix;
 import ch.akuhn.hapax.linalg.Vector;
 import ch.akuhn.hapax.linalg.Vector.Entry;
+import ch.akuhn.util.Bag;
+import ch.akuhn.util.CacheMap;
 import ch.akuhn.util.Each;
 import ch.akuhn.util.Pair;
 import ch.akuhn.util.Bag.Count;
 
-public class TermDocumentMatrix extends SparseMatrix {
+public class TermDocumentMatrix extends SparseMatrix implements Corpus {
 
     public final Index<Document> documents; // columns
     private double[] globalWeighting;
     public final Index<String> terms; // rows
+    private Map<String, VersionNumber> versionMap = CacheMap.instances(VersionNumber.class);
 
     public TermDocumentMatrix() {
         super(0, 0);
@@ -142,6 +150,25 @@ public class TermDocumentMatrix extends SparseMatrix {
             }
         }
         return tdm;
+    }
+
+
+    @Override
+    public void addDocument(String name, String version,
+            Bag<String> terms) {
+        Document document = new Document(name, versionMap.get(name), terms);
+        document.dropTerms();
+        int column = addDocument(document);
+        for (Count<String> each: terms.counts()) {
+            int row = addTerm(each.element);
+            add(row, column, each.count);
+        }
+        
+    }
+
+    @Override
+    public Iterable<Document> documents() {
+        return documents;
     }
     
 }
