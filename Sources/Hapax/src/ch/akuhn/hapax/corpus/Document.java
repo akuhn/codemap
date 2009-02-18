@@ -78,6 +78,10 @@ public class Document {
             if (each instanceof Number) count = ((Number) each).intValue();
             else terms.add((String) each, count);
         }
+    }
+
+    public void addTerms(Terms terms) {
+        this.terms().addAll(terms); 
     }        
     
 }
