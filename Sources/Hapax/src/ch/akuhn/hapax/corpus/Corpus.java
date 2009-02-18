@@ -12,19 +12,45 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
+import ch.akuhn.fame.FameDescription;
+import ch.akuhn.fame.FamePackage;
+import ch.akuhn.fame.FameProperty;
 import ch.akuhn.util.CacheMap;
 import ch.akuhn.util.Files;
 import ch.akuhn.util.Throw;
 
-
+@FamePackage("Hapax")
+@FameDescription("Corpus")
 public class Corpus {
 
+    @FameProperty
     private Collection<Document> documents;
-    private Map<String,VersionNumber> versions;
+    @FameProperty
+    private Collection<VersionNumber> versions;
+    private Map<String,VersionNumber> versionMap;
 
     public Corpus() {
         this.documents = new ArrayList<Document>();
-        this.versions = CacheMap.<String,VersionNumber>instances(VersionNumber.class);
+        this.versions = new ArrayList<VersionNumber>();
+    }
+    
+    private VersionNumber getVersion(String name) {
+        if (versionMap == null) versionMap = new VersionMap();
+        return versionMap.get(name);
+    }
+    
+    @SuppressWarnings("serial")
+    private class VersionMap extends CacheMap<String,VersionNumber> {
+        public VersionMap() { 
+            for (VersionNumber each: versions) this.put(each.name(), each); 
+        }
+        @Override
+        public VersionNumber initialize(String name) {
+            VersionNumber version = new VersionNumber(name);
+            versions.add(version);
+            return version;
+        }
+        
     }
 
     public Iterable<Document> documents() {
@@ -61,8 +87,8 @@ public class Corpus {
         try {
             ZipFile zip = new ZipFile(file);
             for (ZipEntry entry: each(zip.entries())) {
-                for (String each: extensions) {
-                    if (!each.equals(entry.getName())) continue;
+                for (String suffix: extensions) {
+                    if (!entry.getName().endsWith(suffix)) continue;
                     InputStream in = zip.getInputStream(entry);
                     Terms terms = new Terms(in).intern();
                     this.addDocument(entry.getName(), file.getName(), terms);
@@ -81,7 +107,7 @@ public class Corpus {
     }
 
     public void addDocument(String name, String version, Collection<String> terms) {
-        this.add(new Document(name, versions.get(version), terms));
+        this.add(new Document(name, getVersion(version), terms));
     }
 
     public Terms terms() {
@@ -99,4 +125,6 @@ public class Corpus {
         return String.format("Corpus (%d documents, %d terms)", documentSize(), termSize());
     }
 
+    
+    
 }

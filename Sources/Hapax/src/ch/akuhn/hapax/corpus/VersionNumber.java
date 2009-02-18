@@ -8,14 +8,26 @@ import static java.lang.Math.min;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import ch.akuhn.fame.FameDescription;
+import ch.akuhn.fame.FamePackage;
+import ch.akuhn.fame.FameProperty;
+
+@FamePackage("Hapax")
+@FameDescription("Document")
 public class VersionNumber implements Comparable<VersionNumber> {
 
-    public final int numbers[];
-    public final String string;
+    public int numbers[];
+    @FameProperty
+    private String name;
     
-    public VersionNumber(String string) {
-        this.string = string;
-        this.numbers = parse(string);
+    @SuppressWarnings("unused")
+    private VersionNumber() {
+        // for Fame
+    }
+    
+    public VersionNumber(String name) {
+        this.name = name;
+        this.numbers = parse(name);
     }
 
     private int[] parse(String string) {
@@ -49,6 +61,10 @@ public class VersionNumber implements Comparable<VersionNumber> {
     public boolean equals(Object other) {
         return other instanceof VersionNumber &&
                 compareTo((VersionNumber) other) == 0;
+    }
+
+    public String name() {
+        return name;
     }
     
     
