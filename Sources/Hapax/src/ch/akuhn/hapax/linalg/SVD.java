@@ -4,13 +4,17 @@ import static ch.akuhn.util.Interval.range;
 import static java.lang.String.format;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+
 import ch.akuhn.hapax.util.StreamGobbler;
+import ch.akuhn.util.TeeInputStream;
 import ch.akuhn.util.Throw;
 
 public class SVD {
 
     class Gobbler extends StreamGobbler {
 
+        public boolean done = false;
+        
         public Gobbler(InputStream is) {
             super(is);
         }
@@ -91,6 +95,7 @@ public class SVD {
             gobbleLeftSingularValues();
             gobbleRightSingularValues();
             gobbleFooter();
+            done = true;
             expectEOF();
         }
 
@@ -110,18 +115,22 @@ public class SVD {
     
     private SVD decompose(Matrix matrix, int dimensions) {
         try {
-            StreamGobbler error, input;
+            StreamGobbler error;
+            Gobbler input;
             String command = command(dimensions);
             Process proc = Runtime.getRuntime().exec(command);
             error = new StreamGobbler(proc.getErrorStream());
-            input = new Gobbler(proc.getInputStream());
+            input = new Gobbler(new TeeInputStream(proc.getInputStream(), "input"));
             error.start();
             input.start();
             matrix.storeSparseOn(new OutputStreamWriter(proc.getOutputStream()));
             int exit = proc.waitFor();
+            while (!input.done) Thread.sleep(20);
             error.kill();
             input.kill();
             if (exit != 0) throw new Error(command);
+            assert Vt != null;
+            assert Ut != null;
             return this;
         } catch (Exception ex) {
             throw Throw.exception(ex);
@@ -177,6 +186,8 @@ public class SVD {
     }
 
     public double similarityVV(int a, int b) {
+        assert Vt != null;
+        assert s != null;
         assert a < Vt[0].length : a + " < " + Vt[0].length;
         assert b < Vt[0].length : b + " < " + Vt[0].length;
         int dim = s.length;
@@ -184,6 +195,7 @@ public class SVD {
         double suma = 0;
         double sumb = 0;
         for (int n: range(dim)) {
+            assert Vt[n] != null : n;
             sim += Vt[n][a] * Vt[n][b] * s[n] * s[n];
             suma += Vt[n][a] * Vt[n][a] * s[n] * s[n];
             sumb += Vt[n][b] * Vt[n][b] * s[n] * s[n];
@@ -198,6 +210,11 @@ public class SVD {
 
     public SVD(Matrix matrix, int dimensions) {
         this.decompose(matrix, dimensions);
+        assert s != null;
+        assert Vt != null;
+        assert Ut != null;
+        assert Vt.length == s.length;
+        assert Ut.length == s.length;
     }
 
     public SVD transposed() {
