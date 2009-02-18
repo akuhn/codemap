@@ -125,6 +125,10 @@ public class Corpus {
         return String.format("Corpus (%d documents, %d terms)", documentSize(), termSize());
     }
 
+    public void importZipArchive(String name, String extensions) {
+        this.importZipArchive(new File(name), extensions);
+    }
+
     
     
 }
