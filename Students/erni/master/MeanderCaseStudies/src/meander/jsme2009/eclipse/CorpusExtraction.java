@@ -1,6 +1,7 @@
 package meander.jsme2009.eclipse;
 
-import ch.akuhn.hapax.corpus.Corpus;
+import ch.akuhn.hapax.corpus.Importer;
+import ch.akuhn.hapax.corpus.TermBagCorpus;
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.akuhn.util.SizeOf;
@@ -11,8 +12,8 @@ public class CorpusExtraction {
         
         // XXX must run with -Xmx128M for greater justice.
         
-        Corpus corpus = new Corpus();
-        corpus.importZipArchivePackageWise("data/eclipse/eclipse-sourceBuild-srcIncluded-2.0.1.zip", ".java");
+        TermBagCorpus corpus = new TermBagCorpus();
+        new Importer(corpus).importZipArchivePackageWise("data/eclipse/eclipse-sourceBuild-srcIncluded-2.0.1.zip", ".java");
        // corpus.importAllZipArchivesPackageWise(new File("data/eclipse"), ".java");
         System.out.println(corpus);
         System.out.println(SizeOf.deepSizeOf(corpus));

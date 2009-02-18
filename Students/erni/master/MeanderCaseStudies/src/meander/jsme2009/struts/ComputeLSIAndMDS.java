@@ -5,6 +5,7 @@ import java.util.List;
 
 import ch.akuhn.fame.Repository;
 import ch.akuhn.hapax.corpus.Corpus;
+import ch.akuhn.hapax.corpus.TermBagCorpus;
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.corpus.VersionNumber;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
@@ -60,7 +61,7 @@ public class ComputeLSIAndMDS {
                 ser.model().count(MSEDocument.class),
                 ser.model().count(MSERelease.class));
         MSEProject project = ser.model().all(MSEProject.class).iterator().next();
-        Corpus corpus = new Corpus();
+        TermBagCorpus corpus = new TermBagCorpus();
         int tally = 0;
         for (MSERelease version: project.releases) {
             if (!VERSIONS.contains(version.name)) continue;

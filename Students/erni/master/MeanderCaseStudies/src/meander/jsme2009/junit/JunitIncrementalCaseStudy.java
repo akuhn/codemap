@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import ch.akuhn.hapax.corpus.Corpus;
+import ch.akuhn.hapax.corpus.TermBagCorpus;
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.corpus.VersionNumber;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
@@ -29,13 +29,13 @@ import ch.deif.meander.Serializer.MSERelease;
 public class JunitIncrementalCaseStudy implements Runnable {
 
     public final String FILENAME = "mse/junit_corpus.mse";
-    private Corpus corpus;
+    private TermBagCorpus corpus;
  
-    public Corpus corpus(String versionName) {
+    public TermBagCorpus corpus(String versionName) {
         Serializer ser = new Serializer();
         ser.model().importMSEFile(FILENAME);
         MSEProject project = ser.model().all(MSEProject.class).iterator().next();
-        Corpus corpus = new Corpus();
+        TermBagCorpus corpus = new TermBagCorpus();
         for (MSERelease version: project.releases) {
             if (!versionName.equals(version.name)) continue;
             for (MSEDocument each: version.documents) {
@@ -92,7 +92,7 @@ public class JunitIncrementalCaseStudy implements Runnable {
     }
 
     private Map nextMap(String versionName, Map previous) {
-        Corpus prevCorpus = corpus;
+        TermBagCorpus prevCorpus = corpus;
         corpus = corpus(versionName);
         List<Document> tempDocuments = As.list(corpus.documents());
         corpus.addAll(prevCorpus);

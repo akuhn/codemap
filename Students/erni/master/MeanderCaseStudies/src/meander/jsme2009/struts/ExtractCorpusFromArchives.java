@@ -6,6 +6,8 @@ import java.util.zip.ZipException;
 
 import ch.akuhn.fame.Tower;
 import ch.akuhn.hapax.corpus.Corpus;
+import ch.akuhn.hapax.corpus.Importer;
+import ch.akuhn.hapax.corpus.TermBagCorpus;
 
 
 public class ExtractCorpusFromArchives {
@@ -15,8 +17,9 @@ public class ExtractCorpusFromArchives {
         // XXX Must run with -Xmx128M for greater justice
         
         Tower t = new Tower();
-        t.metamodel.with(Corpus.class);
-        Corpus corpus = new Corpus().importAllZipArchives(new File("data/struts"), ".java");
+        t.metamodel.with(TermBagCorpus.class);
+        TermBagCorpus corpus = new TermBagCorpus();
+        new Importer(corpus).importAllZipArchives(new File("data/struts"), ".java");
         System.out.println(corpus);
         t.model.add(corpus);
         t.model.exportMSEFile("mse/struts_new_input.mse");
