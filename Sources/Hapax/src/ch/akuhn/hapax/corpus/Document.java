@@ -51,7 +51,7 @@ public class Document {
     }
 
     public int termSize() {
-        return termSize;
+        return terms == null ? termSize : terms.size();
     }
 
     public VersionNumber version() {
@@ -82,6 +82,11 @@ public class Document {
 
     public void addTerms(Terms terms) {
         this.terms().addAll(terms); 
+    }
+
+    public void dropTerms() {
+        termSize = terms.size();
+        terms = null;
     }        
     
 }

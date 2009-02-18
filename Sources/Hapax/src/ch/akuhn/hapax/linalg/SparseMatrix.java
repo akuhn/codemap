@@ -110,7 +110,7 @@ public class SparseMatrix extends Matrix {
         return rows.size();
     }
 
-    protected void setRow(int row, Vector values) {
+    protected void setRow(int row, SparseVector values) {
         rows.set(row, values);
     }
 
@@ -122,4 +122,10 @@ public class SparseMatrix extends Matrix {
         return used;
     }
 
+    public void trim() {
+        for (Vector each: rows) {
+            ((SparseVector) each).trim();
+        }
+    }
+    
 }

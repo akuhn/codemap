@@ -40,7 +40,7 @@ public class SparseVector extends Vector {
     private int[] keys;
     private int size, used;
 
-    private double[] values;
+    private float[] values;
 
     public SparseVector(double[] values) {
         this(values.length);
@@ -58,7 +58,7 @@ public class SparseVector extends Vector {
         assert capacity >= 0;
         this.size = size;
         this.keys = new int[capacity];
-        this.values = new double[capacity];
+        this.values = new float[capacity];
     }
 
     @Override
@@ -111,7 +111,7 @@ public class SparseVector extends Vector {
     public double put(int key, double value) {
         if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer.toString(key));
         int spot = Arrays.binarySearch(keys, 0, used, key);
-        if (spot >= 0) return values[spot] = value;
+        if (spot >= 0) return values[spot] = (float) value;
         else return update(-1 - spot, key, value);
     }
 
@@ -141,12 +141,18 @@ public class SparseVector extends Vector {
         }
         used++;
         keys[spot] = key;
-        return values[spot] = value;
+        return values[spot] = (float) value;
     }
 
     @Override
     public int used() {
         return used;
     }
+    
+    public void trim() {
+        keys = Arrays.copyOf(keys, used);
+        values = Arrays.copyOf(values, used);
+    }
+    
 
 }
