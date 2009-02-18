@@ -3,42 +3,56 @@ package ch.akuhn.util;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.IdentityHashMap;
+import java.util.Map;
 
+public class SizeOf {
 
-public class Debug {
+    private static final String[] UNIT = { "bytes", "KB", "MB", "GB", "TB" };
+    
+    private int size = 0;
 
-    public static final int deepSizeOf(Object o) {
-        Set<Object> done = new HashSet<Object>();
-        done.add(o);
-        return deepSizeOf(o, done);
+    @Override
+    public String toString() {
+        int order = (int) ((Math.log(size) /  Math.log(1024)) + 0.05);
+        if (order == 0) return size + " bytes";
+        return String.format("%.2f %s (%d bytes)", 1.0 / Math.pow(1024, order) * size, UNIT[order], size);
+    }
+    
+    public SizeOf(int size) {
+        this.size = size;
+    }
+    
+    public static final SizeOf deepSizeOf(Object o) {
+        Map<Object,Object> done = new IdentityHashMap<Object,Object>();
+        return new SizeOf(deepSizeOf(o, done));
     }
         
-    private static final int deepSizeOf(Object o, Set<Object> done) {
-        int size = sizeOf(o);
-        if (o.getClass().isArray()) {
-            if (o.getClass().getComponentType().isPrimitive()) return size;
-            for (int n = 0; n < Array.getLength(o); n++) {
-                Object value = Array.get(o, n);
-                if (value == null) continue;
-                if (isInternedString(value)) continue;
-                if (!done.add(value)) continue;
-                size += deepSizeOf(value, done);
+    private static final int deepSizeOf(Object obj, Map<Object,Object> done) {
+        if (obj == null || isInternedString(obj) || done.containsKey(obj)) return 0;
+        done.put(obj, null);
+        int size = sizeOf(obj);
+        Class<?> type = obj.getClass();
+        if (type.isArray()) {
+            if (!type.getComponentType().isPrimitive()) {
+                int len = Array.getLength(obj);
+                for (int n = 0; n < len; n++) {
+                    Object value = Array.get(obj, n);
+                    size += deepSizeOf(value, done);
+                }
             }
-            return size;
         }
-        for (Class<?> aClass = o.getClass(); aClass != null; aClass = aClass.getSuperclass()) {
-            for (Field f: aClass.getDeclaredFields()) {
-                if (f.getType().isPrimitive()) continue;
-                if (Modifier.isStatic(f.getModifiers())) continue;
-                f.setAccessible(true);
-                Object value = getField(o, f);
-                if (value == null) continue;
-                if (isInternedString(value)) continue;
-                if (!done.add(value)) continue;
-                size += deepSizeOf(value, done);
+        else { 
+            while (type != null) {
+                for (Field f: type.getDeclaredFields()) {
+                    if (f.getType().isPrimitive()) continue;
+                    if (Modifier.isStatic(f.getModifiers())) continue;
+                    f.setAccessible(true);
+                    Object value = getField(obj, f);
+                    int sizeOf = deepSizeOf(value, done);
+                    size += sizeOf;
+                }
+                type = type.getSuperclass();
             }
         }
         return size;
@@ -103,6 +117,21 @@ public class Debug {
         if (type == Float.TYPE) return 4;
         if (type == Double.TYPE) return 5;
         return 4;
+    }
+    
+    public static void main(String... args) {
+        System.out.println(new SizeOf(1));
+        System.out.println(new SizeOf(10));
+        System.out.println(new SizeOf(100));
+        System.out.println(new SizeOf(500));
+        System.out.println(new SizeOf(600));
+        System.out.println(new SizeOf(700));
+        System.out.println(new SizeOf(800));
+        System.out.println(new SizeOf(900));
+        System.out.println(new SizeOf(1000));
+        System.out.println(new SizeOf(10000));
+        System.out.println(new SizeOf(100000));
+        System.out.println(new SizeOf(1000000));
     }
     
 }
