@@ -1,4 +1,4 @@
-package ch.unibe.jsme2009;
+package meander.jsme2009;
 
 import static ch.akuhn.util.Files.openWrite;
 import static ch.akuhn.util.Get.each;

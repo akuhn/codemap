@@ -67,7 +67,7 @@ public class ComputeLSIAndMDS {
             for (MSEDocument each: version.documents) {
                 assert each.name != null;
                 if ((tally++ % 10) != 0) continue;
-                corpus.add(new Document(each.name, each.terms, versionNumbers.get(version.name)));
+                corpus.addDocument(each.name, version.name, each.terms);
             }
         }
         System.out.printf("# num(doc) = %d\n", 
@@ -85,7 +85,7 @@ public class ComputeLSIAndMDS {
         System.out.println("Computing LSI...");
         LatentSemanticIndex i = tdm.createIndex();
         tdm = null;
-        for (Document each: i.documents) each.terms = null;
+        // for (Document each: i.documents) each.terms = null;
         System.gc();
         System.out.println("Computing MDS...");
         MDS mds = MDS.fromCorrelationMatrix(i);
@@ -95,11 +95,11 @@ public class ComputeLSIAndMDS {
         String version = "";
         int index = 0;
         for (Document each: i.documents) {
-            if (!each.version.string.equals(version)) {
-                version = each.version.string;
+            if (!each.version().name().equals(version)) {
+                version = each.version().name();
                 ser.release(version);
             }
-            ser.location(mds.x[index], mds.y[index], Math.sqrt(each.termSize), each.handle);
+            ser.location(mds.x[index], mds.y[index], Math.sqrt(each.termSize()), each.name());
             index++;
         }
         return ser.model();

@@ -1,5 +1,6 @@
 package meander.jsme2009.junit;
 
+import meander.jsme2009.HapaxDoc;
 import ch.akuhn.fame.Repository;
 import ch.akuhn.fame.Tower;
 import ch.akuhn.fame.parser.InputSource;
@@ -25,7 +26,6 @@ import ch.deif.meander.Serializer.MSEDocument;
 import ch.deif.meander.Serializer.MSELocation;
 import ch.deif.meander.Serializer.MSEProject;
 import ch.deif.meander.Serializer.MSERelease;
-import ch.unibe.jsme2009.HapaxDoc;
 
 
 public class JunitCaseStudy {
@@ -48,7 +48,7 @@ public class JunitCaseStudy {
         for (MSERelease version: project.releases) {
             for (MSEDocument each: version.documents) {
                 assert each.name != null;
-                corpus.add(new Document(each.name, each.terms, new VersionNumber(version.name)));
+                corpus.addDocument(each.name, version.name, each.terms);
             }
         }
         return corpus;
@@ -68,11 +68,11 @@ public class JunitCaseStudy {
         String version = "";
         int index = 0;
         for (Document each: tdm.documents) {
-            if (!each.version.string.equals(version)) {
-                version = each.version.string;
+            if (!each.version().name().equals(version)) {
+                version = each.version().name();
                 ser.release(version);
             }
-            ser.location(mds.x[index], mds.y[index], Math.sqrt(each.terms.size()), each.handle);
+            ser.location(mds.x[index], mds.y[index], Math.sqrt(each.termSize()), each.name());
             index++;
         }
         return ser.model();
@@ -80,7 +80,7 @@ public class JunitCaseStudy {
     
     public static void main(String[] args) {
         
-        boolean compute = true;
+        boolean compute = !!! true;
         boolean show = !!! true;
         boolean dist = true;
         int nth = 2;

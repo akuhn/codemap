@@ -1,4 +1,4 @@
-package ch.unibe.jsme2009;
+package meander.jsme2009;
 
 import ch.akuhn.util.Bag;
 import ch.akuhn.util.Strings;

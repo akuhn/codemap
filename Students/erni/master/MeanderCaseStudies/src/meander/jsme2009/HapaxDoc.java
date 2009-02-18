@@ -1,4 +1,4 @@
-package ch.unibe.jsme2009;
+package meander.jsme2009;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,7 +51,7 @@ public class HapaxDoc implements Comparable<HapaxDoc> {
 
     @FameProperty
     public String getVersion() {
-        return version.string;
+        return version.name();
     }
 
     public void setVersion(String version) {

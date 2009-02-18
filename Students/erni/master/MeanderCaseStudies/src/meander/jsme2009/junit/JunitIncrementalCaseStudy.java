@@ -40,7 +40,7 @@ public class JunitIncrementalCaseStudy implements Runnable {
             if (!versionName.equals(version.name)) continue;
             for (MSEDocument each: version.documents) {
                 assert each.name != null;
-                corpus.add(new Document(each.name, each.terms, new VersionNumber(version.name)));
+                corpus.addDocument(each.name, version.name, each.terms);
             }
         }
         return corpus;
@@ -85,7 +85,7 @@ public class JunitIncrementalCaseStudy implements Runnable {
         MapBuilder builder = new MapBuilder();
         for (Document each: tempDocuments) {
             int index = lsi.documents.get(each);
-            builder.location(mds.x[index], mds.y[index], Math.sqrt(each.terms.size()), each);
+            builder.location(mds.x[index], mds.y[index], Math.sqrt(each.termSize()), each);
         }
         builder.name(versionName);
         return builder.build();
@@ -107,7 +107,7 @@ public class JunitIncrementalCaseStudy implements Runnable {
         MapBuilder builder = new MapBuilder();
         for (Document each: tempDocuments) {
             int index = lsi.documents.get(each);
-            builder.location(mds.x[index], mds.y[index], Math.sqrt(each.terms.size()), each);
+            builder.location(mds.x[index], mds.y[index], Math.sqrt(each.termSize()), each);
         }
         builder.name(versionName);
         Map map =  builder.build();
@@ -123,8 +123,8 @@ public class JunitIncrementalCaseStudy implements Runnable {
         for (Collect2<Document,Location> each: collect) {
             Detect<Location> match = Detect.from(previous.locations);
             for (Detect<Location> other: match) {
-                other.yield = norm((String) other.element.document.handle).equals(
-                        norm((String) each.element.handle));
+                other.yield = norm(other.element.document.name()).equals(
+                        norm(each.element.name()));
             }
             if (match.resultIfNone(null) == null) tally++; 
             collect.yield = match.resultIfNone(makeRandomLocation());
