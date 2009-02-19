@@ -2,7 +2,6 @@ package ch.akuhn.hapax.index;
 
 import static ch.akuhn.util.Each.withIndex;
 
-import java.io.InputStream;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 

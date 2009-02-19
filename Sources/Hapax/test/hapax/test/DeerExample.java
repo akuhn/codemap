@@ -1,14 +1,14 @@
 package hapax.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Scanner;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import jexample.Depends;
 import jexample.JExample;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.hapax.index.TermDocumentMatrix;

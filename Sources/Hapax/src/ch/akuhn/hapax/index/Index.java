@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import ch.akuhn.hapax.corpus.Document;
-
 public class Index<E> implements Cloneable, Iterable<E> {
 
     private List<E> list;
