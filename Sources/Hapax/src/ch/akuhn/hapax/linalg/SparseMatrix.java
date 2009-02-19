@@ -36,14 +36,14 @@ public class SparseMatrix extends Matrix {
         return rows.get(row).add(column, sum);
     }
 
-    protected int addColumn() {
+    public int addColumn() {
         columns++;
         for (Vector each: rows)
             ((SparseVector) each).resizeTo(columns);
         return columns - 1;
     }
 
-    protected int addRow() {
+    public int addRow() {
         rows.add(new SparseVector(columns));
         return rowSize() - 1;
     }
@@ -53,7 +53,7 @@ public class SparseMatrix extends Matrix {
         return rowSize() - 1;
     }
 
-    protected void addToRow(int row, Vector values) {
+    public void addToRow(int row, Vector values) {
         Vector v = rows.get(row);
         for (Entry each: values.entries())
             v.add(each.index, each.value);

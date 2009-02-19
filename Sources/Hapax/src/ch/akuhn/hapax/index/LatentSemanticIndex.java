@@ -6,6 +6,7 @@ import static ch.akuhn.util.Interval.range;
 import java.util.Iterator;
 
 import ch.akuhn.hapax.corpus.Document;
+import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.hapax.linalg.SVD;
 import ch.akuhn.hapax.linalg.SymetricMatrix;
