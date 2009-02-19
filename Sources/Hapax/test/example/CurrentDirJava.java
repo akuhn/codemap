@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import ch.akuhn.hapax.corpus.Importer;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
+import ch.akuhn.util.Get;
 
 public class CurrentDirJava {
 
@@ -22,12 +23,11 @@ public class CurrentDirJava {
 
         puts(tdm);
 
-        //puts(corpus.terms().toLowerCase().sortedCounts());
-
-        //TermDocumentMatrix tdm = new TermDocumentMatrix();
-
-        //tdm.addCorpus(corpus);
-
+        tdm.storeOn("chdir.tdm");
+        
+        puts(Get.head(tdm.documents()));
+        p(Get.head(tdm.documents()).terms());
+        
         puts(tdm);
 
         puts(tdm.density());
@@ -38,7 +38,7 @@ public class CurrentDirJava {
 
         puts(tdm.density());
 
-        p(tdm.termBag().sortedCounts());
+        p(tdm.terms().sortedCounts());
 
         LatentSemanticIndex lsi = tdm.createIndex();
 
@@ -46,8 +46,6 @@ public class CurrentDirJava {
         p(first(10, lsi.rankTermsByTerm("bag")));
         p(first(10, lsi.rankDocumentsByTerm("famix")));
         p(first(10, lsi.rankDocumentsByQuery("split string by lower- and upper-case")));
-
-        tdm.storeOn(System.out);
         
     }
 

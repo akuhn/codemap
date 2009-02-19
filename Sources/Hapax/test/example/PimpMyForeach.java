@@ -3,11 +3,14 @@ package example;
 import static ch.akuhn.util.Each.withIndex;
 import static ch.akuhn.util.Out.puts;
 import static ch.akuhn.util.Strings.letters;
-import static ch.akuhn.util.query.Query.*;
+import static ch.akuhn.util.query.Query.$result;
+import static ch.akuhn.util.query.Query.groupedBy;
+import static ch.akuhn.util.query.Query.reject;
 import ch.akuhn.util.As;
 import ch.akuhn.util.Each;
 import ch.akuhn.util.IteratorAsList;
-import ch.akuhn.util.query.*;
+import ch.akuhn.util.query.GroupedBy;
+import ch.akuhn.util.query.Reject;
 
 public class PimpMyForeach {
 

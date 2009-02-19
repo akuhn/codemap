@@ -5,6 +5,8 @@ import static ch.akuhn.util.Get.each;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -23,7 +25,7 @@ public class Importer {
     
     public Corpus importAllFiles(File folder, String... extensions) {
         for (File each : Files.find(folder, extensions)) {
-            corpus.addDocument(each.getAbsolutePath(), null, new Terms(each));
+            corpus.makeDocument(each.getAbsolutePath(), null).addTerms(new Terms(each));
         }
         return corpus;
     }
@@ -49,6 +51,7 @@ public class Importer {
 
     public Corpus importZipArchivePackageWise(File file, String... extensions) {
         try {
+            Map<String,Document> packages = new HashMap<String,Document>();
             ZipFile zip = new ZipFile(file);
             String version = file.getName();
             String fileSeparator = System.getProperty("file.separator");
@@ -63,8 +66,11 @@ public class Importer {
                     InputStream in = zip.getInputStream(entry);
                     Terms terms = new Terms(in).intern();                    
                     String directory = name.substring(0, endIndex + 1);
-                    Document document = corpus.addDocument(directory);
-                    document.version(version).addTerms(terms);
+                    if (!packages.containsKey(directory)) {
+                        packages.put(directory, corpus.makeDocument(directory, version));
+                    }
+                    Document document = packages.get(directory);
+                    document.addTerms(terms);
                     break;
                 }
             }
@@ -84,7 +90,7 @@ public class Importer {
                     if (!entry.getName().endsWith(suffix)) continue;
                     InputStream in = zip.getInputStream(entry);
                     Terms terms = new Terms(in).intern();
-                    corpus.addDocument(entry.getName(), file.getName(), terms);
+                    corpus.makeDocument(entry.getName(), file.getName()).addTerms(terms);
                     break;
                 }
             }

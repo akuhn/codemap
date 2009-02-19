@@ -1,4 +1,4 @@
-package ch.akuhn.hapax;
+package hapax.test;
 
 import java.io.ByteArrayInputStream;
 

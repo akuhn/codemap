@@ -4,6 +4,7 @@ import static ch.akuhn.util.Each.withIndex;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import ch.akuhn.hapax.linalg.Vector.Entry;
 import ch.akuhn.util.Each;
@@ -126,6 +127,23 @@ public class SparseMatrix extends Matrix {
         for (Vector each: rows) {
             ((SparseVector) each).trim();
         }
+    }
+
+    public static SparseMatrix readFrom(Scanner scan) {
+        int columns = scan.nextInt();
+        int rows = scan.nextInt();
+        int used = scan.nextInt();
+        SparseMatrix matrix = new SparseMatrix(rows, columns);
+        for (int row = 0; row < rows; row++) {
+            int len = scan.nextInt();
+            for (int i = 0; i < len; i++) {
+                int column = scan.nextInt();
+                double value = scan.nextDouble();
+                matrix.put(row, column, value);
+            }
+        }
+        assert matrix.used() == used;
+        return matrix;
     }
     
 }

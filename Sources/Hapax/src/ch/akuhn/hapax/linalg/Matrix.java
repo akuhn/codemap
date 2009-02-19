@@ -68,8 +68,9 @@ public abstract class Matrix {
         for (Vector row: rows()) {
             out.print(row.used()).cr();
             for (Entry each: row.entries()) {
-                out.print(each.index).space().print(each.value).cr();
+                out.print(each.index).space().print(each.value).space();
             }
+            out.cr();
         }
         out.close();
     }

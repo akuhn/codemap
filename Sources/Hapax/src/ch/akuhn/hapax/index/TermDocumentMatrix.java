@@ -1,7 +1,11 @@
 package ch.akuhn.hapax.index;
 
 import static ch.akuhn.util.Each.withIndex;
-import static ch.akuhn.util.Pair.zip;
+
+import java.io.InputStream;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+
 import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.corpus.PorterStemmer;
@@ -13,39 +17,81 @@ import ch.akuhn.hapax.linalg.SparseMatrix;
 import ch.akuhn.hapax.linalg.Vector;
 import ch.akuhn.hapax.linalg.Vector.Entry;
 import ch.akuhn.util.Each;
+import ch.akuhn.util.Files;
 import ch.akuhn.util.Pair;
 import ch.akuhn.util.PrintOn;
 import ch.akuhn.util.Bag.Count;
 
 
+
 public class TermDocumentMatrix extends Corpus {
 
-    private Index<String> terms; // rows
-    private Index<Document> documents; // columns
-    private SparseMatrix matrix;
-    private double[] globalWeighting;
+    private static class Doc extends Document {
 
+        private TermDocumentMatrix owner;
+        
+        public Doc(String name, String version, TermDocumentMatrix owner) {
+            super(name, version);
+            this.owner = owner;
+        }
+
+        @Override
+        public Document addTerms(Terms terms) {
+            owner.addTerms(this, terms);
+            return this;
+        }
+
+        @Override
+        public Corpus owner() {
+            return owner;
+        }
+
+        @Override
+        public Terms terms() {
+            return owner.terms(this);
+        }
+
+        @Override
+        public int termSize() {
+            return terms().uniqueSize();
+        }
+        
+    }
+    
+    private Index<Document> documents; // columns
+    private double[] globalWeighting;
+    private SparseMatrix matrix;
+    private Index<String> terms; // rows
+    
     public TermDocumentMatrix() {
         this.matrix = new SparseMatrix(0, 0);
         this.terms = new Index<String>();
         this.documents = new Index<Document>();
     }
-    
+
     private TermDocumentMatrix(Index<String> terms, Index<Document> documents) {
         this.matrix = new SparseMatrix(terms.size(), documents.size());
         this.terms = terms.clone();
         this.documents = documents.clone();
     }
 
-    private int indexTerm(String term) {
-        int index = terms.add(term);
-        if (index == matrix.rowSize()) matrix.addRow();
-        return index;
-    }
-
-    private void addTerm(String term, Vector values) {
+    private void addToRow(String term, Vector values) {
         int row = indexTerm(term);
         matrix.addToRow(row, values);
+    }
+
+    public void addTerms(Doc doc, Terms bag) {
+        int column = documents.get(doc);
+        if (column == -1) throw new NoSuchElementException();
+        for (Count<String> term: bag.counts()) {
+            int row = this.indexTerm(term.element);
+            matrix.add(row, column, term.count);
+        }
+    }
+
+    @Override
+    public boolean contains(Document doc) {
+        return documents.contains(doc);
     }
 
     public LatentSemanticIndex createIndex() {
@@ -56,8 +102,45 @@ public class TermDocumentMatrix extends Corpus {
         return new LatentSemanticIndex(terms, documents, globalWeighting, new SVD(matrix, dimensions));
     }
 
+    public double density() {
+        return matrix.density();
+    }
+
+    @Override
+    public Iterable<Document> documents() {
+        return documents;
+    }
+
+    @Override
+    public int documentSize() {
+        return documents.size();
+    }
+
+    private int indexTerm(String term) {
+        int index = terms.add(term);
+        if (index == matrix.rowSize()) matrix.addRow();
+        return index;
+    }
+    
+    private int indexDocument(Document doc) {
+        int column = documents.add(doc);
+        if (column == matrix.columnSize()) matrix.addColumn();
+        return column;
+    }
+
+    @Override
+    public Document makeDocument(String name, String version) {
+        Document doc = new Doc(name, version, this);
+        this.indexDocument(doc);
+        return doc;
+    }
+
     public TermDocumentMatrix rejectAndWeight() {
-        return rejectHapaxes().toLowerCase().rejectStopwords().stem().weight(LocalWeighting.TERM, GlobalWeighting.IDF);
+        return toLowerCase()
+                .rejectHapaxes()
+                .rejectStopwords()
+                .stem()
+                .weight(LocalWeighting.TERM, GlobalWeighting.IDF);
     }
 
     public TermDocumentMatrix rejectHapaxes() {
@@ -66,9 +149,9 @@ public class TermDocumentMatrix extends Corpus {
 
     public TermDocumentMatrix rejectLegomena(int threshold) {
         TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<String>(), documents);
-        for (Pair<String,Vector> each: zip(terms, matrix.rows())) {
+        for (Pair<String,Vector> each: termRowPairs()) {
             if (each.snd.used() <= threshold) continue;
-            tdm.addTerm(each.fst, each.snd);
+            tdm.addToRow(each.fst, each.snd);
         }
         return tdm;
     }
@@ -79,44 +162,91 @@ public class TermDocumentMatrix extends Corpus {
 
     public TermDocumentMatrix rejectStopwords(Stopwords stopwords) {
         TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<String>(), documents);
-        for (Pair<String,Vector> each: zip(terms, matrix.rows())) {
+        for (Pair<String,Vector> each: termRowPairs()) {
             if (stopwords.contains(each.fst)) continue;
-            tdm.addTerm(each.fst, each.snd);
+            tdm.addToRow(each.fst, each.snd);
         }
         return tdm;
     }
-
+    
     public TermDocumentMatrix stem() {
         return stem(new PorterStemmer());
     }
 
     public TermDocumentMatrix stem(Stemmer stemmer) {
         TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<String>(), documents);
-        for (Pair<String,Vector> each: zip(terms, matrix.rows())) {
-            tdm.addTerm(stemmer.stem(each.fst), each.snd);
+        for (Pair<String,Vector> each: termRowPairs()) {
+            tdm.addToRow(stemmer.stem(each.fst), each.snd);
         }
         return tdm;
     }
+    
+    public void storeOn(Appendable app) {
+        PrintOn out = new PrintOn(app);
+        out.print("# Term-Document-Matrix").cr();
+        out.print(this.termSize()).cr();
+        for (String term: terms) {
+            out.print(term).cr();
+        }
+        out.print(this.documentSize()).cr();
+        for (Document doc: documents) {
+            out.print(doc.name().replace(' ', '_')).tab().print(doc.version().replace(' ', '_')).cr();
+        }
+        matrix.storeSparseOn(app);
+    }
 
-    public Terms termBag() {
+    public void storeOn(String filename) {
+        this.storeOn(Files.openWrite(filename));
+    }        
+    
+    public static TermDocumentMatrix readFrom(Scanner scan) {
+        TermDocumentMatrix tdm = new TermDocumentMatrix();
+        if (scan.hasNext("#")) scan.findInLine(".*");
+
+        int termSize = scan.nextInt();
+        for (int i = 0; i < termSize; i++) {
+            String term = scan.next();
+            tdm.indexTerm(term);
+        }
+        assert tdm.termSize() == termSize;
+        
+        int documentSize = scan.nextInt();
+        for (int i = 0; i < documentSize; i++) {
+            String name = scan.next();
+            String version = scan.next();
+            tdm.makeDocument(name, version);
+        }
+        assert tdm.documentSize() == documentSize;
+
+        tdm.matrix = SparseMatrix.readFrom(scan);
+        
+        return tdm;   
+    }
+        
+    @Override
+    public Terms terms() {
         Terms bag = new Terms();
-        for (Pair<String,Vector> each: zip(terms, matrix.rows())) {
+        for (Pair<String,Vector> each: termRowPairs()) {
             bag.add(each.fst, (int) each.snd.sum());
         }
         return bag;
     }
 
-    public TermDocumentMatrix toLowerCase() {
-        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<String>(), documents);
-        for (Pair<String,Vector> each: zip(terms, matrix.rows())) {
-            tdm.addTerm(each.fst.toString().toLowerCase(), each.snd);
-        }
-        return tdm;
+    private Iterable<Pair<String,Vector>> termRowPairs() {
+        return Pair.zip(terms, matrix.rows());
+    }
+    
+    @Override
+    public int termSize() {
+        return terms.size();
     }
 
-    @Override
-    public String toString() {
-        return String.format("TermDocumentMatrix (%d terms, %d documents)", termSize(), documentSize());
+    public TermDocumentMatrix toLowerCase() {
+        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<String>(), documents);
+        for (Pair<String,Vector> each: termRowPairs()) {
+            tdm.addToRow(each.fst.toString().toLowerCase(), each.snd);
+        }
+        return tdm;
     }
 
     public TermDocumentMatrix weight(LocalWeighting localWeighting, GlobalWeighting globalWeighting) {
@@ -131,87 +261,16 @@ public class TermDocumentMatrix extends Corpus {
         return tdm;
     }
 
-
-//    @Override
-//    public void addDocument(String name, String version,
-//            Bag<String> terms) {
-//        Document document = new Document(name, versionMap.get(name), terms);
-//        document.dropTerms();
-//        int column = addDocument(document);
-//        for (Count<String> each: terms.counts()) {
-//            int row = addTerm(each.element);
-//            add(row, column, each.count);
-//        }
-//        
-//    }
-
     @Override
-    public Iterable<Document> documents() {
-        return documents;
-    }
-
-    @Override
-    protected Document makeDocument(String name) {
-        return new Doc(name);
-    }
-    
-    private class Doc extends Document {
-
-        private final int column;
-        
-        public Doc(String name) {
-            super(name);
-            this.column = documents.add(this);
-            if (column == matrix.columnSize()) matrix.addColumn();
+    public Terms terms(Document doc) {
+        int column = documents.get(doc);
+        if (column == -1) throw new NoSuchElementException();
+        Terms bag = new Terms();
+        for (Pair<String,Vector> each: termRowPairs()) {
+            int count = (int) each.snd.get(column);
+            bag.add(each.fst, count);
         }
-
-        @Override
-        public int termSize() {
-            return terms().uniqueSize();
-        }
-
-        @Override
-        public Terms terms() {
-            Terms terms = new Terms();
-            for (Pair<String,Vector> each: zip(terms,matrix.rows())) {
-                double count = each.snd.get(column);
-                terms.add(each.fst, (int) count);
-            }
-            return terms;
-        }
-
-        @Override
-        public Document addTerms(Terms terms) {
-            for (Count<String> each: terms.counts()) {
-                int row = indexTerm(each.element);
-                matrix.add(row, column, each.count);
-            }
-            return this;
-        }
-        
-    }
-
-    public double density() {
-        return matrix.density();
-    }
-    
-    public void storeOn(Appendable app) {
-        PrintOn out = new PrintOn(app);
-        out.print("# Term-Document-Matrix").cr();
-        out.print(this.termSize()).cr();
-        for (String term: terms) {
-            out.print(term).cr();
-        }
-        out.print(this.documentSize()).cr();
-        for (Document doc: documents) {
-            out.print(doc.name()).tab().print(doc.version()).cr();
-        }
-        matrix.storeSparseOn(app);
-    }
-
-    @Override
-    public int termSize() {
-        return terms.size();
+        return bag;
     }
     
 }

@@ -1,4 +1,4 @@
-package ch.akuhn.hapax;
+package hapax.test;
 
 import static org.junit.Assert.assertEquals;
 

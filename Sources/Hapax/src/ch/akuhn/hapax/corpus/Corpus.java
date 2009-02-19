@@ -1,37 +1,23 @@
 package ch.akuhn.hapax.corpus;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
-import ch.akuhn.util.Bag.Count;
 
 public abstract class Corpus {
 
-    private Map<String,Document> documentMap;
+    public abstract Document makeDocument(String name, String version);
     
-    public Corpus() {
-        this.documentMap = new HashMap<String,Document>();
+    public Document makeDocument(String name) {
+        return makeDocument(name, null);
     }
     
-    public Document addDocument(String name) {
-        Document doc = documentMap.get(name);
-        if (doc == null) documentMap.put(name, doc = makeDocument(name));
-        return doc;
-    }
-    
-    public Document addDocument(String name, String version, Terms terms) {
-        return addDocument(name).version(version).addTerms(terms);
-    }
-    
-    protected abstract Document makeDocument(String name);
-
-    public Iterable<Count<String>> terms() {
+    public Terms terms() {
         Terms terms = new Terms();
         for (Document doc: this.documents()) terms.addAll(doc.terms());
-        return terms.counts();
+        return terms;
     }
+   
 
     public Iterable<String> versions() {
         Set<String> versions = new HashSet<String>();
@@ -39,14 +25,14 @@ public abstract class Corpus {
         return versions();
     }
     
-    public Iterable<Document> documents() {
-        return documentMap.values();
-    }
+    public abstract Iterable<Document> documents();
 
-    public int documentSize() {
-        return documentMap.size();
-    }
+    public abstract int documentSize();
 
+    public abstract boolean contains(Document doc);
+    
+    public abstract Terms terms(Document doc);
+    
     public int termSize() {
         Terms terms = new Terms();
         for (Document doc: this.documents()) terms.addAll(doc.terms());

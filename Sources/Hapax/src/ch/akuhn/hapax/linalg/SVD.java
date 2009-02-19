@@ -2,11 +2,11 @@ package ch.akuhn.hapax.linalg;
 
 import static ch.akuhn.util.Interval.range;
 import static java.lang.String.format;
+
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 
 import ch.akuhn.hapax.util.StreamGobbler;
-import ch.akuhn.util.TeeInputStream;
 import ch.akuhn.util.Throw;
 
 public class SVD {
@@ -120,7 +120,7 @@ public class SVD {
             String command = command(dimensions);
             Process proc = Runtime.getRuntime().exec(command);
             error = new StreamGobbler(proc.getErrorStream());
-            input = new Gobbler(new TeeInputStream(proc.getInputStream(), "input"));
+            input = new Gobbler(proc.getInputStream());
             error.start();
             input.start();
             matrix.storeSparseOn(new OutputStreamWriter(proc.getOutputStream()));
