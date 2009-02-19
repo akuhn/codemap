@@ -6,7 +6,6 @@ import java.util.Collection;
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import ch.akuhn.hapax.corpus.VersionNumber;
 import ch.akuhn.util.Bag;
 
 @FamePackage("Hapax")
@@ -22,7 +21,7 @@ public class HapaxDoc implements Comparable<HapaxDoc> {
 
     public Bag<String> terms = new Bag<String>();
 
-    public VersionNumber version;
+    public String version;
     
     @FameProperty
     public Collection getTerms() {
@@ -51,11 +50,11 @@ public class HapaxDoc implements Comparable<HapaxDoc> {
 
     @FameProperty
     public String getVersion() {
-        return version.name();
+        return version;
     }
 
     public void setVersion(String version) {
-        this.version = new VersionNumber(version);
+        this.version = version;
     }
 
     //@Override
