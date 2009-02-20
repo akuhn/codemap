@@ -94,7 +94,7 @@ public class TermDocumentMatrix extends Corpus {
     }
 
     public LatentSemanticIndex createIndex() {
-        return this.createIndex(23); //TODO magic number
+        return this.createIndex(20); //TODO magic number
     }
 
     public LatentSemanticIndex createIndex(int dimensions) {
@@ -270,6 +270,19 @@ public class TermDocumentMatrix extends Corpus {
             bag.add(each.fst, count);
         }
         return bag;
+    }
+    
+    public TermDocumentMatrix copyUpto(String version, String[] versions) {
+        TermDocumentMatrix copy = new TermDocumentMatrix();
+        for (String each: versions) {
+            for (Document doc: this.documents()) {
+                if (doc.version().equals(version)) {
+                    copy.makeDocument(doc.name(), doc.version()).addTerms(doc.terms());
+                }
+            }
+            if (version.equals(each)) return copy;
+        }
+        throw new Error();
     }
     
 }

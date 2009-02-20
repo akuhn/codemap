@@ -213,7 +213,7 @@ public class SVD {
         assert s != null;
         assert Vt != null;
         assert Ut != null;
-        assert Vt.length == s.length;
+        assert Vt.length == s.length : Vt.length +"=="+ s.length;
         assert Ut.length == s.length;
     }
 

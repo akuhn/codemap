@@ -121,4 +121,22 @@ public class LatentSemanticIndex {
         };
     }
     
+    public LatentSemanticIndex select(String version) {
+        Index<Document> selection = new Index<Document>();
+        for (Document each: documents) {
+            if (each.version().equals(version)) selection.add(each);
+        }
+        float[][] Vt = new float[svd.s.length][selection.size()];
+        for (int n = 0; n < selection.size(); n++) {
+            int prev = documents.get(selection.get(n));
+            for (int k = 0; k < Vt.length; k++) {
+                Vt[k][n] = svd.Vt[k][prev];
+            }
+        }
+        return new LatentSemanticIndex(
+                terms, selection,
+                new double[selection.size()], // TODO
+                new SVD(svd.s, svd.Ut, Vt));
+    }
+    
 }

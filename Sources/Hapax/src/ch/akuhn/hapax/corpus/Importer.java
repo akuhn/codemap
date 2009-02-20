@@ -39,7 +39,7 @@ public class Importer {
     
     public Corpus importAllZipArchivesPackageWise(File folder, String... extensions) {
         for (File file : Files.find(folder, ".zip", ".jar")) {
-            System.out.printf("importing file: %s\n", file.getName());
+            System.err.printf("importing file: %s\n", file.getName());
             this.importZipArchivePackageWise(file, extensions);
         }
         return corpus;
@@ -54,11 +54,10 @@ public class Importer {
             Map<String,Document> packages = new HashMap<String,Document>();
             ZipFile zip = new ZipFile(file);
             String version = file.getName();
-            String fileSeparator = System.getProperty("file.separator");
             
             for (ZipEntry entry : each(zip.entries())) {
                 String name = entry.getName();
-                int endIndex = name.lastIndexOf(fileSeparator);
+                int endIndex = name.lastIndexOf('/'); // XXX don't use system file separator!
                 if (endIndex < 0 || entry.isDirectory()) continue;
                 
                 for (String suffix : extensions) {
