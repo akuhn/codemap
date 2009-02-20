@@ -9,13 +9,12 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 
 import ch.akuhn.hapax.index.LatentSemanticIndex;
-import ch.akuhn.hapax.linalg.SymetricMatrix;
 import ch.akuhn.hapax.util.StreamGobbler;
 import ch.akuhn.util.As;
 import ch.akuhn.util.Throw;
 import ch.deif.meander.util.Delimiter;
-import ch.deif.meander.util.TeeInputStream;
-import ch.deif.meander.util.TeeOutputStream;
+import ch.akuhn.util.TeeInputStream;
+import ch.akuhn.util.TeeOutputStream;
 
 
 public class MDS {
@@ -94,7 +93,7 @@ public class MDS {
         try {
             x = new double[index.documents.size()];
             y = new double[index.documents.size()];
-            String command = format("%s 50 1 0 1:8", fname());
+            String command = format("%s 30 1 0 1:8", fname()); // TODO configure this settings
             Process proc = Runtime.getRuntime().exec(command);
             InputStream err = proc.getErrorStream();
             InputStream in = proc.getInputStream();
