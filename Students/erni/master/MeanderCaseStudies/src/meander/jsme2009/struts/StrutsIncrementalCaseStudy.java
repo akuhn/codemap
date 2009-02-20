@@ -1,4 +1,4 @@
-package meander.jsme2009.junit;
+package meander.jsme2009.struts;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
 
+import meander.jsme2009.junit.ComputeHausdorff;
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
@@ -17,29 +18,12 @@ import ch.deif.meander.MDS;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
 
-public class JunitIncrementalCaseStudy implements Runnable {
+public class StrutsIncrementalCaseStudy implements Runnable {
 
     public static final String TDMFILE = 
-        "mse/junit.TDM";
+        "mse/struts_10.TDM";
 
-    public final static String[] VERSIONS = { 
-            "junit2.zip",
-            "JUNIT2.1.ZIP",
-            "JUNIT3.ZIP",
-            "junit3.2.ZIP",
-            "junit3.4.zip",
-            "junit3.5.zip",
-            "junit3.6.zip",
-            "junit3.7.zip",
-            "junit3.8.zip",
-            "junit3.8.1.zip",
-            "junit3.8.2.zip",
-            "junit4.0.zip",
-            "junit4.1.zip",
-            "junit4.2.zip",
-            "junit4.3.1.zip",
-            "junit4.4.zip",
-            "junit4.5.zip" };
+    public final static String[] VERSIONS = ComputeLSIAndMDS.VERSIONS.toArray(new String[0]);
     
     public static TermDocumentMatrix corpus_full()  {
         try {
@@ -51,7 +35,7 @@ public class JunitIncrementalCaseStudy implements Runnable {
     }
 
     public static void main(String[] args) {
-        new JunitIncrementalCaseStudy().run();
+        new StrutsIncrementalCaseStudy().run();
     }
     
     public Collection<Map> createMap() {

@@ -23,16 +23,15 @@ public class ComputeHausdorff implements Runnable {
     public ComputeHausdorff(Serializer ser) {
         this.maps = new ArrayList<Map>();
         MSEProject proj = ser.model().all(MSEProject.class).iterator().next();
-        Map map = null;
         for (MSERelease rel: proj.releases) {
+            if (rel.locations == null) continue;
             MapBuilder builder = Map.builder();
             for (MSELocation each: rel.locations) {
                 builder.location(each.x, each.y, each.height);
             }
             Map each = builder.build();
             each.name = rel.name;
-            map = each;
-            maps.add(map);
+            maps.add(each);
         }
     }
 

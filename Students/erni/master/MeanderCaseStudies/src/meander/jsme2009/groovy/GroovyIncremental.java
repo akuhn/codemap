@@ -1,10 +1,12 @@
-package meander.jsme2009.junit;
+package meander.jsme2009.groovy;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
+
+import meander.jsme2009.junit.ComputeHausdorff;
 
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
@@ -17,33 +19,12 @@ import ch.deif.meander.MDS;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
 
-public class JunitIncrementalCaseStudy implements Runnable {
+public class GroovyIncremental implements Runnable {
 
-    public static final String TDMFILE = 
-        "mse/junit.TDM";
-
-    public final static String[] VERSIONS = { 
-            "junit2.zip",
-            "JUNIT2.1.ZIP",
-            "JUNIT3.ZIP",
-            "junit3.2.ZIP",
-            "junit3.4.zip",
-            "junit3.5.zip",
-            "junit3.6.zip",
-            "junit3.7.zip",
-            "junit3.8.zip",
-            "junit3.8.1.zip",
-            "junit3.8.2.zip",
-            "junit4.0.zip",
-            "junit4.1.zip",
-            "junit4.2.zip",
-            "junit4.3.1.zip",
-            "junit4.4.zip",
-            "junit4.5.zip" };
-    
     public static TermDocumentMatrix corpus_full()  {
         try {
-            TermDocumentMatrix TDM = TermDocumentMatrix.readFrom(new Scanner(new File(TDMFILE)));
+            TermDocumentMatrix TDM = TermDocumentMatrix.readFrom(new Scanner(new File(
+                    GroovyCropus.TDMFILE_10)));
             return TDM;
         } catch (FileNotFoundException ex) {
             throw Throw.exception(ex);
@@ -51,7 +32,7 @@ public class JunitIncrementalCaseStudy implements Runnable {
     }
 
     public static void main(String[] args) {
-        new JunitIncrementalCaseStudy().run();
+        new GroovyIncremental().run();
     }
     
     public Collection<Map> createMap() {
@@ -59,7 +40,7 @@ public class JunitIncrementalCaseStudy implements Runnable {
         String previous = null;
         Map previousMap = null;
 
-        for (String rel: VERSIONS) {
+        for (String rel: GroovyAllAtOnce.VERSIONS) {
             if (previous != null) {
                 previousMap = nextMap(rel, previousMap);
             } else {
@@ -77,7 +58,7 @@ public class JunitIncrementalCaseStudy implements Runnable {
     }
     
     private Map firstMap(String versionName) {
-        TermDocumentMatrix tdm = corpus_full().copyUpto(versionName, VERSIONS);
+        TermDocumentMatrix tdm = corpus_full().copyUpto(versionName, GroovyAllAtOnce.VERSIONS);
         System.out.println(tdm);        
         tdm = tdm.rejectAndWeight();
         LatentSemanticIndex lsi = tdm.createIndex();
@@ -93,7 +74,7 @@ public class JunitIncrementalCaseStudy implements Runnable {
     }
 
     private Map nextMap(String versionName, Map previous) {
-        TermDocumentMatrix tdm = corpus_full().copyUpto(versionName, VERSIONS);
+        TermDocumentMatrix tdm = corpus_full().copyUpto(versionName, GroovyAllAtOnce.VERSIONS);
         System.out.println(versionName + " " + tdm);
         tdm = tdm.rejectAndWeight();
         LatentSemanticIndex lsi = tdm.createIndex();
@@ -117,30 +98,39 @@ public class JunitIncrementalCaseStudy implements Runnable {
         int tally = 0;
         Collect2<Document,Location> collect = Collect2.from(lsi.documents, Location.class);
         for (Collect2<Document,Location> each: collect) {
-            Detect<Location> match = Detect.from(previous.locations);
-            for (Detect<Location> other: match) {
-                other.yield = norm(other.element.document.name()).equals(
-                        norm(each.element.name()));
-            }
-            if (match.resultIfNone(null) == null) tally++; 
-            collect.yield = match.resultIfNone(makeRandomLocation());
+            Location match = findMatch(previous, each.element);
+            if (match == null) tally++; 
+            collect.yield = match == null ? makeRandomLocation() : match;
         }
         System.out.println("# matches --- " + lsi.documents.size() + " " + tally);
         return collect.result();
     }
 
+    private Location findMatch(Map previous, Document document) {
+        int qual = 0;
+        Location match = null;
+        for (Location loc: previous.locations) {
+            String a = loc.document.name();
+            String b = document.name();
+            int alen = a.length();
+            int blen = b.length();
+            int len = Math.min(a.length(), b.length());
+            int n = 1;
+            while (n < len) {
+                if (a.charAt(alen - n) != b.charAt(blen - n)) break;
+                n++;
+            }
+            if (n > 10 && n > qual) { 
+                qual = n;
+                match = loc;
+            }
+        }
+        return match;
+    }
+
     private Location makeRandomLocation() {
         return new Location(Math.random() * 6 - 3, Math.random() * 6 - 3, 0.0);
         // return new Location(1.0, 1.0, 0.0);
-    }
-
-    private Object norm(String name) {
-        //System.out.println(name);
-        name = name.trim();
-        if (name.startsWith("junit2/")) return name.substring("junit2/".length());
-        if (name.startsWith("junit2.1/")) return name.substring("junit2.1/".length());
-        if (name.startsWith("junit3/")) return name.substring("junit3/".length());
-        return name;
     }
 
 }

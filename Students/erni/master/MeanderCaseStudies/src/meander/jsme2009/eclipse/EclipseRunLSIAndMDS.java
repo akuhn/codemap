@@ -1,4 +1,4 @@
-package meander.jsme2009.struts;
+package meander.jsme2009.eclipse;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,46 +20,45 @@ import ch.deif.meander.Serializer.MSEDocument;
 import ch.deif.meander.Serializer.MSERelease;
 
 
-public class ComputeLSIAndMDS {
+public class EclipseRunLSIAndMDS {
     
-    private static final int DEZIMATION_FACTOR = 10;
+    public static final String PROJNAME = "Eclipse";
+
+    public static final String MSE_FILE = "mse/eclipse_meander.mse";
+
+    public static final String TDM_FILE = "mse/eclipse.TDM";
+
+    public static final int DEZIMATION_FACTOR = 20;
 
     public static final List<String> VERSIONS = Arrays.asList(new String[] {
-        "jakarta-struts-1.0.2-src.zip",
-        "jakarta-struts-1.1-b1-src.zip",
-        "jakarta-struts-1.1-b2-src.zip", 
-        "jakarta-struts-1.1-b3-src.zip",
-        "jakarta-struts-1.1-rc1-src.zip",
-        "jakarta-struts-1.1-rc2-src.zip",
-        "jakarta-struts-1.1-src.zip",
-        "jakarta-struts-1.2.2-src.zip",
-        "jakarta-struts-1.2.4-src.zip",
-        "struts-1.2.6-src.zip",
-        "struts-1.2.7-src.zip",
-        "struts-1.2.8-src.zip",
-        "struts-1.2.9-src.zip",
-        "struts-1.3.5-src.zip",
-        "struts-2.0.1-src.zip",
-        "struts-2.0.5-src.zip",
-        "struts-2.0.6-src.zip",
-//        "struts-1.3.8-src.zip",
-//        "struts-1.3.9-src.zip",
-        "struts-2.0.8-src.zip",
-        "struts-2.0.9-src.zip",
-        "struts-2.0.11-src.zip",
-        "struts-2.0.11.1-src.zip",
-        "struts-2.1.2-src.zip",
-//        "struts-2.0.12-src.zip",
-//        "struts-2.0.14-src.zip",
-//        "struts-1.3.10-src.zip",
-        "struts-2.1.6-src.zip",
+            "eclipse-sourceBuild-srcIncluded-2.0.zip",
+            "eclipse-sourceBuild-srcIncluded-2.0.1.zip",
+            "eclipse-sourceBuild-srcIncluded-2.0.2.zip",
+            "eclipse-sourceBuild-srcIncluded-2.1.zip",
+            "eclipse-sourceBuild-srcIncluded-2.1.1.zip",
+            "eclipse-sourceBuild-srcIncluded-2.1.2.zip",
+            "eclipse-sourceBuild-srcIncluded-2.1.3.zip",
+            "eclipse-sourceBuild-srcIncluded-3.0.zip",
+            "eclipse-sourceBuild-srcIncluded-3.0.1.zip",
+            "eclipse-sourceBuild-srcIncluded-3.0.2.zip",
+            "eclipse-sourceBuild-srcIncluded-3.1.zip",
+            "eclipse-sourceBuild-srcIncluded-3.1.1.zip",
+            "eclipse-sourceBuild-srcIncluded-3.1.2.zip",
+            "eclipse-sourceBuild-srcIncluded-3.2.zip",
+            "eclipse-sourceBuild-srcIncluded-3.2.1.zip",
+            "eclipse-sourceBuild-srcIncluded-3.2.2.zip",
+            "eclipse-sourceBuild-srcIncluded-3.3.zip",
+            "eclipse-sourceBuild-srcIncluded-3.3.1.zip",
+            "eclipse-sourceBuild-srcIncluded-3.3.1.1.zip",
+            "eclipse-sourceBuild-srcIncluded-3.3.2.zip",
+
     });
 
     
-    public static TermDocumentMatrix importTDM() {
+    public TermDocumentMatrix importTDM() {
         try {
             TermDocumentMatrix TDM;
-            TDM = TermDocumentMatrix.readFrom(new Scanner(new File("mse/struts.TDM")));
+            TDM = TermDocumentMatrix.readFrom(new Scanner(new File(TDM_FILE)));
             System.out.println(TDM);
             GroupedBy<Document> groupedByName = GroupedBy.from(TDM.documents());
             for (GroupedBy<Document> each: groupedByName) {
@@ -74,7 +73,6 @@ public class ComputeLSIAndMDS {
                 }
             }
             System.out.println(TDM_2);
-            TDM_2.storeOn(StrutsIncrementalCaseStudy.TDMFILE);
             return TDM_2;
         } catch (FileNotFoundException ex) {
             throw Throw.exception(ex);
@@ -90,7 +88,7 @@ public class ComputeLSIAndMDS {
         MDS mds = MDS.fromCorrelationMatrix(i);
         System.out.println("Done.");
         Serializer ser = new Serializer();
-        ser.project("JUnit");
+        ser.project(PROJNAME);
         String version = "";
         for (Document each: Get.sorted(i.documents)) {
             if (!each.version().equals(version)) {
@@ -108,12 +106,12 @@ public class ComputeLSIAndMDS {
         System.out.printf("# num(doc) = %d; num(rel) = %d\n", 
                 model.count(MSEDocument.class),
                 model.count(MSERelease.class));
-        model.exportMSEFile("mse/struts_meander.mse");
+        model.exportMSEFile(MSE_FILE);
      }
  
     public static void main(String[] args) {
         // Run with -Xmx256M for greater justice
-        new ComputeLSIAndMDS().run();
+        new EclipseRunLSIAndMDS().run();
     }
     
 }
