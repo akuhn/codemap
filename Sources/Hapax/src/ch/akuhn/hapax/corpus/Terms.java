@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Collection;
 
 import ch.akuhn.util.Bag;
+import ch.akuhn.util.PrintOn;
 
 public class Terms extends Bag<String> implements ScannerClient {
 
@@ -58,4 +59,14 @@ public class Terms extends Bag<String> implements ScannerClient {
         return terms;
     }
 
+    public void storeOn(Appendable app) {
+        PrintOn out = new PrintOn(app);
+        int count = -1;
+        for (Count<String> each: sortedCounts()) {
+            if (each.count != count) out.print(count = each.count).space();
+            out.append(each.element).space();
+        }
+        out.cr();
+    }
+    
 }

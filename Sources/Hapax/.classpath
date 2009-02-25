@@ -2,10 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/Fame"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/snowball.jar"/>
 	<classpathentry kind="lib" path="lib/jexample-4.4-r271.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ch.akuhn.util"/>
+	<classpathentry kind="lib" path="C:/Program Files/Java/jdk1.6.0_11/lib/tools.jar" sourcepath="lib/langtools-d17d927ad9bd.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

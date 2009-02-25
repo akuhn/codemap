@@ -45,6 +45,10 @@ public abstract class Scanner implements Runnable {
         this.in = CharStream.fromString(string);
         return this;
     }
+    
+    public Scanner onString(CharSequence chars) {
+        return onString(chars.toString());
+    }
 
     //@Override
     public void run() {

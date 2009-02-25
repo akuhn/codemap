@@ -32,7 +32,7 @@ public class SimpleCorpus extends Corpus {
 
         @Override
         public Document addTerms(Terms terms) {
-            terms.addAll(terms);
+            this.terms.addAll(terms);
             return this;
         }
 
