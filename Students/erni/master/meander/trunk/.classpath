@@ -8,6 +8,7 @@
 	<classpathentry kind="lib" path="lib/jexample-4.4-r277.jar"/>
 	<classpathentry kind="lib" path="lib/itext.jar"/>
 	<classpathentry kind="lib" path="lib/pdf.jar"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/Hapax"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Hapax"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Fame"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
