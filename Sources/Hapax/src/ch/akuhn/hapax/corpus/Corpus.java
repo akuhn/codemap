@@ -47,4 +47,9 @@ public abstract class Corpus {
                 termSize());
     }
 
+    public Document get(String name) {
+        for (Document each: documents()) if (each.name().equals(name)) return each;
+        throw new Error();
+    }
+
 }

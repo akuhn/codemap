@@ -1,5 +1,11 @@
 package ch.akuhn.hapax.index;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 import ch.akuhn.hapax.corpus.Terms;
 
 public class LogLikelihood implements Comparable<LogLikelihood>{
@@ -58,6 +64,18 @@ public class LogLikelihood implements Comparable<LogLikelihood>{
     @Override
     public String toString() {
         return String.format("logL(%s) = %.3f", term, value());
+    }
+
+    public static Iterable<LogLikelihood> compare(Terms t1, Terms t2) {
+        List<LogLikelihood> all = new ArrayList<LogLikelihood>();
+        int tally = 0; 
+        for (String each: new Terms(t1, t2).elementSet()) {
+            all.add(new LogLikelihood(t1, t2, each));
+            tally++;
+        }
+        System.out.println(tally);
+        Collections.sort(all);
+        return all;
     }
 
     

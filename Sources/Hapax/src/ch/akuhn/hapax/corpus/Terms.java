@@ -29,6 +29,10 @@ public class Terms extends Bag<String> implements ScannerClient {
         new CamelCaseScanner().client(this).onStream(stream).run();
     }
 
+    public Terms(Terms... union) {
+        for (Terms each: union) addAll(each);
+    }
+
     public Terms stem() {
         Stemmer stemmer = new PorterStemmer();
         Terms terms = new Terms();
@@ -67,6 +71,15 @@ public class Terms extends Bag<String> implements ScannerClient {
             out.append(each.element).space();
         }
         out.cr();
+    }
+    
+    public void readFrom(java.util.Scanner scanner) {
+        while (scanner.hasNextInt()) {
+            int count = scanner.nextInt();
+            while (!scanner.hasNextInt()) {
+                add(scanner.next(), count);
+            }
+        }
     }
     
 }
