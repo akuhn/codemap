@@ -3,7 +3,6 @@ package ch.deif.meander;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.util.As;
 import ch.deif.meander.mds.HitMDS;
-import ch.deif.meander.mds.HitMDSOriginal;
 
 public class JMDS {
 

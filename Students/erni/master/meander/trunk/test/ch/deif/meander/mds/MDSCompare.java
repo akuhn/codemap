@@ -1,17 +1,14 @@
 package ch.deif.meander.mds;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
+import static org.junit.Assert.assertArrayEquals;
 
 import org.junit.Test;
-
 
 public class MDSCompare {
     
     @Test
     public void checkSameOutput() {
-        assertArrayEquals(originalMds(), originalMds());
+        assertArrayEquals(originalMds(), newMDS());
     }
     
     private double[][] originalMds() {

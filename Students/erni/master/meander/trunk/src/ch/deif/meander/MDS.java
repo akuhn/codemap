@@ -11,10 +11,10 @@ import java.io.PrintStream;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.util.StreamGobbler;
 import ch.akuhn.util.As;
-import ch.akuhn.util.Throw;
-import ch.deif.meander.util.Delimiter;
 import ch.akuhn.util.TeeInputStream;
 import ch.akuhn.util.TeeOutputStream;
+import ch.akuhn.util.Throw;
+import ch.deif.meander.util.Delimiter;
 
 
 public class MDS {

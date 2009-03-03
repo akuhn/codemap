@@ -5,8 +5,6 @@ import java.io.File;
 import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.corpus.SimpleCorpus;
 import ch.akuhn.hapax.corpus.Terms;
-import ch.akuhn.hapax.index.LatentSemanticIndex;
-import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.deif.meander.Serializer;
 import ch.deif.meander.Serializer.MSEDocument;
 import ch.deif.meander.Serializer.MSEProject;

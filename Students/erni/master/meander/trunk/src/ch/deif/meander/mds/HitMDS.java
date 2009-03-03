@@ -428,7 +428,7 @@ public class HitMDS {
 
     // ////////////////PUBLIC PART////////////////////////////
     public double[][] evaluate(double[][]a, int destDim, IDistance dist) {
-        int cycles = 50;
+        int cycles = 10;
         assert (cycles != 0);
         double rate = 1;
 
