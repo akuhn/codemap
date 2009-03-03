@@ -20,8 +20,12 @@ import ch.akuhn.util.Throw;
 @FamePackage("Meander")
 public class ExtractVersionOrder implements Runnable {
 
+    /**
+     * @param args
+     * @throws ZipException
+     * @throws IOException
+     */
     public static void main(String[] args) throws ZipException, IOException {
-//        new ExtractVersionOrder().folder("data/groovy").run();
         new ExtractVersionOrder().folder("data/struts").run();
     }
 

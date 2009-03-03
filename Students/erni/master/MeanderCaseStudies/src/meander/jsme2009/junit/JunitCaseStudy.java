@@ -14,6 +14,7 @@ import ch.deif.meander.ContourLineAlgorithm;
 import ch.deif.meander.DEMAlgorithm;
 import ch.deif.meander.HillshadeAlgorithm;
 import ch.deif.meander.HillshadeVisualization;
+import ch.deif.meander.JMDS;
 import ch.deif.meander.MDS;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
@@ -47,7 +48,7 @@ public class JunitCaseStudy {
         System.out.println("Computing LSI...");
         LatentSemanticIndex i = tdm.createIndex();
         System.out.println("Computing MDS...");
-        MDS mds = MDS.fromCorrelationMatrix(i);
+        JMDS mds = JMDS.fromCorrelationMatrix(i);
         System.out.println("Done.");
         Serializer ser = new Serializer();
         ser.project("JUnit");
@@ -66,10 +67,10 @@ public class JunitCaseStudy {
     
     public static void main(String[] args) {
         
-        boolean compute = !!! true;
+        boolean compute = true;
         boolean show = !!! true;
-        boolean dist = true;
-        int nth = 2;
+        boolean dist = !!! true;
+        int nth = 10;
         
         if (compute) {
             Repository model = locationsRepository();
@@ -93,7 +94,7 @@ public class JunitCaseStudy {
             new ContourLineAlgorithm(map).run();
             //MapVisualization viz = new SketchVisualization(map);
             MapVisualization viz = new HillshadeVisualization(map);
-            new PViewer(viz);     
+            new PViewer(viz);
         }
         if (dist) {
             Serializer ser = new Serializer();

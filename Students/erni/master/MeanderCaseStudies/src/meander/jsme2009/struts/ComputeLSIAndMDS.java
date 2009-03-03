@@ -82,7 +82,7 @@ public class ComputeLSIAndMDS {
     }
     
     public Repository locationsRepository() {
-        TermDocumentMatrix TDM = this.importTDM();
+        TermDocumentMatrix TDM = importTDM();
         TDM = TDM.rejectAndWeight();
         System.out.println("Computing LSI...");
         LatentSemanticIndex i = TDM.createIndex();

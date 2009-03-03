@@ -16,9 +16,22 @@ import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.akuhn.util.Get;
 import ch.akuhn.util.Throw;
 import ch.akuhn.util.query.GroupedBy;
+import ch.deif.meander.ContourLineAlgorithm;
+import ch.deif.meander.DEMAlgorithm;
+import ch.deif.meander.HillshadeAlgorithm;
+import ch.deif.meander.HillshadeVisualization;
+import ch.deif.meander.JMDS;
 import ch.deif.meander.MDS;
+import ch.deif.meander.Map;
+import ch.deif.meander.MapBuilder;
+import ch.deif.meander.MapVisualization;
+import ch.deif.meander.NormalizeElevationAlgorithm;
+import ch.deif.meander.NormalizeLocationsAlgorithm;
+import ch.deif.meander.PViewer;
 import ch.deif.meander.Serializer;
 import ch.deif.meander.Serializer.MSEDocument;
+import ch.deif.meander.Serializer.MSELocation;
+import ch.deif.meander.Serializer.MSEProject;
 import ch.deif.meander.Serializer.MSERelease;
 
 
@@ -47,7 +60,7 @@ public class GroovyAllAtOnce {
     
     public TermDocumentMatrix importTDM() {
         try {
-            return TermDocumentMatrix.readFrom(new Scanner(new File(GroovyCropus.TDMFILE_10)));
+            return TermDocumentMatrix.readFrom(new Scanner(new File(GroovyCorpus.TDMFILE_10)));
         } catch (FileNotFoundException ex) {
             throw Throw.exception(ex);
         }
@@ -59,7 +72,7 @@ public class GroovyAllAtOnce {
         System.out.println("Computing LSI...");
         LatentSemanticIndex i = TDM.createIndex();
         System.out.println("Computing MDS...");
-        MDS mds = MDS.fromCorrelationMatrix(i);
+        JMDS mds = JMDS.fromCorrelationMatrix(i);
         System.out.println("Done.");
         Serializer ser = new Serializer();
         ser.project("JUnit");
@@ -75,6 +88,10 @@ public class GroovyAllAtOnce {
     }
     
     public void run() {
+        boolean show = true;
+        boolean hausdorff = !!! true;
+        int nth = 5;
+        
         Repository model = locationsRepository();
         System.out.printf("# num(doc) = %d; num(rel) = %d\n", 
                 model.count(MSEDocument.class),
@@ -82,7 +99,29 @@ public class GroovyAllAtOnce {
         model.exportMSEFile("mse/groovy_meander.mse");
         Serializer ser = new Serializer();
         ser.model().importMSEFile("mse/groovy_meander.mse");
-        new ComputeHausdorff(ser).run();     
+        
+        if (hausdorff) {
+            new ComputeHausdorff(ser).run();                  
+        }
+        if (show) {
+            MSEProject proj = ser.model().all(MSEProject.class).iterator().next();
+            MSERelease rel = Get.element(nth, proj.releases);
+            System.out.println(rel.name);
+            MapBuilder builder = Map.builder();
+            for (MSELocation each: rel.locations) {
+                builder.location(each.x, each.y, each.height);
+            }
+            Map map = builder.build();
+            new NormalizeLocationsAlgorithm(map).run();
+            new DEMAlgorithm(map).run();
+            new NormalizeElevationAlgorithm(map).run();
+            new HillshadeAlgorithm(map).run();
+            new ContourLineAlgorithm(map).run();
+            //MapVisualization viz = new SketchVisualization(map);
+            MapVisualization viz = new HillshadeVisualization(map);
+            new PViewer(viz);            
+        }
+  
     }
  
     public static void main(String[] args) {

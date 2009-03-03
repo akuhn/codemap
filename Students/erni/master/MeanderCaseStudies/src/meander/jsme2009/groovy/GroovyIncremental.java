@@ -24,7 +24,7 @@ public class GroovyIncremental implements Runnable {
     public static TermDocumentMatrix corpus_full()  {
         try {
             TermDocumentMatrix TDM = TermDocumentMatrix.readFrom(new Scanner(new File(
-                    GroovyCropus.TDMFILE_10)));
+                    GroovyCorpus.TDMFILE_10)));
             return TDM;
         } catch (FileNotFoundException ex) {
             throw Throw.exception(ex);

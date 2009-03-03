@@ -12,7 +12,7 @@ import ch.akuhn.util.SizeOf;
 import ch.akuhn.util.query.GroupedBy;
 
 
-public class GroovyCropus {
+public class GroovyCorpus {
 
     public static final String TDMFILE = "mse/groovy.TDM";
     public static final String DATA = "data/groovy";

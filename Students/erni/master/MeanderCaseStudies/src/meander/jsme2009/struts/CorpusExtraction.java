@@ -24,7 +24,6 @@ public class CorpusExtraction {
         SizeOf.sizeOf(TDM);
         
         TDM.storeOn("mse/struts.TDM");
- 
     }
 
 }

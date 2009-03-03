@@ -9,7 +9,10 @@ import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.corpus.Importer;
 import ch.akuhn.hapax.corpus.SimpleCorpus;
 
-
+/**
+ * @author deif
+ *
+ */
 public class ExtractCorpusFromArchives {
 
     public static void main(String[] args) throws ZipException, IOException {

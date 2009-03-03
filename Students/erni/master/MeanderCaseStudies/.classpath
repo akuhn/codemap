@@ -6,5 +6,7 @@
 	<classpathentry kind="lib" path="lib/jexample-4.4-r271.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Meander"/>
 	<classpathentry kind="lib" path="/Meander/lib/core.jar" sourcepath="/Meander/lib/core.zip"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Hapax"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Fame"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
