@@ -2,6 +2,7 @@ package ch.deif.meander;
 
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.util.As;
+import ch.deif.meander.mds.HitMDS;
 import ch.deif.meander.mds.HitMDSOriginal;
 
 public class JMDS {
@@ -40,7 +41,7 @@ public class JMDS {
             }
         }
         
-        double[][] result = new HitMDSOriginal().evaluate(input, -2);
+        double[][] result = new HitMDS().evaluate(input, -2);
         assert result[0].length == 2;
         
         int i = 0;

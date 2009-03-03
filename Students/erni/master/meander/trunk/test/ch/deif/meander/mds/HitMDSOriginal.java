@@ -56,7 +56,7 @@ public class HitMDSOriginal {
 
     private int[] shuffle_index; /* helper for data shuffling */
 
-    private HitRandom random = new HitRandom();
+    private IRandom random = new ModRandom();
 
     private IDistance distance;
 

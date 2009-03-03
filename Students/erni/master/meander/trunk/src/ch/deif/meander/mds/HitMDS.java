@@ -16,7 +16,7 @@ public class HitMDS {
     private static final double M_EXPONENT = 8.0;
 
     /* linear learning rate annealing at . times cycles */
-    private final double START_ANNEALING_RATIO = 0.5;
+    private final double START_ANNEALING_RATIO = .5;
 
     private final double EPS = 1e-16;
 
@@ -420,35 +420,39 @@ public class HitMDS {
 
         return res;
     }
+    
+    public HitMDS withModRandom() {
+        random = new ModRandom();
+        return this;
+    }
 
     // ////////////////PUBLIC PART////////////////////////////
-    public double[][] evaluate(double[][] a, int destDim) {
+    public double[][] evaluate(double[][]a, int destDim, IDistance dist) {
         int cycles = 50;
         assert (cycles != 0);
-
         double rate = 1;
 
-//         distance = DistanceRegistry.createMinkowskiDistance();
-//         distance = DistanceRegistry.createQuadraticEuclideanDistance();
-//         distance = DistanceRegistry.createSpearmanDistance();
-//         distance =
-//         DistanceRegistry.createPearsonCorrelationDistance(M_EXPONENT == 0 ?
-//         1.0 : M_EXPONENT);
-//         distance = DistanceRegistry.createCorr_Deriv_Vec();
-        distance = DistanceRegistry.createEuclideanDistance();
+        distance = dist;
 
         /* calls data_alloc */
         data_stdin(a, destDim);
 
         /* calc distmats */
-        data_init();
-        
+        data_init();       
         debug_print("# corr(D,d): " + 1. / sqrt(corr_2() + 1));
-
         mds_train(cycles * pattern_length, rate);
-
         mds_postprocess();
 
-        return mds_stdout();
+        return mds_stdout();        
+    }
+    
+    public double[][] evaluate(double[][] a, int destDim) {
+//         IDistance dist = DistanceRegistry.createMinkowskiDistance();
+//         IDistance dist = DistanceRegistry.createQuadraticEuclideanDistance();
+//         IDistance dist = DistanceRegistry.createSpearmanDistance();
+//         IDistance dist = DistanceRegistry.createPearsonCorrelationDistance(M_EXPONENT == 0 ? 1.0 : M_EXPONENT);
+//         IDistance dist = DistanceRegistry.createCorr_Deriv_Vec();
+        IDistance dist = DistanceRegistry.createEuclideanDistance();
+        return this.evaluate(a, destDim, dist);
     }
 }
