@@ -2,7 +2,6 @@ package ch.deif.meander.mds;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
-import ch.akuhn.util.Out;
 
 /**
  * @author spupyrev 20.11.2008
@@ -287,14 +286,13 @@ public class HitMDS {
         t = 0;
         m = cycles / 10;
         
-        if (DEBUG_OUTPUT)
-            System.out.println("\ncalculation progress:");
+        debug_print("\ncalculation progress:");
+        
         for (c = 0; c < cycles; c++) {
             if (++t == m) {
                 t = 0;
-                if (DEBUG_OUTPUT)
-                    System.out.println(100.0 * c / cycles + "%: " + corr_2()
-                            + " \t(r = " + 1.0 / sqrt(corr_2() + 1.0) + ")");
+                debug_print(100.0 * c / cycles + "%: " + corr_2()
+                        + " \t(r = " + 1.0 / sqrt(corr_2() + 1.0) + ")");
             }
 
             i = shuffle_next();
@@ -366,6 +364,11 @@ public class HitMDS {
         }
     }
 
+    private void debug_print(String message) {
+        if (DEBUG_OUTPUT)
+            System.out.println(message);
+    }
+
     /*
      * move center to origin, scale data in such a way that standard deviation
      * of dimension of largest variance is equal to 1
@@ -411,13 +414,9 @@ public class HitMDS {
         for (int i = 0; i < pattern_length; i++) {
             for (int j = 0; j < target_dim; j++) {
                 res[i][j] = points[i][j];
-                if (DEBUG_OUTPUT)
-                    System.out.print(points[i][j] + " ");
+                debug_print(points[i][j] + " ");
             }
-
-            if (DEBUG_OUTPUT) {
-                System.out.println("");
-            }
+            debug_print("");
         }
 
         return res;
@@ -444,9 +443,8 @@ public class HitMDS {
 
         /* calc distmats */
         data_init();
-
-        if (DEBUG_OUTPUT)
-            System.out.println("# corr(D,d): " + 1. / sqrt(corr_2() + 1));
+        
+        debug_print("# corr(D,d): " + 1. / sqrt(corr_2() + 1));
 
         mds_train(cycles * pattern_length, rate);
 

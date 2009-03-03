@@ -10,6 +10,7 @@ public class MDSCompare {
         double[][] evaluate = mds.evaluate(input, -2);
         
         System.out.println("----------------------------------------------");
+        System.out.println("results:");
         for (double[] row : evaluate) {
             for (double elem: row) {
                 System.out.print(elem + " ");
