@@ -9,7 +9,7 @@ import static java.lang.Math.sqrt;
  *         Multidimensional Scaling according to best distance matrix
  *         reconstruction. Based on signs of directions to maximize correlation
  */
-// @SuppressWarnings(value = "unused")
+
 public class HitMDS {
     private static final boolean DEBUG_OUTPUT = true;
 

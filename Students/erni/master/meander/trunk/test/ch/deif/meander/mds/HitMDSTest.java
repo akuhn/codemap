@@ -31,7 +31,7 @@ public class HitMDSTest
 					System.out.print(" ");
 			}
 
-		double[][] res = new HitMDS().evaluate(a, -2);
+		double[][] res = new HitMDSOriginal().evaluate(a, -2);
 
 		/*check(res, 0, 0, "-0.2617254159369086");
 		check(res, 1, 1, "0.686928469480733");
