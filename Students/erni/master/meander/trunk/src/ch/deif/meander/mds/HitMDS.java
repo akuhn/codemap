@@ -13,7 +13,7 @@ import static java.lang.Math.sqrt;
 public class HitMDS {
     private static final boolean DEBUG_OUTPUT = true;
 
-    private static final double M_EXPONENT = 0.0;
+    private static final double M_EXPONENT = 8.0;
 
     /* linear learning rate annealing at . times cycles */
     private final double START_ANNEALING_RATIO = 0.5;
@@ -54,7 +54,7 @@ public class HitMDS {
     private int[] shuffle_index; /* helper for data shuffling */
 
     //private IRandom random = new HitRandom();
-    private IRandom random = new ModRandom();    
+    private IRandom random = new MTRandom();    
 
     private IDistance distance;
 
@@ -365,8 +365,7 @@ public class HitMDS {
     }
 
     private void debug_print(String message) {
-        if (DEBUG_OUTPUT)
-            System.out.println(message);
+        if (DEBUG_OUTPUT) System.out.println(message);
     }
 
     /*
@@ -424,18 +423,18 @@ public class HitMDS {
 
     // ////////////////PUBLIC PART////////////////////////////
     public double[][] evaluate(double[][] a, int destDim) {
-        int cycles = 10;
+        int cycles = 50;
         assert (cycles != 0);
 
         double rate = 1;
 
-        // distance = DistanceRegistry.createMinkowskiDistance();
-        // distance = DistanceRegistry.createQuadraticEuclideanDistance();
-        // distance = DistanceRegistry.createSpearmanDistance();
-        // distance =
-        // DistanceRegistry.createPearsonCorrelationDistance(M_EXPONENT == 0 ?
-        // 1.0 : M_EXPONENT);
-        // distance = DistanceRegistry.createCorr_Deriv_Vec();
+//         distance = DistanceRegistry.createMinkowskiDistance();
+//         distance = DistanceRegistry.createQuadraticEuclideanDistance();
+//         distance = DistanceRegistry.createSpearmanDistance();
+//         distance =
+//         DistanceRegistry.createPearsonCorrelationDistance(M_EXPONENT == 0 ?
+//         1.0 : M_EXPONENT);
+//         distance = DistanceRegistry.createCorr_Deriv_Vec();
         distance = DistanceRegistry.createEuclideanDistance();
 
         /* calls data_alloc */

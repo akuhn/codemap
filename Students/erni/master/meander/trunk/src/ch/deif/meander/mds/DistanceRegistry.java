@@ -1,6 +1,5 @@
 package ch.deif.meander.mds;
 
-
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
@@ -8,233 +7,219 @@ import static java.lang.Math.sqrt;
 import java.util.Arrays;
 
 /**
- * @author spupyrev
- * 22.11.2008
+ * @author spupyrev 22.11.2008
  */
-public class DistanceRegistry
-{
-	private static final double EPS = 1e-16;
+public class DistanceRegistry {
+    
+    private static final double EPS = 1e-16;
 
-	public static IDistance createEuclideanDistance()
-	{
-		return new IDistance()
-		{
-			public double distance(int dimension, double[] d1, double[] d2)
-			{
-				double sum = 0.0;
-				for (int u = 0; u < dimension; u++)
-				{
-					double tmp = d1[u] - d2[u];
-					sum += tmp * tmp;
-				}
+    private static class QuadraticEuclideanDistance implements IDistance {
 
-				return sqrt(sum);
-			}
-		};
-	}
+        @Override
+        public double distance(int dimension, double[] d1, double[] d2) {
+            double sum = 0.0;
+            for (int u = 0; u < dimension; u++) {
+                double tmp = d1[u] - d2[u];
+                sum += tmp * tmp;
+            }
+            return sum;
+        }
+    }
 
-	public static IDistance createQuadraticEuclideanDistance()
-	{
-		return new IDistance()
-		{
-			public double distance(int dimension, double[] d1, double[] d2)
-			{
-				double sum = 0.0;
-				for (int u = 0; u < dimension; u++)
-				{
-					double tmp = d1[u] - d2[u];
-					tmp *= tmp;
-					sum += tmp * tmp;
-				}
-				return sum;
-			}
-		};
-	}
+    private static class EuclideanDistance extends QuadraticEuclideanDistance {
+        
+        @Override
+        public double distance(int dimension, double[] d1, double[] d2) {
+            double dist = super.distance(dimension, d1, d2);
+            return sqrt(dist);
+        }
+    }
+    
+    private static class PearsonCorrelationDistance implements IDistance {
+        
+        private double mexponent;
 
-	public static IDistance createMinkowskiDistance()
-	{
-		final double mexponent = 1.0;
+        protected PearsonCorrelationDistance(double exp) {
+            mexponent = exp;
+        }
 
-		return new IDistance()
-		{
-			public double distance(int dimension, double[] d1, double[] d2)
-			{
-				double sum = 0.0;
-				for (int u = 0; u < dimension; u++)
-				{
-					double tmp = d1[u]++ - d2[u];
-					tmp = abs(tmp);
-					sum += pow(tmp, mexponent);
-				}
-				return pow(sum, 1. / mexponent);
-			}
-		};
-	}
+        @Override
+        public double distance(int dimension, double[] d1, double[] d2) {
+            double mono1 = 0., mono2 = 0., mixed = 0., tmp, md1 = mean(
+                    dimension, d1), md2 = mean(dimension, d2);
+            for (int u = 0; u < dimension; u++) {
+                tmp = d1[u] - md1;
+                mono1 += tmp * tmp;
+                tmp = d2[u] - md2;
+                mono2 += tmp * tmp;
+                mixed += tmp * (d1[u] - md1);
+            }
 
-	public static IDistance createSpearmanDistance()
-	{
-		return new IDistance()
-		{
-			double f = 0.0;
-			int idx1[], idx2[];
-			int dim2;
+            tmp = Math.sqrt(mono1 * mono2);
 
-			public double distance(final int dimension, double[] d1, double[] d2)
-			{
-				double s1 = 0.0;
-				double s2 = 0.0;
+            mixed /= (tmp < EPS) ? EPS : tmp;
 
-				if (f == 0.0)
-				{
-					f = 1.0 / (dimension * (dimension * dimension - 1.0));
+            boolean u;
+            /* allow correlated and anti-correlated patterns to be similar */
+            if ((u = (mexponent < 0.0)) && mixed < 0.)
+                mixed = -mixed;
 
-					dim2 = dimension * 2;
+            mono1 = u ? -mexponent : mexponent;
 
-					idx1 = new int[dim2];
-					idx2 = new int[dim2];
-					Arrays.fill(idx1, 0);
-					Arrays.fill(idx2, 0);
-				}
+            return (mono1 == 1.) ? 1. - mixed : pow(1. - mixed, mexponent);
+        }
+        
+    }
 
-				//multiplicity 
-				int i = 0;
-				for (int u = 0; u < dimension; u++)
-				{
-					if (++idx1[(int) (2.0 * (d1[u] - 1.0))] > 1)
-						i++;
-					if (++idx2[(int) (2.0 * (d2[u] - 1.0))] > 1)
-						i++;
-				}
+    public static IDistance createEuclideanDistance() {
+        return new EuclideanDistance();
+    }
 
-				if (i > 0)//   only if necessary 
-					for (int u = 0; u < dim2; u++)
-					{
-						if ((i = idx1[u]) > 1)
-							s1 += i * (i * i - 1);
-						if ((i = idx2[u]) > 1)
-							s2 += i * (i * i - 1);
-					}
+    public static IDistance createQuadraticEuclideanDistance() {
+        return new QuadraticEuclideanDistance();
+    }
 
-				double sum = 0;
-				for (int u = 0; u < dimension; u++)
-				{
-					double tmp = d1[u] - d2[u];
-					sum += tmp * tmp;
-					idx1[u] = idx2[u] = idx1[u + dimension] = idx2[u + dimension] = 0;
-				}
+    public static IDistance createMinkowskiDistance() {
+        final double mexponent = 1.0;
 
-				if (s1 == 0. && s2 == 0.)
-				{
-					return 6.0 * f * sum;
-				}
-				else
-				{
-					s2 *= f;
-					if ((s1 *= f) > 1 - EPS)
-						return (s2 > 1 - EPS) ? 0 : 1.;
-					else if (s2 > 1 - EPS)
-						return 1.0;
-				}
+        return new IDistance() {
+            public double distance(int dimension, double[] d1, double[] d2) {
+                double sum = 0.0;
+                for (int u = 0; u < dimension; u++) {
+                    double tmp = d1[u]++ - d2[u];
+                    tmp = abs(tmp);
+                    sum += pow(tmp, mexponent);
+                }
+                return pow(sum, 1. / mexponent);
+            }
+        };
+    }
 
-				return 1.0 - (1.0 - 6.0 * (f * sum + (s1 + s2) / 12.)) / Math.sqrt((1. - s1) * (1. - s2));
-			}
-		};
-	}
+    public static IDistance createSpearmanDistance() {
+        return new IDistance() {
+            double f = 0.0;
+            int idx1[], idx2[];
+            int dim2;
 
-	/* (1 - Pearson)^expo correlation */
-	public static IDistance createPearsonCorrelationDistance(final double mexponent)
-	{
-		return new IDistance()
-		{
-			public double distance(int dimension, double[] d1, double[] d2)
-			{
-				double mono1 = 0., mono2 = 0., mixed = 0., tmp, md1 = mean(dimension, d1), md2 = mean(dimension, d2);
+            public double distance(final int dimension, double[] d1, double[] d2) {
+                double s1 = 0.0;
+                double s2 = 0.0;
 
-				for (int u = 0; u < dimension; u++)
-				{
-					tmp = d1[u] - md1;
-					mono1 += tmp * tmp;
-					tmp = d2[u] - md2;
-					mono2 += tmp * tmp;
-					mixed += tmp * (d1[u] - md1);
-				}
+                if (f == 0.0) {
+                    f = 1.0 / (dimension * (dimension * dimension - 1.0));
 
-				tmp = Math.sqrt(mono1 * mono2);
+                    dim2 = dimension * 2;
 
-				mixed /= (tmp < EPS) ? EPS : tmp;
+                    idx1 = new int[dim2];
+                    idx2 = new int[dim2];
+                    Arrays.fill(idx1, 0);
+                    Arrays.fill(idx2, 0);
+                }
 
-				boolean u;
-				/* allow correlated and anti-correlated patterns to be similar */
-				if ((u = (mexponent < 0.0)) && mixed < 0.)
-					mixed = -mixed;
+                // multiplicity
+                int i = 0;
+                for (int u = 0; u < dimension; u++) {
+                    if (++idx1[(int) (2.0 * (d1[u] - 1.0))] > 1)
+                        i++;
+                    if (++idx2[(int) (2.0 * (d2[u] - 1.0))] > 1)
+                        i++;
+                }
 
-				mono1 = u ? -mexponent : mexponent;
+                if (i > 0)// only if necessary
+                    for (int u = 0; u < dim2; u++) {
+                        if ((i = idx1[u]) > 1)
+                            s1 += i * (i * i - 1);
+                        if ((i = idx2[u]) > 1)
+                            s2 += i * (i * i - 1);
+                    }
 
-				return (mono1 == 1.) ? 1. - mixed : pow(1. - mixed, mexponent);
-			}
-		};
-	}
+                double sum = 0;
+                for (int u = 0; u < dimension; u++) {
+                    double tmp = d1[u] - d2[u];
+                    sum += tmp * tmp;
+                    idx1[u] = idx2[u] = idx1[u + dimension] = idx2[u
+                            + dimension] = 0;
+                }
 
-	/* derivative of Pearson correlation w.r.t d2 or absolute to both directions (symmetric) */
-	public static IDistance createCorr_Deriv_Vec()
-	{
-		return new IDistance()
-		{
-			public double distance(int dimension, double[] d1, double[] d2)
-			{
-				double mono1 = 0., mono2 = 0., mixed = 0., sum = 0., tmp, tmx, f, md1 = mean(dimension, d1), md2 = mean(dimension, d2);
+                if (s1 == 0. && s2 == 0.) {
+                    return 6.0 * f * sum;
+                } else {
+                    s2 *= f;
+                    if ((s1 *= f) > 1 - EPS)
+                        return (s2 > 1 - EPS) ? 0 : 1.;
+                    else if (s2 > 1 - EPS)
+                        return 1.0;
+                }
 
-				for (int u = 0; u < dimension; u++)
-				{
+                return 1.0 - (1.0 - 6.0 * (f * sum + (s1 + s2) / 12.))
+                        / Math.sqrt((1. - s1) * (1. - s2));
+            }
+        };
+    }
 
-					tmx = d1[u] - md1;
-					mono1 += tmx * tmx;
-					tmp = d2[u] - md2;
-					mono2 += tmp * tmp;
-					mixed += tmp * tmx;
-				}
+    /* (1 - Pearson)^expo correlation */
+    public static IDistance createPearsonCorrelationDistance(double mexponent) {
+        return new PearsonCorrelationDistance(mexponent);
+    }
 
-				tmp = sqrt(mono1 * mono2);
+    /*
+     * derivative of Pearson correlation w.r.t d2 or absolute to both directions
+     * (symmetric)
+     */
+    public static IDistance createCorr_Deriv_Vec() {
+        return new IDistance() {
+            public double distance(int dimension, double[] d1, double[] d2) {
+                double mono1 = 0., mono2 = 0., mixed = 0., sum = 0., tmp, tmx, f, md1 = mean(
+                        dimension, d1), md2 = mean(dimension, d2);
 
-				if (tmp < EPS)
-					tmp = EPS;
-				tmp = 1. / tmp;
+                for (int u = 0; u < dimension; u++) {
 
-				if (mono1 < EPS)
-					mono1 = EPS;
-				mono1 = mixed / mono1;
+                    tmx = d1[u] - md1;
+                    mono1 += tmx * tmx;
+                    tmp = d2[u] - md2;
+                    mono2 += tmp * tmp;
+                    mixed += tmp * tmx;
+                }
 
-				if (mono2 < EPS)
-					mono2 = EPS;
-				mono2 = mixed / mono2;
+                tmp = sqrt(mono1 * mono2);
 
-				for (int u = 0; u < dimension; u++)
-				{
-					f = ((d1[u] - md1) - mono2 * (d2[u] - md2)) * tmp;
+                if (tmp < EPS)
+                    tmp = EPS;
+                tmp = 1. / tmp;
 
-					tmx = ((d2[u] - md2) - mono1 * (d1[u] - md1)) * tmp;
-					f *= tmx;
-					f = abs(f);
+                if (mono1 < EPS)
+                    mono1 = EPS;
+                mono1 = mixed / mono1;
 
-					sum += f;
-				}
+                if (mono2 < EPS)
+                    mono2 = EPS;
+                mono2 = mixed / mono2;
 
-				/* average (absolute) contribution */
-				return sum / dimension;
-			}
-		};
+                for (int u = 0; u < dimension; u++) {
+                    f = ((d1[u] - md1) - mono2 * (d2[u] - md2)) * tmp;
 
-	}
+                    tmx = ((d2[u] - md2) - mono1 * (d1[u] - md1)) * tmp;
+                    f *= tmx;
+                    f = abs(f);
 
-	/* just a mean */
-	private static double mean(int dimension, double[] p)
-	{
-		double sum = 0.;
+                    sum += f;
+                }
 
-		for (int i = 0; i < dimension; i++)
-			sum += p[i];
+                /* average (absolute) contribution */
+                return sum / dimension;
+            }
+        };
 
-		return sum / dimension;
-	}
+    }
+
+    /* just a mean */
+    private static double mean(int dimension, double[] p) {
+        double sum = 0.;
+
+        for (int i = 0; i < dimension; i++)
+            sum += p[i];
+
+        return sum / dimension;
+    }
 
 }
