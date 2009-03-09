@@ -1,9 +1,11 @@
-package ch.deif.meander;
+package ch.deif.meander.ui;
 
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
+
+import ch.deif.meander.MapVisualization;
 
 import processing.core.PApplet;
 

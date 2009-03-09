@@ -2,6 +2,8 @@ package ch.deif.meander;
 
 import org.junit.Test;
 
+import ch.deif.meander.ui.PViewer;
+
 public class SandboxMain {
 
     public Map sample() {

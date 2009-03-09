@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="lib/pdf.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Hapax"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Fame"/>
+	<classpathentry kind="lib" path="lib/swt.jar" sourcepath="lib/swt-src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

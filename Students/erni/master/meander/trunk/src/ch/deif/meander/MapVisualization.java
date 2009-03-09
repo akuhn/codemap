@@ -2,6 +2,8 @@ package ch.deif.meander;
 
 import java.io.File;
 
+import ch.deif.meander.ui.PViewer;
+
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
