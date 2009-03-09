@@ -27,12 +27,12 @@ import ch.deif.meander.MapBuilder;
 import ch.deif.meander.MapVisualization;
 import ch.deif.meander.NormalizeElevationAlgorithm;
 import ch.deif.meander.NormalizeLocationsAlgorithm;
-import ch.deif.meander.PViewer;
 import ch.deif.meander.Serializer;
 import ch.deif.meander.Serializer.MSEDocument;
 import ch.deif.meander.Serializer.MSELocation;
 import ch.deif.meander.Serializer.MSEProject;
 import ch.deif.meander.Serializer.MSERelease;
+import ch.deif.meander.ui.PViewer;
 
 
 public class GroovyAllAtOnce {

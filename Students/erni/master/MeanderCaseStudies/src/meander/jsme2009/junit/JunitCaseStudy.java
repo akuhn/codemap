@@ -21,11 +21,11 @@ import ch.deif.meander.MapBuilder;
 import ch.deif.meander.MapVisualization;
 import ch.deif.meander.NormalizeElevationAlgorithm;
 import ch.deif.meander.NormalizeLocationsAlgorithm;
-import ch.deif.meander.PViewer;
 import ch.deif.meander.Serializer;
 import ch.deif.meander.Serializer.MSELocation;
 import ch.deif.meander.Serializer.MSEProject;
 import ch.deif.meander.Serializer.MSERelease;
+import ch.deif.meander.ui.PViewer;
 
 
 public class JunitCaseStudy {
@@ -67,8 +67,8 @@ public class JunitCaseStudy {
     
     public static void main(String[] args) {
         
-        boolean compute = true;
-        boolean show = !!! true;
+        boolean compute = !!! true;
+        boolean show = true;
         boolean dist = !!! true;
         int nth = 10;
         
