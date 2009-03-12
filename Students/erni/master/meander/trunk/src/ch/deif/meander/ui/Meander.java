@@ -1,11 +1,16 @@
 package ch.deif.meander.ui;
 
+import java.awt.Dimension;
 import java.awt.Frame;
 
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -62,16 +67,23 @@ public class Meander {
             int width = pa.getWidth();
             int height = pa.getHeight();
             
+            System.out.println(width + " - " + height);
+            
             mapFrame.add(pa);
             mapFrame.setSize(width, height);
-            parent.getShell().setSize(width+55, height+5);
+            mapFrame.setMaximumSize(new Dimension(width, height));
             map.setSize(width, height);
-            map.setLocation(0, 0);
             
             Text text = new Text(parent.getShell(), SWT.BORDER); 
             text.setText("Write"); 
-            text.setLocation(width+20,0); 
-            text.setSize(50,20); 
+            text.setLocation(width+20, width); 
+            text.setSize(50,20);
+            
+            parent.getShell().setSize(width, height);
+            GridDataFactory.fillDefaults().minSize(width, height).hint(width, height).applyTo(map);
+            
+            GridLayoutFactory.fillDefaults().applyTo(parent.getShell());
+            GridDataFactory.fillDefaults().minSize(width, height).applyTo(text);
             
             return parent;
           }

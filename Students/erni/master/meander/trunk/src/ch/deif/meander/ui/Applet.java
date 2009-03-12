@@ -9,6 +9,8 @@ public class Applet {
     public static class MapViz extends PApplet {
 
         private MapVisualization viz;
+        private int width;
+        private int height;
 
         public MapViz(MapVisualization viz) {
             this.viz = viz;
@@ -16,12 +18,16 @@ public class Applet {
 
         @Override
         public void setup() {
-            size(viz.map.getParameters().width, viz.map.getParameters().height);
+            width = viz.map.getParameters().width;
+            height = viz.map.getParameters().height;
             frameRate(1);
+            noFill();
+            size(width, height);
         }
 
         @Override
         public void draw() {
+            size(width, height);        
             viz.draw(g);
         }
     }
