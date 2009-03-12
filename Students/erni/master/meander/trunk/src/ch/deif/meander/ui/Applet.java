@@ -1,7 +1,7 @@
 package ch.deif.meander.ui;
 
-import ch.deif.meander.MapVisualization;
 import processing.core.PApplet;
+import ch.deif.meander.MapVisualization;
 
 public class Applet {
 

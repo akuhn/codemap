@@ -11,7 +11,7 @@ import static java.lang.Math.sqrt;
  */
 
 public class HitMDS {
-    private static final boolean DEBUG_OUTPUT = false;
+    private static final boolean DEBUG_OUTPUT = true;
 
     private static final double M_EXPONENT = 8.0;
 

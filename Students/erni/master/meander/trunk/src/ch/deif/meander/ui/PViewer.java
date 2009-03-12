@@ -5,9 +5,8 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import ch.deif.meander.MapVisualization;
-
 import processing.core.PApplet;
+import ch.deif.meander.MapVisualization;
 
 @SuppressWarnings("serial")
 public class PViewer extends JFrame {

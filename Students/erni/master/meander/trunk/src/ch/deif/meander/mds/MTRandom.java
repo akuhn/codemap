@@ -7,7 +7,7 @@ public class MTRandom implements IRandom {
     private Twister twister;
 
     public MTRandom() {
-        twister = new Twister();
+        twister = new Twister(false);
     }
 
     @Override

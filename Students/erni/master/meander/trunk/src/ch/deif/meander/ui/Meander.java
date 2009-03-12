@@ -5,16 +5,18 @@ import java.awt.Frame;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Sash;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 
 import processing.core.PApplet;
 import ch.akuhn.util.Get;
@@ -41,6 +43,8 @@ public class Meander {
     
     private static abstract class AppletWindow extends ApplicationWindow {
         
+        protected Composite map;
+
         public AppletWindow() {
             super(null);
             // Don't return from open() until window closes
@@ -48,16 +52,27 @@ public class Meander {
             // Open the main window
             open();
             // Dispose the display
-            Display.getCurrent().dispose();            
+            Display.getCurrent().dispose();
         }
         
         protected Control createContents(Composite parent) {
-            Composite mapComposite = new Composite(parent.getShell(), SWT.EMBEDDED);
-            Frame mapFrame = SWT_AWT.new_Frame(mapComposite);
+            map = new Composite(parent.getShell(), SWT.EMBEDDED);
+            Frame mapFrame = SWT_AWT.new_Frame(map);
             PApplet pa = createApplet();
+            int width = pa.getWidth();
+            int height = pa.getHeight();
+            
             mapFrame.add(pa);
-            mapComposite.setSize(pa.getWidth(), pa.getHeight());
-           
+            mapFrame.setSize(width, height);
+            parent.getShell().setSize(width+55, height+5);
+            map.setSize(width, height);
+            map.setLocation(0, 0);
+            
+            Text text = new Text(parent.getShell(), SWT.BORDER); 
+            text.setText("Write"); 
+            text.setLocation(width+20,0); 
+            text.setSize(50,20); 
+            
             return parent;
           }
         
@@ -73,10 +88,16 @@ public class Meander {
             pa.init();
             int width = viz.map.getParameters().width;
             int height = viz.map.getParameters().height;
-            // frame.setSize(width, height);
             pa.setSize(width, height);
             return pa;
         }
+        
+        protected Control createContents(Composite parent) {
+            Control control = super.createContents(parent);
+            Shell shell = control.getShell();
+            
+            return control;
+          }        
 
         protected MapVisualization createVizualization() {
 

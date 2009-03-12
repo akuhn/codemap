@@ -17,8 +17,6 @@ import ch.deif.meander.MapBuilder;
 import ch.deif.meander.MapVisualization;
 import ch.deif.meander.NormalizeElevationAlgorithm;
 import ch.deif.meander.NormalizeLocationsAlgorithm;
-import ch.deif.meander.Serializer;
-import ch.deif.meander.Serializer.MSELocation;
 import ch.deif.meander.ui.PViewer;
 
 public class MDSTest {
@@ -34,7 +32,7 @@ public class MDSTest {
             System.out.println("Computing LSI...");
             LatentSemanticIndex i = tdm.createIndex();
             System.out.println("Computing MDS...");
-            System.out.println(i.documents.size());
+            System.out.println("with " + i.documents.size() + " documents...");
             JMDS mds = JMDS.fromCorrelationMatrix(i);
             System.out.println("Done.");
             
