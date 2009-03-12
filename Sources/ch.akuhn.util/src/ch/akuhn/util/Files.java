@@ -199,4 +199,8 @@ public abstract class Files {
         return name.substring(index + 1);
     }
 
+    public static Iterable<File> find(String folder, String... extensions) {
+        return find(new File(folder), extensions);
+    }
+
 }
