@@ -22,7 +22,7 @@ public abstract class Corpus {
     public Iterable<String> versions() {
         Set<String> versions = new HashSet<String>();
         for (Document each: this.documents()) versions.add(each.version());
-        return versions();
+        return versions;
     }
     
     public abstract Iterable<Document> documents();
@@ -50,6 +50,16 @@ public abstract class Corpus {
     public Document get(String name) {
         for (Document each: documents()) if (each.name().equals(name)) return each;
         throw new Error();
+    }
+    
+    public Terms terms(String version) {
+        Terms terms = new Terms();
+        for (Document each: documents()) {
+            if (version.equals(each.version())) {
+                terms.addAll(terms(each));
+            }
+        }
+        return terms;
     }
 
 }

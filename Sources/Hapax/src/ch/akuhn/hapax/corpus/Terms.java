@@ -2,10 +2,14 @@ package ch.akuhn.hapax.corpus;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import ch.akuhn.util.Bag;
 import ch.akuhn.util.PrintOn;
+import ch.akuhn.util.Bag.Count;
 
 public class Terms extends Bag<String> implements ScannerClient {
 
@@ -80,6 +84,13 @@ public class Terms extends Bag<String> implements ScannerClient {
                 add(scanner.next(), count);
             }
         }
+    }
+
+    public List<Count<String>> top(int num) {
+        List<Count<String>> top = new ArrayList<Count<String>>(); 
+        Iterator<Count<String>> counts = this.sortedCounts().iterator();
+        for (int n = 0; n < num && counts.hasNext(); n++) top.add(counts.next());
+        return top;
     }
     
 }
