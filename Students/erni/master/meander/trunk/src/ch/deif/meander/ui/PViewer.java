@@ -14,7 +14,7 @@ public class PViewer extends JFrame {
 
     public PViewer(MapVisualization viz) {
         super("Map Viewer");
-
+        
         setLayout(new BorderLayout());
         PApplet pa = new InnerApplet(viz);
         getContentPane().add(pa, BorderLayout.CENTER);

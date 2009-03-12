@@ -23,15 +23,15 @@ public class JMDS {
             Iterable<Location> matchingLocations) {
         assert matchingLocations == null
                 || index.documents.size() == As.list(matchingLocations).size();
-        
+
         int size = index.documents.size();
         x = new double[size];
         y = new double[size];
         double[][] input = new double[size][size];
-        
+
         int row = 0;
         int col = 0;
-        
+
         for (double corellation : index.documentCorrelations()) {
             input[row][col++] = corellation;
             if (col >= size) {
@@ -39,10 +39,10 @@ public class JMDS {
                 row++;
             }
         }
-        
+
         double[][] result = new HitMDS().evaluate(input, -2);
         assert result[0].length == 2;
-        
+
         int i = 0;
         for (double[] documentPosition : result) {
             x[i] = documentPosition[0];

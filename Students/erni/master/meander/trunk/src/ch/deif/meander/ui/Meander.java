@@ -2,16 +2,16 @@ package ch.deif.meander.ui;
 
 import java.awt.Frame;
 
+import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
@@ -35,67 +35,38 @@ import ch.deif.meander.Serializer.MSERelease;
 public class Meander {
 
     public static void main(String... args) {
-        new MeanderWindow().run();
-        // new GlitchSticksWindow().run();
+//         new GlitchSticksWindow();
+        new MeanderWindow();
     }
-
-    private abstract static class AppletWindow {
-
-        protected Shell shell;
-        protected Display display;
-        protected Composite mapComposite;
-        protected Frame mapFrame;
-
+    
+    private static abstract class AppletWindow extends ApplicationWindow {
+        
         public AppletWindow() {
-            display = new Display();
-            shell = new Shell(display);
-            
-            FormLayout formLayout = new FormLayout();
-            shell.setLayout(formLayout);
-
-            mapComposite = new Composite(shell, SWT.EMBEDDED);
-            mapFrame = SWT_AWT.new_Frame(mapComposite);
+            super(null);
+            // Don't return from open() until window closes
+            setBlockOnOpen(true);
+            // Open the main window
+            open();
+            // Dispose the display
+            Display.getCurrent().dispose();            
+        }
+        
+        protected Control createContents(Composite parent) {
+            Composite mapComposite = new Composite(parent.getShell(), SWT.EMBEDDED);
+            Frame mapFrame = SWT_AWT.new_Frame(mapComposite);
             PApplet pa = createApplet();
             mapFrame.add(pa);
             mapComposite.setSize(pa.getWidth(), pa.getHeight());
-            
-            FormData mapData = new FormData();
-            mapData.top = new FormAttachment(0);
-            mapComposite.setLayoutData(mapData);
-            
-//            new Button(shell, SWT.PUSH).setText("B1");
-//            new Button(shell, SWT.PUSH).setText("B2");            
-
-        }
-
-        protected void run() {
-            shell.open();
-            while (!shell.isDisposed()) {
-                if (!display.readAndDispatch())
-                    display.sleep();
-            }
-            display.dispose();
-        }
-
+           
+            return parent;
+          }
+        
         protected abstract PApplet createApplet();
-
+        
     }
-
+    
     private static class MeanderWindow extends AppletWindow {
-
-        public MeanderWindow() {
-            super();
-            Menu menuBar = new Menu(shell, SWT.BAR);
-            shell.setMenuBar(menuBar);
-
-            MenuItem file = new MenuItem(menuBar, SWT.CASCADE);
-            file.setText("File");
-            Menu filemenu = new Menu(shell, SWT.DROP_DOWN);
-            file.setMenu(filemenu);
-            MenuItem actionItem = new MenuItem(filemenu, SWT.PUSH);
-            actionItem.setText("Import");
-        }
-
+        
         protected PApplet createApplet() {
             MapVisualization viz = createVizualization();
             PApplet pa = new Applet.MapViz(viz);
@@ -129,8 +100,8 @@ public class Meander {
             // MapVisualization viz = new SketchVisualization(map);
             MapVisualization viz = new HillshadeVisualization(map);
             return viz;
-        }
-    }
+        }        
+      }    
 
     private static class GlitchSticksWindow extends AppletWindow {
 

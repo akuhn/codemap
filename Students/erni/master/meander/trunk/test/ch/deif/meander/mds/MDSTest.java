@@ -1,51 +1,65 @@
 package ch.deif.meander.mds;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
-import ch.akuhn.hapax.corpus.Corpus;
-import ch.akuhn.hapax.corpus.SimpleCorpus;
-import ch.akuhn.hapax.corpus.Terms;
+import ch.akuhn.hapax.corpus.Document;
+import ch.akuhn.hapax.index.LatentSemanticIndex;
+import ch.akuhn.hapax.index.TermDocumentMatrix;
+import ch.deif.meander.ContourLineAlgorithm;
+import ch.deif.meander.DEMAlgorithm;
+import ch.deif.meander.HillshadeAlgorithm;
+import ch.deif.meander.HillshadeVisualization;
+import ch.deif.meander.JMDS;
+import ch.deif.meander.Map;
+import ch.deif.meander.MapBuilder;
+import ch.deif.meander.MapVisualization;
+import ch.deif.meander.NormalizeElevationAlgorithm;
+import ch.deif.meander.NormalizeLocationsAlgorithm;
 import ch.deif.meander.Serializer;
-import ch.deif.meander.Serializer.MSEDocument;
-import ch.deif.meander.Serializer.MSEProject;
-import ch.deif.meander.Serializer.MSERelease;
+import ch.deif.meander.Serializer.MSELocation;
+import ch.deif.meander.ui.PViewer;
 
 public class MDSTest {
     
-    private static final String FILENAME = "mse/junit_corpus.mse";
-    private static final String DEFAULT_VERSION = "junit4.0.zip";
-    
-    /**
-     * Load a corpus containing all documents of the given version.
-     * @param versionName
-     * @return
-     */
-    public Corpus corpus(String versionName) {
-        assert new File(FILENAME).isFile();
-        Serializer ser = new Serializer();
-        ser.model().importMSEFile(FILENAME);
-        MSEProject project = ser.model().all(MSEProject.class).iterator().next();
-        Corpus corpus = new SimpleCorpus();
-        for (MSERelease version: project.releases) {
-            if (!versionName.equals(version.name)) continue;
-            for (MSEDocument each: version.documents) {
-                assert each.name != null;
-                corpus.makeDocument(each.name, version.name).addTerms(new Terms(each.terms));
-            }
-        }
-        return corpus;
-    }
-    
+    private static final String FILENAME = "mse/groovy.TDM";
+    private static final String DEFAULT_VERSION = "groovy-1.0-beta-5-src.zip";
+
     public static void main(String... args) {
-        
-        // TODO it seems, class MultiDimensionalScaling is missing or not commit.
-        
-//        Corpus corpus = new MDSTest().corpus(DEFAULT_VERSION);
-//        TermDocumentMatrix tdm = new TermDocumentMatrix();
-//        tdm.addCorpus(corpus);
-//        tdm.rejectAndWeight();
-//        LatentSemanticIndex lsi = tdm.createIndex();
-//        MultiDimensionalScaling.fromCorrelationMatrix(lsi);
+        TermDocumentMatrix tdm;
+        try {
+            tdm = TermDocumentMatrix.readFrom(new Scanner(new File(FILENAME)));
+            tdm.rejectAndWeight();
+            System.out.println("Computing LSI...");
+            LatentSemanticIndex i = tdm.createIndex();
+            System.out.println("Computing MDS...");
+            System.out.println(i.documents.size());
+            JMDS mds = JMDS.fromCorrelationMatrix(i);
+            System.out.println("Done.");
+            
+            MapBuilder builder = Map.builder();
+            for (Document each: i.documents) {
+                if (!each.version().equals(DEFAULT_VERSION)) continue;
+                int index = i.documents.get(each);
+                builder.location(mds.x[index], mds.y[index], Math.sqrt(each.termSize()));
+            }
+            Map map = builder.build();
+            new NormalizeLocationsAlgorithm(map).run();
+            new DEMAlgorithm(map).run();
+            new NormalizeElevationAlgorithm(map).run();
+            new HillshadeAlgorithm(map).run();
+            new ContourLineAlgorithm(map).run();
+            //MapVisualization viz = new SketchVisualization(map);
+            MapVisualization viz = new HillshadeVisualization(map);
+            new PViewer(viz);                 
+            
+            
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 }

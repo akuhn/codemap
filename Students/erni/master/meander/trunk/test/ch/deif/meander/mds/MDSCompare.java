@@ -4,6 +4,8 @@ import static org.junit.Assert.assertArrayEquals;
 
 import org.junit.Test;
 
+import ch.akuhn.util.Out;
+
 public class MDSCompare {
     
     @Test
@@ -20,6 +22,17 @@ public class MDSCompare {
         
         HitMDSOriginal originalMds = new HitMDSOriginal();
         return originalMds.evaluate(input, -2);        
+    }
+    
+    public static void main(String... args){
+        double[][] newMDS = new MDSCompare().originalMds();
+        System.out.println("----------------------");
+        for(double[] row : newMDS){
+            System.out.print(row[0]);
+            System.out.print(" ");
+            System.out.print(row[1]);
+            System.out.println();
+        }
     }
     
     private double[][] newMDS() {
