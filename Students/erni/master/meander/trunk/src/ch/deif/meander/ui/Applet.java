@@ -1,7 +1,17 @@
 package ch.deif.meander.ui;
 
+import java.awt.Color;
+import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import processing.core.PApplet;
+import ch.deif.meander.Map;
 import ch.deif.meander.MapVisualization;
+import ch.deif.meander.MaxDistNearestNeighbor;
+import ch.deif.meander.NearestNeighbor;
 
 public class Applet {
 
@@ -11,25 +21,79 @@ public class Applet {
         private MapVisualization viz;
         private int width;
         private int height;
+        private Map map;
+        private Collection<Point> points;
+        private boolean preSelect = false;
 
         public MapViz(MapVisualization viz) {
             this.viz = viz;
+            map = viz.map;
+            points = new ArrayList<Point>();
         }
 
         @Override
         public void setup() {
             width = viz.map.getParameters().width;
             height = viz.map.getParameters().height;
-            frameRate(1);
-            noFill();
+            frameRate(10);
+            smooth();
             size(width, height);
         }
 
         @Override
         public void draw() {
-            size(width, height);        
             viz.draw(g);
+            noFill();
+            strokeWeight(2);
+
+            if (preSelect) {
+                stroke(Color.BLUE.getRGB());
+                Point current = new Point(mouseX, mouseY);
+                Point preSelect = new MaxDistNearestNeighbor(map, width / 10)
+                        .forLocation(current);
+                if (preSelect != null) {
+                    ellipse(preSelect.x, preSelect.y, 3, 3);
+                }
+            }
+
+            stroke(Color.RED.getRGB());
+            for (Point each : points) {
+                ellipse(each.x, each.y, 7, 7);
+            }
         }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+            super.keyTyped(e);
+            // System.out.println(e.getKeyChar());
+            if (e.getKeyChar() == 's') {
+                preSelect = !preSelect;
+            }
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            super.mouseClicked(e);
+            Point point = e.getPoint();
+            if (!e.isControlDown()) {
+                points.clear();
+            }
+            if (e.getButton() == MouseEvent.BUTTON1) {
+                // button1 is 1st mouse button
+                Point nearest = new MaxDistNearestNeighbor(map, width / 10)
+                        .forLocation(point);
+                if (nearest != null) {
+                    points.add(nearest);
+                    System.out.println(nearest);
+                }
+            } else if (e.getButton() == MouseEvent.BUTTON3) {
+                // button3 is 2nd mouse button
+                Point nearest = new NearestNeighbor(map).forLocation(point);
+                points.add(nearest);
+                System.out.println(nearest);
+            }
+        }
+
     }
 
     /**

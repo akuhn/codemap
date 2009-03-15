@@ -9,36 +9,24 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
-import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Sash;
+import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Slider;
 
 import processing.core.PApplet;
 import ch.akuhn.util.Get;
-import ch.akuhn.util.Out;
-import ch.deif.meander.ContourLineAlgorithm;
-import ch.deif.meander.DEMAlgorithm;
-import ch.deif.meander.HillshadeAlgorithm;
-import ch.deif.meander.HillshadeVisualization;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
 import ch.deif.meander.MapVisualization;
-import ch.deif.meander.NormalizeElevationAlgorithm;
-import ch.deif.meander.NormalizeLocationsAlgorithm;
 import ch.deif.meander.Serializer;
+import ch.deif.meander.Serializer.MSEDocument;
 import ch.deif.meander.Serializer.MSELocation;
 import ch.deif.meander.Serializer.MSEProject;
 import ch.deif.meander.Serializer.MSERelease;
@@ -84,6 +72,10 @@ public class Meander {
     }
 
     private static class MeanderWindow extends AppletWindow {
+        
+        private static int MAP_DIM = 700;
+        private MSEProject project;
+        private MSERelease release;
 
         protected PApplet createApplet() {
             MapVisualization viz = createVizualization();
@@ -108,13 +100,27 @@ public class Meander {
             mapFrame.setLocation(0, 0);
             mapFrame.setSize(width, height);
 //            System.out.println(mapFrame);
-
+            
             map.setSize(width, height);
             map.setLayout(new FillLayout());
             // "debug" to see what components are where ...
 //            map.setBackground(new Color(Display.getCurrent(), 0, 255, 0));
+            
+            Composite rightPane = new Composite(shell, SWT.NONE);
+            List files = new List(rightPane, SWT.MULTI | SWT.V_SCROLL);
+            Canvas tagCloud = new Canvas(rightPane, SWT.NONE);
+            
+            for(MSEDocument each: release.documents){
+                files.add(each.name);
+            }
+            
+            GridDataFactory.swtDefaults().hint(MAP_DIM/2, height/2).applyTo(files);
+            GridDataFactory.swtDefaults().hint(MAP_DIM/2, height/2).applyTo(tagCloud);            
+            GridLayoutFactory.fillDefaults().spacing(5, 5).generateLayout(rightPane);            
+            
             GridDataFactory.swtDefaults().hint(width, height).applyTo(map);
-            GridLayoutFactory.swtDefaults().generateLayout(shell);
+            GridDataFactory.swtDefaults().hint(MAP_DIM/2, height).applyTo(rightPane);
+            GridLayoutFactory.swtDefaults().numColumns(2).generateLayout(shell);
             
             // get rid of magically appearing label
             // FIXME find out where this label comes from
@@ -124,7 +130,7 @@ public class Meander {
                 if (unwanted instanceof Label)
                     unwanted.dispose();
             }
-
+            shell.pack();
             return control;
         }
 
@@ -133,23 +139,16 @@ public class Meander {
             int nth = 10;
             Serializer ser = new Serializer();
             ser.model().importMSEFile("mse/junit_meander.mse");
-            MSEProject proj = ser.model().all(MSEProject.class).iterator()
+            project = ser.model().all(MSEProject.class).iterator()
                     .next();
-            MSERelease rel = Get.element(nth, proj.releases);
-            MapBuilder builder = Map.builder();
-            for (MSELocation each : rel.locations) {
+            release = Get.element(nth, project.releases);
+            MapBuilder builder = Map.builder().size(MAP_DIM, MAP_DIM);
+            for (MSELocation each : release.locations) {
                 builder.location(each.x, each.y, each.height);
             }
+            
             Map map = builder.build();
-
-            new NormalizeLocationsAlgorithm(map).run();
-            new DEMAlgorithm(map).run();
-            new NormalizeElevationAlgorithm(map).run();
-            new HillshadeAlgorithm(map).run();
-            new ContourLineAlgorithm(map).run();
-            // MapVisualization viz = new SketchVisualization(map);
-            MapVisualization viz = new HillshadeVisualization(map);
-            return viz;
+            return map.getDefauVisualization();
         }
     }
 
