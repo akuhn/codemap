@@ -20,6 +20,8 @@ import ch.deif.meander.util.Delimiter;
 public class MDS {
 
     class Gobbler extends StreamGobbler {
+        
+        public boolean done = false;
 
         public Gobbler(InputStream is) {
             super(is);
@@ -33,6 +35,7 @@ public class MDS {
                 x[n] = scan.nextDouble();
                 y[n] = scan.nextDouble();
             }
+            done = true;
             expectEOF();
         }
     }
@@ -99,12 +102,20 @@ public class MDS {
             InputStream in = proc.getInputStream();
             if (tee) err = new TeeInputStream(err, "error.log");
             if (tee) in = new TeeInputStream(in, "input.log");
-            new StreamGobbler(err).verbose().start();
-            new Gobbler(in).start();
+            
+            StreamGobbler error = new StreamGobbler(err);
+            Gobbler input = new Gobbler(in);
+            error.verbose().start();
+            input.start();
+            
             OutputStream out = proc.getOutputStream();
             if (tee) out = new TeeOutputStream(out, "output.log");
             printMatrixOn(index, matchingLocations, new PrintStream(out));
-            int exit = fixBrokenWaitFor(proc);
+            
+            int exit = proc.waitFor();
+            while (!input.done) Thread.sleep(20);
+            error.kill();
+            input.kill();
             if (exit != 0) throw new Error(command);
         } catch (Exception ex) {
             throw Throw.exception(ex);
@@ -112,18 +123,4 @@ public class MDS {
         return this;
     }
 
-    private int fixBrokenWaitFor(Process proc) {
-        // int exit = proc.waitFor();
-        int exit = -1;
-        boolean done = false;
-        while (!done) {
-            try {
-                exit = proc.exitValue();
-                done = true;
-            } catch (IllegalThreadStateException e) {
-                // Thread.sleep(20);
-            }
-        }
-        return exit;
-    }
 }

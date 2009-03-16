@@ -21,7 +21,8 @@ import ch.deif.meander.ui.PViewer;
 
 public class MDSTest {
     
-    private static final String FILENAME = "mse/groovy.TDM";
+//    private static final String FILENAME = "mse/groovy.TDM";
+    private static final String FILENAME = "mse/jnit_new.TDM";    
     private static final String DEFAULT_VERSION = "groovy-1.0-beta-5-src.zip";
 
     public static void main(String... args) {
