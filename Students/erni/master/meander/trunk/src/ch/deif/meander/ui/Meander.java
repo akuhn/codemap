@@ -17,9 +17,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TableItem;
 
 import processing.core.PApplet;
+import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.util.Get;
+import ch.deif.meander.Location;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
 import ch.deif.meander.MapVisualization;
@@ -27,6 +30,7 @@ import ch.deif.meander.Serializer;
 import ch.deif.meander.Serializer.MSEDocument;
 import ch.deif.meander.Serializer.MSEProject;
 import ch.deif.meander.Serializer.MSERelease;
+import ch.deif.meander.ui.Applet.MapViz;
 
 public class Meander {
 
@@ -35,9 +39,43 @@ public class Meander {
         new MeanderWindow();
     }
 
-    private static abstract class AppletWindow extends ApplicationWindow {
+    public static class EventHandler {
 
-        protected Composite map;
+        private MeanderWindow window;
+        private MapViz applet;
+
+        public EventHandler(MeanderWindow m, Applet.MapViz a) {
+            window = m;
+            applet = a;
+            a.registerHandler(this);
+        }
+
+        public void selectionCleared() {
+            System.out.println("clear selection");
+            assert window.display() != null;
+            window.display().syncExec(new Runnable() {
+                public void run() {
+                    window.files().deselectAll();
+                }
+            });
+        }
+
+        public void selected(Location location) {
+            final Document document = location.document;
+            System.out.println("selecting: " + document.name());
+            window.display().syncExec(new Runnable() {
+                public void run() {
+                    int index = window.files().indexOf(document.name());
+                    window.files().select(index);
+                }
+            });            
+        }
+
+    }
+
+    public static abstract class AppletWindow extends ApplicationWindow {
+
+        protected Composite mapComposite;
         protected PApplet applet;
         protected Frame mapFrame;
 
@@ -48,14 +86,18 @@ public class Meander {
             // Open the main window
             open();
             // Dispose the display
-            Display.getCurrent().dispose();
+            display().dispose();
+        }
+
+        public Display display() {
+            return getShell().getDisplay();
         }
 
         protected Control createContents(Composite parent) {
             Shell shell = parent.getShell();
-            map = new Composite(shell, SWT.EMBEDDED);
+            mapComposite = new Composite(shell, SWT.EMBEDDED);
 
-            mapFrame = SWT_AWT.new_Frame(map);
+            mapFrame = SWT_AWT.new_Frame(mapComposite);
             mapFrame.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 
             applet = createApplet();
@@ -68,19 +110,27 @@ public class Meander {
 
     }
 
-    private static class MeanderWindow extends AppletWindow {
-        
+    public static class MeanderWindow extends AppletWindow {
+
         private static int MAP_DIM = 700;
         private MSEProject project;
         private MSERelease release;
+        private Map map;
+        private List filesComposite;
+
+        public List files() {
+            return filesComposite;
+        }
 
         protected PApplet createApplet() {
             MapVisualization viz = createVizualization();
-            PApplet pa = new Applet.MapViz(viz);
+            Applet.MapViz pa = new Applet.MapViz(viz);
             pa.init();
             int width = viz.map.getParameters().width;
             int height = viz.map.getParameters().height;
             pa.setSize(width, height);
+
+            new EventHandler(this, pa);
             return pa;
         }
 
@@ -96,29 +146,34 @@ public class Meander {
             mapFrame.setMaximumSize(new Dimension(width, height));
             mapFrame.setLocation(0, 0);
             mapFrame.setSize(width, height);
-//            System.out.println(mapFrame);
-            
-            map.setSize(width, height);
-            map.setLayout(new FillLayout());
+            // System.out.println(mapFrame);
+
+            mapComposite.setSize(width, height);
+            mapComposite.setLayout(new FillLayout());
             // "debug" to see what components are where ...
-//            map.setBackground(new Color(Display.getCurrent(), 0, 255, 0));
-            
+            // map.setBackground(new Color(Display.getCurrent(), 0, 255, 0));
+
             Composite rightPane = new Composite(shell, SWT.NONE);
-            List files = new List(rightPane, SWT.MULTI | SWT.V_SCROLL);
+            filesComposite = new List(rightPane, SWT.MULTI | SWT.V_SCROLL);
             Canvas tagCloud = new Canvas(rightPane, SWT.NONE);
-            
-            for(MSEDocument each: release.documents){
-                files.add(each.name);
+
+            for (Location l : map.locations()) {
+                filesComposite.add(l.document.name());
             }
-            
-            GridDataFactory.swtDefaults().hint(MAP_DIM/2, height/2).applyTo(files);
-            GridDataFactory.swtDefaults().hint(MAP_DIM/2, height/2).applyTo(tagCloud);            
-            GridLayoutFactory.fillDefaults().spacing(5, 5).generateLayout(rightPane);            
-            
-            GridDataFactory.swtDefaults().hint(width, height).applyTo(map);
-            GridDataFactory.swtDefaults().hint(MAP_DIM/2, height).applyTo(rightPane);
+
+            GridDataFactory.swtDefaults().hint(MAP_DIM / 2, height / 2)
+                    .applyTo(filesComposite);
+            GridDataFactory.swtDefaults().hint(MAP_DIM / 2, height / 2)
+                    .applyTo(tagCloud);
+            GridLayoutFactory.fillDefaults().spacing(5, 5).generateLayout(
+                    rightPane);
+
+            GridDataFactory.swtDefaults().hint(width, height).applyTo(
+                    mapComposite);
+            GridDataFactory.swtDefaults().hint(MAP_DIM / 2, height).applyTo(
+                    rightPane);
             GridLayoutFactory.swtDefaults().numColumns(2).generateLayout(shell);
-            
+
             // get rid of magically appearing label
             // FIXME find out where this label comes from
             Control[] children = shell.getChildren();
@@ -136,15 +191,14 @@ public class Meander {
             int nth = 1;
             Serializer ser = new Serializer();
             ser.model().importMSEFile("mse/junit_with_terms.mse");
-            project = ser.model().all(MSEProject.class).iterator()
-                    .next();
+            project = ser.model().all(MSEProject.class).iterator().next();
             release = Get.element(nth, project.releases);
             MapBuilder builder = Map.builder().size(MAP_DIM, MAP_DIM);
             for (MSEDocument each : release.documents) {
-                builder.location(each.x, each.y, each.height);
+                builder.location(each, release.name);
             }
-            
-            Map map = builder.build();
+
+            map = builder.build();
             return map.getDefauVisualization();
         }
     }

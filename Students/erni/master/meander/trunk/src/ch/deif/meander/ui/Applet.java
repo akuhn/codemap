@@ -12,6 +12,7 @@ import ch.deif.meander.Map;
 import ch.deif.meander.MapVisualization;
 import ch.deif.meander.MaxDistNearestNeighbor;
 import ch.deif.meander.NearestNeighbor;
+import ch.deif.meander.ui.Meander.EventHandler;
 
 public class Applet {
 
@@ -24,6 +25,7 @@ public class Applet {
         private Map map;
         private Collection<Point> points;
         private boolean preSelect = false;
+        private EventHandler event;
 
         public MapViz(MapVisualization viz) {
             this.viz = viz;
@@ -77,21 +79,27 @@ public class Applet {
             Point point = e.getPoint();
             if (!e.isControlDown()) {
                 points.clear();
+                event.selectionCleared();
             }
             if (e.getButton() == MouseEvent.BUTTON1) {
                 // button1 is 1st mouse button
-                Point nearest = new MaxDistNearestNeighbor(map, width / 10)
-                        .forLocation(point);
+                NearestNeighbor nn = new MaxDistNearestNeighbor(map, width / 10);
+                Point nearest = nn.forLocation(point);
                 if (nearest != null) {
                     points.add(nearest);
-                    System.out.println(nearest);
+                    event.selected(nn.location());
                 }
             } else if (e.getButton() == MouseEvent.BUTTON3) {
                 // button3 is 2nd mouse button
-                Point nearest = new NearestNeighbor(map).forLocation(point);
+                NearestNeighbor nn = new NearestNeighbor(map);
+                Point nearest = nn.forLocation(point);
+                event.selected(nn.location());
                 points.add(nearest);
-                System.out.println(nearest);
             }
+        }
+
+        public void registerHandler(EventHandler eventHandler) {
+            this.event = eventHandler;
         }
 
     }

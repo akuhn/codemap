@@ -6,9 +6,14 @@ public class NearestNeighbor {
     
     protected Map map;
     protected double shortest;
+    protected Location location;
     
     public NearestNeighbor(Map map) {
         this.map = map;
+    }
+    
+    public Location location() {
+        return location;
     }
     
     public Point forLocation(Point point) {
@@ -23,6 +28,7 @@ public class NearestNeighbor {
             int y = (int) Math.round(l.y*dimension);
             double dist = dist(x, y, point.x, point.y);
             if (shortest == -1 || dist < shortest) {
+                location = l;
                 shortest = dist;
                 xres = x;
                 yres = y;

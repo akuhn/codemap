@@ -3,9 +3,45 @@ package ch.deif.meander;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.corpus.Document;
+import ch.akuhn.hapax.corpus.Terms;
+import ch.akuhn.util.Bag;
+import ch.deif.meander.Serializer.MSEDocument;
 
 public class MapBuilder {
+    
+    private static class Doc extends Document {
+        
+        private Terms terms;
+        
+        public Doc(String name, String version) {
+            super(name, version);
+            terms = new Terms();            
+        }
+
+        @Override
+        public Document addTerms(Terms terms) {
+            this.terms.addAll(terms);
+            return this;
+        }
+
+        @Override
+        public Corpus owner() {
+            return null;
+        }
+
+        @Override
+        public Terms terms() {
+            return this.terms;
+        }
+
+        public Document addTerms(Bag<String> terms) {
+            this.terms.addAll(terms);
+            return this;
+        }
+        
+    }
 
     private Parameters params;
     private Collection<Location> locations;
@@ -34,6 +70,15 @@ public class MapBuilder {
         return this;
     }
     
+    public MapBuilder location(MSEDocument each, String version) {
+        Doc document = new Doc(each.name, version);
+        document.addTerms(each.terms);
+        Location loc = new Location(each.x, each.y, each.height);
+        loc.document = document;
+        locations.add(loc);
+        return this;
+    }
+    
     public Map build() {
         Map map = new Map(params, locations);
         map.name = name;
@@ -44,5 +89,6 @@ public class MapBuilder {
         name = versionName;
         return this;
     }
+
     
 }
