@@ -34,8 +34,7 @@ public class NearestNeighbor {
                 yres = y;
             }
         }
-        // we assume that there are locations (maybe this assertion is unneeded
-        // as otherwise -1/-1 would be returned)
+        // currently we assume that there are locations
         assert shortest != -1;
         return new Point(xres, yres);
     }

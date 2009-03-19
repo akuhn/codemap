@@ -9,13 +9,17 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 
@@ -48,9 +52,10 @@ public class Meander {
             window = m;
             applet = a;
             a.registerHandler(this);
+            m.registerHandler(this);
         }
 
-        public void selectionCleared() {
+        public void onAppletSelectionCleared() {
             System.out.println("clear selection");
             assert window.display() != null;
             window.display().syncExec(new Runnable() {
@@ -60,7 +65,7 @@ public class Meander {
             });
         }
 
-        public void selected(Location location) {
+        public void onAppletSelection(Location location) {
             final Document document = location.document;
             System.out.println("selecting: " + document.name());
             window.display().syncExec(new Runnable() {
@@ -68,7 +73,11 @@ public class Meander {
                     int index = window.files().indexOf(document.name());
                     window.files().select(index);
                 }
-            });            
+            });
+        }
+
+        public void onMeanderSelection(int[] indices) {
+            applet.indicesSelected(indices);
         }
 
     }
@@ -117,9 +126,14 @@ public class Meander {
         private MSERelease release;
         private Map map;
         private List filesComposite;
+        private EventHandler event;
 
         public List files() {
             return filesComposite;
+        }
+
+        public void registerHandler(EventHandler eventHandler) {
+            this.event = eventHandler;
         }
 
         protected PApplet createApplet() {
@@ -155,6 +169,24 @@ public class Meander {
 
             Composite rightPane = new Composite(shell, SWT.NONE);
             filesComposite = new List(rightPane, SWT.MULTI | SWT.V_SCROLL);
+            filesComposite.addSelectionListener(new SelectionListener() {
+
+                @Override
+                public void widgetDefaultSelected(SelectionEvent e) {
+                    onListSelected();
+                }
+
+                @Override
+                public void widgetSelected(SelectionEvent e) {
+                    onListSelected();                    
+                }
+                
+                private void onListSelected() {
+                    int[] indices = filesComposite.getSelectionIndices();
+                    event.onMeanderSelection(indices);
+                }                
+
+            });
             Canvas tagCloud = new Canvas(rightPane, SWT.NONE);
 
             for (Location l : map.locations()) {

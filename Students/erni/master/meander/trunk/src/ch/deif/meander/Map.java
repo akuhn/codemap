@@ -2,6 +2,7 @@ package ch.deif.meander;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import ch.akuhn.util.Providable;
 
@@ -11,7 +12,7 @@ public class Map {
     private double[][] hillshade;
     private boolean[][] contours;
     public final int width, height;
-    public Collection<Location> locations;
+    public List<Location> locations;
     private Parameters parameters;
     public String name;
     
@@ -19,7 +20,7 @@ public class Map {
         this(parameters, Arrays.asList(locations));
     }
 
-    public Map(Parameters parameters, Collection<Location> locations) {
+    public Map(Parameters parameters, List<Location> locations) {
         this.parameters = parameters;
         this.locations = locations;
         width = parameters.width;

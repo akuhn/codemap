@@ -4,10 +4,11 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 import processing.core.PApplet;
+import ch.deif.meander.Location;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapVisualization;
 import ch.deif.meander.MaxDistNearestNeighbor;
@@ -24,13 +25,14 @@ public class Applet {
         private int height;
         private Map map;
         private Collection<Point> points;
-        private boolean preSelect = false;
         private EventHandler event;
 
+        private boolean preSelect = false;
+        
         public MapViz(MapVisualization viz) {
             this.viz = viz;
             map = viz.map;
-            points = new ArrayList<Point>();
+            points = new HashSet<Point>();
         }
 
         @Override
@@ -79,7 +81,7 @@ public class Applet {
             Point point = e.getPoint();
             if (!e.isControlDown()) {
                 points.clear();
-                event.selectionCleared();
+                event.onAppletSelectionCleared();
             }
             if (e.getButton() == MouseEvent.BUTTON1) {
                 // button1 is 1st mouse button
@@ -87,19 +89,29 @@ public class Applet {
                 Point nearest = nn.forLocation(point);
                 if (nearest != null) {
                     points.add(nearest);
-                    event.selected(nn.location());
+                    event.onAppletSelection(nn.location());
                 }
             } else if (e.getButton() == MouseEvent.BUTTON3) {
                 // button3 is 2nd mouse button
                 NearestNeighbor nn = new NearestNeighbor(map);
                 Point nearest = nn.forLocation(point);
-                event.selected(nn.location());
+                event.onAppletSelection(nn.location());
                 points.add(nearest);
             }
         }
 
         public void registerHandler(EventHandler eventHandler) {
             this.event = eventHandler;
+        }
+
+        public void indicesSelected(int[] indices) {
+            points.clear();
+            for(int index: indices) {
+                Location location = map.locations.get(index);
+                int x = (int) Math.round(location.x*map.height);
+                int y = (int) Math.round(location.y*map.height);                
+                points.add(new Point(x, y));
+            }
         }
 
     }

@@ -2,6 +2,7 @@ package ch.deif.meander;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.corpus.Document;
@@ -44,7 +45,7 @@ public class MapBuilder {
     }
 
     private Parameters params;
-    private Collection<Location> locations;
+    private List<Location> locations;
     private String name;
     
     public MapBuilder() {
