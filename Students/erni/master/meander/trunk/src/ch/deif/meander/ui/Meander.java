@@ -3,6 +3,7 @@ package ch.deif.meander.ui;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.util.TreeMap;
 
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -16,7 +17,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -29,7 +29,6 @@ import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.util.Bag;
 import ch.akuhn.util.Get;
-import ch.akuhn.util.Out;
 import ch.akuhn.util.Separator;
 import ch.deif.meander.Location;
 import ch.deif.meander.Map;
@@ -135,12 +134,14 @@ public class Meander {
         private Terms terms;
         private StyledText text;
         private FontData fontData;
+        private java.util.Map<Integer, Font> fonts;
 
         public TagCloud(StyledText text) {
             terms = new Terms();
             this.text = text;
             fontData = text.getFont().getFontData()[0];
             MAX_HEIGHT = fontData.getHeight() * 3;
+            fonts = new TreeMap<Integer, Font>();
         }
 
         public void clear() {
@@ -166,8 +167,13 @@ public class Meander {
                     if (height > MAX_HEIGHT) {
                         height = MAX_HEIGHT;
                     }
-                    style.font = new Font(text.getDisplay(),
-                            fontData.getName(), height, fontData.getStyle());
+                    Font font = fonts.get(height);
+                    if (font == null) {
+                        font = new Font(text.getDisplay(),
+                                fontData.getName(), height, fontData.getStyle());
+                        fonts.put(height, font);
+                    }
+                    style.font = font; 
                     text.setStyleRange(style);
 
                     start = text.getText().length();
