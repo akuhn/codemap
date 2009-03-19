@@ -9,6 +9,7 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
@@ -22,7 +23,11 @@ import org.eclipse.swt.widgets.Shell;
 
 import processing.core.PApplet;
 import ch.akuhn.hapax.corpus.Document;
+import ch.akuhn.hapax.corpus.Terms;
+import ch.akuhn.util.Bag;
 import ch.akuhn.util.Get;
+import ch.akuhn.util.Out;
+import ch.akuhn.util.Separator;
 import ch.deif.meander.Location;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
@@ -53,22 +58,25 @@ public class Meander {
         }
 
         public void onAppletSelectionCleared() {
-            System.out.println("clear selection");
+//            System.out.println("clear selection");
             assert window.display() != null;
             window.display().syncExec(new Runnable() {
                 public void run() {
                     window.files().deselectAll();
+                    assert window.cloud() != null;
+                    window.cloud().clear();
                 }
             });
         }
 
         public void onAppletSelection(Location location) {
             final Document document = location.document;
-            System.out.println("selecting: " + document.name());
+//            System.out.println("selecting: " + document.name());
             window.display().syncExec(new Runnable() {
                 public void run() {
                     int index = window.files().indexOf(document.name());
                     window.files().select(index);
+                    window.cloud().append(document.terms());
                 }
             });
         }
@@ -92,6 +100,7 @@ public class Meander {
             // Open the main window
             open();
             // Dispose the display
+            applet.destroy();
             display().dispose();
         }
 
@@ -115,18 +124,52 @@ public class Meander {
         protected abstract PApplet createApplet();
 
     }
+    
+    public static class TagCloud {
+
+        private Terms terms;
+        private StyledText text;
+        
+        public TagCloud(StyledText text) {
+            terms = new Terms();
+            this.text = text;
+        }
+
+        public void clear() {
+            terms.clear();
+            clearText();
+        }
+        
+        public void append(Terms t){
+            clearText();
+            terms.addAll(t);
+            Separator s = new Separator(" ");
+            for (Bag.Count<String> each: terms.sortedCounts()) {
+                text.append(s + each.element);
+            }            
+        }
+
+        private void clearText() {
+            text.setText("");
+        }
+        
+    }
 
     public static class MeanderWindow extends AppletWindow {
 
         private static int MAP_DIM = 700;
-        private MSEProject project;
-        private MSERelease release;
         private Map map;
-        private List filesComposite;
+
+        private List files;
         private EventHandler event;
+        private TagCloud tagCloud;
 
         public List files() {
-            return filesComposite;
+            return files;
+        }
+
+        public TagCloud cloud() {
+            return tagCloud;
         }
 
         public void registerHandler(EventHandler eventHandler) {
@@ -165,8 +208,8 @@ public class Meander {
             // map.setBackground(new Color(Display.getCurrent(), 0, 255, 0));
 
             Composite rightPane = new Composite(shell, SWT.NONE);
-            filesComposite = new List(rightPane, SWT.MULTI | SWT.V_SCROLL);
-            filesComposite.addSelectionListener(new SelectionListener() {
+            files = new List(rightPane, SWT.MULTI | SWT.V_SCROLL);
+            files.addSelectionListener(new SelectionListener() {
 
                 @Override
                 public void widgetDefaultSelected(SelectionEvent e) {
@@ -179,21 +222,23 @@ public class Meander {
                 }
 
                 private void onListSelected() {
-                    int[] indices = filesComposite.getSelectionIndices();
+                    int[] indices = files.getSelectionIndices();
                     event.onMeanderSelection(indices);
                 }
 
             });
-            Canvas tagCloud = new Canvas(rightPane, SWT.NONE);
-
             for (Location l : map.locations()) {
-                filesComposite.add(l.document.name());
+                files.add(l.document.name());
             }
 
+            StyledText text = new StyledText(rightPane, SWT.BORDER | SWT.MULTI
+                    | SWT.READ_ONLY | SWT.WRAP);
+            tagCloud = new TagCloud(text);
+
             GridDataFactory.swtDefaults().hint(MAP_DIM / 2, height / 2)
-                    .applyTo(filesComposite);
+                    .applyTo(files);
             GridDataFactory.swtDefaults().hint(MAP_DIM / 2, height / 2)
-                    .applyTo(tagCloud);
+                    .applyTo(text);
             GridLayoutFactory.fillDefaults().spacing(5, 5).generateLayout(
                     rightPane);
 
@@ -220,8 +265,9 @@ public class Meander {
             int nth = 1;
             Serializer ser = new Serializer();
             ser.model().importMSEFile("mse/junit_with_terms.mse");
-            project = ser.model().all(MSEProject.class).iterator().next();
-            release = Get.element(nth, project.releases);
+            MSEProject project = ser.model().all(MSEProject.class).iterator()
+                    .next();
+            MSERelease release = Get.element(nth, project.releases);
             MapBuilder builder = Map.builder().size(MAP_DIM, MAP_DIM);
             for (MSEDocument each : release.documents) {
                 builder.location(each, release.name);
