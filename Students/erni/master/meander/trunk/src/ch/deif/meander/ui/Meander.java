@@ -25,7 +25,6 @@ import ch.deif.meander.MapBuilder;
 import ch.deif.meander.MapVisualization;
 import ch.deif.meander.Serializer;
 import ch.deif.meander.Serializer.MSEDocument;
-import ch.deif.meander.Serializer.MSELocation;
 import ch.deif.meander.Serializer.MSEProject;
 import ch.deif.meander.Serializer.MSERelease;
 
@@ -141,7 +140,7 @@ public class Meander {
                     .next();
             release = Get.element(nth, project.releases);
             MapBuilder builder = Map.builder().size(MAP_DIM, MAP_DIM);
-            for (MSELocation each : release.locations) {
+            for (MSEDocument each : release.documents) {
                 builder.location(each.x, each.y, each.height);
             }
             

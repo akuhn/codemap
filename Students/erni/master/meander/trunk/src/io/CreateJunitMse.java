@@ -33,5 +33,4 @@ public class CreateJunitMse {
         }
         ser.model().exportMSEFile("mse/junit_with_terms.mse");  
     }
-
 }
