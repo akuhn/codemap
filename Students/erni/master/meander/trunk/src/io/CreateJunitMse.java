@@ -15,7 +15,7 @@ public class CreateJunitMse {
 
     public static void main(String... args) throws FileNotFoundException {
         TermDocumentMatrix tdm = TermDocumentMatrix.readFrom(new Scanner(
-                new File("mse/junit_new.TDM")));
+                new File("mse/junit.TDM")));
         LatentSemanticIndex lsi = tdm.rejectAndWeight().createIndex();
         MDS mds = MDS.fromCorrelationMatrix(lsi);
         
@@ -29,10 +29,9 @@ public class CreateJunitMse {
                 ser.release(version);
             }
             ser.location(mds.x[index], mds.y[index], Math.sqrt(each.termSize()), each);
-//            ser.document(each.name(), each.terms());
             index++;
         }
-        ser.model().exportMSEFile("mse/junit.mse");
+        ser.model().exportMSEFile("mse/junit_with_terms.mse");  
     }
 
 }
