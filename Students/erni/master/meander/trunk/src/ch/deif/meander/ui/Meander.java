@@ -9,9 +9,12 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
+import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -58,7 +61,7 @@ public class Meander {
         }
 
         public void onAppletSelectionCleared() {
-//            System.out.println("clear selection");
+            // System.out.println("clear selection");
             assert window.display() != null;
             window.display().syncExec(new Runnable() {
                 public void run() {
@@ -71,7 +74,7 @@ public class Meander {
 
         public void onAppletSelection(Location location) {
             final Document document = location.document;
-//            System.out.println("selecting: " + document.name());
+            // System.out.println("selecting: " + document.name());
             window.display().syncExec(new Runnable() {
                 public void run() {
                     int index = window.files().indexOf(document.name());
@@ -124,35 +127,58 @@ public class Meander {
         protected abstract PApplet createApplet();
 
     }
-    
+
     public static class TagCloud {
 
+        private final int MIN_COUNT = 1;
+        private final int MAX_HEIGHT;
         private Terms terms;
         private StyledText text;
-        
+        private FontData fontData;
+
         public TagCloud(StyledText text) {
             terms = new Terms();
             this.text = text;
+            fontData = text.getFont().getFontData()[0];
+            MAX_HEIGHT = fontData.getHeight() * 3;
         }
 
         public void clear() {
             terms.clear();
             clearText();
         }
-        
-        public void append(Terms t){
+
+        public void append(Terms t) {
             clearText();
             terms.addAll(t);
-            Separator s = new Separator(" ");
-            for (Bag.Count<String> each: terms.sortedCounts()) {
-                text.append(s + each.element);
-            }            
+
+            Separator separator = new Separator(" ");
+            int start = 0;
+            for (Bag.Count<String> each : terms.counts()) {
+                if (each.count > MIN_COUNT) {
+                    String tag = separator + each.element;
+                    text.append(tag);
+
+                    StyleRange style = new StyleRange();
+                    style.start = start;
+                    style.length = tag.length();
+                    int height = fontData.getHeight() + each.count;
+                    if (height > MAX_HEIGHT) {
+                        height = MAX_HEIGHT;
+                    }
+                    style.font = new Font(text.getDisplay(),
+                            fontData.getName(), height, fontData.getStyle());
+                    text.setStyleRange(style);
+
+                    start = text.getText().length();
+                }
+            }
         }
 
         private void clearText() {
             text.setText("");
         }
-        
+
     }
 
     public static class MeanderWindow extends AppletWindow {
@@ -253,8 +279,7 @@ public class Meander {
             Control[] children = shell.getChildren();
             if (children.length > 1) {
                 Control unwanted = children[0];
-                if (unwanted instanceof Label)
-                    unwanted.dispose();
+                if (unwanted instanceof Label) unwanted.dispose();
             }
             shell.pack();
             return control;

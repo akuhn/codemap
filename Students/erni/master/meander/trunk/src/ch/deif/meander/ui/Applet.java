@@ -106,7 +106,7 @@ public class Applet {
 
         public void indicesSelected(int[] indices) {
             points.clear();
-            event.onAppletSelectionCleared();
+            event.onAppletSelectionCleared();          
             for(int index: indices) {
                 Location location = map.locations.get(index);
                 //callback
