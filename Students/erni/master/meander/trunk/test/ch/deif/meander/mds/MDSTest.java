@@ -20,9 +20,9 @@ import ch.deif.meander.NormalizeLocationsAlgorithm;
 import ch.deif.meander.ui.PViewer;
 
 public class MDSTest {
-    
-//    private static final String FILENAME = "mse/groovy.TDM";
-    private static final String FILENAME = "mse/jnit_new.TDM";    
+
+    // private static final String FILENAME = "mse/groovy.TDM";
+    private static final String FILENAME = "mse/jnit_new.TDM";
     private static final String DEFAULT_VERSION = "groovy-1.0-beta-5-src.zip";
 
     public static void main(String... args) {
@@ -36,12 +36,14 @@ public class MDSTest {
             System.out.println("with " + i.documents.size() + " documents...");
             JMDS mds = JMDS.fromCorrelationMatrix(i);
             System.out.println("Done.");
-            
+
             MapBuilder builder = Map.builder();
-            for (Document each: i.documents) {
-                if (!each.version().equals(DEFAULT_VERSION)) continue;
+            for (Document each : i.documents) {
+                if (!each.version().equals(DEFAULT_VERSION))
+                    continue;
                 int index = i.documents.get(each);
-                builder.location(mds.x[index], mds.y[index], Math.sqrt(each.termSize()));
+                builder.location(mds.x[index], mds.y[index], Math.sqrt(each
+                        .termSize()));
             }
             Map map = builder.build();
             new NormalizeLocationsAlgorithm(map).run();
@@ -49,15 +51,13 @@ public class MDSTest {
             new NormalizeElevationAlgorithm(map).run();
             new HillshadeAlgorithm(map).run();
             new ContourLineAlgorithm(map).run();
-            //MapVisualization viz = new SketchVisualization(map);
+            // MapVisualization viz = new SketchVisualization(map);
             MapVisualization viz = new HillshadeVisualization(map);
-            new PViewer(viz);                 
-            
-            
+            new PViewer(viz);
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
 
     }
 

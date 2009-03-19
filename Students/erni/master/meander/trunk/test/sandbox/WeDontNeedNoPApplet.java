@@ -9,11 +9,11 @@ import processing.pdf.PGraphicsPDF;
 
 public class WeDontNeedNoPApplet {
 
-    private static final PFont FONT = new PFont(PFont.findFont("Andale Mono"), true, PFont.DEFAULT_CHARSET);
+    private static final PFont FONT = new PFont(PFont.findFont("Andale Mono"),
+            true, PFont.DEFAULT_CHARSET);
 
-    
     public static void main(String[] args) throws Throwable {
-        //for (Object each: PFont.list()) System.out.println(each);
+        // for (Object each: PFont.list()) System.out.println(each);
         drawToPNG();
         drawToPDF();
     }
@@ -25,7 +25,7 @@ public class WeDontNeedNoPApplet {
         pa = new PApplet();
         pa.init();
         pg.setParent(pa);
-        pg.setPath(System.getProperty("user.dir")+"/example.pdf");
+        pg.setPath(System.getProperty("user.dir") + "/example.pdf");
         setupAndDraw(pg);
         pg.dispose();
         pg = null;
@@ -40,7 +40,8 @@ public class WeDontNeedNoPApplet {
     }
 
     private static void draw(PGraphics pg) {
-        pg.textMode(PConstants.SHAPE); // Embed PDF fonts, prints err for Java2D :(
+        pg.textMode(PConstants.SHAPE); // Embed PDF fonts, prints err for Java2D
+                                       // :(
         pg.fill(0xFFFF0000);
         pg.rect(20, 20, 50, 70);
         pg.textFont(FONT, 30);
@@ -53,7 +54,7 @@ public class WeDontNeedNoPApplet {
         pa.init();
         pg.setParent(pa);
         setupAndDraw(pg);
-        pg.save(System.getProperty("user.dir")+"/example.png");
+        pg.save(System.getProperty("user.dir") + "/example.png");
     }
-    
+
 }

@@ -53,8 +53,8 @@ public class HitMDS {
 
     private int[] shuffle_index; /* helper for data shuffling */
 
-    //private IRandom random = new HitRandom();
-    private IRandom random = new MTRandom();    
+    // private IRandom random = new HitRandom();
+    private IRandom random = new MTRandom();
 
     private IDistance distance;
 
@@ -285,14 +285,14 @@ public class HitMDS {
 
         t = 0;
         m = cycles / 10;
-        
+
         debug_print("\ncalculation progress:");
-        
+
         for (c = 0; c < cycles; c++) {
             if (++t == m) {
                 t = 0;
-                debug_print(100.0 * c / cycles + "%: " + corr_2()
-                        + " \t(r = " + 1.0 / sqrt(corr_2() + 1.0) + ")");
+                debug_print(100.0 * c / cycles + "%: " + corr_2() + " \t(r = "
+                        + 1.0 / sqrt(corr_2() + 1.0) + ")");
             }
 
             i = shuffle_next();
@@ -365,7 +365,8 @@ public class HitMDS {
     }
 
     private void debug_print(String message) {
-        if (DEBUG_OUTPUT) System.out.println(message);
+        if (DEBUG_OUTPUT)
+            System.out.println(message);
     }
 
     /*
@@ -420,14 +421,14 @@ public class HitMDS {
 
         return res;
     }
-    
+
     public HitMDS withModRandom() {
         random = new ModRandom();
         return this;
     }
 
     // ////////////////PUBLIC PART////////////////////////////
-    public double[][] evaluate(double[][]a, int destDim, IDistance dist) {
+    public double[][] evaluate(double[][] a, int destDim, IDistance dist) {
         int cycles = 10;
         assert (cycles != 0);
         double rate = 1;
@@ -438,20 +439,22 @@ public class HitMDS {
         data_stdin(a, destDim);
 
         /* calc distmats */
-        data_init();       
+        data_init();
         debug_print("# corr(D,d): " + 1. / sqrt(corr_2() + 1));
         mds_train(cycles * pattern_length, rate);
         mds_postprocess();
 
-        return mds_stdout();        
+        return mds_stdout();
     }
-    
+
     public double[][] evaluate(double[][] a, int destDim) {
-//         IDistance dist = DistanceRegistry.createMinkowskiDistance();
-//         IDistance dist = DistanceRegistry.createQuadraticEuclideanDistance();
-//         IDistance dist = DistanceRegistry.createSpearmanDistance();
-//         IDistance dist = DistanceRegistry.createPearsonCorrelationDistance(M_EXPONENT == 0 ? 1.0 : M_EXPONENT);
-//         IDistance dist = DistanceRegistry.createCorr_Deriv_Vec();
+        // IDistance dist = DistanceRegistry.createMinkowskiDistance();
+        // IDistance dist = DistanceRegistry.createQuadraticEuclideanDistance();
+        // IDistance dist = DistanceRegistry.createSpearmanDistance();
+        // IDistance dist =
+        // DistanceRegistry.createPearsonCorrelationDistance(M_EXPONENT == 0 ?
+        // 1.0 : M_EXPONENT);
+        // IDistance dist = DistanceRegistry.createCorr_Deriv_Vec();
         IDistance dist = DistanceRegistry.createEuclideanDistance();
         return this.evaluate(a, destDim, dist);
     }

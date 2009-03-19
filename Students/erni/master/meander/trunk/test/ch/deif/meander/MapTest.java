@@ -18,16 +18,13 @@ public class MapTest {
 
     @Test
     public Map fiveOnThreeMap() {
-         Map map = Map.builder()
-             .size(5,3)
-             .location(0.5, 0.5, 100)
-             .build();
-         assertEquals(5, map.width);
-         assertEquals(3, map.height);
-         assertEquals(1, map.locationSize());
-         return map;
+        Map map = Map.builder().size(5, 3).location(0.5, 0.5, 100).build();
+        assertEquals(5, map.width);
+        assertEquals(3, map.height);
+        assertEquals(1, map.locationSize());
+        return map;
     }
-    
+
     @Test
     @Depends("#fiveOnThreeMap")
     public void testPixelCoordinates(Map map) {
@@ -55,7 +52,7 @@ public class MapTest {
         assertEquals(0.25, p.xNormed(), NaN);
         assertEquals(0.5, p.yNormed(), NaN);
     }
-    
+
     @Test
     @Depends("#fiveOnThreeMap")
     public Map mapWithDEM(Map map) {
@@ -64,7 +61,7 @@ public class MapTest {
         assertEquals(true, map.hasDEM());
         return map;
     }
-    
+
     @Test
     @Depends("#mapWithDEM")
     public void testPixelElevation(Map map) {
@@ -74,6 +71,5 @@ public class MapTest {
         assertEquals(0.5, p.yNormed(), NaN);
         assertEquals(100, p.elevation(), 1e-2);
     }
-    
-    
+
 }

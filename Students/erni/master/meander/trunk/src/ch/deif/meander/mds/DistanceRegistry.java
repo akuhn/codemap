@@ -10,7 +10,7 @@ import java.util.Arrays;
  * @author spupyrev 22.11.2008
  */
 public class DistanceRegistry {
-    
+
     private static final double EPS = 1e-16;
 
     private static class QuadraticEuclideanDistance implements IDistance {
@@ -27,16 +27,16 @@ public class DistanceRegistry {
     }
 
     private static class EuclideanDistance extends QuadraticEuclideanDistance {
-        
+
         @Override
         public double distance(int dimension, double[] d1, double[] d2) {
             double dist = super.distance(dimension, d1, d2);
             return sqrt(dist);
         }
     }
-    
+
     private static class PearsonCorrelationDistance implements IDistance {
-        
+
         private double mexponent;
 
         protected PearsonCorrelationDistance(double exp) {
@@ -68,7 +68,7 @@ public class DistanceRegistry {
 
             return (mono1 == 1.) ? 1. - mixed : pow(1. - mixed, mexponent);
         }
-        
+
     }
 
     public static IDistance createEuclideanDistance() {

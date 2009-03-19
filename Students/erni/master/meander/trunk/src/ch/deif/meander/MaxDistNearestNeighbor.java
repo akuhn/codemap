@@ -10,7 +10,7 @@ public class MaxDistNearestNeighbor extends NearestNeighbor {
         super(map);
         this.maxDist = maxDist;
     }
-    
+
     @Override
     public Point forLocation(Point point) {
         Point result = super.forLocation(point);

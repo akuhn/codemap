@@ -10,8 +10,8 @@ public class WatershadeAlgorithm extends MapAlgorithm {
 
     @Override
     public void run() {
-    	for(Pixel p: map.pixels()) {
-    		
-    	}
+        for (Pixel p : map.pixels()) {
+
+        }
     }
 }

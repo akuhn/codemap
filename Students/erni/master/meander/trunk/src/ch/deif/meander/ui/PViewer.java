@@ -13,7 +13,7 @@ public class PViewer extends JFrame {
 
     public PViewer(MapVisualization viz) {
         super("Map Viewer");
-        
+
         setLayout(new BorderLayout());
         PApplet pa = new InnerApplet(viz);
         getContentPane().add(pa, BorderLayout.CENTER);
@@ -25,24 +25,24 @@ public class PViewer extends JFrame {
     }
 
     private class InnerApplet extends PApplet {
-        
+
         private MapVisualization viz;
-        
+
         public InnerApplet(MapVisualization viz) {
             this.viz = viz;
         }
-        
+
         @Override
         public void setup() {
             size(viz.map.getParameters().width, viz.map.getParameters().height);
             frameRate(1);
         }
-    
+
         @Override
         public void draw() {
             viz.draw(g);
         }
-        
+
     }
-    
+
 }

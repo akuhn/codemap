@@ -15,7 +15,7 @@ public class DebugDEMVisualization extends MapVisualization {
         PImage img = new PImage(map.width, map.height);
         int[] pixels = img.pixels;
         int index = 0;
-        for (Pixel p: map.pixels()) {
+        for (Pixel p : map.pixels()) {
             pixels[index++] = (int) Math.min(p.elevation(), 255);
         }
         img.updatePixels();

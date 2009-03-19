@@ -6,12 +6,13 @@ import static java.lang.Math.sqrt;
 /**
  * @author spupyrev 20.11.2008
  * 
- * This is the original algorithm found at http://code.google.com/p/graphvis/.
- * Stored here for testing purposes, ie to see if our modified version yields
- * the same output as the original algorithm.
+ *         This is the original algorithm found at
+ *         http://code.google.com/p/graphvis/. Stored here for testing purposes,
+ *         ie to see if our modified version yields the same output as the
+ *         original algorithm.
  * 
- * Multidimensional Scaling according to best distance matrix
- * reconstruction. Based on signs of directions to maximize correlation
+ *         Multidimensional Scaling according to best distance matrix
+ *         reconstruction. Based on signs of directions to maximize correlation
  */
 public class HitMDSOriginal {
     private static final boolean DEBUG_OUTPUT = true;

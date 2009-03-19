@@ -26,8 +26,9 @@ public class Serializer {
         public double height;
         @FameProperty
         public String name;
-        
+
         public Bag<String> terms;
+
         @FameProperty
         public Collection<?> getTerms() {
             if (terms == null)
@@ -82,8 +83,8 @@ public class Serializer {
     private MSERelease release;
 
     public Serializer() {
-        t.metamodel.withAll(MSEDocument.class,
-                MSEProject.class, MSERelease.class);
+        t.metamodel.withAll(MSEDocument.class, MSEProject.class,
+                MSERelease.class);
     }
 
     public Serializer project(String name) {
