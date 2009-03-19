@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import meander.jsme2009.Serializer;
+import meander.jsme2009.Serializer.MSEDocument;
+import meander.jsme2009.Serializer.MSERelease;
 import meander.jsme2009.junit.ComputeHausdorff;
 
 import ch.akuhn.fame.Repository;
@@ -12,9 +15,6 @@ import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.akuhn.util.Throw;
 import ch.deif.meander.MDS;
-import ch.deif.meander.Serializer;
-import ch.deif.meander.Serializer.MSEDocument;
-import ch.deif.meander.Serializer.MSERelease;
 
 
 public class EclipseAllAtOnce {

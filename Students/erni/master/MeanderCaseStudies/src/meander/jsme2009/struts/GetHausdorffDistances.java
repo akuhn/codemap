@@ -1,7 +1,7 @@
 package meander.jsme2009.struts;
 
+import meander.jsme2009.Serializer;
 import meander.jsme2009.junit.ComputeHausdorff;
-import ch.deif.meander.Serializer;
 
 public class GetHausdorffDistances {
 

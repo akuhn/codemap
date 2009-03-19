@@ -7,6 +7,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
+import meander.jsme2009.Serializer;
+import meander.jsme2009.Serializer.MSEDocument;
+import meander.jsme2009.Serializer.MSELocation;
+import meander.jsme2009.Serializer.MSEProject;
+import meander.jsme2009.Serializer.MSERelease;
 import meander.jsme2009.junit.ComputeHausdorff;
 
 import ch.akuhn.fame.Repository;
@@ -27,11 +32,6 @@ import ch.deif.meander.MapBuilder;
 import ch.deif.meander.MapVisualization;
 import ch.deif.meander.NormalizeElevationAlgorithm;
 import ch.deif.meander.NormalizeLocationsAlgorithm;
-import ch.deif.meander.Serializer;
-import ch.deif.meander.Serializer.MSEDocument;
-import ch.deif.meander.Serializer.MSELocation;
-import ch.deif.meander.Serializer.MSEProject;
-import ch.deif.meander.Serializer.MSERelease;
 import ch.deif.meander.ui.PViewer;
 
 

@@ -7,6 +7,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
+import meander.jsme2009.Serializer;
+import meander.jsme2009.Serializer.MSEDocument;
+import meander.jsme2009.Serializer.MSERelease;
+
 import ch.akuhn.fame.Repository;
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
@@ -15,9 +19,6 @@ import ch.akuhn.util.Get;
 import ch.akuhn.util.Throw;
 import ch.akuhn.util.query.GroupedBy;
 import ch.deif.meander.MDS;
-import ch.deif.meander.Serializer;
-import ch.deif.meander.Serializer.MSEDocument;
-import ch.deif.meander.Serializer.MSERelease;
 
 
 public class ComputeLSIAndMDS {

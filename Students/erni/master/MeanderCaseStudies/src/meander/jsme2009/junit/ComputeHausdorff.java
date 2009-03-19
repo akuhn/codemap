@@ -3,13 +3,14 @@ package meander.jsme2009.junit;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import meander.jsme2009.Serializer;
+import meander.jsme2009.Serializer.MSELocation;
+import meander.jsme2009.Serializer.MSEProject;
+import meander.jsme2009.Serializer.MSERelease;
+
 import ch.deif.meander.HausdorffDistance;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
-import ch.deif.meander.Serializer;
-import ch.deif.meander.Serializer.MSELocation;
-import ch.deif.meander.Serializer.MSEProject;
-import ch.deif.meander.Serializer.MSERelease;
 
 public class ComputeHausdorff implements Runnable {
 

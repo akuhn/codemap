@@ -15,7 +15,15 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+import meander.jsme2009.Serializer.MSEDocument;
+import meander.jsme2009.Serializer.MSEProject;
+import meander.jsme2009.Serializer.MSERelease;
+
 import ch.akuhn.fame.Repository;
+import ch.akuhn.hapax.corpus.Document;
+import ch.akuhn.hapax.corpus.Terms;
+import ch.akuhn.hapax.index.LatentSemanticIndex;
+import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.akuhn.util.Bag;
 import ch.akuhn.util.Files;
 import ch.akuhn.util.Throw;
@@ -23,7 +31,7 @@ import ch.akuhn.util.Throw;
 public class Main implements Runnable {
 
     public static void main(String[] args) {
-        Main m = new Main("\\\\.PSF\\.Home\\Desktop\\junit");
+        Main m = new Main("data/junit");
         m.run();
         System.out.println("done");
     }
@@ -129,11 +137,24 @@ public class Main implements Runnable {
 
     public void unsafeRun() throws Exception {
         m = new Repository(HapaxModel.metamodel());
-        for (File each: Files.all(folder))
+        for (File each: Files.all(folder)) {
+            System.out.println(each.getAbsolutePath());
             if (isZipFile(each)) processZipfile(each);
-        m.exportMSE(openWrite(folder + "\\model.h.mse"));
-        m.exportMSE(openWrite("C:\\Documents and Settings\\akuhn\\My Documents\\Smalltalk\\model.h.mse"));
-        HapaxModel.metamodel().exportMSE(openWrite(folder + "\\h.fm3.mse"));
+        }
+        m.exportMSE(openWrite(folder + "/model.h.mse"));
+//        HapaxModel.metamodel().exportMSE(openWrite(folder + "/h.fm3.mse"));
+        TermDocumentMatrix tdm = new TermDocumentMatrix();
+        for(Object o : m.getElements()) {
+            HapaxDoc each = (HapaxDoc) o;
+            Document doc = tdm.makeDocument(each.name, each.version);
+            tdm.addTerms(doc, new Terms(each.terms));
+        }
+        
+        System.out.println(tdm.termSize());
+        System.out.println(tdm.documentSize());
+        
+        tdm.storeOn("mse/jnit_new.TDM");
+        
     }
 
 }

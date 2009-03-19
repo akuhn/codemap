@@ -4,6 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import meander.jsme2009.Serializer;
+import meander.jsme2009.Serializer.MSELocation;
+import meander.jsme2009.Serializer.MSEProject;
+import meander.jsme2009.Serializer.MSERelease;
+
 import ch.akuhn.fame.Repository;
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
@@ -21,10 +26,6 @@ import ch.deif.meander.MapBuilder;
 import ch.deif.meander.MapVisualization;
 import ch.deif.meander.NormalizeElevationAlgorithm;
 import ch.deif.meander.NormalizeLocationsAlgorithm;
-import ch.deif.meander.Serializer;
-import ch.deif.meander.Serializer.MSELocation;
-import ch.deif.meander.Serializer.MSEProject;
-import ch.deif.meander.Serializer.MSERelease;
 import ch.deif.meander.ui.PViewer;
 
 
@@ -78,7 +79,7 @@ public class JunitCaseStudy {
         }
         if (show) {
             Serializer ser = new Serializer();
-            ser.model().importMSEFile("mse/junit_meander.mse");
+            ser.model().importMSEFile("mse/junit_meander(2).mse");
             MSEProject proj = ser.model().all(MSEProject.class).iterator().next();
             MSERelease rel = Get.element(nth, proj.releases);
             System.out.println(rel.name);
