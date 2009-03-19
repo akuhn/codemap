@@ -22,7 +22,6 @@ import ch.akuhn.util.PrintOn;
 import ch.akuhn.util.Bag.Count;
 
 
-
 public class TermDocumentMatrix extends Corpus {
 
     private static class Doc extends Document {
@@ -79,7 +78,7 @@ public class TermDocumentMatrix extends Corpus {
         matrix.addToRow(row, values);
     }
 
-    public void addTerms(Doc doc, Terms bag) {
+    public void addTerms(Document doc, Terms bag) {
         int column = documents.get(doc);
         if (column == -1) throw new NoSuchElementException();
         for (Count<String> term: bag.counts()) {
