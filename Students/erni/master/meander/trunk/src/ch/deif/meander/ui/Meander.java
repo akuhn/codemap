@@ -169,11 +169,11 @@ public class Meander {
                     }
                     Font font = fonts.get(height);
                     if (font == null) {
-                        font = new Font(text.getDisplay(),
-                                fontData.getName(), height, fontData.getStyle());
+                        font = new Font(text.getDisplay(), fontData.getName(),
+                                height, fontData.getStyle());
                         fonts.put(height, font);
                     }
-                    style.font = font; 
+                    style.font = font;
                     text.setStyleRange(style);
 
                     start = text.getText().length();

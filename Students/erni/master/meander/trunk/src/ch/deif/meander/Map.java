@@ -70,8 +70,7 @@ public class Map {
                     x = 0;
                     y++;
                 }
-                if (y >= height)
-                    return done();
+                if (y >= height) return done();
                 Pixel p = new Pixel(x++, y);
                 return p;
             }
@@ -93,8 +92,7 @@ public class Map {
                     m = 0;
                     n++;
                 }
-                if (n >= width)
-                    return done();
+                if (n >= width) return done();
                 Pixel p = new Pixel(n, m++);
                 return p;
             }
@@ -116,8 +114,7 @@ public class Map {
                     x = 0;
                     y++;
                 }
-                if (y >= height)
-                    return done();
+                if (y >= height) return done();
                 Kernel k = new Kernel(x++, y);
                 return k;
             }
@@ -178,8 +175,7 @@ public class Map {
         }
 
         public void increaseElevation(double elevation) {
-            if (elevation < 0)
-                return;
+            if (elevation < 0) return;
             getDEM()[x][y] += elevation;
         }
 

@@ -41,7 +41,7 @@ public class WeDontNeedNoPApplet {
 
     private static void draw(PGraphics pg) {
         pg.textMode(PConstants.SHAPE); // Embed PDF fonts, prints err for Java2D
-                                       // :(
+        // :(
         pg.fill(0xFFFF0000);
         pg.rect(20, 20, 50, 70);
         pg.textFont(FONT, 30);

@@ -28,7 +28,7 @@ public class Applet {
         private EventHandler event;
 
         private boolean preSelect = false;
-        
+
         public MapViz(MapVisualization viz) {
             this.viz = viz;
             map = viz.map;
@@ -106,13 +106,13 @@ public class Applet {
 
         public void indicesSelected(int[] indices) {
             points.clear();
-            event.onAppletSelectionCleared();          
-            for(int index: indices) {
+            event.onAppletSelectionCleared();
+            for (int index : indices) {
                 Location location = map.locations.get(index);
-                //callback
+                // callback
                 event.onAppletSelection(location);
-                int x = (int) Math.round(location.x*map.height);
-                int y = (int) Math.round(location.y*map.height);                
+                int x = (int) Math.round(location.x * map.height);
+                int y = (int) Math.round(location.y * map.height);
                 points.add(new Point(x, y));
             }
         }

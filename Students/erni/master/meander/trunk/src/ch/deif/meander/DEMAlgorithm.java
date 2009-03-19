@@ -5,7 +5,8 @@ import ch.deif.meander.Map.Pixel;
 public class DEMAlgorithm extends MapAlgorithm {
 
     private static final int MAGIC_VALUE = 2000; // TODO avoid magic number for
-                                                 // diameter of DEM hills.
+
+    // diameter of DEM hills.
 
     public DEMAlgorithm(Map map) {
         super(map);

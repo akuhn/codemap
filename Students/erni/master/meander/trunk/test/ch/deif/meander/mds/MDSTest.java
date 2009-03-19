@@ -39,8 +39,7 @@ public class MDSTest {
 
             MapBuilder builder = Map.builder();
             for (Document each : i.documents) {
-                if (!each.version().equals(DEFAULT_VERSION))
-                    continue;
+                if (!each.version().equals(DEFAULT_VERSION)) continue;
                 int index = i.documents.get(each);
                 builder.location(mds.x[index], mds.y[index], Math.sqrt(each
                         .termSize()));

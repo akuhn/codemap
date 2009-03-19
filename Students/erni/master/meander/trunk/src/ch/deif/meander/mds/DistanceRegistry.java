@@ -61,8 +61,7 @@ public class DistanceRegistry {
 
             boolean u;
             /* allow correlated and anti-correlated patterns to be similar */
-            if ((u = (mexponent < 0.0)) && mixed < 0.)
-                mixed = -mixed;
+            if ((u = (mexponent < 0.0)) && mixed < 0.) mixed = -mixed;
 
             mono1 = u ? -mexponent : mexponent;
 
@@ -119,18 +118,14 @@ public class DistanceRegistry {
                 // multiplicity
                 int i = 0;
                 for (int u = 0; u < dimension; u++) {
-                    if (++idx1[(int) (2.0 * (d1[u] - 1.0))] > 1)
-                        i++;
-                    if (++idx2[(int) (2.0 * (d2[u] - 1.0))] > 1)
-                        i++;
+                    if (++idx1[(int) (2.0 * (d1[u] - 1.0))] > 1) i++;
+                    if (++idx2[(int) (2.0 * (d2[u] - 1.0))] > 1) i++;
                 }
 
-                if (i > 0)// only if necessary
+                if (i > 0) // only if necessary
                     for (int u = 0; u < dim2; u++) {
-                        if ((i = idx1[u]) > 1)
-                            s1 += i * (i * i - 1);
-                        if ((i = idx2[u]) > 1)
-                            s2 += i * (i * i - 1);
+                        if ((i = idx1[u]) > 1) s1 += i * (i * i - 1);
+                        if ((i = idx2[u]) > 1) s2 += i * (i * i - 1);
                     }
 
                 double sum = 0;
@@ -145,10 +140,8 @@ public class DistanceRegistry {
                     return 6.0 * f * sum;
                 } else {
                     s2 *= f;
-                    if ((s1 *= f) > 1 - EPS)
-                        return (s2 > 1 - EPS) ? 0 : 1.;
-                    else if (s2 > 1 - EPS)
-                        return 1.0;
+                    if ((s1 *= f) > 1 - EPS) return (s2 > 1 - EPS) ? 0 : 1.;
+                    else if (s2 > 1 - EPS) return 1.0;
                 }
 
                 return 1.0 - (1.0 - 6.0 * (f * sum + (s1 + s2) / 12.))
@@ -183,16 +176,13 @@ public class DistanceRegistry {
 
                 tmp = sqrt(mono1 * mono2);
 
-                if (tmp < EPS)
-                    tmp = EPS;
+                if (tmp < EPS) tmp = EPS;
                 tmp = 1. / tmp;
 
-                if (mono1 < EPS)
-                    mono1 = EPS;
+                if (mono1 < EPS) mono1 = EPS;
                 mono1 = mixed / mono1;
 
-                if (mono2 < EPS)
-                    mono2 = EPS;
+                if (mono2 < EPS) mono2 = EPS;
                 mono2 = mixed / mono2;
 
                 for (int u = 0; u < dimension; u++) {

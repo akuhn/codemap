@@ -57,8 +57,7 @@ public abstract class MapVisualization {
         pg.hint(PConstants.ENABLE_NATIVE_FONTS);
         pg.setSize(width, height);
         pg.beginDraw();
-        if (pg instanceof PGraphicsPDF)
-            pg.textMode(PConstants.SHAPE);
+        if (pg instanceof PGraphicsPDF) pg.textMode(PConstants.SHAPE);
         this.draw(pg);
         pg.endDraw();
     }

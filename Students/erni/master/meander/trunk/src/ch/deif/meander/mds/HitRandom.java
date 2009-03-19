@@ -16,8 +16,7 @@ public class HitRandom implements IRandom {
     public int nextInt(int upper) {
         cur = (cur * A + B);
         int ret = cur % upper;
-        if (ret < 0)
-            ret += upper;
+        if (ret < 0) ret += upper;
         return ret;
     }
 }

@@ -28,14 +28,11 @@ public class Delimiter {
 
     @Override
     public String toString() {
-        if (!foo)
-            tally++;
+        if (!foo) tally++;
         foo = false;
-        if (tally != period)
-            return "";
+        if (tally != period) return "";
         tally = 0;
-        if (++tallyCR != periodCR)
-            return value;
+        if (++tallyCR != periodCR) return value;
         tallyCR = 0;
         return "\n";
     }

@@ -200,8 +200,7 @@ public class MTRandom implements IRandom {
             // This is unavoidable because no fields in our instance will
             // have been initialised at this point, not even if the code
             // were placed at the declaration of the member variable.
-            if (mt == null)
-                mt = new int[N];
+            if (mt == null) mt = new int[N];
 
             // ---- Begin Mersenne Twister Algorithm ----
             mt[0] = seed;
@@ -237,8 +236,7 @@ public class MTRandom implements IRandom {
                 // This is unavoidable because no fields in our instance will
                 // have been initialised at this point, not even if the code
                 // were placed at the declaration of the member variable.
-                if (ibuf == null)
-                    ibuf = new int[2];
+                if (ibuf == null) ibuf = new int[2];
 
                 ibuf[0] = (int) seed;
                 ibuf[1] = (int) (seed >>> 32);
@@ -297,8 +295,7 @@ public class MTRandom implements IRandom {
                     mt[0] = mt[N - 1];
                     i = 1;
                 }
-                if (j >= length)
-                    j = 0;
+                if (j >= length) j = 0;
             }
             for (k = N - 1; k > 0; k--) {
                 mt[i] = (mt[i] ^ ((mt[i - 1] ^ (mt[i - 1] >>> 30)) * MAGIC_FACTOR3))
@@ -418,8 +415,7 @@ public class MTRandom implements IRandom {
             int[] ibuf = new int[ilen];
             for (int n = 0; n < ilen; n++) {
                 int m = (n + 1) << 2;
-                if (m > blen)
-                    m = blen;
+                if (m > blen) m = blen;
                 for (k = buf[--m] & 0xff; (m & 0x3) != 0; k = (k << 8)
                         | buf[--m] & 0xff)
                     ;

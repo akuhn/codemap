@@ -13,8 +13,7 @@ public class HausdorffDistance {
         double min = Double.POSITIVE_INFINITY;
         for (Location b : B.locations) {
             double dist = (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
-            if (dist < min)
-                min = dist;
+            if (dist < min) min = dist;
         }
         return Math.sqrt(min);
     }
@@ -23,8 +22,7 @@ public class HausdorffDistance {
         double max = 0;
         for (Location a : A.locations()) {
             double dist = d(a, B);
-            if (max < dist)
-                max = dist;
+            if (max < dist) max = dist;
         }
         return max;
     }

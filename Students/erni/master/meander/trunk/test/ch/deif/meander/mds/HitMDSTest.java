@@ -27,10 +27,8 @@ public class HitMDSTest {
                 a[i][j] = Double.parseDouble(sp[i * a.length + j]);
                 System.out.print("d[" + i + "][" + j + "] = "
                         + sp[i * a.length + j] + ";");
-                if (j == a.length - 1)
-                    System.out.println("");
-                else
-                    System.out.print(" ");
+                if (j == a.length - 1) System.out.println("");
+                else System.out.print(" ");
             }
 
         double[][] res = new HitMDSOriginal().evaluate(a, -2);

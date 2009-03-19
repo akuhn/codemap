@@ -61,8 +61,7 @@ public class MDS {
         for (double value : index.documentCorrelations()) {
             out.append(' ');
             out.print((float) value);
-            if (delim.tally())
-                System.out.print(delim);
+            if (delim.tally()) System.out.print(delim);
         }
         System.out.println();
         out.append('\n');
@@ -101,14 +100,12 @@ public class MDS {
             x = new double[index.documents.size()];
             y = new double[index.documents.size()];
             String command = format("%s 30 1 0 1:8", fname()); // TODO configure
-                                                               // this settings
+            // this settings
             Process proc = Runtime.getRuntime().exec(command);
             InputStream err = proc.getErrorStream();
             InputStream in = proc.getInputStream();
-            if (tee)
-                err = new TeeInputStream(err, "error.log");
-            if (tee)
-                in = new TeeInputStream(in, "input.log");
+            if (tee) err = new TeeInputStream(err, "error.log");
+            if (tee) in = new TeeInputStream(in, "input.log");
 
             StreamGobbler error = new StreamGobbler(err);
             Gobbler input = new Gobbler(in);
@@ -116,8 +113,7 @@ public class MDS {
             input.start();
 
             OutputStream out = proc.getOutputStream();
-            if (tee)
-                out = new TeeOutputStream(out, "output.log");
+            if (tee) out = new TeeOutputStream(out, "output.log");
             printMatrixOn(index, matchingLocations, new PrintStream(out));
 
             int exit = proc.waitFor();
@@ -125,8 +121,7 @@ public class MDS {
                 Thread.sleep(20);
             error.kill();
             input.kill();
-            if (exit != 0)
-                throw new Error(command);
+            if (exit != 0) throw new Error(command);
         } catch (Exception ex) {
             throw Throw.exception(ex);
         }

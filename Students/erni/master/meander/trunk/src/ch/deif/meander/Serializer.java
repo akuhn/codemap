@@ -31,13 +31,11 @@ public class Serializer {
 
         @FameProperty
         public Collection<?> getTerms() {
-            if (terms == null)
-                return Collections.EMPTY_LIST;
+            if (terms == null) return Collections.EMPTY_LIST;
             Collection<Object> coll = new ArrayList<Object>();
             int count = -1;
             for (Bag.Count<String> each : terms.sortedCounts()) {
-                if (each.count != count)
-                    coll.add(count = each.count);
+                if (each.count != count) coll.add(count = each.count);
                 coll.add(each.element);
             }
             return coll;
@@ -47,10 +45,8 @@ public class Serializer {
             terms = new Bag<String>();
             int count = -1;
             for (Object each : encoded) {
-                if (each instanceof Number)
-                    count = ((Number) each).intValue();
-                else
-                    terms.add((String) each, count);
+                if (each instanceof Number) count = ((Number) each).intValue();
+                else terms.add((String) each, count);
             }
         }
 

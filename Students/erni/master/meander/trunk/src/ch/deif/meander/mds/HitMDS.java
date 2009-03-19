@@ -134,9 +134,8 @@ public class HitMDS {
         data_alloc();
 
         if (pattern_length < 0) /* read full distance matrix */
-            matrix_input = pattern_length = pattern_dimension = -pattern_length;
-        else
-            matrix_input = 0;
+        matrix_input = pattern_length = pattern_dimension = -pattern_length;
+        else matrix_input = 0;
 
         for (int line = 0; line < pattern_length; line++) {
             for (int column = 0; column < pattern_dimension; column++) {
@@ -244,8 +243,7 @@ public class HitMDS {
     }
 
     private void shuffle_do() {
-        if (shuffle_index == null)
-            shuffle_index_alloc();
+        if (shuffle_index == null) shuffle_index_alloc();
 
         for (int cnt = 0; cnt < pattern_length; cnt++) {
             int ind = random.nextInt(pattern_length);
@@ -365,8 +363,7 @@ public class HitMDS {
     }
 
     private void debug_print(String message) {
-        if (DEBUG_OUTPUT)
-            System.out.println(message);
+        if (DEBUG_OUTPUT) System.out.println(message);
     }
 
     /*
@@ -396,8 +393,7 @@ public class HitMDS {
 
             var /= pattern_length - 1;
 
-            if (var > maxvar)
-                maxvar = var;
+            if (var > maxvar) maxvar = var;
         }
 
         /* in fact inverse standard deviation */
