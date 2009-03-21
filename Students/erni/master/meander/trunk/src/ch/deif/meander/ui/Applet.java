@@ -8,6 +8,10 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import processing.core.PApplet;
+import processing.core.PGraphics;
+import processing.core.PGraphics2D;
+import processing.core.PImage;
+import ch.akuhn.util.Out;
 import ch.deif.meander.Location;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapVisualization;
@@ -28,28 +32,43 @@ public class Applet {
         private EventHandler event;
 
         private boolean preSelect = false;
+        private PImage background;
 
-        public MapViz(MapVisualization viz) {
-            this.viz = viz;
+        public MapViz(MapVisualization vizualization) {
+            viz = vizualization;
+            width = viz.map.getParameters().width;
+            height = viz.map.getParameters().height;
             map = viz.map;
             points = new HashSet<Point>();
+            background = new PImage(width, height);
         }
 
         @Override
         public void setup() {
-            width = viz.map.getParameters().width;
-            height = viz.map.getParameters().height;
             frameRate(10);
             smooth();
+            noFill();
+            strokeWeight(2);
             size(width, height);
+            viz.drawOn(background);
+            loadPixels();
         }
 
         @Override
         public void draw() {
-            viz.draw(g);
-            noFill();
-            strokeWeight(2);
+            reloadBackGround();
+            drawSelection();
+            drawPreSelectioin();
+        }
 
+        private void drawSelection() {
+            stroke(Color.RED.getRGB());
+            for (Point each : points) {
+                ellipse(each.x, each.y, 7, 7);
+            }
+        }
+
+        private void drawPreSelectioin() {
             if (preSelect) {
                 stroke(Color.BLUE.getRGB());
                 Point current = new Point(mouseX, mouseY);
@@ -59,11 +78,13 @@ public class Applet {
                     ellipse(preSelect.x, preSelect.y, 3, 3);
                 }
             }
+        }
 
-            stroke(Color.RED.getRGB());
-            for (Point each : points) {
-                ellipse(each.x, each.y, 7, 7);
-            }
+        private void reloadBackGround() {
+            assert background.pixels != null;
+            assert pixels != null;
+            System.arraycopy(background.pixels, 0, pixels, 0, background.pixels.length);
+            updatePixels();
         }
 
         @Override

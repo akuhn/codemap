@@ -240,7 +240,7 @@ public class Meander {
             // map.setBackground(new Color(Display.getCurrent(), 0, 255, 0));
 
             Composite rightPane = new Composite(shell, SWT.NONE);
-            files = new List(rightPane, SWT.MULTI | SWT.V_SCROLL);
+            files = new List(rightPane, SWT.MULTI | SWT.V_SCROLL | SWT.BORDER);
             files.addSelectionListener(new SelectionListener() {
 
                 @Override

@@ -1,6 +1,8 @@
 package ch.deif.meander;
 
 import processing.core.PGraphics;
+import processing.core.PImage;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class SketchVisualization extends MapVisualization {
 
@@ -24,6 +26,11 @@ public class SketchVisualization extends MapVisualization {
             float r = (float) (each.height / 100 * width / 2.61f);
             pg.ellipse(x, y, r, r);
         }
+    }
+
+    @Override
+    public void drawOn(PImage img) {
+        throw new NotImplementedException();
     }
 
 }
