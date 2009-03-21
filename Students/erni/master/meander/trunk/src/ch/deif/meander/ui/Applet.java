@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
@@ -45,7 +47,7 @@ public class Applet {
 
         @Override
         public void setup() {
-            frameRate(10);
+            frameRate(25);
             smooth();
             noFill();
             strokeWeight(2);
@@ -56,19 +58,19 @@ public class Applet {
 
         @Override
         public void draw() {
-            reloadBackGround();
-            drawSelection();
-            drawPreSelectioin();
+            drawBackground();
+            drawSelectedPoints();
+            drawPreSelectionPoint();
         }
 
-        private void drawSelection() {
+        private void drawSelectedPoints() {
             stroke(Color.RED.getRGB());
             for (Point each : points) {
                 ellipse(each.x, each.y, 7, 7);
             }
         }
 
-        private void drawPreSelectioin() {
+        private void drawPreSelectionPoint() {
             if (preSelect) {
                 stroke(Color.BLUE.getRGB());
                 Point current = new Point(mouseX, mouseY);
@@ -80,10 +82,11 @@ public class Applet {
             }
         }
 
-        private void reloadBackGround() {
+        private void drawBackground() {
             assert background.pixels != null;
             assert pixels != null;
-            System.arraycopy(background.pixels, 0, pixels, 0, background.pixels.length);
+            System.arraycopy(background.pixels, 0, pixels, 0,
+                    background.pixels.length);
             updatePixels();
         }
 
@@ -119,6 +122,18 @@ public class Applet {
                 event.onAppletSelection(nn.location());
                 points.add(nearest);
             }
+            System.out.println("Mouse clicked");
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            super.mouseDragged(e);
+//            System.out.println(e.getPoint());
+        }
+
+        public void mouseReleased() {
+            super.mouseReleased();
+            System.out.println("Mouse Released");
         }
 
         public void registerHandler(EventHandler eventHandler) {
@@ -128,14 +143,16 @@ public class Applet {
         public void indicesSelected(int[] indices) {
             points.clear();
             event.onAppletSelectionCleared();
+            List<Location> locations = new ArrayList<Location>();
             for (int index : indices) {
                 Location location = map.locations.get(index);
-                // callback
-                event.onAppletSelection(location);
+                locations.add(location);
                 int x = (int) Math.round(location.x * map.height);
                 int y = (int) Math.round(location.y * map.height);
                 points.add(new Point(x, y));
             }
+            // callback for tag-cloud
+            event.onAppletSelection(locations);
         }
     }
 

@@ -3,6 +3,8 @@ package ch.deif.meander.ui;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.TreeMap;
 
 import org.eclipse.jface.layout.GridDataFactory;
@@ -72,19 +74,28 @@ public class Meander {
         }
 
         public void onAppletSelection(Location location) {
-            final Document document = location.document;
-            // System.out.println("selecting: " + document.name());
-            window.display().syncExec(new Runnable() {
-                public void run() {
-                    int index = window.files().indexOf(document.name());
-                    window.files().select(index);
-                    window.cloud().append(document.terms());
-                }
-            });
+            ArrayList<Location> l = new ArrayList<Location>();
+            l.add(location);
+            this.onAppletSelection(l);
         }
 
         public void onMeanderSelection(int[] indices) {
             applet.indicesSelected(indices);
+        }
+
+        public void onAppletSelection(final java.util.List<Location> locations) {
+            window.display().syncExec(new Runnable() {
+                public void run() {
+                    Document document;
+                    for(Location each : locations) {
+                        document = each.document;
+                        int index = window.files().indexOf(document.name());
+                        window.files().select(index);
+                        window.cloud().append(document.terms());                        
+                    }
+                    window.cloud().renderText();
+                }
+            });
         }
 
     }
@@ -150,9 +161,11 @@ public class Meander {
         }
 
         public void append(Terms t) {
-            clearText();
             terms.addAll(t);
-
+        }
+        
+        public void renderText() {
+            clearText();
             Separator separator = new Separator(" ");
             int start = 0;
             for (Bag.Count<String> each : terms.counts()) {
@@ -178,7 +191,7 @@ public class Meander {
 
                     start = text.getText().length();
                 }
-            }
+            }            
         }
 
         private void clearText() {
