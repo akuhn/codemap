@@ -31,6 +31,7 @@ public class Applet {
         private EventHandler event;
 
         private boolean preSelect = false;
+        private boolean changed = false;
         private PImage background;
 
         public MapViz(MapVisualization vizualization) {
@@ -51,13 +52,17 @@ public class Applet {
             size(width, height);
             viz.drawOn(background);
             loadPixels();
+            setNeedsRedraw();
         }
 
         @Override
         public void draw() {
-            drawBackground();
-            drawSelectedPoints();
-            drawPreSelectionPoint();
+            if (changed || preSelect) {
+                changed = false;
+                drawBackground();
+                drawSelectedPoints();
+                drawPreSelectionPoint();                
+            }
         }
 
         private void drawSelectedPoints() {
@@ -92,8 +97,13 @@ public class Applet {
             super.keyTyped(e);
             // System.out.println(e.getKeyChar());
             if (e.getKeyChar() == 's') {
-                preSelect = !preSelect;
+                togglePreSelect();
+                setNeedsRedraw();
             }
+        }
+
+        protected void togglePreSelect() {
+            preSelect = !preSelect;
         }
 
         @Override
@@ -119,6 +129,7 @@ public class Applet {
                 event.onAppletSelection(nn.location());
                 points.add(nearest);
             }
+            setNeedsRedraw();
             System.out.println("Mouse clicked");
         }
 
@@ -150,6 +161,11 @@ public class Applet {
             }
             // callback for tag-cloud
             event.onAppletSelection(locations);
+            setNeedsRedraw();
+        }
+
+        protected void setNeedsRedraw() {
+            changed = true;
         }
     }
 
