@@ -8,7 +8,6 @@ import processing.core.PGraphics;
 import processing.core.PGraphicsJava2D;
 import processing.core.PImage;
 import processing.pdf.PGraphicsPDF;
-import ch.deif.meander.Map.Pixel;
 import ch.deif.meander.ui.PViewer;
 
 public abstract class MapVisualization {
@@ -19,7 +18,7 @@ public abstract class MapVisualization {
     public MapVisualization(Map map) {
         this.map = map;
         this.width = map.getParameters().width;
-        this.height = map.getParameters().height; 
+        this.height = map.getParameters().height;
     }
 
     public abstract void draw(PGraphics pg);

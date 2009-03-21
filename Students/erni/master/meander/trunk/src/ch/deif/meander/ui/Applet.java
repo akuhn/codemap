@@ -10,10 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import processing.core.PApplet;
-import processing.core.PGraphics;
-import processing.core.PGraphics2D;
 import processing.core.PImage;
-import ch.akuhn.util.Out;
 import ch.deif.meander.Location;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapVisualization;
@@ -128,7 +125,7 @@ public class Applet {
         @Override
         public void mouseDragged(MouseEvent e) {
             super.mouseDragged(e);
-//            System.out.println(e.getPoint());
+            // System.out.println(e.getPoint());
         }
 
         public void mouseReleased() {

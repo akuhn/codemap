@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.TreeMap;
 
 import org.eclipse.jface.layout.GridDataFactory;
@@ -87,11 +86,11 @@ public class Meander {
             window.display().syncExec(new Runnable() {
                 public void run() {
                     Document document;
-                    for(Location each : locations) {
+                    for (Location each : locations) {
                         document = each.document;
                         int index = window.files().indexOf(document.name());
                         window.files().select(index);
-                        window.cloud().append(document.terms());                        
+                        window.cloud().append(document.terms());
                     }
                     window.cloud().renderText();
                 }
@@ -147,12 +146,12 @@ public class Meander {
         private FontData fontData;
         private java.util.Map<Integer, Font> fonts;
 
-        public TagCloud(StyledText text) {
+        public TagCloud(StyledText styledText) {
             terms = new Terms();
-            this.text = text;
-            fontData = text.getFont().getFontData()[0];
-            MAX_HEIGHT = fontData.getHeight() * 3;
+            text = styledText;
+            fontData = styledText.getFont().getFontData()[0];
             fonts = new TreeMap<Integer, Font>();
+            MAX_HEIGHT = fontData.getHeight() * 3;
         }
 
         public void clear() {
@@ -163,17 +162,21 @@ public class Meander {
         public void append(Terms t) {
             terms.addAll(t);
         }
-        
+
         public void renderText() {
             clearText();
             Separator separator = new Separator(" ");
             int start = 0;
+            StringBuilder str = new StringBuilder();
+            java.util.List<StyleRange> ranges = new ArrayList<StyleRange>();
+            String tag;
+            StyleRange style;
             for (Bag.Count<String> each : terms.counts()) {
                 if (each.count > MIN_COUNT) {
-                    String tag = separator + each.element;
-                    text.append(tag);
+                    tag = separator + each.element;
+                    str.append(tag);
 
-                    StyleRange style = new StyleRange();
+                    style = new StyleRange();
                     style.start = start;
                     style.length = tag.length();
                     int height = fontData.getHeight() + each.count;
@@ -187,11 +190,13 @@ public class Meander {
                         fonts.put(height, font);
                     }
                     style.font = font;
-                    text.setStyleRange(style);
+                    ranges.add(style);
 
-                    start = text.getText().length();
+                    start = str.length();
                 }
-            }            
+            }
+            text.setText(str.toString());
+            text.setStyleRanges(ranges.toArray(new StyleRange[0]));
         }
 
         private void clearText() {
