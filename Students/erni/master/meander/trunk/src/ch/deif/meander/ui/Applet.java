@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -46,7 +47,8 @@ public class Applet {
             width = viz.map.getParameters().width;
             height = viz.map.getParameters().height;
             map = viz.map;
-            points = new HashSet<Point>();
+            // TODO check if the concurrency problem really comes from the points
+            points = Collections.synchronizedSet(new HashSet<Point>());
             background = new PImage(width, height);
         }
 
