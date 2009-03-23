@@ -23,7 +23,7 @@ public class Applet {
     @SuppressWarnings("serial")
     public static class MapViz extends PApplet {
 
-        protected final int SELECTION_SIZE = 15;
+        protected final int SELECTION_SIZE = 12;
         protected final int POINT_STROKE = 4;
         protected final int BOX_STROKE = 2;
 
@@ -150,7 +150,7 @@ public class Applet {
             }
             unsetSelectionBox();
             setNeedsRedraw();
-            System.out.println("Mouse clicked");
+            // System.out.println("Mouse clicked");
         }
 
         private void unsetSelectionBox() {
@@ -168,9 +168,8 @@ public class Applet {
             setNeedsRedraw();
         }
 
-        public void mouseReleased() {
+        public void mouseReleased(MouseEvent e) {
             super.mouseReleased();
-            
             if (dragStart != null && dragStop != null) {
                 // make sure that start is top-left and stop is bottom-right
                 int minX = Math.min(dragStart.x, dragStop.x);
@@ -180,14 +179,15 @@ public class Applet {
                 dragStart = new Point(minX, minY);
                 dragStop = new Point(maxX, maxY);
                 List<Location> selected = new ArrayList<Location>();
-                System.out.println("start: " + dragStart.x + " " + dragStart.y);
-                System.out.println("stop: " + dragStop.x + " " + dragStop.y);   
+                // System.out.println("start: " + dragStart.x + " " +
+                // dragStart.y);
+                // System.out.println("stop: " + dragStop.x + " " + dragStop.y);
                 points.clear();
                 for (Location each : map.locations()) {
                     int x = (int) Math.round(each.x * map.height);
                     int y = (int) Math.round(each.y * map.height);
-                    if (x < dragStop.x && x > dragStart.x
-                            && y < dragStop.y && y > dragStart.y) {
+                    if (x < dragStop.x && x > dragStart.x && y < dragStop.y
+                            && y > dragStart.y) {
                         selected.add(each);
                         points.add(new Point(x, y));
                     }

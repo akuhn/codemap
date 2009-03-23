@@ -62,8 +62,8 @@ public class Meander {
 
         public void onAppletSelectionCleared() {
             // System.out.println("clear selection");
-            assert window.display() != null;
-            window.display().syncExec(new Runnable() {
+            assert window.getDisplay() != null;
+            window.getDisplay().syncExec(new Runnable() {
                 public void run() {
                     window.files().deselectAll();
                     assert window.cloud() != null;
@@ -83,7 +83,7 @@ public class Meander {
         }
 
         public void onAppletSelection(final java.util.List<Location> locations) {
-            window.display().syncExec(new Runnable() {
+            window.getDisplay().syncExec(new Runnable() {
                 public void run() {
                     Document document;
                     window.files().deselectAll();
@@ -114,10 +114,13 @@ public class Meander {
             open();
             // Dispose the display
             applet.destroy();
-            display().dispose();
+            close();
+//            if (!getDisplay().isDisposed()) {
+//                getDisplay().dispose();                
+//            }
         }
 
-        public Display display() {
+        public Display getDisplay() {
             return getShell().getDisplay();
         }
 
