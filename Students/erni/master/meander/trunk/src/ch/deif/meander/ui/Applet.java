@@ -23,6 +23,10 @@ public class Applet {
     @SuppressWarnings("serial")
     public static class MapViz extends PApplet {
 
+        protected final int SELECTION_SIZE = 15;
+        protected final int POINT_STROKE = 4;
+        protected final int BOX_STROKE = 2;
+
         private MapVisualization viz;
         private int width;
         private int height;
@@ -33,6 +37,9 @@ public class Applet {
         private boolean preSelect = false;
         private boolean changed = false;
         private PImage background;
+
+        private Point dragStart;
+        private Point dragStop;
 
         public MapViz(MapVisualization vizualization) {
             viz = vizualization;
@@ -48,7 +55,7 @@ public class Applet {
             frameRate(25);
             smooth();
             noFill();
-            strokeWeight(2);
+            strokeWeight(POINT_STROKE);
             size(width, height);
             viz.drawOn(background);
             loadPixels();
@@ -61,14 +68,26 @@ public class Applet {
                 changed = false;
                 drawBackground();
                 drawSelectedPoints();
-                drawPreSelectionPoint();                
+                drawPreSelectionPoint();
+                drawSelectionBox();
+            }
+        }
+
+        private void drawSelectionBox() {
+            if (dragStart != null && dragStop != null) {
+                stroke(Color.RED.getRGB());
+                strokeWeight(BOX_STROKE);
+                int deltaX = dragStop.x - dragStart.x;
+                int deltaY = dragStop.y - dragStart.y;
+                rect(dragStart.x, dragStart.y, deltaX, deltaY);
+                strokeWeight(POINT_STROKE);
             }
         }
 
         private void drawSelectedPoints() {
-            stroke(Color.RED.getRGB());
             for (Point each : points) {
-                ellipse(each.x, each.y, 7, 7);
+                stroke(Color.RED.getRGB());
+                ellipse(each.x, each.y, SELECTION_SIZE, SELECTION_SIZE);
             }
         }
 
@@ -129,19 +148,54 @@ public class Applet {
                 event.onAppletSelection(nn.location());
                 points.add(nearest);
             }
+            unsetSelectionBox();
             setNeedsRedraw();
             System.out.println("Mouse clicked");
+        }
+
+        private void unsetSelectionBox() {
+            dragStart = null;
+            dragStop = null;
         }
 
         @Override
         public void mouseDragged(MouseEvent e) {
             super.mouseDragged(e);
-            // System.out.println(e.getPoint());
+            if (dragStart == null) {
+                dragStart = e.getPoint();
+            }
+            dragStop = e.getPoint();
+            setNeedsRedraw();
         }
 
         public void mouseReleased() {
             super.mouseReleased();
-            System.out.println("Mouse Released");
+            
+            if (dragStart != null && dragStop != null) {
+                // make sure that start is top-left and stop is bottom-right
+                int minX = Math.min(dragStart.x, dragStop.x);
+                int minY = Math.min(dragStart.y, dragStop.y);
+                int maxX = Math.max(dragStart.x, dragStop.x);
+                int maxY = Math.max(dragStart.y, dragStop.y);
+                dragStart = new Point(minX, minY);
+                dragStop = new Point(maxX, maxY);
+                List<Location> selected = new ArrayList<Location>();
+                System.out.println("start: " + dragStart.x + " " + dragStart.y);
+                System.out.println("stop: " + dragStop.x + " " + dragStop.y);   
+                points.clear();
+                for (Location each : map.locations()) {
+                    int x = (int) Math.round(each.x * map.height);
+                    int y = (int) Math.round(each.y * map.height);
+                    if (x < dragStop.x && x > dragStart.x
+                            && y < dragStop.y && y > dragStart.y) {
+                        selected.add(each);
+                        points.add(new Point(x, y));
+                    }
+                }
+                unsetSelectionBox();
+                event.onAppletSelection(selected);
+                setNeedsRedraw();
+            }
         }
 
         public void registerHandler(EventHandler eventHandler) {

@@ -86,6 +86,7 @@ public class Meander {
             window.display().syncExec(new Runnable() {
                 public void run() {
                     Document document;
+                    window.files().deselectAll();
                     for (Location each : locations) {
                         document = each.document;
                         int index = window.files().indexOf(document.name());
