@@ -263,6 +263,13 @@ public class Meander {
 
             Composite rightPane = new Composite(shell, SWT.NONE);
             files = new List(rightPane, SWT.MULTI | SWT.V_SCROLL | SWT.BORDER);
+            
+            // increase font size
+            Font font = files.getFont();
+            FontData fontData = font.getFontData()[0];
+            fontData.height = fontData.height*1.35F;
+            files.setFont(new Font(this.getDisplay(), new FontData[]{fontData}));
+            
             files.addSelectionListener(new SelectionListener() {
 
                 @Override
