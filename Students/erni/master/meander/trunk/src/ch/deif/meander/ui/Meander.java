@@ -25,7 +25,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
-import processing.core.PApplet;
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.util.Bag;
@@ -43,310 +42,296 @@ import ch.deif.meander.ui.Applet.MapViz;
 
 public class Meander {
 
-    public static void main(String... args) {
-        // new GlitchSticksWindow();
-        new MeanderWindow();
-    }
+	public static void main(String... args) {
+		new MeanderWindow();
+	}
 
-    public static class EventHandler {
+	public static class EventHandler {
 
-        private MeanderWindow window;
-        private MapViz applet;
+		private MeanderWindow window;
+		private MapViz applet;
 
-        public EventHandler(MeanderWindow m, Applet.MapViz a) {
-            window = m;
-            applet = a;
-            a.registerHandler(this);
-            m.registerHandler(this);
-        }
+		public EventHandler(MeanderWindow m, Applet.MapViz a) {
+			window = m;
+			applet = a;
+			a.registerHandler(this);
+			m.registerHandler(this);
+		}
 
-        public void onAppletSelectionCleared() {
-            // System.out.println("clear selection");
-            assert window.getDisplay() != null;
-            window.getDisplay().syncExec(new Runnable() {
-                public void run() {
-                    window.files().deselectAll();
-                    assert window.cloud() != null;
-                    window.cloud().clear();
-                }
-            });
-        }
+		public void onAppletSelectionCleared() {
+			// System.out.println("clear selection");
+			assert window.getDisplay() != null;
+			window.getDisplay().syncExec(new Runnable() {
+				public void run() {
+					window.files().deselectAll();
+					assert window.cloud() != null;
+					window.cloud().clear();
+				}
+			});
+		}
 
-        public void onAppletSelection(Location location) {
-            ArrayList<Location> l = new ArrayList<Location>();
-            l.add(location);
-            this.onAppletSelection(l);
-        }
+		public void onAppletSelection(Location location) {
+			ArrayList<Location> l = new ArrayList<Location>();
+			l.add(location);
+			this.onAppletSelection(l);
+		}
 
-        public void onMeanderSelection(int[] indices) {
-            applet.indicesSelected(indices);
-        }
+		public void onMeanderSelection(int[] indices) {
+			applet.indicesSelected(indices);
+		}
 
-        public void onAppletSelection(final java.util.List<Location> locations) {
-            window.getDisplay().syncExec(new Runnable() {
-                public void run() {
-                    Document document;
-                    window.files().deselectAll();
-                    for (Location each : locations) {
-                        document = each.document;
-                        int index = window.files().indexOf(document.name());
-                        window.files().select(index);
-                        window.cloud().append(document.terms());
-                    }
-                    window.cloud().renderText();
-                }
-            });
-        }
+		public void onAppletSelection(final java.util.List<Location> locations) {
+			window.getDisplay().syncExec(new Runnable() {
+				public void run() {
+					Document document;
+					window.files().deselectAll();
+					for (Location each : locations) {
+						document = each.document;
+						int index = window.files().indexOf(document.name());
+						window.files().select(index);
+						window.cloud().append(document.terms());
+					}
+					window.cloud().renderText();
+				}
+			});
+		}
 
-    }
+	}
 
-    public static abstract class AppletWindow extends ApplicationWindow {
+	public static class TagCloud {
 
-        protected Composite mapComposite;
-        protected PApplet applet;
-        protected Frame mapFrame;
+		private final int MIN_COUNT = 1;
+		private final int MAX_HEIGHT;
+		private Terms terms;
+		private StyledText text;
+		private FontData fontData;
+		private java.util.Map<Integer, Font> fonts;
 
-        public AppletWindow() {
-            super(null);
-            // Don't return from open() until window closes
-            setBlockOnOpen(true);
-            // Open the main window
-            open();
-            // Dispose the display
-            applet.destroy();
-            close();
-//            if (!getDisplay().isDisposed()) {
-//                getDisplay().dispose();                
-//            }
-        }
+		public TagCloud(StyledText styledText) {
+			terms = new Terms();
+			text = styledText;
+			fontData = styledText.getFont().getFontData()[0];
+			fonts = new TreeMap<Integer, Font>();
+			MAX_HEIGHT = fontData.getHeight() * 3;
+		}
 
-        public Display getDisplay() {
-            return getShell().getDisplay();
-        }
+		public void clear() {
+			terms.clear();
+			clearText();
+		}
 
-        protected Control createContents(Composite parent) {
-            Shell shell = parent.getShell();
-            mapComposite = new Composite(shell, SWT.EMBEDDED);
+		public void append(Terms t) {
+			terms.addAll(t);
+		}
 
-            mapFrame = SWT_AWT.new_Frame(mapComposite);
-            mapFrame.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		public void renderText() {
+			clearText();
+			Separator separator = new Separator(" ");
+			int start = 0;
+			StringBuilder str = new StringBuilder();
+			java.util.List<StyleRange> ranges = new ArrayList<StyleRange>();
+			String tag;
+			StyleRange style;
+			for (Bag.Count<String> each : terms.counts()) {
+				if (each.count > MIN_COUNT) {
+					tag = separator + each.element;
+					str.append(tag);
 
-            applet = createApplet();
-            mapFrame.add(applet);
+					style = new StyleRange();
+					style.start = start;
+					style.length = tag.length();
+					int height = fontData.getHeight() + each.count;
+					if (height > MAX_HEIGHT) {
+						height = MAX_HEIGHT;
+					}
+					Font font = fonts.get(height);
+					if (font == null) {
+						font = new Font(text.getDisplay(), fontData.getName(),
+								height, fontData.getStyle());
+						fonts.put(height, font);
+					}
+					style.font = font;
+					ranges.add(style);
 
-            return parent;
-        }
+					start = str.length();
+				}
+			}
+			text.setText(str.toString());
+			text.setStyleRanges(ranges.toArray(new StyleRange[0]));
+		}
 
-        protected abstract PApplet createApplet();
+		private void clearText() {
+			text.setText("");
+		}
 
-    }
+	}
 
-    public static class TagCloud {
+	public static class MeanderWindow extends ApplicationWindow {
 
-        private final int MIN_COUNT = 1;
-        private final int MAX_HEIGHT;
-        private Terms terms;
-        private StyledText text;
-        private FontData fontData;
-        private java.util.Map<Integer, Font> fonts;
+		private static int MAP_DIM = 700;
 
-        public TagCloud(StyledText styledText) {
-            terms = new Terms();
-            text = styledText;
-            fontData = styledText.getFont().getFontData()[0];
-            fonts = new TreeMap<Integer, Font>();
-            MAX_HEIGHT = fontData.getHeight() * 3;
-        }
+		private List files;
+		private EventHandler event;
+		private TagCloud tagCloud;
 
-        public void clear() {
-            terms.clear();
-            clearText();
-        }
+		public MeanderWindow() {
+			super(null);
+			// Don't return from open() until window closes
+			setBlockOnOpen(true);
+			// Open the main window
+			open();
+			// Dispose the display
+			close();
+			// if (!getDisplay().isDisposed()) {
+			// getDisplay().dispose();
+			// }
+		}
 
-        public void append(Terms t) {
-            terms.addAll(t);
-        }
+		public Display getDisplay() {
+			return getShell().getDisplay();
+		}
 
-        public void renderText() {
-            clearText();
-            Separator separator = new Separator(" ");
-            int start = 0;
-            StringBuilder str = new StringBuilder();
-            java.util.List<StyleRange> ranges = new ArrayList<StyleRange>();
-            String tag;
-            StyleRange style;
-            for (Bag.Count<String> each : terms.counts()) {
-                if (each.count > MIN_COUNT) {
-                    tag = separator + each.element;
-                    str.append(tag);
+		public List files() {
+			return files;
+		}
 
-                    style = new StyleRange();
-                    style.start = start;
-                    style.length = tag.length();
-                    int height = fontData.getHeight() + each.count;
-                    if (height > MAX_HEIGHT) {
-                        height = MAX_HEIGHT;
-                    }
-                    Font font = fonts.get(height);
-                    if (font == null) {
-                        font = new Font(text.getDisplay(), fontData.getName(),
-                                height, fontData.getStyle());
-                        fonts.put(height, font);
-                    }
-                    style.font = font;
-                    ranges.add(style);
+		public TagCloud cloud() {
+			return tagCloud;
+		}
 
-                    start = str.length();
-                }
-            }
-            text.setText(str.toString());
-            text.setStyleRanges(ranges.toArray(new StyleRange[0]));
-        }
+		public void registerHandler(EventHandler eventHandler) {
+			this.event = eventHandler;
+		}
 
-        private void clearText() {
-            text.setText("");
-        }
+		protected Control createContents(Composite parent) {
+			Control control = super.createContents(parent);
+			Shell shell = control.getShell();
 
-    }
+			SoftwareMap softwareMap = new SoftwareMap(shell);
+			new EventHandler(this, softwareMap.applet);
 
-    public static class MeanderWindow extends AppletWindow {
+			int width = softwareMap.applet.getWidth();
+			int height = softwareMap.applet.getHeight();
+			System.out.println(width + " - " + height);
 
-        private static int MAP_DIM = 700;
-        private Map map;
+			// mapFrame.setSize(width, height);
+			softwareMap.setMaximumSize(new Dimension(width, height));
+			// System.out.println(mapFrame);
 
-        private List files;
-        private EventHandler event;
-        private TagCloud tagCloud;
+			softwareMap.setSize(width, height);
+			softwareMap.setLayout(new FillLayout());
+			// "debug" to see what components are where ...
+			// map.setBackground(new Color(Display.getCurrent(), 0, 255, 0));
 
-        public List files() {
-            return files;
-        }
+			Composite rightPane = new Composite(shell, SWT.NONE);
+			files = new List(rightPane, SWT.MULTI | SWT.V_SCROLL | SWT.BORDER);
 
-        public TagCloud cloud() {
-            return tagCloud;
-        }
+			// increase font size
+			Font font = files.getFont();
+			FontData fontData = font.getFontData()[0];
+			fontData.height = fontData.height * 1.35F;
+			files.setFont(new Font(this.getDisplay(),
+					new FontData[] { fontData }));
 
-        public void registerHandler(EventHandler eventHandler) {
-            this.event = eventHandler;
-        }
+			files.addSelectionListener(new SelectionListener() {
 
-        protected PApplet createApplet() {
-            MapVisualization viz = createVizualization();
-            Applet.MapViz pa = new Applet.MapViz(viz);
-            pa.init();
-            int width = viz.map.getParameters().width;
-            int height = viz.map.getParameters().height;
-            pa.setSize(width, height);
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+					onListSelected();
+				}
 
-            new EventHandler(this, pa);
-            return pa;
-        }
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					onListSelected();
+				}
 
-        protected Control createContents(Composite parent) {
-            Control control = super.createContents(parent);
-            Shell shell = control.getShell();
+				private void onListSelected() {
+					int[] indices = files.getSelectionIndices();
+					event.onMeanderSelection(indices);
+				}
 
-            int width = applet.getWidth();
-            int height = applet.getHeight();
-            System.out.println(width + " - " + height);
+			});
 
-            // mapFrame.setSize(width, height);
-            mapFrame.setMaximumSize(new Dimension(width, height));
-            mapFrame.setLocation(0, 0);
-            mapFrame.setSize(width, height);
-            // System.out.println(mapFrame);
+			for (Location l : softwareMap.map.locations()) {
+				files.add(l.document.name());
+			}
 
-            mapComposite.setSize(width, height);
-            mapComposite.setLayout(new FillLayout());
-            // "debug" to see what components are where ...
-            // map.setBackground(new Color(Display.getCurrent(), 0, 255, 0));
+			StyledText text = new StyledText(rightPane, SWT.BORDER | SWT.MULTI
+					| SWT.READ_ONLY | SWT.WRAP);
+			tagCloud = new TagCloud(text);
 
-            Composite rightPane = new Composite(shell, SWT.NONE);
-            files = new List(rightPane, SWT.MULTI | SWT.V_SCROLL | SWT.BORDER);
-            
-            // increase font size
-            Font font = files.getFont();
-            FontData fontData = font.getFontData()[0];
-            fontData.height = fontData.height*1.35F;
-            files.setFont(new Font(this.getDisplay(), new FontData[]{fontData}));
-            
-            files.addSelectionListener(new SelectionListener() {
+			GridDataFactory.swtDefaults().hint(MAP_DIM / 2, height / 2)
+					.applyTo(files);
+			GridDataFactory.swtDefaults().hint(MAP_DIM / 2, height / 2)
+					.applyTo(text);
+			GridLayoutFactory.fillDefaults().spacing(5, 5).generateLayout(
+					rightPane);
 
-                @Override
-                public void widgetDefaultSelected(SelectionEvent e) {
-                    onListSelected();
-                }
+			GridDataFactory.swtDefaults().hint(width, height).applyTo(
+					softwareMap);
+			GridDataFactory.swtDefaults().hint(MAP_DIM / 2, height).applyTo(
+					rightPane);
+			GridLayoutFactory.swtDefaults().numColumns(2).generateLayout(shell);
 
-                @Override
-                public void widgetSelected(SelectionEvent e) {
-                    onListSelected();
-                }
+			// get rid of magically appearing label
+			// FIXME find out where this composite comes from
+			Control[] children = shell.getChildren();
+//			System.out.println("*****************************");
+//			for (Control each : children) {
+//				System.out.println(each);
+//			}
+			if (children.length > 1) {
+				Control unwanted = children[0];
+				unwanted.dispose();
+			}
+			shell.pack();
+			return control;
+		}
+	}
 
-                private void onListSelected() {
-                    int[] indices = files.getSelectionIndices();
-                    event.onMeanderSelection(indices);
-                }
+	public static class SoftwareMap extends Composite {
 
-            });
-            for (Location l : map.locations()) {
-                files.add(l.document.name());
-            }
+		public final MapViz applet;
+		public final Map map;
+		private Frame mapFrame;
+		private static final int MAP_DIM = 700;
 
-            StyledText text = new StyledText(rightPane, SWT.BORDER | SWT.MULTI
-                    | SWT.READ_ONLY | SWT.WRAP);
-            tagCloud = new TagCloud(text);
+		public SoftwareMap(Composite parent) {
+			super(parent, SWT.EMBEDDED);
+			mapFrame = SWT_AWT.new_Frame(this);
+			mapFrame.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 
-            GridDataFactory.swtDefaults().hint(MAP_DIM / 2, height / 2)
-                    .applyTo(files);
-            GridDataFactory.swtDefaults().hint(MAP_DIM / 2, height / 2)
-                    .applyTo(text);
-            GridLayoutFactory.fillDefaults().spacing(5, 5).generateLayout(
-                    rightPane);
+			MapVisualization viz = createVizualization();
+			this.map = viz.map;
+			int width = viz.map.getParameters().width;
+			int height = viz.map.getParameters().height;
 
-            GridDataFactory.swtDefaults().hint(width, height).applyTo(
-                    mapComposite);
-            GridDataFactory.swtDefaults().hint(MAP_DIM / 2, height).applyTo(
-                    rightPane);
-            GridLayoutFactory.swtDefaults().numColumns(2).generateLayout(shell);
+			applet = new Applet.MapViz(viz);
+			applet.init();
+			applet.setSize(width, height);
+			mapFrame.add(applet);
+		}
 
-            // get rid of magically appearing label
-            // FIXME find out where this label comes from
-            Control[] children = shell.getChildren();
-            if (children.length > 1) {
-                Control unwanted = children[0];
-                if (unwanted instanceof Label) unwanted.dispose();
-            }
-            shell.pack();
-            return control;
-        }
+		public void setMaximumSize(Dimension dimension) {
+			mapFrame.setMaximumSize(dimension);
+			mapFrame.setLocation(0, 0);
+			mapFrame.setSize(dimension.width, dimension.height);
+		}
 
-        protected MapVisualization createVizualization() {
+		protected MapVisualization createVizualization() {
+			int nth = 1;
+			Serializer ser = new Serializer();
+			ser.model().importMSEFile("mse/junit_with_terms.mse");
+			MSEProject project = ser.model().all(MSEProject.class).iterator()
+					.next();
+			MSERelease release = Get.element(nth, project.releases);
+			MapBuilder builder = Map.builder().size(MAP_DIM, MAP_DIM);
+			for (MSEDocument each : release.documents) {
+				builder.location(each, release.name);
+			}
+			Map map = builder.build();
+			return map.getDefauVisualization();
+		}
 
-            int nth = 1;
-            Serializer ser = new Serializer();
-            ser.model().importMSEFile("mse/junit_with_terms.mse");
-            MSEProject project = ser.model().all(MSEProject.class).iterator()
-                    .next();
-            MSERelease release = Get.element(nth, project.releases);
-            MapBuilder builder = Map.builder().size(MAP_DIM, MAP_DIM);
-            for (MSEDocument each : release.documents) {
-                builder.location(each, release.name);
-            }
-
-            map = builder.build();
-            return map.getDefauVisualization();
-        }
-    }
-
-    private static class GlitchSticksWindow extends AppletWindow {
-
-        @Override
-        protected PApplet createApplet() {
-            PApplet pa = new Applet.GlitchSticks();
-            pa.setSize(512, 512);
-            pa.init();
-            return pa;
-        }
-
-    }
+	}
 }
