@@ -17,7 +17,6 @@ import ch.deif.meander.Map;
 import ch.deif.meander.MapVisualization;
 import ch.deif.meander.MaxDistNearestNeighbor;
 import ch.deif.meander.NearestNeighbor;
-import ch.deif.meander.ui.Meander.EventHandler;
 
 public class Applet {
 
@@ -33,7 +32,7 @@ public class Applet {
         private int height;
         private Map map;
         private Collection<Point> points;
-        private EventHandler event;
+        private IEventHandler event;
 
         private boolean preSelect = false;
         private boolean changed = false;
@@ -43,6 +42,7 @@ public class Applet {
         private Point dragStop;
 
         public MapViz(MapVisualization vizualization) {
+        	event = new NullEventHandler();
             viz = vizualization;
             width = viz.map.getParameters().width;
             height = viz.map.getParameters().height;
@@ -200,7 +200,7 @@ public class Applet {
             }
         }
 
-        public void registerHandler(EventHandler eventHandler) {
+        public void registerHandler(IEventHandler eventHandler) {
             this.event = eventHandler;
         }
 

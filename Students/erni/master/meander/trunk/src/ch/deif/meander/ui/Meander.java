@@ -1,8 +1,6 @@
 package ch.deif.meander.ui;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Frame;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -10,7 +8,6 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionEvent;
@@ -21,81 +18,18 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 
-import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.util.Bag;
-import ch.akuhn.util.Get;
 import ch.akuhn.util.Separator;
 import ch.deif.meander.Location;
-import ch.deif.meander.Map;
-import ch.deif.meander.MapBuilder;
-import ch.deif.meander.MapVisualization;
-import ch.deif.meander.Serializer;
-import ch.deif.meander.Serializer.MSEDocument;
-import ch.deif.meander.Serializer.MSEProject;
-import ch.deif.meander.Serializer.MSERelease;
-import ch.deif.meander.ui.Applet.MapViz;
 
 public class Meander {
 
 	public static void main(String... args) {
 		new MeanderWindow();
-	}
-
-	public static class EventHandler {
-
-		private MeanderWindow window;
-		private MapViz applet;
-
-		public EventHandler(MeanderWindow m, Applet.MapViz a) {
-			window = m;
-			applet = a;
-			a.registerHandler(this);
-			m.registerHandler(this);
-		}
-
-		public void onAppletSelectionCleared() {
-			// System.out.println("clear selection");
-			assert window.getDisplay() != null;
-			window.getDisplay().syncExec(new Runnable() {
-				public void run() {
-					window.files().deselectAll();
-					assert window.cloud() != null;
-					window.cloud().clear();
-				}
-			});
-		}
-
-		public void onAppletSelection(Location location) {
-			ArrayList<Location> l = new ArrayList<Location>();
-			l.add(location);
-			this.onAppletSelection(l);
-		}
-
-		public void onMeanderSelection(int[] indices) {
-			applet.indicesSelected(indices);
-		}
-
-		public void onAppletSelection(final java.util.List<Location> locations) {
-			window.getDisplay().syncExec(new Runnable() {
-				public void run() {
-					Document document;
-					window.files().deselectAll();
-					for (Location each : locations) {
-						document = each.document;
-						int index = window.files().indexOf(document.name());
-						window.files().select(index);
-						window.cloud().append(document.terms());
-					}
-					window.cloud().renderText();
-				}
-			});
-		}
-
 	}
 
 	public static class TagCloud {
@@ -171,7 +105,7 @@ public class Meander {
 		private static int MAP_DIM = 700;
 
 		private List files;
-		private EventHandler event;
+		private IEventHandler event;
 		private TagCloud tagCloud;
 
 		public MeanderWindow() {
@@ -199,7 +133,7 @@ public class Meander {
 			return tagCloud;
 		}
 
-		public void registerHandler(EventHandler eventHandler) {
+		public void registerHandler(IEventHandler eventHandler) {
 			this.event = eventHandler;
 		}
 
@@ -276,10 +210,10 @@ public class Meander {
 			// get rid of magically appearing label
 			// FIXME find out where this composite comes from
 			Control[] children = shell.getChildren();
-//			System.out.println("*****************************");
-//			for (Control each : children) {
-//				System.out.println(each);
-//			}
+			// System.out.println("*****************************");
+			// for (Control each : children) {
+			// System.out.println(each);
+			// }
 			if (children.length > 1) {
 				Control unwanted = children[0];
 				unwanted.dispose();
@@ -287,51 +221,5 @@ public class Meander {
 			shell.pack();
 			return control;
 		}
-	}
-
-	public static class SoftwareMap extends Composite {
-
-		public final MapViz applet;
-		public final Map map;
-		private Frame mapFrame;
-		private static final int MAP_DIM = 700;
-
-		public SoftwareMap(Composite parent) {
-			super(parent, SWT.EMBEDDED);
-			mapFrame = SWT_AWT.new_Frame(this);
-			mapFrame.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-
-			MapVisualization viz = createVizualization();
-			this.map = viz.map;
-			int width = viz.map.getParameters().width;
-			int height = viz.map.getParameters().height;
-
-			applet = new Applet.MapViz(viz);
-			applet.init();
-			applet.setSize(width, height);
-			mapFrame.add(applet);
-		}
-
-		public void setMaximumSize(Dimension dimension) {
-			mapFrame.setMaximumSize(dimension);
-			mapFrame.setLocation(0, 0);
-			mapFrame.setSize(dimension.width, dimension.height);
-		}
-
-		protected MapVisualization createVizualization() {
-			int nth = 1;
-			Serializer ser = new Serializer();
-			ser.model().importMSEFile("mse/junit_with_terms.mse");
-			MSEProject project = ser.model().all(MSEProject.class).iterator()
-					.next();
-			MSERelease release = Get.element(nth, project.releases);
-			MapBuilder builder = Map.builder().size(MAP_DIM, MAP_DIM);
-			for (MSEDocument each : release.documents) {
-				builder.location(each, release.name);
-			}
-			Map map = builder.build();
-			return map.getDefauVisualization();
-		}
-
 	}
 }
