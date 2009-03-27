@@ -1,4 +1,4 @@
-package io;
+package ch.deif.meander.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;
