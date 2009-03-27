@@ -23,8 +23,8 @@ public class Applet {
     @SuppressWarnings("serial")
     public static class MapViz extends PApplet {
 
-        protected final int SELECTION_SIZE = 12;
-        protected final int POINT_STROKE = 4;
+        protected final int SELECTION_SIZE = 10;
+        protected final int POINT_STROKE = 2;
         protected final int BOX_STROKE = 2;
 
         private MapVisualization viz;
