@@ -13,17 +13,13 @@ public class All {
 
     public static <T> boolean notNull(Iterable<T> iter) {
         assert iter != null;
-        for (T t : iter) {
-            if (t == null) return false;
-        }
+        for (T t: iter) if (t == null) return false;
         return true;
     }
 
-    public static boolean notNull(Object[] values) {
+    public static boolean notNull(Object... values) {
         assert values != null;
-        for (Object o : values) {
-            if (o == null) return false;
-        }
+        for (Object each: values) if (each == null) return false;
         return true;
     }
 

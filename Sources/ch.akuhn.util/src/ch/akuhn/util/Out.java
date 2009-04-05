@@ -1,6 +1,5 @@
 package ch.akuhn.util;
 
-import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 
