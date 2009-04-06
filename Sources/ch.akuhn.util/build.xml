@@ -5,8 +5,7 @@
       <jar id="files" zipfile="${file.jar}">
         <fileset dir="bin"><patternset refid="the.patternset"/></fileset>
         <fileset dir="src"><patternset refid="the.patternset"/></fileset>
-        <fileset dir="../Query/bin"><patternset refid="the.patternset"/></fileset>
-        <fileset dir="../Query/src"><patternset refid="the.patternset"/></fileset>
+        <zipfileset src="${foreach.jar}"><patternset refid="the.patternset"/></zipfileset>   	
       </jar>
       <zipfileset id="files" src="${file.jar}"/>
       <pathconvert property="listing" refid="files" pathsep="${line.separator}">
@@ -27,6 +26,7 @@
       </redirector>
     </exec>	
 
+	<property name="foreach.jar" value="lib/foreach-r24969.jar"/>
     <property name="file.jar" value="akuhn-util-r${svnversion}.jar"/>
     <property name="include.sources" value=""/>
     <property name="DONT-include.tests" value=""/>
