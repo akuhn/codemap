@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Meander" default="all" basedir=".">
+	
+    <target name="all" depends="deps, build, jar, cleanup"/>	
+	
+	<target name="deps">
+		<ant inheritAll="false" antfile="../ch.akuhn.util/build.xml"/>
+	    <ant inheritAll="false" antfile="../Fame/build.xml"/>
+	    <ant inheritAll="false" antfile="../Hapax/build.xml"/>		
+
+	</target>
+	
+	<target name="build">
+	    <javac srcdir="src/" destdir="bin/" classpath="../Hapax/bin/" verbose="true"/>
+	</target>
+	
+	<target name="jar" depends="deps, build">
+		<delete file="dist/meander.jar" />
+		<delete file="MANIFEST.MF" />
+		<manifest file="MANIFEST.MF">
+			<attribute name="Built-By" value="${user.name}" />
+			<!-- <attribute name="Main-Class" value="DI" /> -->
+		</manifest>
+        <jar id="files" zipfile="dist/meander.jar" manifest="MANIFEST.MF" >
+        	<!--
+            -->
+            <fileset dir="bin"><patternset refid="the.patternset"/></fileset>
+            <fileset dir="src"><patternset refid="the.patternset"/></fileset>
+            <zipfileset src="lib/core.jar"/>
+            <zipfileset src="lib/jexample-4.4-r277.jar"/>
+            <zipfileset src="lib/itext.jar"/>
+            <zipfileset src="lib/pdf.jar"/>        	
+            <zipfileset src="${ch.akuhn.util.jar}"><patternset refid="the.patternset"/></zipfileset>
+            <zipfileset src="${Hapax.jar}"><patternset refid="the.patternset"/></zipfileset>
+            <zipfileset src="${Fame.jar}"><patternset refid="the.patternset"/></zipfileset>        	
+        </jar>		
+		
+	</target>
+	
+	<target name="cleanup">
+		<delete>
+			<fileset file="MANIFEST.MF" />
+		</delete>
+	</target>
+	
+    <!--from http://www.innovationontherun.com/creating-a-build-number-with-ant-and-subversion-->
+    <exec outputproperty="svnversion-ch.akuh.util" executable="svnversion" dir="../ch.akuhn.util/">
+      <arg line="-n -c" />
+      <redirector>
+        <outputfilterchain>
+          <tokenfilter>
+            <replaceregex pattern="^[0-9]*:?" replace="" flags="g"/>
+          </tokenfilter>
+        </outputfilterchain>
+      </redirector>
+    </exec>
+	
+    <!--from http://www.innovationontherun.com/creating-a-build-number-with-ant-and-subversion-->
+    <exec outputproperty="svnversion-hapax" executable="svnversion" dir="../Hapax/">
+      <arg line="-n -c" />
+      <redirector>
+        <outputfilterchain>
+          <tokenfilter>
+            <replaceregex pattern="^[0-9]*:?" replace="" flags="g"/>
+          </tokenfilter>
+        </outputfilterchain>
+      </redirector>
+    </exec>
+	
+    <!--from http://www.innovationontherun.com/creating-a-build-number-with-ant-and-subversion-->
+    <exec outputproperty="svnversion-fame" executable="svnversion" dir="../Fame/">
+      <arg line="-n -c" />
+      <redirector>
+        <outputfilterchain>
+          <tokenfilter>
+            <replaceregex pattern="^[0-9]*:?" replace="" flags="g"/>
+          </tokenfilter>
+        </outputfilterchain>
+      </redirector>
+    </exec>     	
+	
+	
+    <property name="ch.akuhn.util.jar" value="../ch.akuhn.util/akuhn-util-r${svnversion-ch.akuh.util}.jar"/>
+    <property name="Hapax.jar" value="../Hapax/hapax-r${svnversion-hapax}.jar"/>
+    <property name="Fame.jar" value="../Fame/fame-r${svnversion-fame}.jar"/>   
+	
+    <property name="include.sources" value="true"/>
+    <property name="include.tests" value="false"/>	
+	
+	
+    <patternset id="the.patternset">
+        <include name="COPYING*"/>
+        <include name="ch/**/*.java" if="include.sources"/>
+        <include name="ch/**/*.class"/>
+        <exclude name="**/*Test*" unless="include.tests"/>                   
+    </patternset>	
+	
+</project>

@@ -53,7 +53,7 @@ public class SoftwareMap extends Composite {
 	protected MapVisualization createVizualization() {
 		int nth = 1;
 		Serializer ser = new Serializer();
-		ser.model().importMSEFile("mse/junit_with_terms.mse");
+		ser.model().importMSEFile("/Users/deif/Documents/workspace_galileo/Meander/mse/junit_with_terms.mse");
 		MSEProject project = ser.model().all(MSEProject.class).iterator()
 				.next();
 		MSERelease release = Get.element(nth, project.releases);
