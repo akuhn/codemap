@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Iterator;
 
-import jexample.Depends;
-import jexample.JExample;
+import ch.unibe.jexample.Given;
+import ch.unibe.jexample.JExample;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +26,7 @@ public class MapTest {
     }
 
     @Test
-    @Depends("#fiveOnThreeMap")
+    @Given("#fiveOnThreeMap")
     public void testPixelCoordinates(Map map) {
         Iterator<Pixel> it = map.pixels().iterator();
         Pixel p;
@@ -54,7 +54,7 @@ public class MapTest {
     }
 
     @Test
-    @Depends("#fiveOnThreeMap")
+    @Given("#fiveOnThreeMap")
     public Map mapWithDEM(Map map) {
         assertEquals(false, map.hasDEM());
         new DEMAlgorithm(map).run();
@@ -63,7 +63,7 @@ public class MapTest {
     }
 
     @Test
-    @Depends("#mapWithDEM")
+    @Given("#mapWithDEM")
     public void testPixelElevation(Map map) {
         Pixel p;
         p = map.get(2, 1);
