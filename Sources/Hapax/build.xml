@@ -6,8 +6,8 @@
       <jar id="files" zipfile="${file.jar}" duplicate="preserve">
         <fileset dir="bin"><patternset refid="the.patternset"/></fileset>
         <fileset dir="src"><patternset refid="the.patternset"/></fileset>
-        <fileset dir="../Query/bin"><patternset refid="the.patternset"/></fileset>
-        <fileset dir="../Query/src"><patternset refid="the.patternset"/></fileset>
+        <fileset dir="../ForEach DSL/bin"><patternset refid="the.patternset"/></fileset>
+        <fileset dir="../ForEach DSL/src"><patternset refid="the.patternset"/></fileset>
         <fileset dir="../ch.akuhn.util/bin"><patternset refid="the.patternset"/></fileset>
         <fileset dir="../ch.akuhn.util/src"><patternset refid="the.patternset"/></fileset>
     	<zipfileset src="lib/snowball.jar">
@@ -23,6 +23,24 @@
       <echo message="${listing}"/>
     </target>
 	
+    <target name="lib-package">
+      <delete file="hapax-lib.jar"/>
+      <jar id="files" zipfile="hapax-lib.jar" duplicate="preserve">
+        <fileset dir="bin"><patternset refid="the.lib-patternset"/></fileset>
+        <fileset dir="src"><patternset refid="the.lib-patternset"/></fileset>
+        <zipfileset src="lib/snowball.jar">
+            <include name="org/tartarus/snowball/Among*.*"/> 
+            <include name="org/tartarus/snowball/Snowball*.*"/> 
+            <include name="org/tartarus/snowball/ext/porter*"/> 
+        </zipfileset>
+      </jar>
+      <zipfileset id="files" src="hapax-lib.jar"/>
+      <pathconvert property="listing" refid="files" pathsep="${line.separator}">
+        <globmapper from="${basedir}${file.separator}*" to="*"/>
+      </pathconvert>    
+      <echo message="${listing}"/>
+    </target>	
+	
     <!--from http://www.innovationontherun.com/creating-a-build-number-with-ant-and-subversion-->
     <exec outputproperty="svnversion" executable="svnversion" dir=".">
       <arg line="-n -c" />
@@ -36,7 +54,7 @@
     </exec>	
 
     <property name="file.jar" value="hapax-r${svnversion}.jar"/>
-    <property name="include.sources" value="off"/>
+    <property name="include.sources" value="true"/>
     <property name="DONT-include.tests" value="off"/>
 
     <patternset id="the.patternset">
@@ -46,6 +64,13 @@
         <include name="ch/**/resources/*"/>
         <exclude name="**/*Test*" unless="include.tests"/>                   
     </patternset>
+	
+    <patternset id="the.lib-patternset">
+        <include name="COPYING*"/>
+        <include name="ch/**/*.java" if="include.sources"/>
+        <include name="ch/**/*.class"/>
+        <include name="ch/**/resources/*"/>          
+    </patternset>	
 	
 	
 </project>
