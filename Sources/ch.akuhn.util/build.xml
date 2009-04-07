@@ -14,6 +14,18 @@
       <echo message="${listing}"/>
     </target>
 	
+    <target name="lib-package">
+      <jar id="files" zipfile="ch.akuhn.util-lib.jar">
+        <fileset dir="bin"><patternset refid="the.lib-patternset"/></fileset>
+        <fileset dir="src"><patternset refid="the.lib-patternset"/></fileset>   
+      </jar>
+      <zipfileset id="files" src="ch.akuhn.util-lib.jar"/>
+      <pathconvert property="listing" refid="files" pathsep="${line.separator}">
+        <globmapper from="${basedir}${file.separator}*" to="*"/>
+      </pathconvert>    
+      <echo message="${listing}"/>
+    </target>	
+	
     <!--from http://www.innovationontherun.com/creating-a-build-number-with-ant-and-subversion-->
     <exec outputproperty="svnversion" executable="svnversion" dir=".">
       <arg line="-n -c" />
@@ -37,6 +49,13 @@
         <include name="ch/**/*.class"/>
         <exclude name="**/*Test*" unless="include.tests"/>                   
     </patternset>
+
+    <patternset id="the.lib-patternset">
+        <include name="COPYING*"/>
+        <include name="ch/**/*.java"/>
+        <include name="ch/**/*.class"/>
+        <exclude name="**/*Test*"/>                      
+    </patternset>   
 	
 	
 </project>
