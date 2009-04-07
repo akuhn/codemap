@@ -14,18 +14,18 @@
 	    <javac srcdir="src/" destdir="bin/" classpath="../Hapax/bin/" verbose="true"/>
 	</target>
 	
-	<target name="jar" depends="deps, build">
+	<target name="jar" depends="build">
 		<delete file="dist/meander.jar" />
 		<delete file="MANIFEST.MF" />
 		<manifest file="MANIFEST.MF">
 			<attribute name="Built-By" value="${user.name}" />
 			<!-- <attribute name="Main-Class" value="DI" /> -->
 		</manifest>
-        <jar id="files" zipfile="dist/meander.jar" manifest="MANIFEST.MF" >
-        	<!--
-            -->
+        <jar id="files" destfile="dist/meander.jar" manifest="MANIFEST.MF" >
+        	
             <fileset dir="bin"><patternset refid="the.patternset"/></fileset>
             <fileset dir="src"><patternset refid="the.patternset"/></fileset>
+        	
             <zipfileset src="lib/core.jar"/>
             <zipfileset src="lib/jexample-4.4-r277.jar"/>
             <zipfileset src="lib/itext.jar"/>
@@ -34,8 +34,9 @@
             <zipfileset src="../ForEach DSL/foreach-lib.jar"/>        	
             <zipfileset src="../Hapax/hapax-lib.jar"/>
             <zipfileset src="../Fame/fame-lib.jar"/>        	
+        	<!--
+            -->
         </jar>		
-		
 	</target>
 	
 	<target name="cleanup">
@@ -52,6 +53,7 @@
         <include name="COPYING*"/>
         <include name="ch/**/*.java" if="include.sources"/>
         <include name="ch/**/*.class"/>
+        <include name="ch/**/*.mse"/>    	
         <exclude name="**/*Test*" unless="include.tests"/>                   
     </patternset>	
 	

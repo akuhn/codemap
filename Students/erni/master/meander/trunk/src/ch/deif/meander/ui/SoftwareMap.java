@@ -6,6 +6,8 @@ package ch.deif.meander.ui;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.io.File;
+import java.io.FileInputStream;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -19,6 +21,7 @@ import ch.deif.meander.Serializer;
 import ch.deif.meander.Serializer.MSEDocument;
 import ch.deif.meander.Serializer.MSEProject;
 import ch.deif.meander.Serializer.MSERelease;
+import ch.deif.meander.resources.MSE;
 import ch.deif.meander.ui.Applet.MapViz;
 
 public class SoftwareMap extends Composite {
@@ -54,7 +57,8 @@ public class SoftwareMap extends Composite {
 		int nth = 1;
 		Serializer ser = new Serializer();
 		//TODO: do not use absolute paths here ...
-		ser.model().importMSEFile("/Users/deif/Documents/workspace_galileo/Meander/mse/junit_with_terms.mse");
+		
+		ser.model().importMSE(MSE.junit());
 		MSEProject project = ser.model().all(MSEProject.class).iterator()
 				.next();
 		MSERelease release = Get.element(nth, project.releases);
