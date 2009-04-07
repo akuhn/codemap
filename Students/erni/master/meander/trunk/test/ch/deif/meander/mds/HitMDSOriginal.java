@@ -15,7 +15,7 @@ import static java.lang.Math.sqrt;
  *         reconstruction. Based on signs of directions to maximize correlation
  */
 public class HitMDSOriginal {
-    private static final boolean DEBUG_OUTPUT = true;
+    private static final boolean DEBUG_OUTPUT = false;
 
     private static final double M_EXPONENT = 0.0;
 
@@ -296,7 +296,6 @@ public class HitMDSOriginal {
             }
 
             i = shuffle_next();
-            // System.out.println("shuffle=" + i);
 
             for (k = 0; k < target_dim; k++)
                 delta_point[k] = 0.;

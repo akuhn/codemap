@@ -28,7 +28,6 @@ public class HillshadeVisualization extends MapVisualization {
 
     @Override
     public void drawOn(PImage img) {
-        Out.puts(img.width, map.width, img.height, map.height);
         assert img.width == map.width && img.height == map.height;
         int[] pixels = img.pixels;
         int index = 0;

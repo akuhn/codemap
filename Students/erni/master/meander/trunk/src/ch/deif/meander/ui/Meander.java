@@ -146,11 +146,9 @@ public class Meander {
 
 			int width = softwareMap.applet.getWidth();
 			int height = softwareMap.applet.getHeight();
-			System.out.println(width + " - " + height);
 
 			// mapFrame.setSize(width, height);
 			softwareMap.setMaximumSize(new Dimension(width, height));
-			// System.out.println(mapFrame);
 
 			softwareMap.setSize(width, height);
 			softwareMap.setLayout(new FillLayout());
@@ -210,10 +208,6 @@ public class Meander {
 			// get rid of magically appearing label
 			// FIXME find out where this composite comes from
 			Control[] children = shell.getChildren();
-			// System.out.println("*****************************");
-			// for (Control each : children) {
-			// System.out.println(each);
-			// }
 			if (children.length > 1) {
 				Control unwanted = children[0];
 				unwanted.dispose();

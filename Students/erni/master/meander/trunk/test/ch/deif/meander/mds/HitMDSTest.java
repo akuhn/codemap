@@ -25,8 +25,6 @@ public class HitMDSTest {
         for (int i = 0; i < a.length; i++)
             for (int j = 0; j < a.length; j++) {
                 a[i][j] = Double.parseDouble(sp[i * a.length + j]);
-                System.out.print("d[" + i + "][" + j + "] = "
-                        + sp[i * a.length + j] + ";");
                 if (j == a.length - 1) System.out.println("");
                 else System.out.print(" ");
             }

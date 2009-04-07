@@ -25,7 +25,6 @@ public class EventHandler implements IEventHandler {
 	 * @see ch.deif.meander.ui.IEventHandler#onAppletSelectionCleared()
 	 */
 	public void onAppletSelectionCleared() {
-		// System.out.println("clear selection");
 		assert window.getDisplay() != null;
 		window.getDisplay().syncExec(new Runnable() {
 			public void run() {

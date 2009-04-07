@@ -61,9 +61,7 @@ public class MDS {
         for (double value : index.documentCorrelations()) {
             out.append(' ');
             out.print((float) value);
-            if (delim.tally()) System.out.print(delim);
         }
-        System.out.println();
         out.append('\n');
         if (locations == null) {
             out.print("# -2\n");

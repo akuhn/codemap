@@ -116,7 +116,6 @@ public class Applet {
         @Override
         public void keyTyped(KeyEvent e) {
             super.keyTyped(e);
-            // System.out.println(e.getKeyChar());
             if (e.getKeyChar() == 's') {
                 togglePreSelect();
                 setNeedsRedraw();
@@ -152,7 +151,6 @@ public class Applet {
             }
             unsetSelectionBox();
             setNeedsRedraw();
-            // System.out.println("Mouse clicked");
         }
 
         private void unsetSelectionBox() {
@@ -181,9 +179,6 @@ public class Applet {
                 dragStart = new Point(minX, minY);
                 dragStop = new Point(maxX, maxY);
                 List<Location> selected = new ArrayList<Location>();
-                // System.out.println("start: " + dragStart.x + " " +
-                // dragStart.y);
-                // System.out.println("stop: " + dragStop.x + " " + dragStop.y);
                 points.clear();
                 for (Location each : map.locations()) {
                     int x = (int) Math.round(each.x * map.height);

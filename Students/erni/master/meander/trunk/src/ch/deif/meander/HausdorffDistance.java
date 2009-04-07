@@ -56,14 +56,12 @@ public class HausdorffDistance {
     public double D22(Map A, Map B) {
         double ab = d6(A, B);
         double ba = d6(B, A);
-        // System.out.printf("# d(A,B) = %f; d(B,A) = %f\n", ab, ba);
         return Math.max(ab, ba);
     }
 
     public double D23(Map A, Map B) {
         double ab = d6(A, B);
         double ba = d6(B, A);
-        // System.out.printf("# d(A,B) = %f; d(B,A) = %f\n", ab, ba);
         return ab + ba / 2;
     }
 

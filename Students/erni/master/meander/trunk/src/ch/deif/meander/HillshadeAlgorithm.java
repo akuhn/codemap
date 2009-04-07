@@ -45,8 +45,6 @@ public class HillshadeAlgorithm extends MapAlgorithm {
             MAX = Math.max(MAX, k.elevation());
 
         }
-
-        System.out.println("MAX= " + MAX);
     }
 
 }

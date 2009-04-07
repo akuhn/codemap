@@ -13,7 +13,6 @@ public class WeDontNeedNoPApplet {
             true, PFont.DEFAULT_CHARSET);
 
     public static void main(String[] args) throws Throwable {
-        // for (Object each: PFont.list()) System.out.println(each);
         drawToPNG();
         drawToPDF();
     }

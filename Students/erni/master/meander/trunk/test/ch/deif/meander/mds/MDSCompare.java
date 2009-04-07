@@ -5,7 +5,7 @@ import static org.junit.Assert.assertArrayEquals;
 import org.junit.Test;
 
 public class MDSCompare {
-
+    
     @Test
     public void checkSameOutput() {
         assertArrayEquals(originalMds(), newMDS());
