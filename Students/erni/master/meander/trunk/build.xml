@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Meander" default="all" basedir=".">
-	
-    <target name="all" depends="deps, build, jar, cleanup"/>	
-	
+
+	<target name="all" depends="deps, build, jar, cleanup" />
+
 	<target name="deps">
-		<ant inheritAll="false" antfile="../ForEach DSL/build.xml" target="lib-package"/>
-		<ant inheritAll="false" antfile="../ch.akuhn.util/build.xml" target="lib-package"/>
-	    <ant inheritAll="false" antfile="../Fame/build.xml" target="lib-package"/>
-	    <ant inheritAll="false" antfile="../Hapax/build.xml" target="lib-package"/>		
+		<ant inheritAll="false" antfile="../ForEach DSL/build.xml" target="lib-package" />
+		<ant inheritAll="false" antfile="../ch.akuhn.util/build.xml" target="lib-package" />
+		<ant inheritAll="false" antfile="../Fame/build.xml" target="lib-package" />
+		<ant inheritAll="false" antfile="../Hapax/build.xml" target="lib-package" />
 	</target>
-	
+
 	<target name="build">
-	    <javac srcdir="src/" destdir="bin/" classpath="../Hapax/bin/" verbose="true"/>
+		<javac srcdir="src/" destdir="bin/" classpath="../Hapax/bin/" verbose="true" />
 	</target>
-	
+
 	<target name="jar" depends="build">
 		<delete file="meander.jar" />
 		<delete file="MANIFEST.MF" />
@@ -21,40 +21,45 @@
 			<attribute name="Built-By" value="${user.name}" />
 			<!-- <attribute name="Main-Class" value="DI" /> -->
 		</manifest>
-        <jar id="files" destfile="meander.jar" manifest="MANIFEST.MF" >
-        	
-            <fileset dir="bin"><patternset refid="the.patternset"/></fileset>
-            <fileset dir="src"><patternset refid="the.patternset"/></fileset>
-        	
-            <zipfileset src="lib/core.jar"/>
-            <zipfileset src="lib/jexample-4.4-r277.jar"/>
-            <zipfileset src="lib/itext.jar"/>
-            <zipfileset src="lib/pdf.jar"/>        	
-            <zipfileset src="../ch.akuhn.util/ch.akuhn.util-lib.jar"/>
-            <zipfileset src="../ForEach DSL/foreach-lib.jar"/>        	
-            <zipfileset src="../Hapax/hapax-lib.jar"/>
-            <zipfileset src="../Fame/fame-lib.jar"/>        	
-        	<!--
+		<jar id="files" destfile="meander.jar" manifest="MANIFEST.MF">
+
+			<fileset dir="bin">
+				<patternset refid="the.patternset" />
+			</fileset>
+			<fileset dir="src">
+				<patternset refid="the.patternset" />
+			</fileset>
+
+			<zipfileset src="lib/core.jar" />
+			<zipfileset src="lib/jexample-4.4-r277.jar" />
+			<zipfileset src="lib/itext.jar" />
+			<zipfileset src="lib/pdf.jar" />
+			<zipfileset src="../ch.akuhn.util/ch.akuhn.util-lib.jar" />
+			<zipfileset src="../ForEach DSL/foreach-lib.jar" />
+			<zipfileset src="../Hapax/hapax-lib.jar" />
+			<zipfileset src="../Fame/fame-lib.jar" />
+			<!--
             -->
-        </jar>		
+		</jar>
+		<copy file="meander.jar" todir="../ch.deif.SoftwareMap/lib/" overwrite="true" />
 	</target>
-	
+
 	<target name="cleanup">
 		<delete>
 			<fileset file="MANIFEST.MF" />
 		</delete>
 	</target>
-	
-    <property name="include.sources" value="true"/>
-    <property name="include.tests" value="false"/>	
-	
-	
-    <patternset id="the.patternset">
-        <include name="COPYING*"/>
-        <include name="ch/**/*.java" if="include.sources"/>
-        <include name="ch/**/*.class"/>
-        <include name="ch/**/*.mse"/>    	
-        <exclude name="**/*Test*" unless="include.tests"/>                   
-    </patternset>	
-	
+
+	<property name="include.sources" value="true" />
+	<property name="include.tests" value="false" />
+
+
+	<patternset id="the.patternset">
+		<include name="COPYING*" />
+		<include name="ch/**/*.java" if="include.sources" />
+		<include name="ch/**/*.class" />
+		<include name="ch/**/*.mse" />
+		<exclude name="**/*Test*" unless="include.tests" />
+	</patternset>
+
 </project>
