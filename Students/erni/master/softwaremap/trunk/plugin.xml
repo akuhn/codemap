@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Software Cartography"
+            id="SoftwareMap">
+      </category>
+      <view
+            name="Map View"
+            icon="icons/sample.gif"
+            category="SoftwareMap"
+            class="ch.deif.softwaremap.views.MapView"
+            id="softwaremap.views.MapView">
+      </view>
+   </extension>
+
+</plugin>
