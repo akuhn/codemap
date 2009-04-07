@@ -138,7 +138,7 @@ public class StringsTest {
         String abc = "abcdef";
         int index = 0;
         for (Character each : chars(abc)) {
-            assertEquals(abc.charAt(index++), each);
+            assertEquals(abc.charAt(index++), (char)each);
         }
         assertEquals(index, abc.length());
     }

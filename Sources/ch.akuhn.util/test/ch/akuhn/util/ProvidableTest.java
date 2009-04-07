@@ -25,9 +25,9 @@ public class ProvidableTest {
     @Test
     public void testIterator() {
         Iterator<Integer> iter = newDummy().iterator();
-        assertEquals(42, iter.next());
-        assertEquals(43, iter.next());
-        assertEquals(44, iter.next());
+        assertEquals(42, (int)iter.next());
+        assertEquals(43, (int)iter.next());
+        assertEquals(44, (int)iter.next());
         assertEquals(false, iter.hasNext());
     }
     
@@ -46,13 +46,13 @@ public class ProvidableTest {
         Iterator<Integer> iter_A = dummy.iterator();
         Iterator<Integer> iter_B = dummy.iterator();
         assertNotSame(iter_A,iter_B);
-        assertEquals(42, iter_A.next());
-        assertEquals(43, iter_A.next());
-        assertEquals(42, iter_B.next());
-        assertEquals(44, iter_A.next());
-        assertEquals(43, iter_B.next());
+        assertEquals(42, (int)iter_A.next());
+        assertEquals(43, (int)iter_A.next());
+        assertEquals(42, (int)iter_B.next());
+        assertEquals(44, (int)iter_A.next());
+        assertEquals(43, (int)iter_B.next());
         assertEquals(false, iter_A.hasNext());
-        assertEquals(44, iter_B.next());
+        assertEquals(44, (int)iter_B.next());
         assertEquals(false, iter_A.hasNext());
     }
     
