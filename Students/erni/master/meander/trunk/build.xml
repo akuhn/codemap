@@ -15,13 +15,13 @@
 	</target>
 	
 	<target name="jar" depends="build">
-		<delete file="dist/meander.jar" />
+		<delete file="meander.jar" />
 		<delete file="MANIFEST.MF" />
 		<manifest file="MANIFEST.MF">
 			<attribute name="Built-By" value="${user.name}" />
 			<!-- <attribute name="Main-Class" value="DI" /> -->
 		</manifest>
-        <jar id="files" destfile="dist/meander.jar" manifest="MANIFEST.MF" >
+        <jar id="files" destfile="meander.jar" manifest="MANIFEST.MF" >
         	
             <fileset dir="bin"><patternset refid="the.patternset"/></fileset>
             <fileset dir="src"><patternset refid="the.patternset"/></fileset>
