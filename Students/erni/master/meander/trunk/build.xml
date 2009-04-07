@@ -4,10 +4,10 @@
     <target name="all" depends="deps, build, jar, cleanup"/>	
 	
 	<target name="deps">
-		<ant inheritAll="false" antfile="../ch.akuhn.util/build.xml"/>
-	    <ant inheritAll="false" antfile="../Fame/build.xml"/>
-	    <ant inheritAll="false" antfile="../Hapax/build.xml"/>		
-
+		<ant inheritAll="false" antfile="../ForEach DSL/build.xml" target="lib-package"/>
+		<ant inheritAll="false" antfile="../ch.akuhn.util/build.xml" target="lib-package"/>
+	    <ant inheritAll="false" antfile="../Fame/build.xml" target="lib-package"/>
+	    <ant inheritAll="false" antfile="../Hapax/build.xml" target="lib-package"/>		
 	</target>
 	
 	<target name="build">
@@ -30,9 +30,10 @@
             <zipfileset src="lib/jexample-4.4-r277.jar"/>
             <zipfileset src="lib/itext.jar"/>
             <zipfileset src="lib/pdf.jar"/>        	
-            <zipfileset src="${ch.akuhn.util.jar}"><patternset refid="the.patternset"/></zipfileset>
-            <zipfileset src="${Hapax.jar}"><patternset refid="the.patternset"/></zipfileset>
-            <zipfileset src="${Fame.jar}"><patternset refid="the.patternset"/></zipfileset>        	
+            <zipfileset src="../ch.akuhn.util/ch.akuhn.util-lib.jar"/>
+            <zipfileset src="../ForEach DSL/foreach-lib.jar"/>        	
+            <zipfileset src="../Hapax/hapax-lib.jar"/>
+            <zipfileset src="../Fame/fame-lib.jar"/>        	
         </jar>		
 		
 	</target>
@@ -42,47 +43,6 @@
 			<fileset file="MANIFEST.MF" />
 		</delete>
 	</target>
-	
-    <!--from http://www.innovationontherun.com/creating-a-build-number-with-ant-and-subversion-->
-    <exec outputproperty="svnversion-ch.akuh.util" executable="svnversion" dir="../ch.akuhn.util/">
-      <arg line="-n -c" />
-      <redirector>
-        <outputfilterchain>
-          <tokenfilter>
-            <replaceregex pattern="^[0-9]*:?" replace="" flags="g"/>
-          </tokenfilter>
-        </outputfilterchain>
-      </redirector>
-    </exec>
-	
-    <!--from http://www.innovationontherun.com/creating-a-build-number-with-ant-and-subversion-->
-    <exec outputproperty="svnversion-hapax" executable="svnversion" dir="../Hapax/">
-      <arg line="-n -c" />
-      <redirector>
-        <outputfilterchain>
-          <tokenfilter>
-            <replaceregex pattern="^[0-9]*:?" replace="" flags="g"/>
-          </tokenfilter>
-        </outputfilterchain>
-      </redirector>
-    </exec>
-	
-    <!--from http://www.innovationontherun.com/creating-a-build-number-with-ant-and-subversion-->
-    <exec outputproperty="svnversion-fame" executable="svnversion" dir="../Fame/">
-      <arg line="-n -c" />
-      <redirector>
-        <outputfilterchain>
-          <tokenfilter>
-            <replaceregex pattern="^[0-9]*:?" replace="" flags="g"/>
-          </tokenfilter>
-        </outputfilterchain>
-      </redirector>
-    </exec>     	
-	
-	
-    <property name="ch.akuhn.util.jar" value="../ch.akuhn.util/akuhn-util-r${svnversion-ch.akuh.util}.jar"/>
-    <property name="Hapax.jar" value="../Hapax/hapax-r${svnversion-hapax}.jar"/>
-    <property name="Fame.jar" value="../Fame/fame-r${svnversion-fame}.jar"/>   
 	
     <property name="include.sources" value="true"/>
     <property name="include.tests" value="false"/>	

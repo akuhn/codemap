@@ -11,5 +11,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/Hapax"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Fame"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/SWT &amp; JFace"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ch.akuhn.util"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
