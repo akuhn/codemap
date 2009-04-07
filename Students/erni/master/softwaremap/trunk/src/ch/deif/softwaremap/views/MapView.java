@@ -38,8 +38,7 @@ public class MapView extends ViewPart {
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "softwaremap.views.MapView";
-
-	private TableViewer viewer;
+	private SoftwareMap softwareMap;
 
 	/*
 	 * The content provider class is responsible for
@@ -86,13 +85,13 @@ public class MapView extends ViewPart {
 	 * to create the viewer and initialize it.
 	 */
 	public void createPartControl(Composite parent) {
-		new SoftwareMap(parent);
+		softwareMap = new SoftwareMap(parent);
 	}	
 
 	/**
 	 * Passing the focus request to the viewer's control.
 	 */
 	public void setFocus() {
-		viewer.getControl().setFocus();
+		softwareMap.setFocus();
 	}
 }
