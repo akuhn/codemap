@@ -36,7 +36,19 @@ public class ArrowOverlay extends MapVisualization {
             float y1 = from.y * pg.height;
             float x2 = to.x * pg.width;
             float y2 = to.y * pg.height;
-            float w = 40.0f;
+            float w = 8.0f;
+            pg.noFill();
+            pg.stroke(0,0,0,20);
+            drawArrowShape(pg, x1+3, y1+3, x2+3, y2+3, w, w-2);
+            drawArrowShape(pg, x1+3, y1+3, x2+3, y2+3, w, w);
+            drawArrowShape(pg, x1+3, y1+3, x2+3, y2+3, w, w+2);
+            pg.stroke(255);
+            pg.strokeWeight(w);
+            drawArrowShape(pg, x1, y1, x2, y2, w, w);
+            pg.strokeWeight(1.0f);  
+        }
+
+        private void drawArrowShape(PGraphics pg, float x1, float y1, float x2, float y2, float len, float w) {
             pg.strokeWeight(w);
             pg.line(x1, y1, x2, y2);
             pg.pushMatrix();
@@ -44,15 +56,11 @@ public class ArrowOverlay extends MapVisualization {
             float a = (float) Math.atan2(x1-x2, y2-y1);
             pg.rotate(a);
             pg.beginShape();
-            pg.vertex(w * -1.5f, w * -2f);
+            pg.vertex(len * -1.5f, len * -2.5f);
             pg.vertex(0,0);
-            pg.vertex(w * +1.5f, w * -2f);
+            pg.vertex(len * +1.5f, len * -2.5f);
             pg.endShape();
             pg.popMatrix();
-            pg.strokeWeight(1.0f);  
-            pg.fill(255);
-            pg.rect(x1-2,y1-2,4,4);
-            pg.rect(x1-100,y1-100,200,200);
         }
 
         public Location from, to;

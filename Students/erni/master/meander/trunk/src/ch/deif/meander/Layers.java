@@ -26,5 +26,9 @@ public class Layers extends MapVisualization {
         for (MapVisualization overlay: layers) overlay.draw(pg);
     }
 
+    public void useHillshading() {
+        background = new HillshadeVisualization(map);
+    }
+
 
 }
