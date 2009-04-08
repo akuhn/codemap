@@ -17,8 +17,7 @@ public class DebugDEMVisualization extends MapVisualization {
         pg.image(img, 0, 0);
     }
 
-    @Override
-    public void drawOn(PImage img) {
+    private void drawOn(PImage img) {
         int[] pixels = img.pixels;
         int index = 0;
         for (Pixel p : map.pixels()) {

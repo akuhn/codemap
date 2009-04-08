@@ -83,6 +83,4 @@ public abstract class MapVisualization {
         return img;
     }
 
-    public abstract void drawOn(PImage img);
-
 }

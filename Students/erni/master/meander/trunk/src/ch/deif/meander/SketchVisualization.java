@@ -28,9 +28,4 @@ public class SketchVisualization extends MapVisualization {
         }
     }
 
-    @Override
-    public void drawOn(PImage img) {
-        throw new NotImplementedException();
-    }
-
 }

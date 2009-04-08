@@ -71,5 +71,5 @@ public class MapTest {
         assertEquals(0.5, p.yNormed(), NaN);
         assertEquals(100, p.elevation(), 1e-2);
     }
-
+    
 }

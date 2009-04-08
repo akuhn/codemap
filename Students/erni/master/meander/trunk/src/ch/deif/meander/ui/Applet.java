@@ -11,6 +11,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import processing.core.PApplet;
+import processing.core.PGraphics;
+import processing.core.PGraphicsJava2D;
 import processing.core.PImage;
 import ch.deif.meander.Location;
 import ch.deif.meander.Map;
@@ -36,7 +38,7 @@ public class Applet {
 
         private boolean preSelect = false;
         private boolean changed = false;
-        private PImage background;
+        private PGraphics background;
 
         private Point dragStart;
         private Point dragStop;
@@ -49,7 +51,8 @@ public class Applet {
             map = viz.map;
             // TODO check if the concurrency problem really comes from the points
             points = Collections.synchronizedSet(new HashSet<Point>());
-            background = new PImage(width, height);
+            background = new PGraphicsJava2D();
+            background.setSize(width, height);
         }
 
         @Override
@@ -59,7 +62,7 @@ public class Applet {
             noFill();
             strokeWeight(POINT_STROKE);
             size(width, height);
-            viz.drawOn(background);
+            viz.draw(background);
             loadPixels();
             setNeedsRedraw();
         }

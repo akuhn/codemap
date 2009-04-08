@@ -26,8 +26,7 @@ public class HillshadeVisualization extends MapVisualization {
         return new MColor(0, 68, 255);
     }
 
-    @Override
-    public void drawOn(PImage img) {
+    private void drawOn(PImage img) {
         assert img.width == map.width && img.height == map.height;
         int[] pixels = img.pixels;
         int index = 0;
