@@ -65,7 +65,9 @@ public class SparseVector extends Vector {
     public double add(int key, double value) {
         if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer.toString(key));
         // tally$total++;
-        int spot = Arrays.binarySearch(keys, 0, used, key);
+//        not supported in 1.5?
+//        int spot = Arrays.binarySearch(keys, 0, used, key);        
+        int spot = Arrays.binarySearch(keys, key);
         if (spot >= 0) return values[spot] += value;
         return update(-1 - spot, key, value);
     }
@@ -93,7 +95,7 @@ public class SparseVector extends Vector {
     @Override
     public double get(int key) {
         if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer.toString(key));
-        int spot = Arrays.binarySearch(keys, 0, used, key);
+        int spot = Arrays.binarySearch(keys, key);
         return spot < 0 ? 0 : values[spot];
     }
 
@@ -104,13 +106,13 @@ public class SparseVector extends Vector {
     }
 
     public boolean isUsed(int key) {
-        return 0 <= Arrays.binarySearch(keys, 0, used, key);
+        return 0 <= Arrays.binarySearch(keys, key);
     }
 
     @Override
     public double put(int key, double value) {
         if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer.toString(key));
-        int spot = Arrays.binarySearch(keys, 0, used, key);
+        int spot = Arrays.binarySearch(keys, key);
         if (spot >= 0) return values[spot] = (float) value;
         else return update(-1 - spot, key, value);
     }
@@ -129,9 +131,9 @@ public class SparseVector extends Vector {
         // grow if reaching end of capacity
         if (used == keys.length) {
             // tally$grow++;
-            int capacity = (keys.length * 3) / 2 + 1;
-            keys = Arrays.copyOf(keys, capacity);
-            values = Arrays.copyOf(values, capacity);
+            int capacity = (keys.length * 3) / 2 + 1;            
+            keys = arrayCopyOf(keys, capacity);
+            values = arrayCopyOf(values, capacity);
         }
         // shift values if not appending
         if (spot < used) {
@@ -144,14 +146,28 @@ public class SparseVector extends Vector {
         return values[spot] = (float) value;
     }
 
+    public static int[] arrayCopyOf(int[] original, int newLength) {
+        int[] copy = new int[newLength];
+        System.arraycopy(original, 0, copy, 0,
+                         Math.min(original.length, newLength));
+        return copy;
+    }
+    
+    public static float[] arrayCopyOf(float[] original, int newLength) {
+        float[] copy = new float[newLength];
+        System.arraycopy(original, 0, copy, 0,
+                         Math.min(original.length, newLength));
+        return copy;
+    }
+    
     @Override
     public int used() {
         return used;
     }
     
     public void trim() {
-        keys = Arrays.copyOf(keys, used);
-        values = Arrays.copyOf(values, used);
+        keys = arrayCopyOf(keys, used);
+        values = arrayCopyOf(values, used);
     }
     
 

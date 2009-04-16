@@ -21,7 +21,6 @@ public class FileResource implements Resource {
         this.file = file;
     }
     
-    @Override
     public ResourceStream open() {
         return new ReadStream();
     }
@@ -40,7 +39,6 @@ public class FileResource implements Resource {
             }
         }
 
-        @Override
         public int nextInt() {
             try {
                 return binary.readInt();
@@ -49,7 +47,6 @@ public class FileResource implements Resource {
             }
         }
 
-        @Override
         public void close() {
             try {
                 binary.close();
@@ -58,7 +55,6 @@ public class FileResource implements Resource {
             }
         }
 
-        @Override
         public double nextDouble() {
             try {
                 return binary.readDouble();
@@ -67,13 +63,11 @@ public class FileResource implements Resource {
             }
         }
 
-        @Override
         public ResourceStream put(double value) {
             // TODO Auto-generated method stub
             return null;
         }
 
-        @Override
         public ResourceStream put(int value) {
             // TODO Auto-generated method stub
             return null;
@@ -81,7 +75,6 @@ public class FileResource implements Resource {
         
     }
 
-    @Override
     public ResourceStream writeStream() {
         return new WriteStream();
     }
@@ -100,7 +93,6 @@ public class FileResource implements Resource {
             }
         }
 
-        @Override
         public ResourceStream put(int value) {
             try {
                 binary.writeInt(value);
@@ -110,7 +102,6 @@ public class FileResource implements Resource {
             }
         }
 
-        @Override
         public ResourceStream put(double value) {
             try {
                 binary.writeDouble(value);
@@ -120,7 +111,6 @@ public class FileResource implements Resource {
             }
         }
         
-        @Override
         public void close() {
             try {
                 binary.close();
@@ -130,13 +120,11 @@ public class FileResource implements Resource {
         }
 
 
-        @Override
         public int nextInt() {
             // TODO Auto-generated method stub
             return 0;
         }
 
-        @Override
         public double nextDouble() {
             // TODO Auto-generated method stub
             return 0;
