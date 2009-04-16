@@ -13,7 +13,6 @@ import java.util.List;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PGraphicsJava2D;
-import processing.core.PImage;
 import ch.deif.meander.Location;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapVisualization;
@@ -51,8 +50,7 @@ public class Applet {
             map = viz.map;
             // TODO check if the concurrency problem really comes from the points
             points = Collections.synchronizedSet(new HashSet<Point>());
-            background = new PGraphicsJava2D();
-            background.setSize(width, height);
+            background = createGraphics(width, height, JAVA2D);
         }
 
         @Override
@@ -62,19 +60,21 @@ public class Applet {
             noFill();
             strokeWeight(POINT_STROKE);
             size(width, height);
+            background.beginDraw();
             viz.draw(background);
-            loadPixels();
+            background.endDraw();
+            drawBackground();
             setNeedsRedraw();
         }
 
         @Override
         public void draw() {
             if (changed || preSelect) {
-                changed = false;
                 drawBackground();
                 drawSelectedPoints();
                 drawPreSelectionPoint();
                 drawSelectionBox();
+                changed = false;
             }
         }
 
@@ -109,11 +109,7 @@ public class Applet {
         }
 
         private void drawBackground() {
-            assert background.pixels != null;
-            assert pixels != null;
-            System.arraycopy(background.pixels, 0, pixels, 0,
-                    background.pixels.length);
-            updatePixels();
+            image(background, 0, 0);
         }
 
         @Override

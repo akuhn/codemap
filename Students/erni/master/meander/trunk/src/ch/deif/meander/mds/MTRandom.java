@@ -10,12 +10,10 @@ public class MTRandom implements IRandom {
         twister = new Twister(false);
     }
 
-    @Override
     public double nextDouble() {
         return twister.nextDouble();
     }
 
-    @Override
     public int nextInt(int upper) {
         return Math.abs(twister.nextInt() % upper);
     }

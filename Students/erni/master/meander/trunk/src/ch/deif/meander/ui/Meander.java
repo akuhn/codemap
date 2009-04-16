@@ -115,9 +115,9 @@ public class Meander {
 			// Open the main window
 			open();
 			// Dispose the display
-			close();
+			
 			// if (!getDisplay().isDisposed()) {
-			// getDisplay().dispose();
+			getDisplay().dispose();
 			// }
 		}
 
@@ -167,12 +167,10 @@ public class Meander {
 
 			files.addSelectionListener(new SelectionListener() {
 
-				@Override
 				public void widgetDefaultSelected(SelectionEvent e) {
 					onListSelected();
 				}
 
-				@Override
 				public void widgetSelected(SelectionEvent e) {
 					onListSelected();
 				}

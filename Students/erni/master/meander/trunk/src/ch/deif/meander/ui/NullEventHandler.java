@@ -13,19 +13,15 @@ import ch.deif.meander.Location;
  */
 public class NullEventHandler implements IEventHandler {
 
-	@Override
 	public void onAppletSelection(Location location) {
 	}
 
-	@Override
 	public void onAppletSelection(List<Location> locations) {
 	}
 
-	@Override
 	public void onAppletSelectionCleared() {
 	}
 
-	@Override
 	public void onMeanderSelection(int[] indices) {
 	}
 }

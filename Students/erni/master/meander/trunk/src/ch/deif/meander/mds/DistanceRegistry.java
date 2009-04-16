@@ -15,7 +15,6 @@ public class DistanceRegistry {
 
     private static class QuadraticEuclideanDistance implements IDistance {
 
-        @Override
         public double distance(int dimension, double[] d1, double[] d2) {
             double sum = 0.0;
             for (int u = 0; u < dimension; u++) {
@@ -43,7 +42,6 @@ public class DistanceRegistry {
             mexponent = exp;
         }
 
-        @Override
         public double distance(int dimension, double[] d1, double[] d2) {
             double mono1 = 0., mono2 = 0., mixed = 0., tmp, md1 = mean(
                     dimension, d1), md2 = mean(dimension, d2);

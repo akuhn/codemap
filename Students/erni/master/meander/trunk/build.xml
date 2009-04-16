@@ -31,7 +31,7 @@
 			</fileset>
 
 			<zipfileset src="lib/core.jar" />
-			<zipfileset src="lib/jexample-4.4-r277.jar" />
+			<zipfileset src="lib/jexample-4.4-r281.jar" />
 			<zipfileset src="lib/itext.jar" />
 			<zipfileset src="lib/pdf.jar" />
 			<zipfileset src="../ch.akuhn.util/ch.akuhn.util-lib.jar" />
