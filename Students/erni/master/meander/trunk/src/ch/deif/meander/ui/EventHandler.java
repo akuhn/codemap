@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import ch.akuhn.hapax.corpus.Document;
 import ch.deif.meander.Location;
-import ch.deif.meander.ui.Applet.MapViz;
 import ch.deif.meander.ui.Meander.MeanderWindow;
 
 public class EventHandler implements IEventHandler {
@@ -12,7 +11,7 @@ public class EventHandler implements IEventHandler {
 	private MeanderWindow window;
 	private MapViz applet;
 
-	public EventHandler(MeanderWindow m, Applet.MapViz a) {
+	public EventHandler(MeanderWindow m, MapViz a) {
 		window = m;
 		applet = a;
 		a.registerHandler(this);

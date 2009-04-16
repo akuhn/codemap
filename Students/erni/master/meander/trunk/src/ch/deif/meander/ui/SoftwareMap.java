@@ -6,8 +6,6 @@ package ch.deif.meander.ui;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.io.File;
-import java.io.FileInputStream;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -22,7 +20,6 @@ import ch.deif.meander.Serializer.MSEDocument;
 import ch.deif.meander.Serializer.MSEProject;
 import ch.deif.meander.Serializer.MSERelease;
 import ch.deif.meander.resources.MSE;
-import ch.deif.meander.ui.Applet.MapViz;
 
 public class SoftwareMap extends Composite {
 
@@ -41,7 +38,7 @@ public class SoftwareMap extends Composite {
 		int width = viz.map.getParameters().width;
 		int height = viz.map.getParameters().height;
 
-		applet = new Applet.MapViz(viz);
+		applet = new MapViz(viz);
 		applet.init();
 		applet.setSize(width, height);
 		mapFrame.add(applet);
