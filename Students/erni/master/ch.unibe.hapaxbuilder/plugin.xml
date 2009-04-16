@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="SampleBuilder"
+         name="Sample Project Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="true">
+         <run
+               class="ch.unibe.hapaxbuilder.SampleBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         id="SampleNature"
+         name="Sample Project Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="ch.unibe.hapaxbuilder.SampleNature">
+         </run>
+      </runtime>
+      <builder
+            id="ch.unibe.hapaxbuilder.SampleBuilder">
+      </builder>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="true"
+            objectClass="org.eclipse.core.resources.IProject"
+            nameFilter="*"
+            id="ch.unibe.hapaxbuilder.menus">
+         <action
+               label="Add/Remove Sample Nature"
+               class="ch.unibe.hapaxbuilder.ToggleNatureAction"
+               menubarPath="additions"
+               enablesFor="+"
+               id="ch.unibe.hapaxbuilder.menus.toggleNatureAction">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>

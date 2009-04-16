@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Hapax Vocabulary Corpus Builder
+Bundle-SymbolicName: ch.unibe.hapaxbuilder;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: ch.unibe.hapaxbuilder.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-Vendor: Adrian Kuhn and David Erni
