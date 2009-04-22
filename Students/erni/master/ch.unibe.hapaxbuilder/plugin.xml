@@ -42,5 +42,20 @@
          </action>
       </objectContribution>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="ch.unibe.hapaxbuilder"
+            class="ch.unibe.hapaxbuilder.MapView"
+            icon="icons/sample.gif"
+            id="ch.unibe.hapaxbuilder.MapView"
+            name="Map View"
+            restorable="true">
+      </view>
+      <category
+            id="ch.unibe.hapaxbuilder"
+            name="Software Cartography">
+      </category>
+   </extension>
 
 </plugin>
