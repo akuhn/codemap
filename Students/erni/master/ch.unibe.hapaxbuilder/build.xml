@@ -4,6 +4,7 @@
 	<property name="package.jar" value="lib/meander-kingsize.jar"/>
 
 	<target name="package">
+		<mkdir dir="lib"/>
 		<jar id="files" destfile="${package.jar}">
 			<fileset dir="../ch.akuhn.util/bin"/>
             <fileset dir="../Fame/bin"/>
