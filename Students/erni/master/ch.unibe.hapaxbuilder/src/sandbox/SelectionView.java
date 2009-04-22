@@ -23,6 +23,8 @@ import org.eclipse.ui.part.ViewPart;
  * It works for both, element and text selection.
  */
 public class SelectionView extends ViewPart {
+    
+    public static final String PACKAGE_EXPLORER_ID = "org.eclipse.jdt.ui.PackageExplorer";
 
 	private PageBook pagebook;
 	private TableViewer tableviewer;
@@ -84,7 +86,7 @@ public class SelectionView extends ViewPart {
 		textviewer = new TextViewer(pagebook, SWT.H_SCROLL | SWT.V_SCROLL);
 		textviewer.setEditable(false);
 		
-		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(listener);
+		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(PACKAGE_EXPLORER_ID, listener);
 	}
 
 	public void setFocus() {
@@ -93,7 +95,7 @@ public class SelectionView extends ViewPart {
 
 	public void dispose() {
 		// important: We need do unregister our listener when the view is disposed
-		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(listener);
+		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(PACKAGE_EXPLORER_ID, listener);
 		super.dispose();
 	}
 
