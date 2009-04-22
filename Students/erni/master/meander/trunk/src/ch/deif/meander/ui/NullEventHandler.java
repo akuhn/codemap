@@ -5,8 +5,6 @@ import java.util.List;
 import ch.deif.meander.Location;
 
 /**
- *  * @author deif
- *
  *  EventHandler that does nothing, used to initialize the EventHandler 
  *  in the MapViz Applet.
  *   

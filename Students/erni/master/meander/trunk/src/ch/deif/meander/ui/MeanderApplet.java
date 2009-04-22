@@ -19,16 +19,13 @@ import ch.deif.meander.MaxDistNearestNeighbor;
 import ch.deif.meander.NearestNeighbor;
 
 @SuppressWarnings("serial")
-public class MapViz extends PApplet {
+public class MeanderApplet extends PApplet {
 
     protected final int SELECTION_SIZE = 10;
     protected final int POINT_STROKE = 2;
     protected final int BOX_STROKE = 2;
 
     private MapVisualization viz;
-    private int width;
-    private int height;
-    private Map map;
     private Collection<Point> points;
     private IEventHandler event;
 
@@ -39,20 +36,17 @@ public class MapViz extends PApplet {
     private Point dragStart;
     private Point dragStop;
 
-    public MapViz(MapVisualization vizualization) {
+    public MeanderApplet(MapVisualization vizualization) {
         event = new NullEventHandler();
         viz = vizualization;
-        width = viz.map.getParameters().width;
-        height = viz.map.getParameters().height;
-        map = viz.map;
         // TODO check if the concurrency problem really comes from the points
         points = Collections.synchronizedSet(new HashSet<Point>());
-        background = createGraphics(width, height, JAVA2D);
+        background = createGraphics(width(), height(), JAVA2D);
     }
 
     @Override
     public void setup() {
-        size(width, height);
+        size(width(), height());
         frameRate(25);
         setupBackground();
         drawBackground();
@@ -102,7 +96,7 @@ public class MapViz extends PApplet {
         if (preSelect) {
             stroke(Color.BLUE.getRGB());
             Point current = new Point(mouseX, mouseY);
-            Point preSelect = new MaxDistNearestNeighbor(map, width / 10)
+            Point preSelect = new MaxDistNearestNeighbor(map(), width() / 10)
                     .forLocation(current);
             if (preSelect != null) {
                 ellipse(preSelect.x, preSelect.y, 3, 3);
@@ -137,7 +131,7 @@ public class MapViz extends PApplet {
         }
         if (e.getButton() == MouseEvent.BUTTON1) {
             // button1 is 1st mouse button
-            NearestNeighbor nn = new MaxDistNearestNeighbor(map, width / 10);
+            NearestNeighbor nn = new MaxDistNearestNeighbor(map(), width() / 10);
             Point nearest = nn.forLocation(point);
             if (nearest != null) {
                 points.add(nearest);
@@ -145,7 +139,7 @@ public class MapViz extends PApplet {
             }
         } else if (e.getButton() == MouseEvent.BUTTON3) {
             // button3 is 2nd mouse button
-            NearestNeighbor nn = new NearestNeighbor(map);
+            NearestNeighbor nn = new NearestNeighbor(map());
             Point nearest = nn.forLocation(point);
             event.onAppletSelection(nn.location());
             points.add(nearest);
@@ -181,9 +175,9 @@ public class MapViz extends PApplet {
             dragStop = new Point(maxX, maxY);
             List<Location> selected = new ArrayList<Location>();
             points.clear();
-            for (Location each : map.locations()) {
-                int x = (int) Math.round(each.x * map.height);
-                int y = (int) Math.round(each.y * map.height);
+            for (Location each : map().locations()) {
+                int x = (int) Math.round(each.x * map().height);
+                int y = (int) Math.round(each.y * map().height);
                 if (x < dragStop.x && x > dragStart.x && y < dragStop.y
                         && y > dragStart.y) {
                     selected.add(each);
@@ -205,10 +199,10 @@ public class MapViz extends PApplet {
         event.onAppletSelectionCleared();
         List<Location> locations = new ArrayList<Location>();
         for (int index : indices) {
-            Location location = map.locations.get(index);
+            Location location = map().locations.get(index);
             locations.add(location);
-            int x = (int) Math.round(location.x * map.height);
-            int y = (int) Math.round(location.y * map.height);
+            int x = (int) Math.round(location.x * map().height);
+            int y = (int) Math.round(location.y * map().height);
             points.add(new Point(x, y));
         }
         // callback for tag-cloud
@@ -219,4 +213,18 @@ public class MapViz extends PApplet {
     protected void setNeedsRedraw() {
         changed = true;
     }
+
+    private Map map() {
+        return viz.map;
+    }
+
+    private int width() {
+        return viz.map.getParameters().width;
+    }
+
+    private int height() {
+        return viz.map.getParameters().height;
+    }
+
+
 }

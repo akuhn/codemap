@@ -1,6 +1,3 @@
-/**
- * 
- */
 package ch.deif.meander.ui;
 
 import java.awt.Dimension;
@@ -21,27 +18,21 @@ import ch.deif.meander.Serializer.MSEProject;
 import ch.deif.meander.Serializer.MSERelease;
 import ch.deif.meander.resources.MSE;
 
-public class SoftwareMap extends Composite {
+/** Bridges between Eclipse (which uses SWT) and Processing (which uses AWT).
+ *
+ */
+public class EclipseProcessingBridge extends Composite {
 
-	public final MapViz applet;
-	public final Map map;
 	private Frame mapFrame;
 	private static final int MAP_DIM = 700;
 
-	public SoftwareMap(Composite parent) {
+	public EclipseProcessingBridge(Composite parent) {
 		super(parent, SWT.EMBEDDED);
 		mapFrame = SWT_AWT.new_Frame(this);
 		mapFrame.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 
 		MapVisualization viz = createVizualization();
-		this.map = viz.map;
-		int width = viz.map.getParameters().width;
-		int height = viz.map.getParameters().height;
-
-		applet = new MapViz(viz);
-		applet.init();
-		applet.setSize(width, height);
-		mapFrame.add(applet);
+		this.setMapVizualization(viz);
 	}
 
 	public void setMaximumSize(Dimension dimension) {
@@ -67,4 +58,14 @@ public class SoftwareMap extends Composite {
 		return map.getDefauVisualization();
 	}
 
+	public void setMapVizualization(MapVisualization viz) {
+            int width = viz.map.getParameters().width;
+            int height = viz.map.getParameters().height;
+            MeanderApplet applet = new MeanderApplet(viz);
+            applet.init();
+            applet.setSize(width, height);
+            mapFrame.removeAll();
+            mapFrame.add(applet);
+	}
+	
 }
