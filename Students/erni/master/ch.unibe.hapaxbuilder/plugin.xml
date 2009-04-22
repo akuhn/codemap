@@ -9,7 +9,7 @@
       <builder
             hasNature="true">
          <run
-               class="ch.unibe.hapaxbuilder.MSEBuilder">
+               class="ch.unibe.softwaremap.builder.MSEBuilder">
          </run>
       </builder>
    </extension>
@@ -19,11 +19,11 @@
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
-               class="ch.unibe.hapaxbuilder.HapaxNature">
+               class="ch.unibe.softwaremap.builder.HapaxNature">
          </run>
       </runtime>
       <builder
-            id="ch.unibe.hapaxbuilder.SampleBuilder">
+            id="ch.unibe.softwaremap.SampleBuilder">
       </builder>
    </extension>
    <extension
@@ -32,34 +32,34 @@
             adaptable="true"
             objectClass="org.eclipse.core.resources.IProject"
             nameFilter="*"
-            id="ch.unibe.hapaxbuilder.menus">
+            id="ch.unibe.softwaremap.menus">
          <action
                label="Add/Remove Sample Nature"
-               class="ch.unibe.hapaxbuilder.ToggleNatureAction"
+               class="ch.unibe.softwaremap.builder.ToggleNatureAction"
                menubarPath="additions"
                enablesFor="+"
-               id="ch.unibe.hapaxbuilder.menus.toggleNatureAction">
+               id="ch.unibe.softwaremap.menus.toggleNatureAction">
          </action>
       </objectContribution>
    </extension>
    <extension
          point="org.eclipse.ui.views">
       <category
-            id="ch.unibe.hapaxbuilder"
+            id="ch.unibe.softwaremap"
             name="Software Cartography">
       </category>
       <view
-            category="ch.unibe.hapaxbuilder"
-            class="ch.unibe.hapaxbuilder.MapView"
+            category="ch.unibe.softwaremap"
+            class="ch.unibe.softwaremap.ui.MapView"
             icon="icons/sample.gif"
-            id="ch.unibe.hapaxbuilder.MapView"
+            id="ch.unibe.softwaremap.MapView"
             name="Map View"
             restorable="true">
       </view>
       <view
-            category="ch.unibe.hapaxbuilder"
-            class="sandbox.SelectionView"
-            id="ch.unibe.hapaxbuilder.SelectionView"
+            category="ch.unibe.softwaremap"
+            class="ch.unibe.softwaremap.ui.SelectionView"
+            id="ch.unibe.softwaremap.SelectionView"
             name="name"
             restorable="true">
       </view>

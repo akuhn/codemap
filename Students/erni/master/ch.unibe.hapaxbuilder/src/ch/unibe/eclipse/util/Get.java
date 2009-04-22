@@ -1,4 +1,4 @@
-package ch.unibe.hapaxbuilder.util;
+package ch.unibe.eclipse.util;
 
 import java.util.ArrayList;
 import java.util.List;

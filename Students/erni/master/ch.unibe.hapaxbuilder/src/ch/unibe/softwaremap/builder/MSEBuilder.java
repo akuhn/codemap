@@ -1,4 +1,4 @@
-package ch.unibe.hapaxbuilder;
+package ch.unibe.softwaremap.builder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,7 +24,7 @@ import org.eclipse.jdt.core.JavaCore;
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.akuhn.util.Throw;
-import ch.unibe.hapaxbuilder.util.Get;
+import ch.unibe.eclipse.util.Get;
 
 public class MSEBuilder extends IncrementalProjectBuilder {
 

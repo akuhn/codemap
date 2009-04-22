@@ -1,4 +1,4 @@
-package ch.unibe.hapaxbuilder;
+package ch.unibe.softwaremap.builder;
 
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;

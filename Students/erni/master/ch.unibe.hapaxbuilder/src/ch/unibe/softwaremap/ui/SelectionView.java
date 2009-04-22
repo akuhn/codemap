@@ -1,4 +1,4 @@
-package sandbox;
+package ch.unibe.softwaremap.ui;
 
 
 import org.eclipse.jface.text.BadLocationException;

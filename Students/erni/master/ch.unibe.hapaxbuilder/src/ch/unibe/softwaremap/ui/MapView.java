@@ -1,4 +1,4 @@
-package ch.unibe.hapaxbuilder;
+package ch.unibe.softwaremap.ui;
 
 
 import org.eclipse.jface.viewers.ITableLabelProvider;
