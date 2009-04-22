@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Build huge meatball of JAR files" default="package" basedir=".">
+
+	<property name="package.jar" value="lib/meander-kingsize.jar"/>
+
+	<target name="package">
+		<jar id="files" destfile="${package.jar}">
+			<fileset dir="../ch.akuhn.util/bin"/>
+            <fileset dir="../Fame/bin"/>
+            <fileset dir="../ForEach DSL/bin"/>
+            <fileset dir="../Hapax/bin"/>
+            <fileset dir="../Meander/bin"/>
+            <fileset dir="../SCG util package/bin"/>
+            <zipfileset src="../Hapax/lib/snowball.jar" />
+			<zipfileset src="../Meander/lib/core.jar" />
+            <zipfileset src="../Meander/lib/itext.jar" />
+            <zipfileset src="../Meander/lib/pdf.jar" />
+		</jar>	
+	</target>
+
+</project>

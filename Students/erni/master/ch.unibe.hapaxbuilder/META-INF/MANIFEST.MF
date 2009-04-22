@@ -12,13 +12,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: Adrian Kuhn and David Erni
 Bundle-ClassPath: .,
- lib/ch.unibe.scg.util.jar,
- lib/hapax-lib.jar,
- lib/snowball.jar,
- lib/ch.akuhn.util-lib.jar,
- lib/foreach-lib.jar,
- lib/meander-lib.jar,
- lib/core.jar,
- lib/itext.jar,
- lib/pdf.jar,
- lib/fame-lib.jar
+ lib/meander-kingsize.jar
