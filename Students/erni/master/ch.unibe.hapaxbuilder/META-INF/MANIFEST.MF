@@ -6,7 +6,14 @@ Bundle-Version: 1.0.0
 Bundle-Activator: ch.unibe.hapaxbuilder.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.core.resources
+ org.eclipse.core.resources,
+ org.eclipse.jdt.core;bundle-version="3.4.4"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: Adrian Kuhn and David Erni
+Bundle-ClassPath: .,
+ lib/ch.unibe.scg.util.jar,
+ lib/hapax-lib.jar,
+ lib/snowball.jar,
+ lib/ch.akuhn.util-lib.jar,
+ lib/foreach-lib.jar

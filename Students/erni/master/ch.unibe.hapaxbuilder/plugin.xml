@@ -9,7 +9,7 @@
       <builder
             hasNature="true">
          <run
-               class="ch.unibe.hapaxbuilder.SampleBuilder">
+               class="ch.unibe.hapaxbuilder.MSEBuilder">
          </run>
       </builder>
    </extension>
@@ -19,7 +19,7 @@
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
-               class="ch.unibe.hapaxbuilder.SampleNature">
+               class="ch.unibe.hapaxbuilder.HapaxNature">
          </run>
       </runtime>
       <builder
