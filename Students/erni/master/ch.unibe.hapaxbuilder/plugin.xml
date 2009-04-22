@@ -56,6 +56,12 @@
             id="ch.unibe.hapaxbuilder"
             name="Software Cartography">
       </category>
+      <view
+            class="sandbox.SelectionView"
+            id="ch.unibe.hapaxbuilder.SelectionView"
+            name="name"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>
