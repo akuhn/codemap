@@ -28,17 +28,10 @@ public abstract class Providable<E> implements Iterable<E>, Iterator<E>, Cloneab
     }
 
     public final boolean hasNext() {
-        switch (state) {
-        case FAIL:
-        case UNINITIALIZED:
-            throw new IllegalStateException(state.toString());
-        case DONE:
-            return false;
-        case READY:
-            return true;
-        default:
-            return computeNext();
-        }
+        if (state == State.EMPTY) return computeNext();
+        if (state == State.DONE) return false;
+        if (state == State.READY) return true;
+        throw new IllegalStateException(state.toString());
     }
 
     public abstract void initialize();
