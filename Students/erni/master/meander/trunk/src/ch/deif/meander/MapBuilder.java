@@ -44,12 +44,12 @@ public class MapBuilder {
     }
 
     private Parameters params;
-    private List<Location> locations;
+    private LocationList locations;
     private String name;
 
     public MapBuilder() {
         params = new Parameters();
-        locations = new ArrayList<Location>();
+        locations = new LocationList();
     }
 
     public MapBuilder size(int width, int height) {
@@ -59,28 +59,24 @@ public class MapBuilder {
     }
 
     public MapBuilder location(double xNormed, double yNormed, double h) {
-        locations.add(new Location(xNormed, yNormed, h));
+        locations.makeLocation(xNormed, yNormed, h);
         return this;
     }
 
     public MapBuilder location(double xNormed, double yNormed, double h,
             Document document) {
-        Location loc = new Location(xNormed, yNormed, h);
-        loc.document = document;
-        locations.add(loc);
+        locations.makeLocation(xNormed, yNormed, h).setDocument(document);
         return this;
     }
 
     public MapBuilder location(MSEDocument each, String version) {
         Doc document = new Doc(each.name, version);
         document.addTerms(each.terms);
-        Location loc = new Location(each.x, each.y, each.height);
-        loc.document = document;
-        locations.add(loc);
+        locations.makeLocation(each.x, each.y, each.height).setDocument(document);
         return this;
     }
 
-    public Map build() {
+    public Map done() {
         Map map = new Map(params, locations);
         map.name = name;
         return map;

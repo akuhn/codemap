@@ -1,7 +1,10 @@
-package ch.deif.meander;
+package ch.deif.meander.viz;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ch.deif.meander.Location;
+import ch.deif.meander.Map;
 
 import processing.core.PGraphics;
 
@@ -32,10 +35,10 @@ public class ArrowOverlay extends MapVisualization {
         }
 
         public void draw(PGraphics pg) {
-            float x1 = from.x * pg.width;
-            float y1 = from.y * pg.height;
-            float x2 = to.x * pg.width;
-            float y2 = to.y * pg.height;
+            float x1 = (float) (from.x() * pg.width);
+            float y1 = (float) (from.y() * pg.height);
+            float x2 = (float) (to.x() * pg.width);
+            float y2 = (float) (to.y() * pg.height);
             float w = 8.0f;
             pg.noFill();
             pg.stroke(0,0,0,20);

@@ -3,13 +3,16 @@ package ch.deif.meander;
 import org.junit.Test;
 
 import ch.deif.meander.ui.PViewer;
+import ch.deif.meander.viz.DebugDEMVisualization;
+import ch.deif.meander.viz.HillshadeVisualization;
+import ch.deif.meander.viz.MapVisualization;
 
 public class SandboxMain {
 
     public Map sample() {
         return Map.builder().size(640, 640).location(0.375, 0.375, 40)
                 .location(0.5, 0.375, 40).location(0.625, 0.250, 100).location(
-                        0.750, 0.500, 30).build();
+                        0.750, 0.500, 30).done();
     }
 
     public void sketch() {

@@ -20,12 +20,12 @@ public class NearestNeighbor {
         int xres = -1;
         int yres = -1;
         shortest = -1;
-        int dimension = map.width;
+        int dimension = map.getWidth();
 
         for (Location l : map.locations()) {
             // get location in map coordinates
-            int x = (int) Math.round(l.x * dimension);
-            int y = (int) Math.round(l.y * dimension);
+            int x = (int) Math.round(l.x() * dimension);
+            int y = (int) Math.round(l.y() * dimension);
             double dist = dist(x, y, point.x, point.y);
             if (shortest == -1 || dist < shortest) {
                 location = l;

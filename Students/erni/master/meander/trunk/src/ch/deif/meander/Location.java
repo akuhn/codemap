@@ -2,16 +2,21 @@ package ch.deif.meander;
 
 import ch.akuhn.hapax.corpus.Document;
 
-public class Location {
+/** Elevation on the map, (value object); 
+ * 
+ * @author Adrian Kuhn
+ *
+ */
+public interface Location {
 
-    public float x, y;
-    public float height;
-    public Document document;
+    public double elevation();
+    
+    public double x();
+    
+    public double y();
 
-    public Location(double xNormed, double yNormed, double height) {
-        this.x = (float) xNormed;
-        this.y = (float) yNormed;
-        this.height = (float) height;
-    }
-
+    public void setDocument(Document document);
+    
+    public Document getDocument();
+    
 }

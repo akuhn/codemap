@@ -68,10 +68,10 @@ public class MDS {
         } else {
             out.print("# 2\n");
             for (Location each : locations) {
-                float x = (float) each.x;
+                float x = (float) each.x();
                 out.print(x);
                 out.append(' ');
-                float y = (float) each.y;
+                float y = (float) each.y();
                 out.print(y);
                 out.append('\n');
             }

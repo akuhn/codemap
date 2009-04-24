@@ -1,7 +1,8 @@
-package ch.deif.meander;
+package ch.deif.meander.viz;
 
 import processing.core.PGraphics;
 import processing.core.PImage;
+import ch.deif.meander.Map;
 import ch.deif.meander.Map.Pixel;
 
 public class DebugDEMVisualization extends MapVisualization {
@@ -12,7 +13,7 @@ public class DebugDEMVisualization extends MapVisualization {
 
     @Override
     public void draw(PGraphics pg) {
-        PImage img = new PImage(map.width, map.height);
+        PImage img = new PImage(map.getWidth(), map.getHeight());
         this.drawOn(img);
         pg.image(img, 0, 0);
     }

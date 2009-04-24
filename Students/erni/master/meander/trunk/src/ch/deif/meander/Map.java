@@ -4,22 +4,28 @@ import java.util.Arrays;
 import java.util.List;
 
 import ch.akuhn.util.Providable;
+import ch.deif.meander.viz.HillshadeVisualization;
+import ch.deif.meander.viz.MapVisualization;
+import ch.deif.meander.viz.SketchVisualization;
 
+/** Main data container of maps.
+ * 
+ * @author Adrian Kuhn
+ * @author David Erni
+ *
+ */
 public class Map {
 
     private double[][] DEM;
     private double[][] hillshade;
     private boolean[][] contours;
-    public final int width, height;
-    public List<Location> locations;
+    private final int height;
+    private int width;
+    public LocationList locations;
     private Parameters parameters;
     public String name;
 
-    public Map(Parameters parameters, Location... locations) {
-        this(parameters, Arrays.asList(locations));
-    }
-
-    public Map(Parameters parameters, List<Location> locations) {
+    public Map(Parameters parameters, LocationList locations) {
         this.parameters = parameters;
         this.locations = locations;
         width = parameters.width;
@@ -27,11 +33,11 @@ public class Map {
     }
 
     private double[][] getDEM() {
-        return DEM == null ? DEM = new double[width][height] : DEM;
+        return DEM == null ? DEM = new double[getWidth()][getHeight()] : DEM;
     }
 
     private boolean[][] getContours() {
-        return contours == null ? contours = new boolean[width][height]
+        return contours == null ? contours = new boolean[getWidth()][getHeight()]
                 : contours;
     }
 
@@ -66,11 +72,11 @@ public class Map {
 
             @Override
             public Pixel provide() {
-                if (x >= width) {
+                if (x >= getWidth()) {
                     x = 0;
                     y++;
                 }
-                if (y >= height) return done();
+                if (y >= getHeight()) return done();
                 Pixel p = new Pixel(x++, y);
                 return p;
             }
@@ -88,11 +94,11 @@ public class Map {
 
             @Override
             public Pixel provide() {
-                if (m >= height) {
+                if (m >= getHeight()) {
                     m = 0;
                     n++;
                 }
-                if (n >= width) return done();
+                if (n >= getWidth()) return done();
                 Pixel p = new Pixel(n, m++);
                 return p;
             }
@@ -110,11 +116,11 @@ public class Map {
 
             @Override
             public Kernel provide() {
-                if (x >= width) {
+                if (x >= getWidth()) {
                     x = 0;
                     y++;
                 }
-                if (y >= height) return done();
+                if (y >= getHeight()) return done();
                 Kernel k = new Kernel(x++, y);
                 return k;
             }
@@ -130,8 +136,8 @@ public class Map {
             super(x, y);
             int yTop = (y == 0 ? 0 : y - 1);
             int xLeft = (x == 0 ? 0 : x - 1);
-            int yBottom = (y == (height - 1) ? (height - 1) : y + 1);
-            int xRight = (x == (width - 1) ? (width - 1) : x + 1);
+            int yBottom = (y == (getHeight() - 1) ? (getHeight() - 1) : y + 1);
+            int xRight = (x == (getWidth() - 1) ? (getWidth() - 1) : x + 1);
 
             topLeft = getDEM()[xLeft][yTop];
             top = getDEM()[x][yTop];
@@ -151,7 +157,7 @@ public class Map {
     }
 
     private double[][] getHillshade() {
-        return hillshade == null ? hillshade = new double[width][height]
+        return hillshade == null ? hillshade = new double[getWidth()][getHeight()]
                 : hillshade;
     }
 
@@ -161,17 +167,17 @@ public class Map {
         int y;
 
         public Pixel(int x, int y) {
-            assert x < width && y < height : x + "," + y;
+            assert x < getWidth() && y < getHeight() : x + "," + y;
             this.x = x;
             this.y = y;
         }
 
         public double xNormed() {
-            return (double) x / (width - 1);
+            return (double) x / (getWidth() - 1);
         }
 
         public double yNormed() {
-            return (double) y / (height - 1);
+            return (double) y / (getHeight() - 1);
         }
 
         public void increaseElevation(double elevation) {
@@ -206,11 +212,11 @@ public class Map {
     }
 
     public int pixelSize() {
-        return width * height;
+        return getWidth() * getHeight();
     }
 
-    public int locationSize() {
-        return locations.size();
+    public int locationCount() {
+        return locations.count();
     }
 
     public Object hasDEM() {
@@ -227,6 +233,18 @@ public class Map {
         new ContourLineAlgorithm(map).run();
         // return new SketchVisualization(map);
         return new HillshadeVisualization(map);
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public Location locationAt(int index) {
+        return locations.at(index);
     }
 
 }

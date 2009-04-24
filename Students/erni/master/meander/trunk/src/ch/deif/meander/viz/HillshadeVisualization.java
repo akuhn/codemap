@@ -1,8 +1,11 @@
-package ch.deif.meander;
+package ch.deif.meander.viz;
 
 import processing.core.PGraphics;
 import processing.core.PImage;
 import ch.akuhn.util.Out;
+import ch.deif.meander.MColor;
+import ch.deif.meander.Map;
+import ch.deif.meander.Parameters;
 import ch.deif.meander.Map.Pixel;
 
 public class HillshadeVisualization extends MapVisualization {
@@ -13,7 +16,7 @@ public class HillshadeVisualization extends MapVisualization {
 
     @Override
     public void draw(PGraphics pg) {
-        PImage img = new PImage(map.width, map.height);
+        PImage img = new PImage(map.getWidth(), map.getHeight());
         this.drawOn(img);
         pg.image(img, 0, 0);
     }
@@ -27,7 +30,7 @@ public class HillshadeVisualization extends MapVisualization {
     }
 
     private void drawOn(PImage img) {
-        assert img.width == map.width && img.height == map.height;
+        assert img.width == map.getWidth() && img.height == map.getHeight();
         int[] pixels = img.pixels;
         int index = 0;
         for (Pixel p : map.pixels()) {

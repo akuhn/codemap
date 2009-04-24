@@ -17,13 +17,13 @@ public class NormalizeLocationsAlgorithm extends MapAlgorithm {
             // minY = Math.min(l.yNormed, minY);
             // maxX = Math.max(l.xNormed, maxX);
             // maxY = Math.max(l.yNormed, maxY);
-            maxHeight = Math.max(l.height, maxHeight);
+            maxHeight = Math.max(l.elevation(), maxHeight);
         }
         double scale = Math.max((maxX - minX), (maxY - minY));
         for (Location l : this.map.locations) {
-            l.x = (float) ((l.x - minX) / scale);
-            l.y = (float) ((l.y - minY) / scale);
-            l.height = (float) (l.height * 100 / maxHeight);
+            //l.x = (float) ((l.x - minX) / scale);
+            //l.y = (float) ((l.y - minY) / scale);
+            //l.elevation = (float) (l.elevation * 100 / maxHeight);
         }
     }
 

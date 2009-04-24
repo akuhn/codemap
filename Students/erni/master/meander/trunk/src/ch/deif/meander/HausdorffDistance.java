@@ -12,7 +12,7 @@ public class HausdorffDistance {
     public double d(Location a, Map B) {
         double min = Double.POSITIVE_INFINITY;
         for (Location b : B.locations) {
-            double dist = (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
+            double dist = (a.x() - b.x()) * (a.x() - b.x()) + (a.y() - b.y()) * (a.y() - b.y());
             if (dist < min) min = dist;
         }
         return Math.sqrt(min);
@@ -34,7 +34,7 @@ public class HausdorffDistance {
             // approx 1e-16
             sum += d(a, B);
         }
-        return sum / A.locationSize();
+        return sum / A.locationCount();
     }
 
     public double kahan_d6(Map A, Map B) {
@@ -46,7 +46,7 @@ public class HausdorffDistance {
             c = (t - sum) - y;
             sum = t;
         }
-        return sum / A.locationSize();
+        return sum / A.locationCount();
     }
 
     public double D18(Map A, Map B) {

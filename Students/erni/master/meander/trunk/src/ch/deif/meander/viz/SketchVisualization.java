@@ -1,5 +1,7 @@
-package ch.deif.meander;
+package ch.deif.meander.viz;
 
+import ch.deif.meander.Location;
+import ch.deif.meander.Map;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -21,9 +23,9 @@ public class SketchVisualization extends MapVisualization {
         pg.noFill();
         pg.smooth();
         for (Location each : map.locations()) {
-            float x = (float) (each.x * width);
-            float y = (float) (each.y * height);
-            float r = (float) (each.height / 100 * width / 2.61f);
+            float x = (float) (each.x() * width);
+            float y = (float) (each.y() * height);
+            float r = (float) (each.elevation() / 100 * width / 2.61f);
             pg.ellipse(x, y, r, r);
         }
     }

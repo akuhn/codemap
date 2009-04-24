@@ -1,4 +1,4 @@
-package ch.deif.meander;
+package ch.deif.meander.viz;
 
 import java.io.File;
 
@@ -8,6 +8,7 @@ import processing.core.PGraphics;
 import processing.core.PGraphicsJava2D;
 import processing.core.PImage;
 import processing.pdf.PGraphicsPDF;
+import ch.deif.meander.Map;
 import ch.deif.meander.ui.PViewer;
 
 public abstract class MapVisualization {

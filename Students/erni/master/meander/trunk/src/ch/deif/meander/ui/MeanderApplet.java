@@ -14,9 +14,9 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.Map;
-import ch.deif.meander.MapVisualization;
 import ch.deif.meander.MaxDistNearestNeighbor;
 import ch.deif.meander.NearestNeighbor;
+import ch.deif.meander.viz.MapVisualization;
 
 @SuppressWarnings("serial")
 public class MeanderApplet extends PApplet {
@@ -176,8 +176,8 @@ public class MeanderApplet extends PApplet {
             List<Location> selected = new ArrayList<Location>();
             points.clear();
             for (Location each : map().locations()) {
-                int x = (int) Math.round(each.x * map().height);
-                int y = (int) Math.round(each.y * map().height);
+                int x = (int) Math.round(each.x() * map().getHeight());
+                int y = (int) Math.round(each.y() * map().getHeight());
                 if (x < dragStop.x && x > dragStart.x && y < dragStop.y
                         && y > dragStart.y) {
                     selected.add(each);
@@ -199,10 +199,10 @@ public class MeanderApplet extends PApplet {
         event.onAppletSelectionCleared();
         List<Location> locations = new ArrayList<Location>();
         for (int index : indices) {
-            Location location = map().locations.get(index);
+            Location location = map().locationAt(index);
             locations.add(location);
-            int x = (int) Math.round(location.x * map().height);
-            int y = (int) Math.round(location.y * map().height);
+            int x = (int) Math.round(location.x() * map().getHeight());
+            int y = (int) Math.round(location.y() * map().getHeight());
             points.add(new Point(x, y));
         }
         // callback for tag-cloud

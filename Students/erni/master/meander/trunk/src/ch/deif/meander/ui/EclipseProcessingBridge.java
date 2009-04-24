@@ -11,12 +11,12 @@ import org.eclipse.swt.widgets.Composite;
 import ch.akuhn.util.Get;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
-import ch.deif.meander.MapVisualization;
 import ch.deif.meander.Serializer;
 import ch.deif.meander.Serializer.MSEDocument;
 import ch.deif.meander.Serializer.MSEProject;
 import ch.deif.meander.Serializer.MSERelease;
 import ch.deif.meander.resources.MSE;
+import ch.deif.meander.viz.MapVisualization;
 
 /** Bridges between Eclipse (which uses SWT) and Processing (which uses AWT).
  *
@@ -54,7 +54,7 @@ public class EclipseProcessingBridge extends Composite {
 		for (MSEDocument each : release.documents) {
 			builder.location(each, release.name);
 		}
-		Map map = builder.build();
+		Map map = builder.done();
 		return map.getDefauVisualization();
 	}
 

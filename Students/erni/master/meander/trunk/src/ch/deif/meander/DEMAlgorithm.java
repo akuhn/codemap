@@ -16,9 +16,9 @@ public class DEMAlgorithm extends MapAlgorithm {
     public void run() {
         for (Location each : map.locations()) {
             for (Pixel p : map.pixels()) {
-                double dist = dist(each.x, each.y, p.xNormed(), p.yNormed());
-                dist = dist / each.height * MAGIC_VALUE;
-                double elevation = each.height * Math.exp(-(dist * dist / 2));
+                double dist = dist(each.x(), each.y(), p.xNormed(), p.yNormed());
+                dist = dist / each.elevation() * MAGIC_VALUE;
+                double elevation = each.elevation() * Math.exp(-(dist * dist / 2));
                 p.increaseElevation(elevation);
             }
         }

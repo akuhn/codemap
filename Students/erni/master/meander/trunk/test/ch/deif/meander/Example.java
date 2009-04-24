@@ -1,5 +1,8 @@
 package ch.deif.meander;
 
+import ch.deif.meander.viz.ArrowOverlay;
+import ch.deif.meander.viz.Layers;
+
 public class Example {
 
     public static void main(String... args) {
@@ -7,13 +10,13 @@ public class Example {
                 .size(640, 640)
                 .location(0.5, 0.5, 80)
                 .location(0.2, 0.2, 100)
-                .build();
+                .done();
         map.createVisualization();
         
         Layers layers = new Layers(map);
         
-        Location l1 = map.locations.get(0);
-        Location l2 = map.locations.get(1);
+        Location l1 = map.locationAt(0);
+        Location l2 = map.locationAt(1);
         
         ArrowOverlay viz = new ArrowOverlay(map);
         viz.arrow(l1, l2, 4.0f);

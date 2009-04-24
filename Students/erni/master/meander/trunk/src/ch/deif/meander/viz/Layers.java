@@ -1,6 +1,8 @@
-package ch.deif.meander;
+package ch.deif.meander.viz;
 
 import java.util.LinkedList;
+
+import ch.deif.meander.Map;
 
 import processing.core.PGraphics;
 

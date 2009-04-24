@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 import processing.core.PApplet;
-import ch.deif.meander.MapVisualization;
+import ch.deif.meander.viz.MapVisualization;
 
 @SuppressWarnings("serial")
 public class PViewer extends JFrame {
