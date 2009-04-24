@@ -1,8 +1,5 @@
 package ch.deif.meander;
 
-import java.util.Arrays;
-import java.util.List;
-
 import ch.akuhn.util.Providable;
 import ch.deif.meander.viz.HillshadeVisualization;
 import ch.deif.meander.viz.MapVisualization;
@@ -30,6 +27,7 @@ public class Map {
         this.locations = locations;
         width = parameters.width;
         height = parameters.height;
+        locations.setPixelScale(width);
     }
 
     private double[][] getDEM() {
@@ -64,6 +62,9 @@ public class Map {
     public Iterable<Pixel> pixelsByRows() {
         return new Providable<Pixel>() {
             private int x, y;
+            private Pixel pixel = new Pixel(0, 0);
+            private final int width = getWidth(); 
+            private final int height = getHeight();
 
             @Override
             public void initialize() {
@@ -72,13 +73,14 @@ public class Map {
 
             @Override
             public Pixel provide() {
-                if (x >= getWidth()) {
+                if (x >= width) {
                     x = 0;
                     y++;
+                    if (y >= height) return done();
                 }
-                if (y >= getHeight()) return done();
-                Pixel p = new Pixel(x++, y);
-                return p;
+                pixel.px = x++;
+                pixel.py = y;
+                return pixel;
             }
         };
     }
@@ -86,6 +88,9 @@ public class Map {
     public Iterable<Pixel> pixelsByColumns() {
         return new Providable<Pixel>() {
             private int n, m;
+            private Pixel pixel = new Pixel(0, 0);
+            private final int width = getWidth(); 
+            private final int height = getHeight();
 
             @Override
             public void initialize() {
@@ -94,13 +99,14 @@ public class Map {
 
             @Override
             public Pixel provide() {
-                if (m >= getHeight()) {
+                if (m >= height) {
                     m = 0;
                     n++;
+                    if (n >= width) return done();
                 }
-                if (n >= getWidth()) return done();
-                Pixel p = new Pixel(n, m++);
-                return p;
+                pixel.px = n;
+                pixel.py = m++;
+                return pixel;
             }
         };
     }
@@ -151,7 +157,7 @@ public class Map {
         }
 
         public void setHillshade(double hillshade) {
-            getHillshade()[x][y] = hillshade;
+            getHillshade()[px][py] = hillshade;
         }
 
     }
@@ -163,46 +169,49 @@ public class Map {
 
     public class Pixel {
 
-        int x;
-        int y;
+        
+        int px;
+        int py;
+        private double[][] DEM0;
 
-        public Pixel(int x, int y) {
-            assert x < getWidth() && y < getHeight() : x + "," + y;
-            this.x = x;
-            this.y = y;
+        public Pixel(int px, int py) {
+            assert px < getWidth() && py < getHeight() : px + "," + py;
+            this.px = px;
+            this.py = py;
+            this.DEM0 = getDEM();
         }
 
-        public double xNormed() {
-            return (double) x / (getWidth() - 1);
+        public double x() {
+            return (double) px / (getWidth() - 1);
         }
 
-        public double yNormed() {
-            return (double) y / (getHeight() - 1);
+        public double y() {
+            return (double) py / (getHeight() - 1);
         }
 
         public void increaseElevation(double elevation) {
             if (elevation < 0) return;
-            getDEM()[x][y] += elevation;
+            DEM0[px][py] += elevation;
         }
 
         public double elevation() {
-            return getDEM()[x][y];
+            return DEM0[px][py];
         }
 
         public double hillshade() {
-            return getHillshade()[x][y];
+            return getHillshade()[px][py];
         }
 
         public boolean hasContourLine() {
-            return getContours()[x][y];
+            return getContours()[px][py];
         }
 
         public void setContourLine(boolean bool) {
-            getContours()[x][y] = bool;
+            getContours()[px][py] = bool;
         }
 
         public void normalizeElevation(double maxElevation) {
-            DEM[x][y] = 100.0 * (DEM[x][y] / maxElevation);
+            DEM0[px][py] = 100.0 * (DEM0[px][py] / maxElevation);
         }
 
     }
@@ -226,7 +235,6 @@ public class Map {
     public MapVisualization getDefauVisualization() {
         // TODO make all algorithms reentrant.
         Map map = this;
-        new NormalizeLocationsAlgorithm(map).run();
         new DEMAlgorithm(map).run();
         new NormalizeElevationAlgorithm(map).run();
         new HillshadeAlgorithm(map).run();

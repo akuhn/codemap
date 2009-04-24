@@ -11,7 +11,7 @@ public class Example {
                 .location(0.5, 0.5, 80)
                 .location(0.2, 0.2, 100)
                 .done();
-        map.createVisualization();
+        map.getDefauVisualization().openApplet();
         
         Layers layers = new Layers(map);
         

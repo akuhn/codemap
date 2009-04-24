@@ -14,7 +14,6 @@ import ch.deif.meander.JMDS;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
 import ch.deif.meander.NormalizeElevationAlgorithm;
-import ch.deif.meander.NormalizeLocationsAlgorithm;
 import ch.deif.meander.ui.PViewer;
 import ch.deif.meander.viz.HillshadeVisualization;
 import ch.deif.meander.viz.MapVisualization;
@@ -45,7 +44,6 @@ public class MDSTest {
                         .termSize()));
             }
             Map map = builder.done();
-            new NormalizeLocationsAlgorithm(map).run();
             new DEMAlgorithm(map).run();
             new NormalizeElevationAlgorithm(map).run();
             new HillshadeAlgorithm(map).run();

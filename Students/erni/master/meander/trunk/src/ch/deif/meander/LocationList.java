@@ -6,7 +6,7 @@ import java.util.List;
 
 import ch.akuhn.hapax.corpus.Document;
 
-/** List of locations, (value object).
+/** List of locations, (scalable value object).
  * 
  * @author Adrian Kuhn
  *
@@ -14,6 +14,8 @@ import ch.akuhn.hapax.corpus.Document;
 public class LocationList implements Iterable<Location> {
 
     private List<Location> locations;
+    private double maxElevation = 1.0;
+    private int pixelScale = 200;
     
     public LocationList() {
         this.locations = new ArrayList<Location>();
@@ -29,6 +31,7 @@ public class LocationList implements Iterable<Location> {
     }
     
     public Location makeLocation(double x, double y, double elevation) {
+        maxElevation = Math.max(maxElevation, elevation);
         Location location = new Loc(x, y, elevation);
         locations.add(location);
         return location;
@@ -68,33 +71,33 @@ public class LocationList implements Iterable<Location> {
             this.document = document;
         }
         
-        private Location copyRestFrom(Location other) {
-            this.document = ((Loc) other).document;
-            return this;
+        @Override
+        public float px() {
+            return (float) (x * getPixelScale());
         }
         
-    }
-    
-    public LocationList normalizeElevation() {
-        LocationList result = new LocationList();
-        double maxElevation = maxElevation();
-        for (Location each: locations) {
-            result.locations.add(new Loc(each.x(), each.y(), 
-                    each.elevation() / maxElevation * 100)
-                    .copyRestFrom(each));
+        @Override
+        public float py() {
+            return (float) (y * getPixelScale());
         }
-        return result;
-    }
-
-    public double maxElevation() {
-        double maxElevation = 0.0;
-        for (Location each: locations) 
-            maxElevation = Math.max(maxElevation, each.elevation());
-        return maxElevation;
+        
+        @Override
+        public double normElevation() {
+            return elevation / maxElevation * 100;
+        }
+        
     }
 
     public Location at(int index) {
         return locations.get(index);
+    }
+
+    public void setPixelScale(int pixelScale) {
+        this.pixelScale = pixelScale;
+    }
+
+    public int getPixelScale() {
+        return pixelScale;
     }
     
 }

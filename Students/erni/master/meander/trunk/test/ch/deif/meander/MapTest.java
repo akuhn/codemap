@@ -1,6 +1,8 @@
 package ch.deif.meander;
 
 import static java.lang.Double.NaN;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 import static org.junit.Assert.*;
 
 import java.util.Iterator;
@@ -33,26 +35,26 @@ public class MapTest {
         Iterator<Pixel> it = map.pixels().iterator();
         Pixel p;
         p = it.next();
-        assertEquals(0.0, p.xNormed(), NaN);
-        assertEquals(0.0, p.yNormed(), NaN);
+        assertEquals(0.0, p.x(), NaN);
+        assertEquals(0.0, p.y(), NaN);
         p = it.next();
-        assertEquals(0.25, p.xNormed(), NaN);
-        assertEquals(0.0, p.yNormed(), NaN);
+        assertEquals(0.25, p.x(), NaN);
+        assertEquals(0.0, p.y(), NaN);
         p = it.next();
-        assertEquals(0.5, p.xNormed(), NaN);
-        assertEquals(0.0, p.yNormed(), NaN);
+        assertEquals(0.5, p.x(), NaN);
+        assertEquals(0.0, p.y(), NaN);
         p = it.next();
-        assertEquals(0.75, p.xNormed(), NaN);
-        assertEquals(0.0, p.yNormed(), NaN);
+        assertEquals(0.75, p.x(), NaN);
+        assertEquals(0.0, p.y(), NaN);
         p = it.next();
-        assertEquals(1.0, p.xNormed(), NaN);
-        assertEquals(0.0, p.yNormed(), NaN);
+        assertEquals(1.0, p.x(), NaN);
+        assertEquals(0.0, p.y(), NaN);
         p = it.next();
-        assertEquals(0.0, p.xNormed(), NaN);
-        assertEquals(0.5, p.yNormed(), NaN);
+        assertEquals(0.0, p.x(), NaN);
+        assertEquals(0.5, p.y(), NaN);
         p = it.next();
-        assertEquals(0.25, p.xNormed(), NaN);
-        assertEquals(0.5, p.yNormed(), NaN);
+        assertEquals(0.25, p.x(), NaN);
+        assertEquals(0.5, p.y(), NaN);
     }
 
     @Test
@@ -69,8 +71,8 @@ public class MapTest {
     public void testPixelElevation(Map map) {
         Pixel p;
         p = map.get(2, 1);
-        assertEquals(0.5, p.xNormed(), NaN);
-        assertEquals(0.5, p.yNormed(), NaN);
+        assertEquals(0.5, p.x(), NaN);
+        assertEquals(0.5, p.y(), NaN);
         assertEquals(100, p.elevation(), 1e-2);
     }
     
@@ -80,7 +82,7 @@ public class MapTest {
             .size(200, 200);
         for (int a = 5; a < 90; a += 10) {
             double rad = Math.PI / 180 * a;
-            builder.location(Math.sin(rad), Math.cos(rad), a);
+            builder.location(0.8*sin(rad), 0.8*cos(rad), a + 25);
         }
         return builder.done();
     }

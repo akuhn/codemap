@@ -36,8 +36,8 @@ public class SandboxMain {
         new HillshadeAlgorithm(map).run();
         new ContourLineAlgorithm(map).run();
         MapVisualization viz = new HillshadeVisualization(map);
-        viz.drawToPDF("example");
-        viz.drawToPNG("example");
+        //viz.drawToPDF("example"); TODO fix!
+        //viz.drawToPNG("example"); TODO fix!
         viz.openApplet();
     }
 
