@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Scanner;
 
-import jexample.Depends;
-import jexample.JExample;
+import ch.unibe.jexample.Given;
+import ch.unibe.jexample.JExample;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,7 +45,7 @@ public class DeerExample {
     }
     
     @Test
-    @Depends("#makeTermDocumentMatrix")
+    @Given("#makeTermDocumentMatrix")
     public TermDocumentMatrix rejectStopWords(TermDocumentMatrix tdm) {
         tdm = tdm.toLowerCase();
         assertEquals(9, tdm.documentSize());
@@ -61,7 +61,7 @@ public class DeerExample {
     }
     
     @Test
-    @Depends("#rejectStopWords")
+    @Given("#rejectStopWords")
     public void testImportExport(TermDocumentMatrix tdm) {
         StringBuilder buf = new StringBuilder();
         tdm.storeOn(buf);
