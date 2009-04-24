@@ -11,7 +11,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.widgets.Composite;
@@ -33,6 +32,7 @@ public class TagCloudView extends ViewPart implements ISelectionListener, Contro
     /** Sent when view is opened.
      * 
      */
+    @SuppressWarnings("serial")
     @Override
     public void createPartControl(Composite parent) {
         view = new EclipseProcessingBridge2(parent);

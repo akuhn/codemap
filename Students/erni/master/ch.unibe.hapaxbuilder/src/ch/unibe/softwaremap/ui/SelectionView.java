@@ -74,6 +74,7 @@ public class SelectionView extends ViewPart {
         pagebook.showPage(textviewer.getControl());
     }
 
+    @Override
     public void createPartControl(Composite parent) {
         // the PageBook allows simple switching between two viewers
         pagebook = new PageBook(parent, SWT.NONE);
@@ -92,13 +93,13 @@ public class SelectionView extends ViewPart {
         getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(PACKAGE_EXPLORER_ID, listener);
     }
 
+    @Override
     public void setFocus() {
         pagebook.setFocus();
     }
 
+    @Override
     public void dispose() {
-        // important: We need do unregister our listener when the view is
-        // disposed
         getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(PACKAGE_EXPLORER_ID, listener);
         super.dispose();
     }

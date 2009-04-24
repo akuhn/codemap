@@ -8,7 +8,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import ch.akuhn.hapax.index.TermDocumentMatrix;
-import ch.unibe.softwaremap.builder.HapaxNature;
 
 /**
  * The activator class controls the plug-in life cycle
