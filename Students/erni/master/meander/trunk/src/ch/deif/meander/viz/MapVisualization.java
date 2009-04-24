@@ -1,25 +1,32 @@
 package ch.deif.meander.viz;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PGraphicsJava2D;
-import processing.core.PImage;
 import processing.pdf.PGraphicsPDF;
 import ch.deif.meander.Map;
 import ch.deif.meander.ui.PViewer;
 
-public abstract class MapVisualization {
+
+public abstract class MapVisualization implements Drawable {
 
     public final Map map;
-    public final int width, height;
+    protected final int pixelScale;
+    private Collection<Drawable> children;
 
+    public void addChild(Drawable child) {
+        if (children == null) children = new ArrayList<Drawable>();
+        children.add(child);
+    }
+    
     public MapVisualization(Map map) {
         this.map = map;
-        this.width = map.getParameters().width;
-        this.height = map.getParameters().height;
+        this.pixelScale = map.getParameters().width;
     }
 
     public abstract void draw(PGraphics pg);
@@ -55,13 +62,17 @@ public abstract class MapVisualization {
                 + ext;
     }
 
-    private void performDraw(PGraphics pg) {
+    public void performDraw(PGraphics pg) {
         pg.hint(PConstants.ENABLE_NATIVE_FONTS);
         pg.smooth();
-        pg.setSize(width, height);
+        pg.setSize(pixelScale, pixelScale);
         pg.beginDraw();
         if (pg instanceof PGraphicsPDF) pg.textMode(PConstants.SHAPE);
         this.draw(pg);
+        if (children != null)
+            for (Drawable each: children) {
+                each.draw(pg);
+            }
         pg.endDraw();
     }
 
@@ -83,6 +94,10 @@ public abstract class MapVisualization {
         this.performDraw(img);
         img.updatePixels();
         return img;
+    }
+
+    public int pixelScale() {
+        return pixelScale;
     }
 
 }

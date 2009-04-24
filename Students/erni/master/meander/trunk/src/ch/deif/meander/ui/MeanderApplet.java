@@ -219,11 +219,11 @@ public class MeanderApplet extends PApplet {
     }
 
     private int width() {
-        return viz.map.getParameters().width;
+        return viz.pixelScale();
     }
 
     private int height() {
-        return viz.map.getParameters().height;
+        return viz.pixelScale();
     }
 
 

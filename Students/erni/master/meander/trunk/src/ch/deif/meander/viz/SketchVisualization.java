@@ -25,7 +25,7 @@ public class SketchVisualization extends MapVisualization {
         for (Location each : map.locations()) {
             float x = (float) (each.x() * width);
             float y = (float) (each.y() * height);
-            float r = (float) (each.elevation() / 100 * width / 2.61f);
+            float r = (float) (each.elevation() / 500 * width);
             pg.ellipse(x, y, r, r);
         }
     }

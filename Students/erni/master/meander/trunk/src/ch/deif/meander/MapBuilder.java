@@ -87,4 +87,9 @@ public class MapBuilder {
         return this;
     }
 
+    public MapBuilder location(double x, double y, int z, String string) {
+        locations.makeLocation(x, y, z).setName(string);
+        return this;
+    }
+
 }

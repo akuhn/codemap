@@ -42,6 +42,7 @@ public class LocationList implements Iterable<Location> {
         private double elevation;
         private double y, x;
         private Document document;
+        private String name;
 
         private Loc(double x, double y, double elevation) {
             this.x = x;
@@ -84,6 +85,16 @@ public class LocationList implements Iterable<Location> {
         @Override
         public double normElevation() {
             return elevation / maxElevation * 100;
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public void setName(String string) {
+            this.name = string;
         }
         
     }

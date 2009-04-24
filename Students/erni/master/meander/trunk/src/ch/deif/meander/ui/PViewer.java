@@ -20,7 +20,7 @@ public class PViewer extends JFrame {
         pa.init();
         pack();
         setVisible(true);
-        setSize(viz.map.getParameters().width, viz.map.getParameters().height);
+        setSize(viz.pixelScale(), viz.pixelScale());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
@@ -34,13 +34,13 @@ public class PViewer extends JFrame {
 
         @Override
         public void setup() {
-            size(viz.map.getParameters().width, viz.map.getParameters().height);
+            size(viz.pixelScale(), viz.pixelScale());
             frameRate(1);
         }
 
         @Override
         public void draw() {
-            viz.draw(g);
+            viz.performDraw(g);
         }
 
     }

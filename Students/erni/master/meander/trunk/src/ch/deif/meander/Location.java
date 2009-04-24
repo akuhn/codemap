@@ -24,5 +24,9 @@ public interface Location {
     public float py();
 
     public float px();
+
+    public void setName(String string);
+    
+    public String getName();
     
 }
