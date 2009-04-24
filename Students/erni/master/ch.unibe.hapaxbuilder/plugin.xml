@@ -3,19 +3,19 @@
 <plugin>
 
    <extension
-         id="SampleBuilder"
-         name="Sample Project Builder"
+         id="HapaxBuilder"
+         name="Hapax Builder"
          point="org.eclipse.core.resources.builders">
       <builder
             hasNature="true">
          <run
-               class="ch.unibe.softwaremap.builder.MSEBuilder">
+               class="ch.unibe.softwaremap.builder.HapaxBuilder">
          </run>
       </builder>
    </extension>
    <extension
-         id="SampleNature"
-         name="Sample Project Nature"
+         id="HapaxNature"
+         name="Hapax Project Nature"
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
@@ -23,7 +23,7 @@
          </run>
       </runtime>
       <builder
-            id="ch.unibe.softwaremap.SampleBuilder">
+            id="ch.unibe.softwaremap.HapaxBuilder">
       </builder>
    </extension>
    <extension
