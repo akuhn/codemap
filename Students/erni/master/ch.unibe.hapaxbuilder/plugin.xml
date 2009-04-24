@@ -63,6 +63,13 @@
             name="name"
             restorable="true">
       </view>
+      <view
+            category="ch.unibe.softwaremap"
+            class="ch.unibe.softwaremap.ui.TagCloudView"
+            id="ch.unibe.softwaremap.TagCloudView"
+            name="Word Cloud"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>
