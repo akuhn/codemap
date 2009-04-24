@@ -28,6 +28,7 @@ class FullBuildVisitor implements IResourceVisitor {
 
     public boolean visit(IResource resource) throws CoreException {
         IJavaElement javaElement = JavaCore.create(resource);
+        if (javaElement == null) return true;
         if (javaElement.getElementType() != IJavaElement.COMPILATION_UNIT) return true;
         ICompilationUnit compilationUnit = (ICompilationUnit) javaElement.getAdapter(ICompilationUnit.class); 
         return visit(compilationUnit);

@@ -5,6 +5,7 @@ import static ch.unibe.eclipse.util.EclipseUtil.adapt;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
@@ -18,11 +19,14 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
+import ch.unibe.softwaremap.SoftwareMapCore;
+
 import processing.core.PApplet;
 
 
 public class TagCloudView extends ViewPart implements ISelectionListener, ControlListener {
 
+    private static final String RESOURCE_NAVIGATOR_ID = "org.eclipse.ui.views.ResourceNavigator";
     private static final String CONTENT_OUTLINE_ID = "org.eclipse.ui.views.ContentOutline";
     public static final String PACKAGE_EXPLORER_ID = "org.eclipse.jdt.ui.PackageExplorer";
 
@@ -46,10 +50,10 @@ public class TagCloudView extends ViewPart implements ISelectionListener, Contro
                 size(400,400);
             }
         });
-        getSite().getWorkbenchWindow().getSelectionService()
-                .addSelectionListener(PACKAGE_EXPLORER_ID, this);
-        getSite().getWorkbenchWindow().getSelectionService()
-                .addSelectionListener(CONTENT_OUTLINE_ID, this);
+        addSelectionListener(
+                PACKAGE_EXPLORER_ID,
+                CONTENT_OUTLINE_ID,
+                RESOURCE_NAVIGATOR_ID);
         view.addControlListener(this);
     }
 
@@ -63,14 +67,24 @@ public class TagCloudView extends ViewPart implements ISelectionListener, Contro
      */
     @Override
     public void dispose() {
-        getSite().getWorkbenchWindow().getSelectionService()
-                .removeSelectionListener(PACKAGE_EXPLORER_ID, this);
-        getSite().getWorkbenchWindow().getSelectionService()
-                .removeSelectionListener(CONTENT_OUTLINE_ID, this);
-        view.removeControlListener(this);
-        super.dispose();
+        removeSelectionListener(
+                CONTENT_OUTLINE_ID, 
+                PACKAGE_EXPLORER_ID, 
+                RESOURCE_NAVIGATOR_ID);
+    }
+    
+    private void addSelectionListener(String... viewPartID) {
+        for (String each: viewPartID) 
+            getSite().getWorkbenchWindow().getSelectionService()
+                .addSelectionListener(each, this);
     }
 
+    private void removeSelectionListener(String... viewPartID) {
+        for (String each: viewPartID) 
+            getSite().getWorkbenchWindow().getSelectionService()
+                .removeSelectionListener(each, this);
+    }
+    
     /** Sent when selection in package explorer or content outline changes.
      * 
      */
@@ -108,6 +122,8 @@ public class TagCloudView extends ViewPart implements ISelectionListener, Contro
 
     private void compilationUnitsSelected(IJavaProject project, Collection<ICompilationUnit> units) {
         System.out.println(units.size() + " in " + project.getHandleIdentifier());
+        IProject resource = adapt(project, IProject.class);
+        SoftwareMapCore.at(resource).enableBuilder();
     }
 
     private void multipleProjectSelected() {
@@ -119,6 +135,9 @@ public class TagCloudView extends ViewPart implements ISelectionListener, Contro
         // Do nothing.
     }
 
+    /** Sent when view is resized. 
+     * 
+     */
     @Override
     public void controlResized(ControlEvent e) {
         // TODO handle this event somehow

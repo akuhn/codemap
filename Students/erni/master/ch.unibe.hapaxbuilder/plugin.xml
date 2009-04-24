@@ -7,40 +7,11 @@
          name="Hapax Builder"
          point="org.eclipse.core.resources.builders">
       <builder
-            hasNature="true">
+            hasNature="false">
          <run
                class="ch.unibe.softwaremap.builder.HapaxBuilder">
          </run>
       </builder>
-   </extension>
-   <extension
-         id="HapaxNature"
-         name="Hapax Project Nature"
-         point="org.eclipse.core.resources.natures">
-      <runtime>
-         <run
-               class="ch.unibe.softwaremap.builder.HapaxNature">
-         </run>
-      </runtime>
-      <builder
-            id="ch.unibe.softwaremap.HapaxBuilder">
-      </builder>
-   </extension>
-   <extension
-         point="org.eclipse.ui.popupMenus">
-      <objectContribution
-            adaptable="true"
-            objectClass="org.eclipse.core.resources.IProject"
-            nameFilter="*"
-            id="ch.unibe.softwaremap.menus">
-         <action
-               label="Add/Remove Sample Nature"
-               class="ch.unibe.softwaremap.builder.ToggleNatureAction"
-               menubarPath="additions"
-               enablesFor="+"
-               id="ch.unibe.softwaremap.menus.toggleNatureAction">
-         </action>
-      </objectContribution>
    </extension>
    <extension
          point="org.eclipse.ui.views">

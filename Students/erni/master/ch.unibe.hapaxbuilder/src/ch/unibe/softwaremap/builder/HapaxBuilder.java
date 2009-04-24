@@ -73,7 +73,7 @@ public class HapaxBuilder extends IncrementalProjectBuilder {
             each.getCorrespondingResource().accept(visitor);
         }
         TermDocumentMatrix result = visitor.getResult();
-        SoftwareMapCore.put(getProject(), result);
+        SoftwareMapCore.at(getProject()).putTDM(result);
         return defaultReturnValue();
     }
 }

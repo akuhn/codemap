@@ -42,10 +42,11 @@ public class SoftwareMapCore extends AbstractUIPlugin {
         return PLUGIN_ID + "." + javaClass.getSimpleName();
     }
 
-    public static void put(IProject project, TermDocumentMatrix result) {
+    public static ProjectMap at(IProject project) {
         if (hashmap == null) hashmap = new HashMap<IProject,ProjectMap>();
         ProjectMap map = hashmap.get(project);
-        if (map == null) hashmap.put(project, map = new ProjectMap());
-        map.tdm = result;
+        if (map == null) hashmap.put(project, map = new ProjectMap(project));
+        return map;
+        
     }
 }
