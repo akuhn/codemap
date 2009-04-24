@@ -2,12 +2,13 @@ package ch.unibe.softwaremap.ui;
 
 import static ch.unibe.eclipse.util.EclipseUtil.adapt;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IMember;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Composite;
@@ -19,6 +20,8 @@ import processing.core.PApplet;
 
 
 public class TagCloudView extends ViewPart implements ISelectionListener {
+
+    private static final String CONTENT_OUTLINE_ID = "org.eclipse.ui.views.ContentOutline";
 
     public static final String PACKAGE_EXPLORER_ID = "org.eclipse.jdt.ui.PackageExplorer";
 
@@ -39,6 +42,8 @@ public class TagCloudView extends ViewPart implements ISelectionListener {
         });
         getSite().getWorkbenchWindow().getSelectionService()
                 .addSelectionListener(PACKAGE_EXPLORER_ID, this);
+        getSite().getWorkbenchWindow().getSelectionService()
+                .addSelectionListener(CONTENT_OUTLINE_ID, this);
     }
 
     @Override
@@ -50,6 +55,8 @@ public class TagCloudView extends ViewPart implements ISelectionListener {
     public void dispose() {
         getSite().getWorkbenchWindow().getSelectionService()
                 .removeSelectionListener(PACKAGE_EXPLORER_ID, this);
+        getSite().getWorkbenchWindow().getSelectionService()
+                .removeSelectionListener(CONTENT_OUTLINE_ID, this);
         super.dispose();
     }
 
@@ -62,7 +69,7 @@ public class TagCloudView extends ViewPart implements ISelectionListener {
 
     private void selectionChanged(IStructuredSelection selection) {
         IJavaProject project = null;
-        Collection<ICompilationUnit> units = new ArrayList<ICompilationUnit>(); 
+        Collection<ICompilationUnit> units = new HashSet<ICompilationUnit>(); 
         for (Object each: selection.toList()) {
             IJavaElement javaElement = adapt(each, IJavaElement.class);
             if (project == null) project = javaElement.getJavaProject();
@@ -70,8 +77,13 @@ public class TagCloudView extends ViewPart implements ISelectionListener {
                 multipleProjectSelected();
                 return;
             }
-            if (javaElement instanceof ICompilationUnit) 
+            if (javaElement instanceof ICompilationUnit) {
                 units.add((ICompilationUnit) javaElement);
+            }
+            if (javaElement instanceof IMember) {
+                javaElement = javaElement.getAncestor(IJavaElement.COMPILATION_UNIT);
+                if (javaElement != null) units.add((ICompilationUnit) javaElement);
+            }
         }
         if (project != null) compilationUnitsSelected(project, units);
     }
