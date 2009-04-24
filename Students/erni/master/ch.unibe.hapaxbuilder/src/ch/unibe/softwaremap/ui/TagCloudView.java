@@ -11,6 +11,9 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
@@ -19,14 +22,17 @@ import org.eclipse.ui.part.ViewPart;
 import processing.core.PApplet;
 
 
-public class TagCloudView extends ViewPart implements ISelectionListener {
+public class TagCloudView extends ViewPart implements ISelectionListener, ControlListener {
 
     private static final String CONTENT_OUTLINE_ID = "org.eclipse.ui.views.ContentOutline";
-
     public static final String PACKAGE_EXPLORER_ID = "org.eclipse.jdt.ui.PackageExplorer";
 
     private EclipseProcessingBridge2 view;
 
+    
+    /** Sent when view is opened.
+     * 
+     */
     @Override
     public void createPartControl(Composite parent) {
         view = new EclipseProcessingBridge2(parent);
@@ -44,6 +50,7 @@ public class TagCloudView extends ViewPart implements ISelectionListener {
                 .addSelectionListener(PACKAGE_EXPLORER_ID, this);
         getSite().getWorkbenchWindow().getSelectionService()
                 .addSelectionListener(CONTENT_OUTLINE_ID, this);
+        view.addControlListener(this);
     }
 
     @Override
@@ -51,15 +58,22 @@ public class TagCloudView extends ViewPart implements ISelectionListener {
         view.setFocus();
     }
 
+    /** Sent when view is closed.
+     * 
+     */
     @Override
     public void dispose() {
         getSite().getWorkbenchWindow().getSelectionService()
                 .removeSelectionListener(PACKAGE_EXPLORER_ID, this);
         getSite().getWorkbenchWindow().getSelectionService()
                 .removeSelectionListener(CONTENT_OUTLINE_ID, this);
+        view.removeControlListener(this);
         super.dispose();
     }
 
+    /** Sent when selection in package explorer or content outline changes.
+     * 
+     */
     @Override
     public void selectionChanged(IWorkbenchPart part, ISelection selection) {
         if (part == this) return;
@@ -67,6 +81,10 @@ public class TagCloudView extends ViewPart implements ISelectionListener {
                 selectionChanged((IStructuredSelection) selection);
     }
 
+    /** Filters selected IJavaProject and ICompilationUnit.
+     * 
+     * @param selection
+     */
     private void selectionChanged(IStructuredSelection selection) {
         IJavaProject project = null;
         Collection<ICompilationUnit> units = new HashSet<ICompilationUnit>(); 
@@ -94,6 +112,16 @@ public class TagCloudView extends ViewPart implements ISelectionListener {
 
     private void multipleProjectSelected() {
         System.out.println("!!! multiple projects selected !!!");
+    }
+
+    @Override
+    public void controlMoved(ControlEvent e) {
+        // Do nothing.
+    }
+
+    @Override
+    public void controlResized(ControlEvent e) {
+        // TODO handle this event somehow
     }
     
     
