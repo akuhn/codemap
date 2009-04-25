@@ -4,8 +4,13 @@ import java.awt.Rectangle;
 
 import processing.core.PGraphics;
 
+/** Displays some text.
+ * 
+ */
 public class Label implements Drawable, Comparable<Label> {
 
+    // TODO extract parts of this class into a figure superclass, eg positioning and bounding box
+    
     public static boolean DRAFT = false;
     
     private String text;
