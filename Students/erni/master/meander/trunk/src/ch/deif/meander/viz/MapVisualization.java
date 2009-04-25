@@ -13,15 +13,19 @@ import ch.deif.meander.Map;
 import ch.deif.meander.ui.PViewer;
 
 
-public abstract class MapVisualization implements Drawable {
+public abstract class MapVisualization<E extends Drawable> implements Drawable {
 
     public final Map map;
     protected final int pixelScale;
-    private Collection<Drawable> children;
+    protected Collection<E> children;
 
-    public void addChild(Drawable child) {
-        if (children == null) children = new ArrayList<Drawable>();
+    public void addChild(E child) {
+        if (children == null) children = new ArrayList<E>();
         children.add(child);
+    }
+    
+    public Iterable<E> children() {
+        return children;
     }
     
     public MapVisualization(Map map) {
