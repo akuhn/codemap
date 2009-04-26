@@ -7,6 +7,7 @@ import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.corpus.Importer;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
+import ch.deif.meander.ui.MeanderApplet;
 import ch.deif.meander.viz.Layers;
 import ch.deif.meander.viz.MapVisualization;
 
@@ -55,7 +56,7 @@ public class Meander {
         tdm = tdm.rejectAndWeight();
         LatentSemanticIndex lsi = tdm.createIndex();
         MDS mds = MDS.fromCorrelationMatrix(lsi);
-        MapBuilder builder = Map.builder().size(480);
+        MapBuilder builder = Map.builder().size(MeanderApplet.PIXELSCALE);
         Iterator<Document> iterator = lsi.documents.iterator();
         for (int n = 0; n < mds.x.length; n++) {
             Document each = iterator.next();

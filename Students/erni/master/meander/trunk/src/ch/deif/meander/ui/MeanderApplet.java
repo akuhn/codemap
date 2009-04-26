@@ -2,7 +2,6 @@ package ch.deif.meander.ui;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,34 +24,31 @@ public class MeanderApplet extends PApplet {
     protected final int POINT_STROKE = 2;
     protected final int BOX_STROKE = 2;
 
-    private MapVisualization viz;
+    private MapVisualization<?> viz;
     private Collection<Point> points;
 
-    private boolean preSelect = false;
-    private boolean changed = false;
+    private boolean needsRedraw;
     private PGraphics background;
 
     private Point dragStart;
     private Point dragStop;
+    
+    public static final int PIXELSCALE = 512;
 
     public MeanderApplet() {
-        this(EclipseProcessingBridge.createVizualization());
+        this(null);
     }
-    
-    public MeanderApplet(MapVisualization vizualization) {
-        viz = vizualization;
-        // TODO check if the concurrency problem really comes from the points
+
+    public MeanderApplet(MapVisualization<?> vizualization) {
         points = Collections.synchronizedSet(new HashSet<Point>());
         background = createGraphics(width(), height(), JAVA2D);
+        setVisualization(vizualization);
     }
 
     @Override
     public void setup() {
         size(width(), height());
         frameRate(25);
-        setupBackground();
-        drawBackground();
-        setNeedsRedraw();
     }
 
     private void setupBackground() {
@@ -63,16 +59,14 @@ public class MeanderApplet extends PApplet {
 
     @Override
     public void draw() {
-        if (!(changed || preSelect)) return;
+        if (!needsRedraw) return;
         smooth();
         noFill();
         strokeWeight(POINT_STROKE);
-
         drawBackground();
         drawSelectedPoints();
-        drawPreSelectionPoint();
         drawSelectionBox();
-        changed = false;
+        needsRedraw = false;
     }
 
     private void drawSelectionBox() {
@@ -93,34 +87,8 @@ public class MeanderApplet extends PApplet {
         }
     }
 
-    private void drawPreSelectionPoint() {
-        // TODO: guarding if-statements
-        if (preSelect) {
-            stroke(Color.BLUE.getRGB());
-            Point current = new Point(mouseX, mouseY);
-            Point preSelect = new MaxDistNearestNeighbor(map(), width() / 10)
-                    .forLocation(current);
-            if (preSelect != null) {
-                ellipse(preSelect.x, preSelect.y, 3, 3);
-            }
-        }
-    }
-
     private void drawBackground() {
         image(background, 0, 0);
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        super.keyTyped(e);
-        if (e.getKeyChar() == 's') {
-            togglePreSelect();
-            setNeedsRedraw();
-        }
-    }
-
-    protected void togglePreSelect() {
-        preSelect = !preSelect;
     }
 
     @Override
@@ -144,7 +112,7 @@ public class MeanderApplet extends PApplet {
             points.add(nearest);
         }
         unsetSelectionBox();
-        setNeedsRedraw();
+        needsRedraw();
     }
 
     private void unsetSelectionBox() {
@@ -159,9 +127,10 @@ public class MeanderApplet extends PApplet {
             dragStart = e.getPoint();
         }
         dragStop = e.getPoint();
-        setNeedsRedraw();
+        needsRedraw();
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
         super.mouseReleased();
         if (dragStart != null && dragStop != null) {
@@ -184,7 +153,7 @@ public class MeanderApplet extends PApplet {
                 }
             }
             unsetSelectionBox();
-            setNeedsRedraw();
+            needsRedraw();
         }
     }
 
@@ -198,37 +167,46 @@ public class MeanderApplet extends PApplet {
             int y = (int) Math.round(location.y() * map().getHeight());
             points.add(new Point(x, y));
         }
-        // callback for tag-cloud
-        setNeedsRedraw();
+        needsRedraw();
     }
 
-    protected void setNeedsRedraw() {
-        changed = true;
+    protected void needsRedraw() {
+        needsRedraw = true;
     }
 
     private Map map() {
-        return viz.map;
+        return viz == null ? null : viz.map;
     }
 
     private int width() {
-        return viz.pixelScale();
+        return MeanderApplet.PIXELSCALE;
     }
 
     private int height() {
-        return viz.pixelScale();
+        return MeanderApplet.PIXELSCALE;
     }
 
-	public void updateSelection(List<String> handleIdentifiers) {
-		points.clear();
-		for (Location each : viz.map.locations()) {
-			if (handleIdentifiers.contains(each.getDocument().name())) {
-				int x = (int) Math.round(each.x() * map().getHeight());
-				int y = (int) Math.round(each.y() * map().getHeight());
-				points.add(new Point(x, y));		
-			} 
-		}
-        setNeedsRedraw();
-	}
+    public void updateSelection(List<String> handleIdentifiers) {
+        points.clear();
+        for (Location each : viz.map.locations()) {
+            if (handleIdentifiers.contains(each.getDocument().name())) {
+                int x = (int) Math.round(each.x() * map().getHeight());
+                int y = (int) Math.round(each.y() * map().getHeight());
+                points.add(new Point(x, y));		
+            } 
+        }
+        needsRedraw();
+    }
+
+    public void setVisualization(MapVisualization<?> viz) {
+        if (viz == this.viz) return;
+        this.points.clear();
+        this.viz = viz;
+        setupBackground();
+        needsRedraw();
+        repaint();
+    }
+
 
 
 }
