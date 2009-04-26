@@ -21,7 +21,7 @@ public class MapTest {
 
     @Test
     public Map fiveOnThreeMap() {
-        Map map = Map.builder().size(5, 3).location(0.5, 0.5, 100).done();
+        Map map = Map.builder().size(5).location(0.5, 0.5, 100).done();
         assertEquals(5, map.getWidth());
         assertEquals(3, map.getHeight());
         assertEquals(1, map.locationCount());
@@ -77,8 +77,7 @@ public class MapTest {
     
     @Test
     public Map makeSampleMap() {
-        MapBuilder builder = Map.builder()
-            .size(200, 200);
+        MapBuilder builder = Map.builder().size(200);
         for (int a = 5; a < 90; a += 10) {
             double rad = Math.PI / 180 * a;
             builder.location(0.8*sin(rad), 0.8*cos(rad), a + 25);

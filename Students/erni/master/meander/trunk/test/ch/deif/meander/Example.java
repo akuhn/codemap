@@ -6,8 +6,7 @@ import ch.deif.meander.viz.Layers;
 public class Example {
 
     public static void main(String... args) {
-        Map map = new MapBuilder()
-                .size(640, 640)
+        Map map = new MapBuilder().size(640)
                 .location(0.5, 0.5, 80)
                 .location(0.2, 0.2, 100)
                 .done();

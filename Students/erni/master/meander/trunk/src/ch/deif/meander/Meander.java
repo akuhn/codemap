@@ -55,7 +55,7 @@ public class Meander {
         tdm = tdm.rejectAndWeight();
         LatentSemanticIndex lsi = tdm.createIndex();
         MDS mds = MDS.fromCorrelationMatrix(lsi);
-        MapBuilder builder = Map.builder().size(512, 512);
+        MapBuilder builder = Map.builder().size(480);
         Iterator<Document> iterator = lsi.documents.iterator();
         for (int n = 0; n < mds.x.length; n++) {
             Document each = iterator.next();

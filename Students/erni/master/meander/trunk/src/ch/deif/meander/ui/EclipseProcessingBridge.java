@@ -52,7 +52,7 @@ public class EclipseProcessingBridge extends Composite {
 		MSEProject project = ser.model().all(MSEProject.class).iterator()
 				.next();
 		MSERelease release = Get.element(nth, project.releases);
-		MapBuilder builder = Map.builder().size(MAP_DIM, MAP_DIM);
+		MapBuilder builder = Map.builder().size(MAP_DIM);
 		for (MSEDocument each : release.documents) {
 			builder.location(each, release.name);
 		}

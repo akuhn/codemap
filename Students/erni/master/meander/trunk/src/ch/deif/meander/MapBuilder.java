@@ -49,9 +49,9 @@ public class MapBuilder {
         locations = new LocationList();
     }
 
-    public MapBuilder size(int width, int height) {
-        params.width = width;
-        params.height = height;
+    public MapBuilder size(int pixelScale) {
+        params.width = pixelScale;
+        params.height = pixelScale;
         return this;
     }
 
