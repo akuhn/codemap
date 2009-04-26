@@ -43,7 +43,7 @@ public class Meander {
     }
     
     public Meander useCorpus(TermDocumentMatrix tdm) {
-        assert (tdm == null) : "Cannot call #useCorpus after #addDocuments.";
+        assert this.tdm == null : "Cannot call #useCorpus after #addDocuments.";
         assert map == null : "Cannot call #useCorpus after #makeMap.";
         this.tdm = tdm;
         return this;
