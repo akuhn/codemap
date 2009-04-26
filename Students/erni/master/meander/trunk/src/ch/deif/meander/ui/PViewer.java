@@ -11,7 +11,7 @@ import ch.deif.meander.viz.MapVisualization;
 @SuppressWarnings("serial")
 public class PViewer extends JFrame {
 
-    public PViewer(MapVisualization viz) {
+    public PViewer(MapVisualization<?> viz) {
         super("Map Viewer");
 
         setLayout(new BorderLayout());
@@ -26,9 +26,9 @@ public class PViewer extends JFrame {
 
     private class InnerApplet extends PApplet {
 
-        private MapVisualization viz;
+        private MapVisualization<?> viz;
 
-        public InnerApplet(MapVisualization viz) {
+        public InnerApplet(MapVisualization<?> viz) {
             this.viz = viz;
         }
 
@@ -40,7 +40,7 @@ public class PViewer extends JFrame {
 
         @Override
         public void draw() {
-            viz.performDraw(g);
+            viz.drawToPGraphics(g);
         }
 
     }

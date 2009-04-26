@@ -1,9 +1,11 @@
 package ch.deif.meander;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static ch.unibe.scg.util.Extension.$;
 import ch.akuhn.hapax.corpus.Document;
 
 /** List of locations, (scalable value object).
@@ -89,12 +91,19 @@ public class LocationList implements Iterable<Location> {
 
         @Override
         public String getName() {
-            return name;
+            if (document == null) return String.valueOf(name);
+            String name = (new File(document.name()).getName());
+            return $(name).removeSuffix(".java");
         }
 
         @Override
         public void setName(String string) {
             this.name = string;
+        }
+
+        public void normalizeXY(double minX, double maxX, double minY, double maxY) {
+            x = (x - minX) / (maxX - minX);
+            y = (y - minY) / (maxY - minY);
         }
         
     }
@@ -109,6 +118,19 @@ public class LocationList implements Iterable<Location> {
 
     public int getPixelScale() {
         return pixelScale;
+    }
+
+    /*package*/ void normalizeXY() {
+        double minX = 0, maxX = 0, minY = 0, maxY = 0;
+        for (Location each: this) {
+            minY = Math.min(minY, each.y());
+            maxY = Math.max(maxY, each.y());
+            minX = Math.min(minX, each.x());
+            maxX = Math.max(maxX, each.x());
+        }
+        for (Location each: this) {
+            ((Loc) each).normalizeXY(minX, maxX, minY, maxY);
+        }
     }
     
 }

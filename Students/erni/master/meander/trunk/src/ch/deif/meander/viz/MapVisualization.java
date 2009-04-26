@@ -33,7 +33,7 @@ public abstract class MapVisualization<E extends Drawable> implements Drawable {
         this.pixelScale = map.getParameters().width;
     }
 
-    public abstract void draw(PGraphics pg);
+    public abstract void drawThis(PGraphics pg);
 
     public void openApplet() {
         new PViewer(this);
@@ -55,7 +55,7 @@ public abstract class MapVisualization<E extends Drawable> implements Drawable {
         pa.init();
         pg.setParent(pa);
         pg.setPath(qname(name, "pdf"));
-        performDraw(pg);
+        draw(pg);
         pg.dispose();
         pg = null;
     }
@@ -66,19 +66,24 @@ public abstract class MapVisualization<E extends Drawable> implements Drawable {
                 + ext;
     }
 
-    public void performDraw(PGraphics pg) {
+    public final void draw(PGraphics pg) {
+        this.drawThis(pg);
+        if (children != null)
+            for (Drawable each: children) {
+                each.draw(pg);
+            }
+    }
+    
+    public final void drawToPGraphics(PGraphics pg) {
         pg.hint(PConstants.ENABLE_NATIVE_FONTS);
         pg.smooth();
         pg.setSize(pixelScale, pixelScale);
         pg.beginDraw();
         if (pg instanceof PGraphicsPDF) pg.textMode(PConstants.SHAPE);
         this.draw(pg);
-        if (children != null)
-            for (Drawable each: children) {
-                each.draw(pg);
-            }
         pg.endDraw();
     }
+    
 
     public void drawToPNG(String name) {
         PGraphics pg = new PGraphicsJava2D();
@@ -87,7 +92,7 @@ public abstract class MapVisualization<E extends Drawable> implements Drawable {
         // PApplet pa = new PApplet();
         // pa.init();
         // pg.setParent(pa);
-        performDraw(pg);
+        draw(pg);
         pg.save(qname(name, "png"));
     }
 
@@ -95,7 +100,7 @@ public abstract class MapVisualization<E extends Drawable> implements Drawable {
         PGraphics img = new PGraphics();
         img.loadPixels();
         img.updatePixels();
-        this.performDraw(img);
+        this.draw(img);
         img.updatePixels();
         return img;
     }

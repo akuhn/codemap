@@ -1,30 +1,5 @@
 package ch.deif.meander.ui;
 
-import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.TreeMap;
-
-import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.window.ApplicationWindow;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StyleRange;
-import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.List;
-import org.eclipse.swt.widgets.Shell;
-
-import ch.akuhn.hapax.corpus.Terms;
-import ch.akuhn.util.Bag;
-import ch.akuhn.util.Separator;
-import ch.deif.meander.Location;
 
 public class Meander {
 //

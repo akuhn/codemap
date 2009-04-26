@@ -1,8 +1,5 @@
 package ch.deif.meander;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.corpus.Terms;
@@ -90,6 +87,13 @@ public class MapBuilder {
     public MapBuilder location(double x, double y, int z, String string) {
         locations.makeLocation(x, y, z).setName(string);
         return this;
+    }
+
+    public void normalizeXY() {
+        locations.normalizeXY();
+        for (Location each: locations) {
+            System.out.println(each.x() + "," + each.y());
+        }
     }
 
 }

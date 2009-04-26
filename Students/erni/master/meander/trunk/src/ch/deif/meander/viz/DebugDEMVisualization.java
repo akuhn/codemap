@@ -5,14 +5,14 @@ import processing.core.PImage;
 import ch.deif.meander.Map;
 import ch.deif.meander.Map.Pixel;
 
-public class DebugDEMVisualization extends MapVisualization {
+public class DebugDEMVisualization extends MapVisualization<Drawable> {
 
     public DebugDEMVisualization(Map map) {
         super(map);
     }
 
     @Override
-    public void draw(PGraphics pg) {
+    public void drawThis(PGraphics pg) {
         PImage img = new PImage(map.getWidth(), map.getHeight());
         int[] pixels = img.pixels;
         int index = 0;

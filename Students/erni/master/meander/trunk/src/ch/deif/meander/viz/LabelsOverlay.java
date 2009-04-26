@@ -4,15 +4,15 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
+import processing.core.PFont;
+import processing.core.PGraphics;
 import ch.akuhn.util.Get;
 import ch.deif.meander.Location;
 import ch.deif.meander.Map;
-import processing.core.PFont;
-import processing.core.PGraphics;
 
 public class LabelsOverlay extends MapVisualization<Label> {
 
-    private PFont PFONT = new PFont(PFont.findFont("Helvetica"), true, PFont.DEFAULT_CHARSET);
+    private PFont PFONT = new PFont(PFont.findFont("Arial Narrow"), true, PFont.DEFAULT_CHARSET);
     private boolean layoutDone = false;
 
     public LabelsOverlay(Map map) {
@@ -22,13 +22,13 @@ public class LabelsOverlay extends MapVisualization<Label> {
             addChild(l);
             l.x = l.x0 = each.px();
             l.y = l.y0 = each.py();
-            l.size = (float) each.elevation();
+            l.size = (float) each.normElevation() / 4f;
         }
     }
     
  
     @Override
-    public void draw(PGraphics pg) {
+    public void drawThis(PGraphics pg) {
         pg.textFont(PFONT);
         this.layout(pg);
         pg.fill(255,0,0);

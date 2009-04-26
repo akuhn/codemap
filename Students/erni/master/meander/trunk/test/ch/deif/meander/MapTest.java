@@ -3,12 +3,9 @@ package ch.deif.meander;
 import static java.lang.Double.NaN;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Iterator;
-
-import ch.unibe.jexample.Given;
-import ch.unibe.jexample.JExample;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +13,8 @@ import org.junit.runner.RunWith;
 import ch.akuhn.util.All;
 import ch.akuhn.util.Size;
 import ch.deif.meander.Map.Pixel;
+import ch.unibe.jexample.Given;
+import ch.unibe.jexample.JExample;
 
 @RunWith(JExample.class)
 public class MapTest {
