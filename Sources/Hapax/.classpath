@@ -6,6 +6,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/snowball.jar"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/ch.akuhn.util"/>
-	<classpathentry kind="lib" path="/JExample plugin/lib/jexample-r285.jar"/>
+	<classpathentry kind="lib" path="lib/jexample-r285.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
