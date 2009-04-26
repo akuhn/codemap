@@ -82,6 +82,7 @@ public class SelectionView extends ViewPart {
         tableviewer = new TableViewer(pagebook, SWT.NONE);
         tableviewer.setLabelProvider(new WorkbenchLabelProvider());
         tableviewer.setContentProvider(new ArrayContentProvider());
+        tableviewer.setSelection(null);
 
         // we're cooperative and also provide our selection
         // at least for the tableviewer
