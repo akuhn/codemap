@@ -36,7 +36,7 @@ public class Meander {
 
     public Meander addDocuments(String folder, String... extensions) {
         if (tdm == null) tdm = new TermDocumentMatrix();
-        assert map != null : "Cannot call #addDocuments after #makeMap.";
+        assert map == null : "Cannot call #addDocuments after #makeMap.";
         Importer importer = new Importer(tdm);
         importer.importAllFiles(new File(folder), extensions);
         return this;
@@ -44,7 +44,7 @@ public class Meander {
     
     public Meander useCorpus(TermDocumentMatrix tdm) {
         assert (tdm == null) : "Cannot call #useCorpus after #addDocuments.";
-        assert map != null : "Cannot call #useCorpus after #makeMap.";
+        assert map == null : "Cannot call #useCorpus after #makeMap.";
         this.tdm = tdm;
         return this;
     }
