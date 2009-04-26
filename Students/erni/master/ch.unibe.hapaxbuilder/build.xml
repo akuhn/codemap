@@ -8,12 +8,17 @@
         <delete file="${package.jar}"/>
 		<jar id="files" destfile="${package.jar}">
 			<fileset dir="../ch.akuhn.util/bin"/>
+			<fileset dir="../ch.akuhn.util/src"/>
             <fileset dir="../Fame/bin"/>
+			<fileset dir="../Fame/src"/>
             <fileset dir="../ForEach DSL/bin"/>
+			<fileset dir="../ForEach DSL/src"/>
             <fileset dir="../Hapax/bin"/>
-            <fileset dir="../Hapax/src"/> <!-- include resources -->
-			<fileset dir="../Meander/bin"/>
+            <fileset dir="../Hapax/src"/> 
+            <fileset dir="../Meander/bin"/>
+			<fileset dir="../Meander/src"/>
             <fileset dir="../SCG util package/bin"/>
+			<fileset dir="../SCG util package/src"/>
             <zipfileset src="../Hapax/lib/snowball.jar" />
 			<zipfileset src="../Meander/lib/core.jar" />
             <zipfileset src="../Meander/lib/itext.jar" />
