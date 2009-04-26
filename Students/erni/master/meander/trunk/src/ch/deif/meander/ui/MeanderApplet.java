@@ -27,7 +27,6 @@ public class MeanderApplet extends PApplet {
 
     private MapVisualization viz;
     private Collection<Point> points;
-    private IEventHandler event;
 
     private boolean preSelect = false;
     private boolean changed = false;
@@ -41,7 +40,6 @@ public class MeanderApplet extends PApplet {
     }
     
     public MeanderApplet(MapVisualization vizualization) {
-        event = new NullEventHandler();
         viz = vizualization;
         // TODO check if the concurrency problem really comes from the points
         points = Collections.synchronizedSet(new HashSet<Point>());
@@ -131,7 +129,6 @@ public class MeanderApplet extends PApplet {
         Point point = e.getPoint();
         if (!e.isControlDown()) {
             points.clear();
-            event.onAppletSelectionCleared();
         }
         if (e.getButton() == MouseEvent.BUTTON1) {
             // button1 is 1st mouse button
@@ -139,13 +136,11 @@ public class MeanderApplet extends PApplet {
             Point nearest = nn.forLocation(point);
             if (nearest != null) {
                 points.add(nearest);
-                event.onAppletSelection(nn.location());
             }
         } else if (e.getButton() == MouseEvent.BUTTON3) {
             // button3 is 2nd mouse button
             NearestNeighbor nn = new NearestNeighbor(map());
             Point nearest = nn.forLocation(point);
-            event.onAppletSelection(nn.location());
             points.add(nearest);
         }
         unsetSelectionBox();
@@ -189,18 +184,12 @@ public class MeanderApplet extends PApplet {
                 }
             }
             unsetSelectionBox();
-            event.onAppletSelection(selected);
             setNeedsRedraw();
         }
     }
 
-    public void registerHandler(IEventHandler eventHandler) {
-        this.event = eventHandler;
-    }
-
     public void indicesSelected(int[] indices) {
         points.clear();
-        event.onAppletSelectionCleared();
         List<Location> locations = new ArrayList<Location>();
         for (int index : indices) {
             Location location = map().locationAt(index);
@@ -210,7 +199,6 @@ public class MeanderApplet extends PApplet {
             points.add(new Point(x, y));
         }
         // callback for tag-cloud
-        event.onAppletSelection(locations);
         setNeedsRedraw();
     }
 
@@ -229,6 +217,18 @@ public class MeanderApplet extends PApplet {
     private int height() {
         return viz.pixelScale();
     }
+
+	public void updateSelection(List<String> handleIdentifiers) {
+		points.clear();
+		for (Location each : viz.map.locations()) {
+			if (handleIdentifiers.contains(each.getDocument().name())) {
+				int x = (int) Math.round(each.x() * map().getHeight());
+				int y = (int) Math.round(each.y() * map().getHeight());
+				points.add(new Point(x, y));		
+			} 
+		}
+        setNeedsRedraw();
+	}
 
 
 }

@@ -3,6 +3,7 @@ package ch.deif.meander.ui;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
@@ -68,6 +69,11 @@ public class EclipseProcessingBridge extends Composite {
             applet.setSize(width, height);
             mapFrame.removeAll();
             mapFrame.add(applet);
+	}
+
+	public void updateSelection(List<String> handleIdentifiers) {
+		applet.updateSelection(handleIdentifiers);
+		
 	}
 	
 }
