@@ -45,184 +45,199 @@ import org.eclipse.ui.part.ViewPart;
 import ch.deif.meander.ui.EclipseProcessingBridge;
 import ch.deif.meander.ui.MeanderEventListener;
 import ch.deif.meander.viz.MapVisualization;
-import ch.unibe.eclipse.util.EclipseUtil;
 import ch.unibe.eclipse.util.SelectionProviderAdapter;
 import ch.unibe.softwaremap.SoftwareMapCore;
 
 public class MapView extends ViewPart implements ISelectionListener, ISelectionProvider, MeanderEventListener {
 
-	public static final String MAP_VIEW_ID = SoftwareMapCore.makeID(MapView.class);
-	private EclipseProcessingBridge softwareMap;
-	private SelectionProviderAdapter selectionProvider;
+    public static final String MAP_VIEW_ID = SoftwareMapCore.makeID(MapView.class);
+    private EclipseProcessingBridge softwareMap;
+    private IProject project;
+    private Collection<ICompilationUnit> selectedUnits;
+    private SelectionProviderAdapter selectionProvider;
 
-	private static final String RESOURCE_NAVIGATOR_ID = "org.eclipse.ui.views.ResourceNavigator";
-	private static final String CONTENT_OUTLINE_ID = "org.eclipse.ui.views.ContentOutline";
-	public static final String PACKAGE_EXPLORER_ID = "org.eclipse.jdt.ui.PackageExplorer";
-	
-	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
-		public String getColumnText(Object obj, int index) {
-			return getText(obj);
-		}
+    private static final String RESOURCE_NAVIGATOR_ID = "org.eclipse.ui.views.ResourceNavigator";
+    private static final String CONTENT_OUTLINE_ID = "org.eclipse.ui.views.ContentOutline";
+    public static final String PACKAGE_EXPLORER_ID = "org.eclipse.jdt.ui.PackageExplorer";
 
-		public Image getColumnImage(Object obj, int index) {
-			return getImage(obj);
-		}
+    class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
+        public String getColumnText(Object obj, int index) {
+            return getText(obj);
+        }
 
-		@Override
-		public Image getImage(Object obj) {
-			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
-		}
-	}
+        public Image getColumnImage(Object obj, int index) {
+            return getImage(obj);
+        }
 
-	public MapView() {
-		this.selectionProvider = new SelectionProviderAdapter();
-	}
+        @Override
+        public Image getImage(Object obj) {
+            return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
+        }
+    }
 
-	@Override
-	public void createPartControl(Composite parent) {
-		softwareMap = new EclipseProcessingBridge(parent);
-		softwareMap.getApplet().addListener(this);
-		addSelectionListener(PACKAGE_EXPLORER_ID, CONTENT_OUTLINE_ID, RESOURCE_NAVIGATOR_ID);
-		
-		getSite().setSelectionProvider(this);
-	}
+    public MapView() {
+        this.selectionProvider = new SelectionProviderAdapter();
+    }
 
-	/**
-	 * Sent when view is closed.
-	 * 
-	 */
-	@Override
-	public void dispose() {
-		removeSelectionListener(CONTENT_OUTLINE_ID, PACKAGE_EXPLORER_ID, RESOURCE_NAVIGATOR_ID);
-	}
+    @Override
+    public void createPartControl(Composite parent) {
+        softwareMap = new EclipseProcessingBridge(parent);
+        softwareMap.getApplet().addListener(this);
+        addSelectionListener(PACKAGE_EXPLORER_ID, CONTENT_OUTLINE_ID, RESOURCE_NAVIGATOR_ID);
+        getSite().setSelectionProvider(this);
+    }
 
-	private void removeSelectionListener(String... viewPartID) {
-		for (String each : viewPartID)
-			getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(each, this);
-	}
+    /**
+     * Sent when view is closed.
+     * 
+     */
+    @Override
+    public void dispose() {
+        SoftwareMapCore.setMapView(null);
+        removeSelectionListener(CONTENT_OUTLINE_ID, PACKAGE_EXPLORER_ID, RESOURCE_NAVIGATOR_ID);
+    }
 
-	private void addSelectionListener(String... viewPartID) {
-		for (String each : viewPartID)
-			getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(each, this);
-	}
+    private void removeSelectionListener(String... viewPartID) {
+        for (String each : viewPartID)
+            getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(each, this);
+    }
 
-	@Override
-	public void setFocus() {
-		softwareMap.setFocus();
-	}
+    private void addSelectionListener(String... viewPartID) {
+        for (String each : viewPartID)
+            getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(each, this);
+    }
 
-	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (part == this) {
-			return;			
-		}
-		if (selection instanceof IStructuredSelection) {			
-			try {
-				selectionChanged((IStructuredSelection) selection);
-			} catch (CoreException e) {
-				throw new RuntimeException(e);
-			}
-		}
-	}
+    @Override
+    public void setFocus() {
+        softwareMap.setFocus();
+    }
 
-	/**
-	 * Filters selected IJavaProject and ICompilationUnit.
-	 * 
-	 * @param selection
-	 * @throws CoreException 
-	 */
-	private void selectionChanged(IStructuredSelection selection) throws CoreException {
-		IJavaProject project = null;
-		Collection<ICompilationUnit> units = new HashSet<ICompilationUnit>();
-		for (Object each : selection.toList()) {
-			IJavaElement javaElement = adapt(each, IJavaElement.class);
-			if (javaElement == null) continue;
-			if (project == null)
-				project = javaElement.getJavaProject();
-			if (!project.equals(javaElement.getJavaProject()) && javaElement.getJavaProject() != null) {
-				multipleProjectSelected();
-				return;
-			}
-			if (javaElement instanceof ICompilationUnit) {
-				units.add((ICompilationUnit) javaElement);
-			}
-			if (javaElement instanceof IPackageFragment) {
-				ICompilationUnit[] children = ((IPackageFragment)javaElement).getCompilationUnits();
-				units.addAll(Arrays.asList(children));
-			}
-			if (javaElement instanceof IMember) {
-				javaElement = javaElement.getAncestor(IJavaElement.COMPILATION_UNIT);
-				if (javaElement != null)
-					units.add((ICompilationUnit) javaElement);
-			}
-		}
-		if (project != null)
-			compilationUnitsSelected(project, units);
-	}
+    @Override
+    public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+        if (part == this) {
+            return;			
+        }
+        if (selection instanceof IStructuredSelection) {			
+            try {
+                selectionChanged((IStructuredSelection) selection);
+            } catch (CoreException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
-	private void multipleProjectSelected() {
-		System.out.println("!!! multiple projects selected !!!");
-	}
+    /**
+     * Filters selected IJavaProject and ICompilationUnit.
+     * 
+     * @param selection
+     * @throws CoreException 
+     */
+    private void selectionChanged(IStructuredSelection selection) throws CoreException {
+        IJavaProject javaProject = null;
+        Collection<ICompilationUnit> units = new HashSet<ICompilationUnit>();
+        for (Object each : selection.toList()) {
+            IJavaElement javaElement = adapt(each, IJavaElement.class);
+            if (javaElement == null) continue;
+            if (javaProject == null)
+                javaProject = javaElement.getJavaProject();
+            if (!javaProject.equals(javaElement.getJavaProject()) && javaElement.getJavaProject() != null) {
+                multipleProjectSelected();
+                return;
+            }
+            if (javaElement instanceof ICompilationUnit) {
+                units.add((ICompilationUnit) javaElement);
+            }
+            if (javaElement instanceof IPackageFragment) {
+                ICompilationUnit[] children = ((IPackageFragment)javaElement).getCompilationUnits();
+                units.addAll(Arrays.asList(children));
+            }
+            if (javaElement instanceof IMember) {
+                javaElement = javaElement.getAncestor(IJavaElement.COMPILATION_UNIT);
+                if (javaElement != null)
+                    units.add((ICompilationUnit) javaElement);
+            }
+        }
+        if (javaProject != null)
+            compilationUnitsSelected(javaProject, units);
+    }
 
-	private void compilationUnitsSelected(IJavaProject project, Collection<ICompilationUnit> units) {
-		IProject resource = adapt(project, IProject.class);
-		MapVisualization<?> viz = SoftwareMapCore.at(resource).enableBuilder().getVisualization();
-		if (viz == null) return;
-		softwareMap.setMapVizualization(viz);
-		
-		List<String> handleIdentifiers = new ArrayList<String>();
-		for(ICompilationUnit each : units) {
-			handleIdentifiers.add(each.getHandleIdentifier());
-		}
-		softwareMap.updateSelection(handleIdentifiers);
-	}
+    private void multipleProjectSelected() {
+        System.out.println("!!! multiple projects selected !!!");
+    }
 
-	@Override
-	public void addSelectionChangedListener(ISelectionChangedListener listener) {
-		this.selectionProvider.addSelectionChangedListener(listener);
-	}
+    private void compilationUnitsSelected(IJavaProject javaProject, Collection<ICompilationUnit> units) {
+        this.project = adapt(javaProject, IProject.class);
+        this.selectedUnits = units;
+        compilationUnitsSelected(units);
+    }
 
-	@Override
-	public ISelection getSelection() {
-		return this.selectionProvider.getSelection();
-	}
+    private void compilationUnitsSelected(Collection<ICompilationUnit> units) {
+        MapVisualization<?> viz = SoftwareMapCore.at(project).enableBuilder().getVisualization();
+        if (viz == null) return;
+        softwareMap.setMapVizualization(viz);
+        softwareMapUpdateSelection(units);
+    }
 
-	@Override
-	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
-		this.selectionProvider.removeSelectionChangedListener(listener);
-	}
+    private void softwareMapUpdateSelection(Collection<ICompilationUnit> units) {
+        List<String> handleIdentifiers = new ArrayList<String>();
+        for(ICompilationUnit each : units) {
+            handleIdentifiers.add(each.getHandleIdentifier());
+        }
+        softwareMap.updateSelection(handleIdentifiers);
+    }
 
-	@Override
-	public void setSelection(ISelection selection) {
-		this.selectionProvider.setSelection(selection);
-	}
-	
+    public void newProjectMapAvailable(IProject project) {
+        if (!this.project.equals(project)) return;
+        this.compilationUnitsSelected(selectedUnits);
+    }
 
-	@Override
-	public void selectionChanged(final String... handlerIdentifiers) {
-		Display.getDefault().syncExec(new Runnable(){
-			@Override
-			public void run() {
-				final ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
-				for(String each : handlerIdentifiers) {
-					IJavaElement javaElement = JavaCore.create(each);
-					selection.add(javaElement);
-					openInEditor(javaElement);
-				}
-				selectionProvider.setSelection(new StructuredSelection(selection));
-			}
-		});
-	}
 
-	private void openInEditor(IJavaElement javaElement) {
-		try {
-			IWorkbenchPage page = getSite().getPage();
-			IResource resource = javaElement.getResource();
-			if (resource == null || !resource.exists() || !(resource instanceof IFile)) return;
-			IDE.openEditor(page, (IFile)resource, true);
-		} catch (PartInitException e) {
-			throw new RuntimeException(e);
-		}
-		
-	}
+    @Override
+    public void addSelectionChangedListener(ISelectionChangedListener listener) {
+        this.selectionProvider.addSelectionChangedListener(listener);
+    }
+
+    @Override
+    public ISelection getSelection() {
+        return this.selectionProvider.getSelection();
+    }
+
+    @Override
+    public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+        this.selectionProvider.removeSelectionChangedListener(listener);
+    }
+
+    @Override
+    public void setSelection(ISelection selection) {
+        this.selectionProvider.setSelection(selection);
+    }
+
+
+    @Override
+    public void selectionChanged(final String... handlerIdentifiers) {
+        Display.getDefault().syncExec(new Runnable(){
+            @Override
+            public void run() {
+                final ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
+                for(String each : handlerIdentifiers) {
+                    IJavaElement javaElement = JavaCore.create(each);
+                    selection.add(javaElement);
+                    openInEditor(javaElement);
+                }
+                selectionProvider.setSelection(new StructuredSelection(selection));
+            }
+        });
+    }
+
+    private void openInEditor(IJavaElement javaElement) {
+        try {
+            IWorkbenchPage page = getSite().getPage();
+            IResource resource = javaElement.getResource();
+            if (resource == null || !resource.exists() || !(resource instanceof IFile)) return;
+            IDE.openEditor(page, (IFile)resource, true);
+        } catch (PartInitException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }

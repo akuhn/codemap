@@ -9,6 +9,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.deif.meander.Meander;
@@ -16,6 +17,7 @@ import ch.deif.meander.viz.LabelsOverlay;
 import ch.deif.meander.viz.MapVisualization;
 import ch.unibe.softwaremap.builder.HapaxBuilder;
 import ch.unibe.softwaremap.builder.MapMakerBackgroundJob;
+import ch.unibe.softwaremap.ui.MapView;
 
 public class ProjectMap {
 
@@ -23,6 +25,7 @@ public class ProjectMap {
     private TermDocumentMatrix tdm;
     private MapVisualization<?> map;
     private boolean mapBeingCalculated = false;
+    private boolean builderIsRunning = false;
 
     public ProjectMap(IProject project) {
         this.project = project;
@@ -30,19 +33,42 @@ public class ProjectMap {
 
     public ProjectMap enableBuilder()  {
         try { 
-            unsafeEnableBuilder(); 
+            addBuilderToProjectDescriptionCommands();
+            if (tdm == null) makeBuilderBackgroundJob().schedule();
         } catch (CoreException ex) { 
             throw new RuntimeException(ex); 
         }
         return this;
     }
     
-    public void unsafeEnableBuilder() throws CoreException {
+    private Job makeBuilderBackgroundJob() {
+        return new Job("Initial build of Hapax vocabulary.") {
+            @Override
+            protected IStatus run(IProgressMonitor monitor) {
+                if (builderIsRunning) return Status.OK_STATUS;
+                try {
+                    builderIsRunning = true;
+                    getProject().build(
+                            HapaxBuilder.FULL_BUILD, 
+                            HapaxBuilder.BUILDER_ID, 
+                            null, monitor);
+                    new MapMakerBackgroundJob(ProjectMap.this).schedule();
+                } catch (CoreException ex) {
+                    throw new RuntimeException(ex);
+                } finally {
+                    builderIsRunning = false;
+                }
+                return Status.OK_STATUS;
+            }
+        };
+    }
+
+    private void addBuilderToProjectDescriptionCommands() throws CoreException {
         IProjectDescription desc = getProject().getDescription();
         ICommand[] commands = desc.getBuildSpec();
         for (ICommand command: commands) {
         	if (command.getBuilderName().equals(HapaxBuilder.BUILDER_ID)) {
-        		return;        	
+        		;        	
         	}
         }
         ICommand newCommand = desc.newCommand();
@@ -82,8 +108,14 @@ public class ProjectMap {
                 .useHillshading()
                 .add(LabelsOverlay.class)
                 .getVisualization();
+        notifyMapView();
         monitor.done();
         return Status.OK_STATUS;
+    }
+
+    private void notifyMapView() {
+        MapView mapView = SoftwareMapCore.getMapView();
+        if (mapView != null) mapView.newProjectMapAvailable(project);
     }
     
 }

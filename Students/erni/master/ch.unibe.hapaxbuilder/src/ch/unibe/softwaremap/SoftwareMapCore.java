@@ -8,6 +8,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import ch.akuhn.hapax.index.TermDocumentMatrix;
+import ch.unibe.softwaremap.ui.MapView;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -17,7 +18,7 @@ public class SoftwareMapCore extends AbstractUIPlugin {
     public static final String PLUGIN_ID = SoftwareMapCore.class.getPackage().getName();
     private static SoftwareMapCore plugin;
     private static Map<IProject,ProjectMap> hashmap;
-
+    private static MapView mapView;
     
     public SoftwareMapCore() {
     }
@@ -48,5 +49,13 @@ public class SoftwareMapCore extends AbstractUIPlugin {
         if (map == null) hashmap.put(project, map = new ProjectMap(project));
         return map;
         
+    }
+
+    public static void setMapView(MapView mapView) {
+        SoftwareMapCore.mapView = mapView;
+    }
+
+    public static MapView getMapView() {
+        return mapView;
     }
 }
