@@ -24,7 +24,7 @@ import ch.deif.meander.viz.MapVisualization;
 public class EclipseProcessingBridge extends Composite {
 
 	private Frame mapFrame;
-	private static final int MAP_DIM = 700;
+	private static final int MAP_DIM = 256;
 
 	public EclipseProcessingBridge(Composite parent) {
 		super(parent, SWT.EMBEDDED);
@@ -41,7 +41,7 @@ public class EclipseProcessingBridge extends Composite {
 		mapFrame.setSize(dimension.width, dimension.height);
 	}
 
-	protected MapVisualization createVizualization() {
+	protected static MapVisualization createVizualization() {
 		int nth = 1;
 		Serializer ser = new Serializer();
 		//TODO: do not use absolute paths here ...

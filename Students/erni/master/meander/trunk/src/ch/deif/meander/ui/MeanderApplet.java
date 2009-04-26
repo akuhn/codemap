@@ -36,6 +36,10 @@ public class MeanderApplet extends PApplet {
     private Point dragStart;
     private Point dragStop;
 
+    public MeanderApplet() {
+        this(EclipseProcessingBridge.createVizualization());
+    }
+    
     public MeanderApplet(MapVisualization vizualization) {
         event = new NullEventHandler();
         viz = vizualization;
