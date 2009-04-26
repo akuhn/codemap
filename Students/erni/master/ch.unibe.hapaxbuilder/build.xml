@@ -5,12 +5,14 @@
 
 	<target name="package">
 		<mkdir dir="lib"/>
+        <delete file="${package.jar}"/>
 		<jar id="files" destfile="${package.jar}">
 			<fileset dir="../ch.akuhn.util/bin"/>
             <fileset dir="../Fame/bin"/>
             <fileset dir="../ForEach DSL/bin"/>
             <fileset dir="../Hapax/bin"/>
-            <fileset dir="../Meander/bin"/>
+            <fileset dir="../Hapax/src"/> <!-- include resources -->
+			<fileset dir="../Meander/bin"/>
             <fileset dir="../SCG util package/bin"/>
             <zipfileset src="../Hapax/lib/snowball.jar" />
 			<zipfileset src="../Meander/lib/core.jar" />
