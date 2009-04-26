@@ -31,7 +31,7 @@
             category="ch.unibe.softwaremap"
             class="ch.unibe.softwaremap.ui.SelectionView"
             id="ch.unibe.softwaremap.SelectionView"
-            name="name"
+            name="Selection View"
             restorable="true">
       </view>
       <view

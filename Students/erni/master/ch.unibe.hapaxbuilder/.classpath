@@ -8,6 +8,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/Fame"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Hapax"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Meander"/>
-	<classpathentry exported="true" kind="lib" path="lib/meander-kingsize.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/meander-kingsize.jar" sourcepath="/Meander/lib/core.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
