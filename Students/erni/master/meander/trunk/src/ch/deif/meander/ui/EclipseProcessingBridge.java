@@ -24,8 +24,8 @@ public class EclipseProcessingBridge extends Composite {
         mapFrame = SWT_AWT.new_Frame(this);
         mapFrame.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
         applet = new MeanderApplet();
-        applet.init();
-        mapFrame.add(applet);
+        getApplet().init();
+        mapFrame.add(getApplet());
     }
 
     public void setMaximumSize(Dimension dimension) {
@@ -35,12 +35,16 @@ public class EclipseProcessingBridge extends Composite {
     }
 
     public void setMapVizualization(MapVisualization<?> viz) {
-        applet.setVisualization(viz);
+        getApplet().setVisualization(viz);
         mapFrame.repaint();
     }
 
     public void updateSelection(List<String> handleIdentifiers) {
-        applet.updateSelection(handleIdentifiers);
+        getApplet().updateSelection(handleIdentifiers);
     }
+
+	public MeanderApplet getApplet() {
+		return applet;
+	}
     
 }

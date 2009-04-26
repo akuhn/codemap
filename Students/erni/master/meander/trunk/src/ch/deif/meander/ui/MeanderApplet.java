@@ -32,8 +32,11 @@ public class MeanderApplet extends PApplet {
 
     private Point dragStart;
     private Point dragStop;
+
+	private MeanderEventListener listener;
     
     public static final int PIXELSCALE = 512;
+
 
     public MeanderApplet() {
         this(null);
@@ -43,6 +46,16 @@ public class MeanderApplet extends PApplet {
         points = Collections.synchronizedSet(new HashSet<Point>());
         background = createGraphics(width(), height(), JAVA2D);
         setVisualization(vizualization);
+    }
+    
+    public void addListener(MeanderEventListener listener) {
+    	assert this.listener == null;
+    	this.listener = listener;
+    }
+    
+    public void removeListener(MeanderEventListener listener) {
+    	assert this.listener == listener;
+    	this.listener = null;
     }
 
     @Override
@@ -103,17 +116,36 @@ public class MeanderApplet extends PApplet {
             NearestNeighbor nn = new MaxDistNearestNeighbor(map(), width() / 10);
             Point nearest = nn.forLocation(point);
             if (nearest != null) {
-                points.add(nearest);
+                addSelection(nearest);
+                selectionChanged(nn.location());
             }
         } else if (e.getButton() == MouseEvent.BUTTON3) {
             // button3 is 2nd mouse button
             NearestNeighbor nn = new NearestNeighbor(map());
             Point nearest = nn.forLocation(point);
-            points.add(nearest);
+            addSelection(nearest);
+            selectionChanged(nn.location());
         }
         unsetSelectionBox();
         needsRedraw();
     }
+
+	private void selectionChanged(final Location location) {
+		System.out.println("selected: " + location.getDocument().name());
+		if (listener != null) {
+			new Thread() {
+				@Override
+				public void run() {
+					listener.selectionChanged(location.getDocument().name());					
+				}
+			}.start();
+		}
+			
+	}
+
+	private void addSelection(Point point) {
+		points.add(point);
+	}
 
     private void unsetSelectionBox() {
         dragStart = null;
