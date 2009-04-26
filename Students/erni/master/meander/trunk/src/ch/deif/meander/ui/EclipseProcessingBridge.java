@@ -24,6 +24,7 @@ import ch.deif.meander.viz.MapVisualization;
 public class EclipseProcessingBridge extends Composite {
 
 	private Frame mapFrame;
+    private MeanderApplet applet;
 	private static final int MAP_DIM = 256;
 
 	public EclipseProcessingBridge(Composite parent) {
@@ -31,7 +32,7 @@ public class EclipseProcessingBridge extends Composite {
 		mapFrame = SWT_AWT.new_Frame(this);
 		mapFrame.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 
-		MapVisualization viz = createVizualization();
+		MapVisualization<?> viz = createVizualization();
 		this.setMapVizualization(viz);
 	}
 
@@ -41,7 +42,7 @@ public class EclipseProcessingBridge extends Composite {
 		mapFrame.setSize(dimension.width, dimension.height);
 	}
 
-	protected static MapVisualization createVizualization() {
+	protected static MapVisualization<?> createVizualization() {
 		int nth = 1;
 		Serializer ser = new Serializer();
 		//TODO: do not use absolute paths here ...
@@ -58,10 +59,11 @@ public class EclipseProcessingBridge extends Composite {
 		return map.getDefauVisualization();
 	}
 
-	public void setMapVizualization(MapVisualization viz) {
+	public void setMapVizualization(MapVisualization<?> viz) {
             int width = viz.map.getParameters().width;
             int height = viz.map.getParameters().height;
-            MeanderApplet applet = new MeanderApplet(viz);
+            if (applet != null) applet.destroy();
+            applet = new MeanderApplet(viz);
             applet.init();
             applet.setSize(width, height);
             mapFrame.removeAll();
