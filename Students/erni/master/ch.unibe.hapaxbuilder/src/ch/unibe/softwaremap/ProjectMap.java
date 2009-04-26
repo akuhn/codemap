@@ -42,7 +42,6 @@ public class ProjectMap {
         ICommand[] commands = desc.getBuildSpec();
         for (ICommand command: commands) {
         	if (command.getBuilderName().equals(HapaxBuilder.BUILDER_ID)) {
-        		System.out.println("Builder already active");
         		return;        	
         	}
         }
@@ -50,7 +49,6 @@ public class ProjectMap {
         newCommand.setBuilderName(HapaxBuilder.BUILDER_ID);
         commands = $(commands).copyWith(newCommand);
         desc.setBuildSpec(commands);
-        System.out.println("adding builder to" + getProject().getName());
         getProject().setDescription(desc, null);
     }
 

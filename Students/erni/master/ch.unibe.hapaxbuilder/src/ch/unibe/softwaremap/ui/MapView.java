@@ -107,7 +107,7 @@ public class MapView extends ViewPart implements ISelectionListener {
 			if (javaElement == null) continue;
 			if (project == null)
 				project = javaElement.getJavaProject();
-			if (project != javaElement.getJavaProject()) {
+			if (!project.equals(javaElement.getJavaProject()) && javaElement.getJavaProject() != null) {
 				multipleProjectSelected();
 				return;
 			}
@@ -129,7 +129,6 @@ public class MapView extends ViewPart implements ISelectionListener {
 	}
 
 	private void compilationUnitsSelected(IJavaProject project, Collection<ICompilationUnit> units) {
-		System.out.println(units.size() + " in " + project.getHandleIdentifier());
 		IProject resource = adapt(project, IProject.class);
 		MapVisualization<?> viz = SoftwareMapCore.at(resource).enableBuilder().getVisualization();
 		if (viz == null) return;
