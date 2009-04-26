@@ -93,6 +93,9 @@ public class LocationList implements Iterable<Location> {
         public String getName() {
             if (document == null) return String.valueOf(name);
             String name = (new File(document.name()).getName());
+            if (name.contains("{")) {
+            	name = name.substring(name.indexOf("{")+1, name.length());
+            }
             return $(name).removeSuffix(".java");
         }
 
