@@ -8,7 +8,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -18,6 +20,7 @@ import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.internal.ui.javaeditor.EditorUtility;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -28,11 +31,15 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
 
 import ch.deif.meander.ui.EclipseProcessingBridge;
@@ -192,16 +199,30 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 	
 
 	@Override
-	public void selectionChanged(String... handlerIdentifiers) {
-		ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
-		for(String each : handlerIdentifiers) {
-			selection.add(JavaCore.create(each));
-			try {
-				JavaUI.openInEditor(JavaCore.create(each));
-			} catch (CoreException e) {
-				throw new RuntimeException(e);
+	public void selectionChanged(final String... handlerIdentifiers) {
+		Display.getDefault().syncExec(new Runnable(){
+			@Override
+			public void run() {
+				final ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
+				for(String each : handlerIdentifiers) {
+					IJavaElement javaElement = JavaCore.create(each);
+					selection.add(javaElement);
+					openInEditor(javaElement);
+				}
+				selectionProvider.setSelection(new StructuredSelection(selection));
 			}
+		});
+	}
+
+	private void openInEditor(IJavaElement javaElement) {
+		try {
+			IWorkbenchPage page = getSite().getPage();
+			IResource resource = javaElement.getResource();
+			if (resource == null || !resource.exists() || !(resource instanceof IFile)) return;
+			IDE.openEditor(page, (IFile)resource, true);
+		} catch (PartInitException e) {
+			throw new RuntimeException(e);
 		}
-		this.selectionProvider.setSelection(new StructuredSelection(selection));
+		
 	}
 }
