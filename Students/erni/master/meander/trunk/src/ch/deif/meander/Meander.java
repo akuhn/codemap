@@ -10,6 +10,19 @@ import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.deif.meander.viz.Layers;
 import ch.deif.meander.viz.MapVisualization;
 
+/** Creates maps from source files
+ *<PRE>
+ *  Meander.script()
+ *    .addDocuments("../JExample", ".java")
+ *    .makeMap()
+ *    .useHillshading()
+ *    .add(LabelsOverlay.class)
+ *    .openApplet();
+ *</PRE> 
+ * 
+ * @author Adrian Kuhn
+ *
+ */
 public class Meander {
 
     public static Meander script() {
@@ -23,8 +36,16 @@ public class Meander {
 
     public Meander addDocuments(String folder, String... extensions) {
         if (tdm == null) tdm = new TermDocumentMatrix();
+        assert map != null : "Cannot call #addDocuments after #makeMap.";
         Importer importer = new Importer(tdm);
         importer.importAllFiles(new File(folder), extensions);
+        return this;
+    }
+    
+    public Meander useCorpus(TermDocumentMatrix tdm) {
+        assert (tdm == null) : "Cannot call #useCorpus after #addDocuments.";
+        assert map != null : "Cannot call #useCorpus after #makeMap.";
+        this.tdm = tdm;
         return this;
     }
 
@@ -66,6 +87,10 @@ public class Meander {
     public Meander openApplet() {
         layers.openApplet();
         return this;
+    }
+    
+    public MapVisualization<?> getVisualization() {
+        return layers;
     }
 
 }

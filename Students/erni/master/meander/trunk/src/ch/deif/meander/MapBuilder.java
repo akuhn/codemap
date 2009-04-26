@@ -91,9 +91,6 @@ public class MapBuilder {
 
     public void normalizeXY() {
         locations.normalizeXY();
-        for (Location each: locations) {
-            System.out.println(each.x() + "," + each.y());
-        }
     }
 
 }
