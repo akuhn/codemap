@@ -1,4 +1,3 @@
-package ch.unibe.eclipse.util;
 /*******************************************************************************
  * Copyright (c) 2000, 2005 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
@@ -9,6 +8,7 @@ package ch.unibe.eclipse.util;
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
+package ch.unibe.eclipse.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,37 +26,35 @@ import org.eclipse.jface.viewers.StructuredSelection;
  */
 public class SelectionProviderAdapter implements ISelectionProvider {
 
-    List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
+	List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
 
-    ISelection theSelection = StructuredSelection.EMPTY;
+	ISelection theSelection = StructuredSelection.EMPTY;
 
-    public void addSelectionChangedListener(ISelectionChangedListener listener) {
-        listeners.add(listener);
-    }
+	public void addSelectionChangedListener(ISelectionChangedListener listener) {
+		listeners.add(listener);
+	}
 
-    public ISelection getSelection() {
-        return theSelection;
-    }
+	public ISelection getSelection() {
+		return theSelection;
+	}
 
-    public void removeSelectionChangedListener(
-            ISelectionChangedListener listener) {
-        listeners.remove(listener);
-    }
+	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+		listeners.remove(listener);
+	}
 
-    public void setSelection(ISelection selection) {
-        theSelection = selection;
-        final SelectionChangedEvent e = new SelectionChangedEvent(this, selection);
-        Object[] listenersArray = listeners.toArray();
-        
-        for (int i = 0; i < listenersArray.length; i++) {
-            final ISelectionChangedListener l = (ISelectionChangedListener) listenersArray[i];
-            Platform.run(new SafeRunnable() {
-                public void run() {
-                    l.selectionChanged(e);
-                }
-            });
+	public void setSelection(ISelection selection) {
+		theSelection = selection;
+		final SelectionChangedEvent e = new SelectionChangedEvent(this, selection);
+		Object[] listenersArray = listeners.toArray();
+
+		for (int i = 0; i < listenersArray.length; i++) {
+			final ISelectionChangedListener l = (ISelectionChangedListener) listenersArray[i];
+			Platform.run(new SafeRunnable() {
+				public void run() {
+					l.selectionChanged(e);
+				}
+			});
 		}
-    }
+	}
 
 }
-

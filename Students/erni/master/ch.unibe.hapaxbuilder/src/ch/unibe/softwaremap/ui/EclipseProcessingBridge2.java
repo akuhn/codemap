@@ -15,26 +15,26 @@ import processing.core.PApplet;
  */
 public class EclipseProcessingBridge2 extends Composite {
 
-    private Frame bridge;
+	private Frame bridge;
 
-    public EclipseProcessingBridge2(Composite parent) {
-        super(parent, SWT.EMBEDDED);
-        bridge = SWT_AWT.new_Frame(this);
-    }
+	public EclipseProcessingBridge2(Composite parent) {
+		super(parent, SWT.EMBEDDED);
+		bridge = SWT_AWT.new_Frame(this);
+	}
 
-    public void setMaximumSize(Dimension dimension) {
-        bridge.setMaximumSize(dimension);
-        bridge.setLocation(0, 0);
-        bridge.setSize(dimension.width, dimension.height);
-    }
+	public void setMaximumSize(Dimension dimension) {
+		bridge.setMaximumSize(dimension);
+		bridge.setLocation(0, 0);
+		bridge.setSize(dimension.width, dimension.height);
+	}
 
-    public void setApplet(PApplet applet) {
-        applet.init();
-        int width = applet.width;
-        int height = applet.height;
-        applet.setSize(width, height);
-        bridge.removeAll();
-        bridge.add(applet);
-    }
+	public void setApplet(PApplet applet) {
+		applet.init();
+		int width = applet.width;
+		int height = applet.height;
+		applet.setSize(width, height);
+		bridge.removeAll();
+		bridge.add(applet);
+	}
 
 }

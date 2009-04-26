@@ -19,129 +19,122 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
-import ch.unibe.softwaremap.SoftwareMapCore;
-
 import processing.core.PApplet;
-
+import ch.unibe.softwaremap.SoftwareMapCore;
 
 public class TagCloudView extends ViewPart implements ISelectionListener, ControlListener {
 
-    private static final String RESOURCE_NAVIGATOR_ID = "org.eclipse.ui.views.ResourceNavigator";
-    private static final String CONTENT_OUTLINE_ID = "org.eclipse.ui.views.ContentOutline";
-    public static final String PACKAGE_EXPLORER_ID = "org.eclipse.jdt.ui.PackageExplorer";
+	private static final String RESOURCE_NAVIGATOR_ID = "org.eclipse.ui.views.ResourceNavigator";
+	private static final String CONTENT_OUTLINE_ID = "org.eclipse.ui.views.ContentOutline";
+	public static final String PACKAGE_EXPLORER_ID = "org.eclipse.jdt.ui.PackageExplorer";
 
-    private EclipseProcessingBridge2 view;
+	private EclipseProcessingBridge2 view;
 
-    
-    /** Sent when view is opened.
-     * 
-     */
-    @SuppressWarnings("serial")
-    @Override
-    public void createPartControl(Composite parent) {
-        view = new EclipseProcessingBridge2(parent);
-        view.setApplet(new PApplet() {
-            @Override
-            public void draw() {
-                rect(50,50,200,200);
-            }
-            @Override
-            public void setup() {
-                size(400,400);
-            }
-        });
-        addSelectionListener(
-                PACKAGE_EXPLORER_ID,
-                CONTENT_OUTLINE_ID,
-                RESOURCE_NAVIGATOR_ID);
-        view.addControlListener(this);
-    }
+	/**
+	 * Sent when view is opened.
+	 * 
+	 */
+	@SuppressWarnings("serial")
+	@Override
+	public void createPartControl(Composite parent) {
+		view = new EclipseProcessingBridge2(parent);
+		view.setApplet(new PApplet() {
+			@Override
+			public void draw() {
+				rect(50, 50, 200, 200);
+			}
 
-    @Override
-    public void setFocus() {
-        view.setFocus();
-    }
+			@Override
+			public void setup() {
+				size(400, 400);
+			}
+		});
+		addSelectionListener(PACKAGE_EXPLORER_ID, CONTENT_OUTLINE_ID, RESOURCE_NAVIGATOR_ID);
+		view.addControlListener(this);
+	}
 
-    /** Sent when view is closed.
-     * 
-     */
-    @Override
-    public void dispose() {
-        removeSelectionListener(
-                CONTENT_OUTLINE_ID, 
-                PACKAGE_EXPLORER_ID, 
-                RESOURCE_NAVIGATOR_ID);
-    }
-    
-    private void addSelectionListener(String... viewPartID) {
-        for (String each: viewPartID) 
-            getSite().getWorkbenchWindow().getSelectionService()
-                .addSelectionListener(each, this);
-    }
+	@Override
+	public void setFocus() {
+		view.setFocus();
+	}
 
-    private void removeSelectionListener(String... viewPartID) {
-        for (String each: viewPartID) 
-            getSite().getWorkbenchWindow().getSelectionService()
-                .removeSelectionListener(each, this);
-    }
-    
-    /** Sent when selection in package explorer or content outline changes.
-     * 
-     */
-    @Override
-    public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-        if (part == this) return;
-        if (selection instanceof IStructuredSelection) 
-                selectionChanged((IStructuredSelection) selection);
-    }
+	/**
+	 * Sent when view is closed.
+	 * 
+	 */
+	@Override
+	public void dispose() {
+		removeSelectionListener(CONTENT_OUTLINE_ID, PACKAGE_EXPLORER_ID, RESOURCE_NAVIGATOR_ID);
+	}
 
-    /** Filters selected IJavaProject and ICompilationUnit.
-     * 
-     * @param selection
-     */
-    private void selectionChanged(IStructuredSelection selection) {
-        IJavaProject project = null;
-        Collection<ICompilationUnit> units = new HashSet<ICompilationUnit>(); 
-        for (Object each: selection.toList()) {
-            IJavaElement javaElement = adapt(each, IJavaElement.class);
-            if (project == null) project = javaElement.getJavaProject();
-            if (project != javaElement.getJavaProject()) {
-                multipleProjectSelected();
-                return;
-            }
-            if (javaElement instanceof ICompilationUnit) {
-                units.add((ICompilationUnit) javaElement);
-            }
-            if (javaElement instanceof IMember) {
-                javaElement = javaElement.getAncestor(IJavaElement.COMPILATION_UNIT);
-                if (javaElement != null) units.add((ICompilationUnit) javaElement);
-            }
-        }
-        if (project != null) compilationUnitsSelected(project, units);
-    }
+	private void addSelectionListener(String... viewPartID) {
+		for (String each: viewPartID)
+			getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(each, this);
+	}
 
-    private void compilationUnitsSelected(IJavaProject project, Collection<ICompilationUnit> units) {
-        System.out.println(units.size() + " in " + project.getHandleIdentifier());
-        IProject resource = adapt(project, IProject.class);
-        SoftwareMapCore.at(resource).enableBuilder();
-    }
+	private void removeSelectionListener(String... viewPartID) {
+		for (String each: viewPartID)
+			getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(each, this);
+	}
 
-    private void multipleProjectSelected() {
-        System.out.println("!!! multiple projects selected !!!");
-    }
+	/**
+	 * Sent when selection in package explorer or content outline changes.
+	 * 
+	 */
+	@Override
+	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		if (part == this) return;
+		if (selection instanceof IStructuredSelection) selectionChanged((IStructuredSelection) selection);
+	}
 
-    @Override
-    public void controlMoved(ControlEvent e) {
-        // Do nothing.
-    }
+	/**
+	 * Filters selected IJavaProject and ICompilationUnit.
+	 * 
+	 * @param selection
+	 */
+	private void selectionChanged(IStructuredSelection selection) {
+		IJavaProject project = null;
+		Collection<ICompilationUnit> units = new HashSet<ICompilationUnit>();
+		for (Object each: selection.toList()) {
+			IJavaElement javaElement = adapt(each, IJavaElement.class);
+			if (project == null) project = javaElement.getJavaProject();
+			if (project != javaElement.getJavaProject()) {
+				multipleProjectSelected();
+				return;
+			}
+			if (javaElement instanceof ICompilationUnit) {
+				units.add((ICompilationUnit) javaElement);
+			}
+			if (javaElement instanceof IMember) {
+				javaElement = javaElement.getAncestor(IJavaElement.COMPILATION_UNIT);
+				if (javaElement != null) units.add((ICompilationUnit) javaElement);
+			}
+		}
+		if (project != null) compilationUnitsSelected(project, units);
+	}
 
-    /** Sent when view is resized. 
-     * 
-     */
-    @Override
-    public void controlResized(ControlEvent e) {
-        // TODO handle this event somehow
-    }
-    
-    
+	private void compilationUnitsSelected(IJavaProject project, Collection<ICompilationUnit> units) {
+		System.out.println(units.size() + " in " + project.getHandleIdentifier());
+		IProject resource = adapt(project, IProject.class);
+		SoftwareMapCore.at(resource).enableBuilder();
+	}
+
+	private void multipleProjectSelected() {
+		System.out.println("!!! multiple projects selected !!!");
+	}
+
+	@Override
+	public void controlMoved(ControlEvent e) {
+		// Do nothing.
+	}
+
+	/**
+	 * Sent when view is resized.
+	 * 
+	 */
+	@Override
+	public void controlResized(ControlEvent e) {
+		// TODO handle this event somehow
+	}
+
 }

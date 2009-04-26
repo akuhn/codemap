@@ -15,36 +15,35 @@ import org.eclipse.jdt.core.JavaModelException;
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 
-/** Creates TDM from all ICompilationUnit resources in an IProject.
- *
+/**
+ * Creates TDM from all ICompilationUnit resources in an IProject.
+ * 
  */
 class FullBuildVisitor implements IResourceVisitor {
 
-    private TermDocumentMatrix TDM;
+	private TermDocumentMatrix TDM;
 
-    public FullBuildVisitor() {
-        TDM = new TermDocumentMatrix();
-    }
+	public FullBuildVisitor() {
+		TDM = new TermDocumentMatrix();
+	}
 
-    public boolean visit(IResource resource) throws CoreException {
-        IJavaElement javaElement = JavaCore.create(resource);
-        if (javaElement == null) return true;
-        if (javaElement.getElementType() != IJavaElement.COMPILATION_UNIT) return true;
-        ICompilationUnit compilationUnit = (ICompilationUnit) javaElement.getAdapter(ICompilationUnit.class); 
-        return visit(compilationUnit);
-    }
-        
-    private boolean visit(ICompilationUnit compilationUnit) throws JavaModelException {
-        IBuffer buf = compilationUnit.getBuffer();
-        String contents = buf.getContents();
-        TDM
-            .makeDocument(compilationUnit.getHandleIdentifier())
-            .addTerms(new Terms(contents));
-        return false;
-    }
+	public boolean visit(IResource resource) throws CoreException {
+		IJavaElement javaElement = JavaCore.create(resource);
+		if (javaElement == null) return true;
+		if (javaElement.getElementType() != IJavaElement.COMPILATION_UNIT) return true;
+		ICompilationUnit compilationUnit = (ICompilationUnit) javaElement.getAdapter(ICompilationUnit.class);
+		return visit(compilationUnit);
+	}
 
-    public TermDocumentMatrix getResult() {
-        return TDM;
-    }
-    
+	private boolean visit(ICompilationUnit compilationUnit) throws JavaModelException {
+		IBuffer buf = compilationUnit.getBuffer();
+		String contents = buf.getContents();
+		TDM.makeDocument(compilationUnit.getHandleIdentifier()).addTerms(new Terms(contents));
+		return false;
+	}
+
+	public TermDocumentMatrix getResult() {
+		return TDM;
+	}
+
 }
