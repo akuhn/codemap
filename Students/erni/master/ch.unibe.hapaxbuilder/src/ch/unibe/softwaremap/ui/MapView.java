@@ -85,6 +85,7 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
         softwareMap.getApplet().addListener(this);
         addSelectionListener(PACKAGE_EXPLORER_ID, CONTENT_OUTLINE_ID, RESOURCE_NAVIGATOR_ID);
         getSite().setSelectionProvider(this);
+        SoftwareMapCore.setMapView(this); 
     }
 
     /**

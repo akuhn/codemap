@@ -18,6 +18,7 @@ public class SoftwareMapCore extends AbstractUIPlugin {
     public static final String PLUGIN_ID = SoftwareMapCore.class.getPackage().getName();
     private static SoftwareMapCore plugin;
     private static Map<IProject,ProjectMap> hashmap;
+    // TODO is there a better way to manage the single MapView instance?
     private static MapView mapView;
     
     public SoftwareMapCore() {
