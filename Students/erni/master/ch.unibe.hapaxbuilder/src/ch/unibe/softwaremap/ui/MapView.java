@@ -2,8 +2,10 @@ package ch.unibe.softwaremap.ui;
 
 import static ch.unibe.eclipse.util.EclipseUtil.adapt;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -132,5 +134,11 @@ public class MapView extends ViewPart implements ISelectionListener {
 		MapVisualization<?> viz = SoftwareMapCore.at(resource).enableBuilder().getVisualization();
 		if (viz == null) return;
 		softwareMap.setMapVizualization(viz);
+		
+		List<String> handleIdentifiers = new ArrayList<String>();
+		for(ICompilationUnit each : units) {
+			handleIdentifiers.add(each.getHandleIdentifier());
+		}
+		softwareMap.updateSelection(handleIdentifiers);
 	}
 }
