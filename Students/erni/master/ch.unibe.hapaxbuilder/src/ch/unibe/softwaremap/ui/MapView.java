@@ -3,15 +3,19 @@ package ch.unibe.softwaremap.ui;
 import static ch.unibe.eclipse.util.EclipseUtil.adapt;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMember;
+import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -88,18 +92,25 @@ public class MapView extends ViewPart implements ISelectionListener {
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (part == this)
-			return;
-		if (selection instanceof IStructuredSelection)
-			selectionChanged((IStructuredSelection) selection);
+		if (part == this) {
+			return;			
+		}
+		if (selection instanceof IStructuredSelection) {			
+			try {
+				selectionChanged((IStructuredSelection) selection);
+			} catch (CoreException e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 
 	/**
 	 * Filters selected IJavaProject and ICompilationUnit.
 	 * 
 	 * @param selection
+	 * @throws CoreException 
 	 */
-	private void selectionChanged(IStructuredSelection selection) {
+	private void selectionChanged(IStructuredSelection selection) throws CoreException {
 		IJavaProject project = null;
 		Collection<ICompilationUnit> units = new HashSet<ICompilationUnit>();
 		for (Object each : selection.toList()) {
@@ -113,6 +124,10 @@ public class MapView extends ViewPart implements ISelectionListener {
 			}
 			if (javaElement instanceof ICompilationUnit) {
 				units.add((ICompilationUnit) javaElement);
+			}
+			if (javaElement instanceof IPackageFragment) {
+				ICompilationUnit[] children = ((IPackageFragment)javaElement).getCompilationUnits();
+				units.addAll(Arrays.asList(children));
 			}
 			if (javaElement instanceof IMember) {
 				javaElement = javaElement.getAncestor(IJavaElement.COMPILATION_UNIT);
