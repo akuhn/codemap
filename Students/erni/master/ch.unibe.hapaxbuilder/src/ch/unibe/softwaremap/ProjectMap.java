@@ -6,16 +6,20 @@ import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.deif.meander.Meander;
 import ch.deif.meander.viz.LabelsOverlay;
 import ch.deif.meander.viz.MapVisualization;
 import ch.unibe.softwaremap.builder.HapaxBuilder;
+import ch.unibe.softwaremap.builder.MapMakerBackgroundJob;
 
 public class ProjectMap {
 
-    public final IProject project;
+    private final IProject project;
     private TermDocumentMatrix tdm;
     private MapVisualization<?> map;
     private boolean mapBeingCalculated = false;
@@ -34,7 +38,7 @@ public class ProjectMap {
     }
     
     public void unsafeEnableBuilder() throws CoreException {
-        IProjectDescription desc = project.getDescription();
+        IProjectDescription desc = getProject().getDescription();
         ICommand[] commands = desc.getBuildSpec();
         for (ICommand command: commands) {
         	if (command.getBuilderName().equals(HapaxBuilder.BUILDER_ID)) {
@@ -46,8 +50,8 @@ public class ProjectMap {
         newCommand.setBuilderName(HapaxBuilder.BUILDER_ID);
         commands = $(commands).copyWith(newCommand);
         desc.setBuildSpec(commands);
-        System.out.println("adding builder to" + project.getName());
-        project.setDescription(desc, null);
+        System.out.println("adding builder to" + getProject().getName());
+        getProject().setDescription(desc, null);
     }
 
     public void putTDM(TermDocumentMatrix tdm) {
@@ -63,15 +67,25 @@ public class ProjectMap {
     	if (tdm == null) return null;
         if (map != null) return map;
         if (mapBeingCalculated) return null;
-    	mapBeingCalculated = true;
-    	return map = Meander.script()
-    		.useCorpus(tdm)
-    		.makeMap()
-    		.useHillshading()
-    		.add(LabelsOverlay.class)
-    		.getVisualization();
-    	
-    	
+        mapBeingCalculated = true;
+        new MapMakerBackgroundJob(this).schedule();
+        return null;
+    }
+
+    public IProject getProject() {
+        return project;
+    }
+
+    public IStatus makeMap(IProgressMonitor monitor) {
+        monitor.beginTask("Making map", 5);
+        map = Meander.script()
+                .useCorpus(tdm)
+                .makeMap()
+                .useHillshading()
+                .add(LabelsOverlay.class)
+                .getVisualization();
+        monitor.done();
+        return Status.OK_STATUS;
     }
     
 }
