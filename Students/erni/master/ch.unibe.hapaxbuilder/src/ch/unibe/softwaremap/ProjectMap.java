@@ -17,6 +17,8 @@ public class ProjectMap {
 
     public final IProject project;
     private TermDocumentMatrix tdm;
+    private MapVisualization<?> map;
+    private boolean mapBeingCalculated = false;
 
     public ProjectMap(IProject project) {
         this.project = project;
@@ -59,12 +61,16 @@ public class ProjectMap {
     
     public MapVisualization<?> getVisualization() {
     	if (tdm == null) return null;
-    	return Meander.script()
-    			.useCorpus(tdm)
-    			.makeMap()
-    			.useHillshading()
-    			.add(LabelsOverlay.class)
-    			.getVisualization();
+        if (map != null) return map;
+        if (mapBeingCalculated) return null;
+    	mapBeingCalculated = true;
+    	return map = Meander.script()
+    		.useCorpus(tdm)
+    		.makeMap()
+    		.useHillshading()
+    		.add(LabelsOverlay.class)
+    		.getVisualization();
+    	
     	
     }
     
