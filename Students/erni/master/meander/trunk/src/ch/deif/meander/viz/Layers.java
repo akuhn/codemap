@@ -1,8 +1,10 @@
 package ch.deif.meander.viz;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 
 import processing.core.PGraphics;
+import ch.akuhn.util.Throw;
 import ch.deif.meander.Map;
 
 
@@ -29,6 +31,14 @@ public class Layers extends MapVisualization<Drawable> {
 
     public void useHillshading() {
         background = new HillshadeVisualization(map);
+    }
+
+    public void add(Class<? extends MapVisualization<?>> overlay) {
+        try {
+            add(overlay.getConstructor(Map.class).newInstance(map));
+        } catch (Exception ex) {
+            throw Throw.exception(ex);
+        }
     }
 
 
