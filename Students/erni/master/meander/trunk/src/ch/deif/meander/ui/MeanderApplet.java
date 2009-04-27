@@ -28,7 +28,7 @@ public class MeanderApplet extends PApplet {
     private Collection<Point> points;
 
     private boolean needsRedraw;
-    private PGraphics background;
+    private PGraphics bg;
 
     private Point dragStart;
     private Point dragStop;
@@ -44,7 +44,7 @@ public class MeanderApplet extends PApplet {
 
     public MeanderApplet(MapVisualization<?> vizualization) {
         points = Collections.synchronizedSet(new HashSet<Point>());
-        background = createGraphics(width(), height(), JAVA2D);
+        bg = createGraphics(width(), height(), JAVA2D);
         setVisualization(vizualization);
     }
     
@@ -65,9 +65,9 @@ public class MeanderApplet extends PApplet {
     }
 
     private void setupBackground() {
-        background.beginDraw();
-        viz.draw(background);
-        background.endDraw();
+        bg.beginDraw();
+        viz.draw(bg);
+        bg.endDraw();
     }
 
     @Override
@@ -101,7 +101,7 @@ public class MeanderApplet extends PApplet {
     }
 
     private void drawBackground() {
-        image(background, 0, 0);
+        image(bg, 0, 0);
     }
 
     @Override
@@ -229,7 +229,7 @@ public class MeanderApplet extends PApplet {
         }
         needsRedraw();
     }
-
+    
     public void setVisualization(MapVisualization<?> viz) {
         if (viz == this.viz) return;
         this.points.clear();
