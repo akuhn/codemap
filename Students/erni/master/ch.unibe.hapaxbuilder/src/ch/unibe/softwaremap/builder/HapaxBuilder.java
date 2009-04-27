@@ -15,6 +15,11 @@ import org.eclipse.jdt.core.JavaCore;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.unibe.softwaremap.SoftwareMapCore;
 
+/** Creates TDM in the background.
+ * 
+ * @author Adrian Kuhn
+ *
+ */
 public class HapaxBuilder extends IncrementalProjectBuilder {
 
 	public static final String BUILDER_ID = SoftwareMapCore.makeID(HapaxBuilder.class);
@@ -29,27 +34,25 @@ public class HapaxBuilder extends IncrementalProjectBuilder {
 	}
 
 	private IProject[] incrementalBuild(IResourceDelta delta, IProgressMonitor monitor) {
-		System.out.println(delta);
-
 		try {
+			// TODO actually update the TDM here
 			delta.accept(new IResourceDeltaVisitor() {
-
 				public boolean visit(IResourceDelta delta) throws CoreException {
 					switch (delta.getKind()) {
 					case IResourceDelta.ADDED:
-						System.out.print("ADDED");
+						//System.out.print("ADDED");
 						break;
 					case IResourceDelta.REMOVED:
-						System.out.print("REMOVED");
+						//System.out.print("REMOVED");
 						break;
 					case IResourceDelta.CHANGED:
-						System.out.print("CHANGED");
+						//System.out.print("CHANGED");
 						break;
 					default:
-						System.out.print("[" + delta.getKind() + "]");
+						//System.out.print("[" + delta.getKind() + "]");
 						break;
 					}
-					System.out.println(delta.getResource());
+					//System.out.println(delta.getResource());
 					return true;
 				}
 
@@ -69,7 +72,9 @@ public class HapaxBuilder extends IncrementalProjectBuilder {
 		FullBuildVisitor visitor = new FullBuildVisitor();
 		IJavaProject javaProject = JavaCore.create(getProject());
 		for (IPackageFragmentRoot each: javaProject.getPackageFragmentRoots()) {
-			if (each.isArchive()) continue;
+			if (each.isArchive()) {
+				continue;
+			}
 			each.getCorrespondingResource().accept(visitor);
 		}
 		TermDocumentMatrix result = visitor.getResult();

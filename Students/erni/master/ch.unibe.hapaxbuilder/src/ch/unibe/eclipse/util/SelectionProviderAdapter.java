@@ -13,7 +13,7 @@ package ch.unibe.eclipse.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -21,14 +21,14 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 
-/**
+/** Copied from "org.eclipse.ui.internal.part" package.
  * 
  */
 public class SelectionProviderAdapter implements ISelectionProvider {
 
 	List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
-
 	ISelection theSelection = StructuredSelection.EMPTY;
+
 
 	public void addSelectionChangedListener(ISelectionChangedListener listener) {
 		listeners.add(listener);
@@ -45,13 +45,10 @@ public class SelectionProviderAdapter implements ISelectionProvider {
 	public void setSelection(ISelection selection) {
 		theSelection = selection;
 		final SelectionChangedEvent e = new SelectionChangedEvent(this, selection);
-		Object[] listenersArray = listeners.toArray();
-
-		for (int i = 0; i < listenersArray.length; i++) {
-			final ISelectionChangedListener l = (ISelectionChangedListener) listenersArray[i];
-			Platform.run(new SafeRunnable() {
+		for (final ISelectionChangedListener each: listeners) {
+			SafeRunner.run(new SafeRunnable() {
 				public void run() {
-					l.selectionChanged(e);
+					each.selectionChanged(e);
 				}
 			});
 		}

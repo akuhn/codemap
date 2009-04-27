@@ -20,6 +20,11 @@ import ch.unibe.softwaremap.builder.HapaxBuilder;
 import ch.unibe.softwaremap.builder.MapMakerBackgroundJob;
 import ch.unibe.softwaremap.ui.MapView;
 
+/** Caches the map of a project.
+ * 
+ * @author Adrian Kuhn
+ *
+ */
 public class ProjectMap {
 
 	private final IProject project;
@@ -35,7 +40,9 @@ public class ProjectMap {
 	public ProjectMap enableBuilder() {
 		try {
 			addBuilderToProjectDescriptionCommands();
-			if (tdm == null) makeBuilderBackgroundJob().schedule();
+			if (tdm == null) {
+				makeBuilderBackgroundJob().schedule();
+			}
 		} catch (CoreException ex) {
 			throw new RuntimeException(ex);
 		}
@@ -50,7 +57,6 @@ public class ProjectMap {
 				try {
 					builderIsRunning = true;
 					getProject().build(IncrementalProjectBuilder.FULL_BUILD, HapaxBuilder.BUILDER_ID, null, monitor);
-					new MapMakerBackgroundJob(ProjectMap.this).schedule();
 				} catch (CoreException ex) {
 					throw new RuntimeException(ex);
 				} finally {
@@ -82,7 +88,7 @@ public class ProjectMap {
 	}
 
 	private void startBackgroundTask() {
-		// TODO implement background task ...
+		new MapMakerBackgroundJob(ProjectMap.this).schedule();
 	}
 
 	public MapVisualization<?> getVisualization() {
@@ -90,7 +96,7 @@ public class ProjectMap {
 		if (map != null) return map;
 		if (mapBeingCalculated) return null;
 		mapBeingCalculated = true;
-		new MapMakerBackgroundJob(this).schedule();
+		startBackgroundTask();
 		return null;
 	}
 
@@ -100,7 +106,12 @@ public class ProjectMap {
 
 	public IStatus makeMap(IProgressMonitor monitor) {
 		monitor.beginTask("Making map", 5);
-		map = Meander.script().useCorpus(tdm).makeMap().useHillshading().add(LabelsOverlay.class).getVisualization();
+		map = Meander.script().
+		useCorpus(tdm).
+		makeMap().
+		useHillshading().
+		add(LabelsOverlay.class).
+		getVisualization();
 		notifyMapView();
 		monitor.done();
 		return Status.OK_STATUS;
@@ -108,7 +119,9 @@ public class ProjectMap {
 
 	private void notifyMapView() {
 		MapView mapView = SoftwareMapCore.getMapView();
-		if (mapView != null) mapView.newProjectMapAvailable(project);
+		if (mapView != null) {
+			mapView.newProjectMapAvailable(project);
+		}
 	}
 
 }

@@ -9,8 +9,8 @@ import org.osgi.framework.BundleContext;
 
 import ch.unibe.softwaremap.ui.MapView;
 
-/**
- * The activator class controls the plug-in life cycle
+/** One singleton to rule them all.
+ * 
  */
 public class SoftwareMapCore extends AbstractUIPlugin {
 
