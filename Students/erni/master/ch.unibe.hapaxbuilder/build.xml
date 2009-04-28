@@ -6,6 +6,10 @@
 	<target name="package">
 		<mkdir dir="lib"/>
         <delete file="${package.jar}"/>
+		
+        <mkdir dir="tmp"/>
+        <unzip src="../Meander/lib/core.zip" dest="tmp"/>
+		
 		<jar id="files" destfile="${package.jar}">
 			<fileset dir="../ch.akuhn.util/bin"/>
 			<fileset dir="../ch.akuhn.util/src"/>
@@ -21,9 +25,22 @@
 			<fileset dir="../SCG util package/src"/>
             <zipfileset src="../Hapax/lib/snowball.jar" />
 			<zipfileset src="../Meander/lib/core.jar" />
+			<fileset dir="tmp/src"/>
+	        <!--
+	        TODO: find a nicer solution
+	        <zipfileset src="../Meander/lib/core.zip" includes="src/**/*" />
+	        -->
             <zipfileset src="../Meander/lib/itext.jar" />
             <zipfileset src="../Meander/lib/pdf.jar" />
-		</jar>	
+		</jar>
+        <delete dir="tmp"/>        	
+		<!--
+	      <zipfileset id="files" src="${package.jar}"/>
+	      <pathconvert property="listing" refid="files" pathsep="${line.separator}">
+	        <globmapper from="${basedir}${file.separator}*" to="*"/>
+	      </pathconvert>    
+	      <echo message="${listing}"/>
+		-->
 	</target>
 
 </project>
