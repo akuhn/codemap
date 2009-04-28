@@ -1,7 +1,5 @@
 package ch.unibe.softwaremap.ui;
 
-import static ch.unibe.eclipse.util.EclipseUtil.adapt;
-
 import java.util.Collection;
 import java.util.HashSet;
 

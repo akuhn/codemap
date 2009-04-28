@@ -1,7 +1,5 @@
 package ch.unibe.softwaremap.ui;
 
-import static ch.unibe.eclipse.util.EclipseUtil.adapt;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
