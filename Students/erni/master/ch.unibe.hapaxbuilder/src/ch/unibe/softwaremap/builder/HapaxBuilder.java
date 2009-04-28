@@ -16,10 +16,11 @@ import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.unibe.softwaremap.Log;
 import ch.unibe.softwaremap.SoftwareMapCore;
 
-/** Creates TDM in the background.
+/**
+ * Creates TDM in the background.
  * 
  * @author Adrian Kuhn
- *
+ * 
  */
 public class HapaxBuilder extends IncrementalProjectBuilder {
 	
@@ -40,20 +41,9 @@ public class HapaxBuilder extends IncrementalProjectBuilder {
 			delta.accept(new IResourceDeltaVisitor() {
 				public boolean visit(IResourceDelta delta) throws CoreException {
 					switch (delta.getKind()) {
-						case IResourceDelta.ADDED:
-							//System.out.print("ADDED");
-							break;
-						case IResourceDelta.REMOVED:
-							//System.out.print("REMOVED");
-							break;
-						case IResourceDelta.CHANGED:
-							//System.out.print("CHANGED");
-							break;
-						default:
-							//System.out.print("[" + delta.getKind() + "]");
-							break;
+					
 					}
-					//System.out.println(delta.getResource());
+					// System.out.println(delta.getResource());
 					return true;
 				}
 				

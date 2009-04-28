@@ -16,14 +16,16 @@ import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.deif.meander.Meander;
 import ch.deif.meander.viz.LabelsOverlay;
 import ch.deif.meander.viz.MapVisualization;
+import ch.unibe.scg.util.Extension;
 import ch.unibe.softwaremap.builder.HapaxBuilder;
 import ch.unibe.softwaremap.builder.MapMakerBackgroundJob;
 import ch.unibe.softwaremap.ui.MapView;
 
-/** Caches the map of a project.
+/**
+ * Caches the map of a project.
  * 
  * @author Adrian Kuhn
- *
+ * 
  */
 public class ProjectMap {
 	
@@ -77,7 +79,7 @@ public class ProjectMap {
 		}
 		ICommand newCommand = desc.newCommand();
 		newCommand.setBuilderName(HapaxBuilder.BUILDER_ID);
-		commands = $(commands).copyWith(newCommand);
+		commands = Extension.$(commands).copyWith(newCommand);
 		desc.setBuildSpec(commands);
 		getProject().setDescription(desc, null);
 	}
@@ -106,12 +108,12 @@ public class ProjectMap {
 	
 	public IStatus makeMap(IProgressMonitor monitor) {
 		monitor.beginTask("Making map", 5);
-		map = Meander.script().
-		useCorpus(tdm).
-		makeMap().
-		useHillshading().
-		add(LabelsOverlay.class).
-		getVisualization();
+		map = Meander.script()
+				.useCorpus(tdm)
+				.makeMap()
+				.useHillshading()
+				.add(LabelsOverlay.class)
+				.getVisualization();
 		notifyMapView();
 		monitor.done();
 		return Status.OK_STATUS;

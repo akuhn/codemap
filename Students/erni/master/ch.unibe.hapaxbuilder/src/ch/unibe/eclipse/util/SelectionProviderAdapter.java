@@ -21,14 +21,14 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 
-/** Copied from "org.eclipse.ui.internal.part" package.
+/**
+ * Copied from "org.eclipse.ui.internal.part" package.
  * 
  */
 public class SelectionProviderAdapter implements ISelectionProvider {
 
 	List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
 	ISelection theSelection = StructuredSelection.EMPTY;
-
 
 	public void addSelectionChangedListener(ISelectionChangedListener listener) {
 		listeners.add(listener);

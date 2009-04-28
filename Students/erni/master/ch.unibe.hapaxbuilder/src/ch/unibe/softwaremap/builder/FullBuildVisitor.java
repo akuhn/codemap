@@ -15,7 +15,8 @@ import org.eclipse.jdt.core.JavaModelException;
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 
-/** Creates TDM from all ICompilationUnit resources in an IProject.
+/**
+ * Creates TDM from all ICompilationUnit resources in an IProject.
  * 
  */
 class FullBuildVisitor implements IResourceVisitor {

@@ -13,8 +13,6 @@
 		<jar id="files" destfile="${package.jar}">
 			<fileset dir="../ch.akuhn.util/bin"/>
 			<fileset dir="../ch.akuhn.util/src"/>
-            <fileset dir="../Fame/bin"/>
-			<fileset dir="../Fame/src"/>
             <fileset dir="../ForEach DSL/bin"/>
 			<fileset dir="../ForEach DSL/src"/>
             <fileset dir="../Hapax/bin"/>

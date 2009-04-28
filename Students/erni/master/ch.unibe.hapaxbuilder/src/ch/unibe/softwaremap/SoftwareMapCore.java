@@ -9,7 +9,8 @@ import org.osgi.framework.BundleContext;
 
 import ch.unibe.softwaremap.ui.MapView;
 
-/** One singleton to rule them all.
+/**
+ * One singleton to rule them all.
  * 
  */
 public class SoftwareMapCore extends AbstractUIPlugin {

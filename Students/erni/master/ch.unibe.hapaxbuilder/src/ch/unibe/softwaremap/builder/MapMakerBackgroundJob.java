@@ -6,10 +6,11 @@ import org.eclipse.core.runtime.jobs.Job;
 
 import ch.unibe.softwaremap.ProjectMap;
 
-/** Creates map from TDM.
+/**
+ * Creates map from TDM.
  * 
  * @author Adrian Kuhn
- *
+ * 
  */
 public class MapMakerBackgroundJob extends Job {
 
