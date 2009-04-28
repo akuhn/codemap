@@ -16,10 +16,9 @@ import ch.deif.meander.Map.Pixel;
 import ch.unibe.jexample.Given;
 import ch.unibe.jexample.JExample;
 
-
 @RunWith(JExample.class)
 public class MapTest {
-	
+
 	@Test
 	public Map fiveOnThreeMap() {
 		Map map = Map.builder().size(5).location(0.5, 0.5, 100).done();
@@ -28,7 +27,7 @@ public class MapTest {
 		assertEquals(1, map.locationCount());
 		return map;
 	}
-	
+
 	@Test
 	@Given("#fiveOnThreeMap")
 	public void testPixelCoordinates(Map map) {
@@ -50,7 +49,7 @@ public class MapTest {
 		assertEquals(1.0, p.x(), NaN);
 		assertEquals(0.0, p.y(), NaN);
 	}
-	
+
 	@Test
 	@Given("#fiveOnThreeMap")
 	public Map mapWithDEM(Map map) {
@@ -59,7 +58,7 @@ public class MapTest {
 		assertEquals(true, map.hasDEM());
 		return map;
 	}
-	
+
 	@Test
 	@Given("#mapWithDEM")
 	public void testPixelElevation(Map map) {
@@ -69,7 +68,7 @@ public class MapTest {
 		assertEquals(0.5, p.y(), NaN);
 		assertEquals(100, p.elevation(), 1e-2);
 	}
-	
+
 	@Test
 	public Map makeSampleMap() {
 		MapBuilder builder = Map.builder().size(200);
@@ -79,7 +78,7 @@ public class MapTest {
 		}
 		return builder.done();
 	}
-	
+
 	@Test
 	@Given("#makeSampleMap")
 	public Map testLocations(Map map) {
@@ -88,7 +87,7 @@ public class MapTest {
 		assertEquals(true, All.notNull(map.locations()));
 		return map;
 	}
-	
+
 	@Test
 	@Given("#makeSampleMap")
 	public Map testPixelDimension(Map map) {
@@ -96,5 +95,5 @@ public class MapTest {
 		assertEquals(200, map.getHeight());
 		return map;
 	}
-	
+
 }

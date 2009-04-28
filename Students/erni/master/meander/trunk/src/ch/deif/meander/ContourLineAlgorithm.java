@@ -2,13 +2,12 @@ package ch.deif.meander;
 
 import ch.deif.meander.Map.Kernel;
 
-
 public class ContourLineAlgorithm extends MapAlgorithm {
-	
+
 	public ContourLineAlgorithm(Map map) {
 		super(map);
 	}
-	
+
 	@Override
 	public void run() {
 		int step = map.getParameters().contourLineStep;
@@ -20,5 +19,5 @@ public class ContourLineAlgorithm extends MapAlgorithm {
 			k.setContourLine((top != here || left != here) && !coastline);
 		}
 	}
-	
+
 }

@@ -11,15 +11,14 @@ import org.eclipse.swt.widgets.Composite;
 
 import ch.deif.meander.viz.MapVisualization;
 
-
 /**
  * Bridges between Eclipse (which uses SWT) and Processing (which uses AWT).
  */
 public class EclipseProcessingBridge extends Composite {
-	
+
 	private Frame mapFrame;
 	private MeanderApplet applet;
-	
+
 	public EclipseProcessingBridge(Composite parent) {
 		super(parent, SWT.EMBEDDED);
 		mapFrame = SWT_AWT.new_Frame(this);
@@ -28,24 +27,24 @@ public class EclipseProcessingBridge extends Composite {
 		getApplet().init();
 		mapFrame.add(getApplet());
 	}
-	
+
 	public void setMaximumSize(Dimension dimension) {
 		mapFrame.setMaximumSize(dimension);
 		mapFrame.setLocation(0, 0);
 		mapFrame.setSize(dimension.width, dimension.height);
 	}
-	
+
 	public void setMapVizualization(MapVisualization<?> viz) {
 		getApplet().setVisualization(viz);
 		mapFrame.repaint();
 	}
-	
+
 	public void updateSelection(List<String> handleIdentifiers) {
 		getApplet().updateSelection(handleIdentifiers);
 	}
-	
+
 	public MeanderApplet getApplet() {
 		return applet;
 	}
-	
+
 }

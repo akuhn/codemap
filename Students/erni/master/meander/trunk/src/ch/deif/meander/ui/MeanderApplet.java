@@ -17,59 +17,58 @@ import ch.deif.meander.MaxDistNearestNeighbor;
 import ch.deif.meander.NearestNeighbor;
 import ch.deif.meander.viz.MapVisualization;
 
-
 @SuppressWarnings("serial")
 public class MeanderApplet extends PApplet {
-	
+
 	protected final int SELECTION_SIZE = 10;
 	protected final int POINT_STROKE = 2;
 	protected final int BOX_STROKE = 2;
-	
+
 	private MapVisualization<?> viz;
 	private Collection<Point> points;
-	
+
 	private boolean needsRedraw;
 	private PGraphics bg;
-	
+
 	private Point dragStart;
 	private Point dragStop;
-	
+
 	private MeanderEventListener listener;
-	
+
 	public static final int PIXELSCALE = 512;
-	
+
 	public MeanderApplet() {
 		this(null);
 	}
-	
+
 	public MeanderApplet(MapVisualization<?> vizualization) {
 		points = Collections.synchronizedSet(new HashSet<Point>());
 		bg = createGraphics(width(), height(), JAVA2D);
 		setVisualization(vizualization);
 	}
-	
+
 	public void addListener(MeanderEventListener listener) {
 		assert this.listener == null;
 		this.listener = listener;
 	}
-	
+
 	public void removeListener(MeanderEventListener listener) {
 		assert this.listener == listener;
 		this.listener = null;
 	}
-	
+
 	@Override
 	public void setup() {
 		size(width(), height());
 		frameRate(25);
 	}
-	
+
 	private void setupBackground() {
 		bg.beginDraw();
 		viz.draw(bg);
 		bg.endDraw();
 	}
-	
+
 	@Override
 	public void draw() {
 		if (!needsRedraw) return;
@@ -81,7 +80,7 @@ public class MeanderApplet extends PApplet {
 		drawSelectionBox();
 		needsRedraw = false;
 	}
-	
+
 	private void drawSelectionBox() {
 		if (dragStart != null && dragStop != null) {
 			stroke(Color.RED.getRGB());
@@ -92,18 +91,18 @@ public class MeanderApplet extends PApplet {
 			strokeWeight(POINT_STROKE);
 		}
 	}
-	
+
 	private void drawSelectedPoints() {
 		for (Point each: points) {
 			stroke(Color.RED.getRGB());
 			ellipse(each.x, each.y, SELECTION_SIZE, SELECTION_SIZE);
 		}
 	}
-	
+
 	private void drawBackground() {
 		image(bg, 0, 0);
 	}
-	
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		super.mouseClicked(e);
@@ -127,7 +126,7 @@ public class MeanderApplet extends PApplet {
 		unsetSelectionBox();
 		needsRedraw();
 	}
-	
+
 	private void selectionChanged(final Location... locations) {
 		final ArrayList<String> names = new ArrayList<String>();
 		for (Location each: locations)
@@ -138,18 +137,18 @@ public class MeanderApplet extends PApplet {
 				listener.selectionChanged(names.toArray(new String[0]));
 			}
 		}.start();
-		
+
 	}
-	
+
 	private void addSelection(Point point) {
 		points.add(point);
 	}
-	
+
 	private void unsetSelectionBox() {
 		dragStart = null;
 		dragStop = null;
 	}
-	
+
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		super.mouseDragged(e);
@@ -157,7 +156,7 @@ public class MeanderApplet extends PApplet {
 		dragStop = e.getPoint();
 		needsRedraw();
 	}
-	
+
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		super.mouseReleased();
@@ -184,7 +183,7 @@ public class MeanderApplet extends PApplet {
 			needsRedraw();
 		}
 	}
-	
+
 	public void indicesSelected(int[] indices) {
 		points.clear();
 		List<Location> locations = new ArrayList<Location>();
@@ -197,23 +196,23 @@ public class MeanderApplet extends PApplet {
 		}
 		needsRedraw();
 	}
-	
+
 	protected void needsRedraw() {
 		needsRedraw = true;
 	}
-	
+
 	private Map map() {
 		return viz == null ? null : viz.map;
 	}
-	
+
 	private int width() {
 		return MeanderApplet.PIXELSCALE;
 	}
-	
+
 	private int height() {
 		return MeanderApplet.PIXELSCALE;
 	}
-	
+
 	public void updateSelection(List<String> handleIdentifiers) {
 		points.clear();
 		for (Location each: viz.map.locations())
@@ -224,7 +223,7 @@ public class MeanderApplet extends PApplet {
 			}
 		needsRedraw();
 	}
-	
+
 	public void setVisualization(MapVisualization<?> viz) {
 		if (viz == this.viz) return;
 		this.points.clear();
@@ -233,5 +232,5 @@ public class MeanderApplet extends PApplet {
 		needsRedraw();
 		repaint();
 	}
-	
+
 }

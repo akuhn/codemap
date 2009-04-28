@@ -2,13 +2,12 @@ package ch.deif.meander;
 
 import ch.deif.meander.Map.Pixel;
 
-
 public class NormalizeElevationAlgorithm extends MapAlgorithm {
-	
+
 	public NormalizeElevationAlgorithm(Map map) {
 		super(map);
 	}
-	
+
 	@Override
 	public void run() {
 		double maxElevation = 0;
@@ -19,5 +18,5 @@ public class NormalizeElevationAlgorithm extends MapAlgorithm {
 			p.normalizeElevation(maxElevation);
 		}
 	}
-	
+
 }

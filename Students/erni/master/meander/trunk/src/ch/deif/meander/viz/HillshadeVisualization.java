@@ -7,20 +7,19 @@ import ch.deif.meander.Map;
 import ch.deif.meander.Parameters;
 import ch.deif.meander.Map.Pixel;
 
-
 public class HillshadeVisualization extends MapVisualization<Drawable> {
-	
+
 	public HillshadeVisualization(Map map) {
 		super(map);
 	}
-	
+
 	@Override
 	public void drawThis(PGraphics pg) {
 		PImage img = new PImage(map.getWidth(), map.getHeight());
 		this.drawOn(img);
 		pg.image(img, 0, 0);
 	}
-	
+
 	private MColor color(Pixel p) {
 		Parameters params = map.getParameters();
 		double elevation = p.elevation();
@@ -28,7 +27,7 @@ public class HillshadeVisualization extends MapVisualization<Drawable> {
 		if (elevation > params.waterHeight) return new MColor(92, 142, 255);
 		return new MColor(0, 68, 255);
 	}
-	
+
 	private void drawOn(PImage img) {
 		assert img.width == map.getWidth() && img.height == map.getHeight();
 		int[] pixels = img.pixels;

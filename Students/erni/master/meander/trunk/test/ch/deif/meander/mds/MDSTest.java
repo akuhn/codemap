@@ -18,13 +18,12 @@ import ch.deif.meander.ui.PViewer;
 import ch.deif.meander.viz.HillshadeVisualization;
 import ch.deif.meander.viz.MapVisualization;
 
-
 public class MDSTest {
-	
+
 	// private static final String FILENAME = "mse/groovy.TDM";
 	private static final String FILENAME = "mse/jnit_new.TDM";
 	private static final String DEFAULT_VERSION = "groovy-1.0-beta-5-src.zip";
-	
+
 	public static void main(String... args) {
 		TermDocumentMatrix tdm;
 		try {
@@ -36,7 +35,7 @@ public class MDSTest {
 			System.out.println("with " + i.documents.size() + " documents...");
 			JMDS mds = JMDS.fromCorrelationMatrix(i);
 			System.out.println("Done.");
-			
+
 			MapBuilder builder = Map.builder();
 			for (Document each: i.documents) {
 				if (!each.version().equals(DEFAULT_VERSION)) continue;
@@ -51,11 +50,11 @@ public class MDSTest {
 			// MapVisualization viz = new SketchVisualization(map);
 			MapVisualization viz = new HillshadeVisualization(map);
 			new PViewer(viz);
-			
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 }

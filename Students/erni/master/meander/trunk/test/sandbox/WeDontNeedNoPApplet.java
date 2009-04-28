@@ -7,16 +7,15 @@ import processing.core.PGraphics;
 import processing.core.PGraphicsJava2D;
 import processing.pdf.PGraphicsPDF;
 
-
 public class WeDontNeedNoPApplet {
-	
+
 	private static final PFont FONT = new PFont(PFont.findFont("Andale Mono"), true, PFont.DEFAULT_CHARSET);
-	
+
 	public static void main(String[] args) throws Throwable {
 		drawToPNG();
 		drawToPDF();
 	}
-	
+
 	private static void drawToPDF() throws Throwable {
 		PGraphicsPDF pg;
 		PApplet pa;
@@ -29,7 +28,7 @@ public class WeDontNeedNoPApplet {
 		pg.dispose();
 		pg = null;
 	}
-	
+
 	private static void setupAndDraw(PGraphics pg) {
 		pg.hint(PConstants.ENABLE_NATIVE_FONTS);
 		pg.setSize(200, 200);
@@ -37,7 +36,7 @@ public class WeDontNeedNoPApplet {
 		draw(pg);
 		pg.endDraw();
 	}
-	
+
 	private static void draw(PGraphics pg) {
 		pg.textMode(PConstants.SHAPE); // Embed PDF fonts, prints err for Java2D
 		// :(
@@ -46,7 +45,7 @@ public class WeDontNeedNoPApplet {
 		pg.textFont(FONT, 30);
 		pg.text("Hello Worlds!", 30, 30);
 	}
-	
+
 	private static void drawToPNG() throws Throwable {
 		PGraphics pg = new PGraphicsJava2D();
 		PApplet pa = new PApplet();
@@ -55,5 +54,5 @@ public class WeDontNeedNoPApplet {
 		setupAndDraw(pg);
 		pg.save(System.getProperty("user.dir") + "/example.png");
 	}
-	
+
 }

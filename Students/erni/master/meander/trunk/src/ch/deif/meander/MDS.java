@@ -16,17 +16,16 @@ import ch.akuhn.util.TeeOutputStream;
 import ch.akuhn.util.Throw;
 import ch.deif.meander.util.Delimiter;
 
-
 public class MDS {
-	
+
 	class Gobbler extends StreamGobbler {
-		
+
 		public boolean done = false;
-		
+
 		public Gobbler(InputStream is) {
 			super(is);
 		}
-		
+
 		@Override
 		public void run() {
 			r0 = consumeDouble("#", "corr(D,d):");
@@ -39,18 +38,18 @@ public class MDS {
 			expectEOF();
 		}
 	}
-	
+
 	public double[] x, y;
 	public double r0;
 	public double r;
-	
+
 	private static String fname() {
 		String fname = System.getenv("MDS");
 		return fname != null ? fname : "hitmds2";
 	}
-	
+
 	private void printMatrixOn(LatentSemanticIndex index, Iterable<Location> locations, PrintStream out)
-	        throws IOException {
+			throws IOException {
 		out.append('#');
 		out.append(' ');
 		// TODO should be negative numbers but results are nicer this way :-)
@@ -80,15 +79,15 @@ public class MDS {
 		}
 		out.close();
 	}
-	
+
 	public static MDS fromCorrelationMatrix(LatentSemanticIndex index) {
 		return new MDS().compute(index, null);
 	}
-	
+
 	public static MDS fromCorrelationMatrix(LatentSemanticIndex index, Iterable<Location> matchingLocations) {
 		return new MDS().compute(index, matchingLocations);
 	}
-	
+
 	private MDS compute(LatentSemanticIndex index, Iterable<Location> matchingLocations) {
 		assert matchingLocations == null || index.documents.size() == As.list(matchingLocations).size();
 		boolean tee = true;
@@ -102,16 +101,16 @@ public class MDS {
 			InputStream in = proc.getInputStream();
 			if (tee) err = new TeeInputStream(err, "error.log");
 			if (tee) in = new TeeInputStream(in, "input.log");
-			
+
 			StreamGobbler error = new StreamGobbler(err);
 			Gobbler input = new Gobbler(in);
 			error.verbose().start();
 			input.start();
-			
+
 			OutputStream out = proc.getOutputStream();
 			if (tee) out = new TeeOutputStream(out, "output.log");
 			printMatrixOn(index, matchingLocations, new PrintStream(out));
-			
+
 			int exit = proc.waitFor();
 			while (!input.done)
 				Thread.sleep(20);
@@ -123,5 +122,5 @@ public class MDS {
 		}
 		return this;
 	}
-	
+
 }

@@ -6,9 +6,8 @@ import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
 import ch.deif.meander.viz.SketchVisualization;
 
-
 public class SketchSketch {
-	
+
 	public static void main(String... args) {
 		MapBuilder builder = Map.builder().size(800);
 		for (int a = 5; a < 90; a += 10) {
@@ -17,6 +16,6 @@ public class SketchSketch {
 		}
 		Map map = builder.done();
 		new SketchVisualization(map).openApplet();
-		
+
 	}
 }

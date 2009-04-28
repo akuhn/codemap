@@ -5,7 +5,7 @@ package ch.deif.meander;
  *      International Conference on Pattern Recognition, Oct 1994.
  */
 public class HausdorffDistance {
-	
+
 	public double d(Location a, Map B) {
 		double min = Double.POSITIVE_INFINITY;
 		for (Location b: B.locations) {
@@ -14,7 +14,7 @@ public class HausdorffDistance {
 		}
 		return Math.sqrt(min);
 	}
-	
+
 	public double d5(Map A, Map B) {
 		double max = 0;
 		for (Location a: A.locations()) {
@@ -23,7 +23,7 @@ public class HausdorffDistance {
 		}
 		return max;
 	}
-	
+
 	public double d6(Map A, Map B) {
 		double sum = 0;
 		for (Location a: A.locations) {
@@ -33,7 +33,7 @@ public class HausdorffDistance {
 		}
 		return sum / A.locationCount();
 	}
-	
+
 	public double kahan_d6(Map A, Map B) {
 		double sum = 0;
 		double c = 0; // compensation
@@ -45,29 +45,29 @@ public class HausdorffDistance {
 		}
 		return sum / A.locationCount();
 	}
-	
+
 	public double D18(Map A, Map B) {
 		return Math.max(d5(A, B), d5(B, A));
 	}
-	
+
 	public double D22(Map A, Map B) {
 		double ab = d6(A, B);
 		double ba = d6(B, A);
 		return Math.max(ab, ba);
 	}
-	
+
 	public double D23(Map A, Map B) {
 		double ab = d6(A, B);
 		double ba = d6(B, A);
 		return ab + ba / 2;
 	}
-	
+
 	public double distance(Map one, Map two) {
 		return D23(one, two);
 	}
-	
+
 	public double kahan_D22(Map A, Map B) {
 		return Math.max(kahan_d6(A, B), kahan_d6(B, A));
 	}
-	
+
 }

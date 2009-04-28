@@ -2,21 +2,20 @@ package ch.deif.meander;
 
 import ch.deif.meander.viz.LabelsOverlay;
 
-
 public class FromSourceFilesToMap {
-	
+
 	public void run() {
-		
+
 		Meander.script().addDocuments("../JExample", ".java").makeMap().useHillshading().add(LabelsOverlay.class)
-		        .openApplet();
-		
+				.openApplet();
+
 	}
-	
+
 	public static void main(String... args) {
-		
+
 		Meander.script().addDocuments("../JExample", ".java").makeMap().useHillshading().add(LabelsOverlay.class)
-		        .openApplet();
-		
+				.openApplet();
+
 		// TermDocumentMatrix tdm = new TermDocumentMatrix();
 		// Importer importer = new Importer(tdm);
 		// importer.importAllFiles(new File("../JExample"), ".java");
@@ -40,5 +39,5 @@ public class FromSourceFilesToMap {
 		// layers.add(new LabelsOverlay(map));
 		// layers.openApplet();
 	}
-	
+
 }
