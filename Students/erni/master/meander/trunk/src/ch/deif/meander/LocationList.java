@@ -76,13 +76,13 @@ public class LocationList implements Iterable<Location> {
 		}
 
 		@Override
-		public float px() {
-			return (float) (x * getPixelScale());
+		public int px() {
+			return (int) (x * getPixelScale());
 		}
 
 		@Override
-		public float py() {
-			return (float) (y * getPixelScale());
+		public int py() {
+			return (int) (y * getPixelScale());
 		}
 
 		@Override

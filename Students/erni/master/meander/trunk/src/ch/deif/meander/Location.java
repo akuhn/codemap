@@ -21,9 +21,9 @@ public interface Location {
 
 	public double normElevation();
 
-	public float py();
+	public int py();
 
-	public float px();
+	public int px();
 
 	public void setName(String string);
 

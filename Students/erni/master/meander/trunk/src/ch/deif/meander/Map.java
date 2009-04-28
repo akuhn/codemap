@@ -13,7 +13,7 @@ import ch.deif.meander.viz.SketchVisualization;
  */
 public class Map {
 
-	private double[][] DEM;
+	private float[][] DEM;
 	private double[][] hillshade;
 	private boolean[][] contours;
 	private final int height;
@@ -30,8 +30,8 @@ public class Map {
 		locations.setPixelScale(width);
 	}
 
-	private double[][] getDEM() {
-		return DEM == null ? DEM = new double[getWidth()][getHeight()] : DEM;
+	private float[][] getDEM() {
+		return DEM;
 	}
 
 	private boolean[][] getContours() {
@@ -168,7 +168,7 @@ public class Map {
 
 		int px;
 		int py;
-		private double[][] DEM0;
+		private float[][] DEM0;
 
 		public Pixel(int px, int py) {
 			assert px < getWidth() && py < getHeight() : px + "," + py;
@@ -207,7 +207,7 @@ public class Map {
 		}
 
 		public void normalizeElevation(double maxElevation) {
-			DEM0[px][py] = 100.0 * (DEM0[px][py] / maxElevation);
+			DEM0[px][py] = (float) (100.0 * (DEM0[px][py] / maxElevation));
 		}
 
 	}
@@ -249,6 +249,10 @@ public class Map {
 
 	public Location locationAt(int index) {
 		return locations.at(index);
+	}
+
+	public void updateDEM(float[][] DEM) {
+		this.DEM = DEM;
 	}
 
 }

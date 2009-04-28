@@ -15,6 +15,8 @@ import ch.deif.meander.Map.Kernel;
  */
 public class HillshadeAlgorithm extends MapAlgorithm {
 
+	// TODO The shading is vulnerable to the width of the map, we should fix that!
+	
 	public HillshadeAlgorithm(Map map) {
 		super(map);
 	}

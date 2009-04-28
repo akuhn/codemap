@@ -15,7 +15,7 @@ public class DefaultSketch {
 	public static void main(String... args) {
 		long time = System.nanoTime();
 
-		MapBuilder builder = Map.builder().size(200);
+		MapBuilder builder = Map.builder().size(256);
 		for (int a = 5; a < 90; a += 10) {
 			double rad = Math.PI / 180 * a;
 			builder.location(0.8 * sin(rad), 0.8 * cos(rad), a + 25);
@@ -25,9 +25,10 @@ public class DefaultSketch {
 		new NormalizeElevationAlgorithm(map).run();
 		new HillshadeAlgorithm(map).run();
 		new ContourLineAlgorithm(map).run();
-		new HillshadeVisualization(map).openApplet();
 
 		System.out.println((System.nanoTime() - time) / 1000000);
+		//new DebugDEMVisualization(map).openApplet();
+		new HillshadeVisualization(map).openApplet();
 	}
 
 }
