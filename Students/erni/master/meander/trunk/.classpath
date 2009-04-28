@@ -9,7 +9,6 @@
 	<classpathentry kind="lib" path="lib/itext.jar"/>
 	<classpathentry kind="lib" path="lib/pdf.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ch.akuhn.util"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Fame"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Hapax"/>
 	<classpathentry kind="lib" path="lib/jexample-4.4-r281.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/SCG util package"/>
