@@ -16,6 +16,7 @@ import ch.deif.meander.Map.Pixel;
 import ch.unibe.jexample.Given;
 import ch.unibe.jexample.JExample;
 
+
 @RunWith(JExample.class)
 public class MapTest {
 	
@@ -74,7 +75,7 @@ public class MapTest {
 		MapBuilder builder = Map.builder().size(200);
 		for (int a = 5; a < 90; a += 10) {
 			double rad = Math.PI / 180 * a;
-			builder.location(0.8*sin(rad), 0.8*cos(rad), a + 25);
+			builder.location(0.8 * sin(rad), 0.8 * cos(rad), a + 25);
 		}
 		return builder.done();
 	}

@@ -130,7 +130,8 @@ public class MeanderApplet extends PApplet {
 	
 	private void selectionChanged(final Location... locations) {
 		final ArrayList<String> names = new ArrayList<String>();
-		for (Location each: locations) names.add(each.getDocument().name());
+		for (Location each: locations)
+			names.add(each.getDocument().name());
 		if (listener != null) new Thread() {
 			@Override
 			public void run() {

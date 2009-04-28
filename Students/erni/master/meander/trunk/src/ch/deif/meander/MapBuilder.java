@@ -5,6 +5,7 @@ import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.util.Bag;
 
+
 public class MapBuilder {
 	
 	private static class Doc extends Document {
@@ -59,8 +60,7 @@ public class MapBuilder {
 		return this;
 	}
 	
-	public MapBuilder location(double xNormed, double yNormed, double h,
-			Document document) {
+	public MapBuilder location(double xNormed, double yNormed, double h, Document document) {
 		locations.makeLocation(xNormed, yNormed, h).setDocument(document);
 		return this;
 	}

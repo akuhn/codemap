@@ -18,44 +18,44 @@ import ch.deif.meander.ui.PViewer;
 import ch.deif.meander.viz.HillshadeVisualization;
 import ch.deif.meander.viz.MapVisualization;
 
+
 public class MDSTest {
-
-    // private static final String FILENAME = "mse/groovy.TDM";
-    private static final String FILENAME = "mse/jnit_new.TDM";
-    private static final String DEFAULT_VERSION = "groovy-1.0-beta-5-src.zip";
-
-    public static void main(String... args) {
-        TermDocumentMatrix tdm;
-        try {
-            tdm = TermDocumentMatrix.readFrom(new Scanner(new File(FILENAME)));
-            tdm.rejectAndWeight();
-            System.out.println("Computing LSI...");
-            LatentSemanticIndex i = tdm.createIndex();
-            System.out.println("Computing MDS...");
-            System.out.println("with " + i.documents.size() + " documents...");
-            JMDS mds = JMDS.fromCorrelationMatrix(i);
-            System.out.println("Done.");
-
-            MapBuilder builder = Map.builder();
-            for (Document each : i.documents) {
-                if (!each.version().equals(DEFAULT_VERSION)) continue;
-                int index = i.documents.get(each);
-                builder.location(mds.x[index], mds.y[index], Math.sqrt(each
-                        .termSize()));
-            }
-            Map map = builder.done();
-            new DEMAlgorithm(map).run();
-            new NormalizeElevationAlgorithm(map).run();
-            new HillshadeAlgorithm(map).run();
-            new ContourLineAlgorithm(map).run();
-            // MapVisualization viz = new SketchVisualization(map);
-            MapVisualization viz = new HillshadeVisualization(map);
-            new PViewer(viz);
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-    }
-
+	
+	// private static final String FILENAME = "mse/groovy.TDM";
+	private static final String FILENAME = "mse/jnit_new.TDM";
+	private static final String DEFAULT_VERSION = "groovy-1.0-beta-5-src.zip";
+	
+	public static void main(String... args) {
+		TermDocumentMatrix tdm;
+		try {
+			tdm = TermDocumentMatrix.readFrom(new Scanner(new File(FILENAME)));
+			tdm.rejectAndWeight();
+			System.out.println("Computing LSI...");
+			LatentSemanticIndex i = tdm.createIndex();
+			System.out.println("Computing MDS...");
+			System.out.println("with " + i.documents.size() + " documents...");
+			JMDS mds = JMDS.fromCorrelationMatrix(i);
+			System.out.println("Done.");
+			
+			MapBuilder builder = Map.builder();
+			for (Document each: i.documents) {
+				if (!each.version().equals(DEFAULT_VERSION)) continue;
+				int index = i.documents.get(each);
+				builder.location(mds.x[index], mds.y[index], Math.sqrt(each.termSize()));
+			}
+			Map map = builder.done();
+			new DEMAlgorithm(map).run();
+			new NormalizeElevationAlgorithm(map).run();
+			new HillshadeAlgorithm(map).run();
+			new ContourLineAlgorithm(map).run();
+			// MapVisualization viz = new SketchVisualization(map);
+			MapVisualization viz = new HillshadeVisualization(map);
+			new PViewer(viz);
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 }
