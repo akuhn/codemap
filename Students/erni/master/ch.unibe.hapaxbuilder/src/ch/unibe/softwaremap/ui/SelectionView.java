@@ -17,6 +17,7 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.ViewPart;
 
+import ch.unibe.softwaremap.Log;
 import ch.unibe.softwaremap.SoftwareMapCore;
 
 /**
@@ -24,14 +25,14 @@ import ch.unibe.softwaremap.SoftwareMapCore;
  * selection.
  */
 public class SelectionView extends ViewPart {
-
+	
 	public static final String SELECTION_VIEW_ID = SoftwareMapCore.makeID(SelectionView.class);
 	public static final String PACKAGE_EXPLORER_ID = "org.eclipse.jdt.ui.PackageExplorer";
-
+	
 	private PageBook pagebook;
 	private TableViewer tableviewer;
 	private TextViewer textviewer;
-
+	
 	// the listener we register with the selection service
 	private ISelectionListener listener = new ISelectionListener() {
 		public void selectionChanged(IWorkbenchPart sourcepart, ISelection selection) {
@@ -41,7 +42,7 @@ public class SelectionView extends ViewPart {
 			}
 		}
 	};
-
+	
 	/**
 	 * Shows the given selection in this view.
 	 */
@@ -59,50 +60,51 @@ public class SelectionView extends ViewPart {
 			IMarkSelection ms = (IMarkSelection) selection;
 			try {
 				showText(ms.getDocument().get(ms.getOffset(), ms.getLength()));
-			} catch (BadLocationException ble) {
+			} catch (BadLocationException e) {
+				Log.error(e);
 			}
 		}
 	}
-
+	
 	private void showItems(Object[] items) {
 		tableviewer.setInput(items);
 		pagebook.showPage(tableviewer.getControl());
 	}
-
+	
 	private void showText(String text) {
 		textviewer.setDocument(new Document(text));
 		pagebook.showPage(textviewer.getControl());
 	}
-
+	
 	@Override
 	public void createPartControl(Composite parent) {
 		// the PageBook allows simple switching between two viewers
 		pagebook = new PageBook(parent, SWT.NONE);
-
+		
 		tableviewer = new TableViewer(pagebook, SWT.NONE);
 		tableviewer.setLabelProvider(new WorkbenchLabelProvider());
 		tableviewer.setContentProvider(new ArrayContentProvider());
 		tableviewer.setSelection(null);
-
+		
 		// we're cooperative and also provide our selection
 		// at least for the tableviewer
 		getSite().setSelectionProvider(tableviewer);
-
+		
 		textviewer = new TextViewer(pagebook, SWT.H_SCROLL | SWT.V_SCROLL);
 		textviewer.setEditable(false);
-
+		
 		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(PACKAGE_EXPLORER_ID, listener);
 	}
-
+	
 	@Override
 	public void setFocus() {
 		pagebook.setFocus();
 	}
-
+	
 	@Override
 	public void dispose() {
 		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(PACKAGE_EXPLORER_ID, listener);
 		super.dispose();
 	}
-
+	
 }

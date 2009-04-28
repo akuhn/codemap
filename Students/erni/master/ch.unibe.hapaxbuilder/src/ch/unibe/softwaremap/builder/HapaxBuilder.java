@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 
 import ch.akuhn.hapax.index.TermDocumentMatrix;
+import ch.unibe.softwaremap.Log;
 import ch.unibe.softwaremap.SoftwareMapCore;
 
 /** Creates TDM in the background.
@@ -21,9 +22,9 @@ import ch.unibe.softwaremap.SoftwareMapCore;
  *
  */
 public class HapaxBuilder extends IncrementalProjectBuilder {
-
+	
 	public static final String BUILDER_ID = SoftwareMapCore.makeID(HapaxBuilder.class);
-
+	
 	@Override
 	@SuppressWarnings("unchecked")
 	protected IProject[] build(int kind, Map args, IProgressMonitor monitor) throws CoreException {
@@ -32,41 +33,41 @@ public class HapaxBuilder extends IncrementalProjectBuilder {
 		if (delta == null) return fullBuild(monitor);
 		return incrementalBuild(delta, monitor);
 	}
-
+	
 	private IProject[] incrementalBuild(IResourceDelta delta, IProgressMonitor monitor) {
 		try {
 			// TODO actually update the TDM here
 			delta.accept(new IResourceDeltaVisitor() {
 				public boolean visit(IResourceDelta delta) throws CoreException {
 					switch (delta.getKind()) {
-					case IResourceDelta.ADDED:
-						//System.out.print("ADDED");
-						break;
-					case IResourceDelta.REMOVED:
-						//System.out.print("REMOVED");
-						break;
-					case IResourceDelta.CHANGED:
-						//System.out.print("CHANGED");
-						break;
-					default:
-						//System.out.print("[" + delta.getKind() + "]");
-						break;
+						case IResourceDelta.ADDED:
+							//System.out.print("ADDED");
+							break;
+						case IResourceDelta.REMOVED:
+							//System.out.print("REMOVED");
+							break;
+						case IResourceDelta.CHANGED:
+							//System.out.print("CHANGED");
+							break;
+						default:
+							//System.out.print("[" + delta.getKind() + "]");
+							break;
 					}
 					//System.out.println(delta.getResource());
 					return true;
 				}
-
+				
 			});
 		} catch (CoreException e) {
-			e.printStackTrace();
+			Log.error(e);
 		}
 		return defaultReturnValue();
 	}
-
+	
 	private IProject[] defaultReturnValue() {
 		return null; // defaults to current project
 	}
-
+	
 	private IProject[] fullBuild(IProgressMonitor monitor) throws CoreException {
 		if (!getProject().isNatureEnabled(JavaCore.NATURE_ID)) return defaultReturnValue();
 		FullBuildVisitor visitor = new FullBuildVisitor();

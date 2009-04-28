@@ -26,29 +26,29 @@ import ch.unibe.softwaremap.ui.MapView;
  *
  */
 public class ProjectMap {
-
+	
 	private final IProject project;
 	private TermDocumentMatrix tdm;
 	private MapVisualization<?> map;
 	private boolean mapBeingCalculated = false;
 	private boolean builderIsRunning = false;
-
+	
 	public ProjectMap(IProject project) {
 		this.project = project;
 	}
-
+	
 	public ProjectMap enableBuilder() {
 		try {
 			addBuilderToProjectDescriptionCommands();
 			if (tdm == null) {
 				makeBuilderBackgroundJob().schedule();
 			}
-		} catch (CoreException ex) {
-			throw new RuntimeException(ex);
+		} catch (CoreException e) {
+			Log.error(e);
 		}
 		return this;
 	}
-
+	
 	private Job makeBuilderBackgroundJob() {
 		return new Job("Initial build of Hapax vocabulary.") {
 			@Override
@@ -57,8 +57,8 @@ public class ProjectMap {
 				try {
 					builderIsRunning = true;
 					getProject().build(IncrementalProjectBuilder.FULL_BUILD, HapaxBuilder.BUILDER_ID, null, monitor);
-				} catch (CoreException ex) {
-					throw new RuntimeException(ex);
+				} catch (CoreException e) {
+					Log.error(e);
 				} finally {
 					builderIsRunning = false;
 				}
@@ -66,7 +66,7 @@ public class ProjectMap {
 			}
 		};
 	}
-
+	
 	private void addBuilderToProjectDescriptionCommands() throws CoreException {
 		IProjectDescription desc = getProject().getDescription();
 		ICommand[] commands = desc.getBuildSpec();
@@ -81,16 +81,16 @@ public class ProjectMap {
 		desc.setBuildSpec(commands);
 		getProject().setDescription(desc, null);
 	}
-
+	
 	public void putTDM(TermDocumentMatrix tdm) {
 		this.tdm = tdm;
 		this.startBackgroundTask();
 	}
-
+	
 	private void startBackgroundTask() {
 		new MapMakerBackgroundJob(ProjectMap.this).schedule();
 	}
-
+	
 	public MapVisualization<?> getVisualization() {
 		if (tdm == null) return null;
 		if (map != null) return map;
@@ -99,11 +99,11 @@ public class ProjectMap {
 		startBackgroundTask();
 		return null;
 	}
-
+	
 	public IProject getProject() {
 		return project;
 	}
-
+	
 	public IStatus makeMap(IProgressMonitor monitor) {
 		monitor.beginTask("Making map", 5);
 		map = Meander.script().
@@ -116,12 +116,12 @@ public class ProjectMap {
 		monitor.done();
 		return Status.OK_STATUS;
 	}
-
+	
 	private void notifyMapView() {
 		MapView mapView = SoftwareMapCore.getMapView();
 		if (mapView != null) {
 			mapView.newProjectMapAvailable(project);
 		}
 	}
-
+	
 }

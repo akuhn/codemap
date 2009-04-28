@@ -43,6 +43,7 @@ import ch.deif.meander.ui.EclipseProcessingBridge;
 import ch.deif.meander.ui.MeanderEventListener;
 import ch.deif.meander.viz.MapVisualization;
 import ch.unibe.eclipse.util.SelectionProviderAdapter;
+import ch.unibe.softwaremap.Log;
 import ch.unibe.softwaremap.SoftwareMapCore;
 
 public class MapView extends ViewPart implements ISelectionListener, ISelectionProvider, MeanderEventListener {
@@ -119,7 +120,7 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 			try {
 				selectionChanged((IStructuredSelection) selection);
 			} catch (CoreException e) {
-				throw new RuntimeException(e);
+				Log.error(e);
 			}
 		}
 	}
@@ -228,8 +229,8 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 				try {
 					IViewPart showView = getSite().getPage().showView(PACKAGE_EXPLORER_ID);
 					((ISetSelectionTarget)showView).selectReveal(new StructuredSelection(selection));
-				} catch (PartInitException ex) {
-					throw new RuntimeException(ex);
+				} catch (PartInitException e) {
+					Log.error(e);
 				}
 				//(new ShowInPackageViewAction(getSite())).run(new StructuredSelection(selection));
 			}
@@ -243,7 +244,7 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 			if (resource == null || !resource.exists() || !(resource instanceof IFile)) return;
 			IDE.openEditor(page, (IFile) resource, true);
 		} catch (PartInitException e) {
-			throw new RuntimeException(e);
+			Log.error(e);
 		}
 		
 	}
