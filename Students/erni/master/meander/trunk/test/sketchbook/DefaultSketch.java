@@ -15,7 +15,7 @@ public class DefaultSketch {
 	public static void main(String... args) {
 		long time = System.nanoTime();
 
-		MapBuilder builder = Map.builder().size(256);
+		MapBuilder builder = Map.builder().size(320);
 		for (int a = 5; a < 90; a += 10) {
 			double rad = Math.PI / 180 * a;
 			builder.location(0.8 * sin(rad), 0.8 * cos(rad), a + 25);

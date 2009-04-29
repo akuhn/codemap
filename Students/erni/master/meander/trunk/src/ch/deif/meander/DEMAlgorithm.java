@@ -5,8 +5,9 @@ public class DEMAlgorithm extends MapAlgorithm {
 
 	private static final int MAGIC_VALUE = 2000; // TODO avoid magic number for diameter of dem hills
 
+	private static final double THRESHOLD = 1.0;
+
 	private float[][] DEM;
-	private float[][] offscreen;
 	
 	public DEMAlgorithm(Map map) {
 		super(map);
@@ -26,78 +27,100 @@ public class DEMAlgorithm extends MapAlgorithm {
 	private void compute() {
 		final double step = 1.0 / (map.getWidth() - 1);
 		for (Location each: map.locations()) {
-			computePie(step, each);
-			addPieToElevationModel(each);
+			elevateHill(each, computePie(step, each));
 		}
 	}
 
-	private void addPieToElevationModel(Location each) {
-		for (int x = each.px(), ox = 0; x < DEM.length; x++, ox++) {
-			for (int y = each.py(), oy = 0; y < DEM.length; y++, oy++) {
-				DEM[x][y] += offscreen[ox][oy];
+	private void elevateHill(Location each, float[][] offscreen) {
+		final int length = DEM.length;
+		final int radius = offscreen.length;
+		// draw south-eastern pie, row by row
+		for (int y = each.py(), n = 0; y < length && n < radius; y++, n++) {
+			for (int x = each.px(), m = 0; x < length && m <= n; x++, m++) {
+				DEM[x][y] += offscreen[n][m];
 			}
 		}
-		for (int x = each.px() - 1, ox = 1; x >= 0; x--, ox++) {
-			for (int y = each.py(), oy = 0; y < DEM.length; y++, oy++) {
-				DEM[x][y] += offscreen[ox][oy];
+		// draw eastern-south pie, column by column
+		for (int x = each.px(), n = 0; x < length && n < radius; x++, n++) {
+			for (int y = each.py(), m = 0; y < length && m < n; y++, m++) {
+				DEM[x][y] += offscreen[n][m];
 			}
 		}
-		for (int x = each.px(), ox = 0; x < DEM.length; x++, ox++) {
-			for (int y = each.py() - 1, oy = 1; y >= 0; y--, oy++) {
-				DEM[x][y] += offscreen[ox][oy];
+		// draw eastern-north pie, column by column
+		for (int x = each.px(), n = 0; x < length && n < radius; x++, n++) {
+			for (int y = each.py() - 1, m = 1; y >= 0 && m <= n; y--, m++) {
+				DEM[x][y] += offscreen[n][m];
 			}
 		}
-		for (int x = each.px() - 1, ox = 1; x >= 0; x--, ox++) {
-			for (int y = each.py() - 1, oy = 1; y >= 0; y--, oy++) {
-				DEM[x][y] += offscreen[ox][oy];
+		// draw north-eastern pie, row by row
+		for (int y = each.py(), n = 0; y >= 0 && n < radius; y--, n++) {
+			for (int x = each.px(), m = 0; x < length && m < n; x++, m++) {
+				DEM[x][y] += offscreen[n][m];
 			}
 		}
-		for (int x = each.px(), ox = 0; x < DEM.length; x++, ox++) {
-			for (int y = each.py(), oy = 0; y < DEM.length; y++, oy++) {
-				DEM[x][y] += offscreen[oy][ox];
-			}
-		}
-		for (int x = each.px() - 1, ox = 1; x >= 0; x--, ox++) {
-			for (int y = each.py(), oy = 0; y < DEM.length; y++, oy++) {
-				DEM[x][y] += offscreen[oy][ox];
-			}
-		}
-		for (int x = each.px(), ox = 0; x < DEM.length; x++, ox++) {
-			for (int y = each.py() - 1, oy = 1; y >= 0; y--, oy++) {
-				DEM[x][y] += offscreen[oy][ox];
-			}
-		}
-		for (int x = each.px() - 1, ox = 1; x >= 0; x--, ox++) {
-			for (int y = each.py() - 1, oy = 1; y >= 0; y--, oy++) {
-				DEM[x][y] += offscreen[oy][ox];
-			}
-		}
+		
+//		for (int x = each.px() - 1, ox = 1; x >= 0 && ox < radius; x--, ox++) {
+//			for (int y = each.py(), oy = 0; y < length && oy < radius; y++, oy++) {
+//				DEM[x][y] += offscreen[ox][oy];
+//			}
+//		}
+//		for (int x = each.px(), ox = 0; x < length && ox < radius; x++, ox++) {
+//			for (int y = each.py() - 1, oy = 1; y >= 0 && oy < radius; y--, oy++) {
+//				DEM[x][y] += offscreen[ox][oy];
+//			}
+//		}
+//		for (int x = each.px() - 1, ox = 1; x >= 0 && ox < radius; x--, ox++) {
+//			for (int y = each.py() - 1, oy = 1; y >= 0 && oy < radius; y--, oy++) {
+//				DEM[x][y] += offscreen[ox][oy];
+//			}
+//		}
+//		for (int x = each.px(), ox = 0; x < length && ox < radius; x++, ox++) {
+//			for (int y = each.py(), oy = 0; y < length && oy < radius; y++, oy++) {
+//				DEM[x][y] += offscreen[oy][ox];
+//			}
+//		}
+//		for (int x = each.px() - 1, ox = 1; x >= 0 && ox < radius; x--, ox++) {
+//			for (int y = each.py(), oy = 0; y < length && oy < radius; y++, oy++) {
+//				DEM[x][y] += offscreen[oy][ox];
+//			}
+//		}
+//		for (int x = each.px(), ox = 0; x < length && ox < radius; x++, ox++) {
+//			for (int y = each.py() - 1, oy = 1; y >= 0 && oy < radius; y--, oy++) {
+//				DEM[x][y] += offscreen[oy][ox];
+//			}
+//		}
+//		for (int x = each.px() - 1, ox = 1; x >= 0 && ox < radius; x--, ox++) {
+//			for (int y = each.py() - 1, oy = 1; y >= 0 && oy < radius; y--, oy++) {
+//				DEM[x][y] += offscreen[oy][ox];
+//			}
+//		}
 	}
 
-	private void computePie(final double step, Location each) {
-		offscreen = new float[map.getWidth()][map.getWidth()];
-		outer: for (int n = 0; ; n++) {
+	private float[][] computePie(final double step, Location each) {
+		float[][] offscreen = makeTraingleArray();
+		for (int py = 0; py < offscreen.length; py++) {
 			double x0 = each.x();
 			double x = x0;
 			double y0 = each.y();
 			double y = y0;
-			// TODO why do these return float instead of int ? ^^
-			int px = n;
-			int py = n;
-			x += step * n;
-			y += step * n;
-			boolean first = true;
-			while (true) {
+			y += step * py;
+			for (int px = 0; px <= py; px++) {
+				// TODO should work with integer distances, etc...
 				double dist = Math.sqrt((x - x0) * (x - x0) + (y - y0) * (y - y0));
 				dist = dist / each.normElevation() * MAGIC_VALUE;
 				double elevation = each.normElevation() * Math.exp(-(dist * dist / 2));
-				if (first && elevation < 1.0) break outer;
-				first = false;
-				offscreen[px][py++] += (elevation - 1.0);
-				y += step;
-				if (elevation < 1.0) break;
+				if (elevation < THRESHOLD) break;
+				offscreen[py][px] += (elevation - THRESHOLD);
+				x += step;
 			}
 		}
+		return offscreen;
+	}
+
+	private float[][] makeTraingleArray() {
+		float[][] result = new float[100][0];
+		for (int n = 0; n < result.length; n++) result[n] = new float[n+1];
+		return result;
 	}
 
 	private void setup() {
