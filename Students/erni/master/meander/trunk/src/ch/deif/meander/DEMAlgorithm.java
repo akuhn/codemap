@@ -7,6 +7,8 @@ public class DEMAlgorithm extends MapAlgorithm {
 
 	private static final double THRESHOLD = 1.0;
 
+	private static final boolean PACMAN = true;
+
 	private float[][] DEM;
 	
 	public DEMAlgorithm(Map map) {
@@ -34,12 +36,43 @@ public class DEMAlgorithm extends MapAlgorithm {
 	private void elevateHill(Location each, float[][] offscreen) {
 		final int length = DEM.length;
 		final int radius = offscreen.length;
-		// draw south-eastern pie, row by row
-		for (int y = each.py(), n = 0; y < length && n < radius; y++, n++) {
-			for (int x = each.px(), m = 0; x < length && m <= n; x++, m++) {
+		// draw north-eastern pie, row by row
+		for (int y = each.py(), n = 0; y >= 0 && n < radius; y--, n++) {
+			for (int x = each.px(), m = 0; x < length && m < n; x++, m++) {
 				DEM[x][y] += offscreen[n][m];
 			}
 		}
+		// draw north-western pie, row by row
+		for (int y = each.py(), n = 0; y >= 0 && n < radius; y--, n++) {
+			for (int x = each.px() - 1, m = 1; x >= 0 && m <= n; x--, m++) {
+				DEM[x][y] += offscreen[n][m];
+			}
+		}
+		// draw western-north pie, column by column
+		for (int x = each.px(), n = 0; x >= 0 && n < radius; x--, n++) {
+			for (int y = each.py() - 1, m = 1; y >= 0 && m < n; y--, m++) {
+				DEM[x][y] += offscreen[n][m];
+			}
+		}
+		// draw western-south pie, column by column
+		for (int x = each.px(), n = 0; x >= 0 && n < radius; x--, n++) {
+			for (int y = each.py(), m = 0; y < length && m <= n; y++, m++) {
+				DEM[x][y] += offscreen[n][m];
+			}
+		}
+		// draw south-western pie, row by row
+		for (int y = each.py(), n = 0; y < length && n < radius; y++, n++) {
+			for (int x = each.px(), m = 0; x >= 0 && m < n; x--, m++) {
+				DEM[x][y] += offscreen[n][m];
+			}
+		}
+		// draw south-eastern pie, row by row
+		for (int y = each.py(), n = 0; y < length && n < radius; y++, n++) {
+			for (int x = each.px() + 1, m = 1; x < length && m <= n; x++, m++) {
+				DEM[x][y] += offscreen[n][m];
+			}
+		}
+		if (PACMAN) return;
 		// draw eastern-south pie, column by column
 		for (int x = each.px(), n = 0; x < length && n < radius; x++, n++) {
 			for (int y = each.py(), m = 0; y < length && m < n; y++, m++) {
@@ -52,48 +85,6 @@ public class DEMAlgorithm extends MapAlgorithm {
 				DEM[x][y] += offscreen[n][m];
 			}
 		}
-		// draw north-eastern pie, row by row
-		for (int y = each.py(), n = 0; y >= 0 && n < radius; y--, n++) {
-			for (int x = each.px(), m = 0; x < length && m < n; x++, m++) {
-				DEM[x][y] += offscreen[n][m];
-			}
-		}
-		
-//		for (int x = each.px() - 1, ox = 1; x >= 0 && ox < radius; x--, ox++) {
-//			for (int y = each.py(), oy = 0; y < length && oy < radius; y++, oy++) {
-//				DEM[x][y] += offscreen[ox][oy];
-//			}
-//		}
-//		for (int x = each.px(), ox = 0; x < length && ox < radius; x++, ox++) {
-//			for (int y = each.py() - 1, oy = 1; y >= 0 && oy < radius; y--, oy++) {
-//				DEM[x][y] += offscreen[ox][oy];
-//			}
-//		}
-//		for (int x = each.px() - 1, ox = 1; x >= 0 && ox < radius; x--, ox++) {
-//			for (int y = each.py() - 1, oy = 1; y >= 0 && oy < radius; y--, oy++) {
-//				DEM[x][y] += offscreen[ox][oy];
-//			}
-//		}
-//		for (int x = each.px(), ox = 0; x < length && ox < radius; x++, ox++) {
-//			for (int y = each.py(), oy = 0; y < length && oy < radius; y++, oy++) {
-//				DEM[x][y] += offscreen[oy][ox];
-//			}
-//		}
-//		for (int x = each.px() - 1, ox = 1; x >= 0 && ox < radius; x--, ox++) {
-//			for (int y = each.py(), oy = 0; y < length && oy < radius; y++, oy++) {
-//				DEM[x][y] += offscreen[oy][ox];
-//			}
-//		}
-//		for (int x = each.px(), ox = 0; x < length && ox < radius; x++, ox++) {
-//			for (int y = each.py() - 1, oy = 1; y >= 0 && oy < radius; y--, oy++) {
-//				DEM[x][y] += offscreen[oy][ox];
-//			}
-//		}
-//		for (int x = each.px() - 1, ox = 1; x >= 0 && ox < radius; x--, ox++) {
-//			for (int y = each.py() - 1, oy = 1; y >= 0 && oy < radius; y--, oy++) {
-//				DEM[x][y] += offscreen[oy][ox];
-//			}
-//		}
 	}
 
 	private float[][] computePie(final double step, Location each) {
