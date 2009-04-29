@@ -105,6 +105,8 @@ public class ProjectMap {
 	}
 
 	public IStatus makeMap(IProgressMonitor monitor) {
+		if (mapBeingCalculated) return Status.OK_STATUS;
+		mapBeingCalculated = true;
 		monitor.beginTask("Making map", 5);
 		map = Meander.script().useCorpus(tdm).makeMap().useHillshading().add(LabelsOverlay.class).getVisualization();
 		notifyMapView();
