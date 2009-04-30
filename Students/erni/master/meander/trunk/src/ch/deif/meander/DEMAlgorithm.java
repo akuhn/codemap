@@ -1,16 +1,17 @@
 package ch.deif.meander;
 
 
+
 public class DEMAlgorithm extends MapAlgorithm {
 
-	private static final int MAGIC_VALUE = 2000; // TODO avoid magic number for diameter of dem hills
+	private static final int MAGIC_VALUE = 6*320; // TODO avoid magic number for diameter of dem hills
 
 	private static final double THRESHOLD = 1.0;
 
-	private static final boolean PACMAN = true;
-
 	private float[][] DEM;
-	
+
+	private int radius;
+
 	public DEMAlgorithm(Map map) {
 		super(map);
 	}
@@ -34,87 +35,47 @@ public class DEMAlgorithm extends MapAlgorithm {
 	}
 
 	private void elevateHill(Location each, float[][] offscreen) {
-		final int length = DEM.length;
-		final int radius = offscreen.length;
-		// TODO yikes, starting point can be outside the screen!
-		int y0 = Math.max(0,Math.min(length-1,each.py()));
-		int x0 = Math.max(0,Math.min(length-1,each.px()));
-		// draw north-eastern pie, row by row
-		for (int y = y0, n = 0; y >= 0 && n < radius; y--, n++) {
-			for (int x = x0, m = 0; x < length && m < n; x++, m++) {
-				DEM[x][y] += offscreen[n][m];
-			}
-		}
-		// draw north-western pie, row by row
-		for (int y = y0, n = 0; y >= 0 && n < radius; y--, n++) {
-			for (int x = x0 - 1, m = 1; x >= 0 && m <= n; x--, m++) {
-				DEM[x][y] += offscreen[n][m];
-			}
-		}
-		// draw western-north pie, column by column
-		for (int x = x0, n = 0; x >= 0 && n < radius; x--, n++) {
-			for (int y = y0 - 1, m = 1; y >= 0 && m < n; y--, m++) {
-				DEM[x][y] += offscreen[n][m];
-			}
-		}
-		// draw western-south pie, column by column
-		for (int x = x0, n = 0; x >= 0 && n < radius; x--, n++) {
-			for (int y = y0, m = 0; y < length && m <= n; y++, m++) {
-				DEM[x][y] += offscreen[n][m];
-			}
-		}
-		// draw south-western pie, row by row
-		for (int y = y0, n = 0; y < length && n < radius; y++, n++) {
-			for (int x = x0, m = 0; x >= 0 && m < n; x--, m++) {
-				DEM[x][y] += offscreen[n][m];
-			}
-		}
-		// draw south-eastern pie, row by row
-		for (int y = y0, n = 0; y < length && n < radius; y++, n++) {
-			for (int x = x0 + 1, m = 1; x < length && m <= n; x++, m++) {
-				DEM[x][y] += offscreen[n][m];
-			}
-		}
-		if (PACMAN) return;
-		// draw eastern-south pie, column by column
-		for (int x = x0, n = 0; x < length && n < radius; x++, n++) {
-			for (int y = y0, m = 0; y < length && m < n; y++, m++) {
-				DEM[x][y] += offscreen[n][m];
-			}
-		}
-		// draw eastern-north pie, column by column
-		for (int x = x0, n = 0; x < length && n < radius; x++, n++) {
-			for (int y = y0 - 1, m = 1; y >= 0 && m <= n; y--, m++) {
-				DEM[x][y] += offscreen[n][m];
+		final int y0, x0, top, bottom, left, right;
+		y0 = each.py();
+		x0 = each.px();
+		top = y0 > radius ? 1 - radius : 0 - y0;
+		left = x0 > radius ? 1 - radius : 0 - x0;
+		bottom = y0 + radius < DEM.length ? radius : DEM.length - y0; 
+		right = x0 + radius < DEM.length ? radius : DEM.length - x0; 
+		for (int y = top; y < bottom; y++) {
+			int absy = Math.abs(y);
+			for (int x = left; x < right; x++) {
+					DEM[x+x0][y+y0] += offscreen
+					[Math.max(absy,Math.abs(x))]
+					[Math.min(absy,Math.abs(x))];
 			}
 		}
 	}
 
 	private float[][] computePie(final double step, Location each) {
-		float[][] offscreen = makeTraingleArray();
-		for (int py = 0; py < offscreen.length; py++) {
-			double x0 = each.x();
-			double x = x0;
-			double y0 = each.y();
-			double y = y0;
-			y += step * py;
-			for (int px = 0; px <= py; px++) {
-				// TODO should work with integer distances, etc...
-				double dist = Math.sqrt((x - x0) * (x - x0) + (y - y0) * (y - y0));
-				dist = dist / each.normElevation() * MAGIC_VALUE;
-				double elevation = each.normElevation() * Math.exp(-(dist * dist / 2));
-				if (elevation < THRESHOLD) break;
-				offscreen[py][px] += (elevation - THRESHOLD);
-				x += step;
+		float[][] offscreen = new float[DEM.length][];
+		double e = each.normElevation();
+		double factor = -1.0 
+				/ (e * e) 
+				* (MAGIC_VALUE * MAGIC_VALUE)
+				/ ((DEM.length * DEM.length))
+				/ 2;
+		loop: for (int n = 0, n2 = 0; n < offscreen.length; n2 += (++n)+n-1) {
+			offscreen[n] = new float[n+1];
+			//assert n2 == n*n;
+			for (int m = 0, dist2 = n2; m <= n; dist2 += (++m)+m-1) {
+				//assert dist2 == n*n + m*m;
+				double elevation = e * Math.exp(factor * (double) dist2);
+				if (elevation < THRESHOLD) {
+					if (m == 0) { 
+						radius = n; break loop; 
+					}
+					break;
+				}
+				offscreen[n][m] += (elevation - THRESHOLD);
 			}
 		}
 		return offscreen;
-	}
-
-	private float[][] makeTraingleArray() {
-		float[][] result = new float[map.getWidth()][0];
-		for (int n = 0; n < result.length; n++) result[n] = new float[n+1];
-		return result;
 	}
 
 	private void setup() {
