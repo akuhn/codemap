@@ -220,7 +220,6 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 		for (String each: handlerIdentifiers) {
 			IJavaElement javaElement = JavaCore.create(each);
 			selection.add(javaElement);
-			// openInEditor(javaElement);
 		}
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
@@ -231,20 +230,31 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 				} catch (PartInitException e) {
 					Log.error(e);
 				}
-				// (new ShowInPackageViewAction(getSite())).run(new StructuredSelection(selection));
 			}
 		});
 	}
 
 	private void openInEditor(IJavaElement javaElement) {
-		try {
-			IWorkbenchPage page = getSite().getPage();
-			IResource resource = javaElement.getResource();
-			if (resource == null || !resource.exists() || !(resource instanceof IFile)) return;
-			IDE.openEditor(page, (IFile) resource, true);
-		} catch (PartInitException e) {
-			Log.error(e);
-		}
+		final IWorkbenchPage page = getSite().getPage();
+		final IResource resource = javaElement.getResource();
+		if (resource == null || !resource.exists() || !(resource instanceof IFile)) return;
 
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					IDE.openEditor(page, (IFile) resource, true);
+				} catch (PartInitException e) {
+					Log.error(e);
+				}
+			}
+		});
+
+	}
+
+	@Override
+	public void doubleClicked(String handlerIdentifier) {
+		IJavaElement javaElement = JavaCore.create(handlerIdentifier);
+		openInEditor(javaElement);
 	}
 }
