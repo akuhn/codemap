@@ -36,25 +36,73 @@ public class MeanderApplet extends PApplet {
 	private MeanderEventListener listener;
 
 	public static final int PIXELSCALE = 512;
+	private Events events;
+	
+	
+	private static class Events {
+		
+		private MeanderEventListener listener;
+		private MeanderApplet applet;
+
+		public Events(MeanderApplet meanderApplet) {
+			this.applet = meanderApplet;
+		}
+
+		public void addListener(MeanderEventListener listener) {
+			assert this.listener == null;
+			this.listener = listener;
+		}
+		
+		public void removeListener(MeanderEventListener listener) {
+			assert this.listener == listener;
+			this.listener = null;
+		}
+
+		public void doubleClicked(final Location location) {
+			if (listener != null) new Thread() {
+				@Override
+				public void run() {
+					listener.doubleClicked(location.getDocument().name());
+				}
+			}.start();
+		}
+		
+		public void selectionChanged(final Location... locations) {
+			final ArrayList<String> names = new ArrayList<String>();
+			for (Location each: locations)
+				names.add(each.getDocument().name());
+			if (listener != null) new Thread() {
+				@Override
+				public void run() {
+					listener.selectionChanged(names.toArray(new String[0]));
+				}
+			}.start();
+		}		
+		
+	}
 
 	public MeanderApplet() {
 		this(null);
 	}
 
 	public MeanderApplet(MapVisualization<?> vizualization) {
+		events = new Events(this);
 		points = Collections.synchronizedSet(new HashSet<Point>());
 		bg = createGraphics(width(), height(), JAVA2D);
 		setVisualization(vizualization);
 	}
-
-	public void addListener(MeanderEventListener listener) {
-		assert this.listener == null;
-		this.listener = listener;
+	
+	public Events events() {
+		return events;
 	}
 
+	public void addListener(MeanderEventListener listener) {
+		events().addListener(listener);
+	}
+	
+
 	public void removeListener(MeanderEventListener listener) {
-		assert this.listener == listener;
-		this.listener = null;
+		events.removeListener(listener);
 	}
 
 	@Override
@@ -114,47 +162,23 @@ public class MeanderApplet extends PApplet {
 			NearestNeighbor nn = new MaxDistNearestNeighbor(map(), width() / 10).forLocation(point);
 			if (nn.hasResult()) {
 				addSelection(nn.point());
-				doubleClicked(nn.location());
+				events().doubleClicked(nn.location());
 			}			
 		} else if (e.getButton() == MouseEvent.BUTTON1) {
 			// button1 is 1st mouse button
 			NearestNeighbor nn = new MaxDistNearestNeighbor(map(), width() / 10).forLocation(point);
 			if (nn.hasResult()) {
 				addSelection(nn.point());
-				selectionChanged(nn.location());
+				events().selectionChanged(nn.location());
 			}
 		} else if (e.getButton() == MouseEvent.BUTTON3) {
 			// button3 is 2nd mouse button
 			NearestNeighbor nn = new NearestNeighbor(map()).forLocation(point);
 			addSelection(nn.point());
-			selectionChanged(nn.location());
+			events().selectionChanged(nn.location());
 		}
 		unsetSelectionBox();
 		setNeedsRedraw();
-	}
-
-	private void doubleClicked(final Location location) {
-		if (listener != null) new Thread() {
-			@Override
-			public void run() {
-				listener.doubleClicked(location.getDocument().name());
-			}
-		}.start();
-
-		
-	}
-
-	private void selectionChanged(final Location... locations) {
-		final ArrayList<String> names = new ArrayList<String>();
-		for (Location each: locations)
-			names.add(each.getDocument().name());
-		if (listener != null) new Thread() {
-			@Override
-			public void run() {
-				listener.selectionChanged(names.toArray(new String[0]));
-			}
-		}.start();
-
 	}
 
 	private void addSelection(Point point) {
@@ -196,7 +220,7 @@ public class MeanderApplet extends PApplet {
 				points.add(new Point(x, y));
 			}
 		}
-		selectionChanged(selected.toArray(new Location[0]));
+		events().selectionChanged(selected.toArray(new Location[0]));
 	}
 
 	private void ensureDragPointOrder() {
