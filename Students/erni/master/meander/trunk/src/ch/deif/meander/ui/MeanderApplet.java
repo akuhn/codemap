@@ -108,7 +108,15 @@ public class MeanderApplet extends PApplet {
 		super.mouseClicked(e);
 		Point point = e.getPoint();
 		if (!e.isControlDown()) points.clear();
-		if (e.getButton() == MouseEvent.BUTTON1) {
+		if (e.getClickCount() == 2) {
+			// button1 is 1st mouse button
+			NearestNeighbor nn = new MaxDistNearestNeighbor(map(), width() / 10);
+			Point nearest = nn.forLocation(point);
+			if (nearest != null) {
+				addSelection(nearest);
+				doubleClicked(nn.location());
+			}			
+		} else  if (e.getButton() == MouseEvent.BUTTON1) {
 			// button1 is 1st mouse button
 			NearestNeighbor nn = new MaxDistNearestNeighbor(map(), width() / 10);
 			Point nearest = nn.forLocation(point);
@@ -125,6 +133,17 @@ public class MeanderApplet extends PApplet {
 		}
 		unsetSelectionBox();
 		needsRedraw();
+	}
+
+	private void doubleClicked(final Location location) {
+		if (listener != null) new Thread() {
+			@Override
+			public void run() {
+				listener.doubleClicked(location.getDocument().name());
+			}
+		}.start();
+
+		
 	}
 
 	private void selectionChanged(final Location... locations) {
