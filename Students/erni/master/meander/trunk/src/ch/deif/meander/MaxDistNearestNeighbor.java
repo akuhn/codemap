@@ -12,9 +12,12 @@ public class MaxDistNearestNeighbor extends NearestNeighbor {
 	}
 
 	@Override
-	public Point forLocation(Point point) {
-		Point result = super.forLocation(point);
-		return shortest <= maxDist ? result : null;
+	public MaxDistNearestNeighbor forLocation(Point point) {
+		super.forLocation(point);
+		if (shortest > maxDist) {
+			result = null;
+		}
+		return this;
 	}
 
 }

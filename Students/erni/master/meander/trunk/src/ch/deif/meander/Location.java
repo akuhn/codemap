@@ -1,5 +1,7 @@
 package ch.deif.meander;
 
+import java.awt.Point;
+
 import ch.akuhn.hapax.corpus.Document;
 
 /**
@@ -28,5 +30,7 @@ public interface Location {
 	public void setName(String string);
 
 	public String getName();
+
+	public Point getPointOn(Map map);
 
 }

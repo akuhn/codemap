@@ -61,17 +61,18 @@ public class MeanderApplet extends PApplet {
 	public void setup() {
 		size(width(), height());
 		frameRate(25);
-	}
+	}	
 
 	private void setupBackground() {
 		bg.beginDraw();
 		viz.draw(bg);
 		bg.endDraw();
-	}
+	}	
 
 	@Override
 	public void draw() {
 		if (!needsRedraw) return;
+		
 		smooth();
 		noFill();
 		strokeWeight(POINT_STROKE);
@@ -82,14 +83,14 @@ public class MeanderApplet extends PApplet {
 	}
 
 	private void drawSelectionBox() {
-		if (dragStart != null && dragStop != null) {
-			stroke(Color.RED.getRGB());
-			strokeWeight(BOX_STROKE);
-			int deltaX = dragStop.x - dragStart.x;
-			int deltaY = dragStop.y - dragStart.y;
-			rect(dragStart.x, dragStart.y, deltaX, deltaY);
-			strokeWeight(POINT_STROKE);
-		}
+		if (!hasDragInput()) return;
+		
+		stroke(Color.RED.getRGB());
+		strokeWeight(BOX_STROKE);
+		int deltaX = dragStop.x - dragStart.x;
+		int deltaY = dragStop.y - dragStart.y;
+		rect(dragStart.x, dragStart.y, deltaX, deltaY);
+		strokeWeight(POINT_STROKE);
 	}
 
 	private void drawSelectedPoints() {
@@ -106,33 +107,30 @@ public class MeanderApplet extends PApplet {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		super.mouseClicked(e);
+		
 		Point point = e.getPoint();
 		if (!e.isControlDown()) points.clear();
 		if (e.getClickCount() == 2) {
-			// button1 is 1st mouse button
-			NearestNeighbor nn = new MaxDistNearestNeighbor(map(), width() / 10);
-			Point nearest = nn.forLocation(point);
-			if (nearest != null) {
-				addSelection(nearest);
+			NearestNeighbor nn = new MaxDistNearestNeighbor(map(), width() / 10).forLocation(point);
+			if (nn.hasResult()) {
+				addSelection(nn.point());
 				doubleClicked(nn.location());
 			}			
-		} else  if (e.getButton() == MouseEvent.BUTTON1) {
+		} else if (e.getButton() == MouseEvent.BUTTON1) {
 			// button1 is 1st mouse button
-			NearestNeighbor nn = new MaxDistNearestNeighbor(map(), width() / 10);
-			Point nearest = nn.forLocation(point);
-			if (nearest != null) {
-				addSelection(nearest);
+			NearestNeighbor nn = new MaxDistNearestNeighbor(map(), width() / 10).forLocation(point);
+			if (nn.hasResult()) {
+				addSelection(nn.point());
 				selectionChanged(nn.location());
 			}
 		} else if (e.getButton() == MouseEvent.BUTTON3) {
 			// button3 is 2nd mouse button
-			NearestNeighbor nn = new NearestNeighbor(map());
-			Point nearest = nn.forLocation(point);
-			addSelection(nearest);
+			NearestNeighbor nn = new NearestNeighbor(map()).forLocation(point);
+			addSelection(nn.point());
 			selectionChanged(nn.location());
 		}
 		unsetSelectionBox();
-		needsRedraw();
+		setNeedsRedraw();
 	}
 
 	private void doubleClicked(final Location location) {
@@ -173,34 +171,41 @@ public class MeanderApplet extends PApplet {
 		super.mouseDragged(e);
 		if (dragStart == null) dragStart = e.getPoint();
 		dragStop = e.getPoint();
-		needsRedraw();
+		setNeedsRedraw();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		super.mouseReleased();
-		if (dragStart != null && dragStop != null) {
-			// make sure that start is top-left and stop is bottom-right
-			int minX = Math.min(dragStart.x, dragStop.x);
-			int minY = Math.min(dragStart.y, dragStop.y);
-			int maxX = Math.max(dragStart.x, dragStop.x);
-			int maxY = Math.max(dragStart.y, dragStop.y);
-			dragStart = new Point(minX, minY);
-			dragStop = new Point(maxX, maxY);
-			List<Location> selected = new ArrayList<Location>();
-			points.clear();
-			for (Location each: map().locations()) {
-				int x = (int) Math.round(each.x() * map().getHeight());
-				int y = (int) Math.round(each.y() * map().getHeight());
-				if (x < dragStop.x && x > dragStart.x && y < dragStop.y && y > dragStart.y) {
-					selected.add(each);
-					points.add(new Point(x, y));
-				}
+		if (! hasDragInput()) return;
+		
+		ensureDragPointOrder();
+		handleDragSelection();
+		unsetSelectionBox();
+		setNeedsRedraw();
+	}
+
+	private void handleDragSelection() {
+		List<Location> selected = new ArrayList<Location>();
+		points.clear();
+		for (Location each: map().locations()) {
+			int x = (int) Math.round(each.x() * map().getHeight());
+			int y = (int) Math.round(each.y() * map().getHeight());
+			if (x < dragStop.x && x > dragStart.x && y < dragStop.y && y > dragStart.y) {
+				selected.add(each);
+				points.add(new Point(x, y));
 			}
-			selectionChanged(selected.toArray(new Location[0]));
-			unsetSelectionBox();
-			needsRedraw();
 		}
+		selectionChanged(selected.toArray(new Location[0]));
+	}
+
+	private void ensureDragPointOrder() {
+		int minX = Math.min(dragStart.x, dragStop.x);
+		int minY = Math.min(dragStart.y, dragStop.y);
+		int maxX = Math.max(dragStart.x, dragStop.x);
+		int maxY = Math.max(dragStart.y, dragStop.y);
+		dragStart = new Point(minX, minY);
+		dragStop = new Point(maxX, maxY);
 	}
 
 	public void indicesSelected(int[] indices) {
@@ -209,15 +214,17 @@ public class MeanderApplet extends PApplet {
 		for (int index: indices) {
 			Location location = map().locationAt(index);
 			locations.add(location);
-			int x = (int) Math.round(location.x() * map().getHeight());
-			int y = (int) Math.round(location.y() * map().getHeight());
-			points.add(new Point(x, y));
+			points.add(location.getPointOn(map()));
 		}
-		needsRedraw();
+		setNeedsRedraw();
 	}
 
-	protected void needsRedraw() {
+	protected void setNeedsRedraw() {
 		needsRedraw = true;
+	}
+
+	protected boolean hasDragInput() {
+		return dragStart != null && dragStop != null;
 	}
 
 	private Map map() {
@@ -236,11 +243,9 @@ public class MeanderApplet extends PApplet {
 		points.clear();
 		for (Location each: viz.map.locations())
 			if (handleIdentifiers.contains(each.getDocument().name())) {
-				int x = (int) Math.round(each.x() * map().getHeight());
-				int y = (int) Math.round(each.y() * map().getHeight());
-				points.add(new Point(x, y));
+				points.add(each.getPointOn(map()));
 			}
-		needsRedraw();
+		setNeedsRedraw();
 	}
 
 	public void setVisualization(MapVisualization<?> viz) {
@@ -248,7 +253,7 @@ public class MeanderApplet extends PApplet {
 		this.points.clear();
 		this.viz = viz;
 		setupBackground();
-		needsRedraw();
+		setNeedsRedraw();
 		repaint();
 	}
 

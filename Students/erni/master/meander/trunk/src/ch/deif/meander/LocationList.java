@@ -2,6 +2,7 @@ package ch.deif.meander;
 
 import static ch.unibe.scg.util.Extension.$;
 
+import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -108,6 +109,13 @@ public class LocationList implements Iterable<Location> {
 		public void normalizeXY(double minX, double maxX, double minY, double maxY) {
 			x = (x - minX) / (maxX - minX);
 			y = (y - minY) / (maxY - minY);
+		}
+
+		@Override
+		public Point getPointOn(Map map) {
+			int x = (int) Math.round(x() * map.getHeight());
+			int y = (int) Math.round(y() * map.getHeight());
+			return new Point(x, y);			
 		}
 
 	}

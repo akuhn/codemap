@@ -7,6 +7,7 @@ public class NearestNeighbor {
 	protected Map map;
 	protected double shortest;
 	protected Location location;
+	protected Point result;
 
 	public NearestNeighbor(Map map) {
 		this.map = map;
@@ -15,8 +16,16 @@ public class NearestNeighbor {
 	public Location location() {
 		return location;
 	}
+	
+	public Point point() {
+		return result;
+	}
+	
+	public boolean hasResult() {
+		return result != null;
+	}
 
-	public Point forLocation(Point point) {
+	public NearestNeighbor forLocation(Point point) {
 		int xres = -1;
 		int yres = -1;
 		shortest = -1;
@@ -36,7 +45,8 @@ public class NearestNeighbor {
 		}
 		// currently we assume that there are locations
 		assert shortest != -1;
-		return new Point(xres, yres);
+		result = new Point(xres, yres);
+		return this;
 	}
 
 	private static double dist(int x1, int y1, int x2, int y2) {
