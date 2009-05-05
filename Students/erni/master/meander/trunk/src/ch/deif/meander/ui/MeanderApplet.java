@@ -62,7 +62,7 @@ public class MeanderApplet extends PApplet {
 			if (listener != null) new Thread() {
 				@Override
 				public void run() {
-					listener.doubleClicked(location.getDocument().name());
+					listener.doubleClicked(location.document().name());
 				}
 			}.start();
 		}
@@ -70,7 +70,7 @@ public class MeanderApplet extends PApplet {
 		public void selectionChanged(final Location... locations) {
 			final ArrayList<String> names = new ArrayList<String>();
 			for (Location each: locations)
-				names.add(each.getDocument().name());
+				names.add(each.document().name());
 			if (listener != null) new Thread() {
 				@Override
 				public void run() {
@@ -238,7 +238,7 @@ public class MeanderApplet extends PApplet {
 		for (int index: indices) {
 			Location location = map().locationAt(index);
 			locations.add(location);
-			points.add(location.getPointOn(map()));
+			points.add(new Point(location.px(), location.py()));
 		}
 		setNeedsRedraw();
 	}
@@ -266,8 +266,8 @@ public class MeanderApplet extends PApplet {
 	public void updateSelection(List<String> handleIdentifiers) {
 		points.clear();
 		for (Location each: viz.map.locations())
-			if (handleIdentifiers.contains(each.getDocument().name())) {
-				points.add(each.getPointOn(map()));
+			if (handleIdentifiers.contains(each.document().name())) {
+				points.add(new Point(each.px(), each.py()));
 			}
 		setNeedsRedraw();
 	}

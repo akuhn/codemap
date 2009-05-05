@@ -1,36 +1,80 @@
 package ch.deif.meander;
 
-import java.awt.Point;
-
 import ch.akuhn.hapax.corpus.Document;
 
+
+
 /**
- * Elevation on the map, (scalable value object);
+ * Location on a map.
  * 
  * @author Adrian Kuhn
  */
-public interface Location {
+public class Location {
 
-	public double elevation();
+	private double x, y;
+	private double elevation;
+	private int px, py;
+	private String name;
+	private Document document;
 
-	public double x();
+	public Location(double x, double y, double elevation) {
+		this.x = x;
+		this.y = y;
+		this.elevation = elevation;
+		this.px = -1;
+		this.py = -1;
+		this.name = null;
+		this.document = null;
+	}
+	
+	public double elevation() {
+		return elevation;
+	}
 
-	public double y();
+	public double x() {
+		return x;
+	}
+	
+	public double y() {
+		return y;
+	}
+	
+	protected void setDocument(Document document) {
+		this.document = document;
+	}
 
-	public void setDocument(Document document);
+	public Document document() {
+		return document;
+	}
 
-	public Document getDocument();
+	public int py() {
+		return py;
+	}
+	
+	public int px() {
+		return px;
+	}
 
-	public double normElevation();
+	protected void setName(String name) {
+		this.name = name;
+	}
 
-	public int py();
+	public String name() {
+		return name;
+	}
 
-	public int px();
-
-	public void setName(String string);
-
-	public String getName();
-
-	public Point getPointOn(Map map);
-
+	protected void normalizePixelXY(int pixelSize) {
+		this.px = (int) (x() / pixelSize);
+		this.py = (int) (y() / pixelSize);
+	}
+	
+	protected void normalizeElevation(double maxElevation) {
+		this.elevation = 100 * this.elevation / maxElevation;
+	}
+	
+	protected void normalizeXY(double left, double width, double top, double height) {
+		this.x = (this.x - left) / width;
+		this.y = (this.y - top) / height;
+	}
+	
 }

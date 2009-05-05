@@ -21,13 +21,14 @@ public class Map {
 	public LocationList locations;
 	private Parameters parameters;
 	public String name;
+	private Location[][] NN;
 
 	public Map(Parameters parameters, LocationList locations) {
 		this.parameters = parameters;
 		this.locations = locations;
 		width = parameters.width;
 		height = parameters.height;
-		locations.setPixelScale(width);
+		locations.normalizePixelXY(width);
 	}
 
 	private float[][] getDEM() {
@@ -253,6 +254,10 @@ public class Map {
 
 	public void updateDEM(float[][] DEM) {
 		this.DEM = DEM;
+	}
+
+	public void setNearestNeighbors(Location[][] NN) {
+		this.NN = NN;
 	}
 
 }

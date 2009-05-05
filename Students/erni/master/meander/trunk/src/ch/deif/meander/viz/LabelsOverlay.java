@@ -18,11 +18,11 @@ public class LabelsOverlay extends MapVisualization<Label> {
 	public LabelsOverlay(Map map) {
 		super(map);
 		for (Location each: map.locations()) {
-			Label l = new Label(each.getName());
+			Label l = new Label(each.name());
 			addChild(l);
 			l.x = l.x0 = each.px();
 			l.y = l.y0 = each.py();
-			l.size = (float) each.normElevation() / 4f;
+			l.size = (float) each.elevation() / 4f;
 		}
 	}
 

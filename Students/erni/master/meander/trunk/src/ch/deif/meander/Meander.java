@@ -58,7 +58,7 @@ public class Meander {
 			Document each = iterator.next();
 			builder.location(mds.x[n], mds.y[n], Math.sqrt(each.termSize()), each);
 		}
-		builder.normalizeXY();
+		builder.normalize();
 		map = builder.done();
 		layers = new Layers(map);
 		return this;

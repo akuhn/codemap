@@ -45,8 +45,8 @@ public class MapBuilder {
 		return this;
 	}
 
-	public void normalizeXY() {
-		locations.normalizeXY();
+	public void normalize() {
+		locations.normalizeLocations();
 	}
 
 }

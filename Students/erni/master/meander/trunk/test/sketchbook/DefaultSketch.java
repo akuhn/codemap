@@ -8,6 +8,7 @@ import ch.deif.meander.HillshadeAlgorithm;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
 import ch.deif.meander.NormalizeElevationAlgorithm;
+import ch.deif.meander.viz.HillshadeVisualization;
 
 public class DefaultSketch {
 
@@ -25,9 +26,8 @@ public class DefaultSketch {
 		new HillshadeAlgorithm(map).run();
 		new ContourLineAlgorithm(map).run();
 
-		//System.out.println((System.nanoTime() - time) / 1000000);
-		//new DebugDEMVisualization(map).openApplet();
-		//new HillshadeVisualization(map).openApplet();
+		System.out.println((System.nanoTime() - time) / 1000000);
+		new HillshadeVisualization(map).openApplet();
 	}
 
 }

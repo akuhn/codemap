@@ -1,13 +1,20 @@
 package ch.deif.meander;
 
-/** Computes digital elevation model.
+/** Creates the digital elevation model of a map. A digital elevation model (DEM) is a raster of z-ordinates for each pixel. 
+ *<p> 
+ * For each location on the map, a hill is added to the digital elevation model. The elevation of a hill at position
+ * (x0,y0) with height (z) is defined as follows, f(x,y) = z * exp ^ (-0.5 * (dist * factor) ^ 2) where
+ * dist = sqrt((x - x0) ^ 2 + (y - y0) ^ 2) and factor = k / z. The constant (k) is chosen such that a hill of height
+ * 100.0 has a diameter of 41% of the map.
+ *<p>
+ * The algorithm has been optimized to run fast.
  * 
  * @author Adrian Kuhn
  *
  */
 public class DEMAlgorithm extends MapAlgorithm {
 
-	private static final int MAGIC_VALUE = 6*320; // TODO avoid magic number for diameter of dem hills
+	private static final int MAGIC_VALUE = 6*320; // TODO magic number!
 
 	private static final double THRESHOLD = 1.0;
 
@@ -57,28 +64,29 @@ public class DEMAlgorithm extends MapAlgorithm {
 
 	private float[][] computePie(Location each) {
 		float[][] pie = new float[DEM.length][];
-		double e = each.normElevation();
-		double factor = -1.0 
-				/ (e * e) 
+		double elevationFactor = each.elevation();
+		double distFactor2 = -1.0 
+				/ (elevationFactor * elevationFactor) 
 				* (MAGIC_VALUE * MAGIC_VALUE)
 				/ ((DEM.length * DEM.length))
 				/ 2;
-		loop: for (int n = 0, n2 = 0; n < pie.length; n2 += (++n)+n-1) {
+		radius = computePieLoop(pie, elevationFactor, distFactor2);
+		return pie;
+	}
+
+	private int computePieLoop(float[][] pie, double elevationFactor, double distFactor2) {
+		for (int n = 0, n2 = 0; n < pie.length; n2 += (++n)+n-1) {
 			pie[n] = new float[n+1];
-			//assert n2 == n*n;
 			for (int m = 0, dist2 = n2; m <= n; dist2 += (++m)+m-1) {
-				//assert dist2 == n*n + m*m;
-				double elevation = e * Math.exp(factor * (double) dist2);
+				double elevation = elevationFactor * Math.exp(distFactor2 * (double) dist2);
 				if (elevation < THRESHOLD) {
-					if (m == 0) { 
-						radius = n; break loop; 
-					}
+					if (m == 0) return n;
 					break;
 				}
 				pie[n][m] += (elevation - THRESHOLD);
 			}
 		}
-		return pie;
+		throw null; // should not happen.
 	}
 
 	private void setup() {
