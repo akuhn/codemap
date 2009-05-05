@@ -30,6 +30,7 @@ public class MapBuilder {
 	}
 
 	public Map done() {
+		locations.normalizePixelXY(params.width);
 		Map map = new Map(params, locations);
 		map.name = name;
 		return map;
@@ -47,6 +48,11 @@ public class MapBuilder {
 
 	public void normalize() {
 		locations.normalizeLocations();
+	}
+
+	public MapBuilder color(MColor red) {
+		locations.last().setColor(red);		
+		return this;
 	}
 
 }

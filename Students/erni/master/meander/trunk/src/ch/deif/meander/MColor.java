@@ -40,6 +40,18 @@ public class MColor {
 	public static MColor YELLOW() {
 		return new MColor(255, 255, 0);
 	}
+	
+	public static final MColor hillgreen() {
+		return new MColor(196, 236, 0);
+	}
+	
+	public static final MColor shoreblue() {
+		return new MColor(92, 142, 255);
+	}
+	
+	public static final MColor deepwaterblue() {
+		return new MColor(0, 68, 255);
+	}
 
 	// public static MColor () {return new MColor();}
 
@@ -84,6 +96,10 @@ public class MColor {
 		r = (int) Math.max(r * factor, 0);
 		g = (int) Math.max(g * factor, 0);
 		b = (int) Math.max(b * factor, 0);
+	}
+
+	public MColor copy() {
+		return new MColor(r, g, b);
 	}
 
 }

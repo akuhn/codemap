@@ -16,6 +16,7 @@ public class Location {
 	private int px, py;
 	private String name;
 	private Document document;
+	private MColor color;
 
 	public Location(double x, double y, double elevation) {
 		this.x = x;
@@ -64,8 +65,8 @@ public class Location {
 	}
 
 	protected void normalizePixelXY(int pixelSize) {
-		this.px = (int) (x() / pixelSize);
-		this.py = (int) (y() / pixelSize);
+		this.px = (int) (x() * pixelSize);
+		this.py = (int) (y() * pixelSize);
 	}
 	
 	protected void normalizeElevation(double maxElevation) {
@@ -75,6 +76,14 @@ public class Location {
 	protected void normalizeXY(double left, double width, double top, double height) {
 		this.x = (this.x - left) / width;
 		this.y = (this.y - top) / height;
+	}
+
+	public void setColor(MColor color) {
+		this.color = color;
+	}
+
+	public MColor color() {
+		return (color == null ? MColor.hillgreen() : color).copy();
 	}
 	
 }

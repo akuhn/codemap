@@ -33,9 +33,9 @@ public class NearestNeighborAlgorithm extends MapAlgorithm {
 			int nearestDist2 = Integer.MAX_VALUE;
 			Location nearestLocation = null;
 			for (Location each: map.locations()) {
-				int dist2 = (p.px - each.px()) * 2 + (p.py - each.py()) * 2;
+				double dist2 = Math.pow(p.px - each.px(), 2) + Math.pow(p.py - each.py(), 2);
 				if (dist2 < nearestDist2) {
-					nearestDist2 = dist2;
+					nearestDist2 = (int) dist2;
 					nearestLocation = each;
 				}
 			}

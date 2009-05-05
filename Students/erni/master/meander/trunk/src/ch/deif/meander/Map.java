@@ -210,6 +210,10 @@ public class Map {
 		public void normalizeElevation(double maxElevation) {
 			DEM0[px][py] = (float) (100.0 * (DEM0[px][py] / maxElevation));
 		}
+		
+		public MColor nearestNeighborColor() {
+			return NN[px][py].color();
+		}
 
 	}
 

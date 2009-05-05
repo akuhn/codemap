@@ -73,4 +73,8 @@ public class LocationList implements Iterable<Location> {
 		}
 	}
 
+	public Location last() {
+		return locations.get(locations.size() - 1);
+	}
+	
 }
