@@ -93,7 +93,10 @@ public class DEMAlgorithmTest {
 	@Test
 	public void testBeyondBoundsHill() {
 		Map map = Map.builder()
-				.location(0.0, 0.0, 1000)
+				.location(2.0, 2.0, 1000)
+				.location(-1.0, 2.0, 1000)
+				.location(-1.0, -1.0, 1000)
+				.location(2.0, -1.0, 1000)
 				.size(100)
 				.done();
 		new DEMAlgorithm(map).run();
@@ -101,8 +104,8 @@ public class DEMAlgorithmTest {
 		double maxElevation = maxElevation(map);
 		double volume = elevationVolume(map);
 		assertEquals(0.0, minElevation, 1e-14);
-		assertEquals(100.0, maxElevation, 1.0);
-		assertEquals(0.25 * VOLUME_UNDER_HILL, volume, 1e3);		
+		assertEquals(0.0, maxElevation, 1.0);
+		assertEquals(0.0 * VOLUME_UNDER_HILL, volume, 1e3);		
 	}
 	
 	
