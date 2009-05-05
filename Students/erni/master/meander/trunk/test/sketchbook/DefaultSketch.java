@@ -2,10 +2,10 @@ package sketchbook;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
+import ch.deif.meander.Colors;
 import ch.deif.meander.ContourLineAlgorithm;
 import ch.deif.meander.DEMAlgorithm;
 import ch.deif.meander.HillshadeAlgorithm;
-import ch.deif.meander.MColor;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
 import ch.deif.meander.NearestNeighborAlgorithm;
@@ -21,10 +21,10 @@ public class DefaultSketch {
 		for (int a = 5; a < 100; a += 9) {
 			double rad = Math.PI / 180 * a;
 			builder.location(0.8 * sin(rad), 0.8 * cos(rad), a + 25);
-			builder.color(new MColor((int) (a * 2.5), 0, 0));
+			builder.color(new Colors((int) (a * 2.5), 0, 0));
 		}
 		Map map = builder.done();
-		map.locationAt(7).setColor(MColor.hillgreen());
+		map.locationAt(7).setColor(Colors.HILLGREEN);
 		new DEMAlgorithm(map).run();
 		new NormalizeElevationAlgorithm(map).run();
 		new HillshadeAlgorithm(map).run();

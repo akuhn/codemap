@@ -16,7 +16,7 @@ public class Location {
 	private int px, py;
 	private String name;
 	private Document document;
-	private MColor color;
+	private Colors color;
 
 	public Location(double x, double y, double elevation) {
 		this.x = x;
@@ -78,12 +78,12 @@ public class Location {
 		this.y = (this.y - top) / height;
 	}
 
-	public void setColor(MColor color) {
+	public void setColor(Colors color) {
 		this.color = color;
 	}
 
-	public MColor color() {
-		return (color == null ? MColor.hillgreen() : color).copy();
+	public Colors color() {
+		return color == null ? Colors.HILLGREEN : color;
 	}
 	
 }

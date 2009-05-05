@@ -50,7 +50,7 @@ public class MapBuilder {
 		locations.normalizeLocations();
 	}
 
-	public MapBuilder color(MColor red) {
+	public MapBuilder color(Colors red) {
 		locations.last().setColor(red);		
 		return this;
 	}

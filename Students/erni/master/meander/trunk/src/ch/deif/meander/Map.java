@@ -211,7 +211,7 @@ public class Map {
 			DEM0[px][py] = (float) (100.0 * (DEM0[px][py] / maxElevation));
 		}
 		
-		public MColor nearestNeighborColor() {
+		public Colors nearestNeighborColor() {
 			return NN[px][py].color();
 		}
 

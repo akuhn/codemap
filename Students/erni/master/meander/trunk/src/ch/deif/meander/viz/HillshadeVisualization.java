@@ -2,7 +2,7 @@ package ch.deif.meander.viz;
 
 import processing.core.PGraphics;
 import processing.core.PImage;
-import ch.deif.meander.MColor;
+import ch.deif.meander.Colors;
 import ch.deif.meander.Map;
 import ch.deif.meander.Parameters;
 import ch.deif.meander.Map.Pixel;
@@ -20,12 +20,12 @@ public class HillshadeVisualization extends MapVisualization<Drawable> {
 		pg.image(img, 0, 0);
 	}
 
-	private MColor color(Pixel p) {
+	private Colors color(Pixel p) {
 		Parameters params = map.getParameters();
 		double elevation = p.elevation();
 		if (elevation > params.beachHeight) return p.nearestNeighborColor();
-		if (elevation > params.waterHeight) return MColor.shoreblue();
-		return MColor.deepwaterblue();
+		if (elevation > params.waterHeight) return Colors.SHORE;
+		return Colors.WATER;
 	}
 
 	private void drawOn(PImage img) {
@@ -33,12 +33,12 @@ public class HillshadeVisualization extends MapVisualization<Drawable> {
 		int[] pixels = img.pixels;
 		int index = 0;
 		for (Pixel p: map.pixels()) {
-			MColor color = color(p);
+			double shading = 1.0;
 			if (p.elevation() > map.getParameters().beachHeight) {
-				color.darker(p.hillshade());
-				if (p.hasContourLine()) color.darker();
+				shading = p.hillshade();
+				if (p.hasContourLine()) shading *= 0.5;
 			}
-			pixels[index++] = color.rgb();
+			pixels[index++] = color(p).scaledRGB(shading);
 		}
 		img.updatePixels();
 	}
