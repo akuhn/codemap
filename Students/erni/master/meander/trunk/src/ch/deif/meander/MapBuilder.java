@@ -1,43 +1,8 @@
 package ch.deif.meander;
 
-import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.corpus.Document;
-import ch.akuhn.hapax.corpus.Terms;
-import ch.akuhn.util.Bag;
 
 public class MapBuilder {
-
-	private static class Doc extends Document {
-
-		private Terms terms;
-
-		public Doc(String name, String version) {
-			super(name, version);
-			terms = new Terms();
-		}
-
-		@Override
-		public Document addTerms(Terms terms) {
-			this.terms.addAll(terms);
-			return this;
-		}
-
-		@Override
-		public Corpus owner() {
-			return null;
-		}
-
-		@Override
-		public Terms terms() {
-			return this.terms;
-		}
-
-		public Document addTerms(Bag<String> terms) {
-			this.terms.addAll(terms);
-			return this;
-		}
-
-	}
 
 	private Parameters params;
 	private LocationList locations;
@@ -54,13 +19,13 @@ public class MapBuilder {
 		return this;
 	}
 
-	public MapBuilder location(double xNormed, double yNormed, double h) {
-		locations.makeLocation(xNormed, yNormed, h);
+	public MapBuilder location(double x, double y, double elevation) {
+		locations.makeLocation(x, y, elevation);
 		return this;
 	}
 
-	public MapBuilder location(double xNormed, double yNormed, double h, Document document) {
-		locations.makeLocation(xNormed, yNormed, h).setDocument(document);
+	public MapBuilder location(double x, double y, double elevation, Document document) {
+		locations.makeLocation(x, y, elevation).setDocument(document);
 		return this;
 	}
 
@@ -75,8 +40,8 @@ public class MapBuilder {
 		return this;
 	}
 
-	public MapBuilder location(double x, double y, int z, String string) {
-		locations.makeLocation(x, y, z).setName(string);
+	public MapBuilder location(double x, double y, int elevation, String string) {
+		locations.makeLocation(x, y, elevation).setName(string);
 		return this;
 	}
 
