@@ -20,7 +20,6 @@ public class Map {
 	private int width;
 	public LocationList locations;
 	private Parameters parameters;
-	public String name;
 	private Location[][] NN;
 
 	public Map(Parameters parameters, LocationList locations) {

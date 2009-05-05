@@ -52,11 +52,11 @@ public class Meander {
 		tdm = tdm.rejectAndWeight();
 		LatentSemanticIndex lsi = tdm.createIndex();
 		MDS mds = MDS.fromCorrelationMatrix(lsi);
-		MapBuilder builder = Map.builder().size(MeanderApplet.PIXELSCALE);
+		MapBuilder builder = Map.builder().pixelSize(MeanderApplet.PIXELSCALE);
 		Iterator<Document> iterator = lsi.documents.iterator();
 		for (int n = 0; n < mds.x.length; n++) {
 			Document each = iterator.next();
-			builder.location(mds.x[n], mds.y[n], Math.sqrt(each.termSize()), each);
+			builder.location(mds.x[n], mds.y[n], Math.sqrt(each.termSize())).document(each);
 		}
 		builder.normalize();
 		map = builder.done();

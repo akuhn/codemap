@@ -14,7 +14,8 @@ public class DEMAlgorithmTest {
 	public void testSingleHill() {
 		Map map = Map.builder()
 				.location(0.5, 0.5, 1000)
-				.size(100)
+				.normalizeElevation()
+				.pixelSize(100)
 				.done();
 		new DEMAlgorithm(map).run();
 		double minElevation = minElevation(map);
@@ -30,7 +31,8 @@ public class DEMAlgorithmTest {
 		Map map = Map.builder()
 				.location(0.5, 0.6, 1000)
 				.location(0.5, 0.4, 1000)
-				.size(100)
+				.normalizeElevation()
+				.pixelSize(100)
 				.done();
 		new DEMAlgorithm(map).run();
 		double minElevation = minElevation(map);
@@ -46,7 +48,8 @@ public class DEMAlgorithmTest {
 		Map map = Map.builder()
 				.location(0.5, 0.6, 1000)
 				.location(0.5, 0.4, 500)
-				.size(100)
+				.normalizeElevation()
+				.pixelSize(100)
 				.done();
 		new DEMAlgorithm(map).run();
 		double minElevation = minElevation(map);
@@ -61,7 +64,8 @@ public class DEMAlgorithmTest {
 	public void testClippedHill() {
 		Map map = Map.builder()
 				.location(0.5, 0.0, 1000)
-				.size(100)
+				.normalizeElevation()
+				.pixelSize(100)
 				.done();
 		new DEMAlgorithm(map).run();
 		double minElevation = minElevation(map);
@@ -79,7 +83,8 @@ public class DEMAlgorithmTest {
 				.location(1.0, 0.0, 1000)
 				.location(1.0, 1.0, 1000)
 				.location(0.0, 1.0, 1000)
-				.size(100)
+				.normalizeElevation()
+				.pixelSize(100)
 				.done();
 		new DEMAlgorithm(map).run();
 		double minElevation = minElevation(map);
@@ -97,7 +102,8 @@ public class DEMAlgorithmTest {
 				.location(-1.0, 2.0, 1000)
 				.location(-1.0, -1.0, 1000)
 				.location(2.0, -1.0, 1000)
-				.size(100)
+				.normalizeElevation()
+				.pixelSize(100)
 				.done();
 		new DEMAlgorithm(map).run();
 		double minElevation = minElevation(map);

@@ -2,48 +2,33 @@ package ch.deif.meander;
 
 import ch.akuhn.hapax.corpus.Document;
 
+
 public class MapBuilder {
 
 	private Parameters params;
 	private LocationList locations;
-	private String name;
+	private Location recentLocation;
 
 	public MapBuilder() {
 		params = new Parameters();
 		locations = new LocationList();
 	}
 
-	public MapBuilder size(int pixelScale) {
+	public MapBuilder pixelSize(int pixelScale) {
 		params.width = pixelScale;
 		params.height = pixelScale;
 		return this;
 	}
 
 	public MapBuilder location(double x, double y, double elevation) {
-		locations.makeLocation(x, y, elevation);
-		return this;
-	}
-
-	public MapBuilder location(double x, double y, double elevation, Document document) {
-		locations.makeLocation(x, y, elevation).setDocument(document);
+		recentLocation = locations.makeLocation(x, y, elevation);
 		return this;
 	}
 
 	public Map done() {
 		locations.normalizePixelXY(params.width);
 		Map map = new Map(params, locations);
-		map.name = name;
 		return map;
-	}
-
-	public MapBuilder name(String versionName) {
-		name = versionName;
-		return this;
-	}
-
-	public MapBuilder location(double x, double y, int elevation, String string) {
-		locations.makeLocation(x, y, elevation).setName(string);
-		return this;
 	}
 
 	public void normalize() {
@@ -51,7 +36,22 @@ public class MapBuilder {
 	}
 
 	public MapBuilder color(Colors red) {
-		locations.last().setColor(red);		
+		recentLocation.setColor(red);		
+		return this;
+	}
+
+	public MapBuilder document(Document document) {
+		recentLocation.setDocument(document);		
+		return this;
+	}
+
+	public MapBuilder name(String string) {
+		recentLocation.setName(string);		
+		return this;
+	}
+
+	public MapBuilder normalizeElevation() {
+		locations.normalizeElevation();
 		return this;
 	}
 

@@ -76,5 +76,15 @@ public class LocationList implements Iterable<Location> {
 	public Location last() {
 		return locations.get(locations.size() - 1);
 	}
+
+	public void normalizeElevation() {
+		double maxElevation = 0;
+		for (Location each: this) {
+			maxElevation = Math.max(maxElevation, each.elevation());
+		}
+		for (Location each: this) {
+			each.normalizeElevation(maxElevation);
+		}
+	}
 	
 }

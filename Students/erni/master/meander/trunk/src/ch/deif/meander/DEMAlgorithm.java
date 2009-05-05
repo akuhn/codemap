@@ -16,7 +16,7 @@ public class DEMAlgorithm extends MapAlgorithm {
 
 	private static final int MAGIC_VALUE = 6*320; // TODO magic number!
 
-	private static final double THRESHOLD = 0.01;
+	private static final double THRESHOLD = 1.0;
 
 	private float[][] DEM;
 
@@ -78,13 +78,12 @@ public class DEMAlgorithm extends MapAlgorithm {
 		for (int n = 0, n2 = 0; n < pie.length; n2 += (++n)+n-1) {
 			pie[n] = new float[n+1];
 			for (int m = 0, dist2 = n2; m <= n; dist2 += (++m)+m-1) {
-				double elevation = Math.exp(distFactor2 * (double) dist2);
+				double elevation = elevationFactor * Math.exp(distFactor2 * (double) dist2);
 				if (elevation < THRESHOLD) {
 					if (m == 0) return n;
 					break;
 				}
-				elevation = elevationFactor * (elevation - THRESHOLD);
-				pie[n][m] += elevation;
+				pie[n][m] += elevation  - THRESHOLD;
 			}
 		}
 		throw null; // should not happen.

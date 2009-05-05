@@ -10,7 +10,7 @@ import ch.deif.meander.viz.MapVisualization;
 public class SandboxMain {
 
 	public Map sample() {
-		return Map.builder().size(640).location(0.375, 0.375, 40).location(0.5, 0.375, 40).location(0.625, 0.250, 100)
+		return Map.builder().pixelSize(640).location(0.375, 0.375, 40).location(0.5, 0.375, 40).location(0.625, 0.250, 100)
 				.location(0.750, 0.500, 30).done();
 	}
 
