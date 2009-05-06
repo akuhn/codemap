@@ -70,6 +70,16 @@ public class ChunkOutput {
 		out.writeFloat(value);
 	}
 
+	public final void write(float[] array) throws IOException {
+		out.writeInt(array.length);
+		for (float each: array) out.writeFloat(each);
+	}
+
+	public final void write(float[][] array) throws IOException {
+		out.writeInt(array.length);
+		for (float[] each: array) this.write(each);
+	}
+	
 	public final void write(double value) throws IOException {
 		out.writeDouble(value);
 	}
