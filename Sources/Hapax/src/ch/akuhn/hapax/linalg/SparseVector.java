@@ -2,8 +2,14 @@ package ch.akuhn.hapax.linalg;
 
 import static ch.akuhn.util.Interval.range;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
+
+import ch.akuhn.io.chunks.ChunkInput;
+import ch.akuhn.io.chunks.ChunkOutput;
+import ch.akuhn.io.chunks.ReadFromChunk;
+import ch.akuhn.io.chunks.WriteOnChunk;
 
 public class SparseVector extends Vector {
 
@@ -140,6 +146,21 @@ public class SparseVector extends Vector {
         keys = Arrays.copyOf(keys, used);
         values = Arrays.copyOf(values, used);
     }
-    
 
+    @ReadFromChunk("SVEC")
+    public SparseVector(ChunkInput chunk) throws IOException {
+    	size = chunk.readInt();
+    	used = chunk.readInt();
+    	keys = chunk.readIntArray(used);
+    	values = chunk.readFloatArray(used);
+    }
+    
+    @WriteOnChunk("SVEC")
+    public void storeOn(ChunkOutput chunk) throws IOException {
+    	chunk.write(size);
+    	chunk.write(used);
+    	chunk.write(keys, 0, used);
+    	chunk.write(values, 0, used);
+    }
+    
 }

@@ -2,11 +2,16 @@ package ch.akuhn.hapax.linalg;
 
 import static ch.akuhn.util.Each.withIndex;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import ch.akuhn.hapax.linalg.Vector.Entry;
+import ch.akuhn.io.chunks.ChunkInput;
+import ch.akuhn.io.chunks.ChunkOutput;
+import ch.akuhn.io.chunks.ReadFromChunk;
+import ch.akuhn.io.chunks.WriteOnChunk;
 import ch.akuhn.util.Each;
 import ch.akuhn.util.Times;
 
@@ -144,6 +149,21 @@ public class SparseMatrix extends Matrix {
         }
         assert matrix.used() == used;
         return matrix;
+    }
+    
+    @ReadFromChunk("SMAT")
+    public SparseMatrix(ChunkInput chunk) throws IOException {
+    	columns = chunk.readInt();
+    	rows = new ArrayList<Vector>(columns);
+    	for (int n = 0; n < columns; n++) 
+    		rows.add(chunk.readChunk(SparseVector.class));
+    }
+    
+    @WriteOnChunk("SMAT")
+    public void storeOn(ChunkOutput chunk) throws IOException {
+    	chunk.write(columns);
+    	for (Vector each: rows())
+    		chunk.writeChunk(each);
     }
     
 }

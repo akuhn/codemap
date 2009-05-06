@@ -3,10 +3,13 @@ package ch.akuhn.hapax.linalg;
 import static ch.akuhn.util.Interval.range;
 import static java.lang.String.format;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 
 import ch.akuhn.hapax.util.StreamGobbler;
+import ch.akuhn.io.chunks.ChunkInput;
+import ch.akuhn.io.chunks.ReadFromChunk;
 import ch.akuhn.util.Throw;
 
 public class SVD {
@@ -108,6 +111,17 @@ public class SVD {
         this.Ut = Ut;
         this.Vt = Vt; 
     }
+    
+    @ReadFromChunk("SVD")
+    public SVD(ChunkInput chunk) throws IOException {
+    	int m = chunk.readInt();
+    	int n = chunk.readInt();
+    	int k = chunk.readInt();
+    	this.s = chunk.readFloatArray(k);
+    	this.Ut = chunk.readFloatArray(k,m);
+    	this.Vt = chunk.readFloatArray(k,n);
+    }
+    
 
     private String command(int dimensions) {
         return format("%s -d %d -v 3 %s", fname(), dimensions, "-");

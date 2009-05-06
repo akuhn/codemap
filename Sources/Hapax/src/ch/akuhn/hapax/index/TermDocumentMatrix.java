@@ -2,6 +2,7 @@ package ch.akuhn.hapax.index;
 
 import static ch.akuhn.util.Each.withIndex;
 
+import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -15,6 +16,8 @@ import ch.akuhn.hapax.linalg.SVD;
 import ch.akuhn.hapax.linalg.SparseMatrix;
 import ch.akuhn.hapax.linalg.Vector;
 import ch.akuhn.hapax.linalg.Vector.Entry;
+import ch.akuhn.io.chunks.ChunkOutput;
+import ch.akuhn.io.chunks.WriteOnChunk;
 import ch.akuhn.util.Each;
 import ch.akuhn.util.Files;
 import ch.akuhn.util.Pair;
@@ -283,6 +286,15 @@ public class TermDocumentMatrix extends Corpus {
             if (version.equals(each)) return copy;
         }
         throw new Error();
+    }
+    
+    @WriteOnChunk("TDM")
+    public void storeOn(ChunkOutput chunk) throws IOException {
+    	chunk.write(terms.size());
+    	chunk.write(documents.size());
+    	for (String each: terms) chunk.writeUTF(each);
+    	for (Document each: documents) chunk.writeUTF(each.name());
+    	chunk.writeChunk(matrix);
     }
     
 }
