@@ -77,12 +77,12 @@ public class ChunkOutput {
 		out.writeLong(value);
 	}
 
-	public final void write(String string) throws IOException {
+	public final void writeUTF(String string) throws IOException {
 		out.writeUTF(string);
 		alignPosition();
 	}
 
-	private final void alignPosition() throws IOException {
+	public final void alignPosition() throws IOException {
 		int pos = (int) stream.getPosition();
 		int modulo = pos % 4;
 		if (modulo == 0) return;

@@ -160,5 +160,16 @@ public class ChunkInput {
 		endChunk(spec.getName());
 		return element;
 	}
+
+	public final float[][] readFloatArray(int rows, int columns) throws IOException {
+		currentFrame.increment(rows * columns * 4);
+		float[][] result = new float[rows][columns];
+		for (int row = 0; row < result.length; row++) {
+			for (int col = 0; col < result[row].length; col++) {
+				result[row][col] = in.readFloat();
+			}		
+		}
+		return result;
+	}
 	
 }
