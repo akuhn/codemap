@@ -18,8 +18,9 @@ public class Layers extends MapVisualization {
 		background = new SketchVisualization(map);
 	}
 
-	public void add(Drawable overlay) {
+	public Layers add(Drawable overlay) {
 		layers.add(overlay);
+		return this;
 	}
 
 	@Override
@@ -36,9 +37,10 @@ public class Layers extends MapVisualization {
 		return this;
 	}
 
-	public void add(Class<? extends MapVisualization> overlay) {
+	public Layers add(Class<? extends MapVisualization> overlay) {
 		try {
 			add(overlay.getConstructor(Map.class).newInstance(map));
+			return this;
 		} catch (Exception ex) {
 			throw Throw.exception(ex);
 		}

@@ -12,8 +12,8 @@ public class ArrowOverlay extends MapVisualization {
 
 	private Composite<Arrow> arrows = Composite.newInstance();
 	
-	public void arrow(Location from, Location to, float d) {
-		arrows.add(new Arrow(from, to, d));
+	public void arrow(Location from, Location to, double d) {
+		arrows.add(new Arrow(from, to, (float) d));
 	}
 
 	@Override
@@ -36,7 +36,7 @@ class Arrow implements Drawable {
 		int y1 = from.py();
 		int x2 = to.px();
 		int y2 = to.py();
-		float w = 8.0f;
+		float w = Math.max(4.0f, weight);
 		pg.noFill();
 		pg.stroke(0, 0, 0, 20);
 		drawArrowShape(pg, x1 + 3, y1 + 3, x2 + 3, y2 + 3, w, w - 2);

@@ -6,6 +6,7 @@ import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
 import ch.deif.meander.viz.Label;
 import ch.deif.meander.viz.LabelsOverlay;
+import ch.deif.meander.viz.Layers;
 
 public class LabelSketch {
 
@@ -26,7 +27,8 @@ public class LabelSketch {
 		builder.normalizeElevation();
 		Map map = builder.done();
 		Label.DRAFT = true;
-		new LabelsOverlay(map).openApplet();
+		
+		new Layers(map).useHillshading().add(LabelsOverlay.class).openApplet();
 
 	}
 

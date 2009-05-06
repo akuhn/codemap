@@ -263,4 +263,15 @@ public class Map {
 		this.NN = NN;
 	}
 
+	public void needElevationModel() {
+		if (DEM == null) new DEMAlgorithm(this).run();
+	}
+
+	public void needHillshading() {
+		if (hillshade == null) {
+			new HillshadeAlgorithm(this).run();
+			new ContourLineAlgorithm(this).run();
+		}
+	}
+
 }

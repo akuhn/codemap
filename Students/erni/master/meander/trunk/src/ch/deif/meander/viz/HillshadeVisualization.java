@@ -8,6 +8,7 @@ public class HillshadeVisualization extends MapVisualization {
 
 	public HillshadeVisualization(Map map) {
 		super(map);
+		map.needHillshading();
 	}
 
 	@Override

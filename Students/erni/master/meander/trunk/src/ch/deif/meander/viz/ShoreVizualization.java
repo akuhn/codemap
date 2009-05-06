@@ -9,6 +9,7 @@ public class ShoreVizualization extends MapVisualization {
 
 	public ShoreVizualization(Map map) {
 		super(map);
+		map.needElevationModel();
 	}
 
 	@Override
