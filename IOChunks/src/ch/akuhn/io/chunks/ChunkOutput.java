@@ -134,5 +134,13 @@ public class ChunkOutput {
 		}
 
 	}
+
+
+	public final <Kind> void writeChunk(Kind element) throws IOException {
+		ChunkSpec spec = new ChunkSpec(element.getClass());
+		beginChunk(spec.getName());
+		spec.writeOn(element, this);
+		endChunk(spec.getName());
+	}
 	
 }

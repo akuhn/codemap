@@ -152,4 +152,13 @@ public class ChunkInput {
 		return result;
 	}
 	
+	public final <Kind> Kind readChunk(Class<Kind> kind) throws IOException {
+		ChunkSpec spec = new ChunkSpec(kind);
+		beginChunk();
+		assert spec.getName() == getName();
+		Kind element = spec.readFrom(this);
+		endChunk(spec.getName());
+		return element;
+	}
+	
 }

@@ -6,24 +6,30 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 
-public class ChunkSpec<Kind> {
+public class ChunkSpec {
 
 	public static final String MATCH_ALL = "*";
 	
 	private int name;
 	private String mnemonic;
-	private Class<Kind> kind;
+	private Class<?> kind;
 	private Method readFrom;
 	private Method writeOn;
-	private Constructor<Kind> createFrom;
+	private Constructor<?> createFrom;
 	
-	public ChunkSpec(Class<Kind> kind, String mnemonic) {
-		this.mnemonic = mnemonic;
-		this.name = Chunks.makeName(mnemonic);
+	public ChunkSpec(Class<?> kind) {
 		this.kind = kind;
 		this.createFrom = findReadFromConstructor();
 		this.readFrom = findReadFromMethod();
 		this.writeOn = findWriteOnMethod();
+		this.mnemonic = findDefaultMnemonic();
+		this.name = Chunks.makeName(mnemonic);
+	}
+
+	private String findDefaultMnemonic() {
+		if (createFrom != null) return createFrom.getAnnotation(ReadFromChunk.class).value();
+		if (readFrom != null) return readFrom.getAnnotation(ReadFromChunk.class).value();
+		return writeOn.getAnnotation(ReadFromChunk.class).value();
 	}
 
 	private final Method findWriteOnMethod() {
@@ -40,18 +46,17 @@ public class ChunkSpec<Kind> {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
-	private final Constructor<Kind> findReadFromConstructor() {
+	private final Constructor<?> findReadFromConstructor() {
 		for (Constructor<?> method: kind.getConstructors())
 			if (method.isAnnotationPresent(ReadFromChunk.class)) 
-				return (Constructor<Kind>) method;
+				return method;
 		return null;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Kind readFrom(ChunkInput input) throws IOException {
+	public <Kind> Kind readFrom(ChunkInput input) throws IOException {
 		try {
-			if (createFrom != null) return createFrom.newInstance(input);
+			if (createFrom != null) return (Kind) createFrom.newInstance(input);
 			return (Kind) readFrom.invoke(null, input);
 		} catch (IllegalArgumentException ex) {
 			throw new RuntimeException(ex);
@@ -66,7 +71,7 @@ public class ChunkSpec<Kind> {
 		}
 	}
 	
-	public void writeOn(Kind element, ChunkOutput output) throws IOException {
+	public void writeOn(Object element, ChunkOutput output) throws IOException {
 		output.beginChunk(name);
 		try {
 			writeOn.invoke(element, output);
@@ -90,7 +95,7 @@ public class ChunkSpec<Kind> {
 		return mnemonic;
 	}
 	
-	public Class<Kind> getKind() {
+	public Class<?> getKind() {
 		return kind;
 	}
 	
