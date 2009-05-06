@@ -14,18 +14,15 @@ public class ChunkOutput {
 
 	private final DataOutput out;
 	private final PositionableStream stream;
-	private final ChunkOutput parent;
-	private final int mark;
-	private final int name;
+	private Frame currentFrame;
+
 
 	public ChunkOutput(File file ) throws FileNotFoundException {
 		this.out = PositionableStreams.makeRandomAccessFile(file, "rw");
 		this.stream = (PositionableStream) out;
-		this.parent = null;
-		this.name = 0;
-		this.mark = 0;
+		this.currentFrame = new Frame();
 	}
-	
+
 	public ChunkOutput(String fname) throws FileNotFoundException {
 		this(new File(fname));
 	}
@@ -34,32 +31,16 @@ public class ChunkOutput {
 		ByteArrayOutputStream baos = PositionableStreams.makeByteArrayOutputStream();
 		this.out = new DataOutputStream(baos);
 		this.stream = (PositionableStream) baos;
-		this.parent = null;
-		this.name = 0;
-		this.mark = 0;
-	}
-	
-	private ChunkOutput(ChunkOutput parent, int name) throws IOException {
-		this.parent = parent;
-		this.out = parent.out;
-		this.stream = parent.stream;
-		this.name = name;
-		this.mark = (int) stream.getPosition() + 8;
-		out.writeInt(name);
-		out.writeInt(-1);
+		this.currentFrame = new Frame();
 	}
 
-	public final ChunkOutput beginChunk(int name) throws IOException {
-		return new ChunkOutput(this, name);
+
+	public final void beginChunk(int name) throws IOException {
+		currentFrame.push(name);
 	}
 
-	public final ChunkOutput endChunk(int name) throws IOException {
-		assert this.name == name;
-		int pos = (int) stream.getPosition();
-		stream.seek(mark - 4);
-		out.writeInt(pos - mark);
-		stream.seek(pos);
-		return parent;
+	public final void endChunk(int name) throws IOException {
+		currentFrame.pop(name);
 	}
 
 	public final void write(int value) throws IOException {
@@ -75,11 +56,19 @@ public class ChunkOutput {
 		for (float each: array) out.writeFloat(each);
 	}
 
+	public final void write(float[] buffer, int offset, int length) throws IOException {
+		for (int n = offset; n < length; n++) out.writeFloat(buffer[n]);
+	}
+
+	public final void write(int[] buffer, int offset, int length) throws IOException {
+		for (int n = offset; n < length; n++) out.writeInt(buffer[n]);
+	}
+	
 	public final void write(float[][] array) throws IOException {
 		out.writeInt(array.length);
 		for (float[] each: array) this.write(each);
 	}
-	
+
 	public final void write(double value) throws IOException {
 		out.writeDouble(value);
 	}
@@ -104,10 +93,46 @@ public class ChunkOutput {
 		assert stream instanceof ByteArrayOutputStream; 
 		return ((ByteArrayOutputStream) stream).toByteArray();
 	}
-	
+
 	public final int[] toIntArray() {
 		IntBuffer source = ByteBuffer.wrap(toByteArray()).asIntBuffer();
 		return IntBuffer.allocate(source.limit()).put(source).array();
+	}
+
+
+	final class Frame {
+
+		private final Frame parent;
+		private final int mark;
+		private final int name;
+
+		public Frame() {
+			this.parent = null;
+			this.name = Chunks.NULL;
+			this.mark = 0;
+		}
+
+		private Frame(Frame parent, int name, int mark) {
+			this.parent = parent;
+			this.name = name;
+			this.mark = mark;
+		}
+
+		public final void push(int name) throws IOException {
+			out.writeInt(name);
+			out.writeInt(-1);
+			currentFrame = new Frame(this, name, (int) stream.getPosition());
+		}
+
+		public final void pop(int name) throws IOException {
+			assert this.name == name;
+			int pos = (int) stream.getPosition();
+			stream.seek(mark - 4);
+			out.writeInt(pos - mark);
+			stream.seek(pos);
+			currentFrame = parent;
+		}
+
 	}
 	
 }

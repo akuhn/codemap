@@ -38,15 +38,13 @@ public class ChunkOutputTest {
 
 	@Test
 	public void testWriteChunk() throws IOException {
-		ChunkOutput output = new ChunkOutput();
-		ChunkOutput chunk = output.beginChunk(HEAD);
-		chunk.write(100);
-		chunk.write(200);
-		chunk.write(300);
-		ChunkOutput parent = chunk.endChunk(HEAD);
-		assertEquals(output, parent);
-		assertNotSame(output, chunk);
-		int[] data = output.toIntArray();
+		ChunkOutput out = new ChunkOutput();
+		out.beginChunk(HEAD);
+		out.write(100);
+		out.write(200);
+		out.write(300);
+		out.endChunk(HEAD);
+		int[] data = out.toIntArray();
 		assertEquals(5, data.length);
 		assertEquals(HEAD, data[0]);
 		assertEquals(3*4, data[1]);

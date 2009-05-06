@@ -4,6 +4,8 @@ import java.nio.ByteBuffer;
 
 public class Chunks {
 
+	public static final int NULL = 0;
+	
 	public static final int makeName(String mnemonic) {
 		ByteBuffer buffer = ByteBuffer.allocate(4);
 		for (int n = 0; n < buffer.limit(); n++) 

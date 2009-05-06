@@ -9,6 +9,7 @@ import org.junit.Test;
 public class ChunkInputTest {
 
 	private static final int HEAD = 7000;
+	private static final int NULL = 0;
 
 	@Test
 	public void testReadInt() throws IOException {
@@ -32,24 +33,33 @@ public class ChunkInputTest {
 	public void testReadChunk() throws IOException {
 		int[] data = new int[] { HEAD, 8, 1, 2, 3 };
 		ChunkInput chunk = new ChunkInput(data);
-		chunk = chunk.beginChunk();
+		assertEquals(NULL, chunk.getName());
+		chunk.beginChunk();
 		assertEquals(HEAD, chunk.getName());
 		assertEquals(1, chunk.readInt());
 		assertEquals(2, chunk.readInt());
 		assertEquals(false, chunk.hasMore());
-		chunk = chunk.endChunk(HEAD);
+		chunk.endChunk(HEAD);
+		assertEquals(NULL, chunk.getName());
+		assertEquals(true, chunk.hasMore());
 		assertEquals(3, chunk.readInt());
+		assertEquals(false, chunk.hasMore());
 	}
 	
 	@Test
 	public void testSkipChunk() throws IOException {
 		int[] data = new int[] { HEAD, 8, 1, 2, 3 };
 		ChunkInput chunk = new ChunkInput(data);
-		chunk = chunk.beginChunk();
+		assertEquals(NULL, chunk.getName());
+		chunk.beginChunk();
 		assertEquals(HEAD, chunk.getName());
+		// don't read, just skip 
 		assertEquals(true, chunk.hasMore());
-		chunk = chunk.endChunk(HEAD);
+		chunk.endChunk(HEAD);
+		assertEquals(NULL, chunk.getName());
+		assertEquals(true, chunk.hasMore());
 		assertEquals(3, chunk.readInt());
+		assertEquals(false, chunk.hasMore());
 	}
 	
 }
