@@ -34,7 +34,7 @@ public class EclipseProcessingBridge extends Composite {
 		mapFrame.setSize(dimension.width, dimension.height);
 	}
 
-	public void setMapVizualization(MapVisualization<?> viz) {
+	public void setMapVizualization(MapVisualization viz) {
 		getApplet().setVisualization(viz);
 		mapFrame.repaint();
 	}

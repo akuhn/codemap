@@ -11,7 +11,7 @@ import ch.deif.meander.viz.MapVisualization;
 @SuppressWarnings("serial")
 public class PViewer extends JFrame {
 
-	public PViewer(MapVisualization<?> viz) {
+	public PViewer(MapVisualization viz) {
 		super("Map Viewer");
 
 		setLayout(new BorderLayout());
@@ -20,21 +20,21 @@ public class PViewer extends JFrame {
 		pa.init();
 		pack();
 		setVisible(true);
-		setSize(viz.pixelScale(), viz.pixelScale());
+		setSize(viz.getWidth(), viz.getWidth());
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	}
 
 	private class InnerApplet extends PApplet {
 
-		private MapVisualization<?> viz;
+		private MapVisualization viz;
 
-		public InnerApplet(MapVisualization<?> viz) {
+		public InnerApplet(MapVisualization viz) {
 			this.viz = viz;
 		}
 
 		@Override
 		public void setup() {
-			size(viz.pixelScale(), viz.pixelScale());
+			size(viz.getWidth(), viz.getWidth());
 			frameRate(1);
 		}
 

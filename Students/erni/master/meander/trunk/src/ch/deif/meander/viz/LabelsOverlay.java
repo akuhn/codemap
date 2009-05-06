@@ -10,37 +10,38 @@ import ch.akuhn.util.Get;
 import ch.deif.meander.Location;
 import ch.deif.meander.Map;
 
-public class LabelsOverlay extends MapVisualization<Label> {
+public class LabelsOverlay extends MapVisualization {
 
 	private PFont PFONT = new PFont(PFont.findFont("Arial Narrow"), true, PFont.DEFAULT_CHARSET);
 	private boolean layoutDone = false;
-
+	private Composite<Label> labels = Composite.newInstance();
+	
 	public LabelsOverlay(Map map) {
 		super(map);
 		for (Location each: map.locations()) {
 			Label l = new Label(each.name());
-			addChild(l);
+			labels.add(l);
 			l.x = l.x0 = each.px();
 			l.y = l.y0 = each.py();
-			l.size = (float) each.elevation() / 4f;
+			l.size = (float) each.elevation();
 		}
 	}
 
 	@Override
-	public void drawThis(PGraphics pg) {
+	public void draw(PGraphics pg) {
 		pg.textFont(PFONT);
 		this.layout(pg);
 		pg.fill(255, 0, 0);
 		pg.textSize(20);
-
+		labels.draw(pg);
 	}
 
 	private void layout(PGraphics pg) {
 		if (layoutDone) return;
-		for (Label each: children())
+		for (Label each: labels)
 			each.initializeWidth(pg);
 		List<Label> done = new ArrayList<Label>();
-		for (Label each: Get.sorted(children())) {
+		for (Label each: Get.sorted(labels)) {
 			layoutLoopBody(done, each);
 		}
 		layoutDone = true;

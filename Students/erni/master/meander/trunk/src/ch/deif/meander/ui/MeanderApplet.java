@@ -24,7 +24,7 @@ public class MeanderApplet extends PApplet {
 	protected final int POINT_STROKE = 2;
 	protected final int BOX_STROKE = 2;
 
-	private MapVisualization<?> viz;
+	private MapVisualization viz;
 	private Collection<Point> points;
 
 	private boolean needsRedraw;
@@ -85,7 +85,7 @@ public class MeanderApplet extends PApplet {
 		this(null);
 	}
 
-	public MeanderApplet(MapVisualization<?> vizualization) {
+	public MeanderApplet(MapVisualization vizualization) {
 		events = new Events(this);
 		points = Collections.synchronizedSet(new HashSet<Point>());
 		bg = createGraphics(width(), height(), JAVA2D);
@@ -272,7 +272,7 @@ public class MeanderApplet extends PApplet {
 		setNeedsRedraw();
 	}
 
-	public void setVisualization(MapVisualization<?> viz) {
+	public void setVisualization(MapVisualization viz) {
 		if (viz == this.viz) return;
 		this.points.clear();
 		this.viz = viz;

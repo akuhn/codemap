@@ -211,7 +211,7 @@ public class Map {
 		}
 		
 		public Colors nearestNeighborColor() {
-			return NN[px][py].color();
+			return NN == null ? Colors.HILLGREEN : NN[px][py].color();
 		}
 
 	}

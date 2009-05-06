@@ -76,7 +76,7 @@ public class Meander {
 		return this;
 	}
 
-	public Meander add(Class<? extends MapVisualization<?>> overlay) {
+	public Meander add(Class<? extends MapVisualization> overlay) {
 		layers.add(overlay);
 		return this;
 	}
@@ -86,7 +86,7 @@ public class Meander {
 		return this;
 	}
 
-	public MapVisualization<?> getVisualization() {
+	public MapVisualization getVisualization() {
 		return layers;
 	}
 

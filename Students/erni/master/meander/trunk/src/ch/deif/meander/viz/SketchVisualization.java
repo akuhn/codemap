@@ -4,7 +4,7 @@ import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.Map;
 
-public class SketchVisualization extends MapVisualization<Drawable> {
+public class SketchVisualization extends MapVisualization {
 
 	// TODO make sure circle size has same diameter as coastline of shaded hills
 
@@ -13,7 +13,7 @@ public class SketchVisualization extends MapVisualization<Drawable> {
 	}
 
 	@Override
-	public void drawThis(PGraphics pg) {
+	public void draw(PGraphics pg) {
 		float width = map.getParameters().width;
 		float height = map.getParameters().height;
 		pg.background(204);

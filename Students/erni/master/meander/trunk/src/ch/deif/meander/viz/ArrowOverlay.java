@@ -4,21 +4,21 @@ import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.Map;
 
-public class ArrowOverlay extends MapVisualization<Arrow> {
+public class ArrowOverlay extends MapVisualization {
 
 	public ArrowOverlay(Map map) {
 		super(map);
 	}
 
-	@Override
-	public void drawThis(PGraphics pg) {
-		for (Arrow each: children)
-			each.draw(pg);
+	private Composite<Arrow> arrows = Composite.newInstance();
+	
+	public void arrow(Location from, Location to, float d) {
+		arrows.add(new Arrow(from, to, d));
 	}
 
-	public void arrow(Location from, Location to, float d) {
-		children.add(new Arrow(from, to, d));
-
+	@Override
+	public void draw(PGraphics pg) {
+		arrows.draw(pg);
 	}
 
 }
@@ -32,10 +32,10 @@ class Arrow implements Drawable {
 	}
 
 	public void draw(PGraphics pg) {
-		float x1 = (float) (from.x() * pg.width);
-		float y1 = (float) (from.y() * pg.height);
-		float x2 = (float) (to.x() * pg.width);
-		float y2 = (float) (to.y() * pg.height);
+		int x1 = from.px();
+		int y1 = from.py();
+		int x2 = to.px();
+		int y2 = to.py();
 		float w = 8.0f;
 		pg.noFill();
 		pg.stroke(0, 0, 0, 20);

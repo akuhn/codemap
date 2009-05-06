@@ -1,20 +1,21 @@
 package ch.deif.meander.viz;
 
-import java.util.LinkedList;
-
 import processing.core.PGraphics;
 import ch.akuhn.util.Throw;
 import ch.deif.meander.Map;
 
-public class Layers extends MapVisualization<Drawable> {
+public class Layers extends MapVisualization {
 
-	private MapVisualization<?> background;
-	private LinkedList<Drawable> layers;
+	private Drawable background;
+	private Composite<Drawable> layers = Composite.newInstance();
 
 	public Layers(Map map) {
 		super(map);
+		useSketchBackground();
+	}
+
+	public void useSketchBackground() {
 		background = new SketchVisualization(map);
-		layers = new LinkedList<Drawable>();
 	}
 
 	public void add(Drawable overlay) {
@@ -22,17 +23,20 @@ public class Layers extends MapVisualization<Drawable> {
 	}
 
 	@Override
-	public void drawThis(PGraphics pg) {
+	public void draw(PGraphics pg) {
 		background.draw(pg);
-		for (Drawable overlay: layers)
-			overlay.draw(pg);
+		for (Drawable each: layers) each.draw(pg);
 	}
 
-	public void useHillshading() {
-		background = new HillshadeVisualization(map);
+	public Layers useHillshading() {
+		background = Composite.of(
+				new WaterVisualization(map),
+				new ShoreVizualization(map),
+				new HillshadeVisualization(map));
+		return this;
 	}
 
-	public void add(Class<? extends MapVisualization<?>> overlay) {
+	public void add(Class<? extends MapVisualization> overlay) {
 		try {
 			add(overlay.getConstructor(Map.class).newInstance(map));
 		} catch (Exception ex) {

@@ -23,6 +23,7 @@ public class LabelSketch {
 				.location(Math.random(), Math.random(), (int) (Math.random() * Math.random() * 140) + 10)
 				.name(names[(int) (Math.random() * names.length)]);
 		}
+		builder.normalizeElevation();
 		Map map = builder.done();
 		Label.DRAFT = true;
 		new LabelsOverlay(map).openApplet();

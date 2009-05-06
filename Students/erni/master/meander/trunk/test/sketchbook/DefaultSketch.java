@@ -10,14 +10,14 @@ import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
 import ch.deif.meander.NearestNeighborAlgorithm;
 import ch.deif.meander.NormalizeElevationAlgorithm;
-import ch.deif.meander.viz.HillshadeVisualization;
+import ch.deif.meander.viz.Layers;
 
 public class DefaultSketch {
 
 	public static void main(String... args) {
-		makeMap(800);
+		//makeMap(800);
+		//makeMap(200);
 		makeMap(400);
-		makeMap(200);
 	}
 
 	private static void makeMap(int size) {
@@ -38,7 +38,7 @@ public class DefaultSketch {
 		new NearestNeighborAlgorithm(map).run();
 
 		System.out.println((System.nanoTime() - time) / 1000000);
-		new HillshadeVisualization(map).openApplet();
+		new Layers(map).useHillshading().openApplet();
 	}
 
 }
