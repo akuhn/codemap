@@ -1,5 +1,8 @@
 package ch.akuhn.hapax.corpus;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * 
  * @author Adrian Kuhn
@@ -7,7 +10,7 @@ package ch.akuhn.hapax.corpus;
  */
 public abstract class Document implements Comparable<Document> {
 
-    //@Override
+	@Override
     public int compareTo(Document other) {
         int signum = this.version.compareTo(other.version); 
         return signum != 0 ? signum : this.name.compareTo(other.name); 
@@ -36,6 +39,8 @@ public abstract class Document implements Comparable<Document> {
 
     @Override
     public String toString() {
+    	Matcher matcher = Pattern.compile("([^\\\\\\/]+)$").matcher(name);
+    	if (matcher.find()) return matcher.group(1);
         return name;
     }
 

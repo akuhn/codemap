@@ -3,6 +3,7 @@ package ch.akuhn.hapax.corpus;
 import static ch.akuhn.util.Get.each;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -15,11 +16,11 @@ import ch.akuhn.util.Files;
 import ch.akuhn.util.Throw;
 
 
-public class Importer {
+public class CorpusBuilder {
 
     private Corpus corpus;
 
-    public Importer(Corpus corpus) {
+    public CorpusBuilder(Corpus corpus) {
         this.corpus = corpus;
     }
     
@@ -104,5 +105,16 @@ public class Importer {
     public void importZipArchive(String name, String extensions) {
         this.importZipArchive(new File(name), extensions);
     }
+
+	public Corpus getCorpus() {
+		return corpus;
+	}
+
+	public void importFrom(String source, String extensions) {
+		File file = new File(source); 
+		assert file.exists();
+		if (file.isDirectory()) importAllFiles(file, extensions);
+		else importZipArchive(file, extensions);
+	}
     
 }

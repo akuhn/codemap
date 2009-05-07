@@ -36,5 +36,12 @@ public class Ranking<T> extends ArrayList<Rank<T>> {
         Collections.sort(this);
         return this;
     }
+    
+    public Ranking<T> top(int ten) {
+    	Ranking<T> result = new Ranking<T>();
+    	int end = Math.max(this.size(), ten);
+    	for (Rank<T> each: this.subList(0, end)) result.add(each);
+    	return result;
+    }
 
 }
