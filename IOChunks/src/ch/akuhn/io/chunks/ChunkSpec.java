@@ -29,7 +29,8 @@ public class ChunkSpec {
 	private String findDefaultMnemonic() {
 		if (createFrom != null) return createFrom.getAnnotation(ReadFromChunk.class).value();
 		if (readFrom != null) return readFrom.getAnnotation(ReadFromChunk.class).value();
-		return writeOn.getAnnotation(ReadFromChunk.class).value();
+		if (writeOn != null) return writeOn.getAnnotation(WriteOnChunk.class).value();
+		throw new UnsupportedOperationException(kind + " does not support chunks.");
 	}
 
 	private final Method findWriteOnMethod() {
@@ -57,15 +58,14 @@ public class ChunkSpec {
 	public <Kind> Kind readFrom(ChunkInput input) throws IOException {
 		try {
 			if (createFrom != null) return (Kind) createFrom.newInstance(input);
-			return (Kind) readFrom.invoke(null, input);
+			if (readFrom != null) return (Kind) readFrom.invoke(null, input);
+			throw new AssertionError(kind + " does not support reading from chunks!");
 		} catch (IllegalArgumentException ex) {
 			throw new RuntimeException(ex);
 		} catch (IllegalAccessException ex) {
 			throw new RuntimeException(ex);
 		} catch (InvocationTargetException ex) {
-			if (ex.getTargetException() instanceof IOException) 
-				throw (IOException) ex.getTargetException();
-			throw new RuntimeException(ex);
+			throw unwrap(ex);
 		} catch (InstantiationException ex) {
 			throw new RuntimeException(ex);
 		}
@@ -80,9 +80,7 @@ public class ChunkSpec {
 		} catch (IllegalAccessException ex) {
 			throw new RuntimeException(ex);
 		} catch (InvocationTargetException ex) {
-			if (ex.getTargetException() instanceof IOException) 
-				throw (IOException) ex.getTargetException();
-			throw new RuntimeException(ex);
+			throw unwrap(ex);
 		}
 		output.endChunk(name);
 	}
@@ -97,6 +95,14 @@ public class ChunkSpec {
 	
 	public Class<?> getKind() {
 		return kind;
+	}
+	
+	private RuntimeException unwrap(InvocationTargetException ex) throws IOException {
+		Throwable th = ex.getTargetException();
+		if (th instanceof IOException) throw (IOException) th;
+		if (th instanceof RuntimeException) throw (RuntimeException) th;
+		if (th instanceof Error) throw (Error) th;
+		throw new RuntimeException(ex);
 	}
 	
 }

@@ -74,7 +74,18 @@ public class ChunkInput {
 	}
 
 	public final String readUTF() throws IOException {
-		throw new UnsupportedOperationException();
+		long position = stream.getPosition();
+		String result = in.readUTF();
+		alignPosition();
+		currentFrame.increment((int) (stream.getPosition() - position));
+		return result;
+	}
+
+	private final void alignPosition() throws IOException {
+		int pos = (int) stream.getPosition();
+		int modulo = pos % 4;
+		if (modulo == 0) return;
+		in.skipBytes(modulo);
 	}
 
 	public final int getName() {

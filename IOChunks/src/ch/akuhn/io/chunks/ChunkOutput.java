@@ -82,7 +82,7 @@ public class ChunkOutput {
 		alignPosition();
 	}
 
-	public final void alignPosition() throws IOException {
+	private final void alignPosition() throws IOException {
 		int pos = (int) stream.getPosition();
 		int modulo = pos % 4;
 		if (modulo == 0) return;
@@ -138,9 +138,33 @@ public class ChunkOutput {
 
 	public final <Kind> void writeChunk(Kind element) throws IOException {
 		ChunkSpec spec = new ChunkSpec(element.getClass());
-		beginChunk(spec.getName());
 		spec.writeOn(element, this);
-		endChunk(spec.getName());
 	}
 	
+	public void DEBUG() {
+		for (int each: toIntArray()) {
+			System.out.printf("0x%s\t%s\t%d\n", hex(each), string(each), each);
+		}
+	}
+
+	private Object string(int each) {
+		String result = "";
+		for (int n = 0; n < 4; n++) {
+			char a = (char) (each & 0xFF);
+			if (!((a >= 'a' && a <= 'z') || (a >= 'A' && a <= 'Z'))) a = '?';
+			result = a + result;
+			each = each >> 8;
+		}
+		return result;
+	}
+
+	private Object hex(int each) {
+		String result = "";
+		for (int n = 0; n < 8; n++) {
+			result = "0123456789ABCDEF".charAt(each & 0xF) + result;
+			each = each >> 4;
+		}
+		return result;
+	}
+
 }
