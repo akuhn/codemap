@@ -50,7 +50,7 @@ public class OfflineMatrix extends Matrix {
     }
 
     @Override
-    public int columnSize() {
+    public int columnCount() {
         return columns;
     }
 
@@ -70,7 +70,7 @@ public class OfflineMatrix extends Matrix {
     }
 
     @Override
-    public int rowSize() {
+    public int rowCount() {
         return rows;
     }
 
@@ -81,8 +81,8 @@ public class OfflineMatrix extends Matrix {
  
     public static final OfflineMatrix from(Matrix matrix, Resource file) {
         ResourceStream out = file.writeStream();
-        out.put(matrix.rowSize());
-        out.put(matrix.columnSize());
+        out.put(matrix.rowCount());
+        out.put(matrix.columnCount());
         for (Vector row: matrix.rows()) 
             for (Entry each: row.entries()) 
                 out.put(each.value);

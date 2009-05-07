@@ -56,7 +56,7 @@ public class BufferedMatrix extends Matrix {
     }
 
     @Override
-    public int columnSize() {
+    public int columnCount() {
         return columns;
     }
 
@@ -76,7 +76,7 @@ public class BufferedMatrix extends Matrix {
     }
 
     @Override
-    public int rowSize() {
+    public int rowCount() {
         return rows;
     }
 

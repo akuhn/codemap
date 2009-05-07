@@ -24,7 +24,7 @@ public class DenseMatrix extends Matrix {
     }
 
     @Override
-    public int columnSize() {
+    public int columnCount() {
         return values[0].length;
     }
 
@@ -52,7 +52,7 @@ public class DenseMatrix extends Matrix {
     }
 
     @Override
-    public int rowSize() {
+    public int rowCount() {
         return values.length;
     }
 

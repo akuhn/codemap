@@ -27,13 +27,13 @@ public abstract class Corpus {
     
     public abstract Iterable<Document> documents();
 
-    public abstract int documentSize();
+    public abstract int documentCount();
 
     public abstract boolean contains(Document doc);
     
     public abstract Terms terms(Document doc);
     
-    public int termSize() {
+    public int termCount() {
         Terms terms = new Terms();
         for (Document doc: this.documents()) terms.addAll(doc.terms());
         return terms.uniqueSize();
@@ -43,8 +43,8 @@ public abstract class Corpus {
     public String toString() {
         return String.format("%s (%d documents, %d terms)",
                 this.getClass().getName(),
-                documentSize(),
-                termSize());
+                documentCount(),
+                termCount());
     }
 
     public Document get(String name) {

@@ -18,10 +18,14 @@ public abstract class Matrix {
 
     public abstract Iterable<Vector> columns();
 
-    public abstract int columnSize();
+    public abstract int columnCount();
 
     public double density() {
-        return ((double) used()) / rowSize() / columnSize();
+        return (double) used() / size();
+    }
+    
+    public int size() {
+    	return rowCount() * columnCount();
     }
 
     public abstract double get(int row, int column);
@@ -30,13 +34,13 @@ public abstract class Matrix {
 
     public abstract Iterable<Vector> rows();
 
-    public abstract int rowSize();
+    public abstract int rowCount();
 
     public abstract int used();
 
     public void storeBinaryOn(DataOutput out) throws IOException {
-        out.writeInt(this.rowSize());
-        out.writeInt(this.columnSize());
+        out.writeInt(this.rowCount());
+        out.writeInt(this.columnCount());
         out.writeInt(this.used());
         for (Vector row: rows()) {
             out.writeInt(row.used());
@@ -62,8 +66,8 @@ public abstract class Matrix {
         // this stores the transposed matrix, but as we will transpose it again
         // when reading it, this can be done without loss of generality.
         PrintOn out = new PrintOn(appendable);
-        out.print(this.columnSize()).space();
-        out.print(this.rowSize()).space();
+        out.print(this.columnCount()).space();
+        out.print(this.rowCount()).space();
         out.print(this.used()).cr();
         for (Vector row: rows()) {
             out.print(row.used()).cr();

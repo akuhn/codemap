@@ -39,8 +39,8 @@ public class DeerExample {
         for (String[] each: DATA) {
             tdm.makeDocument(each[0]).addTerms(new Terms(each[1]));
         }
-        assertEquals(9, tdm.documentSize());
-        assertEquals(45, tdm.termSize());
+        assertEquals(9, tdm.documentCount());
+        assertEquals(45, tdm.termCount());
         return tdm;
     }
     
@@ -48,14 +48,14 @@ public class DeerExample {
     @Given("#makeTermDocumentMatrix")
     public TermDocumentMatrix rejectStopWords(TermDocumentMatrix tdm) {
         tdm = tdm.toLowerCase();
-        assertEquals(9, tdm.documentSize());
-        assertEquals(42, tdm.termSize());
+        assertEquals(9, tdm.documentCount());
+        assertEquals(42, tdm.termCount());
         tdm = tdm.rejectHapaxes();
-        assertEquals(9, tdm.documentSize());
-        assertEquals(16, tdm.termSize());
+        assertEquals(9, tdm.documentCount());
+        assertEquals(16, tdm.termCount());
         tdm = tdm.toLowerCase().rejectStopwords();
-        assertEquals(9, tdm.documentSize());
-        assertEquals(12, tdm.termSize());
+        assertEquals(9, tdm.documentCount());
+        assertEquals(12, tdm.termCount());
         assertEquals(SORTED, Get.sorted(tdm.terms().elementSet()).toString());
         return tdm;
     }
@@ -69,8 +69,8 @@ public class DeerExample {
         StringBuilder buf2 = new StringBuilder();
         tdm2.storeOn(buf2);
         assertEquals(buf.toString(), buf2.toString());
-        assertEquals(tdm.documentSize(), tdm2.documentSize());
-        assertEquals(tdm.termSize(), tdm2.termSize());
+        assertEquals(tdm.documentCount(), tdm2.documentCount());
+        assertEquals(tdm.termCount(), tdm2.termCount());
         assertEquals(tdm.density(), tdm2.density());
     }
 

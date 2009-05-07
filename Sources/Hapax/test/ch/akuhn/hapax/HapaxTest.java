@@ -44,14 +44,14 @@ public class HapaxTest {
 	public void compareSampleAndChunk(Hapax sample, Hapax chunk) {
 		Corpus a = sample.corpora().iterator().next();
 		Corpus b = chunk.corpora().iterator().next();
-		assertEquals(a.documentSize(), b.documentSize());
-		assertEquals(a.termSize(), b.termSize());
+		assertEquals(a.documentCount(), b.documentCount());
+		assertEquals(a.termCount(), b.termCount());
 		Matrix ma = ((TermDocumentMatrix) a).matrix();
 		Matrix mb = ((TermDocumentMatrix) b).matrix();
-		assertEquals(ma.rowSize(), mb.rowSize());
-		assertEquals(ma.columnSize(), mb.columnSize());
-		for (int n = 0; n < ma.rowSize(); n++) {
-			for (int m = 0; m < ma.columnSize(); m++) {
+		assertEquals(ma.rowCount(), mb.rowCount());
+		assertEquals(ma.columnCount(), mb.columnCount());
+		for (int n = 0; n < ma.rowCount(); n++) {
+			for (int m = 0; m < ma.columnCount(); m++) {
 				assertEquals(ma.get(n, m), mb.get(n, m));
 			}
 		}

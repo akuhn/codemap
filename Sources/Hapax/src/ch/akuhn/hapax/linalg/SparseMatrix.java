@@ -51,12 +51,12 @@ public class SparseMatrix extends Matrix {
 
     public int addRow() {
         rows.add(new SparseVector(columns));
-        return rowSize() - 1;
+        return rowCount() - 1;
     }
 
     protected int addRow(double[] values) {
         rows.add(new SparseVector(values));
-        return rowSize() - 1;
+        return rowCount() - 1;
     }
 
     public void addToRow(int row, Vector values) {
@@ -66,7 +66,7 @@ public class SparseMatrix extends Matrix {
     }
 
     public double[][] asDenseDoubleDouble() {
-        double[][] dense = new double[rowSize()][columnSize()];
+        double[][] dense = new double[rowCount()][columnCount()];
         for (Each<Vector> row: withIndex(rows)) {
             for (Entry column: row.element.entries()) {
                 dense[row.index][column.index] = column.value;
@@ -82,7 +82,7 @@ public class SparseMatrix extends Matrix {
     }
 
     @Override
-    public int columnSize() {
+    public int columnCount() {
         return columns;
     }
 
@@ -112,7 +112,7 @@ public class SparseMatrix extends Matrix {
     }
 
     @Override
-    public int rowSize() {
+    public int rowCount() {
         return rows.size();
     }
 

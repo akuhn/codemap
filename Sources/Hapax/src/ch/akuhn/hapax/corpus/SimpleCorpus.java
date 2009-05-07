@@ -49,7 +49,7 @@ public class SimpleCorpus extends Corpus {
     }
 
     @Override
-    public int documentSize() {
+    public int documentCount() {
         return documents.size();
     }
 

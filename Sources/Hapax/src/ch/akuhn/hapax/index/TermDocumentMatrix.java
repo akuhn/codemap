@@ -115,19 +115,19 @@ public class TermDocumentMatrix extends Corpus {
     }
 
     @Override
-    public int documentSize() {
+    public int documentCount() {
         return documents.size();
     }
 
     private int indexTerm(String term) {
         int index = terms.add(term);
-        if (index == matrix.rowSize()) matrix.addRow();
+        if (index == matrix.rowCount()) matrix.addRow();
         return index;
     }
     
     private int indexDocument(Document doc) {
         int column = documents.add(doc);
-        if (column == matrix.columnSize()) matrix.addColumn();
+        if (column == matrix.columnCount()) matrix.addColumn();
         return column;
     }
 
@@ -188,11 +188,11 @@ public class TermDocumentMatrix extends Corpus {
     public void storeOn(Appendable app) {
         PrintOn out = new PrintOn(app);
         out.print("# Term-Document-Matrix").cr();
-        out.print(this.termSize()).cr();
+        out.print(this.termCount()).cr();
         for (String term: terms) {
             out.print(term).cr();
         }
-        out.print(this.documentSize()).cr();
+        out.print(this.documentCount()).cr();
         for (Document doc: documents) {
             out.print(doc.name().replace(' ', '_')).tab().print(doc.version().replace(' ', '_')).cr();
         }
@@ -212,7 +212,7 @@ public class TermDocumentMatrix extends Corpus {
             String term = scan.next();
             tdm.indexTerm(term);
         }
-        assert tdm.termSize() == termSize;
+        assert tdm.termCount() == termSize;
         
         int documentSize = scan.nextInt();
         for (int i = 0; i < documentSize; i++) {
@@ -220,7 +220,7 @@ public class TermDocumentMatrix extends Corpus {
             String version = scan.next();
             tdm.makeDocument(name, version);
         }
-        assert tdm.documentSize() == documentSize;
+        assert tdm.documentCount() == documentSize;
 
         tdm.matrix = SparseMatrix.readFrom(scan);
         
@@ -241,7 +241,7 @@ public class TermDocumentMatrix extends Corpus {
     }
     
     @Override
-    public int termSize() {
+    public int termCount() {
         return terms.size();
     }
 

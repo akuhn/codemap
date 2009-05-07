@@ -18,8 +18,8 @@ public class SymetricMatrix extends Matrix {
     }
 
     @Override
-    public int columnSize() {
-        return rowSize();
+    public int columnCount() {
+        return rowCount();
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SymetricMatrix extends Matrix {
     }
 
     @Override
-    public int rowSize() {
+    public int rowCount() {
         return values.length;
     }
 
