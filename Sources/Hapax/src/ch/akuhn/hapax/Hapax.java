@@ -1,6 +1,7 @@
 package ch.akuhn.hapax;
 
 import java.io.File;
+import java.io.IOException;
 
 import ch.akuhn.hapax.corpus.CamelCaseScanner;
 import ch.akuhn.hapax.corpus.Corpora;
@@ -17,6 +18,10 @@ import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.LocalWeighting;
 import ch.akuhn.hapax.index.Ranking;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
+import ch.akuhn.io.chunks.ChunkInput;
+import ch.akuhn.io.chunks.ChunkOutput;
+import ch.akuhn.io.chunks.ReadFromChunk;
+import ch.akuhn.io.chunks.WriteOnChunk;
 
 public class Hapax {
 
@@ -96,6 +101,7 @@ public class Hapax {
 	public Hapax makeCorpus(String source, String extensions) {
 		makeCorpus();
 		addFiles(source, extensions);
+		closeCorpus();
 		return this;
 	}
 
@@ -174,4 +180,21 @@ public class Hapax {
 		scanner = new WordScanner();
 		return this;	
 	}
+	
+	@WriteOnChunk("HPAX")
+	public void storeOn(ChunkOutput chunk) throws IOException {
+		chunk.write(0x20090507); // version
+		chunk.writeChunk(corpora);
+	}
+	
+	@ReadFromChunk("HPAX")
+	public Hapax(ChunkInput chunk) throws IOException {
+		assert chunk.readInt() == 0x20090507;
+		corpora = chunk.readChunk(Corpora.class);
+	}
+
+	public Corpora corpora() {
+		return corpora;
+	}
+	
 }

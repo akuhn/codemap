@@ -16,7 +16,9 @@ import ch.akuhn.hapax.linalg.SVD;
 import ch.akuhn.hapax.linalg.SparseMatrix;
 import ch.akuhn.hapax.linalg.Vector;
 import ch.akuhn.hapax.linalg.Vector.Entry;
+import ch.akuhn.io.chunks.ChunkInput;
 import ch.akuhn.io.chunks.ChunkOutput;
+import ch.akuhn.io.chunks.ReadFromChunk;
 import ch.akuhn.io.chunks.WriteOnChunk;
 import ch.akuhn.util.Each;
 import ch.akuhn.util.Files;
@@ -295,6 +297,21 @@ public class TermDocumentMatrix extends Corpus {
     	for (String each: terms) chunk.writeUTF(each);
     	for (Document each: documents) chunk.writeUTF(each.name());
     	chunk.writeChunk(matrix);
+    }
+    
+    @ReadFromChunk("TDM")
+    public TermDocumentMatrix(ChunkInput chunk) throws IOException {
+    	int termCount = chunk.readInt();
+    	int documentCount = chunk.readInt();
+    	terms = new Index<String>();
+    	for (int n = 0; n < termCount; n++) terms.add(chunk.readUTF());
+    	documents = new Index<Document>();
+    	for (int i = 0; i < documentCount; i++) documents.add(new Doc(chunk.readUTF(), null, this));
+    	matrix = chunk.readChunk(SparseMatrix.class);
+    }
+    
+    public SparseMatrix matrix() {
+    	return matrix;
     }
     
 }
