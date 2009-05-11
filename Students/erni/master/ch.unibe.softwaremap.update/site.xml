@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/ch.unibe.softwaremap_1.0.0.jar" id="ch.unibe.softwaremap" version="1.0.0"/>
+   <feature url="features/ch.unibe.softwaremap_1.0.0.jar" id="ch.unibe.softwaremap" version="1.0.0">
+      <category name="ch.unibe.softwaremap"/>
+   </feature>
+   <category-def name="ch.unibe.softwaremap" label="Software Map"/>
 </site>
