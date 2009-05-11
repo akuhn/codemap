@@ -2,6 +2,8 @@ package svdlib;
 
 import static svdlib.Svdlib.storeVals.*;
 
+import java.util.Random;
+
 public class Svdlib {
 
 	long[] svd_longArray(int size, boolean empty, String name) {
@@ -253,30 +255,24 @@ public class Svdlib {
 	 * Function finds the index of element having max. absolute value* based on
 	 * FORTRAN 77 routine from Linpack by J. Dongarra *
 	 *****************************************************************/
-	int svd_idamax(long n, double[] dx, long incx) {
-		throw null;
-		// long ix,i,imax;
-		// double dtemp, dmax;
-		//	  
-		// if (n < 1) return(-1);
-		// if (n == 1) return(0);
-		// if (incx == 0) return(-1);
-		//	  
-		// if (incx < 0) ix = (-n+1) * incx;
-		// else ix = 0;
-		// imax = ix;
-		// dx += ix;
-		// dmax = fabs(*dx);
-		// for (i=1; i < n; i++) {
-		// ix += incx;
-		// dx += incx;
-		// dtemp = fabs(*dx);
-		// if (dtemp > dmax) {
-		// dmax = dtemp;
-		// imax = ix;
-		// }
-		// }
-		// return(imax);
+	int svd_idamax(int n, double[] dx, int ix0, int incx) {
+		int ix,imax;
+		double dmax;
+		if (n < 1) return -1;
+		if (n == 1) return 0;
+		if (incx == 0) return -1;
+		ix = (incx < 0) ? ix0 + ((-n+1) * incx) : ix0;
+		imax = ix;
+		dmax = fabs(dx[ix]);
+		for (int i=1; i < n; i++) {
+			ix += incx;
+			double dtemp = fabs(dx[ix]);
+			if (dtemp > dmax) {
+				dmax = dtemp;
+				imax = ix;
+			}
+		}
+		return imax;
 	}
 
 	/* Row-major dense matrix. Rows are consecutive vectors. */
@@ -1217,7 +1213,6 @@ int lanso(SMat A, int iterations, int dimensions, double endl,
 		double endr, double[] ritz, double[] bnd, double[][] wptr, 
 		int[] neigp, int n) {
 	double[] alf, eta, oldeta, bet, wrk;
-	double rnm, tol;
 	int ll, neig, j = 0, intro = 0, last, i, l, id3, first;
 	boolean ENOUGH;
 	
@@ -1228,11 +1223,11 @@ int lanso(SMat A, int iterations, int dimensions, double endl,
 	wrk = wptr[5];
 
 	/* take the first step */
-	double[] ref_rnm = new double[] { rnm }; // XXX wrap
-	double[] ref_tol = new double[] { tol }; // XXX wrap
+	double[] ref_rnm = new double[] { 0d }; // XXX wrap
+	double[] ref_tol = new double[] { 0d }; // XXX wrap
 	stpone(A, wptr, ref_rnm, ref_tol, n);
-	tol = ref_tol[0]; // XXX unwrap
-	rnm = ref_rnm[0]; // XXX unwrap
+	double tol = ref_tol[0]; // XXX unwrap
+	double rnm = ref_rnm[0]; // XXX unwrap
 	
 	if (/* !rnm */ 0 == rnm || 0 != ierr) throw null;
 	eta[0] = eps1;
@@ -1273,7 +1268,7 @@ int lanso(SMat A, int iterations, int dimensions, double endl,
 			svd_dcopy(i-l+1, alf, l,   1, ritz, l,  -1); // WAS svd_dcopy(i-l+1, &alf[l],   1, &ritz[l],  -1); 
 			svd_dcopy(i-l,   bet, l+1, 1, wrk, l+1, -1); // WAS svd_dcopy(i-l,   &bet[l+1], 1, &wrk[l+1], -1);
 
-			imtqlb(i-l+1, &ritz[l], &wrk[l], &bnd[l]); // TODO start at l
+			imtqlb(i-l+1, ritz, wrk, bnd, l); // TODO start at l
 
 			if (0 != ierr) {
 				svd_error("svdLAS2: imtqlb failed to converge (ierr = %ld)\n", ierr);
@@ -1553,7 +1548,7 @@ void purge(int n, int ll, double[] r, double[] q, double[] ra,
 
 	if (step < ll+2) return; 
 
-	k = svd_idamax(step - (ll+1), &eta[ll], 1) + ll; // TODO eta starting at ll
+	k = svd_idamax(step - (ll+1), eta, ll, 1) + ll; // TODO eta starting at ll
 	if (Math.abs(eta[k]) > reps) {
 		reps1 = eps1 / reps;
 		iteration = 0;
@@ -1706,16 +1701,16 @@ MISC		random
 double startv(SMat A, double[][] wptr, int step, int n) {
 	double rnm2, t;
 	double[] r;
-	long irand;
+	//long irand;
 	int id, i;
 
 	/* get initial vector; default is random */
 	rnm2 = svd_ddot(n, wptr[0], 1, wptr[0], 1);
-	irand = 918273 + step;
+	Random random = new Random(); // irand = 918273 + step;
 	r = wptr[0];
 	for (id = 0; id < 3; id++) {
 		if (id > 0 || step > 0 || rnm2 == 0) 
-			for (i = 0; i < n; i++) r[i] = svd_random2(&irand); // TODO fix random2 anyway
+			for (i = 0; i < n; i++) r[i] = random.nextDouble(); // svd_random2(&irand);
 		svd_dcopy(n, wptr[0], 1, wptr[3], 1);
 
 		/* apply operator to put r in range (essential if m singular) */
@@ -1789,7 +1784,7 @@ int error_bound(boolean[] enough, double endl, double endr,
 	double gapl, gap;
 
 	/* massage error bounds for very close ritz values */
-	mid = svd_idamax(step + 1, bnd, 1);
+	mid = svd_idamax(step + 1, bnd, 0, 1);
 
 	for (i=((step+1) + (step-1)) / 2; i >= mid + 1; i -= 1)
 		if (fabs(ritz[i-1] - ritz[i]) < eps34 * fabs(ritz[i])) 
@@ -1867,6 +1862,19 @@ UTILITY	svd_fsign
 MISC		svd_pythag
 
 ***********************************************************************/
+
+void imtqlb(int n, double d[], double e[], double bnd[], int offset) {
+	double[] dn = new double[n];
+	System.arraycopy(d, offset, dn, 0, n);
+	double[] en = new double[n];
+	System.arraycopy(e, offset, en, 0, n);
+	double[] bndn = new double[n];
+	System.arraycopy(bnd, offset, bndn, 0, n);
+	imtqlb(n, dn, en, bndn);
+	System.arraycopy(dn, 0, d, offset, n);
+	System.arraycopy(en, 0, e, offset, n);
+	System.arraycopy(bndn, 0, bnd, offset, n);
+}
 
 void imtqlb(int n, double d[], double e[], double bnd[]) {
 	long iteration;
