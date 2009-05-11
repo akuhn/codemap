@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Iterator;
 
 import ch.akuhn.hapax.corpus.Document;
-import ch.akuhn.hapax.corpus.Importer;
+import ch.akuhn.hapax.corpus.CorpusBuilder;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.deif.meander.ui.MeanderApplet;
@@ -34,7 +34,7 @@ public class Meander {
 	public Meander addDocuments(String folder, String... extensions) {
 		if (tdm == null) tdm = new TermDocumentMatrix();
 		assert map == null : "Cannot call #addDocuments after #makeMap.";
-		Importer importer = new Importer(tdm);
+		CorpusBuilder importer = new CorpusBuilder(tdm);
 		importer.importAllFiles(new File(folder), extensions);
 		return this;
 	}
