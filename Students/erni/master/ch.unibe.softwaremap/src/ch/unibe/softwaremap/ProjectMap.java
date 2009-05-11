@@ -29,7 +29,7 @@ public class ProjectMap {
 
 	private final IProject project;
 	private TermDocumentMatrix tdm;
-	private MapVisualization<?> map;
+	private MapVisualization map;
 	private boolean mapBeingCalculated = false;
 	private boolean builderIsRunning = false;
 
@@ -91,7 +91,7 @@ public class ProjectMap {
 		new MapMakerBackgroundJob(ProjectMap.this).schedule();
 	}
 
-	public MapVisualization<?> getVisualization() {
+	public MapVisualization getVisualization() {
 		if (tdm == null) return null;
 		if (map != null) return map;
 		if (mapBeingCalculated) return null;
