@@ -1350,85 +1350,91 @@ UTILITY	svd_imin, svd_imax
 
 ***********************************************************************/
 
-long lanczos_step(SMat A, long first, long last, double *wptr[],
-double *alf, double *eta, double *oldeta,
-double *bet, long *ll, long *enough, double *rnmp, 
-double *tolp, long n) {
-double t, *mid, rnm = *rnmp, tol = *tolp, anorm;
-long i, j;
+long lanczos_step(SMat A, long first, long last, double[][] wptr,
+		double[] alf, double[] eta, double[] oldeta,
+		double[] bet, long[] ll, long[] enough, double[] rnmp, 
+		double[] tolp, long n) {
+	double t;
+	double[] mid;
+	double rnm = rnmp[0];
+	double tol = tolp[0];
+	double anorm;
+	long i, j;
 
-for (j=first; j<last; j++) {
-mid     = wptr[2];
-wptr[2] = wptr[1];
-wptr[1] = mid;
-mid     = wptr[3];
-wptr[3] = wptr[4];
-wptr[4] = mid;
+	for (j=first; j<last; j++) {
+		mid     = wptr[2];
+		wptr[2] = wptr[1];
+		wptr[1] = mid;
+		mid     = wptr[3];
+		wptr[3] = wptr[4];
+		wptr[4] = mid;
 
-store(n, STORQ, j-1, wptr[2]);
-if (j-1 < MAXLL) store(n, STORP, j-1, wptr[4]);
-bet[j] = rnm;
+		store(n, STORQ, j-1, wptr[2]);
+		if (j-1 < MAXLL) store(n, STORP, j-1, wptr[4]);
+		bet[j] = rnm;
 
-/* restart if invariant subspace is found */
-if (!bet[j]) {
-rnm = startv(A, wptr, j, n);
-if (ierr) return j;
-if (!rnm) *enough = TRUE;
-}
-if (*enough) {
-/* added by Doug... */
-/* These lines fix a bug that occurs with low-rank matrices */
-mid     = wptr[2];
-wptr[2] = wptr[1];
-wptr[1] = mid;
-/* ...added by Doug */
-break;
-}
+		/* restart if invariant subspace is found */
+		if (0 != bet[j]) {
+			rnm = startv(A, wptr, j, n);
+			if (ierr) return j;
+			if (0 != rnm) enough[0] = true;
+		}
+		if (enough[0]) {
+			/* added by Doug... */
+			/* These lines fix a bug that occurs with low-rank matrices */
+			mid     = wptr[2];
+			wptr[2] = wptr[1];
+			wptr[1] = mid;
+			/* ...added by Doug */
+			break;
+		}
 
-/* take a lanczos step */
-t = 1.0 / rnm;
-svd_datx(n, t, wptr[0], 1, wptr[1], 1);
-svd_dscal(n, t, wptr[3], 1);
-svd_opb(A, wptr[3], wptr[0], OPBTemp);
-svd_daxpy(n, -rnm, wptr[2], 1, wptr[0], 1);
-alf[j] = svd_ddot(n, wptr[0], 1, wptr[3], 1);
-svd_daxpy(n, -alf[j], wptr[1], 1, wptr[0], 1);
+		/* take a lanczos step */
+		t = 1.0 / rnm;
+		svd_datx(n, t, wptr[0], 1, wptr[1], 1);
+		svd_dscal(n, t, wptr[3], 1);
+		svd_opb(A, wptr[3], wptr[0], OPBTemp);
+		svd_daxpy(n, -rnm, wptr[2], 1, wptr[0], 1);
+		alf[j] = svd_ddot(n, wptr[0], 1, wptr[3], 1);
+		svd_daxpy(n, -alf[j], wptr[1], 1, wptr[0], 1);
 
-/* orthogonalize against initial lanczos vectors */
-if (j <= MAXLL && (fabs(alf[j-1]) > 4.0 * fabs(alf[j])))
-*ll = j;  
-for (i=0; i < svd_imin(*ll, j-1); i++) {
-store(n, RETRP, i, wptr[5]);
-t = svd_ddot(n, wptr[5], 1, wptr[0], 1);
-store(n, RETRQ, i, wptr[5]);
-svd_daxpy(n, -t, wptr[5], 1, wptr[0], 1);
-eta[i] = eps1;
-oldeta[i] = eps1;
-}
+		/* orthogonalize against initial lanczos vectors */
+		if (j <= MAXLL && (Math.abs(alf[j-1]) > 4.0 * Math.abs(alf[j])))
+			ll[0] = j;  
+		for (i=0; i < svd_imin(ll[0], j-1); i++) {
+			store(n, RETRP, i, wptr[5]);
+			t = svd_ddot(n, wptr[5], 1, wptr[0], 1);
+			store(n, RETRQ, i, wptr[5]);
+			svd_daxpy(n, -t, wptr[5], 1, wptr[0], 1);
+			eta[i] = eps1;
+			oldeta[i] = eps1;
+		}
 
-/* extended local reorthogonalization */
-t = svd_ddot(n, wptr[0], 1, wptr[4], 1);
-svd_daxpy(n, -t, wptr[2], 1, wptr[0], 1);
-if (bet[j] > 0.0) bet[j] = bet[j] + t;
-t = svd_ddot(n, wptr[0], 1, wptr[3], 1);
-svd_daxpy(n, -t, wptr[1], 1, wptr[0], 1);
-alf[j] = alf[j] + t;
-svd_dcopy(n, wptr[0], 1, wptr[4], 1);
-rnm = sqrt(svd_ddot(n, wptr[0], 1, wptr[4], 1));
-anorm = bet[j] + fabs(alf[j]) + rnm;
-tol = reps * anorm;
+		/* extended local reorthogonalization */
+		t = svd_ddot(n, wptr[0], 1, wptr[4], 1);
+		svd_daxpy(n, -t, wptr[2], 1, wptr[0], 1);
+		if (bet[j] > 0.0) bet[j] = bet[j] + t;
+		t = svd_ddot(n, wptr[0], 1, wptr[3], 1);
+		svd_daxpy(n, -t, wptr[1], 1, wptr[0], 1);
+		alf[j] = alf[j] + t;
+		svd_dcopy(n, wptr[0], 1, wptr[4], 1);
+		rnm = sqrt(svd_ddot(n, wptr[0], 1, wptr[4], 1));
+		anorm = bet[j] + Math.abs(alf[j]) + rnm;
+		tol = reps * anorm;
 
-/* update the orthogonality bounds */
-ortbnd(alf, eta, oldeta, bet, j, rnm);
+		/* update the orthogonality bounds */
+		ortbnd(alf, eta, oldeta, bet, j, rnm);
 
-/* restore the orthogonality state when needed */
-purge(n, *ll, wptr[0], wptr[1], wptr[4], wptr[3], wptr[5], eta, oldeta,
-j, &rnm, tol);
-if (rnm <= tol) rnm = 0.0;
-}
-*rnmp = rnm;
-*tolp = tol;
-return j;
+		/* restore the orthogonality state when needed */
+		double[] ref_rnm = new double[] { rnm }; // XXX wrap  
+		purge(n, ll[0], wptr[0], wptr[1], wptr[4], wptr[3], wptr[5], eta, oldeta,
+				j, ref_rnm, tol);
+		rnm = ref_rnm[0]; // XXX unwrap
+		if (rnm <= tol) rnm = 0.0;
+	}
+	rnmp[0] = rnm;
+	tolp[0] = tol;
+	return j;
 }
 
 /***********************************************************************
