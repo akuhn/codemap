@@ -1627,33 +1627,37 @@ LAS		startv
 
 ***********************************************************************/
 
-void stpone(SMat A, double *wrkptr[], double *rnmp, double *tolp, long n) {
-double t, *alf, rnm, anorm;
-alf = wrkptr[6];
+double fabs(double a) {
+	return Math.abs(a);
+}
 
-/* get initial vector; default is random */
-rnm = startv(A, wrkptr, 0, n);
-if (rnm == 0.0 || ierr != 0) return;
+void stpone(SMat A, double[][] wrkptr, double[] rnmp, double[] tolp, long n) {
+	double t, rnm, anorm;
+	double[] alf = wrkptr[6];
 
-/* normalize starting vector */
-t = 1.0 / rnm;
-svd_datx(n, t, wrkptr[0], 1, wrkptr[1], 1);
-svd_dscal(n, t, wrkptr[3], 1);
+	/* get initial vector; default is random */
+	rnm = startv(A, wrkptr, 0, n);
+	if (rnm == 0.0 || ierr != 0) return;
 
-/* take the first step */
-svd_opb(A, wrkptr[3], wrkptr[0], OPBTemp);
-alf[0] = svd_ddot(n, wrkptr[0], 1, wrkptr[3], 1);
-svd_daxpy(n, -alf[0], wrkptr[1], 1, wrkptr[0], 1);
-t = svd_ddot(n, wrkptr[0], 1, wrkptr[3], 1);
-svd_daxpy(n, -t, wrkptr[1], 1, wrkptr[0], 1);
-alf[0] += t;
-svd_dcopy(n, wrkptr[0], 1, wrkptr[4], 1);
-rnm = sqrt(svd_ddot(n, wrkptr[0], 1, wrkptr[4], 1));
-anorm = rnm + fabs(alf[0]);
-*rnmp = rnm;
-*tolp = reps * anorm;
+	/* normalize starting vector */
+	t = 1.0 / rnm;
+	svd_datx(n, t, wrkptr[0], 1, wrkptr[1], 1);
+	svd_dscal(n, t, wrkptr[3], 1);
 
-return;
+	/* take the first step */
+	svd_opb(A, wrkptr[3], wrkptr[0], OPBTemp);
+	alf[0] = svd_ddot(n, wrkptr[0], 1, wrkptr[3], 1);
+	svd_daxpy(n, -alf[0], wrkptr[1], 1, wrkptr[0], 1);
+	t = svd_ddot(n, wrkptr[0], 1, wrkptr[3], 1);
+	svd_daxpy(n, -t, wrkptr[1], 1, wrkptr[0], 1);
+	alf[0] += t;
+	svd_dcopy(n, wrkptr[0], 1, wrkptr[4], 1);
+	rnm = sqrt(svd_ddot(n, wrkptr[0], 1, wrkptr[4], 1));
+	anorm = rnm + fabs(alf[0]);
+	rnmp[0] = rnm;
+	tolp[0] = reps * anorm;
+
+	return;
 }
 
 /***********************************************************************
@@ -1693,48 +1697,49 @@ MISC		random
 
 ***********************************************************************/
 
-double startv(SMat A, double *wptr[], long step, long n) {
-double rnm2, *r, t;
-long irand;
-long id, i;
+double startv(SMat A, double[][] wptr, long step, long n) {
+	double rnm2, t;
+	double[] r;
+	long irand;
+	long id, i;
 
-/* get initial vector; default is random */
-rnm2 = svd_ddot(n, wptr[0], 1, wptr[0], 1);
-irand = 918273 + step;
-r = wptr[0];
-for (id = 0; id < 3; id++) {
-if (id > 0 || step > 0 || rnm2 == 0) 
-for (i = 0; i < n; i++) r[i] = svd_random2(&irand);
-svd_dcopy(n, wptr[0], 1, wptr[3], 1);
+	/* get initial vector; default is random */
+	rnm2 = svd_ddot(n, wptr[0], 1, wptr[0], 1);
+	irand = 918273 + step;
+	r = wptr[0];
+	for (id = 0; id < 3; id++) {
+		if (id > 0 || step > 0 || rnm2 == 0) 
+			for (i = 0; i < n; i++) r[i] = svd_random2(&irand); // TODO fix random2 anyway
+		svd_dcopy(n, wptr[0], 1, wptr[3], 1);
 
-/* apply operator to put r in range (essential if m singular) */
-svd_opb(A, wptr[3], wptr[0], OPBTemp);
-svd_dcopy(n, wptr[0], 1, wptr[3], 1);
-rnm2 = svd_ddot(n, wptr[0], 1, wptr[3], 1);
-if (rnm2 > 0.0) break;
-}
+		/* apply operator to put r in range (essential if m singular) */
+		svd_opb(A, wptr[3], wptr[0], OPBTemp);
+		svd_dcopy(n, wptr[0], 1, wptr[3], 1);
+		rnm2 = svd_ddot(n, wptr[0], 1, wptr[3], 1);
+		if (rnm2 > 0.0) break;
+	}
 
-/* fatal error */
-if (rnm2 <= 0.0) {
-ierr = 8192;
-return(-1);
-}
-if (step > 0) {
-for (i = 0; i < step; i++) {
-store(n, RETRQ, i, wptr[5]);
-t = -svd_ddot(n, wptr[3], 1, wptr[5], 1);
-svd_daxpy(n, t, wptr[5], 1, wptr[0], 1);
-}
+	/* fatal error */
+	if (rnm2 <= 0.0) {
+		ierr = 8192;
+		throw null; // TODO better error handling 
+	}
+	if (step > 0) {
+		for (i = 0; i < step; i++) {
+			store(n, RETRQ, i, wptr[5]);
+			t = -svd_ddot(n, wptr[3], 1, wptr[5], 1);
+			svd_daxpy(n, t, wptr[5], 1, wptr[0], 1);
+		}
 
-/* make sure q[step] is orthogonal to q[step-1] */
-t = svd_ddot(n, wptr[4], 1, wptr[0], 1);
-svd_daxpy(n, -t, wptr[2], 1, wptr[0], 1);
-svd_dcopy(n, wptr[0], 1, wptr[3], 1);
-t = svd_ddot(n, wptr[3], 1, wptr[0], 1);
-if (t <= eps * rnm2) t = 0.0;
-rnm2 = t;
-}
-return(sqrt(rnm2));
+		/* make sure q[step] is orthogonal to q[step-1] */
+		t = svd_ddot(n, wptr[4], 1, wptr[0], 1);
+		svd_daxpy(n, -t, wptr[2], 1, wptr[0], 1);
+		svd_dcopy(n, wptr[0], 1, wptr[3], 1);
+		t = svd_ddot(n, wptr[3], 1, wptr[0], 1);
+		if (t <= eps * rnm2) t = 0.0;
+		rnm2 = t;
+	}
+	return(sqrt(rnm2));
 }
 
 /***********************************************************************
@@ -1771,43 +1776,44 @@ UTILITY	svd_dmin
 
 ***********************************************************************/
 
-long error_bound(long *enough, double endl, double endr, 
-double *ritz, double *bnd, long step, double tol) {
-long mid, i, neig;
-double gapl, gap;
+long error_bound(boolean[] enough, double endl, double endr, 
+		double[] ritz, double[] bnd, int step, double tol) {
+	long mid, neig;
+	int i;
+	double gapl, gap;
 
-/* massage error bounds for very close ritz values */
-mid = svd_idamax(step + 1, bnd, 1);
+	/* massage error bounds for very close ritz values */
+	mid = svd_idamax(step + 1, bnd, 1);
 
-for (i=((step+1) + (step-1)) / 2; i >= mid + 1; i -= 1)
-if (fabs(ritz[i-1] - ritz[i]) < eps34 * fabs(ritz[i])) 
-if (bnd[i] > tol && bnd[i-1] > tol) {
-bnd[i-1] = sqrt(bnd[i] * bnd[i] + bnd[i-1] * bnd[i-1]);
-bnd[i] = 0.0;
-}
+	for (i=((step+1) + (step-1)) / 2; i >= mid + 1; i -= 1)
+		if (fabs(ritz[i-1] - ritz[i]) < eps34 * fabs(ritz[i])) 
+			if (bnd[i] > tol && bnd[i-1] > tol) {
+				bnd[i-1] = Math.sqrt(bnd[i] * bnd[i] + bnd[i-1] * bnd[i-1]);
+				bnd[i] = 0.0;
+			}
 
 
-for (i=((step+1) - (step-1)) / 2; i <= mid - 1; i +=1 ) 
-if (fabs(ritz[i+1] - ritz[i]) < eps34 * fabs(ritz[i])) 
-if (bnd[i] > tol && bnd[i+1] > tol) {
-bnd[i+1] = sqrt(bnd[i] * bnd[i] + bnd[i+1] * bnd[i+1]);
-bnd[i] = 0.0;
-}
+	for (i=((step+1) - (step-1)) / 2; i <= mid - 1; i +=1 ) 
+		if (fabs(ritz[i+1] - ritz[i]) < eps34 * fabs(ritz[i])) 
+			if (bnd[i] > tol && bnd[i+1] > tol) {
+				bnd[i+1] = Math.sqrt(bnd[i] * bnd[i] + bnd[i+1] * bnd[i+1]);
+				bnd[i] = 0.0;
+			}
 
-/* refine the error bounds */
-neig = 0;
-gapl = ritz[step] - ritz[0];
-for (i = 0; i <= step; i++) {
-gap = gapl;
-if (i < step) gapl = ritz[i+1] - ritz[i];
-gap = svd_dmin(gap, gapl);
-if (gap > bnd[i]) bnd[i] = bnd[i] * (bnd[i] / gap);
-if (bnd[i] <= 16.0 * eps * fabs(ritz[i])) {
-neig++;
-if (!*enough) *enough = endl < ritz[i] && ritz[i] < endr;
-}
-}   
-return neig;
+	/* refine the error bounds */
+	neig = 0;
+	gapl = ritz[step] - ritz[0];
+	for (i = 0; i <= step; i++) {
+		gap = gapl;
+		if (i < step) gapl = ritz[i+1] - ritz[i];
+		gap = svd_dmin(gap, gapl);
+		if (gap > bnd[i]) bnd[i] = bnd[i] * (bnd[i] / gap);
+		if (bnd[i] <= 16.0 * eps * fabs(ritz[i])) {
+			neig++;
+			if (!enough[0]) enough[0] = endl < ritz[i] && ritz[i] < endr;
+		}
+	}   
+	return neig;
 }
 
 /***********************************************************************
@@ -1856,108 +1862,107 @@ MISC		svd_pythag
 
 ***********************************************************************/
 
-void imtqlb(long n, double d[], double e[], double bnd[])
+void imtqlb(int n, double d[], double e[], double bnd[]) {
+	long iteration;
+	int last, i, m, l;
+	
+	/* various flags */
+	boolean exchange, convergence, underflow;
+	
+	double b, test, g, r, s, c, p, f;
 
-{
-long last, l, m, i, iteration;
+	if (n == 1) return;
+	ierr = 0;
+	bnd[0] = 1.0;
+	last = n - 1;
+	for (i = 1; i < n; i++) {
+		bnd[i] = 0.0;
+		e[i-1] = e[i];
+	}
+	e[last] = 0.0;
+	for (l = 0; l < n; l++) {
+		iteration = 0;
+		while (iteration <= 30) {
+			for (m = l; m < n; m++) {
+				convergence = false;
+				if (m == last) break;
+				else {
+					test = fabs(d[m]) + fabs(d[m+1]);
+					if (test + fabs(e[m]) == test) convergence = true;
+				}
+				if (convergence) break;
+			}
+			p = d[l]; 
+			f = bnd[l]; 
+			if (m != l) {
+				if (iteration == 30) {
+					ierr = l;
+					return;
+				}
+				iteration += 1;
+				/*........ form shift ........*/
+				g = (d[l+1] - p) / (2.0 * e[l]);
+				r = svd_pythag(g, 1.0);
+				g = d[m] - p + e[l] / (g + svd_fsign(r, g));
+				s = 1.0;
+				c = 1.0;
+				p = 0.0;
+				underflow = false;
+				i = m - 1;
+				while (underflow == false && i >= l) {
+					f = s * e[i];
+					b = c * e[i];
+					r = svd_pythag(f, g);
+					e[i+1] = r;
+					if (r == 0.0) underflow = true;
+					else {
+						s = f / r;
+						c = g / r;
+						g = d[i+1] - p;
+						r = (d[i] - g) * s + 2.0 * c * b;
+						p = s * r;
+						d[i+1] = g + p;
+						g = c * r - b;
+						f = bnd[i+1];
+						bnd[i+1] = s * bnd[i] + c * f;
+						bnd[i] = c * bnd[i] - s * f;
+						i--;
+					}
+				}       /* end while (underflow != FALSE && i >= l) */
+				/*........ recover from underflow .........*/
+				if (underflow) {
+					d[i+1] -= p;
+					e[m] = 0.0;
+				}
+				else {
+					d[l] -= p;
+					e[l] = g;
+					e[m] = 0.0;
+				}
+			} 		       		   /* end if (m != l) */
+			else {
 
-/* various flags */
-long exchange, convergence, underflow;	
-
-double b, test, g, r, s, c, p, f;
-
-if (n == 1) return;
-ierr = 0;
-bnd[0] = 1.0;
-last = n - 1;
-for (i = 1; i < n; i++) {
-bnd[i] = 0.0;
-e[i-1] = e[i];
-}
-e[last] = 0.0;
-for (l = 0; l < n; l++) {
-iteration = 0;
-while (iteration <= 30) {
-for (m = l; m < n; m++) {
-convergence = FALSE;
-if (m == last) break;
-else {
-test = fabs(d[m]) + fabs(d[m+1]);
-if (test + fabs(e[m]) == test) convergence = TRUE;
-}
-if (convergence) break;
-}
-p = d[l]; 
-f = bnd[l]; 
-if (m != l) {
-if (iteration == 30) {
-ierr = l;
-return;
-}
-iteration += 1;
-/*........ form shift ........*/
-g = (d[l+1] - p) / (2.0 * e[l]);
-r = svd_pythag(g, 1.0);
-g = d[m] - p + e[l] / (g + svd_fsign(r, g));
-s = 1.0;
-c = 1.0;
-p = 0.0;
-underflow = FALSE;
-i = m - 1;
-while (underflow == FALSE && i >= l) {
-f = s * e[i];
-b = c * e[i];
-r = svd_pythag(f, g);
-e[i+1] = r;
-if (r == 0.0) underflow = TRUE;
-else {
-s = f / r;
-c = g / r;
-g = d[i+1] - p;
-r = (d[i] - g) * s + 2.0 * c * b;
-p = s * r;
-d[i+1] = g + p;
-g = c * r - b;
-f = bnd[i+1];
-bnd[i+1] = s * bnd[i] + c * f;
-bnd[i] = c * bnd[i] - s * f;
-i--;
-}
-}       /* end while (underflow != FALSE && i >= l) */
-/*........ recover from underflow .........*/
-if (underflow) {
-d[i+1] -= p;
-e[m] = 0.0;
-}
-else {
-d[l] -= p;
-e[l] = g;
-e[m] = 0.0;
-}
-} 		       		   /* end if (m != l) */
-else {
-
-/* order the eigenvalues */
-exchange = TRUE;
-if (l != 0) {
-i = l;
-while (i >= 1 && exchange == TRUE) {
-if (p < d[i-1]) {
-d[i] = d[i-1];
-bnd[i] = bnd[i-1];
-i--;
-}
-else exchange = FALSE;
-}
-}
-if (exchange) i = 0;
-d[i] = p;
-bnd[i] = f; 
-iteration = 31;
-}
-}			       /* end while (iteration <= 30) */
-}				   /* end for (l=0; l<n; l++) */
-return;
+				/* order the eigenvalues */
+				exchange = true;
+				if (l != 0) {
+					i = l;
+					while (i >= 1 && exchange == true) {
+						if (p < d[i-1]) {
+							d[i] = d[i-1];
+							bnd[i] = bnd[i-1];
+							i--;
+						}
+						else exchange = false;
+					}
+				}
+				if (exchange) i = 0;
+				d[i] = p;
+				bnd[i] = f; 
+				iteration = 31;
+			}
+		}			       /* end while (iteration <= 30) */
+	}				   /* end for (l=0; l<n; l++) */
+	return;
 }						  /* end main */
 
 /***********************************************************************
