@@ -278,8 +278,39 @@ public class Svdlib {
 		// return(imax);
 	}
 
+	/* Row-major dense matrix. Rows are consecutive vectors. */
+	class DMat {
+		long rows;
+		long cols;
+		double[][] value; /*
+						 * Accessed by [row][col]. Free value[0] and value to
+						 * free.
+						 */
+	}
+
+	/* Harwell-Boeing sparse matrix. */
 	class SMat {
 
+		long rows;
+		long cols;
+		long vals; /* Total non-zero entries. */
+		long[] pointr; /* For each col (plus 1), index of first non-zero entry. */
+		long[] rowind; /* For each nz entry, the row index. */
+		double[] value; /* For each nz entry, the value. */
+
+	}
+
+	class SVDRec {
+		int d; /* Dimensionality (rank) */
+		DMat Ut; /*
+				 * Transpose of left singular vectors. (d by m) The vectors are
+				 * the rows of Ut.
+				 */
+		double[] S; /* Array of singular values. (length d) */
+		DMat Vt; /*
+				 * Transpose of right singular vectors. (d by n) The vectors are
+				 * the rows of Vt.
+				 */
 	}
 
 	/**************************************************************
