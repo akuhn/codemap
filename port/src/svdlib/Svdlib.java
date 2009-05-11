@@ -2017,114 +2017,114 @@ MISC		svd_pythag
 
 ***********************************************************************/
 
-void imtql2(long nm, long n, double d[], double e[], double z[])
+void imtql2(int nm, int n, double d[], double e[], double z[]) {
+	int index, nnm, j, last, l, m, i, k, iteration;
+	boolean convergence, underflow;
+	
+	double b, test, g, r, s, c, p, f;
+	if (n == 1) return;
+	ierr = 0;
+	last = n - 1;
+	for (i = 1; i < n; i++) e[i-1] = e[i];
+	e[last] = 0.0;
+	nnm = n * nm;
+	for (l = 0; l < n; l++) {
+		iteration = 0;
 
-{
-long index, nnm, j, last, l, m, i, k, iteration, convergence, underflow;
-double b, test, g, r, s, c, p, f;
-if (n == 1) return;
-ierr = 0;
-last = n - 1;
-for (i = 1; i < n; i++) e[i-1] = e[i];
-e[last] = 0.0;
-nnm = n * nm;
-for (l = 0; l < n; l++) {
-iteration = 0;
+		/* look for small sub-diagonal element */
+		while (iteration <= 30) {
+			for (m = l; m < n; m++) {
+				convergence = false;
+				if (m == last) break;
+				else {
+					test = fabs(d[m]) + fabs(d[m+1]);
+					if (test + fabs(e[m]) == test) convergence = true;
+				}
+				if (convergence) break;
+			}
+			if (m != l) {
 
-/* look for small sub-diagonal element */
-while (iteration <= 30) {
-for (m = l; m < n; m++) {
-convergence = FALSE;
-if (m == last) break;
-else {
-test = fabs(d[m]) + fabs(d[m+1]);
-if (test + fabs(e[m]) == test) convergence = TRUE;
-}
-if (convergence) break;
-}
-if (m != l) {
+				/* set error -- no convergence to an eigenvalue after
+				 * 30 iterations. */     
+				if (iteration == 30) {
+					ierr = l;
+					return;
+				}
+				p = d[l]; 
+				iteration += 1;
 
-/* set error -- no convergence to an eigenvalue after
-* 30 iterations. */     
-if (iteration == 30) {
-ierr = l;
-return;
-}
-p = d[l]; 
-iteration += 1;
+				/* form shift */
+				g = (d[l+1] - p) / (2.0 * e[l]);
+				r = svd_pythag(g, 1.0);
+				g = d[m] - p + e[l] / (g + svd_fsign(r, g));
+				s = 1.0;
+				c = 1.0;
+				p = 0.0;
+				underflow = false;
+				i = m - 1;
+				while (underflow == false && i >= l) {
+					f = s * e[i];
+					b = c * e[i];
+					r = svd_pythag(f, g);
+					e[i+1] = r;
+					if (r == 0.0) underflow = true;
+					else {
+						s = f / r;
+						c = g / r;
+						g = d[i+1] - p;
+						r = (d[i] - g) * s + 2.0 * c * b;
+						p = s * r;
+						d[i+1] = g + p;
+						g = c * r - b;
 
-/* form shift */
-g = (d[l+1] - p) / (2.0 * e[l]);
-r = svd_pythag(g, 1.0);
-g = d[m] - p + e[l] / (g + svd_fsign(r, g));
-s = 1.0;
-c = 1.0;
-p = 0.0;
-underflow = FALSE;
-i = m - 1;
-while (underflow == FALSE && i >= l) {
-f = s * e[i];
-b = c * e[i];
-r = svd_pythag(f, g);
-e[i+1] = r;
-if (r == 0.0) underflow = TRUE;
-else {
-s = f / r;
-c = g / r;
-g = d[i+1] - p;
-r = (d[i] - g) * s + 2.0 * c * b;
-p = s * r;
-d[i+1] = g + p;
-g = c * r - b;
+						/* form vector */
+						for (k = 0; k < nnm; k += n) {
+							index = k + i;
+							f = z[index+1];
+							z[index+1] = s * z[index] + c * f;
+							z[index] = c * z[index] - s * f;
+						} 
+						i--;
+					}
+				}   /* end while (underflow != FALSE && i >= l) */
+				/*........ recover from underflow .........*/
+				if (underflow) {
+					d[i+1] -= p;
+					e[m] = 0.0;
+				}
+				else {
+					d[l] -= p;
+					e[l] = g;
+					e[m] = 0.0;
+				}
+			}
+			else break;
+		}		/*...... end while (iteration <= 30) .........*/
+	}		/*...... end for (l=0; l<n; l++) .............*/
 
-/* form vector */
-for (k = 0; k < nnm; k += n) {
-index = k + i;
-f = z[index+1];
-z[index+1] = s * z[index] + c * f;
-z[index] = c * z[index] - s * f;
-} 
-i--;
-}
-}   /* end while (underflow != FALSE && i >= l) */
-/*........ recover from underflow .........*/
-if (underflow) {
-d[i+1] -= p;
-e[m] = 0.0;
-}
-else {
-d[l] -= p;
-e[l] = g;
-e[m] = 0.0;
-}
-}
-else break;
-}		/*...... end while (iteration <= 30) .........*/
-}		/*...... end for (l=0; l<n; l++) .............*/
-
-/* order the eigenvalues */
-for (l = 1; l < n; l++) {
-i = l - 1;
-k = i;
-p = d[i];
-for (j = l; j < n; j++) {
-if (d[j] < p) {
-k = j;
-p = d[j];
-}
-}
-/* ...and corresponding eigenvectors */
-if (k != i) {
-d[k] = d[i];
-d[i] = p;
-for (j = 0; j < nnm; j += n) {
-p = z[j+i];
-z[j+i] = z[j+k];
-z[j+k] = p;
-}
-}   
-}
-return;
+	/* order the eigenvalues */
+	for (l = 1; l < n; l++) {
+		i = l - 1;
+		k = i;
+		p = d[i];
+		for (j = l; j < n; j++) {
+			if (d[j] < p) {
+				k = j;
+				p = d[j];
+			}
+		}
+		/* ...and corresponding eigenvectors */
+		if (k != i) {
+			d[k] = d[i];
+			d[i] = p;
+			for (j = 0; j < nnm; j += n) {
+				p = z[j+i];
+				z[j+i] = z[j+k];
+				z[j+k] = p;
+			}
+		}   
+	}
+	return;
 }		/*...... end main ............................*/
 
 /***********************************************************************
