@@ -1208,89 +1208,107 @@ UTILITY	svd_imin, svd_imax
 ***********************************************************************/
 
 int lanso(SMat A, long iterations, long dimensions, double endl,
-double endr, double *ritz, double *bnd, double *wptr[], 
-long *neigp, long n) {
-double *alf, *eta, *oldeta, *bet, *wrk, rnm, tol;
-long ll, first, last, ENOUGH, id2, id3, i, l, neig, j = 0, intro = 0;
+		double endr, double[] ritz, double[] bnd, double[][] wptr, 
+		long[] neigp, long n) {
+	double[] alf, eta, oldeta, bet, wrk;
+	double rnm, tol;
+	long ll, first, last, id2, id3, i, l, neig, j = 0, intro = 0;
+	boolean ENOUGH;
+	
+	alf = wptr[6];
+	eta = wptr[7];
+	oldeta = wptr[8];
+	bet = wptr[9];
+	wrk = wptr[5];
 
-alf = wptr[6];
-eta = wptr[7];
-oldeta = wptr[8];
-bet = wptr[9];
-wrk = wptr[5];
+	/* take the first step */
+	double[] ref_rnm = new double[] { rnm }; // XXX wrap
+	double[] ref_tol = new double[] { tol }; // XXX wrap
+	stpone(A, wptr, ref_rnm, ref_tol, n);
+	tol = ref_tol[0]; // XXX unwrap
+	rnm = ref_rnm[0]; // XXX unwrap
+	
+	if (0 != rnm || ierr) throw null;
+	eta[0] = eps1;
+	oldeta[0] = eps1;
+	ll = 0;
+	first = 1;
+	last = svd_imin(dimensions + svd_imax(8, dimensions), iterations);
+	ENOUGH = false;
+	/*id1 = 0;*/
+	while (/*id1 < dimensions && */!ENOUGH) {
+		if (rnm <= tol) rnm = 0.0;
 
-/* take the first step */
-stpone(A, wptr, &rnm, &tol, n);
-if (!rnm || ierr) return 0;
-eta[0] = eps1;
-oldeta[0] = eps1;
-ll = 0;
-first = 1;
-last = svd_imin(dimensions + svd_imax(8, dimensions), iterations);
-ENOUGH = FALSE;
-/*id1 = 0;*/
-while (/*id1 < dimensions && */!ENOUGH) {
-if (rnm <= tol) rnm = 0.0;
+		/* the actual lanczos loop */
+		double[] ref_ll = new double[] { ll }; // XXX wrap
+		boolean[] ref_ENOUGH = new boolean[] { ENOUGH }; // XXX wrap
+		double[] ref_rnm = new double[] { rnm }; // XXX wrap
+		double[] ref_tol = new double[] { tol }; // XXX wrap
+		j = lanczos_step(A, first, last, wptr, alf, eta, oldeta, bet, ref_ll,
+				ref_ENOUGH, ref_rnm, ref_tol, n);
+		ll = ref_ll[0]; // XXX unwrap
+		ENOUGH = ref_ENOUGH[0]; // XXX unwrap
+		tol = ref_tol[0]; // XXX unwrap
+		rnm = ref_rnm[0]; // XXX unwrap
+		
+		if (ENOUGH) j = j - 1;
+		else j = last - 1;
+		first = j + 1;
+		bet[j+1] = rnm;
 
-/* the actual lanczos loop */
-j = lanczos_step(A, first, last, wptr, alf, eta, oldeta, bet, &ll,
-&ENOUGH, &rnm, &tol, n);
-if (ENOUGH) j = j - 1;
-else j = last - 1;
-first = j + 1;
-bet[j+1] = rnm;
+		/* analyze T */
+		l = 0;
+		for (id2 = 0; id2 < j; id2++) {
+			if (l > j) break;
+			for (i = l; i <= j; i++) if (!bet[i+1]) break;
+			if (i > j) i = j;
 
-/* analyze T */
-l = 0;
-for (id2 = 0; id2 < j; id2++) {
-if (l > j) break;
-for (i = l; i <= j; i++) if (!bet[i+1]) break;
-if (i > j) i = j;
+			/* now i is at the end of an unreduced submatrix */
+			svd_dcopy(i-l+1, &alf[l],   1, &ritz[l],  -1); // TODO start copy at l
+			svd_dcopy(i-l,   &bet[l+1], 1, &wrk[l+1], -1); // TODO start copy at (l+1)
 
-/* now i is at the end of an unreduced submatrix */
-svd_dcopy(i-l+1, &alf[l],   1, &ritz[l],  -1);
-svd_dcopy(i-l,   &bet[l+1], 1, &wrk[l+1], -1);
+			imtqlb(i-l+1, &ritz[l], &wrk[l], &bnd[l]); // TODO start at l
 
-imtqlb(i-l+1, &ritz[l], &wrk[l], &bnd[l]);
+			if (ierr) {
+				svd_error("svdLAS2: imtqlb failed to converge (ierr = %ld)\n", ierr);
+				svd_error("  l = %ld  i = %ld\n", l, i);
+				for (id3 = l; id3 <= i; id3++) 
+					svd_error("  %ld  %lg  %lg  %lg\n", 
+							id3, ritz[id3], wrk[id3], bnd[id3]);
+			}
+			for (id3 = l; id3 <= i; id3++) 
+				bnd[id3] = rnm * fabs(bnd[id3]);
+			l = i + 1;
+		}
 
-if (ierr) {
-svd_error("svdLAS2: imtqlb failed to converge (ierr = %ld)\n", ierr);
-svd_error("  l = %ld  i = %ld\n", l, i);
-for (id3 = l; id3 <= i; id3++) 
-svd_error("  %ld  %lg  %lg  %lg\n", 
-id3, ritz[id3], wrk[id3], bnd[id3]);
-}
-for (id3 = l; id3 <= i; id3++) 
-bnd[id3] = rnm * fabs(bnd[id3]);
-l = i + 1;
-}
+		/* sort eigenvalues into increasing order */
+		svd_dsort2((j+1) / 2, j + 1, ritz, bnd);
 
-/* sort eigenvalues into increasing order */
-svd_dsort2((j+1) / 2, j + 1, ritz, bnd);
-
-/*    for (i = 0; i < iterations; i++)
+		/*    for (i = 0; i < iterations; i++)
 printf("%f ", ritz[i]);
 printf("\n"); */
 
-/* massage error bounds for very close ritz values */
-neig = error_bound(&ENOUGH, endl, endr, ritz, bnd, j, tol);
-*neigp = neig;
+		/* massage error bounds for very close ritz values */
+		boolean[] ref_ENOUGH = new boolean[] { ENOUGH }; // XXX wrap
+		neig = error_bound(ref_ENOUGH, endl, endr, ritz, bnd, j, tol);
+		ENOUGH = ref_ENOUGH[0]; // XXX unwrap
+		neigp[0] = neig;
 
-/* should we stop? */
-if (neig < dimensions) {
-if (!neig) {
-last = first + 9;
-intro = first;
-} else last = first + svd_imax(3, 1 + ((j - intro) * (dimensions-neig)) /
-              neig);
-last = svd_imin(last, iterations);
-} else ENOUGH = TRUE;
-ENOUGH = ENOUGH || first >= iterations;
-/* id1++; */
-/* printf("id1=%d dimen=%d first=%d\n", id1, dimensions, first); */
-}
-store(n, STORQ, j, wptr[1]);
-return j;
+		/* should we stop? */
+		if (neig < dimensions) {
+			if (!neig) {
+				last = first + 9;
+				intro = first;
+			} else last = first + svd_imax(3, 1 + ((j - intro) * (dimensions-neig)) /
+					neig);
+			last = svd_imin(last, iterations);
+		} else ENOUGH = TRUE;
+		ENOUGH = ENOUGH || first >= iterations;
+		/* id1++; */
+		/* printf("id1=%d dimen=%d first=%d\n", id1, dimensions, first); */
+	}
+	store(n, STORQ, j, wptr[1]);
+	return j;
 }
 
 
