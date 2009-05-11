@@ -2175,74 +2175,76 @@ negeps is bounded below by  -(it+3)
 
 ***********************************************************************/
 
-void machar(long *ibeta, long *it, long *irnd, long *machep, long *negep) {
+// TODO check type of array
+long[] machar(/*long[] ibeta, long[] it, long[] irnd, long[] machep, long[] negep*/) {
 
-volatile double beta, betain, betah, a, b, ZERO, ONE, TWO, temp, tempa,
-temp1;
-long i, itemp;
+	long ibeta, it, irnd, machep, negep;
+	double beta, betain, betah, a, b, ZERO, ONE, TWO, temp, tempa,
+	temp1;
+	long i, itemp;
 
-ONE = (double) 1;
-TWO = ONE + ONE;
-ZERO = ONE - ONE;
+	ONE = (double) 1;
+	TWO = ONE + ONE;
+	ZERO = ONE - ONE;
 
-a = ONE;
-temp1 = ONE;
-while (temp1 - ONE == ZERO) {
-a = a + a;
-temp = a + ONE;
-temp1 = temp - a;
-b += a; /* to prevent icc compiler error */
-}
-b = ONE;
-itemp = 0;
-while (itemp == 0) {
-b = b + b;
-temp = a + b;
-itemp = (long)(temp - a);
-}
-*ibeta = itemp;
-beta = (double) *ibeta;
+	a = ONE;
+	temp1 = ONE;
+	while (temp1 - ONE == ZERO) {
+		a = a + a;
+		temp = a + ONE;
+		temp1 = temp - a;
+		b += a; /* to prevent icc compiler error */
+	}
+	b = ONE;
+	itemp = 0;
+	while (itemp == 0) {
+		b = b + b;
+		temp = a + b;
+		itemp = (long)(temp - a);
+	}
+	ibeta = itemp;
+	beta = (double) ibeta;
 
-*it = 0;
-b = ONE;
-temp1 = ONE;
-while (temp1 - ONE == ZERO) {
-*it = *it + 1;
-b = b * beta;
-temp = b + ONE;
-temp1 = temp - b;
-}
-*irnd = 0; 
-betah = beta / TWO; 
-temp = a + betah;
-if (temp - a != ZERO) *irnd = 1;
-tempa = a + beta;
-temp = tempa + betah;
-if ((*irnd == 0) && (temp - tempa != ZERO)) *irnd = 2;
+	it = 0;
+	b = ONE;
+	temp1 = ONE;
+	while (temp1 - ONE == ZERO) {
+		it = it + 1;
+		b = b * beta;
+		temp = b + ONE;
+		temp1 = temp - b;
+	}
+	irnd = 0; 
+	betah = beta / TWO; 
+	temp = a + betah;
+	if (temp - a != ZERO) irnd = 1;
+	tempa = a + beta;
+	temp = tempa + betah;
+	if ((irnd == 0) && (temp - tempa != ZERO)) irnd = 2;
 
-*negep = *it + 3;
-betain = ONE / beta;
-a = ONE;
-for (i = 0; i < *negep; i++) a = a * betain;
-b = a;
-temp = ONE - a;
-while (temp-ONE == ZERO) {
-a = a * beta;
-*negep = *negep - 1;
-temp = ONE - a;
-}
-*negep = -(*negep);
+	negep = it + 3;
+	betain = ONE / beta;
+	a = ONE;
+	for (i = 0; i < negep; i++) a = a * betain;
+	b = a;
+	temp = ONE - a;
+	while (temp-ONE == ZERO) {
+		a = a * beta;
+		negep = negep - 1;
+		temp = ONE - a;
+	}
+	negep = -(negep);
 
-*machep = -(*it) - 3;
-a = b;
-temp = ONE + a;
-while (temp - ONE == ZERO) {
-a = a * beta;
-*machep = *machep + 1;
-temp = ONE + a;
-}
-eps = a;
-return;
+	machep = -(it) - 3;
+	a = b;
+	temp = ONE + a;
+	while (temp - ONE == ZERO) {
+		a = a * beta;
+		machep = machep + 1;
+		temp = ONE + a;
+	}
+	eps = a;
+	return new long[] { ibeta, it, irnd, machep, negep };
 }
 
 /***********************************************************************
@@ -2281,45 +2283,40 @@ BLAS		svd_dcopy
 
 ***********************************************************************/
 
-void store(long n, long isw, long j, double *s) {
-/* printf("called store %ld %ld\n", isw, j); */
-switch(isw) {
-case STORQ:
-if (!LanStore[j + MAXLL]) {
-if (!(LanStore[j + MAXLL] = svd_doubleArray(n, FALSE, "LanStore[j]")))
-svd_fatalError("svdLAS2: failed to allocate LanStore[%d]", j + MAXLL);
-}
-svd_dcopy(n, s, 1, LanStore[j + MAXLL], 1);
-break;
-case RETRQ:	
-if (!LanStore[j + MAXLL])
-svd_fatalError("svdLAS2: store (RETRQ) called on index %d (not allocated)", 
-j + MAXLL);
-svd_dcopy(n, LanStore[j + MAXLL], 1, s, 1);
-break;
-case STORP:	
-if (j >= MAXLL) {
-svd_error("svdLAS2: store (STORP) called with j >= MAXLL");
-break;
-}
-if (!LanStore[j]) {
-if (!(LanStore[j] = svd_doubleArray(n, FALSE, "LanStore[j]")))
-svd_fatalError("svdLAS2: failed to allocate LanStore[%d]", j);
-}
-svd_dcopy(n, s, 1, LanStore[j], 1);
-break;
-case RETRP:	
-if (j >= MAXLL) {
-svd_error("svdLAS2: store (RETRP) called with j >= MAXLL");
-break;
-}
-if (!LanStore[j])
-svd_fatalError("svdLAS2: store (RETRP) called on index %d (not allocated)", 
-j);
-svd_dcopy(n, LanStore[j], 1, s, 1);
-break;
-}
-return;
+void store(int n, storeVals isw, int j, double[] s) {
+	/* printf("called store %ld %ld\n", isw, j); */
+	switch(isw) {
+	case STORQ:
+		if (null == LanStore[j + MAXLL]) {
+			LanStore[j + MAXLL] = svd_doubleArray(n, false, "LanStore[j]");
+		}
+		svd_dcopy(n, s, 1, LanStore[j + MAXLL], 1);
+		break;
+	case RETRQ:	
+		if (null == LanStore[j + MAXLL]) throw new Error(String.format(
+				"svdLAS2: store (RETRQ) called on index %d (not allocated)", j + MAXLL));
+		svd_dcopy(n, LanStore[j + MAXLL], 1, s, 1);
+		break;
+	case STORP:	
+		if (j >= MAXLL) {
+			throw new Error("svdLAS2: store (STORP) called with j >= MAXLL");
+		}
+		if (null == LanStore[j]) {
+			LanStore[j] = svd_doubleArray(n, false, "LanStore[j]");
+		}
+		svd_dcopy(n, s, 1, LanStore[j], 1);
+		break;
+	case RETRP:	
+		if (j >= MAXLL) {
+			svd_error("svdLAS2: store (RETRP) called with j >= MAXLL");
+			break;
+		}
+		if (null == LanStore[j]) throw new Error(String.format(
+				"svdLAS2: store (RETRP) called on index %d (not allocated)", j));
+		svd_dcopy(n, LanStore[j], 1, s, 1);
+		break;
+	}
+	return;
 }
 	
 
