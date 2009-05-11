@@ -7,6 +7,6 @@
 	<classpathentry kind="lib" path="lib/snowball.jar"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/ch.akuhn.util"/>
 	<classpathentry kind="lib" path="lib/jexample-r285.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/IOChunks"/>
+	<classpathentry kind="lib" path="lib/chunks-r7P.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
