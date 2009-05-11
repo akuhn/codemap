@@ -1043,109 +1043,114 @@ imtql2
 
 ***********************************************************************/
 
-void rotateArray(double *a, int size, int x) {
-int i, j, n, start;
-double t1, t2;
-if (x == 0) return;
-j = start = 0;
-t1 = a[0];
-for (i = 0; i < size; i++) {
-n = (j >= x) ? j - x : j + size - x;
-t2 = a[n];
-a[n] = t1;
-t1 = t2;
-j = n;
-if (j == start) {
-start = ++j;
-t1 = a[j];
+void rotateArray(double[] a, int size, int x) {
+	int i, j, n, start;
+	double t1, t2;
+	if (x == 0) return;
+	j = start = 0;
+	t1 = a[0];
+	for (i = 0; i < size; i++) {
+		n = (j >= x) ? j - x : j + size - x;
+		t2 = a[n];
+		a[n] = t1;
+		t1 = t2;
+		j = n;
+		if (j == start) {
+			start = ++j;
+			t1 = a[j];
+		}
+	}
 }
-}
-}
 
-long ritvec(long n, SMat A, SVDRec R, double kappa, double *ritz, double *bnd, 
-double *alf, double *bet, double *w2, long steps, long neig) {
-long js, jsq, i, k, /*size,*/ id2, tmp, nsig, x;
-double *s, *xv2, tmp0, tmp1, xnorm, *w1 = R->Vt->value[0];
+long ritvec(long n, SMat A, SVDRec R, double kappa, double[] ritz, double[] bnd, 
+		double[] alf, double[] bet, double[] w2, long steps, long neig) {
+	long js, jsq, i, k, /*size,*/ id2, tmp, nsig, x;
+	double[] s;
+	double[] xv2;
+	double tmp0, tmp1, xnorm;
+	double[] w1 = R.Vt.value[0];
 
-js = steps + 1;
-jsq = js * js;
-/*size = sizeof(double) * n;*/
+	js = steps + 1;
+	jsq = js * js;
+	/*size = sizeof(double) * n;*/
 
-s = svd_doubleArray(jsq, TRUE, "ritvec: s");
-xv2 = svd_doubleArray(n, FALSE, "ritvec: xv2");
+	s = svd_doubleArray(jsq, true, "ritvec: s");
+	xv2 = svd_doubleArray(n, false, "ritvec: xv2");
 
-/* initialize s to an identity matrix */
-for (i = 0; i < jsq; i+= (js+1)) s[i] = 1.0;
-svd_dcopy(js, alf, 1, w1, -1);
-svd_dcopy(steps, &bet[1], 1, &w2[1], -1);
+	/* initialize s to an identity matrix */
+	for (i = 0; i < jsq; i+= (js+1)) { 
+		s[i] = 1.0;
+	}
+	svd_dcopy(js, alf, 1, w1, -1); // TODO
+	svd_dcopy(steps, &bet[1], 1, &w2[1], -1); // TODO start dcopy at index 1 of both arrays
 
-/* on return from imtql2(), w1 contains eigenvalues in ascending 
-* order and s contains the corresponding eigenvectors */
-imtql2(js, js, w1, w2, s);
-if (ierr) return 0;
+	/* on return from imtql2(), w1 contains eigenvalues in ascending 
+	 * order and s contains the corresponding eigenvectors */
+	imtql2(js, js, w1, w2, s);
+	if (ierr) return 0; // TODO use exception here?
 
-/*fwrite((char *)&n, sizeof(n), 1, fp_out2);
+	/*fwrite((char *)&n, sizeof(n), 1, fp_out2);
 fwrite((char *)&js, sizeof(js), 1, fp_out2);
 fwrite((char *)&kappa, sizeof(kappa), 1, fp_out2);*/
-/*id = 0;*/
-nsig = 0;
-x = 0;
-id2 = jsq - js;
-for (k = 0; k < js; k++) {
-tmp = id2;
-if (bnd[k] <= kappa * fabs(ritz[k]) && k > js-neig-1) {
-if (--x < 0) x = R->d - 1;
-w1 = R->Vt->value[x];
-for (i = 0; i < n; i++) w1[i] = 0.0;
-for (i = 0; i < js; i++) {
-store(n, RETRQ, i, w2);
-svd_daxpy(n, s[tmp], w2, 1, w1, 1);
-tmp -= js;
-}
-/*fwrite((char *)w1, size, 1, fp_out2);*/
+	/*id = 0;*/
+	nsig = 0;
+	x = 0;
+	id2 = jsq - js;
+	for (k = 0; k < js; k++) {
+		tmp = id2;
+		if (bnd[k] <= kappa * Math.abs(ritz[k]) && k > js-neig-1) {
+			if (--x < 0) x = R.d - 1;
+			w1 = R.Vt.value[x];
+			for (i = 0; i < n; i++) w1[i] = 0.0;
+			for (i = 0; i < js; i++) {
+				store(n, RETRQ, i, w2);
+				svd_daxpy(n, s[tmp], w2, 1, w1, 1);
+				tmp -= js;
+			}
+			/*fwrite((char *)w1, size, 1, fp_out2);*/
 
-/* store the w1 vector row-wise in array xv1;   
-* size of xv1 is (steps+1) * (nrow+ncol) elements 
-* and each vector, even though only ncol long,
-* will have (nrow+ncol) elements in xv1.      
-* It is as if xv1 is a 2-d array (steps+1) by     
-* (nrow+ncol) and each vector occupies a row  */
+			/* store the w1 vector row-wise in array xv1;   
+			 * size of xv1 is (steps+1) * (nrow+ncol) elements 
+			 * and each vector, even though only ncol long,
+			 * will have (nrow+ncol) elements in xv1.      
+			 * It is as if xv1 is a 2-d array (steps+1) by     
+			 * (nrow+ncol) and each vector occupies a row  */
 
-/* j is the index in the R arrays, which are sorted by high to low 
+			/* j is the index in the R arrays, which are sorted by high to low 
 singular values. */
 
-/*for (i = 0; i < n; i++) R->Vt->value[x]xv1[id++] = w1[i];*/
-/*id += nrow;*/
-nsig++;
-}
-id2++;
-}
-SAFE_FREE(s);
+			/*for (i = 0; i < n; i++) R->Vt->value[x]xv1[id++] = w1[i];*/
+			/*id += nrow;*/
+			nsig++;
+		}
+		id2++;
+	}
+	s = null;
 
-/* Rotate the singular vectors and values. */
-/* x is now the location of the highest singular value. */
-rotateArray(R->Vt->value[0], R->Vt->rows * R->Vt->cols, 
-x * R->Vt->cols);
-R->d = svd_imin(R->d, nsig);
-for (x = 0; x < R->d; x++) {
-/* multiply by matrix B first */
-svd_opb(A, R->Vt->value[x], xv2, OPBTemp);
-tmp0 = svd_ddot(n, R->Vt->value[x], 1, xv2, 1);
-svd_daxpy(n, -tmp0, R->Vt->value[x], 1, xv2, 1);
-tmp0 = sqrt(tmp0);
-xnorm = sqrt(svd_ddot(n, xv2, 1, xv2, 1));
+	/* Rotate the singular vectors and values. */
+	/* x is now the location of the highest singular value. */
+	rotateArray(R.Vt.value[0], R.Vt.rows * R.Vt.cols, 
+			x * R.Vt.cols);
+	R.d = svd_imin(R.d, nsig);
+	for (x = 0; x < R.d; x++) {
+		/* multiply by matrix B first */
+		svd_opb(A, R.Vt.value[x], xv2, OPBTemp);
+		tmp0 = svd_ddot(n, R.Vt.value[x], 1, xv2, 1);
+		svd_daxpy(n, -tmp0, R.Vt.value[x], 1, xv2, 1);
+		tmp0 = sqrt(tmp0);
+		xnorm = sqrt(svd_ddot(n, xv2, 1, xv2, 1));
 
-/* multiply by matrix A to get (scaled) left s-vector */
-svd_opa(A, R->Vt->value[x], R->Ut->value[x]);
-tmp1 = 1.0 / tmp0;
-svd_dscal(A->rows, tmp1, R->Ut->value[x], 1);
-xnorm *= tmp1;
-bnd[i] = xnorm;
-R->S[x] = tmp0;
-}
+		/* multiply by matrix A to get (scaled) left s-vector */
+		svd_opa(A, R.Vt.value[x], R.Ut.value[x]);
+		tmp1 = 1.0 / tmp0;
+		svd_dscal(A.rows, tmp1, R.Ut.value[x], 1);
+		xnorm *= tmp1;
+		bnd[i] = xnorm;
+		R.S[x] = tmp0;
+	}
 
-SAFE_FREE(xv2);
-return nsig;
+	xv2 = null;
+	return nsig;
 }
 
 /***********************************************************************
