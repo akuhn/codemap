@@ -841,6 +841,13 @@ LAS2         ritvec, lanso
 
 ***********************************************************************/
 
+void fake_memset_127(double[] a) {
+	double d = Double.longBitsToDouble(0x7f7f7f7f7f7f7f7fL);
+	for (int n = 0; n < a.length; a++) {
+		a[n] = d;
+	}
+}
+
 SVDRec svdLAS2A(SMat A, long dimensions) {
 	double end[2] = {-1.0e-30, 1.0e-30};
 	double kappa = 1e-6;
@@ -850,7 +857,6 @@ SVDRec svdLAS2A(SMat A, long dimensions) {
 	}
 	return svdLAS2(A, dimensions, 0, end, kappa);
 }
-
 
 SVDRec svdLAS2(SMat A, long dimensions, long iterations, double[] end, 
 		double kappa) {
@@ -886,45 +892,46 @@ SVDRec svdLAS2(SMat A, long dimensions, long iterations, double[] end,
 		A = svdTransposeS(A);
 	}
 
-	n = A->cols;
-	/* Compute machine precision */ 
-	machar(&ibeta, &it, &irnd, &machep, &negep);
-	eps1 = eps * sqrt((double) n);
-	reps = sqrt(eps);
-	eps34 = reps * sqrt(reps);
+	n = A.cols;
+
+	/* BEGIN Compute machine precision */ 
+	long[] machar_result = machar(/* &ibeta, &it, &irnd, &machep, &negep */);
+	ibeta = machar_result[0];
+	it = machar_result[1];
+	irnd = machar_result[2];
+	machep = machar_result[3];
+	negep = machar_result[4];
+	/* END Compute machine precision */
+	
+	eps1 = eps * Math.sqrt((double) n);
+	reps = Math.sqrt(eps);
+	eps34 = reps * Math.sqrt(reps);
 
 	/* Allocate temporary space. */
-	if (!(wptr[0] = svd_doubleArray(n, TRUE, "las2: wptr[0]"))) goto abort;
-	if (!(wptr[1] = svd_doubleArray(n, FALSE, "las2: wptr[1]"))) goto abort;
-	if (!(wptr[2] = svd_doubleArray(n, FALSE, "las2: wptr[2]"))) goto abort;
-	if (!(wptr[3] = svd_doubleArray(n, FALSE, "las2: wptr[3]"))) goto abort;
-	if (!(wptr[4] = svd_doubleArray(n, FALSE, "las2: wptr[4]"))) goto abort;
-	if (!(wptr[5] = svd_doubleArray(n, FALSE, "las2: wptr[5]"))) goto abort;
-	if (!(wptr[6] = svd_doubleArray(iterations, FALSE, "las2: wptr[6]"))) 
-		goto abort;
-	if (!(wptr[7] = svd_doubleArray(iterations, FALSE, "las2: wptr[7]"))) 
-		goto abort;
-	if (!(wptr[8] = svd_doubleArray(iterations, FALSE, "las2: wptr[8]"))) 
-		goto abort;
-	if (!(wptr[9] = svd_doubleArray(iterations + 1, FALSE, "las2: wptr[9]"))) 
-		goto abort;
-	/* Calloc may be unnecessary: */
-	if (!(ritz    = svd_doubleArray(iterations + 1, TRUE, "las2: ritz"))) 
-		goto abort;  
-	/* Calloc may be unnecessary: */
-	if (!(bnd     = svd_doubleArray(iterations + 1, TRUE, "las2: bnd"))) 
-		goto abort;
-	memset(bnd, 127, (iterations + 1) * sizeof(double));
+	wptr[0] = new double[n];
+	wptr[1] = new double[n];
+	wptr[2] = new double[n];
+	wptr[3] = new double[n];
+	wptr[4] = new double[n];
+	wptr[5] = new double[n];
+	wptr[6] = new double[iterations];
+	wptr[7] = new double[iterations];
+	wptr[8] = new double[iterations];
+	wptr[9] = new double[iterations + 1];
 
-	if (!(LanStore = (double **) calloc(iterations + MAXLL, sizeof(double *))))
-		goto abort;
-	if (!(OPBTemp = svd_doubleArray(A->rows, FALSE, "las2: OPBTemp"))) 
-		goto abort;
+	ritz = new double[iterations + 1];
+	bnd = new double[iterations + 1]
+	fake_memset_127(bnd);
+
+	LanStore = new double[iterations + MAXLL][];
+	OPBTemp = svd_doubleArray(A.rows, false, "las2: OPBTemp");
 
 	/* Actually run the lanczos thing: */
+	double[] ref_neig = new double[] { neig }; // XXX wrap neig
 	steps = lanso(A, iterations, dimensions, end[0], end[1], ritz, bnd, wptr, 
-			&neig, n);
-
+			ref_neig, n);
+	neig = ref_neig[0]; // XXX unwrap neig
+	
 	/* Print some stuff. */
 	if (SVDVerbosity > 0) {
 		printf("NUMBER OF LANCZOS STEPS   = %6ld\n"
@@ -936,73 +943,48 @@ SVDRec svdLAS2(SMat A, long dimensions, long iterations, double[] end,
 			printf("%3ld  %22.14E  (%11.2E)\n", i + 1, ritz[i], bnd[i]);
 	}
 
-	SAFE_FREE(wptr[0]);
-	SAFE_FREE(wptr[1]);
-	SAFE_FREE(wptr[2]);
-	SAFE_FREE(wptr[3]);
-	SAFE_FREE(wptr[4]);
-	SAFE_FREE(wptr[7]);
-	SAFE_FREE(wptr[8]);
+	wptr[0] = null;
+	wptr[1] = null;
+	wptr[2] = null;
+	wptr[3] = null;
+	wptr[4] = null;
+	wptr[7] = null;
+	wptr[8] = null;
 
 	/* Compute eigenvectors */
 	kappa = svd_dmax(fabs(kappa), eps34);
 
-	R = svdNewSVDRec();
-	if (!R) {
-		svd_error("svdLAS2: allocation of R failed");
-		goto cleanup;
-	}
-	R->d  = /*svd_imin(nsig, dimensions)*/dimensions;
-	R->Ut = svdNewDMat(R->d, A->rows);
-	R->S  = svd_doubleArray(R->d, TRUE, "las2: R->s");
-	R->Vt = svdNewDMat(R->d, A->cols);
-	if (!R->Ut || !R->S || !R->Vt) {
-		svd_error("svdLAS2: allocation of R failed");
-		goto cleanup;
-	}
+	R = new SVDRec();
+	R.d  = /*svd_imin(nsig, dimensions)*/dimensions;
+	R.Ut = new DMat(R.d, A.rows);
+	R.S  = svd_doubleArray(R.d, true, "las2: R->s");
+	R.Vt = new NewDMat(R.d, A.cols);
 
 	nsig = ritvec(n, A, R, kappa, ritz, bnd, wptr[6], wptr[9], wptr[5], steps, 
 			neig);
 
 	if (SVDVerbosity > 1) {
 		printf("\nSINGULAR VALUES: ");
-		svdWriteDenseArray(R->S, R->d, "-", FALSE);
+		svdWriteDenseArray(R.S, R.d, "-", false);
 
 		if (SVDVerbosity > 2) {
 			printf("\nLEFT SINGULAR VECTORS (transpose of U): ");
-			svdWriteDenseMatrix(R->Ut, "-", SVD_F_DT);
+			svdWriteDenseMatrix(R.Ut, "-", SVD_F_DT);
 
 			printf("\nRIGHT SINGULAR VECTORS (transpose of V): ");
-			svdWriteDenseMatrix(R->Vt, "-", SVD_F_DT);
+			svdWriteDenseMatrix(R.Vt, "-", SVD_F_DT);
 		}
 	} else if (SVDVerbosity > 0)
-		printf("SINGULAR VALUES FOUND     = %6d\n", R->d);
-
-	cleanup:    
-		for (i = 0; i <= 9; i++)
-			SAFE_FREE(wptr[i]);
-	SAFE_FREE(ritz);
-	SAFE_FREE(bnd);
-	if (LanStore) {
-		for (i = 0; i < iterations + MAXLL; i++)
-			SAFE_FREE(LanStore[i]);
-		SAFE_FREE(LanStore);
-	}
-	SAFE_FREE(OPBTemp);
+		printf("SINGULAR VALUES FOUND     = %6d\n", R.d);
 
 	/* This swaps and transposes the singular matrices if A was transposed. */
-	if (R && transpose) {
-		DMat T;
-		svdFreeSMat(A);
-		T = R->Ut;
-		R->Ut = R->Vt;
-		R->Vt = T;
+	if (transpose) {
+		DMat swap = R.Ut;
+		R.Ut = R.Vt;
+		R.Vt = swap;
 	}
 
 	return R;
-	abort:
-		svd_error("svdLAS2: fatal error, aborting");
-	return NULL;
 }
 
 
