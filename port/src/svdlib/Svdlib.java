@@ -1228,7 +1228,7 @@ int lanso(SMat A, long iterations, long dimensions, double endl,
 	tol = ref_tol[0]; // XXX unwrap
 	rnm = ref_rnm[0]; // XXX unwrap
 	
-	if (0 != rnm || ierr) throw null;
+	if (/* !rnm */ 0 == rnm || ierr) throw null;
 	eta[0] = eps1;
 	oldeta[0] = eps1;
 	ll = 0;
@@ -1260,7 +1260,7 @@ int lanso(SMat A, long iterations, long dimensions, double endl,
 		l = 0;
 		for (id2 = 0; id2 < j; id2++) {
 			if (l > j) break;
-			for (i = l; i <= j; i++) if (!bet[i+1]) break;
+			for (i = l; i <= j; i++) if (/* !bet[i+1] */ 0 == bet[i+1]) break;
 			if (i > j) i = j;
 
 			/* now i is at the end of an unreduced submatrix */
@@ -1296,7 +1296,7 @@ printf("\n"); */
 
 		/* should we stop? */
 		if (neig < dimensions) {
-			if (!neig) {
+			if (/* !neig */ 0 == neig) {
 				last = first + 9;
 				intro = first;
 			} else last = first + svd_imax(3, 1 + ((j - intro) * (dimensions-neig)) /
@@ -1374,10 +1374,10 @@ long lanczos_step(SMat A, long first, long last, double[][] wptr,
 		bet[j] = rnm;
 
 		/* restart if invariant subspace is found */
-		if (0 != bet[j]) {
+		if (/* !bet[j] */ 0 == bet[j]) {
 			rnm = startv(A, wptr, j, n);
 			if (ierr) return j;
-			if (0 != rnm) enough[0] = true;
+			if (/* !rnm */ 0 == rnm) enough[0] = true;
 		}
 		if (enough[0]) {
 			/* added by Doug... */
@@ -1474,23 +1474,23 @@ BLAS		svd_dswap
 
 ***********************************************************************/
 
-void ortbnd(double *alf, double *eta, double *oldeta, double *bet, long step,
-double rnm) {
-long i;
-if (step < 1) return;
-if (rnm) {
-if (step > 1) {
-oldeta[0] = (bet[1] * eta[1] + (alf[0]-alf[step]) * eta[0] -
-bet[step] * oldeta[0]) / rnm + eps1;
-}
-for (i=1; i<=step-2; i++) 
-oldeta[i] = (bet[i+1] * eta[i+1] + (alf[i]-alf[step]) * eta[i] +
-bet[i] * eta[i-1] - bet[step] * oldeta[i])/rnm + eps1;
-}
-oldeta[step-1] = eps1;
-svd_dswap(step, oldeta, 1, eta, 1);  
-eta[step] = eps1;
-return;
+void ortbnd(double[] alf, double[] eta, double[] oldeta, double[] bet, int step,
+		double rnm) {
+	int i;
+	if (step < 1) return;
+	if (/* rnm */ 0 != rnm) { 
+		if (step > 1) {
+			oldeta[0] = (bet[1] * eta[1] + (alf[0]-alf[step]) * eta[0] -
+					bet[step] * oldeta[0]) / rnm + eps1;
+		}
+		for (i=1; i<=step-2; i++) 
+			oldeta[i] = (bet[i+1] * eta[i+1] + (alf[i]-alf[step]) * eta[i] +
+					bet[i] * eta[i-1] - bet[step] * oldeta[i])/rnm + eps1;
+	}
+	oldeta[step-1] = eps1;
+	svd_dswap(step, oldeta, 1, eta, 1);  
+	eta[step] = eps1;
+	return;
 }
 
 /***********************************************************************
@@ -1537,52 +1537,54 @@ USER		store
 
 ***********************************************************************/
 
-void purge(long n, long ll, double *r, double *q, double *ra,  
-double *qa, double *wrk, double *eta, double *oldeta, long step, 
-double *rnmp, double tol) {
-double t, tq, tr, reps1, rnm = *rnmp;
-long k, iteration, flag, i;
+void purge(long n, long ll, double[] r, double[] q, double[] ra,  
+		double[] qa, double[] wrk, double[] eta, double[] oldeta, long step, 
+		double[] rnmp, double tol) {
+	double t, tq, tr, reps1;
+	double rnm = rnmp[0];
+	long k, iteration, i;
+	boolean flag;
 
-if (step < ll+2) return; 
+	if (step < ll+2) return; 
 
-k = svd_idamax(step - (ll+1), &eta[ll], 1) + ll;
-if (fabs(eta[k]) > reps) {
-reps1 = eps1 / reps;
-iteration = 0;
-flag = TRUE;
-while (iteration < 2 && flag) {
-if (rnm > tol) {
+	k = svd_idamax(step - (ll+1), &eta[ll], 1) + ll; // TODO eta starting at ll
+	if (Math.abs(eta[k]) > reps) {
+		reps1 = eps1 / reps;
+		iteration = 0;
+		flag = true;
+		while (iteration < 2 && flag) {
+			if (rnm > tol) {
 
-/* bring in a lanczos vector t and orthogonalize both 
-* r and q against it */
-tq = 0.0;
-tr = 0.0;
-for (i = ll; i < step; i++) {
-store(n,  RETRQ,  i,  wrk);
-t   = -svd_ddot(n, qa, 1, wrk, 1);
-tq += fabs(t);
-svd_daxpy(n,  t,  wrk,  1,  q,  1);
-t   = -svd_ddot(n, ra, 1, wrk, 1);
-tr += fabs(t);
-svd_daxpy(n, t, wrk, 1, r, 1);
-}
-svd_dcopy(n, q, 1, qa, 1);
-t   = -svd_ddot(n, r, 1, qa, 1);
-tr += fabs(t);
-svd_daxpy(n, t, q, 1, r, 1);
-svd_dcopy(n, r, 1, ra, 1);
-rnm = sqrt(svd_ddot(n, ra, 1, r, 1));
-if (tq <= reps1 && tr <= reps1 * rnm) flag = FALSE;
-}
-iteration++;
-}
-for (i = ll; i <= step; i++) { 
-eta[i] = eps1;
-oldeta[i] = eps1;
-}
-}
-*rnmp = rnm;
-return;
+				/* bring in a lanczos vector t and orthogonalize both 
+				 * r and q against it */
+				tq = 0.0;
+				tr = 0.0;
+				for (i = ll; i < step; i++) {
+					store(n,  RETRQ,  i,  wrk);
+					t   = -svd_ddot(n, qa, 1, wrk, 1);
+					tq += Math.abs(t);
+					svd_daxpy(n,  t,  wrk,  1,  q,  1);
+					t   = -svd_ddot(n, ra, 1, wrk, 1);
+					tr += Math.abs(t);
+					svd_daxpy(n, t, wrk, 1, r, 1);
+				}
+				svd_dcopy(n, q, 1, qa, 1);
+				t   = -svd_ddot(n, r, 1, qa, 1);
+				tr += Math.abs(t);
+				svd_daxpy(n, t, q, 1, r, 1);
+				svd_dcopy(n, r, 1, ra, 1);
+				rnm = sqrt(svd_ddot(n, ra, 1, r, 1));
+				if (tq <= reps1 && tr <= reps1 * rnm) flag = false;
+			}
+			iteration++;
+		}
+		for (i = ll; i <= step; i++) { 
+			eta[i] = eps1;
+			oldeta[i] = eps1;
+		}
+	}
+	rnmp[0] = rnm;
+	return;
 }
 
 
