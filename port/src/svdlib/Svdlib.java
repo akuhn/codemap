@@ -280,24 +280,41 @@ public class Svdlib {
 
 	/* Row-major dense matrix. Rows are consecutive vectors. */
 	class DMat {
-		long rows;
-		long cols;
+		int rows;
+		int cols;
 		double[][] value; /*
 						 * Accessed by [row][col]. Free value[0] and value to
 						 * free.
 						 */
+		
+		DMat(int rows, int cols) {
+			  int i;
+			  this.rows = rows;
+			  this.cols = cols;
+			  
+			  this.value = new double[rows][cols];
+			}		
 	}
 
 	/* Harwell-Boeing sparse matrix. */
 	class SMat {
 
-		long rows;
-		long cols;
-		long vals; /* Total non-zero entries. */
-		long[] pointr; /* For each col (plus 1), index of first non-zero entry. */
-		long[] rowind; /* For each nz entry, the row index. */
+		int rows;
+		int cols;
+		int vals; /* Total non-zero entries. */
+		int[] pointr; /* For each col (plus 1), index of first non-zero entry. */
+		int[] rowind; /* For each nz entry, the row index. */
 		double[] value; /* For each nz entry, the value. */
-
+		
+		
+		SMat(int rows, int cols, int vals) {
+			  this.rows = rows;
+			  this.cols = cols;
+			  this.vals = vals;
+			  this.pointr = new int[cols+1];
+			  this.rowind = new int[vals];
+			  this.value = new double[vals];
+			}		
 	}
 
 	class SVDRec {
@@ -311,6 +328,10 @@ public class Svdlib {
 				 * Transpose of right singular vectors. (d by n) The vectors are
 				 * the rows of Vt.
 				 */
+		
+		SVDRec() {
+			}
+		
 	}
 
 	/**************************************************************
@@ -452,6 +473,93 @@ public class Svdlib {
 			}
 		}
 		return p;
+	}
+
+	String SVDVersion = "1.34";
+	long SVDVerbosity = 1;
+
+	void svdResetCounters() {
+		throw null;
+	}
+
+
+	/**************************** Conversion *************************************/
+
+	/* Converts a sparse matrix to a dense one (without affecting the former) */
+	DMat svdConvertStoD(SMat S) {
+		throw null;
+//	  int i, c;
+//	  DMat D = svdNewDMat(S->rows, S->cols);
+//	  if (!D) {
+//	    svd_error("svdConvertStoD: failed to allocate D");
+//	    return NULL;
+//	  }
+//	  for (i = 0, c = 0; i < S->vals; i++) {
+//	    while (S->pointr[c + 1] <= i) c++;
+//	    D->value[S->rowind[i]][c] = S->value[i];
+//	  }
+//	  return D;
+	}
+
+	/* Converts a dense matrix to a sparse one (without affecting the dense one) */
+	SMat svdConvertDtoS(DMat D) {
+		throw null;
+//	  SMat S;
+//	  int i, j, n;
+//	  for (i = 0, n = 0; i < D->rows; i++)
+//	    for (j = 0; j < D->cols; j++)
+//	      if (D->value[i][j] != 0) n++;
+//	  
+//	  S = svdNewSMat(D->rows, D->cols, n);
+//	  if (!S) {
+//	    svd_error("svdConvertDtoS: failed to allocate S");
+//	    return NULL;
+//	  }
+//	  for (j = 0, n = 0; j < D->cols; j++) {
+//	    S->pointr[j] = n;
+//	    for (i = 0; i < D->rows; i++)
+//	      if (D->value[i][j] != 0) {
+//	        S->rowind[n] = i;
+//	        S->value[n] = D->value[i][j];
+//	        n++;
+//	      }
+//	  }
+//	  S->pointr[S->cols] = S->vals;
+//	  return S;
+	}
+
+	/* Transposes a dense matrix. */
+	DMat svdTransposeD(DMat D) {
+	  int r, c;
+	  DMat N = new DMat(D.cols, D.rows);
+	  for (r = 0; r < D.rows; r++)
+	    for (c = 0; c < D.cols; c++)
+	      N.value[c][r] = D.value[r][c];
+	  return N;
+	}
+
+	/* Efficiently transposes a sparse matrix. */
+	SMat svdTransposeS(SMat S) {
+	  int r, c, i, j;
+	  SMat N = new SMat(S.cols, S.rows, S.vals);
+	  /* Count number nz in each row. */
+	  for (i = 0; i < S.vals; i++)
+	    N.pointr[S.rowind[i]]++;
+	  /* Fill each cell with the starting point of the previous row. */
+	  N.pointr[S.rows] = S.vals - N.pointr[S.rows - 1];
+	  for (r = S.rows - 1; r > 0; r--)
+	    N.pointr[r] = N.pointr[r+1] - N.pointr[r-1];
+	  N.pointr[0] = 0;
+	  /* Assign the new columns and values. */
+	  for (c = 0, i = 0; c < S.cols; c++) {
+	    for (; i < S.pointr[c+1]; i++) {
+	      r = S.rowind[i];
+	      j = N.pointr[r+1]++;
+	      N.rowind[j] = c;
+	      N.value[j] = S.value[i];
+	    }
+	  }
+	  return N;
 	}
 
 }
