@@ -80,42 +80,34 @@ public class Svdlib {
 	 * Function scales a vector by a constant. * Based on Fortran-77 routine
 	 * from Linpack by J. Dongarra *
 	 **************************************************************/
-	void svd_dscal(long n, double da, double[] dx, long incx) {
-		throw null;
-		// long i;
-		//	  
-		// if (n <= 0 || incx == 0) return;
-		// if (incx < 0) dx += (-n+1) * incx;
-		// for (i=0; i < n; i++) {
-		// *dx *= da;
-		// dx += incx;
-		// }
-		// return;
+	void svd_dscal(int n, double da, double[] dx, int incx) {
+
+		if (n <= 0 || incx == 0) return;
+		int ix = (incx < 0) ? n - 1 : 0;
+		for (int i=0; i < n; i++) {
+			dx[ix] *= da;
+			ix += incx;
+		}
+		return;
 	}
 
 	/**************************************************************
 	 * function scales a vector by a constant. * Based on Fortran-77 routine
 	 * from Linpack by J. Dongarra *
 	 **************************************************************/
-	void svd_datx(long n, double da, double[] dx, long incx, double[] dy,
-			long incy) {
-		throw null;
-		// long i;
-		//	  
-		// if (n <= 0 || incx == 0 || incy == 0 || da == 0.0) return;
-		// if (incx == 1 && incy == 1)
-		// for (i=0; i < n; i++) *dy++ = da * (*dx++);
-		//	  
-		// else {
-		// if (incx < 0) dx += (-n+1) * incx;
-		// if (incy < 0) dy += (-n+1) * incy;
-		// for (i=0; i < n; i++) {
-		// *dy = da * (*dx);
-		// dx += incx;
-		// dy += incy;
-		// }
-		// }
-		// return;
+	void svd_datx(int n, double da, double[] dx, int incx, double[] dy,
+			int incy) {
+		assert incx == 1 || incx == -1 || incx == 0;
+		assert incy == 1 || incy == -1 || incy == 0;
+		if (n <= 0 || incx == 0 || incy == 0) return;
+
+		int ix = (incx == 1) ? 0 : n - 1;
+		int iy = (incy == 1) ? 0 : n - 1;
+		for (int i = 0; i < n; i++) {
+			dy[iy] = da * dx[ix];
+			iy += incy;
+			ix += incx;
+		}
 	}
 
 	/**************************************************************
@@ -145,110 +137,85 @@ public class Svdlib {
 	 * Function forms the dot product of two vectors. * Based on Fortran-77
 	 * routine from Linpack by J. Dongarra *
 	 **************************************************************/
-	double svd_ddot(long n, double[] dx, long incx, double[] dy, long incy) {
-		throw null;
-		// long i;
-		// double dot_product;
-		//	  
-		// if (n <= 0 || incx == 0 || incy == 0) return(0.0);
-		// dot_product = 0.0;
-		// if (incx == 1 && incy == 1)
-		// for (i=0; i < n; i++) dot_product += (*dx++) * (*dy++);
-		// else {
-		// if (incx < 0) dx += (-n+1) * incx;
-		// if (incy < 0) dy += (-n+1) * incy;
-		// for (i=0; i < n; i++) {
-		// dot_product += (*dx) * (*dy);
-		// dx += incx;
-		// dy += incy;
-		// }
-		// }
-		// return(dot_product);
+	double svd_ddot(int n, double[] dx, int incx, double[] dy, int incy) {
+		double dot_product = 0.0;
+		int ix0 = 0;
+		int iy0 = 0;
+
+		assert incx == 1 || incx == -1 || incx == 0;
+		assert incy == 1 || incy == -1 || incy == 0;
+		if (n <= 0 || incx == 0 || incy == 0) return 0.0;
+
+		int ix = (incx == 1) ? ix0 : n - 1 + ix0;
+		int iy = (incy == 1) ? iy0 : n - 1 + iy0;
+		for (int i = 0; i < n; i++) {
+			dot_product += dy[iy] * dx[ix];
+			iy += incy;
+			ix += incx;
+		}
+		return dot_product;
 	}
 
 	/**************************************************************
 	 * Constant times a vector plus a vector * Based on Fortran-77 routine from
 	 * Linpack by J. Dongarra *
 	 **************************************************************/
-	void svd_daxpy(long n, double da, double[] dx, long incx, double[] dy,
-			long incy) {
-		throw null;
-		// long i;
-		//	  
-		// if (n <= 0 || incx == 0 || incy == 0 || da == 0.0) return;
-		// if (incx == 1 && incy == 1)
-		// for (i=0; i < n; i++) {
-		// *dy += da * (*dx++);
-		// dy++;
-		// }
-		// else {
-		// if (incx < 0) dx += (-n+1) * incx;
-		// if (incy < 0) dy += (-n+1) * incy;
-		// for (i=0; i < n; i++) {
-		// *dy += da * (*dx);
-		// dx += incx;
-		// dy += incy;
-		// }
-		// }
-		// return;
+	void svd_daxpy(int n, double da, double[] dx, int incx, double[] dy,
+			int incy) {
+		if (n <= 0 || incx == 0 || incy == 0) return;
+
+		int ix = (incx == 1) ? 0 : n - 1;
+		int iy = (incy == 1) ? 0 : n - 1;
+		for (int i = 0; i < n; i++) {
+			dy[iy] += da * dx[ix];
+			iy += incy;
+			ix += incx;
+		}
 	}
 
 	/*********************************************************************
 	 * Function sorts array1 and array2 into increasing order for array1 *
 	 *********************************************************************/
-	void svd_dsort2(long igap, long n, double[] array1, double[] array2) {
-		throw null;
-		// double temp;
-		// long i, j, index;
-		//	  
-		// if (!igap) return;
-		// else {
-		// for (i = igap; i < n; i++) {
-		// j = i - igap;
-		// index = i;
-		// while (j >= 0 && array1[j] > array1[index]) {
-		// temp = array1[j];
-		// array1[j] = array1[index];
-		// array1[index] = temp;
-		// temp = array2[j];
-		// array2[j] = array2[index];
-		// array2[index] = temp;
-		// j -= igap;
-		// index = j + igap;
-		// }
-		// }
-		// }
-		// svd_dsort2(igap/2,n,array1,array2);
+	void svd_dsort2(int igap, int n, double[] array1, double[] array2) {
+		double temp;
+		int i, j, index;
+
+		if (0 == igap) return;
+		else {
+			for (i = igap; i < n; i++) {
+				j = i - igap;
+				index = i;
+				while (j >= 0 && array1[j] > array1[index]) {
+					temp = array1[j];
+					array1[j] = array1[index];
+					array1[index] = temp;
+					temp = array2[j];
+					array2[j] = array2[index];
+					array2[index] = temp;
+					j -= igap;
+					index = j + igap;
+				}
+			}
+		}
+		svd_dsort2(igap/2,n,array1,array2);
 	}
 
 	/**************************************************************
 	 * Function interchanges two vectors * Based on Fortran-77 routine from
 	 * Linpack by J. Dongarra *
 	 **************************************************************/
-	void svd_dswap(long n, double[] dx, long incx, double[] dy, long incy) {
-		throw null;
-		// long i;
-		// double dtemp;
-		//	  
-		// if (n <= 0 || incx == 0 || incy == 0) return;
-		// if (incx == 1 && incy == 1) {
-		// for (i=0; i < n; i++) {
-		// dtemp = *dy;
-		// *dy++ = *dx;
-		// *dx++ = dtemp;
-		// }
-		// }
-		// else {
-		// if (incx < 0) dx += (-n+1) * incx;
-		// if (incy < 0) dy += (-n+1) * incy;
-		// for (i=0; i < n; i++) {
-		// dtemp = *dy;
-		// *dy = *dx;
-		// *dx = dtemp;
-		// dx += incx;
-		// dy += incy;
-		// }
-		// }
+	void svd_dswap(int n, double[] dx, int incx, double[] dy, int incy) {
+		if (n <= 0 || incx == 0 || incy == 0) return;
+
+		int ix = (incx == 1) ? 0 : n - 1;
+		int iy = (incy == 1) ? 0 : n - 1;
+		for (int i = 0; i < n; i++) {
+			double swap = dy[iy];
+			dy[iy] = dx[ix];
+			dx[ix] = swap;
+			iy += incy;
+			ix += incx;
+		}
 	}
 
 	/*****************************************************************
@@ -336,29 +303,28 @@ public class Svdlib {
 	 * vector). *
 	 **************************************************************/
 	void svd_opb(SMat A, double[] x, double[] y, double[] temp) {
-		throw null;
-		// long i, j, end;
-		// long *pointr = A->pointr, *rowind = A->rowind;
-		// double *value = A->value;
-		// long n = A->cols;
-		//
-		// SVDCount[SVD_MXV] += 2;
-		// memset(y, 0, n * sizeof(double));
-		// for (i = 0; i < A->rows; i++) temp[i] = 0.0;
-		//	  
-		// for (i = 0; i < A->cols; i++) {
-		// end = pointr[i+1];
-		// for (j = pointr[i]; j < end; j++)
-		// temp[rowind[j]] += value[j] * (*x);
-		// x++;
-		// }
-		// for (i = 0; i < A->cols; i++) {
-		// end = pointr[i+1];
-		// for (j = pointr[i]; j < end; j++)
-		// *y += value[j] * temp[rowind[j]];
-		// y++;
-		// }
-		// return;
+		int[] pointr = A.pointr;
+		int[] rowind = A.rowind;
+		double[] value = A.value;
+		int n = A.cols;
+
+		//SVDCount[SVD_MXV] += 2;
+		//memset(y, 0, n * sizeof(double));
+		for (int i = 0; i < n; i++) y[i] = 0;
+		
+		for (int i = 0; i < A.rows; i++) temp[i] = 0.0;
+
+		for (int i = 0; i < A.cols; i++) {
+			int end = pointr[i+1];
+			for (int j = pointr[i]; j < end; j++)
+				temp[rowind[j]] += value[j] * (x[i]);
+		}
+		for (int i = 0; i < A.cols; i++) {
+			int end = pointr[i+1];
+			for (int j = pointr[i]; j < end; j++)
+				y[i] += value[j] * temp[rowind[j]];
+		}
+		return;
 	}
 
 	/***********************************************************
@@ -741,14 +707,14 @@ void write_header(long iterations, long dimensions, double endl, double endr,
 		boolean b, double kappa, long nrow, long ncol, 
 		long vals) {
 	printf("SOLVING THE [A^TA] EIGENPROBLEM\n");
-	printf("NO. OF ROWS               = %6ld\n", nrow);
-	printf("NO. OF COLUMNS            = %6ld\n", ncol);
-	printf("NO. OF NON-ZERO VALUES    = %6ld\n", vals);
+	printf("NO. OF ROWS               = %6d\n", nrow);
+	printf("NO. OF COLUMNS            = %6d\n", ncol);
+	printf("NO. OF NON-ZERO VALUES    = %6d\n", vals);
 	printf("MATRIX DENSITY            = %6.2f%%\n", 
 			((float) vals / nrow) * 100 / ncol);
 	/* printf("ORDER OF MATRIX A         = %5ld\n", n); */
-	printf("MAX. NO. OF LANCZOS STEPS = %6ld\n", iterations);
-	printf("MAX. NO. OF EIGENPAIRS    = %6ld\n", dimensions);
+	printf("MAX. NO. OF LANCZOS STEPS = %6d\n", iterations);
+	printf("MAX. NO. OF EIGENPAIRS    = %6d\n", dimensions);
 	printf("LEFT  END OF THE INTERVAL = %9.2E\n", endl);
 	printf("RIGHT END OF THE INTERVAL = %9.2E\n", endr);
 	printf("KAPPA                     = %9.2E\n", kappa);
@@ -860,7 +826,7 @@ SVDRec svdLAS2(SMat A, int dimensions, int iterations, double[] end,
 	double[] bnd;
 	SVDRec R = null;
 
-	svdResetCounters();
+	//svdResetCounters();
 
 	m = svd_imin(A.rows, A.cols);
 	if (dimensions <= 0 || dimensions > m)
@@ -927,13 +893,13 @@ SVDRec svdLAS2(SMat A, int dimensions, int iterations, double[] end,
 	
 	/* Print some stuff. */
 	if (SVDVerbosity > 0) {
-		printf("NUMBER OF LANCZOS STEPS   = %6ld\n" +
-				"RITZ VALUES STABILIZED    = %6ld\n", steps + 1, neig);
+		printf("NUMBER OF LANCZOS STEPS   = %6d\n" +
+				"RITZ VALUES STABILIZED    = %6d\n", steps + 1, neig);
 	}
 	if (SVDVerbosity > 2) {
 		printf("\nCOMPUTED RITZ VALUES  (ERROR BNDS)\n");
 		for (i = 0; i <= steps; i++)
-			printf("%3ld  %22.14E  (%11.2E)\n", i + 1, ritz[i], bnd[i]);
+			printf("%3d  %22.14E  (%11.2E)\n", i + 1, ritz[i], bnd[i]);
 	}
 
 	wptr[0] = null;
@@ -1041,6 +1007,9 @@ imtql2
 ***********************************************************************/
 
 void rotateArray(double[] a, int size, int x) {
+	
+	// TODO fix me, in Java we cannot access a[] as a[][] !!!
+	
 	int i, j, n, start;
 	double t1, t2;
 	if (x == 0) return;
