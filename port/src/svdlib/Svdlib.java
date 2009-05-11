@@ -498,29 +498,24 @@ public class Svdlib {
 
 	/* Converts a dense matrix to a sparse one (without affecting the dense one) */
 	SMat svdConvertDtoS(DMat D) {
-		throw null;
-		// SMat S;
-		// int i, j, n;
-		// for (i = 0, n = 0; i < D->rows; i++)
-		// for (j = 0; j < D->cols; j++)
-		// if (D->value[i][j] != 0) n++;
-		//	  
-		// S = svdNewSMat(D->rows, D->cols, n);
-		// if (!S) {
-		// svd_error("svdConvertDtoS: failed to allocate S");
-		// return NULL;
-		// }
-		// for (j = 0, n = 0; j < D->cols; j++) {
-		// S->pointr[j] = n;
-		// for (i = 0; i < D->rows; i++)
-		// if (D->value[i][j] != 0) {
-		// S->rowind[n] = i;
-		// S->value[n] = D->value[i][j];
-		// n++;
-		// }
-		// }
-		// S->pointr[S->cols] = S->vals;
-		// return S;
+		SMat S;
+		int i, j, n;
+		for (i = 0, n = 0; i < D.rows; i++)
+			for (j = 0; j < D.cols; j++)
+				if (D.value[i][j] != 0) n++;
+
+		S = new SMat(D.rows, D.cols, n);
+		for (j = 0, n = 0; j < D.cols; j++) {
+			S.pointr[j] = n;
+			for (i = 0; i < D.rows; i++)
+				if (D.value[i][j] != 0) {
+					S.rowind[n] = i;
+					S.value[n] = D.value[i][j];
+					n++;
+				}
+		}
+		S.pointr[S.cols] = S.vals;
+		return S;
 	}
 
 	/* Transposes a dense matrix. */
