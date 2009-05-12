@@ -332,20 +332,18 @@ public class Svdlib {
 	 * >> ncol). y stores product vector. *
 	 ***********************************************************/
 	void svd_opa(SMat A, double[] x, double[] y) {
-		throw null;
-		// long end, i, j;
-		// long *pointr = A->pointr, *rowind = A->rowind;
-		// double *value = A->value;
-		//	   
-		// SVDCount[SVD_MXV]++;
-		// memset(y, 0, A->rows * sizeof(double));
-		//	  
-		// for (i = 0; i < A->cols; i++) {
-		// end = pointr[i+1];
-		// for (j = pointr[i]; j < end; j++)
-		// y[rowind[j]] += value[j] * x[i];
-		// }
-		// return;
+		int[] pointr = A.pointr, rowind = A.rowind;
+		double[] value = A.value;
+
+		//SVDCount[SVD_MXV]++;
+		for (int i = 0; i < A.rows; i++) y[i] = 0;
+
+		for (int i = 0; i < A.cols; i++) {
+			int end = pointr[i+1];
+			for (int j = pointr[i]; j < end; j++)
+				y[rowind[j]] += value[j] * x[i];
+		}
+		return;
 	}
 
 	/***********************************************************************
@@ -1006,7 +1004,7 @@ imtql2
 
 ***********************************************************************/
 
-void rotateArray(double[] a, int size, int x) {
+void rotateArray(double[][] a, int size, int x) {
 	
 	// TODO fix me, in Java we cannot access a[] as a[][] !!!
 	
@@ -1014,16 +1012,17 @@ void rotateArray(double[] a, int size, int x) {
 	double t1, t2;
 	if (x == 0) return;
 	j = start = 0;
-	t1 = a[0];
+	t1 = a[0][0];
+	int len = a.length;
 	for (i = 0; i < size; i++) {
 		n = (j >= x) ? j - x : j + size - x;
-		t2 = a[n];
-		a[n] = t1;
+		t2 = a[n % len][n / len];
+		a[n % len][n / len] = t1;
 		t1 = t2;
 		j = n;
 		if (j == start) {
 			start = ++j;
-			t1 = a[j];
+			t1 = a[j % len][j / len];
 		}
 	}
 }
@@ -1095,7 +1094,7 @@ singular values. */
 
 	/* Rotate the singular vectors and values. */
 	/* x is now the location of the highest singular value. */
-	rotateArray(R.Vt.value[0], R.Vt.rows * R.Vt.cols, 
+	rotateArray(R.Vt.value, R.Vt.rows * R.Vt.cols, 
 			x * R.Vt.cols);
 	R.d = svd_imin(R.d, nsig);
 	for (x = 0; x < R.d; x++) {
