@@ -120,9 +120,9 @@ public class Svdlib {
 	void svd_dcopy(int n, double[] dx, int incx, double[] dy, int incy) {
 		svd_dcopy(n, dx, 0, incx, dy, 0, incy);
 	}
-		
+
 	void svd_dcopy(int n, double[] dx, int ix0, int incx, double[] dy, int iy0, int incy) {
-		
+
 		assert incx == 1 || incx == -1 || incx == 0;
 		assert incy == 1 || incy == -1 || incy == 0;
 		if (n <= 0 || incx == 0 || incy == 0) return;
@@ -250,15 +250,13 @@ public class Svdlib {
 		int rows;
 		int cols;
 		double[][] value; /*
-						 * Accessed by [row][col]. Free value[0] and value to
-						 * free.
-						 */
+		 * Accessed by [row][col]. Free value[0] and value to
+		 * free.
+		 */
 
 		DMat(int rows, int cols) {
-			int i;
 			this.rows = rows;
 			this.cols = cols;
-
 			this.value = new double[rows][cols];
 		}
 	}
@@ -286,14 +284,14 @@ public class Svdlib {
 	class SVDRec {
 		int d; /* Dimensionality (rank) */
 		DMat Ut; /*
-				 * Transpose of left singular vectors. (d by m) The vectors are
-				 * the rows of Ut.
-				 */
+		 * Transpose of left singular vectors. (d by m) The vectors are
+		 * the rows of Ut.
+		 */
 		double[] S; /* Array of singular values. (length d) */
 		DMat Vt; /*
-				 * Transpose of right singular vectors. (d by n) The vectors are
-				 * the rows of Vt.
-				 */
+		 * Transpose of right singular vectors. (d by n) The vectors are
+		 * the rows of Vt.
+		 */
 
 		SVDRec() {
 		}
@@ -314,7 +312,7 @@ public class Svdlib {
 		//SVDCount[SVD_MXV] += 2;
 		//memset(y, 0, n * sizeof(double));
 		for (int i = 0; i < n; i++) y[i] = 0;
-		
+
 		for (int i = 0; i < A.rows; i++) temp[i] = 0.0;
 
 		for (int i = 0; i < A.cols; i++) {
@@ -518,7 +516,7 @@ public class Svdlib {
 		}
 		return N;
 	}
-	
+
 	/*************************************************************************
     (c) Copyright 2003
        Douglas Rohde
@@ -528,41 +526,41 @@ adapted from SVDPACKC, which is
     (c) Copyright 1993
  University of Tennessee
    All Rights Reserved                          
-*************************************************************************/
+	 *************************************************************************/
 
-static int MAXLL = 2;
+	static int MAXLL = 2;
 
-enum storeVals {STORQ, RETRQ, STORP, RETRP};
+	enum storeVals {STORQ, RETRQ, STORP, RETRP};
 
-static String[] error_msg = {  /* error messages used by function    *
-        * check_parameters                   */
-null,
-"",
-"ENDL MUST BE LESS THAN ENDR",
-"REQUESTED DIMENSIONS CANNOT EXCEED NUM ITERATIONS",
-"ONE OF YOUR DIMENSIONS IS LESS THAN OR EQUAL TO ZERO",
-"NUM ITERATIONS (NUMBER OF LANCZOS STEPS) IS INVALID",
-"REQUESTED DIMENSIONS (NUMBER OF EIGENPAIRS DESIRED) IS INVALID",
-"6*N+4*ITERATIONS+1 + ITERATIONS*ITERATIONS CANNOT EXCEED NW",
-"6*N+4*ITERATIONS+1 CANNOT EXCEED NW", null};
+	static String[] error_msg = {  /* error messages used by function    *
+	 * check_parameters                   */
+		null,
+		"",
+		"ENDL MUST BE LESS THAN ENDR",
+		"REQUESTED DIMENSIONS CANNOT EXCEED NUM ITERATIONS",
+		"ONE OF YOUR DIMENSIONS IS LESS THAN OR EQUAL TO ZERO",
+		"NUM ITERATIONS (NUMBER OF LANCZOS STEPS) IS INVALID",
+		"REQUESTED DIMENSIONS (NUMBER OF EIGENPAIRS DESIRED) IS INVALID",
+		"6*N+4*ITERATIONS+1 + ITERATIONS*ITERATIONS CANNOT EXCEED NW",
+		"6*N+4*ITERATIONS+1 CANNOT EXCEED NW", null};
 
-double[][] LanStore;
-double[] OPBTemp;
-double eps, eps1, reps, eps34;
-long ierr;
-/*
+	double[][] LanStore;
+	double[] OPBTemp;
+	double eps, eps1, reps, eps34;
+	long ierr;
+	/*
 double rnm, anorm, tol;
 FILE *fp_out1, *fp_out2;
-*/
+	 */
 
-/***********************************************************************
-*                                                                     *
-*                        main()                                       *
-* Sparse SVD(A) via Eigensystem of A'A symmetric Matrix 	       *
-*                  (double precision)                                 *
-*                                                                     *
-***********************************************************************/
-/***********************************************************************
+	/***********************************************************************
+	 *                                                                     *
+	 *                        main()                                       *
+	 * Sparse SVD(A) via Eigensystem of A'A symmetric Matrix 	       *
+	 *                  (double precision)                                 *
+	 *                                                                     *
+	 ***********************************************************************/
+	/***********************************************************************
 
 Description
 -----------
@@ -572,20 +570,20 @@ the equivalent symmetric eigenvalue problem
 
 B x = lambda x, where x' = (u',v'), lambda = sigma**2,
 where sigma is a singular value of A,
-                                              
+
 B = A'A , and A is m (nrow) by n (ncol) (nrow >> ncol),                
-                                          
+
 so that {u,sqrt(lambda),v} is a singular triplet of A.        
 (A' = transpose of A)                                      
-                                     
+
 User supplied routines: svd_opa, opb, store, timer              
-                                 
+
 svd_opa(     x,y) takes an n-vector x and returns A*x in y.
 svd_opb(ncol,x,y) takes an n-vector x and returns B*x in y.
-                                           
+
 Based on operation flag isw, store(n,isw,j,s) stores/retrieves 
 to/from storage a vector of length n in s.                   
-                                        
+
 User should edit timer() with an appropriate call to an intrinsic
 timing routine that returns elapsed user time.                      
 
@@ -653,14 +651,14 @@ Dept. of Computer Science
 Knoxville, TN, 37996-1301
 internet: tdo@cs.utk.edu
 
-***********************************************************************/
+	 ***********************************************************************/
 
-/***********************************************************************
-*								       *
-*		      check_parameters()			       *
-*								       *
-***********************************************************************/
-/***********************************************************************
+	/***********************************************************************
+	 *								       *
+	 *		      check_parameters()			       *
+	 *								       *
+	 ***********************************************************************/
+	/***********************************************************************
 
 Description
 -----------
@@ -677,67 +675,67 @@ endr     right end of interval containing unwanted eigenvalues of B
 vectors  1 indicates both eigenvalues and eigenvectors are wanted 
 and they can be found in lav2; 0 indicates eigenvalues only
 nnzero   number of nonzero elements in input matrix (matrix A)      
-                                               
-***********************************************************************/
 
-int check_parameters(SMat A, long dimensions, long iterations, 
-		double endl, double endr, boolean b) {
-	int error_index;
-	error_index = 0;
+	 ***********************************************************************/
 
-	if (endl >/*=*/ endr)  error_index = 2;
-	else if (dimensions > iterations) error_index = 3;
-	else if (A.cols <= 0 || A.rows <= 0) error_index = 4;
-	/*else if (n > A->cols || n > A->rows) error_index = 1;*/
-	else if (iterations <= 0 || iterations > A.cols || iterations > A.rows)
-		error_index = 5;
-	else if (dimensions <= 0 || dimensions > iterations) error_index = 6;
-	if (0 != error_index) 
-		svd_error("svdLAS2 parameter error: %s\n", error_msg[error_index]);
-	return(error_index);
-}
+	int check_parameters(SMat A, long dimensions, long iterations, 
+			double endl, double endr, boolean b) {
+		int error_index;
+		error_index = 0;
 
-/***********************************************************************
-*								       *
-*			  write_header()			       *
-*   Function writes out header of output file containing ritz values  *
-*								       *
-***********************************************************************/
+		if (endl >/*=*/ endr)  error_index = 2;
+		else if (dimensions > iterations) error_index = 3;
+		else if (A.cols <= 0 || A.rows <= 0) error_index = 4;
+		/*else if (n > A->cols || n > A->rows) error_index = 1;*/
+		else if (iterations <= 0 || iterations > A.cols || iterations > A.rows)
+			error_index = 5;
+		else if (dimensions <= 0 || dimensions > iterations) error_index = 6;
+		if (0 != error_index) 
+			svd_error("svdLAS2 parameter error: %s\n", error_msg[error_index]);
+		return(error_index);
+	}
 
-void write_header(long iterations, long dimensions, double endl, double endr, 
-		boolean b, double kappa, long nrow, long ncol, 
-		long vals) {
-	printf("SOLVING THE [A^TA] EIGENPROBLEM\n");
-	printf("NO. OF ROWS               = %6d\n", nrow);
-	printf("NO. OF COLUMNS            = %6d\n", ncol);
-	printf("NO. OF NON-ZERO VALUES    = %6d\n", vals);
-	printf("MATRIX DENSITY            = %6.2f%%\n", 
-			((float) vals / nrow) * 100 / ncol);
-	/* printf("ORDER OF MATRIX A         = %5ld\n", n); */
-	printf("MAX. NO. OF LANCZOS STEPS = %6d\n", iterations);
-	printf("MAX. NO. OF EIGENPAIRS    = %6d\n", dimensions);
-	printf("LEFT  END OF THE INTERVAL = %9.2E\n", endl);
-	printf("RIGHT END OF THE INTERVAL = %9.2E\n", endr);
-	printf("KAPPA                     = %9.2E\n", kappa);
-	/* printf("WANT S-VECTORS?   [T/F]   =     %c\n", (vectors) ? 'T' : 'F'); */
-	printf("\n");
-	return;
-}
+	/***********************************************************************
+	 *								       *
+	 *			  write_header()			       *
+	 *   Function writes out header of output file containing ritz values  *
+	 *								       *
+	 ***********************************************************************/
 
-void printf(String fmt, Object ... args) {
-	System.out.printf(fmt, args);
-}
+	void write_header(long iterations, long dimensions, double endl, double endr, 
+			boolean b, double kappa, long nrow, long ncol, 
+			long vals) {
+		printf("SOLVING THE [A^TA] EIGENPROBLEM\n");
+		printf("NO. OF ROWS               = %6d\n", nrow);
+		printf("NO. OF COLUMNS            = %6d\n", ncol);
+		printf("NO. OF NON-ZERO VALUES    = %6d\n", vals);
+		printf("MATRIX DENSITY            = %6.2f%%\n", 
+				((float) vals / nrow) * 100 / ncol);
+		/* printf("ORDER OF MATRIX A         = %5ld\n", n); */
+		printf("MAX. NO. OF LANCZOS STEPS = %6d\n", iterations);
+		printf("MAX. NO. OF EIGENPAIRS    = %6d\n", dimensions);
+		printf("LEFT  END OF THE INTERVAL = %9.2E\n", endl);
+		printf("RIGHT END OF THE INTERVAL = %9.2E\n", endr);
+		printf("KAPPA                     = %9.2E\n", kappa);
+		/* printf("WANT S-VECTORS?   [T/F]   =     %c\n", (vectors) ? 'T' : 'F'); */
+		printf("\n");
+		return;
+	}
+
+	void printf(String fmt, Object ... args) {
+		System.out.printf(fmt, args);
+	}
 
 
-/***********************************************************************
-*                                                                     *
-*				landr()				       *
-*        Lanczos algorithm with selective orthogonalization           *
-*                    Using Simon's Recurrence                         *
-*                       (double precision)                            *
-*                                                                     *
-***********************************************************************/
-/***********************************************************************
+	/***********************************************************************
+	 *                                                                     *
+	 *				landr()				       *
+	 *        Lanczos algorithm with selective orthogonalization           *
+	 *                    Using Simon's Recurrence                         *
+	 *                       (double precision)                            *
+	 *                                                                     *
+	 ***********************************************************************/
+	/***********************************************************************
 
 Description
 -----------
@@ -798,167 +796,167 @@ Functions used
 MISC         svd_dmax, machar, check_parameters
 LAS2         ritvec, lanso
 
-***********************************************************************/
+	 ***********************************************************************/
 
-void fake_memset_127(double[] a) {
-	double d = Double.longBitsToDouble(0x7f7f7f7f7f7f7f7fL);
-	for (int n = 0; n < a.length; n++) {
-		a[n] = d;
-	}
-}
-
-SVDRec svdLAS2A(SMat A, int dimensions) {
-	double[] end = new double[] {-1.0e-30, 1.0e-30};
-	double kappa = 1e-6;
-	if (A == null) {
-		svd_error("svdLAS2A called with NULL array\n");
-		return null;
-	}
-	return svdLAS2(A, dimensions, 0, end, kappa);
-}
-
-SVDRec svdLAS2(SMat A, int dimensions, int iterations, double[] end, 
-		double kappa) {
-	boolean transpose = false;
-	long ibeta, it, irnd, machep, negep, nsig;
-	int n, m, i, steps;
-	double[][] wptr = new double[10][];
-	double[] ritz;
-	double[] bnd;
-	SVDRec R = null;
-
-	//svdResetCounters();
-
-	m = svd_imin(A.rows, A.cols);
-	if (dimensions <= 0 || dimensions > m)
-		dimensions = m;
-	if (iterations <= 0 || iterations > m)
-		iterations = m;
-	if (iterations < dimensions) iterations = dimensions;
-
-	/* Write output header */
-	if (SVDVerbosity > 0)
-		write_header(iterations, dimensions, end[0], end[1], true, kappa, A.rows, 
-				A.cols, A.vals);
-
-	/* Check parameters */
-	if (0 != check_parameters(A, dimensions, iterations, end[0], end[1], true))
-		return null;
-
-	/* If A is wide, the SVD is computed on its transpose for speed. */
-	if (A.cols >= A.rows * 1.2) {
-		if (SVDVerbosity > 0) printf("TRANSPOSING THE MATRIX FOR SPEED\n");
-		transpose = true;
-		A = svdTransposeS(A);
-	}
-
-	n = A.cols;
-
-	/* BEGIN Compute machine precision */ 
-	long[] machar_result = machar(/* &ibeta, &it, &irnd, &machep, &negep */);
-	ibeta = machar_result[0];
-	it = machar_result[1];
-	irnd = machar_result[2];
-	machep = machar_result[3];
-	negep = machar_result[4];
-	/* END Compute machine precision */
-	
-	eps1 = eps * Math.sqrt((double) n);
-	reps = Math.sqrt(eps);
-	eps34 = reps * Math.sqrt(reps);
-
-	/* Allocate temporary space. */
-	wptr[0] = new double[n];
-	wptr[1] = new double[n];
-	wptr[2] = new double[n];
-	wptr[3] = new double[n];
-	wptr[4] = new double[n];
-	wptr[5] = new double[n];
-	wptr[6] = new double[iterations];
-	wptr[7] = new double[iterations];
-	wptr[8] = new double[iterations];
-	wptr[9] = new double[iterations + 1];
-
-	ritz = new double[iterations + 1];
-	bnd = new double[iterations + 1];
-	fake_memset_127(bnd);
-
-	LanStore = new double[iterations + MAXLL][];
-	OPBTemp = svd_doubleArray(A.rows, false, "las2: OPBTemp");
-
-	/* Actually run the lanczos thing: */
-	int[] ref_neig = new int[] { 0 }; // XXX wrap neig 
-	steps = lanso(A, iterations, dimensions, end[0], end[1], ritz, bnd, wptr, 
-			ref_neig, n);
-	int neig = ref_neig[0]; // XXX unwrap neig
-	
-	/* Print some stuff. */
-	if (SVDVerbosity > 0) {
-		printf("NUMBER OF LANCZOS STEPS   = %6d\n" +
-				"RITZ VALUES STABILIZED    = %6d\n", steps + 1, neig);
-	}
-	if (SVDVerbosity > 2) {
-		printf("\nCOMPUTED RITZ VALUES  (ERROR BNDS)\n");
-		for (i = 0; i <= steps; i++)
-			printf("%3d  %22.14E  (%11.2E)\n", i + 1, ritz[i], bnd[i]);
-	}
-
-	wptr[0] = null;
-	wptr[1] = null;
-	wptr[2] = null;
-	wptr[3] = null;
-	wptr[4] = null;
-	wptr[7] = null;
-	wptr[8] = null;
-
-	/* Compute eigenvectors */
-	kappa = svd_dmax(fabs(kappa), eps34);
-
-	R = new SVDRec();
-	R.d  = /*svd_imin(nsig, dimensions)*/dimensions;
-	R.Ut = new DMat(R.d, A.rows);
-	R.S  = svd_doubleArray(R.d, true, "las2: R->s");
-	R.Vt = new DMat(R.d, A.cols);
-
-	nsig = ritvec(n, A, R, kappa, ritz, bnd, wptr[6], wptr[9], wptr[5], steps, 
-			neig);
-
-	if (SVDVerbosity > 1) {
-		printf("\nSINGULAR VALUES: ");
-		svdWriteDenseArray(R.S, R.d, "-", false);
-
-		if (SVDVerbosity > 2) {
-			printf("\nLEFT SINGULAR VECTORS (transpose of U): ");
-			// svdWriteDenseMatrix(R.Ut, "-", SVD_F_DT); TODO outout
-
-			printf("\nRIGHT SINGULAR VECTORS (transpose of V): ");
-			// svdWriteDenseMatrix(R.Vt, "-", SVD_F_DT); TODO output
+	void fake_memset_127(double[] a) {
+		double d = Double.longBitsToDouble(0x7f7f7f7f7f7f7f7fL);
+		for (int n = 0; n < a.length; n++) {
+			a[n] = d;
 		}
-	} else if (SVDVerbosity > 0)
-		printf("SINGULAR VALUES FOUND     = %6d\n", R.d);
-
-	/* This swaps and transposes the singular matrices if A was transposed. */
-	if (transpose) {
-		DMat swap = R.Ut;
-		R.Ut = R.Vt;
-		R.Vt = swap;
 	}
 
-	return R;
-}
+	SVDRec svdLAS2A(SMat A, int dimensions) {
+		double[] end = new double[] {-1.0e-30, 1.0e-30};
+		double kappa = 1e-6;
+		if (A == null) {
+			svd_error("svdLAS2A called with NULL array\n");
+			return null;
+		}
+		return svdLAS2(A, dimensions, 0, end, kappa);
+	}
+
+	SVDRec svdLAS2(SMat A, int dimensions, int iterations, double[] end, 
+			double kappa) {
+		boolean transpose = false;
+		long ibeta, it, irnd, machep, negep, nsig;
+		int n, m, i, steps;
+		double[][] wptr = new double[10][];
+		double[] ritz;
+		double[] bnd;
+		SVDRec R = null;
+
+		//svdResetCounters();
+
+		m = svd_imin(A.rows, A.cols);
+		if (dimensions <= 0 || dimensions > m)
+			dimensions = m;
+		if (iterations <= 0 || iterations > m)
+			iterations = m;
+		if (iterations < dimensions) iterations = dimensions;
+
+		/* Write output header */
+		if (SVDVerbosity > 0)
+			write_header(iterations, dimensions, end[0], end[1], true, kappa, A.rows, 
+					A.cols, A.vals);
+
+		/* Check parameters */
+		if (0 != check_parameters(A, dimensions, iterations, end[0], end[1], true))
+			return null;
+
+		/* If A is wide, the SVD is computed on its transpose for speed. */
+		if (A.cols >= A.rows * 1.2) {
+			if (SVDVerbosity > 0) printf("TRANSPOSING THE MATRIX FOR SPEED\n");
+			transpose = true;
+			A = svdTransposeS(A);
+		}
+
+		n = A.cols;
+
+		/* BEGIN Compute machine precision */ 
+		long[] machar_result = machar(/* &ibeta, &it, &irnd, &machep, &negep */);
+		ibeta = machar_result[0];
+		it = machar_result[1];
+		irnd = machar_result[2];
+		machep = machar_result[3];
+		negep = machar_result[4];
+		/* END Compute machine precision */
+
+		eps1 = eps * Math.sqrt((double) n);
+		reps = Math.sqrt(eps);
+		eps34 = reps * Math.sqrt(reps);
+
+		/* Allocate temporary space. */
+		wptr[0] = new double[n];
+		wptr[1] = new double[n];
+		wptr[2] = new double[n];
+		wptr[3] = new double[n];
+		wptr[4] = new double[n];
+		wptr[5] = new double[n];
+		wptr[6] = new double[iterations];
+		wptr[7] = new double[iterations];
+		wptr[8] = new double[iterations];
+		wptr[9] = new double[iterations + 1];
+
+		ritz = new double[iterations + 1];
+		bnd = new double[iterations + 1];
+		fake_memset_127(bnd);
+
+		LanStore = new double[iterations + MAXLL][];
+		OPBTemp = svd_doubleArray(A.rows, false, "las2: OPBTemp");
+
+		/* Actually run the lanczos thing: */
+		int[] ref_neig = new int[] { 0 }; // XXX wrap neig 
+		steps = lanso(A, iterations, dimensions, end[0], end[1], ritz, bnd, wptr, 
+				ref_neig, n);
+		int neig = ref_neig[0]; // XXX unwrap neig
+
+		/* Print some stuff. */
+		if (SVDVerbosity > 0) {
+			printf("NUMBER OF LANCZOS STEPS   = %6d\n" +
+					"RITZ VALUES STABILIZED    = %6d\n", steps + 1, neig);
+		}
+		if (SVDVerbosity > 2) {
+			printf("\nCOMPUTED RITZ VALUES  (ERROR BNDS)\n");
+			for (i = 0; i <= steps; i++)
+				printf("%3d  %22.14E  (%11.2E)\n", i + 1, ritz[i], bnd[i]);
+		}
+
+		wptr[0] = null;
+		wptr[1] = null;
+		wptr[2] = null;
+		wptr[3] = null;
+		wptr[4] = null;
+		wptr[7] = null;
+		wptr[8] = null;
+
+		/* Compute eigenvectors */
+		kappa = svd_dmax(fabs(kappa), eps34);
+
+		R = new SVDRec();
+		R.d  = /*svd_imin(nsig, dimensions)*/dimensions;
+		R.Ut = new DMat(R.d, A.rows);
+		R.S  = svd_doubleArray(R.d, true, "las2: R->s");
+		R.Vt = new DMat(R.d, A.cols);
+
+		nsig = ritvec(n, A, R, kappa, ritz, bnd, wptr[6], wptr[9], wptr[5], steps, 
+				neig);
+
+		if (SVDVerbosity > 1) {
+			printf("\nSINGULAR VALUES: ");
+			svdWriteDenseArray(R.S, R.d, "-", false);
+
+			if (SVDVerbosity > 2) {
+				printf("\nLEFT SINGULAR VECTORS (transpose of U): ");
+				// svdWriteDenseMatrix(R.Ut, "-", SVD_F_DT); TODO outout
+
+				printf("\nRIGHT SINGULAR VECTORS (transpose of V): ");
+				// svdWriteDenseMatrix(R.Vt, "-", SVD_F_DT); TODO output
+			}
+		} else if (SVDVerbosity > 0)
+			printf("SINGULAR VALUES FOUND     = %6d\n", R.d);
+
+		/* This swaps and transposes the singular matrices if A was transposed. */
+		if (transpose) {
+			DMat swap = R.Ut;
+			R.Ut = R.Vt;
+			R.Vt = swap;
+		}
+
+		return R;
+	}
 
 
-void svdWriteDenseArray(double[] s, int d, String string, boolean b) {
-	System.out.println("Declare victory!"); // TODO better print
-}
+	void svdWriteDenseArray(double[] s, int d, String string, boolean b) {
+		System.out.println("Declare victory!"); // TODO better print
+	}
 
-/***********************************************************************
-*                                                                     *
-*                        ritvec()                                     *
-* 	    Function computes the singular vectors of matrix A	       *
-*                                                                     *
-***********************************************************************/
-/***********************************************************************
+	/***********************************************************************
+	 *                                                                     *
+	 *                        ritvec()                                     *
+	 * 	    Function computes the singular vectors of matrix A	       *
+	 *                                                                     *
+	 ***********************************************************************/
+	/***********************************************************************
 
 Description
 -----------
@@ -1005,128 +1003,128 @@ BLAS		svd_dscal, svd_dcopy, svd_daxpy
 USER		store
 imtql2
 
-***********************************************************************/
+	 ***********************************************************************/
 
-void rotateArray(double[][] a, int size, int x) {
-	
-	// TODO fix me, in Java we cannot access a[] as a[][] !!!
-	
-	int i, j, n, start;
-	double t1, t2;
-	if (x == 0) return;
-	j = start = 0;
-	t1 = a[0][0];
-	int len = a.length;
-	for (i = 0; i < size; i++) {
-		n = (j >= x) ? j - x : j + size - x;
-		t2 = a[n % len][n / len];
-		a[n % len][n / len] = t1;
-		t1 = t2;
-		j = n;
-		if (j == start) {
-			start = ++j;
-			t1 = a[j % len][j / len];
+	void rotateArray(double[][] a, int size, int x) {
+
+		// TODO fix me, in Java we cannot access a[] as a[][] !!!
+
+		int i, j, n, start;
+		double t1, t2;
+		if (x == 0) return;
+		j = start = 0;
+		t1 = a[0][0];
+		int len = a.length;
+		for (i = 0; i < size; i++) {
+			n = (j >= x) ? j - x : j + size - x;
+			t2 = a[n % len][n / len];
+			a[n % len][n / len] = t1;
+			t1 = t2;
+			j = n;
+			if (j == start) {
+				start = ++j;
+				t1 = a[j % len][j / len];
+			}
 		}
 	}
-}
 
-long ritvec(int n, SMat A, SVDRec R, double kappa, double[] ritz, double[] bnd, 
-		double[] alf, double[] bet, double[] w2, int steps, long neig) {
-	int k, x, i, jsq, js, tmp, id2, nsig;
-	double[] s;
-	double[] xv2;
-	double tmp0, tmp1, xnorm;
-	double[] w1 = R.Vt.value[0];
+	long ritvec(int n, SMat A, SVDRec R, double kappa, double[] ritz, double[] bnd, 
+			double[] alf, double[] bet, double[] w2, int steps, long neig) {
+		int k, x, i, jsq, js, tmp, id2, nsig;
+		double[] s;
+		double[] xv2;
+		double tmp0, tmp1, xnorm;
+		double[] w1 = R.Vt.value[0];
 
-	js = steps + 1;
-	jsq = js * js;
-	/*size = sizeof(double) * n;*/
+		js = steps + 1;
+		jsq = js * js;
+		/*size = sizeof(double) * n;*/
 
-	s = svd_doubleArray(jsq, true, "ritvec: s");
-	xv2 = svd_doubleArray(n, false, "ritvec: xv2");
+		s = svd_doubleArray(jsq, true, "ritvec: s");
+		xv2 = svd_doubleArray(n, false, "ritvec: xv2");
 
-	/* initialize s to an identity matrix */
-	for (i = 0; i < jsq; i+= (js+1)) { 
-		s[i] = 1.0;
-	}
-	svd_dcopy(js, alf, 1, w1, -1); 
-	svd_dcopy(steps, bet, 1, 1, w2, 1, -1); // WAS svd_dcopy(steps, &bet[1], 1, &w2[1], -1);
+		/* initialize s to an identity matrix */
+		for (i = 0; i < jsq; i+= (js+1)) { 
+			s[i] = 1.0;
+		}
+		svd_dcopy(js, alf, 1, w1, -1); 
+		svd_dcopy(steps, bet, 1, 1, w2, 1, -1); // WAS svd_dcopy(steps, &bet[1], 1, &w2[1], -1);
 
-	/* on return from imtql2(), w1 contains eigenvalues in ascending 
-	 * order and s contains the corresponding eigenvectors */
-	imtql2(js, js, w1, w2, s);
-	if (0 != ierr) return 0; // TODO use exception here?
+		/* on return from imtql2(), w1 contains eigenvalues in ascending 
+		 * order and s contains the corresponding eigenvectors */
+		imtql2(js, js, w1, w2, s);
+		if (0 != ierr) return 0; // TODO use exception here?
 
-	/*fwrite((char *)&n, sizeof(n), 1, fp_out2);
+		/*fwrite((char *)&n, sizeof(n), 1, fp_out2);
 fwrite((char *)&js, sizeof(js), 1, fp_out2);
 fwrite((char *)&kappa, sizeof(kappa), 1, fp_out2);*/
-	/*id = 0;*/
-	nsig = 0;
-	x = 0;
-	id2 = jsq - js;
-	for (k = 0; k < js; k++) {
-		tmp = id2;
-		if (bnd[k] <= kappa * Math.abs(ritz[k]) && k > js-neig-1) {
-			if (--x < 0) x = R.d - 1;
-			w1 = R.Vt.value[x];
-			for (i = 0; i < n; i++) w1[i] = 0.0;
-			for (i = 0; i < js; i++) {
-				store(n, storeVals.RETRQ, i, w2);
-				svd_daxpy(n, s[tmp], w2, 1, w1, 1);
-				tmp -= js;
-			}
-			/*fwrite((char *)w1, size, 1, fp_out2);*/
+		/*id = 0;*/
+		nsig = 0;
+		x = 0;
+		id2 = jsq - js;
+		for (k = 0; k < js; k++) {
+			tmp = id2;
+			if (bnd[k] <= kappa * Math.abs(ritz[k]) && k > js-neig-1) {
+				if (--x < 0) x = R.d - 1;
+				w1 = R.Vt.value[x];
+				for (i = 0; i < n; i++) w1[i] = 0.0;
+				for (i = 0; i < js; i++) {
+					store(n, storeVals.RETRQ, i, w2);
+					svd_daxpy(n, s[tmp], w2, 1, w1, 1);
+					tmp -= js;
+				}
+				/*fwrite((char *)w1, size, 1, fp_out2);*/
 
-			/* store the w1 vector row-wise in array xv1;   
-			 * size of xv1 is (steps+1) * (nrow+ncol) elements 
-			 * and each vector, even though only ncol long,
-			 * will have (nrow+ncol) elements in xv1.      
-			 * It is as if xv1 is a 2-d array (steps+1) by     
-			 * (nrow+ncol) and each vector occupies a row  */
+				/* store the w1 vector row-wise in array xv1;   
+				 * size of xv1 is (steps+1) * (nrow+ncol) elements 
+				 * and each vector, even though only ncol long,
+				 * will have (nrow+ncol) elements in xv1.      
+				 * It is as if xv1 is a 2-d array (steps+1) by     
+				 * (nrow+ncol) and each vector occupies a row  */
 
-			/* j is the index in the R arrays, which are sorted by high to low 
+				/* j is the index in the R arrays, which are sorted by high to low 
 singular values. */
 
-			/*for (i = 0; i < n; i++) R->Vt->value[x]xv1[id++] = w1[i];*/
-			/*id += nrow;*/
-			nsig++;
+				/*for (i = 0; i < n; i++) R->Vt->value[x]xv1[id++] = w1[i];*/
+				/*id += nrow;*/
+				nsig++;
+			}
+			id2++;
 		}
-		id2++;
+		s = null;
+
+		/* Rotate the singular vectors and values. */
+		/* x is now the location of the highest singular value. */
+		rotateArray(R.Vt.value, R.Vt.rows * R.Vt.cols, 
+				x * R.Vt.cols);
+		R.d = svd_imin(R.d, nsig);
+		for (x = 0; x < R.d; x++) {
+			/* multiply by matrix B first */
+			svd_opb(A, R.Vt.value[x], xv2, OPBTemp);
+			tmp0 = svd_ddot(n, R.Vt.value[x], 1, xv2, 1);
+			svd_daxpy(n, -tmp0, R.Vt.value[x], 1, xv2, 1);
+			tmp0 = Math.sqrt(tmp0);
+			xnorm = Math.sqrt(svd_ddot(n, xv2, 1, xv2, 1));
+
+			/* multiply by matrix A to get (scaled) left s-vector */
+			svd_opa(A, R.Vt.value[x], R.Ut.value[x]);
+			tmp1 = 1.0 / tmp0;
+			svd_dscal(A.rows, tmp1, R.Ut.value[x], 1);
+			xnorm *= tmp1;
+			bnd[i] = xnorm;
+			R.S[x] = tmp0;
+		}
+
+		xv2 = null;
+		return nsig;
 	}
-	s = null;
 
-	/* Rotate the singular vectors and values. */
-	/* x is now the location of the highest singular value. */
-	rotateArray(R.Vt.value, R.Vt.rows * R.Vt.cols, 
-			x * R.Vt.cols);
-	R.d = svd_imin(R.d, nsig);
-	for (x = 0; x < R.d; x++) {
-		/* multiply by matrix B first */
-		svd_opb(A, R.Vt.value[x], xv2, OPBTemp);
-		tmp0 = svd_ddot(n, R.Vt.value[x], 1, xv2, 1);
-		svd_daxpy(n, -tmp0, R.Vt.value[x], 1, xv2, 1);
-		tmp0 = Math.sqrt(tmp0);
-		xnorm = Math.sqrt(svd_ddot(n, xv2, 1, xv2, 1));
-
-		/* multiply by matrix A to get (scaled) left s-vector */
-		svd_opa(A, R.Vt.value[x], R.Ut.value[x]);
-		tmp1 = 1.0 / tmp0;
-		svd_dscal(A.rows, tmp1, R.Ut.value[x], 1);
-		xnorm *= tmp1;
-		bnd[i] = xnorm;
-		R.S[x] = tmp0;
-	}
-
-	xv2 = null;
-	return nsig;
-}
-
-/***********************************************************************
-*                                                                     *
-*                          lanso()                                    *
-*                                                                     *
-***********************************************************************/
-/***********************************************************************
+	/***********************************************************************
+	 *                                                                     *
+	 *                          lanso()                                    *
+	 *                                                                     *
+	 ***********************************************************************/
+	/***********************************************************************
 
 Description
 -----------
@@ -1173,118 +1171,118 @@ LAS		stpone, error_bound, lanczos_step
 MISC		svd_dsort2
 UTILITY	svd_imin, svd_imax
 
-***********************************************************************/
+	 ***********************************************************************/
 
-int lanso(SMat A, int iterations, int dimensions, double endl,
-		double endr, double[] ritz, double[] bnd, double[][] wptr, 
-		int[] neigp, int n) {
-	double[] alf, eta, oldeta, bet, wrk;
-	int ll, neig, j = 0, intro = 0, last, i, l, id3, first;
-	boolean ENOUGH;
-	
-	alf = wptr[6];
-	eta = wptr[7];
-	oldeta = wptr[8];
-	bet = wptr[9];
-	wrk = wptr[5];
+	int lanso(SMat A, int iterations, int dimensions, double endl,
+			double endr, double[] ritz, double[] bnd, double[][] wptr, 
+			int[] neigp, int n) {
+		double[] alf, eta, oldeta, bet, wrk;
+		int ll, neig, j = 0, intro = 0, last, i, l, id3, first;
+		boolean ENOUGH;
 
-	/* take the first step */
-	double[] ref_rnm = new double[] { 0d }; // XXX wrap
-	double[] ref_tol = new double[] { 0d }; // XXX wrap
-	stpone(A, wptr, ref_rnm, ref_tol, n);
-	double tol = ref_tol[0]; // XXX unwrap
-	double rnm = ref_rnm[0]; // XXX unwrap
-	
-	if (/* !rnm */ 0 == rnm || 0 != ierr) throw null;
-	eta[0] = eps1;
-	oldeta[0] = eps1;
-	ll = 0;
-	first = 1;
-	last = svd_imin(dimensions + svd_imax(8, dimensions), iterations);
-	ENOUGH = false;
-	/*id1 = 0;*/
-	while (/*id1 < dimensions && */!ENOUGH) {
-		if (rnm <= tol) rnm = 0.0;
+		alf = wptr[6];
+		eta = wptr[7];
+		oldeta = wptr[8];
+		bet = wptr[9];
+		wrk = wptr[5];
 
-		/* the actual lanczos loop */
-		int[] ref_ll = new int[] { ll }; // XXX wrap
-		boolean[] ref_ENOUGH = new boolean[] { ENOUGH }; // XXX wrap
-		double[] ref2_rnm = new double[] { rnm }; // XXX wrap
-		double[] ref2_tol = new double[] { tol }; // XXX wrap
-		j = lanczos_step(A, first, last, wptr, alf, eta, oldeta, bet, ref_ll,
-				ref_ENOUGH, ref2_rnm, ref2_tol, n);
-		ll = ref_ll[0]; // XXX unwrap
-		ENOUGH = ref_ENOUGH[0]; // XXX unwrap
-		tol = ref2_tol[0]; // XXX unwrap
-		rnm = ref2_rnm[0]; // XXX unwrap
-		
-		if (ENOUGH) j = j - 1;
-		else j = last - 1;
-		first = j + 1;
-		bet[j+1] = rnm;
+		/* take the first step */
+		double[] ref_rnm = new double[] { 0d }; // XXX wrap
+		double[] ref_tol = new double[] { 0d }; // XXX wrap
+		stpone(A, wptr, ref_rnm, ref_tol, n);
+		double tol = ref_tol[0]; // XXX unwrap
+		double rnm = ref_rnm[0]; // XXX unwrap
 
-		/* analyze T */
-		l = 0;
-		for (int id2 = 0; id2 < j; id2++) {
-			if (l > j) break;
-			for (i = l; i <= j; i++) if (/* !bet[i+1] */ 0 == bet[i+1]) break;
-			if (i > j) i = j;
+		if (/* !rnm */ 0 == rnm || 0 != ierr) throw null;
+		eta[0] = eps1;
+		oldeta[0] = eps1;
+		ll = 0;
+		first = 1;
+		last = svd_imin(dimensions + svd_imax(8, dimensions), iterations);
+		ENOUGH = false;
+		/*id1 = 0;*/
+		while (/*id1 < dimensions && */!ENOUGH) {
+			if (rnm <= tol) rnm = 0.0;
 
-			/* now i is at the end of an unreduced submatrix */
-			svd_dcopy(i-l+1, alf, l,   1, ritz, l,  -1); // WAS svd_dcopy(i-l+1, &alf[l],   1, &ritz[l],  -1); 
-			svd_dcopy(i-l,   bet, l+1, 1, wrk, l+1, -1); // WAS svd_dcopy(i-l,   &bet[l+1], 1, &wrk[l+1], -1);
+			/* the actual lanczos loop */
+			int[] ref_ll = new int[] { ll }; // XXX wrap
+			boolean[] ref_ENOUGH = new boolean[] { ENOUGH }; // XXX wrap
+			double[] ref2_rnm = new double[] { rnm }; // XXX wrap
+			double[] ref2_tol = new double[] { tol }; // XXX wrap
+			j = lanczos_step(A, first, last, wptr, alf, eta, oldeta, bet, ref_ll,
+					ref_ENOUGH, ref2_rnm, ref2_tol, n);
+			ll = ref_ll[0]; // XXX unwrap
+			ENOUGH = ref_ENOUGH[0]; // XXX unwrap
+			tol = ref2_tol[0]; // XXX unwrap
+			rnm = ref2_rnm[0]; // XXX unwrap
 
-			imtqlb(i-l+1, ritz, wrk, bnd, l); // TODO start at l
+			if (ENOUGH) j = j - 1;
+			else j = last - 1;
+			first = j + 1;
+			bet[j+1] = rnm;
 
-			if (0 != ierr) {
-				svd_error("svdLAS2: imtqlb failed to converge (ierr = %ld)\n", ierr);
-				svd_error("  l = %ld  i = %ld\n", l, i);
+			/* analyze T */
+			l = 0;
+			for (int id2 = 0; id2 < j; id2++) {
+				if (l > j) break;
+				for (i = l; i <= j; i++) if (/* !bet[i+1] */ 0 == bet[i+1]) break;
+				if (i > j) i = j;
+
+				/* now i is at the end of an unreduced submatrix */
+				svd_dcopy(i-l+1, alf, l,   1, ritz, l,  -1); // WAS svd_dcopy(i-l+1, &alf[l],   1, &ritz[l],  -1); 
+				svd_dcopy(i-l,   bet, l+1, 1, wrk, l+1, -1); // WAS svd_dcopy(i-l,   &bet[l+1], 1, &wrk[l+1], -1);
+
+				imtqlb(i-l+1, ritz, wrk, bnd, l); // TODO start at l
+
+				if (0 != ierr) {
+					svd_error("svdLAS2: imtqlb failed to converge (ierr = %ld)\n", ierr);
+					svd_error("  l = %ld  i = %ld\n", l, i);
+					for (id3 = l; id3 <= i; id3++) 
+						svd_error("  %ld  %lg  %lg  %lg\n", 
+								id3, ritz[id3], wrk[id3], bnd[id3]);
+				}
 				for (id3 = l; id3 <= i; id3++) 
-					svd_error("  %ld  %lg  %lg  %lg\n", 
-							id3, ritz[id3], wrk[id3], bnd[id3]);
+					bnd[id3] = rnm * fabs(bnd[id3]);
+				l = i + 1;
 			}
-			for (id3 = l; id3 <= i; id3++) 
-				bnd[id3] = rnm * fabs(bnd[id3]);
-			l = i + 1;
-		}
 
-		/* sort eigenvalues into increasing order */
-		svd_dsort2((j+1) / 2, j + 1, ritz, bnd);
+			/* sort eigenvalues into increasing order */
+			svd_dsort2((j+1) / 2, j + 1, ritz, bnd);
 
-		/*    for (i = 0; i < iterations; i++)
+			/*    for (i = 0; i < iterations; i++)
 printf("%f ", ritz[i]);
 printf("\n"); */
 
-		/* massage error bounds for very close ritz values */
-		boolean[] ref2_ENOUGH = new boolean[] { ENOUGH }; // XXX wrap
-		neig = error_bound(ref2_ENOUGH, endl, endr, ritz, bnd, j, tol);
-		ENOUGH = ref2_ENOUGH[0]; // XXX unwrap
-		neigp[0] = neig;
+			/* massage error bounds for very close ritz values */
+			boolean[] ref2_ENOUGH = new boolean[] { ENOUGH }; // XXX wrap
+			neig = error_bound(ref2_ENOUGH, endl, endr, ritz, bnd, j, tol);
+			ENOUGH = ref2_ENOUGH[0]; // XXX unwrap
+			neigp[0] = neig;
 
-		/* should we stop? */
-		if (neig < dimensions) {
-			if (/* !neig */ 0 == neig) {
-				last = first + 9;
-				intro = first;
-			} else last = first + svd_imax(3, 1 + ((j - intro) * (dimensions-neig)) /
-					neig);
-			last = svd_imin(last, iterations);
-		} else ENOUGH = true;
-		ENOUGH = ENOUGH || first >= iterations;
-		/* id1++; */
-		/* printf("id1=%d dimen=%d first=%d\n", id1, dimensions, first); */
+			/* should we stop? */
+			if (neig < dimensions) {
+				if (/* !neig */ 0 == neig) {
+					last = first + 9;
+					intro = first;
+				} else last = first + svd_imax(3, 1 + ((j - intro) * (dimensions-neig)) /
+						neig);
+				last = svd_imin(last, iterations);
+			} else ENOUGH = true;
+			ENOUGH = ENOUGH || first >= iterations;
+			/* id1++; */
+			/* printf("id1=%d dimen=%d first=%d\n", id1, dimensions, first); */
+		}
+		store(n, storeVals.STORQ, j, wptr[1]);
+		return j;
 	}
-	store(n, storeVals.STORQ, j, wptr[1]);
-	return j;
-}
 
 
-/***********************************************************************
-*                                                                     *
-*			lanczos_step()                                 *
-*                                                                     *
-***********************************************************************/
-/***********************************************************************
+	/***********************************************************************
+	 *                                                                     *
+	 *			lanczos_step()                                 *
+	 *                                                                     *
+	 ***********************************************************************/
+	/***********************************************************************
 
 Description
 -----------
@@ -1315,101 +1313,101 @@ USER		store
 LAS		purge, ortbnd, startv
 UTILITY	svd_imin, svd_imax
 
-***********************************************************************/
+	 ***********************************************************************/
 
-int lanczos_step(SMat A, int first, int last, double[][] wptr,
-		double[] alf, double[] eta, double[] oldeta,
-		double[] bet, int[] ll, boolean[] refEnough, double[] rnmp, 
-		double[] tolp, int n) {
-	double t;
-	double[] mid;
-	double rnm = rnmp[0];
-	double tol = tolp[0];
-	double anorm;
-	int i, j;
+	int lanczos_step(SMat A, int first, int last, double[][] wptr,
+			double[] alf, double[] eta, double[] oldeta,
+			double[] bet, int[] ll, boolean[] refEnough, double[] rnmp, 
+			double[] tolp, int n) {
+		double t;
+		double[] mid;
+		double rnm = rnmp[0];
+		double tol = tolp[0];
+		double anorm;
+		int i, j;
 
-	for (j=first; j<last; j++) {
-		mid     = wptr[2];
-		wptr[2] = wptr[1];
-		wptr[1] = mid;
-		mid     = wptr[3];
-		wptr[3] = wptr[4];
-		wptr[4] = mid;
-
-		store(n, STORQ, j-1, wptr[2]);
-		if (j-1 < MAXLL) store(n, STORP, j-1, wptr[4]);
-		bet[j] = rnm;
-
-		/* restart if invariant subspace is found */
-		if (/* !bet[j] */ 0 == bet[j]) {
-			rnm = startv(A, wptr, j, n);
-			if (0 != ierr) return j;
-			if (/* !rnm */ 0 == rnm) refEnough[0] = true;
-		}
-		if (refEnough[0]) {
-			/* added by Doug... */
-			/* These lines fix a bug that occurs with low-rank matrices */
+		for (j=first; j<last; j++) {
 			mid     = wptr[2];
 			wptr[2] = wptr[1];
 			wptr[1] = mid;
-			/* ...added by Doug */
-			break;
+			mid     = wptr[3];
+			wptr[3] = wptr[4];
+			wptr[4] = mid;
+
+			store(n, STORQ, j-1, wptr[2]);
+			if (j-1 < MAXLL) store(n, STORP, j-1, wptr[4]);
+			bet[j] = rnm;
+
+			/* restart if invariant subspace is found */
+			if (/* !bet[j] */ 0 == bet[j]) {
+				rnm = startv(A, wptr, j, n);
+				if (0 != ierr) return j;
+				if (/* !rnm */ 0 == rnm) refEnough[0] = true;
+			}
+			if (refEnough[0]) {
+				/* added by Doug... */
+				/* These lines fix a bug that occurs with low-rank matrices */
+				mid     = wptr[2];
+				wptr[2] = wptr[1];
+				wptr[1] = mid;
+				/* ...added by Doug */
+				break;
+			}
+
+			/* take a lanczos step */
+			t = 1.0 / rnm;
+			svd_datx(n, t, wptr[0], 1, wptr[1], 1);
+			svd_dscal(n, t, wptr[3], 1);
+			svd_opb(A, wptr[3], wptr[0], OPBTemp);
+			svd_daxpy(n, -rnm, wptr[2], 1, wptr[0], 1);
+			alf[j] = svd_ddot(n, wptr[0], 1, wptr[3], 1);
+			svd_daxpy(n, -alf[j], wptr[1], 1, wptr[0], 1);
+
+			/* orthogonalize against initial lanczos vectors */
+			if (j <= MAXLL && (Math.abs(alf[j-1]) > 4.0 * Math.abs(alf[j])))
+				ll[0] = j;  
+			for (i=0; i < svd_imin(ll[0], j-1); i++) {
+				store(n, RETRP, i, wptr[5]);
+				t = svd_ddot(n, wptr[5], 1, wptr[0], 1);
+				store(n, RETRQ, i, wptr[5]);
+				svd_daxpy(n, -t, wptr[5], 1, wptr[0], 1);
+				eta[i] = eps1;
+				oldeta[i] = eps1;
+			}
+
+			/* extended local reorthogonalization */
+			t = svd_ddot(n, wptr[0], 1, wptr[4], 1);
+			svd_daxpy(n, -t, wptr[2], 1, wptr[0], 1);
+			if (bet[j] > 0.0) bet[j] = bet[j] + t;
+			t = svd_ddot(n, wptr[0], 1, wptr[3], 1);
+			svd_daxpy(n, -t, wptr[1], 1, wptr[0], 1);
+			alf[j] = alf[j] + t;
+			svd_dcopy(n, wptr[0], 1, wptr[4], 1);
+			rnm = Math.sqrt(svd_ddot(n, wptr[0], 1, wptr[4], 1));
+			anorm = bet[j] + Math.abs(alf[j]) + rnm;
+			tol = reps * anorm;
+
+			/* update the orthogonality bounds */
+			ortbnd(alf, eta, oldeta, bet, j, rnm);
+
+			/* restore the orthogonality state when needed */
+			double[] ref_rnm = new double[] { rnm }; // XXX wrap  
+			purge(n, ll[0], wptr[0], wptr[1], wptr[4], wptr[3], wptr[5], eta, oldeta,
+					j, ref_rnm, tol);
+			rnm = ref_rnm[0]; // XXX unwrap
+			if (rnm <= tol) rnm = 0.0;
 		}
-
-		/* take a lanczos step */
-		t = 1.0 / rnm;
-		svd_datx(n, t, wptr[0], 1, wptr[1], 1);
-		svd_dscal(n, t, wptr[3], 1);
-		svd_opb(A, wptr[3], wptr[0], OPBTemp);
-		svd_daxpy(n, -rnm, wptr[2], 1, wptr[0], 1);
-		alf[j] = svd_ddot(n, wptr[0], 1, wptr[3], 1);
-		svd_daxpy(n, -alf[j], wptr[1], 1, wptr[0], 1);
-
-		/* orthogonalize against initial lanczos vectors */
-		if (j <= MAXLL && (Math.abs(alf[j-1]) > 4.0 * Math.abs(alf[j])))
-			ll[0] = j;  
-		for (i=0; i < svd_imin(ll[0], j-1); i++) {
-			store(n, RETRP, i, wptr[5]);
-			t = svd_ddot(n, wptr[5], 1, wptr[0], 1);
-			store(n, RETRQ, i, wptr[5]);
-			svd_daxpy(n, -t, wptr[5], 1, wptr[0], 1);
-			eta[i] = eps1;
-			oldeta[i] = eps1;
-		}
-
-		/* extended local reorthogonalization */
-		t = svd_ddot(n, wptr[0], 1, wptr[4], 1);
-		svd_daxpy(n, -t, wptr[2], 1, wptr[0], 1);
-		if (bet[j] > 0.0) bet[j] = bet[j] + t;
-		t = svd_ddot(n, wptr[0], 1, wptr[3], 1);
-		svd_daxpy(n, -t, wptr[1], 1, wptr[0], 1);
-		alf[j] = alf[j] + t;
-		svd_dcopy(n, wptr[0], 1, wptr[4], 1);
-		rnm = Math.sqrt(svd_ddot(n, wptr[0], 1, wptr[4], 1));
-		anorm = bet[j] + Math.abs(alf[j]) + rnm;
-		tol = reps * anorm;
-
-		/* update the orthogonality bounds */
-		ortbnd(alf, eta, oldeta, bet, j, rnm);
-
-		/* restore the orthogonality state when needed */
-		double[] ref_rnm = new double[] { rnm }; // XXX wrap  
-		purge(n, ll[0], wptr[0], wptr[1], wptr[4], wptr[3], wptr[5], eta, oldeta,
-				j, ref_rnm, tol);
-		rnm = ref_rnm[0]; // XXX unwrap
-		if (rnm <= tol) rnm = 0.0;
+		rnmp[0] = rnm;
+		tolp[0] = tol;
+		return j;
 	}
-	rnmp[0] = rnm;
-	tolp[0] = tol;
-	return j;
-}
 
-/***********************************************************************
-*                                                                     *
-*                          ortbnd()                                   *
-*                                                                     *
-***********************************************************************/
-/***********************************************************************
+	/***********************************************************************
+	 *                                                                     *
+	 *                          ortbnd()                                   *
+	 *                                                                     *
+	 ***********************************************************************/
+	/***********************************************************************
 
 Description
 -----------
@@ -1439,33 +1437,33 @@ Functions used
 
 BLAS		svd_dswap
 
-***********************************************************************/
+	 ***********************************************************************/
 
-void ortbnd(double[] alf, double[] eta, double[] oldeta, double[] bet, int step,
-		double rnm) {
-	int i;
-	if (step < 1) return;
-	if (/* rnm */ 0 != rnm) { 
-		if (step > 1) {
-			oldeta[0] = (bet[1] * eta[1] + (alf[0]-alf[step]) * eta[0] -
-					bet[step] * oldeta[0]) / rnm + eps1;
+	void ortbnd(double[] alf, double[] eta, double[] oldeta, double[] bet, int step,
+			double rnm) {
+		int i;
+		if (step < 1) return;
+		if (/* rnm */ 0 != rnm) { 
+			if (step > 1) {
+				oldeta[0] = (bet[1] * eta[1] + (alf[0]-alf[step]) * eta[0] -
+						bet[step] * oldeta[0]) / rnm + eps1;
+			}
+			for (i=1; i<=step-2; i++) 
+				oldeta[i] = (bet[i+1] * eta[i+1] + (alf[i]-alf[step]) * eta[i] +
+						bet[i] * eta[i-1] - bet[step] * oldeta[i])/rnm + eps1;
 		}
-		for (i=1; i<=step-2; i++) 
-			oldeta[i] = (bet[i+1] * eta[i+1] + (alf[i]-alf[step]) * eta[i] +
-					bet[i] * eta[i-1] - bet[step] * oldeta[i])/rnm + eps1;
+		oldeta[step-1] = eps1;
+		svd_dswap(step, oldeta, 1, eta, 1);  
+		eta[step] = eps1;
+		return;
 	}
-	oldeta[step-1] = eps1;
-	svd_dswap(step, oldeta, 1, eta, 1);  
-	eta[step] = eps1;
-	return;
-}
 
-/***********************************************************************
-*                                                                     *
-*				purge()                                *
-*                                                                     *
-***********************************************************************/
-/***********************************************************************
+	/***********************************************************************
+	 *                                                                     *
+	 *				purge()                                *
+	 *                                                                     *
+	 ***********************************************************************/
+	/***********************************************************************
 
 Description
 -----------
@@ -1502,65 +1500,65 @@ Functions used
 BLAS		svd_daxpy,  svd_dcopy,  svd_idamax,  svd_ddot
 USER		store
 
-***********************************************************************/
+	 ***********************************************************************/
 
-void purge(int n, int ll, double[] r, double[] q, double[] ra,  
-		double[] qa, double[] wrk, double[] eta, double[] oldeta, int step, 
-		double[] rnmp, double tol) {
-	double t, tq, tr, reps1;
-	double rnm = rnmp[0];
-	int k, iteration, i;
-	boolean flag;
+	void purge(int n, int ll, double[] r, double[] q, double[] ra,  
+			double[] qa, double[] wrk, double[] eta, double[] oldeta, int step, 
+			double[] rnmp, double tol) {
+		double t, tq, tr, reps1;
+		double rnm = rnmp[0];
+		int k, iteration, i;
+		boolean flag;
 
-	if (step < ll+2) return; 
+		if (step < ll+2) return; 
 
-	k = svd_idamax(step - (ll+1), eta, ll, 1) + ll; // TODO eta starting at ll
-	if (Math.abs(eta[k]) > reps) {
-		reps1 = eps1 / reps;
-		iteration = 0;
-		flag = true;
-		while (iteration < 2 && flag) {
-			if (rnm > tol) {
+		k = svd_idamax(step - (ll+1), eta, ll, 1) + ll; // TODO eta starting at ll
+		if (Math.abs(eta[k]) > reps) {
+			reps1 = eps1 / reps;
+			iteration = 0;
+			flag = true;
+			while (iteration < 2 && flag) {
+				if (rnm > tol) {
 
-				/* bring in a lanczos vector t and orthogonalize both 
-				 * r and q against it */
-				tq = 0.0;
-				tr = 0.0;
-				for (i = ll; i < step; i++) {
-					store(n,  RETRQ,  i,  wrk);
-					t   = -svd_ddot(n, qa, 1, wrk, 1);
-					tq += Math.abs(t);
-					svd_daxpy(n,  t,  wrk,  1,  q,  1);
-					t   = -svd_ddot(n, ra, 1, wrk, 1);
+					/* bring in a lanczos vector t and orthogonalize both 
+					 * r and q against it */
+					tq = 0.0;
+					tr = 0.0;
+					for (i = ll; i < step; i++) {
+						store(n,  RETRQ,  i,  wrk);
+						t   = -svd_ddot(n, qa, 1, wrk, 1);
+						tq += Math.abs(t);
+						svd_daxpy(n,  t,  wrk,  1,  q,  1);
+						t   = -svd_ddot(n, ra, 1, wrk, 1);
+						tr += Math.abs(t);
+						svd_daxpy(n, t, wrk, 1, r, 1);
+					}
+					svd_dcopy(n, q, 1, qa, 1);
+					t   = -svd_ddot(n, r, 1, qa, 1);
 					tr += Math.abs(t);
-					svd_daxpy(n, t, wrk, 1, r, 1);
+					svd_daxpy(n, t, q, 1, r, 1);
+					svd_dcopy(n, r, 1, ra, 1);
+					rnm = Math.sqrt(svd_ddot(n, ra, 1, r, 1));
+					if (tq <= reps1 && tr <= reps1 * rnm) flag = false;
 				}
-				svd_dcopy(n, q, 1, qa, 1);
-				t   = -svd_ddot(n, r, 1, qa, 1);
-				tr += Math.abs(t);
-				svd_daxpy(n, t, q, 1, r, 1);
-				svd_dcopy(n, r, 1, ra, 1);
-				rnm = Math.sqrt(svd_ddot(n, ra, 1, r, 1));
-				if (tq <= reps1 && tr <= reps1 * rnm) flag = false;
+				iteration++;
 			}
-			iteration++;
+			for (i = ll; i <= step; i++) { 
+				eta[i] = eps1;
+				oldeta[i] = eps1;
+			}
 		}
-		for (i = ll; i <= step; i++) { 
-			eta[i] = eps1;
-			oldeta[i] = eps1;
-		}
+		rnmp[0] = rnm;
+		return;
 	}
-	rnmp[0] = rnm;
-	return;
-}
 
 
-/***********************************************************************
-*                                                                     *
-*                         stpone()                                    *
-*                                                                     *
-***********************************************************************/
-/***********************************************************************
+	/***********************************************************************
+	 *                                                                     *
+	 *                         stpone()                                    *
+	 *                                                                     *
+	 ***********************************************************************/
+	/***********************************************************************
 
 Description
 -----------
@@ -1592,47 +1590,47 @@ BLAS		svd_daxpy, svd_datx, svd_dcopy, svd_ddot, svd_dscal
 USER		store, opb
 LAS		startv
 
-***********************************************************************/
+	 ***********************************************************************/
 
-double fabs(double a) {
-	return Math.abs(a);
-}
+	double fabs(double a) {
+		return Math.abs(a);
+	}
 
-void stpone(SMat A, double[][] wrkptr, double[] rnmp, double[] tolp, int n) {
-	double t, rnm, anorm;
-	double[] alf = wrkptr[6];
+	void stpone(SMat A, double[][] wrkptr, double[] rnmp, double[] tolp, int n) {
+		double t, rnm, anorm;
+		double[] alf = wrkptr[6];
 
-	/* get initial vector; default is random */
-	rnm = startv(A, wrkptr, 0, n);
-	if (rnm == 0.0 || ierr != 0) return;
+		/* get initial vector; default is random */
+		rnm = startv(A, wrkptr, 0, n);
+		if (rnm == 0.0 || ierr != 0) return;
 
-	/* normalize starting vector */
-	t = 1.0 / rnm;
-	svd_datx(n, t, wrkptr[0], 1, wrkptr[1], 1);
-	svd_dscal(n, t, wrkptr[3], 1);
+		/* normalize starting vector */
+		t = 1.0 / rnm;
+		svd_datx(n, t, wrkptr[0], 1, wrkptr[1], 1);
+		svd_dscal(n, t, wrkptr[3], 1);
 
-	/* take the first step */
-	svd_opb(A, wrkptr[3], wrkptr[0], OPBTemp);
-	alf[0] = svd_ddot(n, wrkptr[0], 1, wrkptr[3], 1);
-	svd_daxpy(n, -alf[0], wrkptr[1], 1, wrkptr[0], 1);
-	t = svd_ddot(n, wrkptr[0], 1, wrkptr[3], 1);
-	svd_daxpy(n, -t, wrkptr[1], 1, wrkptr[0], 1);
-	alf[0] += t;
-	svd_dcopy(n, wrkptr[0], 1, wrkptr[4], 1);
-	rnm = Math.sqrt(svd_ddot(n, wrkptr[0], 1, wrkptr[4], 1));
-	anorm = rnm + fabs(alf[0]);
-	rnmp[0] = rnm;
-	tolp[0] = reps * anorm;
+		/* take the first step */
+		svd_opb(A, wrkptr[3], wrkptr[0], OPBTemp);
+		alf[0] = svd_ddot(n, wrkptr[0], 1, wrkptr[3], 1);
+		svd_daxpy(n, -alf[0], wrkptr[1], 1, wrkptr[0], 1);
+		t = svd_ddot(n, wrkptr[0], 1, wrkptr[3], 1);
+		svd_daxpy(n, -t, wrkptr[1], 1, wrkptr[0], 1);
+		alf[0] += t;
+		svd_dcopy(n, wrkptr[0], 1, wrkptr[4], 1);
+		rnm = Math.sqrt(svd_ddot(n, wrkptr[0], 1, wrkptr[4], 1));
+		anorm = rnm + fabs(alf[0]);
+		rnmp[0] = rnm;
+		tolp[0] = reps * anorm;
 
-	return;
-}
+		return;
+	}
 
-/***********************************************************************
-*                                                                     *
-*                         startv()                                    *
-*                                                                     *
-***********************************************************************/
-/***********************************************************************
+	/***********************************************************************
+	 *                                                                     *
+	 *                         startv()                                    *
+	 *                                                                     *
+	 ***********************************************************************/
+	/***********************************************************************
 
 Description
 -----------
@@ -1662,59 +1660,59 @@ BLAS		svd_ddot, svd_dcopy, svd_daxpy
 USER		svd_opb, store
 MISC		random
 
-***********************************************************************/
+	 ***********************************************************************/
 
-double startv(SMat A, double[][] wptr, int step, int n) {
-	double rnm2, t;
-	double[] r;
-	//long irand;
-	int id, i;
+	double startv(SMat A, double[][] wptr, int step, int n) {
+		double rnm2, t;
+		double[] r;
+		//long irand;
+		int id, i;
 
-	/* get initial vector; default is random */
-	rnm2 = svd_ddot(n, wptr[0], 1, wptr[0], 1);
-	Random random = new Random(); // irand = 918273 + step;
-	r = wptr[0];
-	for (id = 0; id < 3; id++) {
-		if (id > 0 || step > 0 || rnm2 == 0) 
-			for (i = 0; i < n; i++) r[i] = random.nextDouble(); // svd_random2(&irand);
-		svd_dcopy(n, wptr[0], 1, wptr[3], 1);
+		/* get initial vector; default is random */
+		rnm2 = svd_ddot(n, wptr[0], 1, wptr[0], 1);
+		Random random = new Random(); // irand = 918273 + step;
+		r = wptr[0];
+		for (id = 0; id < 3; id++) {
+			if (id > 0 || step > 0 || rnm2 == 0) 
+				for (i = 0; i < n; i++) r[i] = random.nextDouble(); // svd_random2(&irand);
+			svd_dcopy(n, wptr[0], 1, wptr[3], 1);
 
-		/* apply operator to put r in range (essential if m singular) */
-		svd_opb(A, wptr[3], wptr[0], OPBTemp);
-		svd_dcopy(n, wptr[0], 1, wptr[3], 1);
-		rnm2 = svd_ddot(n, wptr[0], 1, wptr[3], 1);
-		if (rnm2 > 0.0) break;
-	}
-
-	/* fatal error */
-	if (rnm2 <= 0.0) {
-		ierr = 8192;
-		throw null; // TODO better error handling 
-	}
-	if (step > 0) {
-		for (i = 0; i < step; i++) {
-			store(n, RETRQ, i, wptr[5]);
-			t = -svd_ddot(n, wptr[3], 1, wptr[5], 1);
-			svd_daxpy(n, t, wptr[5], 1, wptr[0], 1);
+			/* apply operator to put r in range (essential if m singular) */
+			svd_opb(A, wptr[3], wptr[0], OPBTemp);
+			svd_dcopy(n, wptr[0], 1, wptr[3], 1);
+			rnm2 = svd_ddot(n, wptr[0], 1, wptr[3], 1);
+			if (rnm2 > 0.0) break;
 		}
 
-		/* make sure q[step] is orthogonal to q[step-1] */
-		t = svd_ddot(n, wptr[4], 1, wptr[0], 1);
-		svd_daxpy(n, -t, wptr[2], 1, wptr[0], 1);
-		svd_dcopy(n, wptr[0], 1, wptr[3], 1);
-		t = svd_ddot(n, wptr[3], 1, wptr[0], 1);
-		if (t <= eps * rnm2) t = 0.0;
-		rnm2 = t;
-	}
-	return(Math.sqrt(rnm2));
-}
+		/* fatal error */
+		if (rnm2 <= 0.0) {
+			ierr = 8192;
+			throw null; // TODO better error handling 
+		}
+		if (step > 0) {
+			for (i = 0; i < step; i++) {
+				store(n, RETRQ, i, wptr[5]);
+				t = -svd_ddot(n, wptr[3], 1, wptr[5], 1);
+				svd_daxpy(n, t, wptr[5], 1, wptr[0], 1);
+			}
 
-/***********************************************************************
-*                                                                     *
-*			error_bound()                                  *
-*                                                                     *
-***********************************************************************/
-/***********************************************************************
+			/* make sure q[step] is orthogonal to q[step-1] */
+			t = svd_ddot(n, wptr[4], 1, wptr[0], 1);
+			svd_daxpy(n, -t, wptr[2], 1, wptr[0], 1);
+			svd_dcopy(n, wptr[0], 1, wptr[3], 1);
+			t = svd_ddot(n, wptr[3], 1, wptr[0], 1);
+			if (t <= eps * rnm2) t = 0.0;
+			rnm2 = t;
+		}
+		return(Math.sqrt(rnm2));
+	}
+
+	/***********************************************************************
+	 *                                                                     *
+	 *			error_bound()                                  *
+	 *                                                                     *
+	 ***********************************************************************/
+	/***********************************************************************
 
 Description
 -----------
@@ -1741,54 +1739,54 @@ Functions used
 BLAS		svd_idamax
 UTILITY	svd_dmin
 
-***********************************************************************/
+	 ***********************************************************************/
 
-int error_bound(boolean[] enough, double endl, double endr, 
-		double[] ritz, double[] bnd, int step, double tol) {
-	int mid, neig;
-	int i;
-	double gapl, gap;
+	int error_bound(boolean[] enough, double endl, double endr, 
+			double[] ritz, double[] bnd, int step, double tol) {
+		int mid, neig;
+		int i;
+		double gapl, gap;
 
-	/* massage error bounds for very close ritz values */
-	mid = svd_idamax(step + 1, bnd, 0, 1);
+		/* massage error bounds for very close ritz values */
+		mid = svd_idamax(step + 1, bnd, 0, 1);
 
-	for (i=((step+1) + (step-1)) / 2; i >= mid + 1; i -= 1)
-		if (fabs(ritz[i-1] - ritz[i]) < eps34 * fabs(ritz[i])) 
-			if (bnd[i] > tol && bnd[i-1] > tol) {
-				bnd[i-1] = Math.sqrt(bnd[i] * bnd[i] + bnd[i-1] * bnd[i-1]);
-				bnd[i] = 0.0;
+		for (i=((step+1) + (step-1)) / 2; i >= mid + 1; i -= 1)
+			if (fabs(ritz[i-1] - ritz[i]) < eps34 * fabs(ritz[i])) 
+				if (bnd[i] > tol && bnd[i-1] > tol) {
+					bnd[i-1] = Math.sqrt(bnd[i] * bnd[i] + bnd[i-1] * bnd[i-1]);
+					bnd[i] = 0.0;
+				}
+
+
+		for (i=((step+1) - (step-1)) / 2; i <= mid - 1; i +=1 ) 
+			if (fabs(ritz[i+1] - ritz[i]) < eps34 * fabs(ritz[i])) 
+				if (bnd[i] > tol && bnd[i+1] > tol) {
+					bnd[i+1] = Math.sqrt(bnd[i] * bnd[i] + bnd[i+1] * bnd[i+1]);
+					bnd[i] = 0.0;
+				}
+
+		/* refine the error bounds */
+		neig = 0;
+		gapl = ritz[step] - ritz[0];
+		for (i = 0; i <= step; i++) {
+			gap = gapl;
+			if (i < step) gapl = ritz[i+1] - ritz[i];
+			gap = svd_dmin(gap, gapl);
+			if (gap > bnd[i]) bnd[i] = bnd[i] * (bnd[i] / gap);
+			if (bnd[i] <= 16.0 * eps * fabs(ritz[i])) {
+				neig++;
+				if (!enough[0]) enough[0] = endl < ritz[i] && ritz[i] < endr;
 			}
+		}   
+		return neig;
+	}
 
-
-	for (i=((step+1) - (step-1)) / 2; i <= mid - 1; i +=1 ) 
-		if (fabs(ritz[i+1] - ritz[i]) < eps34 * fabs(ritz[i])) 
-			if (bnd[i] > tol && bnd[i+1] > tol) {
-				bnd[i+1] = Math.sqrt(bnd[i] * bnd[i] + bnd[i+1] * bnd[i+1]);
-				bnd[i] = 0.0;
-			}
-
-	/* refine the error bounds */
-	neig = 0;
-	gapl = ritz[step] - ritz[0];
-	for (i = 0; i <= step; i++) {
-		gap = gapl;
-		if (i < step) gapl = ritz[i+1] - ritz[i];
-		gap = svd_dmin(gap, gapl);
-		if (gap > bnd[i]) bnd[i] = bnd[i] * (bnd[i] / gap);
-		if (bnd[i] <= 16.0 * eps * fabs(ritz[i])) {
-			neig++;
-			if (!enough[0]) enough[0] = endl < ritz[i] && ritz[i] < endr;
-		}
-	}   
-	return neig;
-}
-
-/***********************************************************************
-*                                                                     *
-*				imtqlb()			       *
-*                                                                     *
-***********************************************************************/
-/***********************************************************************
+	/***********************************************************************
+	 *                                                                     *
+	 *				imtqlb()			       *
+	 *                                                                     *
+	 ***********************************************************************/
+	/***********************************************************************
 
 Description
 -----------
@@ -1827,130 +1825,130 @@ Functions used
 UTILITY	svd_fsign
 MISC		svd_pythag
 
-***********************************************************************/
+	 ***********************************************************************/
 
-void imtqlb(int n, double d[], double e[], double bnd[], int offset) {
-	double[] dn = new double[n];
-	System.arraycopy(d, offset, dn, 0, n);
-	double[] en = new double[n];
-	System.arraycopy(e, offset, en, 0, n);
-	double[] bndn = new double[n];
-	System.arraycopy(bnd, offset, bndn, 0, n);
-	imtqlb(n, dn, en, bndn);
-	System.arraycopy(dn, 0, d, offset, n);
-	System.arraycopy(en, 0, e, offset, n);
-	System.arraycopy(bndn, 0, bnd, offset, n);
-}
-
-void imtqlb(int n, double d[], double e[], double bnd[]) {
-	long iteration;
-	int last, i, m, l;
-	
-	/* various flags */
-	boolean exchange, convergence, underflow;
-	
-	double b, test, g, r, s, c, p, f;
-
-	if (n == 1) return;
-	ierr = 0;
-	bnd[0] = 1.0;
-	last = n - 1;
-	for (i = 1; i < n; i++) {
-		bnd[i] = 0.0;
-		e[i-1] = e[i];
+	void imtqlb(int n, double d[], double e[], double bnd[], int offset) {
+		double[] dn = new double[n];
+		System.arraycopy(d, offset, dn, 0, n);
+		double[] en = new double[n];
+		System.arraycopy(e, offset, en, 0, n);
+		double[] bndn = new double[n];
+		System.arraycopy(bnd, offset, bndn, 0, n);
+		imtqlb(n, dn, en, bndn);
+		System.arraycopy(dn, 0, d, offset, n);
+		System.arraycopy(en, 0, e, offset, n);
+		System.arraycopy(bndn, 0, bnd, offset, n);
 	}
-	e[last] = 0.0;
-	for (l = 0; l < n; l++) {
-		iteration = 0;
-		while (iteration <= 30) {
-			for (m = l; m < n; m++) {
-				convergence = false;
-				if (m == last) break;
-				else {
-					test = fabs(d[m]) + fabs(d[m+1]);
-					if (test + fabs(e[m]) == test) convergence = true;
-				}
-				if (convergence) break;
-			}
-			p = d[l]; 
-			f = bnd[l]; 
-			if (m != l) {
-				if (iteration == 30) {
-					ierr = l;
-					return;
-				}
-				iteration += 1;
-				/*........ form shift ........*/
-				g = (d[l+1] - p) / (2.0 * e[l]);
-				r = svd_pythag(g, 1.0);
-				g = d[m] - p + e[l] / (g + svd_fsign(r, g));
-				s = 1.0;
-				c = 1.0;
-				p = 0.0;
-				underflow = false;
-				i = m - 1;
-				while (underflow == false && i >= l) {
-					f = s * e[i];
-					b = c * e[i];
-					r = svd_pythag(f, g);
-					e[i+1] = r;
-					if (r == 0.0) underflow = true;
-					else {
-						s = f / r;
-						c = g / r;
-						g = d[i+1] - p;
-						r = (d[i] - g) * s + 2.0 * c * b;
-						p = s * r;
-						d[i+1] = g + p;
-						g = c * r - b;
-						f = bnd[i+1];
-						bnd[i+1] = s * bnd[i] + c * f;
-						bnd[i] = c * bnd[i] - s * f;
-						i--;
-					}
-				}       /* end while (underflow != FALSE && i >= l) */
-				/*........ recover from underflow .........*/
-				if (underflow) {
-					d[i+1] -= p;
-					e[m] = 0.0;
-				}
-				else {
-					d[l] -= p;
-					e[l] = g;
-					e[m] = 0.0;
-				}
-			} 		       		   /* end if (m != l) */
-			else {
 
-				/* order the eigenvalues */
-				exchange = true;
-				if (l != 0) {
-					i = l;
-					while (i >= 1 && exchange == true) {
-						if (p < d[i-1]) {
-							d[i] = d[i-1];
-							bnd[i] = bnd[i-1];
+	void imtqlb(int n, double d[], double e[], double bnd[]) {
+		long iteration;
+		int last, i, m, l;
+
+		/* various flags */
+		boolean exchange, convergence, underflow;
+
+		double b, test, g, r, s, c, p, f;
+
+		if (n == 1) return;
+		ierr = 0;
+		bnd[0] = 1.0;
+		last = n - 1;
+		for (i = 1; i < n; i++) {
+			bnd[i] = 0.0;
+			e[i-1] = e[i];
+		}
+		e[last] = 0.0;
+		for (l = 0; l < n; l++) {
+			iteration = 0;
+			while (iteration <= 30) {
+				for (m = l; m < n; m++) {
+					convergence = false;
+					if (m == last) break;
+					else {
+						test = fabs(d[m]) + fabs(d[m+1]);
+						if (test + fabs(e[m]) == test) convergence = true;
+					}
+					if (convergence) break;
+				}
+				p = d[l]; 
+				f = bnd[l]; 
+				if (m != l) {
+					if (iteration == 30) {
+						ierr = l;
+						return;
+					}
+					iteration += 1;
+					/*........ form shift ........*/
+					g = (d[l+1] - p) / (2.0 * e[l]);
+					r = svd_pythag(g, 1.0);
+					g = d[m] - p + e[l] / (g + svd_fsign(r, g));
+					s = 1.0;
+					c = 1.0;
+					p = 0.0;
+					underflow = false;
+					i = m - 1;
+					while (underflow == false && i >= l) {
+						f = s * e[i];
+						b = c * e[i];
+						r = svd_pythag(f, g);
+						e[i+1] = r;
+						if (r == 0.0) underflow = true;
+						else {
+							s = f / r;
+							c = g / r;
+							g = d[i+1] - p;
+							r = (d[i] - g) * s + 2.0 * c * b;
+							p = s * r;
+							d[i+1] = g + p;
+							g = c * r - b;
+							f = bnd[i+1];
+							bnd[i+1] = s * bnd[i] + c * f;
+							bnd[i] = c * bnd[i] - s * f;
 							i--;
 						}
-						else exchange = false;
+					}       /* end while (underflow != FALSE && i >= l) */
+					/*........ recover from underflow .........*/
+					if (underflow) {
+						d[i+1] -= p;
+						e[m] = 0.0;
 					}
-				}
-				if (exchange) i = 0;
-				d[i] = p;
-				bnd[i] = f; 
-				iteration = 31;
-			}
-		}			       /* end while (iteration <= 30) */
-	}				   /* end for (l=0; l<n; l++) */
-	return;
-}						  /* end main */
+					else {
+						d[l] -= p;
+						e[l] = g;
+						e[m] = 0.0;
+					}
+				} 		       		   /* end if (m != l) */
+				else {
 
-/***********************************************************************
-*                                                                     *
-*				imtql2()			       *
-*                                                                     *
-***********************************************************************/
-/***********************************************************************
+					/* order the eigenvalues */
+					exchange = true;
+					if (l != 0) {
+						i = l;
+						while (i >= 1 && exchange == true) {
+							if (p < d[i-1]) {
+								d[i] = d[i-1];
+								bnd[i] = bnd[i-1];
+								i--;
+							}
+							else exchange = false;
+						}
+					}
+					if (exchange) i = 0;
+					d[i] = p;
+					bnd[i] = f; 
+					iteration = 31;
+				}
+			}			       /* end while (iteration <= 30) */
+		}				   /* end for (l=0; l<n; l++) */
+		return;
+	}						  /* end main */
+
+	/***********************************************************************
+	 *                                                                     *
+	 *				imtql2()			       *
+	 *                                                                     *
+	 ***********************************************************************/
+	/***********************************************************************
 
 Description
 -----------
@@ -1976,7 +1974,7 @@ d      contains the diagonal elements of the input matrix
 e      contains the subdiagonal elements of the input matrix in its
 last n-1 positions.  e[0] is arbitrary	             
 z      contains the identity matrix				    
-                                            
+
 (output)                                                       
 d      contains the eigenvalues in ascending order.  if an error
 exit is made, the eigenvalues are correct but unordered for
@@ -1995,124 +1993,124 @@ Functions used
 UTILITY	svd_fsign
 MISC		svd_pythag
 
-***********************************************************************/
+	 ***********************************************************************/
 
-void imtql2(int nm, int n, double d[], double e[], double z[]) {
-	int index, nnm, j, last, l, m, i, k, iteration;
-	boolean convergence, underflow;
-	
-	double b, test, g, r, s, c, p, f;
-	if (n == 1) return;
-	ierr = 0;
-	last = n - 1;
-	for (i = 1; i < n; i++) e[i-1] = e[i];
-	e[last] = 0.0;
-	nnm = n * nm;
-	for (l = 0; l < n; l++) {
-		iteration = 0;
+	void imtql2(int nm, int n, double d[], double e[], double z[]) {
+		int index, nnm, j, last, l, m, i, k, iteration;
+		boolean convergence, underflow;
 
-		/* look for small sub-diagonal element */
-		while (iteration <= 30) {
-			for (m = l; m < n; m++) {
-				convergence = false;
-				if (m == last) break;
-				else {
-					test = fabs(d[m]) + fabs(d[m+1]);
-					if (test + fabs(e[m]) == test) convergence = true;
-				}
-				if (convergence) break;
-			}
-			if (m != l) {
+		double b, test, g, r, s, c, p, f;
+		if (n == 1) return;
+		ierr = 0;
+		last = n - 1;
+		for (i = 1; i < n; i++) e[i-1] = e[i];
+		e[last] = 0.0;
+		nnm = n * nm;
+		for (l = 0; l < n; l++) {
+			iteration = 0;
 
-				/* set error -- no convergence to an eigenvalue after
-				 * 30 iterations. */     
-				if (iteration == 30) {
-					ierr = l;
-					return;
-				}
-				p = d[l]; 
-				iteration += 1;
-
-				/* form shift */
-				g = (d[l+1] - p) / (2.0 * e[l]);
-				r = svd_pythag(g, 1.0);
-				g = d[m] - p + e[l] / (g + svd_fsign(r, g));
-				s = 1.0;
-				c = 1.0;
-				p = 0.0;
-				underflow = false;
-				i = m - 1;
-				while (underflow == false && i >= l) {
-					f = s * e[i];
-					b = c * e[i];
-					r = svd_pythag(f, g);
-					e[i+1] = r;
-					if (r == 0.0) underflow = true;
+			/* look for small sub-diagonal element */
+			while (iteration <= 30) {
+				for (m = l; m < n; m++) {
+					convergence = false;
+					if (m == last) break;
 					else {
-						s = f / r;
-						c = g / r;
-						g = d[i+1] - p;
-						r = (d[i] - g) * s + 2.0 * c * b;
-						p = s * r;
-						d[i+1] = g + p;
-						g = c * r - b;
-
-						/* form vector */
-						for (k = 0; k < nnm; k += n) {
-							index = k + i;
-							f = z[index+1];
-							z[index+1] = s * z[index] + c * f;
-							z[index] = c * z[index] - s * f;
-						} 
-						i--;
+						test = fabs(d[m]) + fabs(d[m+1]);
+						if (test + fabs(e[m]) == test) convergence = true;
 					}
-				}   /* end while (underflow != FALSE && i >= l) */
-				/*........ recover from underflow .........*/
-				if (underflow) {
-					d[i+1] -= p;
-					e[m] = 0.0;
+					if (convergence) break;
 				}
-				else {
-					d[l] -= p;
-					e[l] = g;
-					e[m] = 0.0;
-				}
-			}
-			else break;
-		}		/*...... end while (iteration <= 30) .........*/
-	}		/*...... end for (l=0; l<n; l++) .............*/
+				if (m != l) {
 
-	/* order the eigenvalues */
-	for (l = 1; l < n; l++) {
-		i = l - 1;
-		k = i;
-		p = d[i];
-		for (j = l; j < n; j++) {
-			if (d[j] < p) {
-				k = j;
-				p = d[j];
+					/* set error -- no convergence to an eigenvalue after
+					 * 30 iterations. */     
+					if (iteration == 30) {
+						ierr = l;
+						return;
+					}
+					p = d[l]; 
+					iteration += 1;
+
+					/* form shift */
+					g = (d[l+1] - p) / (2.0 * e[l]);
+					r = svd_pythag(g, 1.0);
+					g = d[m] - p + e[l] / (g + svd_fsign(r, g));
+					s = 1.0;
+					c = 1.0;
+					p = 0.0;
+					underflow = false;
+					i = m - 1;
+					while (underflow == false && i >= l) {
+						f = s * e[i];
+						b = c * e[i];
+						r = svd_pythag(f, g);
+						e[i+1] = r;
+						if (r == 0.0) underflow = true;
+						else {
+							s = f / r;
+							c = g / r;
+							g = d[i+1] - p;
+							r = (d[i] - g) * s + 2.0 * c * b;
+							p = s * r;
+							d[i+1] = g + p;
+							g = c * r - b;
+
+							/* form vector */
+							for (k = 0; k < nnm; k += n) {
+								index = k + i;
+								f = z[index+1];
+								z[index+1] = s * z[index] + c * f;
+								z[index] = c * z[index] - s * f;
+							} 
+							i--;
+						}
+					}   /* end while (underflow != FALSE && i >= l) */
+					/*........ recover from underflow .........*/
+					if (underflow) {
+						d[i+1] -= p;
+						e[m] = 0.0;
+					}
+					else {
+						d[l] -= p;
+						e[l] = g;
+						e[m] = 0.0;
+					}
+				}
+				else break;
+			}		/*...... end while (iteration <= 30) .........*/
+		}		/*...... end for (l=0; l<n; l++) .............*/
+
+		/* order the eigenvalues */
+		for (l = 1; l < n; l++) {
+			i = l - 1;
+			k = i;
+			p = d[i];
+			for (j = l; j < n; j++) {
+				if (d[j] < p) {
+					k = j;
+					p = d[j];
+				}
 			}
+			/* ...and corresponding eigenvectors */
+			if (k != i) {
+				d[k] = d[i];
+				d[i] = p;
+				for (j = 0; j < nnm; j += n) {
+					p = z[j+i];
+					z[j+i] = z[j+k];
+					z[j+k] = p;
+				}
+			}   
 		}
-		/* ...and corresponding eigenvectors */
-		if (k != i) {
-			d[k] = d[i];
-			d[i] = p;
-			for (j = 0; j < nnm; j += n) {
-				p = z[j+i];
-				z[j+i] = z[j+k];
-				z[j+k] = p;
-			}
-		}   
-	}
-	return;
-}		/*...... end main ............................*/
+		return;
+	}		/*...... end main ............................*/
 
-/***********************************************************************
-*                                                                     *
-*				machar()			       *
-*                                                                     *
-***********************************************************************/
-/***********************************************************************
+	/***********************************************************************
+	 *                                                                     *
+	 *				machar()			       *
+	 *                                                                     *
+	 ***********************************************************************/
+	/***********************************************************************
 
 Description
 -----------
@@ -2153,86 +2151,86 @@ negeps    the largest negative integer such that
 1.0-float(ibeta)**negeps .ne. 1.0, except that 
 negeps is bounded below by  -(it+3)	       
 
-***********************************************************************/
+	 ***********************************************************************/
 
-// TODO check type of array
-long[] machar(/*long[] ibeta, long[] it, long[] irnd, long[] machep, long[] negep*/) {
+	// TODO check type of array
+	long[] machar(/*long[] ibeta, long[] it, long[] irnd, long[] machep, long[] negep*/) {
 
-	long ibeta, it, irnd, machep, negep;
-	double beta, betain, betah, a, b, ZERO, ONE, TWO, temp, tempa,
-	temp1;
-	long i, itemp;
+		long ibeta, it, irnd, machep, negep;
+		double beta, betain, betah, a, b, ZERO, ONE, TWO, temp, tempa,
+		temp1;
+		long i, itemp;
 
-	ONE = (double) 1;
-	TWO = ONE + ONE;
-	ZERO = ONE - ONE;
+		ONE = (double) 1;
+		TWO = ONE + ONE;
+		ZERO = ONE - ONE;
 
-	a = ONE;
-	temp1 = ONE;
-	while (temp1 - ONE == ZERO) {
-		a = a + a;
-		temp = a + ONE;
-		temp1 = temp - a;
-		// b += a; /* to prevent icc compiler error */ XXX Intel rockstar compiler :)
-	}
-	b = ONE;
-	itemp = 0;
-	while (itemp == 0) {
-		b = b + b;
-		temp = a + b;
-		itemp = (long)(temp - a);
-	}
-	ibeta = itemp;
-	beta = (double) ibeta;
+		a = ONE;
+		temp1 = ONE;
+		while (temp1 - ONE == ZERO) {
+			a = a + a;
+			temp = a + ONE;
+			temp1 = temp - a;
+			// b += a; /* to prevent icc compiler error */ XXX Intel rockstar compiler :)
+		}
+		b = ONE;
+		itemp = 0;
+		while (itemp == 0) {
+			b = b + b;
+			temp = a + b;
+			itemp = (long)(temp - a);
+		}
+		ibeta = itemp;
+		beta = (double) ibeta;
 
-	it = 0;
-	b = ONE;
-	temp1 = ONE;
-	while (temp1 - ONE == ZERO) {
-		it = it + 1;
-		b = b * beta;
-		temp = b + ONE;
-		temp1 = temp - b;
-	}
-	irnd = 0; 
-	betah = beta / TWO; 
-	temp = a + betah;
-	if (temp - a != ZERO) irnd = 1;
-	tempa = a + beta;
-	temp = tempa + betah;
-	if ((irnd == 0) && (temp - tempa != ZERO)) irnd = 2;
+		it = 0;
+		b = ONE;
+		temp1 = ONE;
+		while (temp1 - ONE == ZERO) {
+			it = it + 1;
+			b = b * beta;
+			temp = b + ONE;
+			temp1 = temp - b;
+		}
+		irnd = 0; 
+		betah = beta / TWO; 
+		temp = a + betah;
+		if (temp - a != ZERO) irnd = 1;
+		tempa = a + beta;
+		temp = tempa + betah;
+		if ((irnd == 0) && (temp - tempa != ZERO)) irnd = 2;
 
-	negep = it + 3;
-	betain = ONE / beta;
-	a = ONE;
-	for (i = 0; i < negep; i++) a = a * betain;
-	b = a;
-	temp = ONE - a;
-	while (temp-ONE == ZERO) {
-		a = a * beta;
-		negep = negep - 1;
+		negep = it + 3;
+		betain = ONE / beta;
+		a = ONE;
+		for (i = 0; i < negep; i++) a = a * betain;
+		b = a;
 		temp = ONE - a;
-	}
-	negep = -(negep);
+		while (temp-ONE == ZERO) {
+			a = a * beta;
+			negep = negep - 1;
+			temp = ONE - a;
+		}
+		negep = -(negep);
 
-	machep = -(it) - 3;
-	a = b;
-	temp = ONE + a;
-	while (temp - ONE == ZERO) {
-		a = a * beta;
-		machep = machep + 1;
+		machep = -(it) - 3;
+		a = b;
 		temp = ONE + a;
+		while (temp - ONE == ZERO) {
+			a = a * beta;
+			machep = machep + 1;
+			temp = ONE + a;
+		}
+		eps = a;
+		return new long[] { ibeta, it, irnd, machep, negep };
 	}
-	eps = a;
-	return new long[] { ibeta, it, irnd, machep, negep };
-}
 
-/***********************************************************************
-*                                                                     *
-*                     store()                                         *
-*                                                                     *
-***********************************************************************/
-/***********************************************************************
+	/***********************************************************************
+	 *                                                                     *
+	 *                     store()                                         *
+	 *                                                                     *
+	 ***********************************************************************/
+	/***********************************************************************
 
 Description
 -----------
@@ -2261,87 +2259,87 @@ Functions used
 
 BLAS		svd_dcopy
 
-***********************************************************************/
+	 ***********************************************************************/
 
-void store(int n, storeVals isw, int j, double[] s) {
-	/* printf("called store %ld %ld\n", isw, j); */
-	switch(isw) {
-	case STORQ:
-		if (null == LanStore[j + MAXLL]) {
-			LanStore[j + MAXLL] = svd_doubleArray(n, false, "LanStore[j]");
-		}
-		svd_dcopy(n, s, 1, LanStore[j + MAXLL], 1);
-		break;
-	case RETRQ:	
-		if (null == LanStore[j + MAXLL]) throw new Error(String.format(
-				"svdLAS2: store (RETRQ) called on index %d (not allocated)", j + MAXLL));
-		svd_dcopy(n, LanStore[j + MAXLL], 1, s, 1);
-		break;
-	case STORP:	
-		if (j >= MAXLL) {
-			throw new Error("svdLAS2: store (STORP) called with j >= MAXLL");
-		}
-		if (null == LanStore[j]) {
-			LanStore[j] = svd_doubleArray(n, false, "LanStore[j]");
-		}
-		svd_dcopy(n, s, 1, LanStore[j], 1);
-		break;
-	case RETRP:	
-		if (j >= MAXLL) {
-			svd_error("svdLAS2: store (RETRP) called with j >= MAXLL");
+	void store(int n, storeVals isw, int j, double[] s) {
+		/* printf("called store %ld %ld\n", isw, j); */
+		switch(isw) {
+		case STORQ:
+			if (null == LanStore[j + MAXLL]) {
+				LanStore[j + MAXLL] = svd_doubleArray(n, false, "LanStore[j]");
+			}
+			svd_dcopy(n, s, 1, LanStore[j + MAXLL], 1);
+			break;
+		case RETRQ:	
+			if (null == LanStore[j + MAXLL]) throw new Error(String.format(
+					"svdLAS2: store (RETRQ) called on index %d (not allocated)", j + MAXLL));
+			svd_dcopy(n, LanStore[j + MAXLL], 1, s, 1);
+			break;
+		case STORP:	
+			if (j >= MAXLL) {
+				throw new Error("svdLAS2: store (STORP) called with j >= MAXLL");
+			}
+			if (null == LanStore[j]) {
+				LanStore[j] = svd_doubleArray(n, false, "LanStore[j]");
+			}
+			svd_dcopy(n, s, 1, LanStore[j], 1);
+			break;
+		case RETRP:	
+			if (j >= MAXLL) {
+				svd_error("svdLAS2: store (RETRP) called with j >= MAXLL");
+				break;
+			}
+			if (null == LanStore[j]) throw new Error(String.format(
+					"svdLAS2: store (RETRP) called on index %d (not allocated)", j));
+			svd_dcopy(n, LanStore[j], 1, s, 1);
 			break;
 		}
-		if (null == LanStore[j]) throw new Error(String.format(
-				"svdLAS2: store (RETRP) called on index %d (not allocated)", j));
-		svd_dcopy(n, LanStore[j], 1, s, 1);
-		break;
+		return;
 	}
-	return;
-}
-	
-/* File format has a funny header, then first entry index per column, then the
+
+	/* File format has a funny header, then first entry index per column, then the
 row for each entry, then the value for each entry.  Indices count from 1.
 Assumes A is initialized. */
-SMat svdLoadSparseTextHBFile(File file) throws FileNotFoundException {
-	int i, x, rows, cols, vals, num_mat;
-	Scanner scanner = new Scanner(file);
-	SMat S;
-	/* Skip the header line: */
-	scanner.nextLine();
-	/* Skip the line giving the number of lines in this file: */
-	scanner.nextLine();
-	/* Read the line with useful dimensions: */
-	scanner.next();
-	rows = scanner.nextInt();
-	cols = scanner.nextInt();
-	vals = scanner.nextInt();
-	num_mat = scanner.nextInt();
-	scanner.nextLine();
-	if (num_mat != 0) {
-		throw new Error("svdLoadSparseTextHBFile: I don't know how to handle a file "
-				+ "with elemental matrices (last entry on header line 3)");
-	}
-	/* Skip the line giving the formats: */
-	scanner.nextLine();
+	SMat svdLoadSparseTextHBFile(File file) throws FileNotFoundException {
+		int i, x, rows, cols, vals, num_mat;
+		Scanner scanner = new Scanner(file);
+		SMat S;
+		/* Skip the header line: */
+		scanner.nextLine();
+		/* Skip the line giving the number of lines in this file: */
+		scanner.nextLine();
+		/* Read the line with useful dimensions: */
+		scanner.next();
+		rows = scanner.nextInt();
+		cols = scanner.nextInt();
+		vals = scanner.nextInt();
+		num_mat = scanner.nextInt();
+		scanner.nextLine();
+		if (num_mat != 0) {
+			throw new Error("svdLoadSparseTextHBFile: I don't know how to handle a file "
+					+ "with elemental matrices (last entry on header line 3)");
+		}
+		/* Skip the line giving the formats: */
+		scanner.nextLine();
 
-	S = new SMat(rows, cols, vals);
+		S = new SMat(rows, cols, vals);
 
-	/* Read column pointers. */
-	for (i = 0; i <= S.cols; i++) {
-		x = scanner.nextInt();
-		S.pointr[i] = x - 1;
-	}
-	S.pointr[S.cols] = S.vals;
+		/* Read column pointers. */
+		for (i = 0; i <= S.cols; i++) {
+			x = scanner.nextInt();
+			S.pointr[i] = x - 1;
+		}
+		S.pointr[S.cols] = S.vals;
 
-	/* Read row indices. */
-	for (i = 0; i < S.vals; i++) {
-		x = scanner.nextInt();
-		S.rowind[i] = x - 1;
+		/* Read row indices. */
+		for (i = 0; i < S.vals; i++) {
+			x = scanner.nextInt();
+			S.rowind[i] = x - 1;
+		}
+		for (i = 0; i < S.vals; i++) {
+			S.value[i] = scanner.nextDouble();
+		}
+		return S;
 	}
-	for (i = 0; i < S.vals; i++) {
-		S.value[i] = scanner.nextDouble();
-	}
-	return S;
-}
 
 }
