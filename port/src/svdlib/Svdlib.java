@@ -2,7 +2,10 @@ package svdlib;
 
 import static svdlib.Svdlib.storeVals.*;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Svdlib {
 
@@ -2296,5 +2299,49 @@ void store(int n, storeVals isw, int j, double[] s) {
 	return;
 }
 	
+/* File format has a funny header, then first entry index per column, then the
+row for each entry, then the value for each entry.  Indices count from 1.
+Assumes A is initialized. */
+SMat svdLoadSparseTextHBFile(File file) throws FileNotFoundException {
+	int i, x, rows, cols, vals, num_mat;
+	Scanner scanner = new Scanner(file);
+	SMat S;
+	/* Skip the header line: */
+	scanner.nextLine();
+	/* Skip the line giving the number of lines in this file: */
+	scanner.nextLine();
+	/* Read the line with useful dimensions: */
+	scanner.next();
+	rows = scanner.nextInt();
+	cols = scanner.nextInt();
+	vals = scanner.nextInt();
+	num_mat = scanner.nextInt();
+	scanner.nextLine();
+	if (num_mat != 0) {
+		throw new Error("svdLoadSparseTextHBFile: I don't know how to handle a file "
+				+ "with elemental matrices (last entry on header line 3)");
+	}
+	/* Skip the line giving the formats: */
+	scanner.nextLine();
+
+	S = new SMat(rows, cols, vals);
+
+	/* Read column pointers. */
+	for (i = 0; i <= S.cols; i++) {
+		x = scanner.nextInt();
+		S.pointr[i] = x - 1;
+	}
+	S.pointr[S.cols] = S.vals;
+
+	/* Read row indices. */
+	for (i = 0; i < S.vals; i++) {
+		x = scanner.nextInt();
+		S.rowind[i] = x - 1;
+	}
+	for (i = 0; i < S.vals; i++) {
+		S.value[i] = scanner.nextDouble();
+	}
+	return S;
+}
 
 }
