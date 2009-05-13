@@ -25,6 +25,7 @@ public class Layers extends MapVisualization {
 
 	@Override
 	public void draw(PGraphics pg) {
+		assert pg != null;
 		background.draw(pg);
 		for (Drawable each: layers) each.draw(pg);
 	}

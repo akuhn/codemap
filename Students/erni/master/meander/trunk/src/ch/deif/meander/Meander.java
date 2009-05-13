@@ -88,7 +88,6 @@ public class Meander {
 		for (int n = 0; n < mds.x.length; n++) {
 			Document each = iterator.next();
 			if (version != null && !each.version().equals(version)) continue;
-			System.out.println(each.fullName());
 			builder.location(mds.x[n], mds.y[n], Math.sqrt(each.termSize())).document(each);
 		}
 		builder.normalizeElevation();

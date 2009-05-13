@@ -45,7 +45,7 @@ public class Label implements Drawable, Comparable<Label> {
 	}
 
 	public Rectangle getBounds() {
-		return new Rectangle((int) x, (int) (y - (size * 0.6f)), (int) width, (int) (size * 0.6f));
+		return new Rectangle((int) x, (int) (y - (size)), (int) width, (int) (size));
 	}
 
 	@Override

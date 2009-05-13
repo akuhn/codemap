@@ -5,7 +5,6 @@ import java.io.File;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
-import processing.core.PGraphicsJava2D;
 import processing.pdf.PGraphicsPDF;
 import ch.deif.meander.Map;
 import ch.deif.meander.ui.PViewer;
@@ -65,14 +64,15 @@ public abstract class MapVisualization implements Drawable {
 	}
 
 	public final void drawToPNG(String name) {
-		PGraphics pg = new PGraphicsJava2D();
-		// TODO find solution for viz with fonts, they seem to need an enclosing
-		// applet!
-		// PApplet pa = new PApplet();
-		// pa.init();
-		// pg.setParent(pa);
+		// TODO find solution for viz with fonts, they seem to need an enclosing applet!
+		PApplet pa = new PApplet();
+		pa.init();
+		PGraphics pg = pa.createGraphics(this.getWidth(), this.getWidth(), PConstants.JAVA2D);
+		pg.beginDraw();
 		draw(pg);
+		pg.endDraw();
 		pg.save(qname(name, "png"));
+		pa.destroy();
 	}
 
 	public final PGraphics drawImage() {
