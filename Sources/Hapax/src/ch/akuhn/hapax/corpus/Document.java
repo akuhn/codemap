@@ -51,5 +51,9 @@ public abstract class Document implements Comparable<Document> {
     public String version() {
         return version;
     }
+
+	public String fullName() {
+		return name;
+	}
     
 }

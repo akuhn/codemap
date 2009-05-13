@@ -12,6 +12,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
+import com.sun.corba.se.spi.ior.MakeImmutable;
+
+import ch.akuhn.hapax.util.Ziperator;
+import ch.akuhn.hapax.util.Ziperator.Each;
 import ch.akuhn.util.Files;
 import ch.akuhn.util.Throw;
 
@@ -33,7 +37,7 @@ public class CorpusBuilder {
     
     public Corpus importAllFiles(File folder, String... extensions) {
         for (File each : Files.find(folder, extensions)) {
-            corpus.makeDocument(each.getAbsolutePath(), null).addTerms(new Terms(each));
+            corpus.makeDocument(each.getAbsolutePath(), version).addTerms(new Terms(each));
         }
         return corpus;
     }
@@ -117,11 +121,28 @@ public class CorpusBuilder {
 		return corpus;
 	}
 
-	public void importFrom(String source, String extensions) {
+	public void importFrom(String source, String... extensions) {
 		File file = new File(source); 
 		assert file.exists() : source;
 		if (file.isDirectory()) importAllFiles(file, extensions);
-		else importZipArchive(file, extensions);
+		else smartImportZipArchive(file, extensions);
+	}
+
+	private void smartImportZipArchive(File file, String... extensions) {
+		// first try to get files from nested sources
+		Each nestedSources = null;
+		for (Each each: new Ziperator(file)) {
+			if (nestedSources == null && each.isSourceArchive()) nestedSources = each;
+			if (each.parent != null && each.parent == nestedSources) {
+				for (String ext: extensions) {
+					if (each.entry.getName().endsWith(ext)) {
+						corpus.makeDocument(each.toString(), version).addTerms(new Terms(each.in));
+						break;
+					}
+				}
+			}
+		}
+		if (nestedSources == null) importZipArchive(file, extensions);
 	}
     
 }
