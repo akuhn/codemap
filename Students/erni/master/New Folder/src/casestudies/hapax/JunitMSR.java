@@ -2,6 +2,7 @@ package casestudies.hapax;
 
 import ch.akuhn.hapax.Hapax;
 import ch.deif.meander.Meander;
+import ch.deif.meander.viz.MapVisualization;
 
 public class JunitMSR implements Runnable {
 		
@@ -21,16 +22,17 @@ public class JunitMSR implements Runnable {
 			.setBaseFolder("../MeanderCaseStudies/data/junit/")
 			.makeCorpus();
 		for (String each: VERSIONS) {
-			//if (each != version) continue;
 			h.addFiles(each, "java");
 		}
 		Meander m = Meander.with(h);
-		m.makeMap("junit3.8.2.zip")
-			.useHillshading()
-			.getVisualization().openApplet();
-		m.makeMap("junit4.0.zip")
-			.useHillshading()
-			.getVisualization().openApplet();
+		for (String each: VERSIONS) {
+			MapVisualization viz = m.makeMap(each)
+				.useHillshading()
+				.getVisualization();
+			viz.drawToPNG(each);
+			if (each == "junit3.8.2.zip") viz.openApplet();
+			if (each == "junit4.0.zip") viz.openApplet();
+		}
 	}
 	
     public final static String[] VERSIONS = { 
