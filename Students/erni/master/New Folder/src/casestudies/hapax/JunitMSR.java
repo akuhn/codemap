@@ -12,8 +12,6 @@ public class JunitMSR implements Runnable {
 	@Override
 	public void run() {
 		
-		String version = "junit4.0.zip";
-		
 		Hapax h = Hapax.legomenon()
 			.useCamelCaseScanner()
 			.useStemming()
@@ -26,7 +24,13 @@ public class JunitMSR implements Runnable {
 			//if (each != version) continue;
 			h.addFiles(each, "java");
 		}
-		Meander.with(h).makeMap(version).useHillshading().getVisualization().openApplet();
+		Meander m = Meander.with(h);
+		m.makeMap("junit3.8.2.zip")
+			.useHillshading()
+			.getVisualization().openApplet();
+		m.makeMap("junit4.0.zip")
+			.useHillshading()
+			.getVisualization().openApplet();
 	}
 	
     public final static String[] VERSIONS = { 
