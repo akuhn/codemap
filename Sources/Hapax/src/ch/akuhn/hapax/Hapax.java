@@ -36,6 +36,7 @@ public class Hapax {
 	private LocalWeighting localWeighting;
 	private boolean rejectStopwords;
 	private boolean rejectRareWords;
+	private String folder;
 
 	private Hapax() {
 		this.index = null;
@@ -47,15 +48,16 @@ public class Hapax {
 		return new Hapax();
 	}
 
-	public Hapax addFolder(String folder, String... extensions) {
-		new CorpusBuilder(buffer).importAllFiles(new File(folder), extensions);
-		return this;
-	}
-	
 	public Hapax createIndex() {
 		this.index = buffer.rejectAndWeight().createIndex();
 		return this;
 	}
+	
+	public LatentSemanticIndex getIndex() {
+		this.createIndex();
+		return index;
+	}
+	
 	public Hapax dontIgnoreCase() {
 		ignoreCase = false;
 		return this;
@@ -97,6 +99,11 @@ public class Hapax {
 		buffer = null;
 		return this;
 	}
+	
+	public Hapax setBaseFolder(String folder) {
+		this.folder = folder;
+		return this;
+	}
 
 	public Hapax makeCorpus(String source, String extensions) {
 		makeCorpus();
@@ -105,9 +112,9 @@ public class Hapax {
 		return this;
 	}
 
-	private Hapax addFiles(String source, String extensions) {
+	public Hapax addFiles(String source, String extensions) {
 		if (buffer == null) throw new IllegalStateException("Please #makeCorpus first.");
-		new CorpusBuilder(buffer).importFrom(source, extensions);
+		new CorpusBuilder(buffer).version(source).importFrom(folder + source, extensions);
 		return this;
 	}
 	
@@ -120,12 +127,12 @@ public class Hapax {
 		rejectRareWords = true;
 		return this;
 	}
-	private Hapax setGlobalWeighting(GlobalWeighting weighting) {
+	public Hapax setGlobalWeighting(GlobalWeighting weighting) {
 		this.globalWeighting = weighting;
 		return this;
 	}
 	
-	private Hapax setLocalWeighting(LocalWeighting weighting) {
+	public Hapax setLocalWeighting(LocalWeighting weighting) {
 		this.localWeighting = weighting;
 		return this;
 	}
@@ -170,7 +177,7 @@ public class Hapax {
 		return this;
 	}
 	
-	private Hapax useTFIDF() {
+	public Hapax useTFIDF() {
 		setGlobalWeighting(GlobalWeighting.IDF);
 		setLocalWeighting(LocalWeighting.TERM);
 		return this;

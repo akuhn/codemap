@@ -19,9 +19,16 @@ import ch.akuhn.util.Throw;
 public class CorpusBuilder {
 
     private Corpus corpus;
+	private String version;
 
     public CorpusBuilder(Corpus corpus) {
         this.corpus = corpus;
+        this.version = Document.UNVERSIONED;
+    }
+    
+    public CorpusBuilder version(String version) {
+    	this.version = version;
+    	return this;
     }
     
     public Corpus importAllFiles(File folder, String... extensions) {
@@ -90,7 +97,7 @@ public class CorpusBuilder {
                     if (!entry.getName().endsWith(suffix)) continue;
                     InputStream in = zip.getInputStream(entry);
                     Terms terms = new Terms(in).intern();
-                    corpus.makeDocument(entry.getName(), file.getName()).addTerms(terms);
+                    corpus.makeDocument(entry.getName(), version).addTerms(terms);
                     break;
                 }
             }
@@ -112,7 +119,7 @@ public class CorpusBuilder {
 
 	public void importFrom(String source, String extensions) {
 		File file = new File(source); 
-		assert file.exists();
+		assert file.exists() : source;
 		if (file.isDirectory()) importAllFiles(file, extensions);
 		else importZipArchive(file, extensions);
 	}
