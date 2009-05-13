@@ -3,8 +3,9 @@ package ch.deif.meander;
 import java.io.File;
 import java.util.Iterator;
 
-import ch.akuhn.hapax.corpus.Document;
+import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.corpus.CorpusBuilder;
+import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.deif.meander.ui.MeanderApplet;
@@ -22,14 +23,29 @@ import ch.deif.meander.viz.MapVisualization;
  */
 public class Meander {
 
+	public Meander(Hapax hapax) {
+		this.hapax = hapax;
+	}
+
+	public Meander() {
+		// do nothing
+	}
+
 	public static Meander script() {
 		return new Meander();
+	}
+	
+	public static Meander with(Hapax hapax) {
+		return new Meander(hapax);
 	}
 
 	private TermDocumentMatrix tdm;
 	private Map map;
 	private Layers layers;
 	private boolean doneDEM = false;
+	private MDS mds;
+	private Hapax hapax;
+	private LatentSemanticIndex lsi;
 
 	public Meander addDocuments(String folder, String... extensions) {
 		if (tdm == null) tdm = new TermDocumentMatrix();
@@ -47,15 +63,30 @@ public class Meander {
 	}
 
 	public Meander makeMap() {
-		assert tdm != null : "Must call #addDocuments first.";
-		assert map == null : "Cannot call #makeMap twice.";
-		tdm = tdm.rejectAndWeight();
-		LatentSemanticIndex lsi = tdm.createIndex();
-		MDS mds = MDS.fromCorrelationMatrix(lsi);
+		return makeMap(null);
+	}
+
+	public Meander doTheNumberCrunching() {
+		assert (tdm != null || hapax != null) : "Must call #addDocuments first (or create with a Hapax).";
+		if (mds != null) return this;
+		if (hapax == null) {
+			tdm = tdm.rejectAndWeight();
+			lsi = tdm.createIndex();
+		}
+		else {
+			lsi = hapax.getIndex();
+		}
+		mds = MDS.fromCorrelationMatrix(lsi);
+		return this;
+	}
+	
+	public Meander makeMap(String version) {
+		this.doTheNumberCrunching();
 		MapBuilder builder = Map.builder().pixelSize(MeanderApplet.PIXELSCALE);
 		Iterator<Document> iterator = lsi.documents.iterator();
 		for (int n = 0; n < mds.x.length; n++) {
 			Document each = iterator.next();
+			if (version != null && each.version() != version) continue;
 			builder.location(mds.x[n], mds.y[n], Math.sqrt(each.termSize())).document(each);
 		}
 		builder.normalize();

@@ -21,6 +21,7 @@ public class Label implements Drawable, Comparable<Label> {
 	boolean hidden;
 
 	public Label(String text) {
+		assert text != null;
 		this.text = text;
 	}
 

@@ -33,7 +33,8 @@ public class Layers extends MapVisualization {
 		background = Composite.of(
 				new WaterVisualization(map),
 				new ShoreVizualization(map),
-				new HillshadeVisualization(map));
+				new HillshadeVisualization(map),
+				new LabelsOverlay(map));
 		return this;
 	}
 

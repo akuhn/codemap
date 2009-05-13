@@ -61,6 +61,14 @@ public class Location {
 	}
 
 	public String name() {
+		if (name == null) return selectFileNameOnly(document.name());
+		return name;
+	}
+
+	private String selectFileNameOnly(String name) {
+		int lastPathSeparator = Math.max(name.lastIndexOf('\\'), name.lastIndexOf('/'));
+		int lastDot = name.lastIndexOf('.');
+		if (lastPathSeparator < lastDot) return name.substring(lastPathSeparator + 1, lastDot);
 		return name;
 	}
 

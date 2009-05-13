@@ -18,13 +18,22 @@ public class LabelsOverlay extends MapVisualization {
 	
 	public LabelsOverlay(Map map) {
 		super(map);
+		double max = maxElevation(map);
 		for (Location each: map.locations()) {
 			Label l = new Label(each.name());
 			labels.add(l);
 			l.x = l.x0 = each.px();
 			l.y = l.y0 = each.py();
-			l.size = (float) each.elevation();
+			l.size = (float) (each.elevation() / max * map.getWidth() / 20);
 		}
+	}
+
+	private double maxElevation(Map map) {
+		double max = Double.MIN_VALUE;
+		for (Location each: map.locations()) {
+			max = Math.max(max, each.elevation());
+		}
+		return max;
 	}
 
 	@Override
