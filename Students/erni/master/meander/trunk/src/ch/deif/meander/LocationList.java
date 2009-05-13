@@ -57,19 +57,16 @@ public class LocationList implements Iterable<Location> {
 		double maxX = 0;
 		double minY = 0;
 		double maxY = 0;
-		double maxElevation = 0;
 		for (Location each: this) {
 			minY = Math.min(minY, each.y());
 			maxY = Math.max(maxY, each.y());
 			minX = Math.min(minX, each.x());
 			maxX = Math.max(maxX, each.x());
-			maxElevation = Math.max(maxElevation, each.elevation());
 		}
 		double width = maxX - minX;
 		double height = maxY - minY;
 		for (Location each: this) {
 			each.normalizeXY(minX, width, minY, height);
-			each.normalizeElevation(maxElevation);
 		}
 	}
 

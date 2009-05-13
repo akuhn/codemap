@@ -94,7 +94,7 @@ public class MDS {
 		try {
 			x = new double[index.documents.size()];
 			y = new double[index.documents.size()];
-			String command = format("%s 30 1 0 1:8", fname()); // TODO configure
+			String command = format("%s 100 1 0 1:8", fname()); // TODO configure
 			// this settings
 			Process proc = Runtime.getRuntime().exec(command);
 			InputStream err = proc.getErrorStream();
@@ -121,6 +121,27 @@ public class MDS {
 			throw Throw.exception(ex);
 		}
 		return this;
+	}
+
+	public void normalize() {
+		double minX = 0;
+		double maxX = 0;
+		double minY = 0;
+		double maxY = 0;
+		for (double each: x) {
+			minX = Math.min(minX, each);
+			maxX = Math.max(maxX, each);
+		}
+		for (double each: y) {
+			minY = Math.min(minY, each);
+			maxY = Math.max(maxY, each);
+		}
+		double width = maxX - minX;
+		double height = maxY - minY;
+		for (int n = 0; n < x.length; n++) {
+			x[n] = (x[n] - minX) / width;
+			y[n] = (y[n] - minY) / height;
+		}
 	}
 
 }

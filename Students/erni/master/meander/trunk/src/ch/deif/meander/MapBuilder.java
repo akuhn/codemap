@@ -8,6 +8,7 @@ public class MapBuilder {
 	private Parameters params;
 	private LocationList locations;
 	private Location recentLocation;
+	private boolean useNormalization;
 
 	public MapBuilder() {
 		params = new Parameters();

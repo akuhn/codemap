@@ -14,7 +14,7 @@ public class Label implements Drawable, Comparable<Label> {
 	public static boolean DRAFT = false;
 
 	private String text;
-	float size = 12;
+	public float size = 12;
 	public float x0, y0, x, y;
 	public float width;
 	private Position pos = Position.TOPLEFT;
@@ -50,6 +50,9 @@ public class Label implements Drawable, Comparable<Label> {
 
 	@Override
 	public int compareTo(Label other) {
+		boolean thisTest = this.text.endsWith("Test");
+		boolean otherTest = other.text.endsWith("Test");
+		if (thisTest != otherTest) return thisTest ? 1 : -1;
 		return (int) (other.size - this.size);
 	}
 

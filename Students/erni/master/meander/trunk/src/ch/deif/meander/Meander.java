@@ -77,6 +77,7 @@ public class Meander {
 			lsi = hapax.getIndex();
 		}
 		mds = MDS.fromCorrelationMatrix(lsi);
+		mds.normalize();
 		return this;
 	}
 	
@@ -86,15 +87,17 @@ public class Meander {
 		Iterator<Document> iterator = lsi.documents.iterator();
 		for (int n = 0; n < mds.x.length; n++) {
 			Document each = iterator.next();
-			if (version != null && each.version() != version) continue;
+			if (version != null && !each.version().equals(version)) continue;
+			System.out.println(each.fullName());
 			builder.location(mds.x[n], mds.y[n], Math.sqrt(each.termSize())).document(each);
 		}
-		builder.normalize();
+		builder.normalizeElevation();
 		map = builder.done();
 		layers = new Layers(map);
+		doneDEM = false;
 		return this;
 	}
-
+	
 	public Meander useHillshading() {
 		if (!doneDEM) {
 			new DEMAlgorithm(map).run();
