@@ -48,4 +48,14 @@ public class Layers extends MapVisualization {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public void alsoShowShoresOf(float[][] DEM) {
+		if (!(background instanceof Composite)) return;
+		for (Drawable each: (Composite<Drawable>) background) {
+			if (each instanceof ShoreVizualization) {
+				((ShoreVizualization) each).alsoShowShoresOf(DEM);
+			}
+		}
+	}
+
 }

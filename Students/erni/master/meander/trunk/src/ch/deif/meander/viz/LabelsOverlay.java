@@ -24,7 +24,7 @@ public class LabelsOverlay extends MapVisualization {
 			labels.add(l);
 			l.x = l.x0 = each.px();
 			l.y = l.y0 = each.py();
-			l.size = (float) (each.elevation() / max * map.getWidth() / 20);
+			l.size = (float) (each.elevation() / max * map.getWidth() / 24);
 		}
 	}
 

@@ -213,8 +213,8 @@ public class MeanderApplet extends PApplet {
 		List<Location> selected = new ArrayList<Location>();
 		points.clear();
 		for (Location each: map().locations()) {
-			int x = (int) Math.round(each.x() * map().getHeight());
-			int y = (int) Math.round(each.y() * map().getHeight());
+			int x = (int) Math.round(each.x() * map().getWidth());
+			int y = (int) Math.round(each.y() * map().getWidth());
 			if (x < dragStop.x && x > dragStart.x && y < dragStop.y && y > dragStart.y) {
 				selected.add(each);
 				points.add(new Point(x, y));

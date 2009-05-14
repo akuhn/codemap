@@ -16,8 +16,6 @@ public class Map {
 	private float[][] DEM;
 	private double[][] hillshade;
 	private boolean[][] contours;
-	private final int height;
-	private int width;
 	public LocationList locations;
 	private Parameters parameters;
 	private Location[][] NN;
@@ -25,17 +23,15 @@ public class Map {
 	public Map(Parameters parameters, LocationList locations) {
 		this.parameters = parameters;
 		this.locations = locations;
-		width = parameters.width;
-		height = parameters.height;
-		locations.normalizePixelXY(width);
+		locations.normalizePixelXY(getWidth());
 	}
 
-	private float[][] getDEM() {
+	public float[][] getDEM() {
 		return DEM;
 	}
 
 	private boolean[][] getContours() {
-		return contours == null ? contours = new boolean[getWidth()][getHeight()] : contours;
+		return contours == null ? contours = new boolean[getWidth()][getWidth()] : contours;
 	}
 
 	public Parameters getParameters() {
@@ -63,7 +59,7 @@ public class Map {
 			private int x, y;
 			private Pixel pixel = new Pixel(0, 0);
 			private final int width = getWidth();
-			private final int height = getHeight();
+			private final int height = getWidth();
 
 			@Override
 			public void initialize() {
@@ -89,7 +85,7 @@ public class Map {
 			private int n, m;
 			private Pixel pixel = new Pixel(0, 0);
 			private final int width = getWidth();
-			private final int height = getHeight();
+			private final int height = getWidth();
 
 			@Override
 			public void initialize() {
@@ -125,7 +121,7 @@ public class Map {
 					x = 0;
 					y++;
 				}
-				if (y >= getHeight()) return done();
+				if (y >= getWidth()) return done();
 				Kernel k = new Kernel(x++, y);
 				return k;
 			}
@@ -140,7 +136,7 @@ public class Map {
 			super(x, y);
 			int yTop = (y == 0 ? 0 : y - 1);
 			int xLeft = (x == 0 ? 0 : x - 1);
-			int yBottom = (y == (getHeight() - 1) ? (getHeight() - 1) : y + 1);
+			int yBottom = (y == (getWidth() - 1) ? (getWidth() - 1) : y + 1);
 			int xRight = (x == (getWidth() - 1) ? (getWidth() - 1) : x + 1);
 
 			topLeft = getDEM()[xLeft][yTop];
@@ -161,17 +157,17 @@ public class Map {
 	}
 
 	private double[][] getHillshade() {
-		return hillshade == null ? hillshade = new double[getWidth()][getHeight()] : hillshade;
+		return hillshade == null ? hillshade = new double[getWidth()][getWidth()] : hillshade;
 	}
 
 	public class Pixel {
 
-		int px;
-		int py;
+		public int px;
+		public int py;
 		private float[][] DEM0;
 
 		public Pixel(int px, int py) {
-			assert px < getWidth() && py < getHeight() : px + "," + py;
+			assert px < getWidth() && py < getWidth() : px + "," + py;
 			this.px = px;
 			this.py = py;
 			this.DEM0 = getDEM();
@@ -182,7 +178,7 @@ public class Map {
 		}
 
 		public double y() {
-			return (double) py / (getHeight() - 1);
+			return (double) py / (getWidth() - 1);
 		}
 
 		public void increaseElevation(double elevation) {
@@ -221,7 +217,7 @@ public class Map {
 	}
 
 	public int pixelSize() {
-		return getWidth() * getHeight();
+		return getWidth() * getWidth();
 	}
 
 	public int locationCount() {
@@ -244,11 +240,7 @@ public class Map {
 	}
 
 	public int getWidth() {
-		return width;
-	}
-
-	public int getHeight() {
-		return height;
+		return getParameters().width;
 	}
 
 	public Location locationAt(int index) {

@@ -8,7 +8,6 @@ import ch.akuhn.hapax.corpus.CorpusBuilder;
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
-import ch.deif.meander.ui.MeanderApplet;
 import ch.deif.meander.viz.Layers;
 import ch.deif.meander.viz.MapVisualization;
 
@@ -46,6 +45,7 @@ public class Meander {
 	private MDS mds;
 	private Hapax hapax;
 	private LatentSemanticIndex lsi;
+	private int width;
 
 	public Meander addDocuments(String folder, String... extensions) {
 		if (tdm == null) tdm = new TermDocumentMatrix();
@@ -76,6 +76,7 @@ public class Meander {
 		else {
 			lsi = hapax.getIndex();
 		}
+		System.out.println("Next is MDS...");
 		mds = MDS.fromCorrelationMatrix(lsi);
 		mds.normalize();
 		return this;
@@ -83,7 +84,7 @@ public class Meander {
 	
 	public Meander makeMap(String version) {
 		this.doTheNumberCrunching();
-		MapBuilder builder = Map.builder().pixelSize(MeanderApplet.PIXELSCALE);
+		MapBuilder builder = Map.builder().pixelSize(width);
 		Iterator<Document> iterator = lsi.documents.iterator();
 		for (int n = 0; n < mds.x.length; n++) {
 			Document each = iterator.next();
@@ -121,6 +122,21 @@ public class Meander {
 
 	public MapVisualization getVisualization() {
 		return layers;
+	}
+
+	public Meander blackAndWhite() {
+		map.getParameters().blackAndWhite = true;
+		return this;
+	}
+
+	public Meander pixelWidth(int pixels) {
+		width = pixels;
+		return this;
+	}
+
+	public Meander alsoShowShoresOf(float[][] DEM) {
+		layers.alsoShowShoresOf(DEM);
+		return this;
 	}
 
 }

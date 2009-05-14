@@ -14,7 +14,7 @@ package ch.deif.meander;
  */
 public class DEMAlgorithm extends MapAlgorithm {
 
-	private static final int MAGIC_VALUE = 6*320; // TODO magic number!
+	private static final int MAGIC_VALUE = 8*320; // TODO magic number!
 
 	private static final double THRESHOLD = 1.0;
 
@@ -90,7 +90,7 @@ public class DEMAlgorithm extends MapAlgorithm {
 	}
 
 	private void setup() {
-		DEM = new float[map.getWidth()][map.getHeight()];
+		DEM = new float[map.getWidth()][map.getWidth()];
 	}
 
 }

@@ -22,7 +22,8 @@ public class Parameters {
 	public boolean showLabels = false;
 
 	public int width = 512;
-	public int height = 512;
+
+	public boolean blackAndWhite = false;
 
 	public void useExample() {
 		showContourLines = false;
@@ -30,7 +31,7 @@ public class Parameters {
 		showWater = false;
 		showColors = false;
 		showLabels = false;
-		height = width = 640;
+		width = 640;
 	}
 
 }

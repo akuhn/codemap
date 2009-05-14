@@ -139,8 +139,8 @@ public class MDS {
 		double width = maxX - minX;
 		double height = maxY - minY;
 		for (int n = 0; n < x.length; n++) {
-			x[n] = (x[n] - minX) / width * 0.7 + 0.15; // XXX
-			y[n] = (y[n] - minY) / height * 0.7 + 0.15; // XXX
+			x[n] = (x[n] - minX) / width * 0.5 + 0.25; // XXX
+			y[n] = (y[n] - minY) / height * 0.5 + 0.25; // XXX
 		}
 	}
 

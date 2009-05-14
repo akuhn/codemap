@@ -17,7 +17,6 @@ public class MapBuilder {
 
 	public MapBuilder pixelSize(int pixelScale) {
 		params.width = pixelScale;
-		params.height = pixelScale;
 		return this;
 	}
 

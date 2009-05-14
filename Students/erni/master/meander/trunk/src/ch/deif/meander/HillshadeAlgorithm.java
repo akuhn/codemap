@@ -15,7 +15,7 @@ import ch.deif.meander.Map.Kernel;
  */
 public class HillshadeAlgorithm extends MapAlgorithm {
 
-	private static final double Z_FACTOR = 0.9e-3;
+	private static final double Z_FACTOR = 0.6e-3;
 
 	public HillshadeAlgorithm(Map map) {
 		super(map);

@@ -14,15 +14,14 @@ public class SketchVisualization extends MapVisualization {
 
 	@Override
 	public void draw(PGraphics pg) {
-		float width = map.getParameters().width;
-		float height = map.getParameters().height;
+		float width = map.getWidth();
 		pg.background(204);
 		pg.stroke(0);
 		pg.noFill();
 		pg.smooth();
 		for (Location each: map.locations()) {
 			float x = (float) (each.x() * width);
-			float y = (float) (each.y() * height);
+			float y = (float) (each.y() * width);
 			float r = (float) (each.elevation() / 500 * width);
 			pg.ellipse(x, y, r, r);
 		}

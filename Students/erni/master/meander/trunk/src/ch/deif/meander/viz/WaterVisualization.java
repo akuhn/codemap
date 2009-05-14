@@ -13,7 +13,7 @@ public class WaterVisualization extends MapVisualization {
 	@Override
 	public void draw(PGraphics pg) {
 		pg.noStroke();
-		pg.fill(Colors.WATER.asRGB());
+		pg.fill(map.getParameters().blackAndWhite ? 0xFFFFFFFF : Colors.WATER.asRGB());
 		pg.rect(0, 0, getWidth(), getWidth());
 	}
 

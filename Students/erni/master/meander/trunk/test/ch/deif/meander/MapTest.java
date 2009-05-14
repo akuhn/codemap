@@ -23,7 +23,6 @@ public class MapTest {
 	public Map fiveOnThreeMap() {
 		Map map = Map.builder().pixelSize(5).location(0.5, 0.5, 100).done();
 		assertEquals(5, map.getWidth());
-		assertEquals(5, map.getHeight());
 		assertEquals(1, map.locationCount());
 		return map;
 	}
@@ -93,7 +92,6 @@ public class MapTest {
 	@Given("#makeSampleMap")
 	public Map testPixelDimension(Map map) {
 		assertEquals(200, map.getWidth());
-		assertEquals(200, map.getHeight());
 		return map;
 	}
 
