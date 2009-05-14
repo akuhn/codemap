@@ -33,8 +33,6 @@ public class MeanderApplet extends PApplet {
 	private Point dragStart;
 	private Point dragStop;
 
-	private MeanderEventListener listener;
-
 	public static final int PIXELSCALE = 512;
 	private Events events;
 	

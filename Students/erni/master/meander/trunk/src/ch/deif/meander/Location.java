@@ -94,4 +94,8 @@ public class Location {
 		return color == null ? Colors.HILLGREEN : color;
 	}
 	
+	public String toString() {
+		return px + ", " + py + " elevation: " + elevation;
+	}
+	
 }

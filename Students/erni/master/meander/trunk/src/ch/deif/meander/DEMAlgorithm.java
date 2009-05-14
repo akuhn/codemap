@@ -40,6 +40,7 @@ public class DEMAlgorithm extends MapAlgorithm {
 
 	private void compute() {
 		for (Location each: map.locations()) {
+			System.out.println(each);
 			elevateHill(each, computePie(each));
 		}
 	}
@@ -86,6 +87,7 @@ public class DEMAlgorithm extends MapAlgorithm {
 				pie[n][m] += elevation  - THRESHOLD;
 			}
 		}
+		System.out.println(pie.length);
 		throw null; // should not happen.
 	}
 

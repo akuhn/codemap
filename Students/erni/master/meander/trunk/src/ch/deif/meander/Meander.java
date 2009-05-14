@@ -84,7 +84,7 @@ public class Meander {
 	
 	public Meander makeMap(String version) {
 		this.doTheNumberCrunching();
-		MapBuilder builder = Map.builder().pixelSize(width);
+		MapBuilder builder = Map.builder();//.pixelSize(width);
 		Iterator<Document> iterator = lsi.documents.iterator();
 		for (int n = 0; n < mds.x.length; n++) {
 			Document each = iterator.next();
