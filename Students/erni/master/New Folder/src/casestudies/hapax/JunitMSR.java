@@ -14,30 +14,37 @@ public class JunitMSR implements Runnable {
 	public void run() {
 		
 		Hapax h = Hapax.legomenon()
+			.ignoreCase()
 			.useCamelCaseScanner()
-			.useStemming()
 			.rejectRareWords()
 			.rejectStopwords()
 			.useTFIDF()
 			.setBaseFolder("../MeanderCaseStudies/data/junit/")
 			.makeCorpus();
 		for (String each: VERSIONS) {
+			System.out.println("parsing " + each);
 			h.addFiles(each, "java");
 		}
-		Meander m = Meander.with(h);
+		h.closeCorpus();
+		Meander m = Meander.with(h).pixelWidth(1600);
+		float[][] oldDEM = null;
 		for (String each: VERSIONS) {
+			System.out.println("saving " + each);
 			MapVisualization viz = m.makeMap(each)
+				.blackAndWhite()
 				.useHillshading()
+				.alsoShowShoresOf(oldDEM)
 				.getVisualization();
 			viz.drawToPNG(each);
-			if (each == "junit3.8.2.zip") viz.openApplet();
-			if (each == "junit4.0.zip") viz.openApplet();
+			oldDEM = viz.map.getDEM();
+			// if (each == "junit3.8.2.zip") viz.openApplet();
+			// if (each == "junit4.0.zip") viz.openApplet();
 		}
 	}
 	
     public final static String[] VERSIONS = { 
         "junit2.zip",
-        "JUNIT2.1.ZIP",
+//        "JUNIT2.1.ZIP",
         "JUNIT3.ZIP",
         "junit3.2.ZIP",
         "junit3.4.zip",
@@ -45,8 +52,8 @@ public class JunitMSR implements Runnable {
         "junit3.6.zip",
         "junit3.7.zip",
         "junit3.8.zip",
-        "junit3.8.1.zip",
-        "junit3.8.2.zip",
+//        "junit3.8.1.zip",
+//        "junit3.8.2.zip",
         "junit4.0.zip",
         "junit4.1.zip",
         "junit4.2.zip",
