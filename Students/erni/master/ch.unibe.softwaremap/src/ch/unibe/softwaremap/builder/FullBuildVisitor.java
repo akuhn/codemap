@@ -38,8 +38,18 @@ class FullBuildVisitor implements IResourceVisitor {
 	private boolean visit(ICompilationUnit compilationUnit) throws JavaModelException {
 		IBuffer buf = compilationUnit.getBuffer();
 		String contents = buf.getContents();
-		TDM.makeDocument(compilationUnit.getHandleIdentifier()).addTerms(new Terms(contents));
+		String name = this.shortenCompilationUnitName(compilationUnit);
+		TDM.makeDocument(name).addTerms(new Terms(contents));
 		return false;
+	}
+	
+	private String shortenCompilationUnitName(ICompilationUnit compilationUnit) {
+		// shorten the fullname which looks like: =Fame/test<ch.akuhn.fame.test{ArrayFieldTest.java
+		String[] split = compilationUnit.getHandleIdentifier().split("\\{");
+		if (!(split.length == 2)) return compilationUnit.getHandleIdentifier();
+		String shorter = split[split.length-1];
+		shorter.replaceAll(".java", "");
+		return shorter;
 	}
 
 	public TermDocumentMatrix getResult() {
