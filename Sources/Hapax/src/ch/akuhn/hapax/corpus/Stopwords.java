@@ -7,8 +7,8 @@ import ch.akuhn.util.Strings;
 @SuppressWarnings("serial")
 public class Stopwords extends HashSet<String> {
 
-    //public static final Stopwords BASIC_ENGLISH = new Stopwords()
-    //        .readFromResource("ch/akuhn/hapax/resources/stopwords_SMART.txt");
+    public static final Stopwords BASIC_ENGLISH = new Stopwords()
+            .readFromResource("ch/akuhn/hapax/resources/stopwords_SMART.txt");
 
     public Stopwords readFromResource(String path) {
         CharSequence str = Strings.fromResource(path);

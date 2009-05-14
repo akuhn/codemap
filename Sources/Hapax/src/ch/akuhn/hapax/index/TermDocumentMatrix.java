@@ -160,8 +160,7 @@ public class TermDocumentMatrix extends Corpus {
     }
 
     public TermDocumentMatrix rejectStopwords() {
-        //return rejectStopwords(Stopwords.BASIC_ENGLISH);
-        return this;
+        return rejectStopwords(Stopwords.BASIC_ENGLISH);
     }
 
     public TermDocumentMatrix rejectStopwords(Stopwords stopwords) {

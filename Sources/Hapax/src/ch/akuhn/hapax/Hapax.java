@@ -1,13 +1,11 @@
 package ch.akuhn.hapax;
 
-import java.io.File;
 import java.io.IOException;
 
 import ch.akuhn.hapax.corpus.CamelCaseScanner;
 import ch.akuhn.hapax.corpus.Corpora;
-import ch.akuhn.hapax.corpus.Corpus;
-import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.corpus.CorpusBuilder;
+import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.corpus.LetterScanner;
 import ch.akuhn.hapax.corpus.PorterStemmer;
 import ch.akuhn.hapax.corpus.Scanner;
@@ -49,7 +47,9 @@ public class Hapax {
 	}
 
 	public Hapax createIndex() {
-		this.index = buffer.rejectAndWeight().createIndex();
+		// TODO fix this mess, these semantics or so screwed up!!!
+		TermDocumentMatrix tdm = (TermDocumentMatrix) corpora.iterator().next();
+		this.index = tdm.weight(localWeighting, globalWeighting).createIndex();
 		return this;
 	}
 	
