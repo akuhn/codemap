@@ -121,13 +121,8 @@ public final class Strings {
             throw new RuntimeException(ex);
         }
     }
-
-    public static final CharSequence fromFile(String filename) {
-        return Strings.fromFile(new File(filename));
-    }
-
-    public static final CharSequence fromResource(String name) {
-        InputStream in = ClassLoader.getSystemResourceAsStream(name);
+    
+    public static final CharSequence fromInputStream(InputStream in) {
         StringBuilder builder = new StringBuilder();
         try {
             while (true) {
@@ -140,6 +135,15 @@ public final class Strings {
             throw new RuntimeException(ex);
         }
         return builder.toString();
+    }
+
+    public static final CharSequence fromFile(String filename) {
+        return Strings.fromFile(new File(filename));
+    }
+
+    public static final CharSequence fromResource(String name) {
+        InputStream in = ClassLoader.getSystemResourceAsStream(name);
+        return fromInputStream(in);
     }
 
     public static final boolean isAlphanumeric(final CharSequence string) {
