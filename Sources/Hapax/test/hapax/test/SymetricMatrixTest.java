@@ -14,10 +14,10 @@ public class SymetricMatrixTest {
     public void testPutGetIsSymetric() {
         Matrix m = new SymetricMatrix(5);
         m.put(4, 2, PI);
-        assertEquals(PI, m.get(4, 2));
-        assertEquals(PI, m.get(2, 4));
+        assertEquals(PI, m.get(4, 2), Double.MIN_VALUE);
+        assertEquals(PI, m.get(2, 4), Double.MIN_VALUE);
         m.put(3, 3, PI);
-        assertEquals(PI, m.get(3, 3));
+        assertEquals(PI, m.get(3, 3), Double.MIN_VALUE);
     }
 
 }

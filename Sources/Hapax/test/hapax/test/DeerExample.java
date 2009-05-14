@@ -72,7 +72,7 @@ public class DeerExample {
         assertEquals(buf.toString(), buf2.toString());
         assertEquals(tdm.documentCount(), tdm2.documentCount());
         assertEquals(tdm.termCount(), tdm2.termCount());
-        assertEquals(tdm.density(), tdm2.density());
+        assertEquals(tdm.density(), tdm2.density(), Double.MIN_VALUE);
     }
 
 }
