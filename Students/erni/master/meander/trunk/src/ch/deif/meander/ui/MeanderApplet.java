@@ -33,12 +33,11 @@ public class MeanderApplet extends PApplet {
 	private Point dragStart;
 	private Point dragStop;
 
-	public static final int PIXELSCALE = 512;
+	// public static final int PIXELSCALE = 512;
 	private Events events;
-	
-	
+
 	private static class Events {
-		
+
 		private MeanderEventListener listener;
 		private MeanderApplet applet;
 
@@ -50,7 +49,7 @@ public class MeanderApplet extends PApplet {
 			assert this.listener == null;
 			this.listener = listener;
 		}
-		
+
 		public void removeListener(MeanderEventListener listener) {
 			assert this.listener == listener;
 			this.listener = null;
@@ -64,32 +63,26 @@ public class MeanderApplet extends PApplet {
 				}
 			}.start();
 		}
-		
+
 		public void selectionChanged(final Location... locations) {
 			final ArrayList<String> names = new ArrayList<String>();
 			for (Location each: locations)
-				names.add(each.document().name());
+				names.add(each.name());
 			if (listener != null) new Thread() {
 				@Override
 				public void run() {
 					listener.selectionChanged(names.toArray(new String[0]));
 				}
 			}.start();
-		}		
-		
+		}
+
 	}
 
 	public MeanderApplet() {
-		this(null);
-	}
-
-	public MeanderApplet(MapVisualization vizualization) {
 		events = new Events(this);
 		points = Collections.synchronizedSet(new HashSet<Point>());
-		bg = createGraphics(width(), height(), JAVA2D);
-		setVisualization(vizualization);
 	}
-	
+
 	public Events events() {
 		return events;
 	}
@@ -97,7 +90,6 @@ public class MeanderApplet extends PApplet {
 	public void addListener(MeanderEventListener listener) {
 		events().addListener(listener);
 	}
-	
 
 	public void removeListener(MeanderEventListener listener) {
 		events.removeListener(listener);
@@ -105,20 +97,19 @@ public class MeanderApplet extends PApplet {
 
 	@Override
 	public void setup() {
-		size(width(), height());
 		frameRate(25);
-	}	
+	}
 
 	private void setupBackground() {
 		bg.beginDraw();
 		viz.draw(bg);
 		bg.endDraw();
-	}	
+	}
 
 	@Override
 	public void draw() {
 		if (!needsRedraw) return;
-		
+
 		smooth();
 		noFill();
 		strokeWeight(POINT_STROKE);
@@ -130,7 +121,7 @@ public class MeanderApplet extends PApplet {
 
 	private void drawSelectionBox() {
 		if (!hasDragInput()) return;
-		
+
 		stroke(Color.RED.getRGB());
 		strokeWeight(BOX_STROKE);
 		int deltaX = dragStop.x - dragStart.x;
@@ -153,7 +144,7 @@ public class MeanderApplet extends PApplet {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		super.mouseClicked(e);
-		
+
 		Point point = e.getPoint();
 		if (!e.isControlDown()) points.clear();
 		if (e.getClickCount() == 2) {
@@ -161,7 +152,7 @@ public class MeanderApplet extends PApplet {
 			if (nn.hasResult()) {
 				addSelection(nn.point());
 				events().doubleClicked(nn.location());
-			}			
+			}
 		} else if (e.getButton() == MouseEvent.BUTTON1) {
 			// button1 is 1st mouse button
 			NearestNeighbor nn = new MaxDistNearestNeighbor(map(), width() / 10).forLocation(point);
@@ -199,8 +190,8 @@ public class MeanderApplet extends PApplet {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		super.mouseReleased();
-		if (! hasDragInput()) return;
-		
+		if (!hasDragInput()) return;
+
 		ensureDragPointOrder();
 		handleDragSelection();
 		unsetSelectionBox();
@@ -254,11 +245,13 @@ public class MeanderApplet extends PApplet {
 	}
 
 	private int width() {
-		return MeanderApplet.PIXELSCALE;
+		return height();
+		// return MeanderApplet.PIXELSCALE;
 	}
 
 	private int height() {
-		return MeanderApplet.PIXELSCALE;
+		return viz == null ? 0 : viz.map.getParameters().width;
+		// return MeanderApplet.PIXELSCALE;
 	}
 
 	public void updateSelection(List<String> handleIdentifiers) {
@@ -274,6 +267,12 @@ public class MeanderApplet extends PApplet {
 		if (viz == this.viz) return;
 		this.points.clear();
 		this.viz = viz;
+		size(width(), height());
+
+		int dimension = viz.map.getParameters().width;
+		if (bg == null || dimension != this.bg.width) {
+			bg = createGraphics(dimension, dimension, JAVA2D);
+		}
 		setupBackground();
 		setNeedsRedraw();
 		repaint();

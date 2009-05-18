@@ -6,14 +6,14 @@ public class FromSourceFilesToMap {
 
 	public void run() {
 
-		Meander.script().addDocuments("../JExample", ".java").makeMap().useHillshading().add(LabelsOverlay.class)
+		Meander.script().addDocuments("../JExample", ".java").makeMap(512).useHillshading().add(LabelsOverlay.class)
 				.openApplet();
 
 	}
 
 	public static void main(String... args) {
 
-		Meander.script().addDocuments("../JExample", ".java").makeMap().useHillshading().add(LabelsOverlay.class)
+		Meander.script().addDocuments("../JExample", ".java").makeMap(512).useHillshading().add(LabelsOverlay.class)
 				.openApplet();
 
 		// TermDocumentMatrix tdm = new TermDocumentMatrix();

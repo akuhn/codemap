@@ -25,13 +25,14 @@ public class Parameters {
 
 	public boolean blackAndWhite = false;
 
-	public void useExample() {
+	public Parameters useExample() {
 		showContourLines = false;
 		showHillshade = false;
 		showWater = false;
 		showColors = false;
 		showLabels = false;
 		width = 640;
+		return this;
 	}
 
 }

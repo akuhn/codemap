@@ -14,7 +14,17 @@ public class LabelSketch {
 			+ "No man is an island. Boustrophedon is greek for as the ox turns in plowing").split("\\s+");
 
 	public static void main(String... args) {
-		MapBuilder builder = Map.builder().pixelSize(800);
+		Label.DRAFT = true;		
+		Layers layers = createLabeledSketch();
+		layers.openApplet();
+	}
+	
+	public static Layers createLabeledSketch() {
+		return createLabeledSketch(800);
+	}	
+
+	public static Layers createLabeledSketch(int size) {
+		MapBuilder builder = Map.builder().pixelSize(size);
 		for (int n = 0, a = 5; a < 90; a += 10) {
 			double rad = Math.PI / 180 * a;
 			builder.location(0.8 * sin(rad), 0.8 * cos(rad), a + 25).name(names[n++]);
@@ -26,10 +36,9 @@ public class LabelSketch {
 		}
 		builder.normalizeElevation();
 		Map map = builder.done();
-		Label.DRAFT = true;
 		
-		new Layers(map).useHillshading().add(LabelsOverlay.class).openApplet();
-
+		Layers layers = new Layers(map).useHillshading().add(LabelsOverlay.class);
+		return layers;
 	}
 
 }

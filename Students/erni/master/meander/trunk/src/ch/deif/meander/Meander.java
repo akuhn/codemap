@@ -45,7 +45,6 @@ public class Meander {
 	private MDS mds;
 	private Hapax hapax;
 	private LatentSemanticIndex lsi;
-	private int width;
 
 	public Meander addDocuments(String folder, String... extensions) {
 		if (tdm == null) tdm = new TermDocumentMatrix();
@@ -62,8 +61,8 @@ public class Meander {
 		return this;
 	}
 
-	public Meander makeMap() {
-		return makeMap(null);
+	public Meander makeMap(int dimension) {
+		return makeMap(null, dimension);
 	}
 
 	public Meander doTheNumberCrunching() {
@@ -82,9 +81,9 @@ public class Meander {
 		return this;
 	}
 	
-	public Meander makeMap(String version) {
+	public Meander makeMap(String version, int dimension) {
 		this.doTheNumberCrunching();
-		MapBuilder builder = Map.builder();//.pixelSize(width);
+		MapBuilder builder = Map.builder().pixelSize(dimension);
 		Iterator<Document> iterator = lsi.documents.iterator();
 		for (int n = 0; n < mds.x.length; n++) {
 			Document each = iterator.next();
@@ -126,11 +125,6 @@ public class Meander {
 
 	public Meander blackAndWhite() {
 		map.getParameters().blackAndWhite = true;
-		return this;
-	}
-
-	public Meander pixelWidth(int pixels) {
-		width = pixels;
 		return this;
 	}
 
