@@ -20,6 +20,7 @@ public class SoftwareMapCore extends AbstractUIPlugin {
 	private static Map<IProject,ProjectMap> hashmap;
 	// TODO is there a better way to manage the single MapView instance?
 	private static MapView mapView;
+	private static int currentMapDimension;
 
 	public SoftwareMapCore() {
 	}
@@ -52,7 +53,7 @@ public class SoftwareMapCore extends AbstractUIPlugin {
 		if (map == null) {
 			hashmap.put(project, map = new ProjectMap(project));
 		}
-		return map;
+		return map.updateSize(currentMapDimension);
 
 	}
 
@@ -62,5 +63,9 @@ public class SoftwareMapCore extends AbstractUIPlugin {
 
 	public static MapView getMapView() {
 		return mapView;
+	}
+
+	public static void updateMapdimension(int newDimension) {
+		currentMapDimension = newDimension;
 	}
 }

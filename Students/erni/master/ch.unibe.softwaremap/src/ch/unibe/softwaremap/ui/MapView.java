@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.internal.ui.compare.ResizableDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -23,9 +24,17 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewPart;
@@ -77,13 +86,20 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 	}
 
 	@Override
-	public void createPartControl(Composite parent) {
+	public void createPartControl(final Composite parent) {
 		softwareMap = new EclipseProcessingBridge(parent);
 		softwareMap.getApplet().addListener(this);
 		addSelectionListener(PACKAGE_EXPLORER_ID, CONTENT_OUTLINE_ID, RESOURCE_NAVIGATOR_ID);
 		getSite().setSelectionProvider(this);
 		SoftwareMapCore.setMapView(this);
+		
+		new ResizeUpdate(parent, softwareMap);
 	}
+	
+	protected void mapDimensionChanged(Point point) {
+		int newDimension = Math.min(point.x, point.y);
+		SoftwareMapCore.updateMapdimension(newDimension);
+	}	
 
 	/**
 	 * Sent when view is closed.
@@ -115,12 +131,12 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		if (part == this) return;
-		if (selection instanceof IStructuredSelection) {
-			try {
-				selectionChanged((IStructuredSelection) selection);
-			} catch (CoreException e) {
-				Log.error(e);
-			}
+		if (!(selection instanceof IStructuredSelection)) return;
+
+		try {
+			selectionChanged((IStructuredSelection) selection);
+		} catch (CoreException e) {
+			Log.error(e);
 		}
 	}
 

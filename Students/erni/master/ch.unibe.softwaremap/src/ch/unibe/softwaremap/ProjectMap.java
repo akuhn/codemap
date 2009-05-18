@@ -32,6 +32,8 @@ public class ProjectMap {
 	private MapVisualization map;
 	private boolean mapBeingCalculated = false;
 	private boolean builderIsRunning = false;
+	
+	int mapDimension = 512;
 
 	public ProjectMap(IProject project) {
 		this.project = project;
@@ -93,7 +95,7 @@ public class ProjectMap {
 
 	public MapVisualization getVisualization() {
 		if (tdm == null) return null;
-		if (map != null) return map;
+		if (map != null && map.getWidth() == mapDimension) return map;
 		if (mapBeingCalculated) return null;
 		mapBeingCalculated = true;
 		startBackgroundTask();
@@ -108,7 +110,7 @@ public class ProjectMap {
 		if (mapBeingCalculated) return Status.OK_STATUS;
 		mapBeingCalculated = true;
 		monitor.beginTask("Making map", 5);
-		map = Meander.script().useCorpus(tdm).makeMap().useHillshading().add(LabelsOverlay.class).getVisualization();
+		map = Meander.script().useCorpus(tdm).makeMap(mapDimension).useHillshading().add(LabelsOverlay.class).getVisualization();
 		notifyMapView();
 		monitor.done();
 		return Status.OK_STATUS;
@@ -119,6 +121,11 @@ public class ProjectMap {
 		if (mapView != null) {
 			mapView.newProjectMapAvailable(project);
 		}
+	}
+
+	public ProjectMap updateSize(int newMapDimension) {
+		this.mapDimension = Math.max(newMapDimension, 512);
+		return this;
 	}
 
 }

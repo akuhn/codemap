@@ -2,7 +2,7 @@ package project.todo;
 
 enum Todo {
 	
-	// 
+	// XXX cleanup the map-width definition ... it's everywhere ... ahh! 
 
 	// TODO TESTS! TESTS! TEST!
 	// TODO refresh map while editing
