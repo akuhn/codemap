@@ -1,5 +1,9 @@
 package ch.unibe.softwaremap.ui;
 
+import static ch.unibe.eclipse.util.ID.CONTENT_OUTLINE;
+import static ch.unibe.eclipse.util.ID.PACKAGE_EXPLORER;
+import static ch.unibe.eclipse.util.ID.RESOURCE_NAVIGATOR;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,7 +20,6 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.internal.ui.compare.ResizableDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -24,17 +27,10 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewPart;
@@ -57,14 +53,11 @@ import ch.unibe.softwaremap.SoftwareMapCore;
 public class MapView extends ViewPart implements ISelectionListener, ISelectionProvider, MeanderEventListener {
 
 	public static final String MAP_VIEW_ID = SoftwareMapCore.makeID(MapView.class);
+	
 	private EclipseProcessingBridge softwareMap;
 	private IProject project;
 	private Collection<ICompilationUnit> selectedUnits;
 	private SelectionProviderAdapter selectionProvider;
-
-	private static final String RESOURCE_NAVIGATOR_ID = "org.eclipse.ui.views.ResourceNavigator";
-	private static final String CONTENT_OUTLINE_ID = "org.eclipse.ui.views.ContentOutline";
-	public static final String PACKAGE_EXPLORER_ID = "org.eclipse.jdt.ui.PackageExplorer";
 
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 		public String getColumnText(Object obj, int index) {
@@ -89,7 +82,7 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 	public void createPartControl(final Composite parent) {
 		softwareMap = new EclipseProcessingBridge(parent);
 		softwareMap.getApplet().addListener(this);
-		addSelectionListener(PACKAGE_EXPLORER_ID, CONTENT_OUTLINE_ID, RESOURCE_NAVIGATOR_ID);
+		addSelectionListener(PACKAGE_EXPLORER.id, CONTENT_OUTLINE.id, RESOURCE_NAVIGATOR.id);
 		getSite().setSelectionProvider(this);
 		SoftwareMapCore.setMapView(this);
 		
@@ -108,7 +101,7 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 	@Override
 	public void dispose() {
 		SoftwareMapCore.setMapView(null);
-		removeSelectionListener(CONTENT_OUTLINE_ID, PACKAGE_EXPLORER_ID, RESOURCE_NAVIGATOR_ID);
+		removeSelectionListener(CONTENT_OUTLINE.id, PACKAGE_EXPLORER.id, RESOURCE_NAVIGATOR.id);
 	}
 
 	private void removeSelectionListener(String... viewPartID) {
@@ -241,7 +234,7 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 			@Override
 			public void run() {
 				try {
-					IViewPart showView = getSite().getPage().showView(PACKAGE_EXPLORER_ID);
+					IViewPart showView = getSite().getPage().showView(PACKAGE_EXPLORER.id);
 					((ISetSelectionTarget) showView).selectReveal(new StructuredSelection(selection));
 				} catch (PartInitException e) {
 					Log.error(e);

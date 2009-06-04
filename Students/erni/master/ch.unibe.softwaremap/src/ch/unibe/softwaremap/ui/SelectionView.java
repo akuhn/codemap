@@ -20,11 +20,14 @@ import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.ViewPart;
 
 import ch.unibe.softwaremap.Log;
+import ch.unibe.softwaremap.SoftwareMapCore;
 /**
  * This view simply mirrors the current selection in the workbench window. It works for both, element and text
  * selection.
  */
 public class SelectionView extends ViewPart {
+	
+	public static final String SELECTION_VIEW_ID = SoftwareMapCore.makeID(SelectionView.class);
 
 	private PageBook pagebook;
 	private TableViewer tableviewer;
