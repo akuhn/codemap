@@ -29,11 +29,11 @@ import ch.akuhn.util.Bag.Count;
 
 public class TermDocumentMatrix extends Corpus {
 
-    private static class Doc extends Document {
+    public static class Doc extends Document {
 
         private TermDocumentMatrix owner;
         
-        public Doc(String name, String version, TermDocumentMatrix owner) {
+        protected Doc(String name, String version, TermDocumentMatrix owner) {
             super(name, version);
             this.owner = owner;
         }
@@ -125,7 +125,7 @@ public class TermDocumentMatrix extends Corpus {
         return index;
     }
     
-    private int indexDocument(Document doc) {
+    protected int indexDocument(Document doc) {
         int column = documents.add(doc);
         if (column == matrix.columnCount()) matrix.addColumn();
         return column;
