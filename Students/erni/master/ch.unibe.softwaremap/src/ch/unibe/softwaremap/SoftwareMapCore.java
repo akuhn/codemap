@@ -71,6 +71,8 @@ public class SoftwareMapCore extends AbstractUIPlugin {
 	public static void updateMapdimension(int newDimension) {
 		currentMapDimension = newDimension;
 		MapVisualization viz = at(currentProject).updateSize(currentMapDimension).getVisualization();
-//		mapView.updateMapVisualization(viz);
+		if (viz != null) {
+			mapView.updateMapVisualization(viz);
+		}
 	}
 }

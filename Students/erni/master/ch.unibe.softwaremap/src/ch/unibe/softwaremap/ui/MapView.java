@@ -42,11 +42,14 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ISetSelectionTarget;
 import org.eclipse.ui.part.ViewPart;
 
+import ch.deif.meander.Location;
 import ch.deif.meander.ui.EclipseProcessingBridge;
 import ch.deif.meander.ui.MeanderEventListener;
 import ch.deif.meander.viz.MapVisualization;
 import ch.unibe.eclipse.util.EclipseUtil;
 import ch.unibe.eclipse.util.SelectionProviderAdapter;
+import ch.unibe.eclipse.util.TermClassMatrix;
+import ch.unibe.eclipse.util.TermClassMatrix.Doc;
 import ch.unibe.softwaremap.Log;
 import ch.unibe.softwaremap.SoftwareMapCore;
 
@@ -226,12 +229,16 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 	public void setSelection(ISelection selection) {
 		this.selectionProvider.setSelection(selection);
 	}
+	
 
 	@Override
-	public void selectionChanged(final String... handlerIdentifiers) {
+	public void selectionChanged(Location... locations) {
+		// TODO Auto-generated method stub
 		final ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
-		for (String each: handlerIdentifiers) {
-			IJavaElement javaElement = JavaCore.create(each);
+		for (Location each: locations) {
+			Doc candidateJavaElement = TermClassMatrix.adaptDoc(each.document());
+			if (candidateJavaElement == null) continue;
+			IJavaElement javaElement = JavaCore.create(candidateJavaElement.identifier());
 			selection.add(javaElement);
 		}
 		Display.getDefault().asyncExec(new Runnable() {
@@ -245,7 +252,8 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 				}
 			}
 		});
-	}
+		
+	}	
 
 	private void openInEditor(IJavaElement javaElement) {
 		final IWorkbenchPage page = getSite().getPage();
@@ -266,8 +274,11 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 	}
 
 	@Override
-	public void doubleClicked(String handlerIdentifier) {
-		IJavaElement javaElement = JavaCore.create(handlerIdentifier);
+	public void doubleClicked(Location location) {
+		Doc candidateJavaElement = TermClassMatrix.adaptDoc(location.document());
+		if (candidateJavaElement == null) return;
+		IJavaElement javaElement = JavaCore.create(candidateJavaElement.identifier());		
 		openInEditor(javaElement);
 	}
+
 }
