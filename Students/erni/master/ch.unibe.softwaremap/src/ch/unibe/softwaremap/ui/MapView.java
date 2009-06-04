@@ -193,7 +193,7 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 	private void softwareMapUpdateSelection(Collection<ICompilationUnit> units) {
 		List<String> handleIdentifiers = new ArrayList<String>();
 		for (ICompilationUnit each: units) {
-			handleIdentifiers.add(each.getHandleIdentifier());
+			handleIdentifiers.add(EclipseUtil.shortenCompilationUnitName(each));
 		}
 		softwareMap.updateSelection(handleIdentifiers);
 	}

@@ -14,6 +14,7 @@ import org.eclipse.jdt.core.JavaModelException;
 
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
+import ch.unibe.eclipse.util.EclipseUtil;
 
 /**
  * Creates TDM from all ICompilationUnit resources in an IProject.
@@ -38,20 +39,11 @@ class FullBuildVisitor implements IResourceVisitor {
 	private boolean visit(ICompilationUnit compilationUnit) throws JavaModelException {
 		IBuffer buf = compilationUnit.getBuffer();
 		String contents = buf.getContents();
-		String name = this.shortenCompilationUnitName(compilationUnit);
+		String name = EclipseUtil.shortenCompilationUnitName(compilationUnit);
 		TDM.makeDocument(name).addTerms(new Terms(contents));
 		return false;
 	}
 	
-	private String shortenCompilationUnitName(ICompilationUnit compilationUnit) {
-		// shorten the fullname which looks like: =Fame/test<ch.akuhn.fame.test{ArrayFieldTest.java
-		String[] split = compilationUnit.getHandleIdentifier().split("\\{");
-		if (!(split.length == 2)) return compilationUnit.getHandleIdentifier();
-		String shorter = split[split.length-1];
-		shorter.replaceAll(".java", "");
-		return shorter;
-	}
-
 	public TermDocumentMatrix getResult() {
 		return TDM;
 	}

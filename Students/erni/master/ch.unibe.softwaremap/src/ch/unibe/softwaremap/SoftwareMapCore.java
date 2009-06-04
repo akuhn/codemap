@@ -67,5 +67,6 @@ public class SoftwareMapCore extends AbstractUIPlugin {
 
 	public static void updateMapdimension(int newDimension) {
 		currentMapDimension = newDimension;
+		
 	}
 }
