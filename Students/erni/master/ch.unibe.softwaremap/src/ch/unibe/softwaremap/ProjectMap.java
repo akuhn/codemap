@@ -74,7 +74,7 @@ public class ProjectMap {
 		ICommand[] commands = desc.getBuildSpec();
 		for (ICommand command: commands) {
 			if (command.getBuilderName().equals(HapaxBuilder.BUILDER_ID)) {
-				;
+				return;
 			}
 		}
 		ICommand newCommand = desc.newCommand();
@@ -97,7 +97,6 @@ public class ProjectMap {
 		if (tdm == null) return null;
 		if (map != null && map.getWidth() == mapDimension) return map;
 		if (mapBeingCalculated) return null;
-		mapBeingCalculated = true;
 		startBackgroundTask();
 		return null;
 	}
@@ -113,6 +112,7 @@ public class ProjectMap {
 		map = Meander.script().useCorpus(tdm).makeMap(mapDimension).useHillshading().add(LabelsOverlay.class).getVisualization();
 		notifyMapView();
 		monitor.done();
+		mapBeingCalculated = false;
 		return Status.OK_STATUS;
 	}
 

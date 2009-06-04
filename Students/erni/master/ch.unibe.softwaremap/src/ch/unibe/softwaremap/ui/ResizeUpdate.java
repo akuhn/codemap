@@ -3,12 +3,14 @@ package ch.unibe.softwaremap.ui;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
 import ch.deif.meander.ui.EclipseProcessingBridge;
+import ch.unibe.softwaremap.SoftwareMapCore;
 
 public class ResizeUpdate implements ControlListener {
 	
@@ -73,6 +75,8 @@ public class ResizeUpdate implements ControlListener {
 	private void processResize() {
 		System.out.println("resize the map");
 		// TODO: actually resize the map ...
+		Point size = target.getSize();
+		SoftwareMapCore.updateMapdimension(Math.min(size.x, size.y));
 	}
 
 	@Override
