@@ -1,9 +1,11 @@
 package ch.deif.meander.ui;
 
+import ch.deif.meander.Location;
+
 public interface MeanderEventListener {
 
-	void selectionChanged(String... name);
+	void selectionChanged(Location... locations);
 
-	void doubleClicked(String name);
+	void doubleClicked(Location location);
 
 }

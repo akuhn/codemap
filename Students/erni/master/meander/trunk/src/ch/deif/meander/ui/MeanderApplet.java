@@ -33,7 +33,6 @@ public class MeanderApplet extends PApplet {
 	private Point dragStart;
 	private Point dragStop;
 
-	// public static final int PIXELSCALE = 512;
 	private Events events;
 
 	private static class Events {
@@ -59,19 +58,16 @@ public class MeanderApplet extends PApplet {
 			if (listener != null) new Thread() {
 				@Override
 				public void run() {
-					listener.doubleClicked(location.document().name());
+					listener.doubleClicked(location);
 				}
 			}.start();
 		}
 
 		public void selectionChanged(final Location... locations) {
-			final ArrayList<String> names = new ArrayList<String>();
-			for (Location each: locations)
-				names.add(each.name());
 			if (listener != null) new Thread() {
 				@Override
 				public void run() {
-					listener.selectionChanged(names.toArray(new String[0]));
+					listener.selectionChanged(locations);
 				}
 			}.start();
 		}
@@ -246,12 +242,10 @@ public class MeanderApplet extends PApplet {
 
 	private int width() {
 		return height();
-		// return MeanderApplet.PIXELSCALE;
 	}
 
 	private int height() {
 		return viz == null ? 0 : viz.map.getParameters().width;
-		// return MeanderApplet.PIXELSCALE;
 	}
 
 	public void updateSelection(List<String> handleIdentifiers) {
