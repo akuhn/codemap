@@ -186,8 +186,12 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 	private void compilationUnitsSelected(Collection<ICompilationUnit> units) {
 		MapVisualization viz = SoftwareMapCore.at(project).enableBuilder().getVisualization();
 		if (viz == null) return;
-		softwareMap.setMapVizualization(viz);
+		updateMapVisualization(viz);
 		softwareMapUpdateSelection(units);
+	}
+
+	public void updateMapVisualization(MapVisualization viz) {
+		softwareMap.setMapVizualization(viz);
 	}
 
 	private void softwareMapUpdateSelection(Collection<ICompilationUnit> units) {

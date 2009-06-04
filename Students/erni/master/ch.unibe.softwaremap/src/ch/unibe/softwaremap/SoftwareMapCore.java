@@ -7,6 +7,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import ch.deif.meander.viz.MapVisualization;
 import ch.unibe.softwaremap.ui.MapView;
 
 /**
@@ -21,6 +22,7 @@ public class SoftwareMapCore extends AbstractUIPlugin {
 	// TODO is there a better way to manage the single MapView instance?
 	private static MapView mapView;
 	private static int currentMapDimension;
+	private static IProject currentProject;
 
 	public SoftwareMapCore() {
 	}
@@ -46,6 +48,7 @@ public class SoftwareMapCore extends AbstractUIPlugin {
 	}
 
 	public static ProjectMap at(IProject project) {
+		currentProject = project;
 		if (hashmap == null) {
 			hashmap = new HashMap<IProject,ProjectMap>();
 		}
@@ -67,6 +70,7 @@ public class SoftwareMapCore extends AbstractUIPlugin {
 
 	public static void updateMapdimension(int newDimension) {
 		currentMapDimension = newDimension;
-		
+		MapVisualization viz = at(currentProject).updateSize(currentMapDimension).getVisualization();
+//		mapView.updateMapVisualization(viz);
 	}
 }
