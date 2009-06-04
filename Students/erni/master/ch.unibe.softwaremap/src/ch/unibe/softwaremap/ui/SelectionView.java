@@ -1,5 +1,7 @@
 package ch.unibe.softwaremap.ui;
 
+import static ch.unibe.eclipse.util.ID.PACKAGE_EXPLORER;
+
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IMarkSelection;
@@ -18,16 +20,11 @@ import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.ViewPart;
 
 import ch.unibe.softwaremap.Log;
-import ch.unibe.softwaremap.SoftwareMapCore;
-
 /**
  * This view simply mirrors the current selection in the workbench window. It works for both, element and text
  * selection.
  */
 public class SelectionView extends ViewPart {
-
-	public static final String SELECTION_VIEW_ID = SoftwareMapCore.makeID(SelectionView.class);
-	public static final String PACKAGE_EXPLORER_ID = "org.eclipse.jdt.ui.PackageExplorer";
 
 	private PageBook pagebook;
 	private TableViewer tableviewer;
@@ -93,7 +90,7 @@ public class SelectionView extends ViewPart {
 		textviewer = new TextViewer(pagebook, SWT.H_SCROLL | SWT.V_SCROLL);
 		textviewer.setEditable(false);
 
-		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(PACKAGE_EXPLORER_ID, listener);
+		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(PACKAGE_EXPLORER.id, listener);
 	}
 
 	@Override
@@ -103,7 +100,7 @@ public class SelectionView extends ViewPart {
 
 	@Override
 	public void dispose() {
-		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(PACKAGE_EXPLORER_ID, listener);
+		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(PACKAGE_EXPLORER.id, listener);
 		super.dispose();
 	}
 

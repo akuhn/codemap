@@ -1,5 +1,9 @@
 package ch.unibe.softwaremap.ui;
 
+import static ch.unibe.eclipse.util.ID.CONTENT_OUTLINE;
+import static ch.unibe.eclipse.util.ID.PACKAGE_EXPLORER;
+import static ch.unibe.eclipse.util.ID.RESOURCE_NAVIGATOR;
+
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -23,10 +27,6 @@ import ch.unibe.softwaremap.SoftwareMapCore;
 
 public class TagCloudView extends ViewPart implements ISelectionListener, ControlListener {
 
-	private static final String RESOURCE_NAVIGATOR_ID = "org.eclipse.ui.views.ResourceNavigator";
-	private static final String CONTENT_OUTLINE_ID = "org.eclipse.ui.views.ContentOutline";
-	public static final String PACKAGE_EXPLORER_ID = "org.eclipse.jdt.ui.PackageExplorer";
-
 	private EclipseProcessingBridge2 view;
 
 	/**
@@ -48,7 +48,7 @@ public class TagCloudView extends ViewPart implements ISelectionListener, Contro
 				size(400, 400);
 			}
 		});
-		addSelectionListener(PACKAGE_EXPLORER_ID, CONTENT_OUTLINE_ID, RESOURCE_NAVIGATOR_ID);
+		addSelectionListener(PACKAGE_EXPLORER.id, CONTENT_OUTLINE.id, RESOURCE_NAVIGATOR.id);
 		view.addControlListener(this);
 	}
 
@@ -63,7 +63,7 @@ public class TagCloudView extends ViewPart implements ISelectionListener, Contro
 	 */
 	@Override
 	public void dispose() {
-		removeSelectionListener(CONTENT_OUTLINE_ID, PACKAGE_EXPLORER_ID, RESOURCE_NAVIGATOR_ID);
+		removeSelectionListener(PACKAGE_EXPLORER.id, CONTENT_OUTLINE.id, RESOURCE_NAVIGATOR.id);
 	}
 
 	private void addSelectionListener(String... viewPartID) {
