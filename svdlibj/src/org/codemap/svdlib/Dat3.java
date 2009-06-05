@@ -11,7 +11,7 @@ public class Dat3 {
 
 	public static void main(String... args) throws FileNotFoundException {
 		Svdlib svdlib = new Svdlib();
-		SMat A = svdlib.svdLoadSparseTextHBFile(new File("../svd example/dat3.txt"));
+		SMat A = svdlib.svdLoadSparseTextHBFile(new File("lib/dat3.txt"));
 		int dimensions = Math.min(A.cols, A.rows);
 		int iterations = 100;
 		double[] end = new double[] { -1e-30, 1e-30 };
