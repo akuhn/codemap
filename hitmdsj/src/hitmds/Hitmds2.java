@@ -51,10 +51,7 @@ public class Hitmds2 {
 	public int	irand(int x) {
 		return ((int)((double)(x) * frand()));
 	}
-	//
-	//	#define error(X) fprintf(stderr, (X)), main_bye(), exit(1)
-	//
-	//
+
 	//	/* address matrix components */
 	//	#define D(mat,i,j) (*(mat + ( \
 	//	  (i<j) ? (j - 1 + ((((pattern_length<<1) - i - 3) * i) >> 1)) \
@@ -128,6 +125,7 @@ public class Hitmds2 {
 
 	/* Euclidean distance */
 	public double dist(int dimension, double[] d1, double[] d2) {
+		assert dimension == d1.length && dimension == d2.length;
 		double sum = 0.0;
 		for(int u = 0; u < dimension; u++) {
 			double tmp = d1[u] - d2[u];
@@ -506,6 +504,7 @@ public class Hitmds2 {
 
 		this.pattern_length = pattern_length;
 		this.pattern_dimension = pattern_dimension;
+		this.target_dim = abs(target_dim);
 
 		double random_matrix[] = null;
 
@@ -682,9 +681,9 @@ public class Hitmds2 {
 
 			if(++t == m) {
 				t = 0;
-				System.err.printf("%3.2f%%: %g  \t(r = %g)\n", 
-						100. * c/cycles, corr_2(), 
-						1./sqrt(corr_2()+1.));
+				System.out.printf("%3.2f%%: %g  \t(r = %g)\n", 
+						100.0 * c/cycles, corr_2(), 
+						1.0/sqrt(corr_2()+1.));
 			}
 
 			i = shuffle_next();
