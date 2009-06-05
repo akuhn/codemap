@@ -81,8 +81,8 @@ public int	irand(int x) {
 	    pattern_length,      /* Length of data series */
 	    pattern_dimension,   /* pattern dimension     */
 	    matsize,             /* number of distance matrix elements */
-	    target_dim,          /* dimension of target space */
-	    printqual;           /* flag to rate embedding qualities (last column) */
+	    target_dim;          /* dimension of target space */
+	boolean printqual;           /* flag to rate embedding qualities (last column) */
 	boolean matrix_input;       /* != 0 if data given as distance matrix */
 
 	double pattern[][],        /* contains float data from STDIN */
@@ -151,12 +151,13 @@ public double dist4s(int dimension, double[] d1, double[] d2) {
 //  }
 //
 //  return sum;
+	throw null;
 }
 
 
 /* general Minkowski metric, mexponent = 2 -> Euclidean distance */
 
-private final double mexponent = 1.0;                                    
+private double mexponent = 1.0;                                    
 
 public double dist_minkowski(int dimension, double[] d1, double[] d2) {
   double sum = 0.0;
@@ -416,7 +417,7 @@ public double deriv(int j, int k, int idx) {
 //  /* Wed Apr  4 11:05:01 */
 //  static double sq, scal;
 //#endif
-  double preres;
+  double preres = 0.0;
   int _j = -1, _k = -1;
 
   double d = D(points_distmat,j, k);
@@ -453,6 +454,21 @@ public double deriv(int j, int k, int idx) {
   return preres * (points[j][idx] - points[k][idx]) / ((d < EPS) ? EPS : d);
 }
 
+/******************************************************************************/
+/*              Some data handling routines                                   */
+/******************************************************************************/
+void data_free(int i, boolean what)
+{
+  
+  pattern = null;
+  points = null;
+    
+  if(what == false) {
+	points = null;
+    points_distmat = null;
+    pattern_distmat = null;
+  }
+}
 
 public int data_alloc() {
 
@@ -606,7 +622,7 @@ public void data_stdin() {
 
 
 public double distance(int dim, double[] a, double[] b) {
-	throw null; // TODO function pointer
+	return corr(dim, a, b); // XXX hardwired parameter "... 1:8"
 }
 
 public void data_init() {
@@ -796,10 +812,10 @@ void mds_train(int cycles, double learning_rate)
 
 /* move center to origin, scale data in such a way that 
    standard deviation of dimension of largest variance is equal to 1 */
-void mds_postprocess(void) 
+public void mds_postprocess() 
 {
   
-  double mean, var = 1., maxvar = -1.;
+  double mean, var = 1.0, maxvar = -1.0;
 
   int i, j;
   
@@ -839,14 +855,13 @@ void mds_postprocess(void)
 }
 
 
-void analyze_corr_deriv() {
+public void analyze_corr_deriv() {
 
   int i, j;
 
-  double *derivs;
+  double derivs[];
 
-  if(NULL == (derivs = (double *)malloc(pattern_dimension)))
-    error("analyze_corr_deriv(): cannot malloc deriv[] vector!");
+  derivs = new double[pattern_dimension];
 
   for(i = 0; i < pattern_dimension; i++) derivs[i] = 0.;
 
@@ -858,14 +873,14 @@ void analyze_corr_deriv() {
   }
 
   for(i = 0; i < pattern_dimension; i++) 
-    printf("%g\n", derivs[i] / (pattern_length * (pattern_length - 1)) );
+    System.out.printf("%g\n", derivs[i] / (pattern_length * (pattern_length - 1)) );
 
-  free(derivs);
+  derivs = null;
 }
 
 
 /* model output */
-void mds_stdout(void) 
+public void mds_stdout() 
 {
   
   int i, j;
@@ -881,73 +896,107 @@ void mds_stdout(void)
       sum = 0.;
       for(j = 0; j < pattern_length; j++) {
         tmp = D(points_distmat, i, j);
-        sum += ABS(tmp);
+        sum += abs(tmp);
       }
     }
 
-    for(j = 0; j < target_dim; j++) printf("%g ", points[i][j]);
+    for(j = 0; j < target_dim; j++) System.out.printf("%g ", points[i][j]);
 
     if(printqual)
-      printf("%g\n", sum / (pattern_length-1));
+    	System.out.printf("%g\n", sum / (pattern_length-1));
     else
-      printf("\n");
+    	System.out.printf("\n");
   }
 
-  fflush(stdout);
 }
 
 
 /* On interrupt (CTRL-C) stop. Initiate write current results. */
-static void interrup(int signal) {
-  stop_calculation = 1;
+public void interrup(int signal) {
+  stop_calculation = true;
 }
 
 
 void main_bye() {
   
-  printf("# corr(D,d): %g\n", 1./sqrt(corr_2()+1));
+  System.out.printf("# corr(D,d): %g\n", 1./sqrt(corr_2()+1));
 
   mds_postprocess();
 
   mds_stdout();
 
-
-  shuffle_index_free();
-  data_free(pattern_length,0);
+  shuffle_index = null;
+  pattern_length = 0;
 }
 
+public void run() {
+	run(10, 1.0, 1.0487507802749606, null);
+}
 
-/* The main function, without input argument validation */
-int main (int argc, char *argv [])
-{
+public void run(int cycles, double rate, double zero, String forth) {
 
-  static void (*old_int_handler)(int);
-  static void (*old_trm_handler)(int);
-
-  int cycles = (argc > 1) ? atoi(argv[1]) : 10;
-  double rate = (argc > 2) ? atof(argv[2]) : 1.; 
-
-  /* set a maximum step size of (1+correps)/(1-(1+correps)^2) ~= 10 */
-  correps = 1. + ((argc > 3) ? atof(argv[3]) : 0.0487507802749606);
+//	Dear Adrian,
+//
+//	thanks for Your interest in hitmds2.
+//	Sorry, the documentation is indeed very poor.
+//
+//	First of all, an ascii (white-space-separated)
+//	data matrix or distance matrix is assumed to be read from
+//	standard input via 'cat myfile | hitmds2 x y z v' or 'hitmds x y z v < myfile'
+//
+//	x is number of cycles, i.e. sweeps through complete data set, usually 50 <= x < 1000
+//	y is the learning rate between 10 and .01, try .1 first,
+//	z is zero
+//	v is the metric selector, namely
+//	0: Standard Euclidean distance -> improved (nonlinear) PCA-like visualization
+//	1: 1-Pearson Correlation; '1:n' means (1-Pearson Correlation)^n
+//	2: Spearman rank correlation, only valid after transforming data to ranks (torank.awk)
+//	':n' General Minkowski metrics, e.g. 2:Eucl.Dist, 1:Manhattan.Dist, etc
+//
+//	The first line of the text input matrix contains two ascii integer numbers
+//	the number samples (i.e. following number of lines = data vectors) and
+//	the input dimension
+//
+//	After the data matrix, there is another number indicating the target
+//	dimension, e.g. 2. A negative sign here denotes random initialization,
+//	the standard case.
+//
+//
+//	If Your matrix is already a dissimilarity or distance matrix, then the
+//	number of lines given in the first row must possess a negative sign.
+//
+//	Hope that these information helps to interpret the makefile examples
+//	and to run hitmds for Your purpose. The ZIP code map of Switzerland
+//	should be feasable.
+//
+//	If not, let me know. If You are successful You might want to share
+//	this by just letting me know.
+//
+//	Best
+//	Marc
+	
+  correps = 1.0 + zero;
   
-  mexponent = (argc > 4) ? (*argv[4]==':' ? -1. : atof(argv[4])) : 0.;
+//  mexponent = (argc > 4) ? (*argv[4]==':' ? -1. : atof(argv[4])) : 0.;
+//  
+//  if(mexponent < 0.) { /* interpret neg vals as neg minkowsi expos */
+//    distance = dist_minkowski;
+//    mexponent = atof(argv[4]+1);
+//  }
+//  else if(mexponent >= 4.)
+//    distance = corr_deriv_abs;
+//  else if(mexponent >= 3.)
+//    distance = dist4s;
+//  else if(mexponent >= 2.)
+//    distance = dist_spearman;
+//  else if(mexponent >= 1.) { /* optional exponent for Pearson correlation */
+//    distance = corr;
+//    mexponent = (*(argv[4]+1) == ':') ? atof(argv[4]+2) : 0;
+//    if(mexponent == 0.) mexponent = 1.;        /* tricky use of mexponent */
+//  } else
+//    distance = dist;
   
-  if(mexponent < 0.) { /* interpret neg vals as neg minkowsi expos */
-    distance = dist_minkowski;
-    mexponent = atof(argv[4]+1);
-  }
-  else if(mexponent >= 4.)
-    distance = corr_deriv_abs;
-  else if(mexponent >= 3.)
-    distance = dist4s;
-  else if(mexponent >= 2.)
-    distance = dist_spearman;
-  else if(mexponent >= 1.) { /* optional exponent for Pearson correlation */
-    distance = corr;
-    mexponent = (*(argv[4]+1) == ':') ? atof(argv[4]+2) : 0;
-    if(mexponent == 0.) mexponent = 1.;        /* tricky use of mexponent */
-  } else
-    distance = dist;
+  mexponent = 8; // XXX hardwired parameter "... 1:8"
 
   randomize();
 
@@ -961,27 +1010,19 @@ int main (int argc, char *argv [])
   }
   else {
 
-    if(cycles < 0) { cycles = -cycles; printqual = 1; }
+    if(cycles < 0) { cycles = -cycles; printqual = true; } // TODO fix this!
 
     data_init();   /* calc distmats */
 
-    data_free(pattern_length,1); /* clear data vectors, after distmat creation */
+    // data_free(pattern_length,1); /* clear data vectors, after distmat creation */
 
-    printf("# corr(D,d): %g\n", 1./sqrt(corr_2()+1));
+    System.out.printf("# corr(D,d): %g\n", 1./sqrt(corr_2()+1));
     
-    old_trm_handler = signal(SIGTERM, interrup);  /* termination   handler */
-    old_int_handler = signal(SIGINT, interrup);   /* CTRL-C (kill) handler */
-
     mds_train(cycles * pattern_length, rate);
-
-    signal(SIGINT, old_int_handler);
-    signal(SIGTERM, old_trm_handler);
 
     main_bye();
   }
 
-
-  return 0;
 }
 
 }
