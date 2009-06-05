@@ -1,8 +1,8 @@
-package svdlib;
+package org.codemap.svdlib;
 
-import svdlib.Svdlib.DMat;
-import svdlib.Svdlib.SMat;
-import svdlib.Svdlib.SVDRec;
+import org.codemap.svdlib.Svdlib.DMat;
+import org.codemap.svdlib.Svdlib.SMat;
+import org.codemap.svdlib.Svdlib.SVDRec;
 
 public class Main {
 

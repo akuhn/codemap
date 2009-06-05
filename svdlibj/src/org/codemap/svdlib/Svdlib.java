@@ -1,6 +1,6 @@
-package svdlib;
+package org.codemap.svdlib;
 
-import static svdlib.Svdlib.storeVals.*;
+import static org.codemap.svdlib.Svdlib.storeVals.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
