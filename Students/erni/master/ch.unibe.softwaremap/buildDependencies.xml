@@ -17,6 +17,8 @@
 			<fileset dir="../ForEach DSL/src"/>
             <fileset dir="../Hapax/bin"/>
             <fileset dir="../Hapax/src"/> 
+<fileset dir="../hitmdsj/src"/>
+<fileset dir="../hitmdsj/bin"/> 
             <fileset dir="../Meander/bin"/>
 			<fileset dir="../Meander/src"/>
             <fileset dir="../SCG util package/bin"/>
