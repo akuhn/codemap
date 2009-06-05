@@ -42,6 +42,11 @@ public class Hitmds2 {
 		return Math.random();
 	}
 
+	public static final boolean VERBOSE = false;
+	
+	public void printf(String format, Object... args) {
+		if (VERBOSE) System.out.printf(format, args);
+	}
 
 
 	public float frand() {
@@ -681,7 +686,7 @@ public class Hitmds2 {
 
 			if(++t == m) {
 				t = 0;
-				System.out.printf("%3.2f%%: %g  \t(r = %g)\n", 
+				printf("%3.2f%%: %g  \t(r = %g)\n", 
 						100.0 * c/cycles, corr_2(), 
 						1.0/sqrt(corr_2()+1.));
 			}
@@ -819,7 +824,7 @@ public class Hitmds2 {
 		}
 
 		for(i = 0; i < pattern_dimension; i++) 
-			System.out.printf("%g\n", derivs[i] / (pattern_length * (pattern_length - 1)) );
+			printf("%g\n", derivs[i] / (pattern_length * (pattern_length - 1)) );
 
 		derivs = null;
 	}
@@ -846,12 +851,12 @@ public class Hitmds2 {
 				}
 			}
 
-			for(j = 0; j < target_dim; j++) System.out.printf("%g ", points[i][j]);
+			for(j = 0; j < target_dim; j++) printf("%g ", points[i][j]);
 
 			if(printqual)
-				System.out.printf("%g\n", sum / (pattern_length-1));
+				printf("%g\n", sum / (pattern_length-1));
 			else
-				System.out.printf("\n");
+				printf("\n");
 		}
 
 	}
@@ -865,7 +870,7 @@ public class Hitmds2 {
 
 	void main_bye() {
 
-		System.out.printf("# corr(D,d): %g\n", 1./sqrt(corr_2()+1));
+		printf("# corr(D,d): %g\n", 1./sqrt(corr_2()+1));
 
 		mds_postprocess();
 
@@ -875,8 +880,9 @@ public class Hitmds2 {
 		pattern_length = 0;
 	}
 
-	public void run(double[][] data) {
+	public double[][] run(double[][] data) {
 		run(10, 1.0, 1.0487507802749606, null, data.length, data[0].length, data, -2, null);
+		return points;
 	}
 
 	public void run(int cycles, double rate, double zero, String forth, int a, int b, double[][] c, int d, double[][] e) {
@@ -950,7 +956,7 @@ public class Hitmds2 {
 
 			data_free(pattern_length,true); /* clear data vectors, after distmat creation */
 
-			System.out.printf("# corr(D,d): %g\n", 1./sqrt(corr_2()+1));
+			printf("# corr(D,d): %g\n", 1./sqrt(corr_2()+1));
 
 			mds_train(cycles * pattern_length, rate);
 
