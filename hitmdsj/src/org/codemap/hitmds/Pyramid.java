@@ -1,4 +1,4 @@
-package hitmds;
+package org.codemap.hitmds;
 
 public class Pyramid {
 

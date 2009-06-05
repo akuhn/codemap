@@ -1,4 +1,4 @@
-package hitmds;
+package org.codemap.hitmds;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
