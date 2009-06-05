@@ -4,6 +4,8 @@ import static java.lang.Math.abs;
 import static java.lang.Math.sqrt;
 import static java.lang.Math.pow;
 
+import java.util.Random;
+
 /*
  * hitmds2.c
  *
@@ -33,13 +35,20 @@ import static java.lang.Math.pow;
 
 public class Hitmds2 {
 
+	private Random random = new Random();
+	
+	public Hitmds2 seed(long seed) {
+		random = new Random(seed);
+		return this;
+	}
+	
 	//	#define SCANFMT "%lf"
 	//
 	//	/* linear learning rate annealing at . times cycles */
 	public static final double START_ANNEALING_RATIO = 0.5;
 
 	public double rand() {
-		return Math.random();
+		return random.nextDouble();
 	}
 
 	public static final boolean VERBOSE = false;
