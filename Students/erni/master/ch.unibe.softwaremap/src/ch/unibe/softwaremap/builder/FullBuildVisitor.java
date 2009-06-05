@@ -15,7 +15,6 @@ import org.eclipse.jdt.core.JavaModelException;
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.unibe.eclipse.util.EclipseUtil;
-import ch.unibe.eclipse.util.TermClassMatrix;
 
 /**
  * Creates TDM from all ICompilationUnit resources in an IProject.
@@ -23,10 +22,10 @@ import ch.unibe.eclipse.util.TermClassMatrix;
  */
 class FullBuildVisitor implements IResourceVisitor {
 
-	private TermClassMatrix TDM;
+	private TermDocumentMatrix TDM;
 
 	public FullBuildVisitor() {
-		TDM = new TermClassMatrix();
+		TDM = new TermDocumentMatrix();
 	}
 
 	public boolean visit(IResource resource) throws CoreException {

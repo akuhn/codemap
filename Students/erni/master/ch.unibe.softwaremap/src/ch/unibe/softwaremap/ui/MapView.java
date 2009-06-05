@@ -48,8 +48,6 @@ import ch.deif.meander.ui.MeanderEventListener;
 import ch.deif.meander.viz.MapVisualization;
 import ch.unibe.eclipse.util.EclipseUtil;
 import ch.unibe.eclipse.util.SelectionProviderAdapter;
-import ch.unibe.eclipse.util.TermClassMatrix;
-import ch.unibe.eclipse.util.TermClassMatrix.Doc;
 import ch.unibe.softwaremap.Log;
 import ch.unibe.softwaremap.SoftwareMapCore;
 
@@ -236,9 +234,8 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 		// TODO Auto-generated method stub
 		final ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
 		for (Location each: locations) {
-			Doc candidateJavaElement = TermClassMatrix.adaptDoc(each.document());
-			if (candidateJavaElement == null) continue;
-			IJavaElement javaElement = JavaCore.create(candidateJavaElement.identifier());
+			if (each.document().getIdentifier() == null) continue;
+			IJavaElement javaElement = JavaCore.create(each.document().getIdentifier());
 			selection.add(javaElement);
 		}
 		Display.getDefault().asyncExec(new Runnable() {
@@ -275,9 +272,8 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 
 	@Override
 	public void doubleClicked(Location location) {
-		Doc candidateJavaElement = TermClassMatrix.adaptDoc(location.document());
-		if (candidateJavaElement == null) return;
-		IJavaElement javaElement = JavaCore.create(candidateJavaElement.identifier());		
+		if (location.document().getIdentifier() == null) return;
+		IJavaElement javaElement = JavaCore.create(location.document().getIdentifier());		
 		openInEditor(javaElement);
 	}
 
