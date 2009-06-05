@@ -62,16 +62,16 @@ public int	irand(int x) {
 //	                  : (i - 1 + ((((pattern_length<<1) - j - 3) * j) >> 1))) \
 //	    )))
 
-	public double D(Object mat, Object i, Object j) {
-		throw null;
+	public float DGet(float[] mat, int i, int j) {
+		return mat[(i < j) ? (j - 1 + ((((pattern_length<<1) - i - 3) * i) >> 1))
+		        		: ((i==j) ? matsize 
+		        				  : (i - 1 + ((((pattern_length<<1) - j - 3) * j) >> 1)))];
 	}
 	
-	public double DGet(Object mat, Object i, Object j) {
-		throw null;
-	}
-	
-	public void DSet(Object mat, Object i, Object j, double value) {
-		throw null;
+	public void DSet(float[] mat, int i, int j, float value) {
+		mat[(i < j) ? (j - 1 + ((((pattern_length<<1) - i - 3) * i) >> 1))
+        		: ((i==j) ? matsize 
+        				  : (i - 1 + ((((pattern_length<<1) - j - 3) * j) >> 1)))] = value;
 	}
 	
 	private boolean stop_calculation = false;
@@ -102,8 +102,8 @@ public int	irand(int x) {
 	int shuffle_index[];      /* helper for data shuffling */
 
 
-	int randomize() {
-//
+	void initializeRandomSeed() {
+//		TODO use same random fun and seed in Java and C to compare results!
 //	  int srd, tmp;  /* auto-variable: not initialized -> random */
 //	                 /* Compiler Warnings are welcome here ! */
 //	  time_t t;
@@ -122,7 +122,6 @@ public int	irand(int x) {
 //	  srand((unsigned)srd);
 //
 //	  return (unsigned)srd;
-		throw null;
 	}
 
 	public static double EPS = 1e-16;
@@ -998,7 +997,7 @@ public void run(int cycles, double rate, double zero, String forth) {
   
   mexponent = 8; // XXX hardwired parameter "... 1:8"
 
-  randomize();
+  initializeRandomSeed();
 
   data_stdin();  /* calls data_alloc */
 
@@ -1014,7 +1013,7 @@ public void run(int cycles, double rate, double zero, String forth) {
 
     data_init();   /* calc distmats */
 
-    // data_free(pattern_length,1); /* clear data vectors, after distmat creation */
+    data_free(pattern_length,true); /* clear data vectors, after distmat creation */
 
     System.out.printf("# corr(D,d): %g\n", 1./sqrt(corr_2()+1));
     
