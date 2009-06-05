@@ -42,7 +42,7 @@ public class Meander {
 	private Map map;
 	private Layers layers;
 	private boolean doneDEM = false;
-	private MDS mds;
+	private JMDS mds;
 	private Hapax hapax;
 	private LatentSemanticIndex lsi;
 
@@ -76,7 +76,7 @@ public class Meander {
 			lsi = hapax.getIndex();
 		}
 		System.out.println("Next is MDS...");
-		mds = MDS.fromCorrelationMatrix(lsi);
+		mds = JMDS.fromCorrelationMatrix(lsi);
 		mds.normalize();
 		return this;
 	}

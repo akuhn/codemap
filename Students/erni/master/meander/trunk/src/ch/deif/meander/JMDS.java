@@ -1,8 +1,9 @@
 package ch.deif.meander;
 
+import org.codemap.hitmds.Hitmds2;
+
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.util.As;
-import ch.deif.meander.mds.HitMDS;
 
 public class JMDS {
 
@@ -37,7 +38,7 @@ public class JMDS {
 			}
 		}
 
-		double[][] result = new HitMDS().evaluate(input, -2);
+		double[][] result = new Hitmds2().run(input);
 		assert result[0].length == 2;
 
 		int i = 0;
@@ -49,4 +50,26 @@ public class JMDS {
 
 		return this;
 	}
+
+	public void normalize() {
+		double minX = 0;
+		double maxX = 0;
+		double minY = 0;
+		double maxY = 0;
+		for (double each: x) {
+			minX = Math.min(minX, each);
+			maxX = Math.max(maxX, each);
+		}
+		for (double each: y) {
+			minY = Math.min(minY, each);
+			maxY = Math.max(maxY, each);
+		}
+		double width = maxX - minX;
+		double height = maxY - minY;
+		for (int n = 0; n < x.length; n++) {
+			x[n] = (x[n] - minX) / width * 0.5 + 0.25; // XXX
+			y[n] = (y[n] - minY) / height * 0.5 + 0.25; // XXX
+		}
+	}	
+	
 }
