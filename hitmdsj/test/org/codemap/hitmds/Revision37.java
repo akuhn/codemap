@@ -18,6 +18,11 @@ public class Revision37 {
 		return this;
 	}
 	
+	public Revision37 useRandom(Random rand) {
+		random = rand;
+		return this;
+	}	
+	
 	//	#define SCANFMT "%lf"
 	//
 	//	/* linear learning rate annealing at . times cycles */

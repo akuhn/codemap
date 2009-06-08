@@ -37,22 +37,56 @@ public class Hitmds2 {
 
 	private Random random = new Random();
 	
+	/* linear learning rate annealing at . times cycles */
+	public static final double START_ANNEALING_RATIO = 0.5;
+	public static final boolean VERBOSE = false;
+	public static final double EPS = 1e-16;
+	
+	private int ind = Integer.MAX_VALUE -1;
+	private boolean stop_calculation = false;
+
+	/* general Minkowski metric, mexponent = 2 -> Euclidean distance */
+	private double mexponent = 1.0;
+
+	int correlation_exponent;
+	int pattern_length;
+	int pattern_dimension;
+	int matsize;
+	int target_dim;
+
+	/* flag to rate embedding qualities (last column) */
+	boolean printqual;
+	/* true if data given as distance matrix */
+	boolean matrix_input;
+
+	double pattern[][];
+	double points[][];
+
+	double points_distmat_mean;
+	double points_distmat_mixed;
+	double points_distmat_mono;
+	double pattern_distmat_var_sum;
+	double pattern_distmat_mean;
+	double correps;
+
+	float pattern_distmat[];
+	float points_distmat[];
+	int shuffle_index[];      /* helper for data shuffling */
+
 	public Hitmds2 seed(long seed) {
-		random = new Random(seed);
+		random.setSeed(seed);
 		return this;
 	}
 	
-	//	#define SCANFMT "%lf"
-	//
-	//	/* linear learning rate annealing at . times cycles */
-	public static final double START_ANNEALING_RATIO = 0.5;
-
+	public Hitmds2 useRandom(Random rand) {
+		random = rand;
+		return this;
+	}
+	
 	public double rand() {
 		return random.nextDouble();
 	}
 
-	public static final boolean VERBOSE = false;
-	
 	public void printf(String format, Object... args) {
 		if (VERBOSE) System.out.printf(format, args);
 	}
@@ -63,7 +97,7 @@ public class Hitmds2 {
 	}
 
 	public int	irand(int x) {
-		return ((int)((double)(x) * frand()));
+		return (int) ((double)(x) * frand());
 	}
 
 	//	/* address matrix components */
@@ -84,34 +118,6 @@ public class Hitmds2 {
 				: ((i==j) ? matsize 
 						: (i - 1 + ((((pattern_length<<1) - j - 3) * j) >> 1)))] = value;
 	}
-
-	private boolean stop_calculation = false;
-	//	static double (*distance)(int dim, double *d1, double *d2);
-
-	int correlation_exponent,/* (1/r^2)^k */
-	pattern_length,      /* Length of data series */
-	pattern_dimension,   /* pattern dimension     */
-	matsize,             /* number of distance matrix elements */
-	target_dim;          /* dimension of target space */
-	boolean printqual;           /* flag to rate embedding qualities (last column) */
-	boolean matrix_input;       /* != 0 if data given as distance matrix */
-
-	double pattern[][],        /* contains float data from STDIN */
-	points[][],
-	points_distmat_mean,
-	points_distmat_mixed,
-	points_distmat_mono,
-	pattern_distmat_var_sum,
-	pattern_distmat_mean,
-	correps;          /* correlation epsilon avoiding 1/0 */
-
-	/* save memory space */
-	float  pattern_distmat[],
-	points_distmat[];
-
-
-	int shuffle_index[];      /* helper for data shuffling */
-
 
 	void initializeRandomSeed() {
 		//		TODO use same random fun and seed in Java and C to compare results!
@@ -134,8 +140,6 @@ public class Hitmds2 {
 		//
 		//	  return (unsigned)srd;
 	}
-
-	public static double EPS = 1e-16;
 
 	/* Euclidean distance */
 	public double dist(int dimension, double[] d1, double[] d2) {
@@ -167,8 +171,6 @@ public class Hitmds2 {
 
 
 	/* general Minkowski metric, mexponent = 2 -> Euclidean distance */
-
-	private double mexponent = 1.0;                                    
 
 	public double dist_minkowski(int dimension, double[] d1, double[] d2) {
 		double sum = 0.0;
@@ -660,9 +662,6 @@ public class Hitmds2 {
 			shuffle_index[ind] = tmp;
 		}
 	}
-
-	private int ind = Integer.MAX_VALUE -1;
-
 
 	public int shuffle_next() {
 		if(++ind >= SHUFFLE_NUMBER()) {
