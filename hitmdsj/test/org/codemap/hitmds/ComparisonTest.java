@@ -49,7 +49,7 @@ public class ComparisonTest {
 		double[][] result_java = null;
 		File java = new File("primitive_rand-hitmds/genes_endo_4824_result_java.dat");
 		if (!java.exists()) {
-			result_java = new Revision37().useRandom(new PrimitiveRandom()).run(Fixture.genesEndo(Fixture.NOF_LINES));
+			result_java = new Hitmds2().useRandom(new PrimitiveRandom()).run(Fixture.genesEndo(Fixture.NOF_LINES));
 			assertTrue(result_java.length == Fixture.NOF_LINES);
 			
 			FileWriter out = new FileWriter("primitive_rand-hitmds/genes_endo_4824_result_java.dat");
@@ -106,10 +106,13 @@ public class ComparisonTest {
 		int smaller0_0001 = 0;
 		
 		
-		private void analyseEpsilon(double epsilon) {
+		private void analyseEpsilon(double epsilon, double first, double second) {
 			epsilon = Math.abs(epsilon);
 			if (epsilon > 0.3) bigger0_3++;
-			else if (epsilon <= 0.3 && epsilon  > 0.1) between0_3And0_1++;
+			else if (epsilon <= 0.3 && epsilon  > 0.1) {
+				between0_3And0_1++;
+//				System.out.println(first + " "+ second);
+			}
 			else if (epsilon <= 0.1 && epsilon > 0.01) between0_1And0_01++;
 			else if (epsilon <= 0.01 && epsilon > 0.001) between0_01And0_001++;
 			else if (epsilon <= 0.001 && epsilon > 0.0001) between0_001And0_0001++;
@@ -124,7 +127,7 @@ public class ComparisonTest {
 		}
 
 		public void analysePoints(double first, double second) {
-			analyseEpsilon(first-second);
+			analyseEpsilon(first-second, first, second);
 			adaptStats(first);
 			adaptStats(second);
 		}

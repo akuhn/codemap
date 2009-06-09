@@ -8,7 +8,7 @@ public class RegressionTest {
 
 	private static final long SEED = 20090605L;
 	private static final int LINES = 200;
-	private static final double EPSILON = 1e-12;
+	private static final double EPSILON = 1e-6;
 	
 	@Test
 	public void testGenesEndo4824() {

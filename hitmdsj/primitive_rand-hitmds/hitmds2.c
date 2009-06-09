@@ -181,8 +181,8 @@ inline double corr_deriv_vec_flt(int dimension, FLT *d1, FLT *d2, FLT *res, int 
 
   double mono1 = 0., mono2 = 0., mixed = 0., sum = 0., tmp, tmx, f;
 
-  FLT md1 = meanf(dimension, d1),
-      md2 = meanf(dimension, d2);
+  FLT md1 = mean(dimension, d1),
+      md2 = mean(dimension, d2);
  
 
   for(u = 0; u < dimension; u++) {
@@ -579,10 +579,10 @@ void data_init(void)
 #endif
   
   /* initial values of point distance matrix, mean, mixed, mono */
-  points_distmat_mean = meanf(matsize, points_distmat);
+  points_distmat_mean = mean(matsize, points_distmat);
   
   /* mean value of pattern distance matrix will be subtracted */
-  pattern_distmat_mean = meanf(matsize, pattern_distmat);
+  pattern_distmat_mean = mean(matsize, pattern_distmat);
 
   points_distmat_mixed = points_distmat_mono = pattern_distmat_var_sum = 0.;
 
@@ -864,7 +864,7 @@ void mds_stdout(void)
       }
     }
 
-    for(j = 0; j < target_dim; j++) printf("%g ", points[i][j]);
+    for(j = 0; j < target_dim; j++) printf("%.12g ", points[i][j]);
 
     if(printqual)
       printf("%g\n", sum / (pattern_length-1));

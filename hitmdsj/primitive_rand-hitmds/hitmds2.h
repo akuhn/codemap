@@ -57,7 +57,7 @@ int myrand(void) {
 double frand(void) {
 	//return double: (0 <= d < 1)
 	double result;
-	// make always smaller than 100
+	// make always smaller than 1.0
 	result = (double) myrand() / (2147483648.0);
 	//printf("called frand: %f\n", result);
     return result;
@@ -83,7 +83,7 @@ static double (*distance)(int dim, double *d1, double *d2);
 #define inline __inline
 
 /* type of distance matrix elements */
-typedef float FLT;
+typedef double FLT;
 
 int correlation_exponent,/* (1/r^2)^k */
     pattern_length,      /* Length of data series */

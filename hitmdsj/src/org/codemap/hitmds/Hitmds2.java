@@ -87,8 +87,8 @@ public class Hitmds2 {
 	}
 
 
-	public float frand() {
-		return (float) rand(); // TODO assume that ((double) rand() / (RAND_MAX+1.0)) does this 
+	public double frand() {
+		return rand(); // TODO assume that ((double) rand() / (RAND_MAX+1.0)) does this 
 	}
 
 	public int	irand(int x) {

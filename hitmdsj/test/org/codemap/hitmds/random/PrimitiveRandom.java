@@ -7,9 +7,8 @@ public class PrimitiveRandom extends Random {
     
     private int rand_num = 30;
     
-    
     public double frand() {
-        return (double) myrand() / 2147483648.0;
+        return ((double) myrand()) / 2147483648.0d;
     }
     
     public int myrand() {
