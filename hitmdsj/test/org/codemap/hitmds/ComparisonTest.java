@@ -4,10 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
@@ -19,7 +16,8 @@ import org.junit.Test;
 public class ComparisonTest {
 	
 	private static final int TARGET_DIM = 2;
-	private static final double EPSILON = 0.3;	
+	private static final double EPSILON = 0.3;
+	private static final boolean PRINT_STATS = true;
 	
 	/**
 	 * Tests that the c implementation ant he java implementation of hitmds yield
@@ -82,8 +80,64 @@ public class ComparisonTest {
 		for (int line = 0; line < result_c.length; line++) {
 			assertEquals(result_c[line][0], result_java[line][0], EPSILON);
 			assertEquals(result_c[line][1], result_java[line][1], EPSILON);
-		}		
+		}
+		
+		if (!PRINT_STATS) return;
+		
+		Stats stats = new Stats();
+		for (int line = 0; line < result_c.length; line++) {
+			stats.analysePoints(result_c[line][0], result_java[line][0]);
+			stats.analysePoints(result_c[line][1], result_java[line][1]);
+		}
+		System.out.println(stats);
 		
 	}
 
+	private class Stats {
+		
+		double biggest = Double.NaN;
+		double smallest = Double.NaN;
+		
+		int bigger0_3 = 0;
+		int between0_3And0_1 = 0;
+		int between0_1And0_01 = 0;
+		int between0_01And0_001 = 0;
+		int between0_001And0_0001 = 0;
+		int smaller0_0001 = 0;
+		
+		
+		private void analyseEpsilon(double epsilon) {
+			epsilon = Math.abs(epsilon);
+			if (epsilon > 0.3) bigger0_3++;
+			else if (epsilon <= 0.3 && epsilon  > 0.1) between0_3And0_1++;
+			else if (epsilon <= 0.1 && epsilon > 0.01) between0_1And0_01++;
+			else if (epsilon <= 0.01 && epsilon > 0.001) between0_01And0_001++;
+			else if (epsilon <= 0.001 && epsilon > 0.0001) between0_001And0_0001++;
+			else smaller0_0001++;
+		}
+		
+		private void adaptStats(double first) {
+			if (Double.isNaN(biggest)) biggest = first;
+			if (Double.isNaN(smallest)) smallest = first;
+			if (smallest > first) smallest = first;
+			if (biggest < first) biggest = first;
+		}
+
+		public void analysePoints(double first, double second) {
+			analyseEpsilon(first-second);
+			adaptStats(first);
+			adaptStats(second);
+		}
+
+		@Override
+		public String toString() {
+			return "biggest: " + biggest + " smallest: " +smallest +
+				   "\ne > 0.3: \t\t" + bigger0_3 + 
+				   "\n0.3 >= e > 0.1: \t" + between0_3And0_1 + 
+				   "\n0.1 >= e > 0.01: \t" + between0_1And0_01 + 
+				   "\n0.01 >= e > 0.001: \t" + between0_01And0_001 +
+				   "\n0.001 >= e > 0.0001: \t" + between0_001And0_0001 +
+				   "\ne < 0.0001: \t\t" + smaller0_0001;
+		}	
+	}
 }

@@ -7,12 +7,9 @@ import static java.lang.Math.pow;
 import java.util.Random;
 
 /*
- * hitmds2.c
- *
  * Multidimensional Scaling according to best distance matrix reconstruction.
  * Based on signs of directions to maximize correlation 
  * (previously based on: Fisher's z)
- * 
  *
  *   Copyright (C) 2006  Marc Strickert (stricker@ipk-gatersleben.de)
  *
@@ -29,10 +26,8 @@ import java.util.Random;
  *   A copy of the GNU General Public License (gp_license.txt) comes
  *   along with this program. (Free Software Foundation, Inc.)
  *
- *
  *  Wed Apr  4 11:05:01     2007: ABS encountered, making some equations unnecessary
  */ 
-
 public class Hitmds2 {
 
 	private Random random = new Random();
