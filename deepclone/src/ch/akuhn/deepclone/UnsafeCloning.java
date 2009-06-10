@@ -8,7 +8,7 @@ import java.util.Collection;
 
 import sun.reflect.ReflectionFactory;
 
-public class UnsafeCloning extends DeepCloneStrategy {
+public class UnsafeCloning extends DeepCloning {
 
 //    private Class<?> type;
     private Constructor<?> constructor;

@@ -1,6 +1,8 @@
 package ch.akuhn.deepclone;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 import java.io.File;
 import java.util.ArrayList;

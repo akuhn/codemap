@@ -3,7 +3,7 @@ package ch.akuhn.deepclone;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
-public class ArrayCloning extends DeepCloneStrategy {
+public class ArrayCloning extends DeepCloning {
 
     private Class<?> type;
 
@@ -14,7 +14,7 @@ public class ArrayCloning extends DeepCloneStrategy {
 
     @Override
     public Object perform(Object instance) throws Exception {
-	DeepCloneStrategy componentStrategy = cloner.getStrategy(type.getComponentType());
+	DeepCloning componentStrategy = cloner.getStrategy(type.getComponentType());
 	int length = Array.getLength(instance);
 	if (componentStrategy.isImmutable()) {
 	    return Arrays.copyOf((Object[]) instance, length);

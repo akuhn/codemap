@@ -1,8 +1,8 @@
 package ch.akuhn.deepclone;
 
-public class DeepCloneStrategy {
+public class DeepCloning {
 
-    public static final DeepCloneStrategy IMMUTABLE = new DeepCloneStrategy(null);
+    public static final DeepCloning IMMUTABLE = new DeepCloning(null);
     
     public DeepClone cloner;
     
@@ -10,7 +10,7 @@ public class DeepCloneStrategy {
 	return false;
     }
     
-    public DeepCloneStrategy(DeepClone cloner) {
+    public DeepCloning(DeepClone cloner) {
 	this.cloner = cloner;
     }
     
