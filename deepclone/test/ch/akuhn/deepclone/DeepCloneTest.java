@@ -7,7 +7,6 @@ import static org.junit.Assert.assertNotSame;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -89,6 +88,15 @@ public class DeepCloneTest {
         clone[1] = 12345;
         assertEquals(12345, clone[1]);
         assertNotSame(12345, original[1]);
+    }
+    
+    @Test
+    public void cloneSelfReference() {
+        Object[] original = new Object[1];
+        original[0] = original;
+        Object[] clone = deep.clone(original);
+        assertNotSame(clone, original);
+        assertEquals(clone, clone[0]);
     }
     
     static class Dummy {

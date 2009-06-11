@@ -44,10 +44,13 @@ public class UnsafeCloning implements DeepCloneStrategy {
     }
     
     @Override
-    public Object makeClone(Object object, CloneFactory delegate) throws Exception {
-	if (object == null) return null;
-	Object clone = constructor.newInstance();
-	for (Field f: fields) f.set(clone, delegate.clone(f.get(object)));
+    public Object makeClone(Object original, CloneFactory delegate) throws Exception {
+	if (original == null) return null;
+	Object clone = delegate.getCachedClone(original);
+	if (clone != null) return clone;
+	clone = constructor.newInstance();
+	delegate.putCachedClone(original, clone);
+	for (Field f: fields) f.set(clone, delegate.clone(f.get(original)));
 	return clone;
     }
 

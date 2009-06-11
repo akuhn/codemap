@@ -17,19 +17,11 @@ public class CloneFactory {
     private Map<Object,Object> done = new IdentityHashMap<Object,Object>();
     private DeepCloneStrategyCache cache = new DeepCloneStrategyCache();
     
-    private Object clone0(Object object) throws Exception {
-	if (object == null) return null;
-	Object clone = done.get(object);
-	if (clone != null) return clone;
-	clone = cache.lookup(object).makeClone(object, this);
-	done.put(object, clone);
-	return clone;
-    }
-
     @SuppressWarnings("unchecked")
     public <T> T clone(T original) throws DeepCloneException {
 	try {
-	    return (T) clone0(original);
+	    if (original == null) return null;
+	    return (T) cache.lookup(original).makeClone(original, this);
 	} catch (DeepCloneException ex) {
 	    throw ex;
         } catch (Throwable ex) {
@@ -40,5 +32,13 @@ public class CloneFactory {
     public static <T> T deepClone(T object) {
 	return new CloneFactory().clone(object);
     }
-
+    
+    public Object getCachedClone(Object original) {
+        return done.get(original);
+    }
+    
+    public void putCachedClone(Object original, Object clone) {
+        done.put(original, clone);
+    }
+    
 }
