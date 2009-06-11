@@ -7,7 +7,7 @@ public class ArrayCloning extends DeepCloning {
 
     private Class<?> type;
 
-    public ArrayCloning(DeepClone cloner, Class<?> type) {
+    public ArrayCloning(CloneFactory cloner, Class<?> type) {
 	super(cloner);
 	this.type = type;
     }
@@ -16,7 +16,7 @@ public class ArrayCloning extends DeepCloning {
     public Object perform(Object instance) throws Exception {
 	DeepCloning componentStrategy = cloner.getStrategy(type.getComponentType());
 	int length = Array.getLength(instance);
-	if (componentStrategy.isImmutable()) {
+	if (componentStrategy == IMMUTABLE) {
 	    return Arrays.copyOf((Object[]) instance, length);
 	} else {
 	    Object clone = Array.newInstance(type.getComponentType(), length);

@@ -10,13 +10,11 @@ import sun.reflect.ReflectionFactory;
 
 public class UnsafeCloning extends DeepCloning {
 
-//    private Class<?> type;
     private Constructor<?> constructor;
     private Collection<Field> fields;
     
-    public UnsafeCloning(DeepClone cloner, Class<?> type) {
+    public UnsafeCloning(CloneFactory cloner, Class<?> type) {
 	super(cloner);
-//	this.type = type;
 	this.constructor = makeConstructor(type);
 	this.fields = makeFields(type);
     }
@@ -52,14 +50,9 @@ public class UnsafeCloning extends DeepCloning {
 	Object clone = constructor.newInstance();
 	for (Field f: fields) {
 	    Object value = f.get(object);
-	    if (needsClone(f)) value = cloner.clone(value);
-	    f.set(clone, value);
+	    f.set(clone, cloner.clone(value));
 	}
 	return clone;
-    }
-
-    private static boolean needsClone(Field f) {
-	return !Modifier.isTransient(f.getModifiers());
     }
 
 }

@@ -4,13 +4,9 @@ public class DeepCloning {
 
     public static final DeepCloning IMMUTABLE = new DeepCloning(null);
     
-    public DeepClone cloner;
+    public CloneFactory cloner;
     
-    public boolean isImmutable() {
-	return false;
-    }
-    
-    public DeepCloning(DeepClone cloner) {
+    public DeepCloning(CloneFactory cloner) {
 	this.cloner = cloner;
     }
     
