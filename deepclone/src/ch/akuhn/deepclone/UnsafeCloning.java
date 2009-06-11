@@ -8,13 +8,12 @@ import java.util.Collection;
 
 import sun.reflect.ReflectionFactory;
 
-public class UnsafeCloning extends DeepCloning {
+public class UnsafeCloning implements DeepCloneStrategy {
 
     private Constructor<?> constructor;
     private Collection<Field> fields;
     
-    public UnsafeCloning(CloneFactory cloner, Class<?> type) {
-	super(cloner);
+    public UnsafeCloning(Class<?> type) {
 	this.constructor = makeConstructor(type);
 	this.fields = makeFields(type);
     }
@@ -45,13 +44,10 @@ public class UnsafeCloning extends DeepCloning {
     }
     
     @Override
-    public Object perform(Object object) throws Exception {
+    public Object makeClone(Object object, CloneFactory delegate) throws Exception {
 	if (object == null) return null;
 	Object clone = constructor.newInstance();
-	for (Field f: fields) {
-	    Object value = f.get(object);
-	    f.set(clone, cloner.clone(value));
-	}
+	for (Field f: fields) f.set(clone, delegate.clone(f.get(object)));
 	return clone;
     }
 

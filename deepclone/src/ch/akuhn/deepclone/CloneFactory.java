@@ -1,71 +1,44 @@
 package ch.akuhn.deepclone;
 
-import static ch.akuhn.deepclone.DeepCloning.IMMUTABLE;
-
-import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
+/** Deep-clones any object. Uses unsafe reflection to clone any objects, no matter whether cloneable or not.
+ * Does not call any methods, neither constructors nor accessors nor <code>clone</code> methods.
+ *<p>
+ * <i>Fluent naming convention:</i> Instances of this class should be named <tt>deep</tt>, in order to complete the fluent naming
+ * of the <tt>deep.clone()</tt> method.
+ * 
+ * @author Adrian Kuhn
+ *
+ */
 public class CloneFactory {
     
-    private Map<Class<?>,DeepCloning> strategies = new HashMap<Class<?>,DeepCloning>();
     private Map<Object,Object> done = new IdentityHashMap<Object,Object>();
+    private DeepCloneStrategyCache cache = new DeepCloneStrategyCache();
     
-    public DeepCloning getStrategy(Class<?> type) {
-	if (type.isPrimitive()) return IMMUTABLE;
-	DeepCloning strategy = strategies.get(type);
-	if (strategy != null) return strategy;
-	strategies.put(type, strategy = makeStrategy(type));
-	return strategy;
-    }
-    
-    private DeepCloning makeStrategy(Class<?> type) {
-	if (isPrimitiveImmutable(type)) return IMMUTABLE;
-	if (type.isArray()) return new ArrayCloning(this, type);
-	return new UnsafeCloning(this, type);
-    }
-
-    protected Object clone(Object object) throws Exception {
+    private Object clone0(Object object) throws Exception {
 	if (object == null) return null;
 	Object clone = done.get(object);
-	DeepCloning strategy = getStrategy(object.getClass());
-	clone = strategy.perform(object);
+	if (clone != null) return clone;
+	clone = cache.lookup(object).makeClone(object, this);
 	done.put(object, clone);
 	return clone;
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T deepClone(T original) {
+    public <T> T clone(T original) throws DeepCloneException {
 	try {
-	    return (T) clone(original);
-        } catch (Exception ex) {
-	    throw new RuntimeException(ex);
+	    return (T) clone0(original);
+	} catch (DeepCloneException ex) {
+	    throw ex;
+        } catch (Throwable ex) {
+	    throw new DeepCloneException(ex);
         }
     }
     
-    public void reset() {
-	done.clear();
+    public static <T> T deepClone(T object) {
+	return new CloneFactory().clone(object);
     }
-    
-    public void dontClone(Class<?> type) {
-	strategies.put(type, IMMUTABLE);
-    }
-    
-    public void useUnsafeClone(Class<?> type) {
-	strategies.put(type, new UnsafeCloning(this, type));
-    }
-    
-    public void useCloneable(Class<?> type) {
-	strategies.put(type, new DefaultCloning(this, type));
-    }
-    
-    public static boolean isPrimitiveImmutable(Class<?> type) {
-	return type.isEnum() ||
-		type.isAnnotation() ||
-		type == String.class ||
-		type == Void.class ||
-		type == Boolean.class ||
-		Number.class.isAssignableFrom(type);
-    }
-    
+
 }

@@ -1,31 +1,26 @@
 package ch.akuhn.deepclone;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
 
-public class ArrayCloning extends DeepCloning {
+public class ArrayCloning implements DeepCloneStrategy {
 
-    private Class<?> type;
+    private Class<?> componentType;
 
-    public ArrayCloning(CloneFactory cloner, Class<?> type) {
-	super(cloner);
-	this.type = type;
+    public ArrayCloning(Class<?> type) {
+        this.componentType = type.getComponentType();
     }
 
     @Override
-    public Object perform(Object instance) throws Exception {
-	DeepCloning componentStrategy = cloner.getStrategy(type.getComponentType());
-	int length = Array.getLength(instance);
-	if (componentStrategy == IMMUTABLE) {
-	    return Arrays.copyOf((Object[]) instance, length);
-	} else {
-	    Object clone = Array.newInstance(type.getComponentType(), length);
-	    for (int n = 0; n < length; n++) {
-		Array.set(clone, n, cloner.clone(Array.get(instance, n)));
-	    }
-	    return clone;
-	}
+    public Object makeClone(Object original, CloneFactory delegate) throws Exception {
+        int length = Array.getLength(original);
+        Object clone = Array.newInstance(componentType, length);
+        if (componentType.isPrimitive()) {
+            System.arraycopy(original, 0, clone, 0, length);
+        } 
+        else for (int n = 0; n < length; n++) {
+            Array.set(clone, n, delegate.clone(Array.get(original, n)));
+        }
+        return clone;
     }
-
 
 }
