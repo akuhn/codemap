@@ -42,7 +42,6 @@ public class EclipseProcessingBridge extends Composite {
 	public void updateSelection(List<String> handleIdentifiers) {
 		getApplet().updateSelection(handleIdentifiers);
 	}
-	
 
 	public void addSelection(List<String> handleIdentifiers) {
 		getApplet().addSelection(handleIdentifiers);
