@@ -250,11 +250,7 @@ public class MeanderApplet extends PApplet {
 
 	public void updateSelection(List<String> handleIdentifiers) {
 		points.clear();
-		for (Location each: viz.map.locations())
-			if (handleIdentifiers.contains(each.document().name())) {
-				points.add(new Point(each.px(), each.py()));
-			}
-		setNeedsRedraw();
+		addSelection(handleIdentifiers);
 	}
 
 	public void setVisualization(MapVisualization viz) {
@@ -270,6 +266,15 @@ public class MeanderApplet extends PApplet {
 		setupBackground();
 		setNeedsRedraw();
 		repaint();
+	}
+
+	public void addSelection(List<String> handleIdentifiers) {
+		for (Location each: viz.map.locations()) {
+			if (handleIdentifiers.contains(each.document().getIdentifier())) {
+				points.add(new Point(each.px(), each.py()));
+			}
+		}
+		setNeedsRedraw();
 	}
 
 }
