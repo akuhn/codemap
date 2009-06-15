@@ -7,27 +7,16 @@ public class MeanderQueryListener implements IQueryListener {
 
 	@Override
 	public void queryAdded(ISearchQuery query) {
-		System.out.println("query added " + query);
 		query.getSearchResult().addListener(new MeanderSearchResultListener());
-
 	}
 
 	@Override
-	public void queryFinished(ISearchQuery query) {
-		System.out.println("query finished " + query);
-
-	}
+	public void queryFinished(ISearchQuery query) {}
 
 	@Override
-	public void queryRemoved(ISearchQuery query) {
-		System.out.println("query removed " + query);
-
-	}
+	public void queryRemoved(ISearchQuery query) {}
 
 	@Override
-	public void queryStarting(ISearchQuery query) {
-		System.out.println("query started " + query);
-
-	}
+	public void queryStarting(ISearchQuery query) {}
 
 }

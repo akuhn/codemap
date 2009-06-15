@@ -124,9 +124,9 @@ public class ProjectMap {
 	}
 
 	public ProjectMap updateSize(int newMapDimension) {
-		if (project != null) {
-			System.out.println("adapting map of " + project.getName() + " to dimension " + newMapDimension);
-		}
+//		if (project != null) {
+//			System.out.println("adapting map of " + project.getName() + " to dimension " + newMapDimension);
+//		}
 		this.mapDimension = Math.max(newMapDimension, 512);
 		return this;
 	}

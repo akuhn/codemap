@@ -40,7 +40,6 @@ public class SoftwareMapCore extends AbstractUIPlugin {
 	}
 
 	protected void registerQueryListener() {
-		System.out.println("registering listener");
 		queryListener = new MeanderQueryListener();
 		NewSearchUI.addQueryListener(queryListener);
 	}

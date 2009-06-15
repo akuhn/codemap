@@ -6,7 +6,6 @@ import java.util.List;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.search.ui.ISearchResultListener;
 import org.eclipse.search.ui.SearchResultEvent;
@@ -32,16 +31,20 @@ public class MeanderSearchResultListener implements ISearchResultListener {
 		Object element = match.getElement();
 		if (element instanceof IJavaElement) {
 			// create it that way to get the correct element (the compilation unit)
-			IResource resource = ((IJavaElement) element).getResource();
-			IJavaElement javaElement = JavaCore.create(resource);
+			IJavaElement javaElement = crateJavaElement(element);
 			
 			if (javaElement == null || javaElement.isReadOnly()) return;
 			if (javaElement.getElementType() != IJavaElement.COMPILATION_UNIT) return;
 
 			ICompilationUnit compilationUnit = (ICompilationUnit) javaElement.getAdapter(ICompilationUnit.class);
 			String ident = compilationUnit.getHandleIdentifier();
-			System.out.println(ident);
 			SoftwareMapCore.getMapView().addSelection(ident);
 		}
+	}
+
+	private IJavaElement crateJavaElement(Object element) {
+		IResource resource = ((IJavaElement) element).getResource();
+		IJavaElement javaElement = JavaCore.create(resource);
+		return javaElement;
 	}
 }

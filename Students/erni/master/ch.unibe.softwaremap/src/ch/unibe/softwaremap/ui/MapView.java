@@ -152,7 +152,7 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 				javaProject = javaElement.getJavaProject();
 			}
 			if (!javaProject.equals(javaElement.getJavaProject()) && javaElement.getJavaProject() != null) {
-				multipleProjectSelected();
+				multipleProjectsSelected();
 				return;
 			}
 			if (javaElement instanceof ICompilationUnit) {
@@ -174,7 +174,7 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 		}
 	}
 
-	private void multipleProjectSelected() {
+	private void multipleProjectsSelected() {
 		System.out.println("!!! multiple projects selected !!!");
 	}
 
@@ -242,7 +242,6 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 
 	@Override
 	public void selectionChanged(Location... locations) {
-		// TODO Auto-generated method stub
 		final ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
 		for (Location each: locations) {
 			if (each.document().getIdentifier() == null) continue;
@@ -260,7 +259,6 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 				}
 			}
 		});
-		
 	}	
 
 	private void openInEditor(IJavaElement javaElement) {
@@ -278,7 +276,6 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 				}
 			}
 		});
-
 	}
 
 	@Override

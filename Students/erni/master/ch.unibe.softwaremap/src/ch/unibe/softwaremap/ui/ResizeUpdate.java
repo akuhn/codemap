@@ -73,8 +73,7 @@ public class ResizeUpdate implements ControlListener {
 	}
 
 	private void processResize() {
-		System.out.println("resize the map");
-		// TODO: actually resize the map ...
+//		System.out.println("resize the map");
 		Point size = target.getSize();
 		SoftwareMapCore.updateMapdimension(Math.min(size.x, size.y));
 	}
