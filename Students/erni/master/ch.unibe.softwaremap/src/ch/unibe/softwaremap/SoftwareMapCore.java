@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import ch.deif.meander.viz.MapVisualization;
+import ch.unibe.softwaremap.search.MeanderQueryListener;
 import ch.unibe.softwaremap.ui.MapView;
 
 /**
@@ -23,6 +25,7 @@ public class SoftwareMapCore extends AbstractUIPlugin {
 	private static MapView mapView;
 	private static int currentMapDimension;
 	private static IProject currentProject;
+	private MeanderQueryListener queryListener;
 
 	public SoftwareMapCore() {
 	}
@@ -31,12 +34,27 @@ public class SoftwareMapCore extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		
+		// FIXME find out why this does not work that way
+//		registerQueryListener();
+	}
+
+	protected void registerQueryListener() {
+		System.out.println("registering listener");
+		queryListener = new MeanderQueryListener();
+		NewSearchUI.addQueryListener(queryListener);
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
+		unregisterQueryListener();
+		
 		plugin = null;
 		super.stop(context);
+	}
+
+	protected void unregisterQueryListener() {
+		NewSearchUI.removeQueryListener(queryListener);
 	}
 
 	public static SoftwareMapCore getDefault() {
@@ -50,6 +68,9 @@ public class SoftwareMapCore extends AbstractUIPlugin {
 	public static ProjectMap at(IProject project) {
 		currentProject = project;
 		if (hashmap == null) {
+			// FIXME find out why we can't call that from start()
+			getDefault().registerQueryListener();
+			
 			hashmap = new HashMap<IProject,ProjectMap>();
 		}
 		ProjectMap map = hashmap.get(project);

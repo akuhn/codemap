@@ -5,9 +5,9 @@ enum Todo {
 
 	// TODO TESTS! TESTS! TEST!
 	// TODO selection as overlay
+	// TODO check MDS performance
 	// TODO refresh map while editing
 	// TODO color overlay
-	// TODO port MDS to java
 	// TODO evaluate further eclipse integration
 	// TODO search on the map
 	// TODO deal with empty projects
@@ -25,6 +25,7 @@ enum Todo {
 
 enum Done {
 	
+	// DONE port MDS to java
 	// DONE resize map to eclipse view (min-size?)
 	// DONE create update site project
 	// DONE build hapax model of project

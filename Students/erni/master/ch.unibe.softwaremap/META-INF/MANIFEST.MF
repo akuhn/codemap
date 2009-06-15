@@ -10,7 +10,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.core,
  org.eclipse.jface.text,
  org.eclipse.jdt.ui,
- org.eclipse.ui.ide
+ org.eclipse.ui.ide,
+ org.eclipse.search;bundle-version="3.5.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Adrian Kuhn and David Erni
