@@ -3,11 +3,9 @@
    <feature url="features/ch.unibe.softwaremap_1.0.0.jar" id="ch.unibe.softwaremap" version="1.0.0">
       <category name="org.codemap"/>
    </feature>
-   <category-def name="org.codemap" label="Software Map"/>
-   <category-def name="new_category_3" label="New Category 3"/>
-   <category-def name="new_category_4" label="New Category 4"/>
-   <category-def name="new_category_5" label="New Category 5"/>
-   <category-def name="new_category_6" label="New Category 6"/>
-   <category-def name="new_category_7" label="New Category 7"/>
-   <category-def name="new_category_8" label="New Category 8"/>
+   <category-def name="org.codemap" label="Software Map">
+      <description>
+         This is a description.
+      </description>
+   </category-def>
 </site>
