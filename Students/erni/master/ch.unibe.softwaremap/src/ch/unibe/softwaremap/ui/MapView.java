@@ -82,12 +82,12 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 	@Override
 	public void createPartControl(final Composite parent) {
 		softwareMap = new EclipseProcessingBridge(parent);
-		softwareMap.getApplet().addListener(this);
+		softwareMap().getApplet().addListener(this);
 		addSelectionListener(PACKAGE_EXPLORER.id, CONTENT_OUTLINE.id, RESOURCE_NAVIGATOR.id);
 		getSite().setSelectionProvider(this);
 		SoftwareMapCore.setMapView(this);
 		
-		new ResizeUpdate(parent, softwareMap);
+		new ResizeUpdate(parent, softwareMap());
 	}
 	
 	protected void mapDimensionChanged(Point point) {
@@ -119,7 +119,7 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 
 	@Override
 	public void setFocus() {
-		softwareMap.setFocus();
+		softwareMap().setFocus();
 	}
 
 	@Override
@@ -192,7 +192,7 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 	}
 
 	public void updateMapVisualization(MapVisualization viz) {
-		softwareMap.setMapVizualization(viz);
+		softwareMap().setMapVizualization(viz);
 	}
 
 	private void softwareMapUpdateSelection(Collection<ICompilationUnit> units) {
@@ -206,11 +206,11 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 	public void addSelection(String handleIdentifier) {
 		List<String> list = new ArrayList<String>();
 		list.add(handleIdentifier);
-		softwareMap.addSelection(list);
+		softwareMap().addSelection(list);
 	}
 
 	public void updateSelection(List<String> handleIdentifiers) {
-		softwareMap.updateSelection(handleIdentifiers);
+		softwareMap().updateSelection(handleIdentifiers);
 		
 	}
 
@@ -283,6 +283,10 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 		if (location.document().getIdentifier() == null) return;
 		IJavaElement javaElement = JavaCore.create(location.document().getIdentifier());		
 		openInEditor(javaElement);
+	}
+
+	protected EclipseProcessingBridge softwareMap() {
+		return softwareMap;
 	}
 
 }
