@@ -37,37 +37,40 @@ public class MeanderApplet extends PApplet {
 
 	private static class Events {
 
-		private MeanderEventListener listener;
+		private List<MeanderEventListener> listeners;
 		private MeanderApplet applet;
 
 		public Events(MeanderApplet meanderApplet) {
+			this.listeners = new ArrayList<MeanderEventListener>();
 			this.applet = meanderApplet;
 		}
 
 		public void addListener(MeanderEventListener listener) {
-			assert this.listener == null;
-			this.listener = listener;
+			this.listeners.add(listener);
 		}
 
 		public void removeListener(MeanderEventListener listener) {
-			assert this.listener == listener;
-			this.listener = null;
+			this.listeners.remove(listener);
 		}
 
 		public void doubleClicked(final Location location) {
-			if (listener != null) new Thread() {
+			if (listeners != null) new Thread() {
 				@Override
 				public void run() {
-					listener.doubleClicked(location);
+					for (MeanderEventListener each: listeners) {
+						each.doubleClicked(location);
+					}
 				}
 			}.start();
 		}
 
 		public void selectionChanged(final Location... locations) {
-			if (listener != null) new Thread() {
+			if (listeners != null) new Thread() {
 				@Override
 				public void run() {
-					listener.selectionChanged(locations);
+					for (MeanderEventListener each: listeners) {
+						each.selectionChanged(locations);
+					}					
 				}
 			}.start();
 		}
