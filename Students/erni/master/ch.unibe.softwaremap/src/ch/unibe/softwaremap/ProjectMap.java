@@ -33,7 +33,7 @@ public class ProjectMap {
 	private boolean mapBeingCalculated = false;
 	private boolean builderIsRunning = false;
 	
-	int mapDimension = 512;
+	int mapDimension = 250;
 
 	public ProjectMap(IProject project) {
 		this.project = project;
