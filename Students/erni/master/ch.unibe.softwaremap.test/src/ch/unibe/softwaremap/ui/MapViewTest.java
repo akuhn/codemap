@@ -1,4 +1,4 @@
-package ch.unibe.softwaremap;
+package ch.unibe.softwaremap.ui;
 
 import static ch.unibe.softwaremap.ui.MapView.MAP_VIEW_ID;
 import static org.junit.Assert.assertNotNull;
@@ -31,6 +31,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import ch.unibe.eclipse.util.ID;
+import ch.unibe.softwaremap.BaseTest;
 import ch.unibe.softwaremap.ui.MapView;
 
 public class MapViewTest extends BaseTest {
@@ -152,6 +153,9 @@ public class MapViewTest extends BaseTest {
 		StructuredSelection selection = new StructuredSelection(javaProject);
 		PackageExplorerPart explorer = (PackageExplorerPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(ID.PACKAGE_EXPLORER.id);
 		explorer.selectReveal(selection);
+		
+		waitForJobs();
+
 	}
 
 }
