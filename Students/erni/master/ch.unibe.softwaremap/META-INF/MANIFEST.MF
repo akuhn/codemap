@@ -17,7 +17,3 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Adrian Kuhn and David Erni
 Bundle-ClassPath: .,
  lib/meander-kingsize.jar
-Export-Package: ch.unibe.softwaremap,
- ch.unibe.softwaremap.builder,
- ch.unibe.softwaremap.search,
- ch.unibe.softwaremap.ui
