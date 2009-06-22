@@ -9,7 +9,6 @@ enum Todo {
 	// TODO color overlay
 	// TODO evaluate further eclipse integration
 	// TODO search on the map
-	// TODO deal with empty projects
 	
 	// TODO polymetric views overlay
 	// TODO overlays (eclipse search results)
@@ -24,6 +23,7 @@ enum Todo {
 
 enum Done {
 	
+	// DONE deal with empty projects
 	// DONE selection as overlay
 	// DONE port MDS to java
 	// DONE resize map to eclipse view (min-size?)
