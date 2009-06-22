@@ -1,8 +1,5 @@
 package org.codemap.svdlib;
 
-import org.codemap.svdlib.Svdlib.DMat;
-import org.codemap.svdlib.Svdlib.SMat;
-import org.codemap.svdlib.Svdlib.SVDRec;
 
 public class Main {
 
@@ -24,7 +21,7 @@ public class Main {
     }
 
     private static SMat makeSMat() {
-        DMat D = new Svdlib().new DMat(12, 9);
+        DMat D = new DMat(12, 9);
         D.value[0] = new double[] { 1, 0, 0, 1, 0, 0, 0, 0, 0 };
         D.value[1] = new double[] { 1, 0, 1, 0, 0, 0, 0, 0, 0 };
         D.value[2] = new double[] { 1, 1, 0, 0, 0, 0, 0, 0, 0 };

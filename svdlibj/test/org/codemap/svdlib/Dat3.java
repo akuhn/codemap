@@ -3,8 +3,6 @@ package org.codemap.svdlib;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import org.codemap.svdlib.Svdlib.SMat;
-import org.codemap.svdlib.Svdlib.SVDRec;
 
 
 public class Dat3 {

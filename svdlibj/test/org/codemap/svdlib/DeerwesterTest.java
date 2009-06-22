@@ -2,9 +2,6 @@ package org.codemap.svdlib;
 
 import static org.junit.Assert.assertEquals;
 
-import org.codemap.svdlib.Svdlib.DMat;
-import org.codemap.svdlib.Svdlib.SMat;
-import org.codemap.svdlib.Svdlib.SVDRec;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -60,7 +57,7 @@ public class DeerwesterTest {
 
     @Before
     public void makeSMat() {
-        DMat D = new Svdlib().new DMat(12, 9);
+        DMat D = new DMat(12, 9);
         D.value = A;
         input = new Svdlib().svdConvertDtoS(D);
     }    

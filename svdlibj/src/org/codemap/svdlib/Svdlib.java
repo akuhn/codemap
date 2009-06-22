@@ -9,42 +9,38 @@ import java.util.Scanner;
 
 public class Svdlib {
 
-    long[] svd_longArray(int size, boolean empty, String name) {
+    static long[] svd_longArray(int size, boolean empty, String name) {
         return new long[size];
     }
 
-    double[] svd_doubleArray(int size, boolean empty, String name) {
+    static double[] svd_doubleArray(int size, boolean empty, String name) {
         return new double[size];
     }
 
-    void svd_beep() {
+    static void svd_beep() {
         System.err.print((char) 10);
     }
 
-    void svd_debug(String fmt, Object... args) {
+    static void svd_debug(String fmt, Object... args) {
         System.err.printf(fmt, args);
     }
 
-    void svd_error(String fmt, Object... args) {
+    static void svd_error(String fmt, Object... args) {
         svd_beep();
         System.err.print("ERROR: ");
         System.err.printf(fmt, args);
         System.err.println();
     }
 
-    void svd_fatalError(String fmt, Object... args) {
+    static void svd_fatalError(String fmt, Object... args) {
         svd_error(fmt, args);
         System.exit(1);
-    }
-
-    boolean stringEndsIn(String s, String t) {
-        return s.endsWith(t);
     }
 
     /**************************************************************
      * returns |a| if b is positive; else fsign returns -|a| *
      **************************************************************/
-    double svd_fsign(double a, double b) {
+    static double svd_fsign(double a, double b) {
         if ((a >= 0.0 && b >= 0.0) || (a < 0.0 && b < 0.0))
             return a;
         else
@@ -54,36 +50,36 @@ public class Svdlib {
     /**************************************************************
      * returns the larger of two double precision numbers *
      **************************************************************/
-    double svd_dmax(double a, double b) {
-        return (a > b) ? a : b;
+    static double svd_dmax(double a, double b) {
+        return  Math.max(a, b);
     }
 
     /**************************************************************
      * returns the smaller of two double precision numbers *
      **************************************************************/
-    double svd_dmin(double a, double b) {
-        return (a < b) ? a : b;
+    static double svd_dmin(double a, double b) {
+        return Math.min(a, b);
     }
 
     /**************************************************************
      * returns the larger of two integers *
      **************************************************************/
-    int svd_imax(int a, int b) {
-        return (a > b) ? a : b;
+    static int svd_imax(int a, int b) {
+        return  Math.max(a, b);
     }
 
     /**************************************************************
      * returns the smaller of two integers *
      **************************************************************/
-    int svd_imin(int a, int b) {
-        return (a < b) ? a : b;
+    static int svd_imin(int a, int b) {
+        return  Math.min(a, b);
     }
 
     /**************************************************************
      * Function scales a vector by a constant. * Based on Fortran-77 routine
      * from Linpack by J. Dongarra *
      **************************************************************/
-    void svd_dscal(int n, double da, double[] dx, int incx) {
+    static void svd_dscal(int n, double da, double[] dx, int incx) {
 
         if (n <= 0 || incx == 0) return;
         int ix = (incx < 0) ? n - 1 : 0;
@@ -98,7 +94,7 @@ public class Svdlib {
      * function scales a vector by a constant. * Based on Fortran-77 routine
      * from Linpack by J. Dongarra *
      **************************************************************/
-    void svd_datx(int n, double da, double[] dx, int incx, double[] dy,
+    static void svd_datx(int n, double da, double[] dx, int incx, double[] dy,
             int incy) {
         assert incx == 1 || incx == -1 || incx == 0;
         assert incy == 1 || incy == -1 || incy == 0;
@@ -117,11 +113,11 @@ public class Svdlib {
      * Function copies a vector x to a vector y * Based on Fortran-77 routine
      * from Linpack by J. Dongarra *
      **************************************************************/
-    void svd_dcopy(int n, double[] dx, int incx, double[] dy, int incy) {
+    static void svd_dcopy(int n, double[] dx, int incx, double[] dy, int incy) {
         svd_dcopy(n, dx, 0, incx, dy, 0, incy);
     }
 
-    void svd_dcopy(int n, double[] dx, int ix0, int incx, double[] dy, int iy0, int incy) {
+    static void svd_dcopy(int n, double[] dx, int ix0, int incx, double[] dy, int iy0, int incy) {
 
         assert incx == 1 || incx == -1 || incx == 0;
         assert incy == 1 || incy == -1 || incy == 0;
@@ -140,7 +136,7 @@ public class Svdlib {
      * Function forms the dot product of two vectors. * Based on Fortran-77
      * routine from Linpack by J. Dongarra *
      **************************************************************/
-    double svd_ddot(int n, double[] dx, int incx, double[] dy, int incy) {
+    static double svd_ddot(int n, double[] dx, int incx, double[] dy, int incy) {
         double dot_product = 0.0;
         int ix0 = 0;
         int iy0 = 0;
@@ -163,7 +159,7 @@ public class Svdlib {
      * Constant times a vector plus a vector * Based on Fortran-77 routine from
      * Linpack by J. Dongarra *
      **************************************************************/
-    void svd_daxpy(int n, double da, double[] dx, int incx, double[] dy,
+    static void svd_daxpy(int n, double da, double[] dx, int incx, double[] dy,
             int incy) {
         if (n <= 0 || incx == 0 || incy == 0) return;
 
@@ -179,7 +175,7 @@ public class Svdlib {
     /*********************************************************************
      * Function sorts array1 and array2 into increasing order for array1 *
      *********************************************************************/
-    void svd_dsort2(int igap, int n, double[] array1, double[] array2) {
+    static void svd_dsort2(int igap, int n, double[] array1, double[] array2) {
         double temp;
         int i, j, index;
 
@@ -207,7 +203,7 @@ public class Svdlib {
      * Function interchanges two vectors * Based on Fortran-77 routine from
      * Linpack by J. Dongarra *
      **************************************************************/
-    void svd_dswap(int n, double[] dx, int incx, double[] dy, int incy) {
+    static void svd_dswap(int n, double[] dx, int incx, double[] dy, int incy) {
         if (n <= 0 || incx == 0 || incy == 0) return;
 
         int ix = (incx == 1) ? 0 : n - 1;
@@ -225,7 +221,7 @@ public class Svdlib {
      * Function finds the index of element having max. absolute value* based on
      * FORTRAN 77 routine from Linpack by J. Dongarra *
      *****************************************************************/
-    int svd_idamax(int n, double[] dx, int ix0, int incx) {
+    static int svd_idamax(int n, double[] dx, int ix0, int incx) {
         int ix,imax;
         double dmax;
         if (n < 1) return -1;
@@ -245,65 +241,12 @@ public class Svdlib {
         return imax;
     }
 
-    /* Row-major dense matrix. Rows are consecutive vectors. */
-    public class DMat {
-        public int rows;
-        public int cols;
-        public double[][] value; /*
-         * Accessed by [row][col]. Free value[0] and value to
-         * free.
-         */
-
-        public DMat(int rows, int cols) {
-            this.rows = rows;
-            this.cols = cols;
-            this.value = new double[rows][cols];
-        }
-    }
-
-    /* Harwell-Boeing sparse matrix. */
-    public class SMat {
-
-        public int rows;
-        public int cols;
-        public int vals; /* Total non-zero entries. */
-        public int[] pointr; /* For each col (plus 1), index of first non-zero entry. */
-        public int[] rowind; /* For each nz entry, the row index. */
-        public double[] value; /* For each nz entry, the value. */
-
-        public SMat(int rows, int cols, int vals) {
-            this.rows = rows;
-            this.cols = cols;
-            this.vals = vals;
-            this.pointr = new int[cols + 1];
-            this.rowind = new int[vals];
-            this.value = new double[vals];
-        }
-    }
-
-    public class SVDRec {
-        public int d; /* Dimensionality (rank) */
-        public DMat Ut; /*
-         * Transpose of left singular vectors. (d by m) The vectors are
-         * the rows of Ut.
-         */
-        public double[] S; /* Array of singular values. (length d) */
-        public DMat Vt; /*
-         * Transpose of right singular vectors. (d by n) The vectors are
-         * the rows of Vt.
-         */
-
-        public SVDRec() {
-        }
-
-    }
-
     /**************************************************************
      * multiplication of matrix B by vector x, where B = A'A, * and A is nrow by
      * ncol (nrow >> ncol). Hence, B is of order * n = ncol (y stores product
      * vector). *
      **************************************************************/
-    void svd_opb(SMat A, double[] x, double[] y, double[] temp) {
+    static void svd_opb(SMat A, double[] x, double[] y, double[] temp) {
         int[] pointr = A.pointr;
         int[] rowind = A.rowind;
         double[] value = A.value;
@@ -332,7 +275,7 @@ public class Svdlib {
      * multiplication of matrix A by vector x, where A is * nrow by ncol (nrow
      * >> ncol). y stores product vector. *
      ***********************************************************/
-    void svd_opa(SMat A, double[] x, double[] y) {
+    static void svd_opa(SMat A, double[] x, double[] y) {
         int[] pointr = A.pointr, rowind = A.rowind;
         double[] value = A.value;
 
@@ -368,7 +311,7 @@ public class Svdlib {
      * 
      * (output) random a double precision random number between (0,1)
      ***********************************************************************/
-    double svd_random2(long[] iy) {
+    static double svd_random2(long[] iy) {
         throw null;
         // static long m2 = 0;
         // static long ia, ic, mic;
@@ -416,7 +359,7 @@ public class Svdlib {
      * 
      * UTILITY dmax, dmin
      **************************************************************/
-    double svd_pythag(double a, double b) {
+    static double svd_pythag(double a, double b) {
         double p, r, s, t, u, temp;
 
         p = svd_dmax(Math.abs(a), Math.abs(b));
@@ -439,14 +382,14 @@ public class Svdlib {
     String SVDVersion = "1.34";
     long SVDVerbosity = 0;
 
-    void svdResetCounters() {
+    static void svdResetCounters() {
         throw null;
     }
 
     /**************************** Conversion *************************************/
 
     /* Converts a sparse matrix to a dense one (without affecting the former) */
-    DMat svdConvertStoD(SMat S) {
+    static DMat svdConvertStoD(SMat S) {
         throw null;
         // int i, c;
         // DMat D = svdNewDMat(S->rows, S->cols);
@@ -462,7 +405,7 @@ public class Svdlib {
     }
 
     /* Converts a dense matrix to a sparse one (without affecting the dense one) */
-    SMat svdConvertDtoS(DMat D) {
+    static SMat svdConvertDtoS(DMat D) {
         SMat S;
         int i, j, n;
         // n = number of non-zero elements
@@ -487,7 +430,7 @@ public class Svdlib {
     }
 
     /* Transposes a dense matrix. */
-    DMat svdTransposeD(DMat D) {
+    static DMat svdTransposeD(DMat D) {
         int r, c;
         DMat N = new DMat(D.cols, D.rows);
         for (r = 0; r < D.rows; r++)
@@ -497,7 +440,7 @@ public class Svdlib {
     }
 
     /* Efficiently transposes a sparse matrix. */
-    SMat svdTransposeS(SMat S) {
+    static SMat svdTransposeS(SMat S) {
         int r, c, i, j;
         SMat N = new SMat(S.cols, S.rows, S.vals);
         /* Count number nz in each row. */
@@ -681,7 +624,7 @@ nnzero   number of nonzero elements in input matrix (matrix A)
 
      ***********************************************************************/
 
-    int check_parameters(SMat A, long dimensions, long iterations, 
+    static int check_parameters(SMat A, long dimensions, long iterations, 
             double endl, double endr, boolean b) {
         int error_index;
         error_index = 0;
@@ -725,7 +668,7 @@ nnzero   number of nonzero elements in input matrix (matrix A)
         return;
     }
 
-    void printf(String fmt, Object ... args) {
+    static void printf(String fmt, Object ... args) {
         System.out.printf(fmt, args);
     }
 
@@ -801,14 +744,14 @@ LAS2         ritvec, lanso
 
      ***********************************************************************/
 
-    void fake_memset_127(double[] a) {
+    static void fake_memset_127(double[] a) {
         double d = Double.longBitsToDouble(0x7f7f7f7f7f7f7f7fL);
         for (int n = 0; n < a.length; n++) {
             a[n] = d;
         }
     }
 
-    SVDRec svdLAS2A(SMat A, int dimensions) {
+    public SVDRec svdLAS2A(SMat A, int dimensions) {
         double[] end = new double[] {-1.0e-30, 1.0e-30};
         double kappa = 1e-6;
         if (A == null) {
@@ -821,7 +764,6 @@ LAS2         ritvec, lanso
     public SVDRec svdLAS2(SMat A, int dimensions, int iterations, double[] end, 
             double kappa) {
         boolean transpose = false;
-        long ibeta, it, irnd, machep, negep, nsig;
         int n, m, i, steps;
         double[][] wptr = new double[10][];
         double[] ritz;
@@ -843,8 +785,16 @@ LAS2         ritvec, lanso
                     A.cols, A.vals);
 
         /* Check parameters */
-        if (0 != check_parameters(A, dimensions, iterations, end[0], end[1], true))
+        if (0 != check_parameters(A, dimensions, iterations, end[0], end[1], true)) {
+            if (A.rows == 0 || A.cols == 0) {
+                R = new SVDRec();
+                R.S = new double[0];
+                R.Ut = new DMat(0,A.rows);
+                R.Vt = new DMat(0,A.cols);
+                return R;
+            }
             return null;
+        }
 
         /* If A is wide, the SVD is computed on its transpose for speed. */
         if (A.cols >= A.rows * 1.2) {
@@ -855,14 +805,7 @@ LAS2         ritvec, lanso
 
         n = A.cols;
 
-        /* BEGIN Compute machine precision */ 
-        long[] machar_result = machar(/* &ibeta, &it, &irnd, &machep, &negep */);
-        ibeta = machar_result[0];
-        it = machar_result[1];
-        irnd = machar_result[2];
-        machep = machar_result[3];
-        negep = machar_result[4];
-        /* END Compute machine precision */
+        machar(); // XXX has side effect, computes machine precision
 
         eps1 = eps * Math.sqrt((double) n);
         reps = Math.sqrt(eps);
@@ -921,7 +864,7 @@ LAS2         ritvec, lanso
         R.S  = svd_doubleArray(R.d, true, "las2: R->s");
         R.Vt = new DMat(R.d, A.cols);
 
-        nsig = ritvec(n, A, R, kappa, ritz, bnd, wptr[6], wptr[9], wptr[5], steps, 
+        ritvec(n, A, R, kappa, ritz, bnd, wptr[6], wptr[9], wptr[5], steps, 
                 neig);
 
         if (SVDVerbosity > 1) {
@@ -949,7 +892,7 @@ LAS2         ritvec, lanso
     }
 
 
-    void svdWriteDenseArray(double[] s, int d, String string, boolean b) {
+    static void svdWriteDenseArray(double[] s, int d, String string, boolean b) {
         System.out.println("Declare victory!"); // TODO better print
     }
 
@@ -1008,7 +951,7 @@ imtql2
 
      ***********************************************************************/
 
-    void rotateArray(double[][] a, int size, int x) {
+    static void rotateArray(double[][] a, int size, int x) {
 
         // TODO fix me, in Java we cannot access a[] as a[][] !!!
 
@@ -1595,7 +1538,7 @@ LAS		startv
 
      ***********************************************************************/
 
-    double fabs(double a) {
+    static double fabs(double a) {
         return Math.abs(a);
     }
 
@@ -2303,7 +2246,7 @@ BLAS		svd_dcopy
     /* File format has a funny header, then first entry index per column, then the
 row for each entry, then the value for each entry.  Indices count from 1.
 Assumes A is initialized. */
-    SMat svdLoadSparseTextHBFile(File file) throws FileNotFoundException {
+    static SMat svdLoadSparseTextHBFile(File file) throws FileNotFoundException {
         int i, x, rows, cols, vals, num_mat;
         Scanner scanner = new Scanner(file);
         SMat S;
