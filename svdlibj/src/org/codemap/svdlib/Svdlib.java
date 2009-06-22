@@ -465,9 +465,12 @@ public class Svdlib {
 	SMat svdConvertDtoS(DMat D) {
 		SMat S;
 		int i, j, n;
-		for (i = 0, n = 0; i < D.rows; i++)
-			for (j = 0; j < D.cols; j++)
+		// n = number of non-zero elements
+		for (i = 0, n = 0; i < D.rows; i++) {
+			for (j = 0; j < D.cols; j++) {
 				if (D.value[i][j] != 0) n++;
+			}
+		}
 
 		S = new SMat(D.rows, D.cols, n);
 		for (j = 0, n = 0; j < D.cols; j++) {
