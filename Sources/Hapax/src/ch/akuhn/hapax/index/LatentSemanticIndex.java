@@ -126,7 +126,7 @@ public class LatentSemanticIndex {
         for (Document each: documents) {
             if (each.version().equals(version)) selection.add(each);
         }
-        float[][] Vt = new float[svd.s.length][selection.size()];
+        double[][] Vt = new double[svd.s.length][selection.size()];
         for (int n = 0; n < selection.size(); n++) {
             int prev = documents.get(selection.get(n));
             for (int k = 0; k < Vt.length; k++) {

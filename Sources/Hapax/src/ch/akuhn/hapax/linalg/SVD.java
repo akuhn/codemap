@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 
+import org.codemap.svdlib.Svdlib;
+import org.codemap.svdlib.Svdlib.SMat;
+import org.codemap.svdlib.Svdlib.SVDRec;
+
 import ch.akuhn.hapax.util.StreamGobbler;
 import ch.akuhn.io.chunks.ChunkInput;
 import ch.akuhn.io.chunks.ReadFromChunk;
@@ -49,7 +53,7 @@ public class SVD {
             consume("LEFT", "SINGULAR", "VECTORS", "(transpose", "of", "U):");
             int rows = scan.nextInt();
             int columns = scan.nextInt();
-            SVD.this.Ut = new float[rows][columns];
+            SVD.this.Ut = new double[rows][columns];
             for (int row: range(rows)) {
                 for (int column: range(columns)) {
                     SVD.this.Ut[row][column] = scan.nextFloat();
@@ -61,7 +65,7 @@ public class SVD {
             consume("RIGHT", "SINGULAR", "VECTORS", "(transpose", "of", "V):");
             int rows = scan.nextInt();
             int columns = scan.nextInt();
-            SVD.this.Vt = new float[rows][columns];
+            SVD.this.Vt = new double[rows][columns];
             for (int row: range(rows)) {
                 for (int column: range(columns)) {
                     SVD.this.Vt[row][column] = scan.nextFloat();
@@ -84,7 +88,7 @@ public class SVD {
 
         private void gobbleSingularValues() {
             int len = consumeInt("SINGULAR", "VALUES:");
-            SVD.this.s = new float[len];
+            SVD.this.s = new double[len];
             for (int n: range(len)) {
                 SVD.this.s[n] = scan.nextFloat();
             }
@@ -104,7 +108,7 @@ public class SVD {
 
     }
 
-    public SVD(float[] s, float[][] Ut, float[][] Vt) {
+    public SVD(double[] s, double[][] Ut, double[][] Vt) {
         assert s.length == Ut.length;
         assert s.length == Vt.length;
         this.s = s;
@@ -117,9 +121,9 @@ public class SVD {
     	int m = chunk.readInt();
     	int n = chunk.readInt();
     	int k = chunk.readInt();
-    	this.s = chunk.readFloatArray(k);
-    	this.Ut = chunk.readFloatArray(k,m);
-    	this.Vt = chunk.readFloatArray(k,n);
+    	this.s = chunk.readDoubleArray(k);
+    	this.Ut = chunk.readDoubleArray(k,m);
+    	this.Vt = chunk.readDoubleArray(k,n);
     }
     
 
@@ -127,37 +131,37 @@ public class SVD {
         return format("%s -d %d -v 3 %s", fname(), dimensions, "-");
     }
     
-    private SVD decompose(Matrix matrix, int dimensions) {
-        try {
-            StreamGobbler error;
-            Gobbler input;
-            String command = command(dimensions);
-            Process proc = Runtime.getRuntime().exec(command);
-            error = new StreamGobbler(proc.getErrorStream());
-            input = new Gobbler(proc.getInputStream());
-            error.start();
-            input.start();
-            matrix.storeSparseOn(new OutputStreamWriter(proc.getOutputStream()));
-            int exit = proc.waitFor();
-            while (!input.done) Thread.sleep(20);
-            error.kill();
-            input.kill();
-            if (exit != 0) throw new Error(command);
-            assert Vt != null;
-            assert Ut != null;
-            return this;
-        } catch (Exception ex) {
-            throw Throw.exception(ex);
-        }
+    private SVD decompose(SparseMatrix matrix, int dimensions) {
+        SMat input = makeSMat(matrix);
+        SVDRec r = new Svdlib().svdLAS2(input, dimensions, 0, new double[] { -1e-30, 1e-30 }, 1e-6);
+        s = r.S;
+        Ut = r.Ut.value;
+        Vt = r.Vt.value;
+        return this;
     }
 
-    public float[] s;
+    private SMat makeSMat(SparseMatrix matrix) {
+        SMat S = new Svdlib().new SMat(matrix.rowCount(), matrix.columnCount(), matrix.used());
+        for (int j = 0, n = 0; j < matrix.columnCount(); j++) {
+            S.pointr[j] = n;
+            for (int i = 0; i < matrix.rowCount(); i++)
+                if (matrix.get(i, j) != 0) {
+                    S.rowind[n] = i;
+                    S.value[n] = matrix.get(i, j);
+                    n++;
+                }
+        }
+        S.pointr[S.cols] = S.vals;
+        return S;
+    }
 
-    public float time;
+    public double[] s;
 
-    public float[][] Ut;
+    public double time;
 
-    public float[][] Vt;
+    public double[][] Ut;
+
+    public double[][] Vt;
 
     public double similarityUU(int a, int b) {
         int dim = s.length;
@@ -222,7 +226,7 @@ public class SVD {
         return fname != null ? fname : "svd";
     }
 
-    public SVD(Matrix matrix, int dimensions) {
+    public SVD(SparseMatrix matrix, int dimensions) {
         this.decompose(matrix, dimensions);
         assert s != null;
         assert Vt != null;
