@@ -14,6 +14,7 @@ import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.deif.meander.Meander;
 import ch.deif.meander.viz.LabelsOverlay;
 import ch.deif.meander.viz.MapVisualization;
+import ch.deif.meander.viz.SelectionOverlay;
 import ch.unibe.scg.util.Extension;
 import ch.unibe.softwaremap.builder.HapaxBuilder;
 import ch.unibe.softwaremap.builder.MapMakerBackgroundJob;
@@ -109,7 +110,7 @@ public class ProjectMap {
 		if (mapBeingCalculated) return Status.OK_STATUS;
 		mapBeingCalculated = true;
 		monitor.beginTask("Making map", 5);
-		map = Meander.script().useCorpus(tdm).makeMap(mapDimension).useHillshading().add(LabelsOverlay.class).getVisualization();
+		map = Meander.script().useCorpus(tdm).makeMap(mapDimension).useHillshading().add(LabelsOverlay.class).add(SelectionOverlay.class).getVisualization();
 		notifyMapView();
 		monitor.done();
 		mapBeingCalculated = false;
