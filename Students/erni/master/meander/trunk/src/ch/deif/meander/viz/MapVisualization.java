@@ -1,6 +1,9 @@
 package ch.deif.meander.viz;
 
+import java.awt.Point;
+import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.List;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -8,10 +11,12 @@ import processing.core.PGraphics;
 import processing.pdf.PGraphicsPDF;
 import ch.deif.meander.Map;
 import ch.deif.meander.ui.PViewer;
+import ch.deif.meander.ui.MeanderApplet.Events;
 
 public abstract class MapVisualization implements Drawable {
 
 	public final Map map;
+	private Events events;
 
 	public MapVisualization(Map map) {
 		this.map = map;
@@ -82,6 +87,29 @@ public abstract class MapVisualization implements Drawable {
 		this.draw(img);
 		img.updatePixels();
 		return img;
+	}
+	
+	
+	public void mouseClicked(MouseEvent e) {}
+
+	public void addSelection(List<String> handleIdentifiers) {}
+
+	public void indicesSelected(int[] indices) {}
+
+	public void updateSelection(List<String> handleIdentifiers) {}
+
+	public void mouseDragStarted(Point dragStart) {}
+
+	public void mouseDraggedTo(Point dragStop) {}
+
+	public void mouseDragStopped() {}
+
+	public void setEventHandler(Events events) {
+		this.events = events;
+	}
+	
+	public Events events() {
+		return events;
 	}
 
 }

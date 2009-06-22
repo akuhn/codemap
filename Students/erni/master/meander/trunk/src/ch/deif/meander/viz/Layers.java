@@ -1,13 +1,18 @@
 package ch.deif.meander.viz;
 
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.util.List;
+
 import processing.core.PGraphics;
 import ch.akuhn.util.Throw;
 import ch.deif.meander.Map;
+import ch.deif.meander.ui.MeanderApplet.Events;
 
 public class Layers extends MapVisualization {
 
 	private Drawable background;
-	private Composite<Drawable> layers = Composite.newInstance();
+	private Composite<MapVisualization> layers = Composite.newInstance();
 
 	public Layers(Map map) {
 		super(map);
@@ -18,7 +23,7 @@ public class Layers extends MapVisualization {
 		background = new SketchVisualization(map);
 	}
 
-	public Layers add(Drawable overlay) {
+	public Layers add(MapVisualization overlay) {
 		layers.add(overlay);
 		return this;
 	}
@@ -57,5 +62,60 @@ public class Layers extends MapVisualization {
 			}
 		}
 	}
-
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		for (MapVisualization each: layers) {
+			each.mouseClicked(e);
+		}
+	}
+	
+	@Override
+	public void addSelection(List<String> handleIdentifiers) {
+		for (MapVisualization each: layers) {
+			each.addSelection(handleIdentifiers);
+		}
+	}
+	
+	@Override
+	public void indicesSelected(int[] indices) {
+		for (MapVisualization each: layers) {
+			each.indicesSelected(indices);
+		}		
+	}
+	
+	@Override
+	public void updateSelection(List<String> handleIdentifiers) {
+		for (MapVisualization each: layers) {
+			each.updateSelection(handleIdentifiers);
+		}				
+	}
+	
+	@Override
+	public void mouseDragStarted(Point dragStart) {
+		for (MapVisualization each: layers) {
+			each.mouseDragStarted(dragStart);
+		}			
+	}
+	
+	@Override
+	public void mouseDraggedTo(Point dragStop) {
+		for (MapVisualization each: layers) {
+			each.mouseDraggedTo(dragStop);
+		}		
+	}
+	
+	@Override
+	public void mouseDragStopped() {
+		for (MapVisualization each: layers) {
+			each.mouseDragStopped();
+		}			
+	}
+	
+	@Override
+	public void setEventHandler(Events events) {
+		for (MapVisualization each: layers) {
+			each.setEventHandler(events);
+		}		
+	}
 }

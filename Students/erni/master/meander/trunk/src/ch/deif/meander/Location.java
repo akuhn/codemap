@@ -61,7 +61,10 @@ public class Location {
 	}
 
 	public String name() {
-		if (name == null) return selectFileNameOnly(document.name());
+		if (name == null) {
+			if (document == null) return "";
+			return selectFileNameOnly(document.name());			
+		}
 		return name;
 	}
 
