@@ -437,7 +437,7 @@ public class Svdlib {
 	}
 
 	String SVDVersion = "1.34";
-	long SVDVerbosity = 1;
+	long SVDVerbosity = 0;
 
 	void svdResetCounters() {
 		throw null;

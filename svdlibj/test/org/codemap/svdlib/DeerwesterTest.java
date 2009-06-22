@@ -2,9 +2,9 @@ package org.codemap.svdlib;
 
 import static org.junit.Assert.assertEquals;
 
-import org.codemap.svdlib.Revision39.DMat;
-import org.codemap.svdlib.Revision39.SMat;
-import org.codemap.svdlib.Revision39.SVDRec;
+import org.codemap.svdlib.Svdlib.DMat;
+import org.codemap.svdlib.Svdlib.SMat;
+import org.codemap.svdlib.Svdlib.SVDRec;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -60,9 +60,9 @@ public class DeerwesterTest {
 
     @Before
     public void makeSMat() {
-        DMat D = new Revision39().new DMat(12, 9);
+        DMat D = new Svdlib().new DMat(12, 9);
         D.value = A;
-        input = new Revision39().svdConvertDtoS(D);
+        input = new Svdlib().svdConvertDtoS(D);
     }    
 
     @Before
@@ -75,7 +75,7 @@ public class DeerwesterTest {
 
     @Test
     public void singularValues() {
-        SVDRec result = new Revision39().svdLAS2(input, dimensions, iterations, end, kappa);
+        SVDRec result = new Svdlib().svdLAS2(input, dimensions, iterations, end, kappa);
         assertEquals(3.34088, result.S[0], delta);
         assertEquals(2.5417, result.S[1], delta);
         assertEquals(2.35394, result.S[2], delta);
@@ -89,7 +89,7 @@ public class DeerwesterTest {
 
     @Test
     public void leftSingularValues() {
-        SVDRec result = new Revision39().svdLAS2(input, dimensions, iterations, end, kappa);
+        SVDRec result = new Svdlib().svdLAS2(input, dimensions, iterations, end, kappa);
         assertEquals(12, result.Ut.cols);
         assertEquals(9, result.Ut.rows);
         for (int row = 0; row < 9; row++) {
@@ -103,7 +103,7 @@ public class DeerwesterTest {
 
     @Test
     public void rightSingularValues() {
-        SVDRec result = new Revision39().svdLAS2(input, dimensions, iterations, end, kappa);
+        SVDRec result = new Svdlib().svdLAS2(input, dimensions, iterations, end, kappa);
         assertEquals(9, result.Vt.cols);
         assertEquals(9, result.Vt.rows);
         for (int row = 0; row < 9; row++) {
@@ -117,7 +117,7 @@ public class DeerwesterTest {
     
     @Test
     public void recomposition() {
-        SVDRec result = new Revision39().svdLAS2(input, dimensions, iterations, end, kappa);
+        SVDRec result = new Svdlib().svdLAS2(input, dimensions, iterations, end, kappa);
         for (int n = 0; n < 9; n++) {
             for (int m = 0; m < 12; m++) {
                 double mult = 0;
