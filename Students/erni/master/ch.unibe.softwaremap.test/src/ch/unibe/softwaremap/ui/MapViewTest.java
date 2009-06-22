@@ -1,6 +1,7 @@
 package ch.unibe.softwaremap.ui;
 
 import static ch.unibe.softwaremap.ui.MapView.MAP_VIEW_ID;
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
@@ -18,21 +19,26 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.internal.ui.packageview.PackageExplorerPart;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.LibraryLocation;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.ISetSelectionTarget;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import ch.deif.meander.Map;
+import ch.deif.meander.viz.Layers;
+import ch.deif.meander.viz.MapVisualization;
+import ch.deif.meander.viz.SelectionOverlay;
 import ch.unibe.eclipse.util.ID;
 import ch.unibe.softwaremap.BaseTest;
-import ch.unibe.softwaremap.ui.MapView;
+import ch.unibe.softwaremap.SoftwareMapCore;
 
 public class MapViewTest extends BaseTest {
 
@@ -46,7 +52,6 @@ public class MapViewTest extends BaseTest {
 		waitForJobs();
 	}
 
-	@SuppressWarnings("restriction")
 	protected static IProject initDummyProject() throws CoreException {
 		System.out.println("Start creating project");
 		
@@ -145,14 +150,27 @@ public class MapViewTest extends BaseTest {
 	@Test
 	public void testView() throws PartInitException {
 		selectJavaProject();
-		
+		Layers layers = testLayersLoaded();
+		Map map = layers.map;
+		assertEquals(2, map.locations.count());
+	}
+
+	private Layers testLayersLoaded() {
+		MapVisualization visualization = mapView.softwareMap().getApplet().visualization();
+		assertTrue(visualization instanceof Layers);
+		Layers layers = (Layers) visualization;
+		MapVisualization mapVisualization = layers.get(SelectionOverlay.class);
+		assertTrue(mapVisualization instanceof SelectionOverlay);
+		SelectionOverlay overlay = (SelectionOverlay) mapVisualization;
+		return layers;
 	}
 
 	private void selectJavaProject() throws PartInitException {
 		assertNotNull(mapView);
+		
 		StructuredSelection selection = new StructuredSelection(javaProject);
-		PackageExplorerPart explorer = (PackageExplorerPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(ID.PACKAGE_EXPLORER.id);
-		explorer.selectReveal(selection);
+		IViewPart showView = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(ID.PACKAGE_EXPLORER.id);
+		((ISetSelectionTarget) showView).selectReveal(selection);		
 		
 		waitForJobs();
 
