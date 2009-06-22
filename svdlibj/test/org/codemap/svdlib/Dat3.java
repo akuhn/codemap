@@ -3,14 +3,14 @@ package org.codemap.svdlib;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import org.codemap.svdlib.Svdlib.SMat;
-import org.codemap.svdlib.Svdlib.SVDRec;
+import org.codemap.svdlib.Revision39.SMat;
+import org.codemap.svdlib.Revision39.SVDRec;
 
 
 public class Dat3 {
 
 	public static void main(String... args) throws FileNotFoundException {
-		Svdlib svdlib = new Svdlib();
+		Revision39 svdlib = new Revision39();
 		SMat A = svdlib.svdLoadSparseTextHBFile(new File("lib/dat3.txt"));
 		int dimensions = Math.min(A.cols, A.rows);
 		int iterations = 100;

@@ -1,14 +1,14 @@
 package org.codemap.svdlib;
 
-import org.codemap.svdlib.Svdlib.DMat;
-import org.codemap.svdlib.Svdlib.SMat;
-import org.codemap.svdlib.Svdlib.SVDRec;
+import org.codemap.svdlib.Revision39.DMat;
+import org.codemap.svdlib.Revision39.SMat;
+import org.codemap.svdlib.Revision39.SVDRec;
 
 public class Main {
 
 	public static void main(String[] args) {
 		
-		Svdlib svdlib = new Svdlib();
+		Revision39 svdlib = new Revision39();
 		SMat A = makeSMat();
 		int dimensions = 9;
 		int iterations = 100;
@@ -24,7 +24,7 @@ public class Main {
 	}
 
 	private static SMat makeSMat() {
-		DMat D = new Svdlib().new DMat(12, 9);
+		DMat D = new Revision39().new DMat(12, 9);
 		D.value[0] = new double[] { 1, 0, 0, 1, 0, 0, 0, 0, 0 };
 		D.value[1] = new double[] { 1, 0, 1, 0, 0, 0, 0, 0, 0 };
 		D.value[2] = new double[] { 1, 1, 0, 0, 0, 0, 0, 0, 0 };
@@ -37,7 +37,7 @@ public class Main {
 		D.value[9] = new double[] { 0, 0, 0, 0, 0, 1, 1, 1, 0 };
 		D.value[10] = new double[] { 0, 0, 0, 0, 0, 0, 1, 1, 1 };
 		D.value[11] = new double[] { 0, 0, 0, 0, 0, 0, 0, 1, 1 };
-		return new Svdlib().svdConvertDtoS(D);
+		return new Revision39().svdConvertDtoS(D);
 	}
 	
 }
