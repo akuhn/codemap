@@ -4,6 +4,17 @@ enum Todo {
 	
 
 	// TODO TESTS! TESTS! TEST!
+	
+	// TODO View: define toolbar buttons / actions to toggle overlays (ie search, coverage)
+	// TODO View: define toolbar pull-down manu actions
+	// TODO View: define a filter to eg just show one package
+	// TODO View: can we provide a context menu? ^^
+	
+	// TODO Map: show shores of entire map but only selected elevations
+	// TODO Map: use white font to write labels
+	// TODO Map: use a more visible selection (what would apple do?)
+	// TODO Map: drop shadow for labels / decorations
+	
 	// TODO check MDS performance
 	// TODO refresh map while editing
 	// TODO color overlay
