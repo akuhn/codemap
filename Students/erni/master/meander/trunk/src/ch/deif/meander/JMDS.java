@@ -39,7 +39,7 @@ public class JMDS {
 		}
 
 		double[][] result = new Hitmds2().run(input);
-		assert result[0].length == 2;
+		assert result.length == 0 || result[0].length == 2;
 
 		int i = 0;
 		for (double[] documentPosition: result) {
