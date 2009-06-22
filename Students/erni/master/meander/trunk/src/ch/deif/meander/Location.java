@@ -14,7 +14,7 @@ public class Location {
 	private double x, y;
 	private double elevation;
 	private int px, py;
-	private String name;
+	private String name; // TODO is this name freetext? or does codemap use it for identifiers?
 	private Document document;
 	private Colors color;
 

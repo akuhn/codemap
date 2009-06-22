@@ -1,12 +1,12 @@
-package ch.deif.meander.mds;
+package ch.deif.meander.util;
 
 import java.util.Random;
 
-public class MTRandom implements IRandom {
+public class MersenneTwister {
 
 	private Twister twister;
 
-	public MTRandom() {
+	public MersenneTwister() {
 		twister = new Twister(false);
 	}
 
