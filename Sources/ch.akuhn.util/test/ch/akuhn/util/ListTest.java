@@ -11,11 +11,11 @@ import static org.junit.Assert.assertSame;
 
 import java.util.Iterator;
 
-import jexample.Depends;
-import jexample.JExample;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import ch.unibe.jexample.Given;
+import ch.unibe.jexample.JExample;
 
 @RunWith(JExample.class)
 @SuppressWarnings("unchecked")
@@ -25,7 +25,7 @@ public class ListTest {
         a, b, c, d, e
     };
 
-    @Depends("nil")
+    @Given("nil")
     @Test(expected = UnsupportedOperationException.class)
     public void cannotSetTailOfEmpty(List nil) {
         nil.setTail(List.nil());
@@ -116,7 +116,7 @@ public class ListTest {
     }
 
     @Test
-    @Depends("new5tuple")
+    @Given("new5tuple")
     public void get(List $) {
         assertSame(a, $.get(0));
         assertSame(b, $.get(1));
@@ -125,13 +125,13 @@ public class ListTest {
         assertSame(e, $.get(4));
     }
 
-    @Depends("new5tuple")
+    @Given("new5tuple")
     @Test(expected = IndexOutOfBoundsException.class)
     public void getMinusOneIsFail(List $) {
         assertSame(a, $.get(-1));
     }
 
-    @Depends("new5tuple")
+    @Given("new5tuple")
     @Test(expected = IndexOutOfBoundsException.class)
     public void getSizeIsFail(List $) {
         assertSame(a, $.get(5));
@@ -227,7 +227,7 @@ public class ListTest {
     }
 
     @Test
-    @Depends("new3tuple")
+    @Given("new3tuple")
     public void testAppend(List $3) {
         List $ = $3.append(e);
         assertNotSame($3, $);
@@ -240,7 +240,7 @@ public class ListTest {
     }
 
     @Test
-    @Depends("new3tuple")
+    @Given("new3tuple")
     public void testAppendList(List $3) {
         List $2 = List.of(d, e);
         List $ = $3.appendList($2);
@@ -256,7 +256,7 @@ public class ListTest {
     }
 
     @Test
-    @Depends("new3tuple")
+    @Given("new3tuple")
     public void testPrepend(List $3) {
         List $ = $3.prepend(e);
         assertNotSame($3, $);
@@ -269,7 +269,7 @@ public class ListTest {
     }
 
     @Test
-    @Depends("new3tuple")
+    @Given("new3tuple")
     public void testPrependList(List $3) {
         List $2 = List.of(d, e);
         List $ = $3.prependList($2);
@@ -285,7 +285,7 @@ public class ListTest {
     }
 
     @Test
-    @Depends("new5tuple")
+    @Given("new5tuple")
     public void testSublist(List $5) {
         java.util.List sub = $5.subList(1, 4);
         assertEquals(3, sub.size());
@@ -295,13 +295,13 @@ public class ListTest {
     }
 
     @Test
-    @Depends("new5tuple")
+    @Given("new5tuple")
     public void testSublistEmpty(List $5) {
         java.util.List sub = $5.subList(2, 2);
         assertEquals(0, sub.size());
     }
 
-    @Depends("new5tuple")
+    @Given("new5tuple")
     @Test(expected = IllegalArgumentException.class)
     public void testSublistNegative(List $5) {
         @SuppressWarnings("unused")
@@ -309,7 +309,7 @@ public class ListTest {
     }
 
     @Test
-    @Depends("new3tuple")
+    @Given("new3tuple")
     public void testToArray(List $3) {
         Object[] $ = new Object[3];
         Object[] prev = $;
@@ -322,7 +322,7 @@ public class ListTest {
     }
 
     @Test
-    @Depends("new3tuple")
+    @Given("new3tuple")
     public void testToLongArrayIsLong(List $3) {
         Object[] $ = new Object[4];
         Object[] prev = $;
@@ -336,7 +336,7 @@ public class ListTest {
     }
 
     @Test
-    @Depends("new3tuple")
+    @Given("new3tuple")
     public void testToShortArray(List $3) {
         Object[] $ = new Object[2];
         Object[] prev = $;

@@ -1,11 +1,12 @@
 package ch.akuhn.util;
 
 import static org.junit.Assert.assertEquals;
-import jexample.Depends;
-import jexample.JExample;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import ch.unibe.jexample.Given;
+import ch.unibe.jexample.JExample;
 
 @RunWith(JExample.class)
 public class TabTest {
@@ -16,7 +17,7 @@ public class TabTest {
     }
 
     @Test
-    @Depends("#testEmpty")
+    @Given("#testEmpty")
     public void testBeginEnd(Tab n) {
         assertEquals("", n.toString());
         assertEquals("", n.begin());
@@ -27,7 +28,7 @@ public class TabTest {
     }
 
     @Test
-    @Depends("#testIncrement")
+    @Given("#testIncrement")
     public Tab testDecrement(Tab n) {
         assertEquals("abcabcabc", n.toString());
         n.less();
@@ -40,13 +41,13 @@ public class TabTest {
     }
 
     @Test(expected = IllegalStateException.class)
-    @Depends("#testDone")
+    @Given("#testDone")
     public void testDecrementFailsWhenDone(Tab n) {
         n.less();
     }
 
     @Test
-    @Depends("#testDecrement")
+    @Given("#testDecrement")
     public Tab testDone(Tab n) {
         assertEquals(true, n.isEmpty());
         return n;
@@ -61,7 +62,7 @@ public class TabTest {
     }
 
     @Test
-    @Depends("testEmpty")
+    @Given("testEmpty")
     public Tab testIncrement(Tab n) {
         n.more();
         assertEquals("abc", n.toString());
@@ -73,7 +74,7 @@ public class TabTest {
     }
 
     @Test
-    @Depends("#testIncrement")
+    @Given("#testIncrement")
     public Tab testNotDone(Tab n) {
         assertEquals(false, n.isEmpty());
         return n;

@@ -20,11 +20,12 @@ package ch.akuhn.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
-import jexample.Depends;
-import jexample.JExample;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import ch.unibe.jexample.Given;
+import ch.unibe.jexample.JExample;
 
 
 
@@ -48,13 +49,13 @@ public class BagTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    @Depends("#withAAA")
+    @Given("#withAAA")
     public void cannotAddNegativeOccurrencesWithAAA(Bag bag) {
         bag.add("A", -1);
     }
 
     @Test
-    @Depends("#empty")
+    @Given("#empty")
     public void clearEmpty(Bag bag) {
         bag.clear();
         assertEquals(0, bag.size());
@@ -63,7 +64,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withMany")
+    @Given("#withMany")
     public void clearWithMany(Bag bag) {
         bag.clear();
         assertEquals(0, bag.size());
@@ -72,7 +73,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#empty")
+    @Given("#empty")
     public void containsEmpty(Bag bag) {
         assertEquals(false, bag.contains("A"));
         assertEquals(false, bag.contains("B"));
@@ -81,7 +82,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withAAA")
+    @Given("#withAAA")
     public void containsWithAAA(Bag bag) {
         assertEquals(true, bag.contains("A"));
         assertEquals(false, bag.contains("B"));
@@ -90,7 +91,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withABC")
+    @Given("#withABC")
     public void containsWithABC(Bag bag) {
         assertEquals(true, bag.contains("A"));
         assertEquals(true, bag.contains("B"));
@@ -99,7 +100,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withMany")
+    @Given("#withMany")
     public void containsWithMany(Bag bag) {
         assertEquals(true, bag.contains("A"));
         assertEquals(true, bag.contains("B"));
@@ -121,7 +122,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#empty,#withA,#withAAA,#withABC")
+    @Given("#empty,#withA,#withAAA,#withABC")
     public void equalsIsReflexive(Bag empty, Bag withA, Bag withAAA, Bag withABC) {
         assertEquals(empty, empty);
         assertEquals(withA, withA);
@@ -130,7 +131,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withABC,#withABC")
+    @Given("#withABC,#withABC")
     public void equalsWithABC(Bag first, Bag second) {
         assertNotSame(first, second);
         assertEquals(first, second);
@@ -142,14 +143,14 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withABC,#withABC")
+    @Given("#withABC,#withABC")
     public void hashCodeWithABC(Bag first, Bag second) {
         assertNotSame(first, second);
         assertEquals(first.hashCode(), second.hashCode());
     }
 
     @Test
-    @Depends("#empty")
+    @Given("#empty")
     public void iterateEmpty(Bag bag) {
         assertEquals(false, bag.iterator().hasNext());
         assertEquals(false, bag.elements().iterator().hasNext());
@@ -157,7 +158,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withAAA")
+    @Given("#withAAA")
     public void iterateWithAAA(Bag bag) {
         assertEquals("[A, A, A]", sortedPrint(bag));
         assertEquals("[A]", sortedPrint(bag.elements()));
@@ -165,7 +166,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withABC")
+    @Given("#withABC")
     public void iterateWithABC(Bag bag) {
         assertEquals("[A, B, C]", sortedPrint(bag));
         assertEquals("[A, B, C]", sortedPrint(bag.elements()));
@@ -173,7 +174,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withMany")
+    @Given("#withMany")
     public void iterateWithMany(Bag bag) {
         assertEquals("[A, A, A, A, B, C]", sortedPrint(bag));
         assertEquals("[A, B, C]", sortedPrint(bag.elements()));
@@ -181,63 +182,63 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#empty")
+    @Given("#empty")
     public void maxOccurrencesEmpty(Bag bag) {
         int max = bag.maxOccurrences();
         assertEquals(0, max);
     }
 
     @Test
-    @Depends("#withA")
+    @Given("#withA")
     public void maxOccurrencesWithA(Bag bag) {
         int max = bag.maxOccurrences();
         assertEquals(1, max);
     }
 
     @Test
-    @Depends("#withAAA")
+    @Given("#withAAA")
     public void maxOccurrencesWithAAA(Bag bag) {
         int max = bag.maxOccurrences();
         assertEquals(3, max);
     }
 
     @Test
-    @Depends("#withMany")
+    @Given("#withMany")
     public void maxOccurrencesWithMany(Bag bag) {
         int max = bag.maxOccurrences();
         assertEquals(4, max);
     }
 
     @Test
-    @Depends("#empty")
+    @Given("#empty")
     public void mostOccurringEmpty(Bag bag) {
         Object most = bag.mostOccurring();
         assertEquals(null, most);
     }
 
     @Test
-    @Depends("#withA")
+    @Given("#withA")
     public void mostOccurringWithA(Bag bag) {
         Object most = bag.mostOccurring();
         assertEquals("A", most);
     }
 
     @Test
-    @Depends("#withAAA")
+    @Given("#withAAA")
     public void mostOccurringWithAAA(Bag bag) {
         Object most = bag.mostOccurring();
         assertEquals("A", most);
     }
 
     @Test
-    @Depends("#withMany")
+    @Given("#withMany")
     public void mostOccurringWithMany(Bag bag) {
         Object most = bag.mostOccurring();
         assertEquals("A", most);
     }
 
     @Test
-    @Depends("#empty")
+    @Given("#empty")
     public void occurrenceEmpty(Bag bag) {
         assertEquals(0, bag.occurrences("A"));
         assertEquals(0, bag.occurrences("B"));
@@ -246,7 +247,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withAAA")
+    @Given("#withAAA")
     public void occurrenceWithAAA(Bag bag) {
         assertEquals(3, bag.occurrences("A"));
         assertEquals(0, bag.occurrences("B"));
@@ -255,7 +256,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withABC")
+    @Given("#withABC")
     public void occurrenceWithABC(Bag bag) {
         assertEquals(1, bag.occurrences("A"));
         assertEquals(1, bag.occurrences("B"));
@@ -264,7 +265,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withMany")
+    @Given("#withMany")
     public void occurrenceWithMany(Bag bag) {
         assertEquals(4, bag.occurrences("A"));
         assertEquals(1, bag.occurrences("B"));
@@ -273,7 +274,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#empty")
+    @Given("#empty")
     public void removeAllEmpty(Bag bag) {
         boolean f = bag.removeAllOccurrences("A");
         assertEquals(false, f);
@@ -283,7 +284,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withA")
+    @Given("#withA")
     public void removeAllWithA(Bag bag) {
         boolean f = bag.removeAllOccurrences("A");
         assertEquals(true, f);
@@ -293,7 +294,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withAAA")
+    @Given("#withAAA")
     public void removeAllWithAAA(Bag bag) {
         boolean f = bag.removeAllOccurrences("A");
         assertEquals(true, f);
@@ -303,7 +304,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withMany")
+    @Given("#withMany")
     public void removeAllWithMany(Bag bag) {
         boolean f = bag.removeAllOccurrences("A");
         assertEquals(true, f);
@@ -313,7 +314,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#empty")
+    @Given("#empty")
     public void removeEmpty(Bag bag) {
         boolean f = bag.remove("A");
         assertEquals(false, f);
@@ -323,7 +324,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withA")
+    @Given("#withA")
     public void removeWithA(Bag bag) {
         boolean f = bag.remove("A");
         assertEquals(true, f);
@@ -333,7 +334,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withAAA")
+    @Given("#withAAA")
     public void removeWithAAA(Bag bag) {
         boolean f = bag.remove("A");
         assertEquals(true, f);
@@ -343,7 +344,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withMany")
+    @Given("#withMany")
     public void removeWithMany(Bag bag) {
         boolean f = bag.remove("A");
         assertEquals(true, f);
@@ -429,7 +430,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#empty,#withA,#withAAA,#withABC")
+    @Given("#empty,#withA,#withAAA,#withABC")
     public void toString(Bag empty, Bag withA, Bag withAAA, Bag withABC) {
         assertEquals("[]", empty.toString());
         assertEquals("[A]", withA.toString());
@@ -439,7 +440,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#empty")
+    @Given("#empty")
     public Bag withA(Bag bag) {
         bag.add("A");
         assertEquals(1, bag.size());
@@ -449,7 +450,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withA")
+    @Given("#withA")
     public Bag withAAA(Bag bag) {
         bag.add("A");
         bag.add("A");
@@ -460,7 +461,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withA")
+    @Given("#withA")
     public Bag withABC(Bag bag) {
         bag.add("B");
         bag.add("C");
@@ -471,7 +472,7 @@ public class BagTest {
     }
 
     @Test
-    @Depends("#withAAA,#withABC")
+    @Given("#withAAA,#withABC")
     public Bag withMany(Bag bag, Bag more) {
         bag.addAll(more);
         assertEquals(6, bag.size());
