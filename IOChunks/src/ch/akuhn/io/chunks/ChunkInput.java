@@ -162,6 +162,19 @@ public class ChunkInput {
 		for (int n = 0; n < result.length; n++) result[n] = in.readFloat();
 		return result;
 	}
+
+        public final double[] readDoubleArray() throws IOException {
+            currentFrame.increment(4);
+            int count = in.readInt();
+            return readDoubleArray(count);
+    }
+
+    public final double[] readDoubleArray(int count) throws IOException {
+            currentFrame.increment(count * 4);
+            double[] result = new double[count];
+            for (int n = 0; n < result.length; n++) result[n] = in.readFloat();
+            return result;
+    }	
 	
 	public final <Kind> Kind readChunk(Class<Kind> kind) throws IOException {
 		ChunkSpec spec = new ChunkSpec(kind);
@@ -172,9 +185,9 @@ public class ChunkInput {
 		return element;
 	}
 
-	public final float[][] readFloatArray(int rows, int columns) throws IOException {
+	public final double[][] readFloatArray(int rows, int columns) throws IOException {
 		currentFrame.increment(rows * columns * 4);
-		float[][] result = new float[rows][columns];
+		double[][] result = new double[rows][columns];
 		for (int row = 0; row < result.length; row++) {
 			for (int col = 0; col < result[row].length; col++) {
 				result[row][col] = in.readFloat();
@@ -183,4 +196,14 @@ public class ChunkInput {
 		return result;
 	}
 	
+        public final double[][] readDoubleArray(int rows, int columns) throws IOException {
+            currentFrame.increment(rows * columns * 4);
+            double[][] result = new double[rows][columns];
+            for (int row = 0; row < result.length; row++) {
+                    for (int col = 0; col < result[row].length; col++) {
+                            result[row][col] = in.readFloat();
+                    }               
+            }
+            return result;
+    }	
 }
