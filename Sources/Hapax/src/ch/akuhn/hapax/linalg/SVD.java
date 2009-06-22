@@ -132,6 +132,12 @@ public class SVD {
     }
     
     private SVD decompose(SparseMatrix matrix, int dimensions) {
+        if (matrix.rowCount() == 0 || matrix.columnCount() == 0) {
+            s = new double[0];
+            Ut = new double[0][];
+            Vt = new double[0][];
+            return this;
+        }
         SMat input = makeSMat(matrix);
         SVDRec r = new Svdlib().svdLAS2(input, dimensions, 0, new double[] { -1e-30, 1e-30 }, 1e-6);
         s = r.S;

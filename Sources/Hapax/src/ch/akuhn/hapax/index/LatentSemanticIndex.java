@@ -25,11 +25,14 @@ public class LatentSemanticIndex {
             double[] globalWeighting, SVD svd) {
         this.documents = documents;
         this.terms = terms;
-        if (svd.Ut[0].length != terms.size()) svd = svd.transposed();
         this.svd = svd;
+        this.globalWeighting = globalWeighting;
+        assert svd.s.length == 0 || svd.Ut.length != 0;
+        assert svd.s.length == 0 || svd.Ut.length != 0;
+        if (svd.s.length == 0) return;
+        if (svd.Ut[0].length != terms.size()) svd = svd.transposed();
         assert svd.Ut[0].length == terms.size();
         assert svd.Vt[0].length == documents.size();
-        this.globalWeighting = globalWeighting;
     }
 
     public double[] createPseudoDocument(String string) {
@@ -137,6 +140,10 @@ public class LatentSemanticIndex {
                 terms, selection,
                 new double[selection.size()], // TODO
                 new SVD(svd.s, svd.Ut, Vt));
+    }
+
+    public Object documentCount() {
+        return documents.size();
     }
     
 }
