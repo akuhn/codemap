@@ -34,6 +34,7 @@ public class ProjectMap {
 	private boolean mapBeingCalculated = false;
 	private boolean builderIsRunning = false;
 	
+	// XXX: ugly hardcoded dimension
 	int mapDimension = 250;
 
 	public ProjectMap(IProject project) {
@@ -128,6 +129,7 @@ public class ProjectMap {
 //		if (project != null) {
 //			System.out.println("adapting map of " + project.getName() + " to dimension " + newMapDimension);
 //		}
+		// XXX: ugly hardcoded map-size
 		this.mapDimension = Math.max(newMapDimension, 512);
 		return this;
 	}

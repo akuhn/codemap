@@ -17,13 +17,14 @@
 			<fileset dir="../ForEach DSL/src"/>
             <fileset dir="../Hapax/bin"/>
             <fileset dir="../Hapax/src"/> 
-<fileset dir="../hitmdsj/src"/>
-<fileset dir="../hitmdsj/bin"/> 
+			<fileset dir="../hitmdsj/src"/>
+		    <fileset dir="../hitmdsj/bin"/> 
             <fileset dir="../Meander/bin"/>
 			<fileset dir="../Meander/src"/>
             <fileset dir="../SCG util package/bin"/>
 			<fileset dir="../SCG util package/src"/>
             <zipfileset src="../Hapax/lib/snowball.jar" />
+			<zipfileset src="../Hapax/lib/svdlib-r50M.jar" />
 			<zipfileset src="../Meander/lib/core.jar" />
 			<fileset dir="tmp/src"/>
 	        <!--
