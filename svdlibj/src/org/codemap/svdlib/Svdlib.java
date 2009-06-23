@@ -1616,7 +1616,7 @@ MISC		random
 
         /* get initial vector; default is random */
         rnm2 = svd_ddot(n, wptr[0], 1, wptr[0], 1);
-        Random random = new Random(); // irand = 918273 + step;
+        Random random = new Random(918273L + step); // irand = 918273 + step;
         r = wptr[0];
         for (id = 0; id < 3; id++) {
             if (id > 0 || step > 0 || rnm2 == 0) 
