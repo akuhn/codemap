@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
 import ch.deif.meander.ui.EclipseProcessingBridge;
-import ch.unibe.softwaremap.SoftwareMapCore;
+import ch.unibe.softwaremap.SoftwareMap;
 
 public class ResizeUpdate implements ControlListener {
 	
@@ -75,7 +75,7 @@ public class ResizeUpdate implements ControlListener {
 	private void processResize() {
 //		System.out.println("resize the map");
 		Point size = target.getSize();
-		SoftwareMapCore.updateMapdimension(Math.min(size.x, size.y));
+		SoftwareMap.core().updateMapdimension(Math.min(size.x, size.y));
 	}
 
 	@Override

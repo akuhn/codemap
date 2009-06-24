@@ -18,10 +18,10 @@ import ch.unibe.softwaremap.ui.MapView;
  * One singleton to rule them all.
  * 
  */
-public class SoftwareMapCore extends AbstractUIPlugin {
+public class SoftwareMap extends AbstractUIPlugin {
 
-	public static final String PLUGIN_ID = SoftwareMapCore.class.getPackage().getName();
-	private static SoftwareMapCore plugin;
+	public static final String PLUGIN_ID = SoftwareMap.class.getPackage().getName();
+	private static SoftwareMap plugin;
 	private static Map<IProject,ProjectMap> hashmap;
 	// TODO is there a better way to manage the single MapView instance?
 	private static MapView mapView;
@@ -31,7 +31,7 @@ public class SoftwareMapCore extends AbstractUIPlugin {
 	private static List<IMeanderPlugin> plugins;
 	private MeanderQueryListener queryListener;
 
-	public SoftwareMapCore() {
+	public SoftwareMap() {
 		plugins = new ArrayList<IMeanderPlugin>();
 	}
 
@@ -61,19 +61,18 @@ public class SoftwareMapCore extends AbstractUIPlugin {
 		NewSearchUI.removeQueryListener(queryListener);
 	}
 
-	public static SoftwareMapCore getDefault() {
+	public static SoftwareMap core() {
 		return plugin;
 	}
 
 	public final static String makeID(Class<?> javaClass) {
 		return PLUGIN_ID + "." + javaClass.getSimpleName();
 	}
-
-	public static ProjectMap at(IProject project) {
-		currentProject = project;
+	
+	public ProjectMap mapForProject(IProject project) {
 		if (hashmap == null) {
 			// FIXME find out why we can't call that from start()
-			getDefault().registerQueryListener();
+			core().registerQueryListener();
 			
 			hashmap = new HashMap<IProject,ProjectMap>();
 		}
@@ -84,27 +83,36 @@ public class SoftwareMapCore extends AbstractUIPlugin {
 		return map.updateSize(currentMapDimension);
 	}
 	
+	public ProjectMap mapForChangedProject(IProject project) {
+		currentProject = project;
+		return mapForProject(project);
+	}
+	
 	public static IProject currentProject() {
 		return currentProject;
 	}
 
-	public static void setMapView(MapView mapView) {
-		SoftwareMapCore.mapView = mapView;
+	public void setMapView(MapView mapView) {
+		SoftwareMap.mapView = mapView;
 	}
 
-	public static MapView getMapView() {
+	public MapView getMapView() {
 		return mapView;
 	}
 
-	public static void updateMapdimension(int newDimension) {
+	public void updateMapdimension(int newDimension) {
 		currentMapDimension = newDimension;
-		MapVisualization viz = at(currentProject).updateSize(currentMapDimension).getVisualization();
+		MapVisualization viz = mapForChangedProject(currentProject()).updateSize(currentMapDimension).getVisualization();
 		if (viz != null) {
 			mapView.updateMapVisualization(viz);
 		}
 	}
+	
+	public void updateMap() {
+		mapForProject(currentProject()).updateMap();
+	}
 
-	public static void register(IMeanderPlugin plugin) {
+	public void register(IMeanderPlugin plugin) {
 		plugins.add(plugin);
 	}
 }

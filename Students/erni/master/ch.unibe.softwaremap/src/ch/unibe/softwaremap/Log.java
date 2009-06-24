@@ -73,7 +73,7 @@ public class Log {
 	 * @return, the status object (not <code>null</code>).
 	 */
 	private static IStatus createStatus(int severity, int code, String message, Throwable exception) {
-		return new Status(severity, SoftwareMapCore.PLUGIN_ID, code, message, exception);
+		return new Status(severity, SoftwareMap.PLUGIN_ID, code, message, exception);
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class Log {
 	 *            , the status to log.
 	 */
 	private static void log(IStatus status) {
-		SoftwareMapCore.getDefault().getLog().log(status);
+		SoftwareMap.core().getLog().log(status);
 	}
 
 }

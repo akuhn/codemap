@@ -1,6 +1,7 @@
 package ch.unibe.softwaremap;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
@@ -13,10 +14,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import ch.akuhn.hapax.index.TermDocumentMatrix;
-import ch.akuhn.util.Pair;
-import ch.deif.meander.Colors;
-import ch.deif.meander.Location;
-import ch.deif.meander.Map;
 import ch.deif.meander.MapModifier;
 import ch.deif.meander.Meander;
 import ch.deif.meander.NearestNeighborAlgorithm;
@@ -41,13 +38,14 @@ public class ProjectMap {
 	private MapVisualization mapViz;
 	private boolean mapBeingCalculated = false;
 	private boolean builderIsRunning = false;
-	private MapModifier modifier;
+	private Set<MapModifier> modifiers;
 	
 	// XXX: ugly hardcoded dimension
 	int mapDimension = 250;
 
 	public ProjectMap(IProject project) {
 		this.project = project;
+		modifiers = new HashSet<MapModifier>();
 	}
 
 	public ProjectMap enableBuilder() {
@@ -107,9 +105,13 @@ public class ProjectMap {
 	public MapVisualization getVisualization() {
 		if (tdm == null) return null;
 		if (mapViz != null && mapViz.getWidth() == mapDimension) return mapViz;
-		if (mapBeingCalculated) return null;
-		startBackgroundTask();
+		updateMap();
 		return null;
+	}
+
+	public void updateMap() {
+		if (mapBeingCalculated) return;
+		startBackgroundTask();
 	}
 
 	public IProject getProject() {
@@ -122,7 +124,7 @@ public class ProjectMap {
 		monitor.beginTask("Making map", 5);
 		mapViz = Meander.script().useCorpus(tdm)
 								 .makeMap(mapDimension)
-								 .applyModifier(modifier)
+								 .applyModifier(modifiers)
 								 .useHillshading()
 								 .add(LabelsOverlay.class)
 								 .add(SelectionOverlay.class)
@@ -135,7 +137,7 @@ public class ProjectMap {
 	}
 
 	private void notifyMapView() {
-		MapView mapView = SoftwareMapCore.getMapView();
+		MapView mapView = SoftwareMap.core().getMapView();
 		if (mapView != null) {
 			mapView.newProjectMapAvailable(project);
 		}
@@ -150,8 +152,12 @@ public class ProjectMap {
 		return this;
 	}
 
-	public void setModifier(MapModifier mod) {
-		modifier = mod;
+	public void addModifier(MapModifier mod) {
+		boolean added = modifiers.add(mod);
+		if (!added) {
+			modifiers.remove(mod);
+			modifiers.add(mod);
+		}
 	}
 
 }

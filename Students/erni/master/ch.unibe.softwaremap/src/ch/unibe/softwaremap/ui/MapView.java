@@ -49,11 +49,11 @@ import ch.deif.meander.viz.MapVisualization;
 import ch.unibe.eclipse.util.EclipseUtil;
 import ch.unibe.eclipse.util.SelectionProviderAdapter;
 import ch.unibe.softwaremap.Log;
-import ch.unibe.softwaremap.SoftwareMapCore;
+import ch.unibe.softwaremap.SoftwareMap;
 
 public class MapView extends ViewPart implements ISelectionListener, ISelectionProvider, MeanderEventListener {
 
-	public static final String MAP_VIEW_ID = SoftwareMapCore.makeID(MapView.class);
+	public static final String MAP_VIEW_ID = SoftwareMap.makeID(MapView.class);
 	
 	private EclipseProcessingBridge softwareMap;
 	private IProject project;
@@ -85,14 +85,14 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 		softwareMap().getApplet().addListener(this);
 		addSelectionListener(PACKAGE_EXPLORER.id, CONTENT_OUTLINE.id, RESOURCE_NAVIGATOR.id);
 		getSite().setSelectionProvider(this);
-		SoftwareMapCore.setMapView(this);
+		SoftwareMap.core().setMapView(this);
 		
 		new ResizeUpdate(parent, softwareMap());
 	}
 	
 	protected void mapDimensionChanged(Point point) {
 		int newDimension = Math.min(point.x, point.y);
-		SoftwareMapCore.updateMapdimension(newDimension);
+		SoftwareMap.core().updateMapdimension(newDimension);
 	}	
 
 	/**
@@ -101,7 +101,7 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 	 */
 	@Override
 	public void dispose() {
-		SoftwareMapCore.setMapView(null);
+		SoftwareMap.core().setMapView(null);
 		removeSelectionListener(CONTENT_OUTLINE.id, PACKAGE_EXPLORER.id, RESOURCE_NAVIGATOR.id);
 	}
 
@@ -185,7 +185,7 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 	}
 
 	private void compilationUnitsSelected() {
-		MapVisualization viz = SoftwareMapCore.at(project).enableBuilder().getVisualization();
+		MapVisualization viz = SoftwareMap.core().mapForChangedProject(project).enableBuilder().getVisualization();
 		if (viz == null) return;
 		updateMapVisualization(viz);
 		softwareMapUpdateSelection(selectedUnits);

@@ -23,7 +23,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import processing.core.PApplet;
 import ch.unibe.eclipse.util.EclipseUtil;
-import ch.unibe.softwaremap.SoftwareMapCore;
+import ch.unibe.softwaremap.SoftwareMap;
 
 public class TagCloudView extends ViewPart implements ISelectionListener, ControlListener {
 
@@ -115,7 +115,7 @@ public class TagCloudView extends ViewPart implements ISelectionListener, Contro
 	private void compilationUnitsSelected(IJavaProject project, Collection<ICompilationUnit> units) {
 		System.out.println(units.size() + " in " + project.getHandleIdentifier());
 		IProject resource = EclipseUtil.adapt(project, IProject.class);
-		SoftwareMapCore.at(resource).enableBuilder();
+		SoftwareMap.core().mapForChangedProject(resource).enableBuilder();
 	}
 
 	private void multipleProjectSelected() {

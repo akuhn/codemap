@@ -12,7 +12,7 @@ import org.eclipse.search.ui.SearchResultEvent;
 import org.eclipse.search.ui.text.Match;
 import org.eclipse.search.ui.text.MatchEvent;
 
-import ch.unibe.softwaremap.SoftwareMapCore;
+import ch.unibe.softwaremap.SoftwareMap;
 
 public class MeanderSearchResultListener implements ISearchResultListener {
 
@@ -38,7 +38,7 @@ public class MeanderSearchResultListener implements ISearchResultListener {
 
 			ICompilationUnit compilationUnit = (ICompilationUnit) javaElement.getAdapter(ICompilationUnit.class);
 			String ident = compilationUnit.getHandleIdentifier();
-			SoftwareMapCore.getMapView().addSelection(ident);
+			SoftwareMap.core().getMapView().addSelection(ident);
 		}
 	}
 
