@@ -44,8 +44,10 @@ public class SelectionOverlay extends MapVisualization {
 	}
 	
 	private void drawSelectedPoints(PGraphics pg) {
-		for (Point each: points) {
-			pg.ellipse(each.x, each.y, SELECTION_SIZE, SELECTION_SIZE);
+		synchronized (points) {
+			for (Point each: points) {
+				pg.ellipse(each.x, each.y, SELECTION_SIZE, SELECTION_SIZE);
+			}			
 		}
 	}
 	
@@ -69,7 +71,9 @@ public class SelectionOverlay extends MapVisualization {
 	public void mouseClicked(MouseEvent e) {
 		
 		Point point = e.getPoint();
-		if (!e.isControlDown()) points.clear();
+		if (!e.isControlDown()) {
+			clearPoints();
+		}
 		if (e.getClickCount() == 2) {
 			NearestNeighbor nn = new MaxDistNearestNeighbor(map, getWidth() / 10).forLocation(point);
 			if (nn.hasResult()) {
@@ -91,43 +95,55 @@ public class SelectionOverlay extends MapVisualization {
 		}
 		unsetSelectionBox();	
 	}
+
+	private void clearPoints() {
+		synchronized (points) {
+			points.clear();				
+		}
+	}
 	
 	@Override
 	public void updateSelection(List<String> handleIdentifiers) {
 		super.updateSelection(handleIdentifiers);
-		points.clear();
+		clearPoints();
 		addSelection(handleIdentifiers);		
 	}
 	
 	@Override
 	public void addSelection(List<String> handleIdentifiers) {
-		for (Location each: map.locations()) {
-			if (handleIdentifiers.contains(each.document().getIdentifier())) {
-				points.add(new Point(each.px(), each.py()));
-			}
+		synchronized (points) {
+			for (Location each: map.locations()) {
+				if (handleIdentifiers.contains(each.document().getIdentifier())) {
+					points.add(new Point(each.px(), each.py()));
+				}
+			}			
 		}
 	}
 	
 	@Override
 	public void indicesSelected(int[] indices) {
-		points.clear();
+		clearPoints();
 		List<Location> locations = new ArrayList<Location>();
-		for (int index: indices) {
-			Location location = map.locationAt(index);
-			locations.add(location);
-			points.add(new Point(location.px(), location.py()));
+		synchronized (points) {
+			for (int index: indices) {
+				Location location = map.locationAt(index);
+				locations.add(location);
+				points.add(new Point(location.px(), location.py()));
+			}			
 		}
 	}
 	
 	private void handleDragSelection() {
 		List<Location> selected = new ArrayList<Location>();
-		points.clear();
-		for (Location each: map.locations()) {
-			int x = (int) Math.round(each.x() * getWidth());
-			int y = (int) Math.round(each.y() * getWidth());
-			if (x < dragStop.x && x > dragStart.x && y < dragStop.y && y > dragStart.y) {
-				selected.add(each);
-				points.add(new Point(x, y));
+		clearPoints();
+		synchronized (points) {
+			for (Location each: map.locations()) {
+				int x = (int) Math.round(each.x() * getWidth());
+				int y = (int) Math.round(each.y() * getWidth());
+				if (x < dragStop.x && x > dragStart.x && y < dragStop.y && y > dragStart.y) {
+					selected.add(each);
+					points.add(new Point(x, y));
+				}
 			}
 		}
 		events().selectionChanged(selected.toArray(new Location[0]));
@@ -148,7 +164,9 @@ public class SelectionOverlay extends MapVisualization {
 	}	
 	
 	private void addSelection(Point point) {
-		points.add(point);
+		synchronized (points) {
+			points.add(point);			
+		}
 	}
 	
 	@Override

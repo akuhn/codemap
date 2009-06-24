@@ -2,6 +2,7 @@ package ch.deif.meander;
 
 import java.io.File;
 import java.util.Iterator;
+import java.util.Set;
 
 import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.corpus.CorpusBuilder;
@@ -139,10 +140,12 @@ public class Meander {
 		return this;
 	}
 
-	public Meander applyModifier(MapModifier modifier) {
-		if (modifier == null) return this;
-		assert map != null; 
-		modifier.applyOn(map);
+	public Meander applyModifier(Set<MapModifier> modifiers) {
+		if (modifiers == null) return this;
+		assert map != null;
+		for(MapModifier each: modifiers) {
+			each.applyOn(map);
+		}
 		return this;
 	}
 
