@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package ch.unibe.eclipse.util;
+package ch.unibe.softwaremap.ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +21,21 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 
+
 /**
  * Copied from "org.eclipse.ui.internal.part" package.
  * 
  */
-public class SelectionProviderAdapter implements ISelectionProvider {
+public class SelectionProvider implements ISelectionProvider {
 
 	List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
 	ISelection theSelection = StructuredSelection.EMPTY;
+	private MapView view;
+
+	public SelectionProvider(MapView mapView) {
+		this.view = mapView;
+		view.getSite().setSelectionProvider(this);
+	}
 
 	public void addSelectionChangedListener(ISelectionChangedListener listener) {
 		listeners.add(listener);

@@ -13,19 +13,25 @@ import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 
 import ch.unibe.eclipse.util.EclipseUtil;
 import ch.unibe.softwaremap.Log;
 
-public class SelectionTracker {
+public class SelectionTracker implements ISelectionListener {
 
 	private MapView view;
 	private boolean enabled = false;
 
 	public SelectionTracker(MapView view) {
 		this.view = view;
+		view.getSite().getPage().addPostSelectionListener(this);
 	}
+
+	public void dispose() {
+	    view.getSite().getPage().removePostSelectionListener(this);
+	}		
 	
 	public boolean isEnabled() {
 		return enabled;
@@ -34,7 +40,8 @@ public class SelectionTracker {
 	public void setEnabled(boolean checked) {
 		enabled = checked;
 	}
-
+	
+	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		if (part == this.view) return;
 		if (! isEnabled()) return;
@@ -96,7 +103,6 @@ public class SelectionTracker {
 		view.project = EclipseUtil.adapt(javaProject, IProject.class);
 		view.selectedUnits = units;
 		view.compilationUnitsSelected();
-	}	
-
+	}
 
 }
