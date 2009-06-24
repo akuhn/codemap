@@ -30,7 +30,7 @@ import java.util.Random;
  */ 
 public class Hitmds2 {
 
-    private Random random = new Random();
+    private Random random = new Random(0L);
 
     /* linear learning rate annealing at . times cycles */
     public static final double START_ANNEALING_RATIO = 0.5;
@@ -888,7 +888,7 @@ public class Hitmds2 {
         run(10, 1.0, 1.0487507802749606, null, data.length, data[0].length, data, -2, null);
         return points;
     }
-
+    
     public void run(int cycles, double rate, double zero, String forth, int a, int b, double[][] c, int d, double[][] e) {
 
         //	Dear Adrian,
