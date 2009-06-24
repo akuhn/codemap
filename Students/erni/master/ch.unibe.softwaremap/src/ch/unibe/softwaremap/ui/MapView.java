@@ -20,6 +20,8 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -34,6 +36,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
@@ -88,8 +91,18 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 		SoftwareMap.core().setMapView(this);
 		
 		new ResizeUpdate(parent, softwareMap());
+		
+		configureToolbar();		
 	}
 	
+	private void configureToolbar() {
+	    IToolBarManager tbm = getViewSite().getActionBars().getToolBarManager();
+	    tbm.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+	    tbm.add(new Separator());
+	    tbm.add(new LinkWithSelectionAction());
+		
+	}
+
 	protected void mapDimensionChanged(Point point) {
 		int newDimension = Math.min(point.x, point.y);
 		SoftwareMap.core().updateMapdimension(newDimension);
