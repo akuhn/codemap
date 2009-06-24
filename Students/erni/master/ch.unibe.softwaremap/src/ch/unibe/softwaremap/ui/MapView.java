@@ -156,8 +156,11 @@ public class MapView extends ViewPart implements MeanderEventListener {
 			@Override
 			public void run() {
 				try {
+					final StructuredSelection structuredSelection = new StructuredSelection(selection);
+					selectionProvider.setSelection(structuredSelection);
+					
 					IViewPart showView = getSite().getPage().showView(PACKAGE_EXPLORER.id);
-					((ISetSelectionTarget) showView).selectReveal(new StructuredSelection(selection));
+					((ISetSelectionTarget) showView).selectReveal(structuredSelection);
 				} catch (PartInitException e) {
 					Log.error(e);
 				}
