@@ -197,7 +197,7 @@ public class Hapax {
     @ReadFromChunk("HPAX")
     public Hapax(ChunkInput chunk) throws IOException {
         int version = chunk.readInt();
-        //if (version != 0x20090507) throw new Error(Integer.toHexString(version));
+        if (version != 0x20090507) throw new Error(Integer.toHexString(version));
         corpora = chunk.readChunk(Corpora.class);
     }
 

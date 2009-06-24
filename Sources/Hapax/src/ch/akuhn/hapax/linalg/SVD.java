@@ -1,112 +1,17 @@
 package ch.akuhn.hapax.linalg;
 
 import static ch.akuhn.util.Interval.range;
-import static java.lang.String.format;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
 
 import org.codemap.svdlib.Svdlib;
 import org.codemap.svdlib.Svdlib.SMat;
 import org.codemap.svdlib.Svdlib.SVDRec;
 
-import ch.akuhn.hapax.util.StreamGobbler;
 import ch.akuhn.io.chunks.ChunkInput;
 import ch.akuhn.io.chunks.ReadFromChunk;
-import ch.akuhn.util.Throw;
 
 public class SVD {
-
-    class Gobbler extends StreamGobbler {
-
-        public boolean done = false;
-        
-        public Gobbler(InputStream is) {
-            super(is);
-        }
-
-        private void gobbleFooter() {
-            consume("ELAPSED", "CPU", "TIME", "=");
-            SVD.this.time = scan.nextFloat();
-            consume("sec.");
-            consume("MULTIPLICATIONS", "BY", "A", "=", null);
-            consume("MULTIPLICATIONS", "BY", "A^T", "=", null);
-        }
-
-        private void gobbleHeader() {
-            consume("Loading", "the", "matrix...");
-            consume("Computing", "the", "SVD...");
-            consume("SOLVING", "THE", "[A^TA]", "EIGENPROBLEM");
-            consume("NO.", "OF", "ROWS", "=", null);
-            consume("NO.", "OF", "COLUMNS", "=", null);
-            consume("NO.", "OF", "NON-ZERO", "VALUES", "=", null);
-            consume("MATRIX", "DENSITY", "=", null);
-            consume("MAX.", "NO.", "OF", "LANCZOS", "STEPS", "=", null);
-            consume("MAX.", "NO.", "OF", "EIGENPAIRS", "=", null);
-            consume("LEFT", "END", "OF", "THE", "INTERVAL", "=", null);
-            consume("RIGHT", "END", "OF", "THE", "INTERVAL", "=", null);
-            consume("KAPPA", "=", null);
-        }
-
-        private void gobbleLeftSingularValues() {
-            consume("LEFT", "SINGULAR", "VECTORS", "(transpose", "of", "U):");
-            int rows = scan.nextInt();
-            int columns = scan.nextInt();
-            SVD.this.Ut = new double[rows][columns];
-            for (int row: range(rows)) {
-                for (int column: range(columns)) {
-                    SVD.this.Ut[row][column] = scan.nextFloat();
-                }
-            }
-        }
-
-        private void gobbleRightSingularValues() {
-            consume("RIGHT", "SINGULAR", "VECTORS", "(transpose", "of", "V):");
-            int rows = scan.nextInt();
-            int columns = scan.nextInt();
-            SVD.this.Vt = new double[rows][columns];
-            for (int row: range(rows)) {
-                for (int column: range(columns)) {
-                    SVD.this.Vt[row][column] = scan.nextFloat();
-                }
-            }
-        }
-
-        private void gobbleRitzValues() {
-            String next = scan.next(); // either "NUMBER" or "TRANSPOSING"
-            if (next.equals("TRANSPOSING")) {
-                consume("THE", "MATRIX", "FOR", "SPEED", "NUMBER");
-            } else assert next.equals("NUMBER");
-            int skip = consumeInt("OF", "LANCZOS", "STEPS", "=");
-            consumeInt("RITZ", "VALUES", "STABILIZED", "=");
-            consume("COMPUTED", "RITZ", "VALUES", "(ERROR", "BNDS)");
-            for (int n: range(skip)) {
-                consume(Integer.toString(n + 1), null, null, null);
-            }
-        }
-
-        private void gobbleSingularValues() {
-            int len = consumeInt("SINGULAR", "VALUES:");
-            SVD.this.s = new double[len];
-            for (int n: range(len)) {
-                SVD.this.s[n] = scan.nextFloat();
-            }
-        }
-
-        @Override
-        public void run() {
-            gobbleHeader();
-            gobbleRitzValues();
-            gobbleSingularValues();
-            gobbleLeftSingularValues();
-            gobbleRightSingularValues();
-            gobbleFooter();
-            done = true;
-            expectEOF();
-        }
-
-    }
 
     public SVD(double[] s, double[][] Ut, double[][] Vt) {
         assert s.length == Ut.length;
@@ -127,10 +32,6 @@ public class SVD {
     }
     
 
-    private String command(int dimensions) {
-        return format("%s -d %d -v 3 %s", fname(), dimensions, "-");
-    }
-    
     private SVD decompose(SparseMatrix matrix, int dimensions) {
         if (matrix.rowCount() == 0 || matrix.columnCount() == 0) {
             s = new double[0];
@@ -227,11 +128,6 @@ public class SVD {
         return sim / (Math.sqrt(suma) * Math.sqrt(sumb));
     }
     
-    private static String fname() {
-        String fname = System.getenv("SVD");
-        return fname != null ? fname : "svd";
-    }
-
     public SVD(SparseMatrix matrix, int dimensions) {
         this.decompose(matrix, dimensions);
         assert s != null;
