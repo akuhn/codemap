@@ -5,7 +5,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import ch.unibe.softwaremap.IMeanderPlugin;
-import ch.unibe.softwaremap.SoftwareMapCore;
+import ch.unibe.softwaremap.SoftwareMap;
 
 import com.mountainminds.eclemma.core.CoverageTools;
 
@@ -58,7 +58,7 @@ public class EclemmaOverlay extends AbstractUIPlugin implements IStartup, IMeand
 		// TODO: define extension point(s) in ch.unibe.softwaremap and load this lazily
 		System.out.println("starting up ...");
 		CoverageTools.addJavaCoverageListener(new MeanderCoverageListener());
-		SoftwareMapCore.register(this);
+		SoftwareMap.core().register(this);
 	}
 
 }

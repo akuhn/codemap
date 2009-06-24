@@ -19,7 +19,7 @@ import ch.deif.meander.Colors;
 import ch.deif.meander.Location;
 import ch.deif.meander.viz.MapVisualization;
 import ch.unibe.softwaremap.ProjectMap;
-import ch.unibe.softwaremap.SoftwareMapCore;
+import ch.unibe.softwaremap.SoftwareMap;
 
 import com.mountainminds.eclemma.core.CoverageTools;
 import com.mountainminds.eclemma.core.analysis.IJavaCoverageListener;
@@ -52,7 +52,7 @@ public class MeanderCoverageListener implements IJavaCoverageListener {
 				return false;
 			}
 			identifiers.add(new Pair<String, Double>(identifier, coverageInfo.getLineCounter().getRatio()));
-			System.out.println(identifier + " " + coverageInfo.getLineCounter().getRatio());
+//			System.out.println(identifier + " " + coverageInfo.getLineCounter().getRatio());
 			return false;
 		}
 	}
@@ -61,17 +61,22 @@ public class MeanderCoverageListener implements IJavaCoverageListener {
 	public void coverageChanged() {
 		IJavaModelCoverage coverage = CoverageTools.getJavaModelCoverage();
 		List<IJavaProject> projects = Arrays.asList(coverage.getInstrumentedProjects());
+		boolean isEmptyCoverage = true;
 		for(IJavaProject each: projects) {
 			if (! each.isOpen()) continue;
-//			System.out.println("coverage changed for: " + each.getHandleIdentifier());
+			isEmptyCoverage = false;
+			System.out.println("coverage changed for: " + each.getHandleIdentifier());
 //			IJavaElementCoverage coverageInfo = CoverageTools.getCoverageInfo(each);
 //			System.out.println(coverageInfo.getMethodCounter().getRatio());
 			
 			List<Pair<String, Double>> coverageInfo = compilationUnitCoverage(each);
 			CoverageMapModifier coverageMod = new CoverageMapModifier(coverageInfo);
-			SoftwareMapCore.at(each.getProject()).setModifier(coverageMod);
-			
+			SoftwareMap.core().mapForProject(each.getProject()).addModifier(coverageMod);
 		}
+		if(! isEmptyCoverage) {
+			SoftwareMap.core().updateMap();
+		}
+			
 	}
 
 	private List<Pair<String, Double>> compilationUnitCoverage(IJavaProject project) {
