@@ -59,9 +59,10 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 	public static final String MAP_VIEW_ID = SoftwareMap.makeID(MapView.class);
 	
 	private EclipseProcessingBridge softwareMap;
-	private IProject project;
-	private Collection<ICompilationUnit> selectedUnits;
+	IProject project;
+	Collection<ICompilationUnit> selectedUnits;
 	private SelectionProviderAdapter selectionProvider;
+	private SelectionTracker selectionTracker;
 
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 		public String getColumnText(Object obj, int index) {
@@ -79,13 +80,15 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 	}
 
 	public MapView() {
-		this.selectionProvider = new SelectionProviderAdapter();
+		selectionProvider = new SelectionProviderAdapter();
+		selectionTracker = new SelectionTracker(this);
 	}
 
 	@Override
 	public void createPartControl(final Composite parent) {
 		softwareMap = new EclipseProcessingBridge(parent);
 		softwareMap().getApplet().addListener(this);
+		
 		addSelectionListener(PACKAGE_EXPLORER.id, CONTENT_OUTLINE.id, RESOURCE_NAVIGATOR.id);
 		getSite().setSelectionProvider(this);
 		SoftwareMap.core().setMapView(this);
@@ -99,7 +102,7 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 	    IToolBarManager tbm = getViewSite().getActionBars().getToolBarManager();
 	    tbm.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	    tbm.add(new Separator());
-	    tbm.add(new LinkWithSelectionAction());
+	    tbm.add(new LinkWithSelectionAction(selectionTracker));
 		
 	}
 
@@ -137,67 +140,10 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (part == this) return;
-		if (!(selection instanceof IStructuredSelection)) return;
-
-		try {
-			selectionChanged((IStructuredSelection) selection);
-		} catch (CoreException e) {
-			Log.error(e);
-		}
+		selectionTracker.selectionChanged(part, selection);
 	}
 
-	/**
-	 * Filters selected IJavaProject and ICompilationUnit.
-	 * 
-	 * @param selection
-	 * @throws CoreException
-	 */
-	private void selectionChanged(IStructuredSelection selection) throws CoreException {
-		IJavaProject javaProject = null;
-		Collection<ICompilationUnit> units = new HashSet<ICompilationUnit>();
-		for (Object each: selection.toList()) {
-			IJavaElement javaElement = EclipseUtil.adapt(each, IJavaElement.class);
-			if (javaElement == null) {
-				continue;
-			}
-			if (javaProject == null) {
-				javaProject = javaElement.getJavaProject();
-			}
-			if (!javaProject.equals(javaElement.getJavaProject()) && javaElement.getJavaProject() != null) {
-				multipleProjectsSelected();
-				return;
-			}
-			if (javaElement instanceof ICompilationUnit) {
-				units.add((ICompilationUnit) javaElement);
-			}
-			if (javaElement instanceof IPackageFragment) {
-				ICompilationUnit[] children = ((IPackageFragment) javaElement).getCompilationUnits();
-				units.addAll(Arrays.asList(children));
-			}
-			if (javaElement instanceof IMember) {
-				javaElement = javaElement.getAncestor(IJavaElement.COMPILATION_UNIT);
-				if (javaElement != null) {
-					units.add((ICompilationUnit) javaElement);
-				}
-			}
-		}
-		if (javaProject != null) {
-			compilationUnitsSelected(javaProject, units);
-		}
-	}
-
-	private void multipleProjectsSelected() {
-		System.out.println("!!! multiple projects selected !!!");
-	}
-
-	private void compilationUnitsSelected(IJavaProject javaProject, Collection<ICompilationUnit> units) {
-		this.project = EclipseUtil.adapt(javaProject, IProject.class);
-		this.selectedUnits = units;
-		compilationUnitsSelected();
-	}
-
-	private void compilationUnitsSelected() {
+	void compilationUnitsSelected() {
 		MapVisualization viz = SoftwareMap.core().mapForChangedProject(project).enableBuilder().getVisualization();
 		if (viz == null) return;
 		updateMapVisualization(viz);

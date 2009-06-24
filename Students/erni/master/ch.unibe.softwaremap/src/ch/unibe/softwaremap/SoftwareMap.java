@@ -22,13 +22,14 @@ public class SoftwareMap extends AbstractUIPlugin {
 
 	public static final String PLUGIN_ID = SoftwareMap.class.getPackage().getName();
 	private static SoftwareMap plugin;
-	private static Map<IProject,ProjectMap> hashmap;
-	// TODO is there a better way to manage the single MapView instance?
-	private static MapView mapView;
-	private static int currentMapDimension;
-	private static IProject currentProject;
 	
-	private static List<IMeanderPlugin> plugins;
+	private Map<IProject,ProjectMap> hashmap;
+	// TODO is there a better way to manage the single MapView instance?
+	private MapView mapView;
+	private int currentMapDimension;
+	private IProject currentProject;
+	
+	private List<IMeanderPlugin> plugins;
 	private MeanderQueryListener queryListener;
 
 	public SoftwareMap() {
@@ -88,12 +89,12 @@ public class SoftwareMap extends AbstractUIPlugin {
 		return mapForProject(project);
 	}
 	
-	public static IProject currentProject() {
+	public IProject currentProject() {
 		return currentProject;
 	}
 
-	public void setMapView(MapView mapView) {
-		SoftwareMap.mapView = mapView;
+	public void setMapView(MapView view) {
+		mapView = view;
 	}
 
 	public MapView getMapView() {
