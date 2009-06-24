@@ -76,7 +76,6 @@ public class Meander {
 		else {
 			lsi = hapax.getIndex();
 		}
-		System.out.println("Next is MDS...");
 		mds = JMDS.fromCorrelationMatrix(lsi);
 		mds.normalize();
 		return this;
