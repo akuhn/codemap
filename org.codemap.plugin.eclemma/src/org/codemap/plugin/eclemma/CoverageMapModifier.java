@@ -13,7 +13,7 @@ public class CoverageMapModifier implements MapModifier {
 	/**
 	 * CoverageMapModifiers equal each other regardless of the coverageInfo they
 	 * contain.
- 	 * Thus two instances of this class are allways equal to each other.
+ 	 * Thus two instances of this class are always equal to each other.
 	 */
 	@Override
 	public boolean equals(Object obj) {
