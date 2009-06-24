@@ -39,8 +39,10 @@ public class Label implements Drawable, Comparable<Label> {
 			pg.ellipse(x0, y0, 5, 5);
 		}
 		if (hidden) return;
-		pg.fill(0);
 		pg.textSize(size);
+		pg.fill(0,0,0,64);
+		pg.text(text, x + 1, y + 1);
+		pg.fill(255);
 		pg.text(text, x, y);
 	}
 
