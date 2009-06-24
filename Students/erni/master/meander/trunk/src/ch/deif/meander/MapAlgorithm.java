@@ -2,12 +2,23 @@ package ch.deif.meander;
 
 public abstract class MapAlgorithm implements Runnable {
 
-	protected final Map map;
+	private Map map;
 
 	public MapAlgorithm(Map map) {
-		this.map = map;
+		setMap(map);
+	}
+	
+	public MapAlgorithm() {
+		
+	}
+	
+	protected void setMap(Map map) {
+		this.map = map;		
+	}
+
+	protected Map getMap() {
+		return map;
 	}
 
 	public abstract void run();
-
 }

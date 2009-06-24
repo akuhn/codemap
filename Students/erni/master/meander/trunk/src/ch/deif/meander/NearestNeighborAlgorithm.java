@@ -17,11 +17,14 @@ public class NearestNeighborAlgorithm extends MapAlgorithm {
 		super(map);
 	}
 
+	public NearestNeighborAlgorithm() {
+	}
+
 	@Override
 	public void run() {
 		setup();
 		compute();
-		update(map);
+		update(getMap());
 	}
 
 	private void update(Map map) {
@@ -29,10 +32,10 @@ public class NearestNeighborAlgorithm extends MapAlgorithm {
 	}
 
 	private void compute() {
-		for (Pixel p: map.pixels()) {
+		for (Pixel p: getMap().pixels()) {
 			int nearestDist2 = Integer.MAX_VALUE;
 			Location nearestLocation = null;
-			for (Location each: map.locations()) {
+			for (Location each: getMap().locations()) {
 				double dist2 = Math.pow(p.px - each.px(), 2) + Math.pow(p.py - each.py(), 2);
 				if (dist2 < nearestDist2) {
 					nearestDist2 = (int) dist2;
@@ -44,7 +47,7 @@ public class NearestNeighborAlgorithm extends MapAlgorithm {
 	}
 
 	private void setup() {
-		this.NN = new Location[map.getWidth()][map.getWidth()];
+		this.NN = new Location[getMap().getWidth()][getMap().getWidth()];
 	}
 
 }

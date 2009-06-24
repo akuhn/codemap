@@ -1,6 +1,6 @@
 package ch.deif.meander;
 
-public final class Grayscales {
+public final class Grayscales{
 
 	public static final Grayscales HILLGREEN = new Grayscales(204);
 	public static final Grayscales SHORE = new Grayscales(204);
@@ -12,7 +12,11 @@ public final class Grayscales {
 		this.gray = gray;
 		this.rgb = 0xFF000000 | gray << 16 | gray << 8 | gray;
 	}
-	
+
+	public Grayscales(double value) {
+		this((int)(255*value));
+	}
+
 	public int scaledRGB(double factor) {
 		if (factor < 0.0) return 0xFF000000;
 		if (factor == 1.0) return rgb;

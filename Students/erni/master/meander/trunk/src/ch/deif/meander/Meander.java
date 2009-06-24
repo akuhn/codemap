@@ -133,4 +133,17 @@ public class Meander {
 		return this;
 	}
 
+	public Meander runAlgorithm(MapAlgorithm algo) {
+		algo.setMap(map);
+		algo.run();
+		return this;
+	}
+
+	public Meander applyModifier(MapModifier modifier) {
+		if (modifier == null) return this;
+		assert map != null; 
+		modifier.applyOn(map);
+		return this;
+	}
+
 }

@@ -104,7 +104,7 @@ public abstract class MapVisualization implements Drawable {
 
 	public void mouseDragStopped() {}
 
-	public void setEventHandler(Events events) {
+	public void registerEventHandler(Events events) {
 		this.events = events;
 	}
 	

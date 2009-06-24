@@ -166,7 +166,7 @@ public class MeanderApplet extends PApplet {
 	public void setVisualization(MapVisualization viz) {
 		if (viz == this.viz) return;
 		this.viz = viz;
-		this.viz.setEventHandler(events);
+		this.viz.registerEventHandler(events);
 		size(width(), height());
 		
 		// TODO somehow clean up the parameters ... maybe singleton 
@@ -177,6 +177,10 @@ public class MeanderApplet extends PApplet {
 		setupBackground();
 		setNeedsRedraw();
 		repaint();
+	}
+	
+	public MapVisualization visualization() {
+		return viz;
 	}
 
 	public void addSelection(List<String> handleIdentifiers) {

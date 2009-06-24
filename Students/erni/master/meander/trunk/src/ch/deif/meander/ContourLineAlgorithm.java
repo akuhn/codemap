@@ -10,8 +10,8 @@ public class ContourLineAlgorithm extends MapAlgorithm {
 
 	@Override
 	public void run() {
-		int step = map.getParameters().contourLineStep;
-		for (Kernel k: map.kernels()) {
+		int step = getMap().getParameters().contourLineStep;
+		for (Kernel k: getMap().kernels()) {
 			int top = (int) Math.floor(k.top / step);
 			int left = (int) Math.floor(k.left / step);
 			int here = (int) Math.floor(k.here / step);

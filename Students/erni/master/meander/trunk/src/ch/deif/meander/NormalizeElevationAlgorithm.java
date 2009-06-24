@@ -11,10 +11,10 @@ public class NormalizeElevationAlgorithm extends MapAlgorithm {
 	@Override
 	public void run() {
 		double maxElevation = 0;
-		for (Pixel p: map.pixels()) {
+		for (Pixel p: getMap().pixels()) {
 			maxElevation = Math.max(maxElevation, p.elevation());
 		}
-		for (Pixel p: map.pixels()) {
+		for (Pixel p: getMap().pixels()) {
 			p.normalizeElevation(maxElevation);
 		}
 	}

@@ -28,8 +28,8 @@ public class HillshadeAlgorithm extends MapAlgorithm {
 		double zenithRad = 45 * PI / 180;
 		// azimuth: direction of sun on x-y-plane
 		double azimuthRad = (315 - 180) * PI / 180;
-		double z_factor = Z_FACTOR * map.getWidth();
-		for (Kernel k: map.kernels()) {
+		double z_factor = Z_FACTOR * getMap().getWidth();
+		for (Kernel k: getMap().kernels()) {
 			double dx = (k.topRight + (2 * k.right) + k.bottomRight - (k.topLeft + (2 * k.left) + k.bottomLeft)) / 8;
 			double dy = (k.bottomLeft + (2 * k.bottom) + k.bottomRight - (k.topLeft + (2 * k.top) + k.topRight)) / 8;
 			double slopeRad = atan(z_factor * sqrt(dx * dx + (dy * dy)));

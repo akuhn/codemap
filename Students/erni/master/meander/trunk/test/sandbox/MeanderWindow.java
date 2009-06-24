@@ -5,6 +5,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import sketchbook.LabelSketch;
+import ch.deif.meander.Colors;
+import ch.deif.meander.Location;
+import ch.deif.meander.Map;
+import ch.deif.meander.NearestNeighborAlgorithm;
 import ch.deif.meander.ui.EclipseProcessingBridge;
 import ch.deif.meander.viz.Layers;
 import ch.deif.meander.viz.SelectionOverlay;
@@ -27,10 +31,31 @@ public class MeanderWindow {
 	private static void createMeander(Shell shell) {
 		bridge = new EclipseProcessingBridge(shell);
 		Layers layers = LabelSketch.createLabeledSketch();
+		new NearestNeighborAlgorithm(layers.map).run();
 		layers.add(SelectionOverlay.class);
+		
+		Location loc = findLocation(layers.map, "the");
+		loc.setColor(new Colors(255, 0, 0));
+		
+		loc = findLocation(layers.map, "for");
+		loc.setColor(new Colors(255, 0, 0));	
+		
+		loc = findLocation(layers.map, "fox");
+		loc.setColor(new Colors(255, 0, 0));			
+		
 		bridge.setMapVizualization(layers);
+		
+		
 		int dim = layers.map.getParameters().width;
 		shell.setSize(dim, dim);
+	}
+	
+	private static Location findLocation(Map map, String name) {
+		for (Location each: map.locations()) {
+			if (each.name().equals(name))
+				return each;
+		}
+		return null;
 	}
 
 	private static void loop(Display display, Shell shell) {

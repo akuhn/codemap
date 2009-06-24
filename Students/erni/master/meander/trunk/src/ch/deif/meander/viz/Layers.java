@@ -52,6 +52,15 @@ public class Layers extends MapVisualization {
 			throw Throw.exception(ex);
 		}
 	}
+	
+	public MapVisualization get(Class<? extends MapVisualization> overlay) {
+		for (MapVisualization each: layers) {
+			if (overlay.isAssignableFrom(each.getClass())) {
+				return each;
+			}
+		}
+		return null;
+	}
 
 	@SuppressWarnings("unchecked")
 	public void alsoShowShoresOf(float[][] DEM) {
@@ -113,9 +122,9 @@ public class Layers extends MapVisualization {
 	}
 	
 	@Override
-	public void setEventHandler(Events events) {
+	public void registerEventHandler(Events events) {
 		for (MapVisualization each: layers) {
-			each.setEventHandler(events);
+			each.registerEventHandler(events);
 		}		
 	}
 }

@@ -235,6 +235,7 @@ public class Map {
 		new NormalizeElevationAlgorithm(map).run();
 		new HillshadeAlgorithm(map).run();
 		new ContourLineAlgorithm(map).run();
+		new NearestNeighborAlgorithm(map).run();
 		// return new SketchVisualization(map);
 		return new HillshadeVisualization(map);
 	}

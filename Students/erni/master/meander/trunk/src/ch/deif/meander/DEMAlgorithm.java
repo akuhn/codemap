@@ -30,7 +30,7 @@ public class DEMAlgorithm extends MapAlgorithm {
 	public void run() {
 		setup();
 		compute();
-		update(map);
+		update(getMap());
 	}
 	
 	private void update(Map map) {
@@ -39,7 +39,7 @@ public class DEMAlgorithm extends MapAlgorithm {
 	}
 
 	private void compute() {
-		for (Location each: map.locations()) {
+		for (Location each: getMap().locations()) {
 			elevateHill(each, computePie(each));
 		}
 	}
@@ -90,7 +90,7 @@ public class DEMAlgorithm extends MapAlgorithm {
 	}
 
 	private void setup() {
-		DEM = new float[map.getWidth()][map.getWidth()];
+		DEM = new float[getMap().getWidth()][getMap().getWidth()];
 	}
 
 }
