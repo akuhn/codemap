@@ -38,7 +38,7 @@ import ch.deif.meander.viz.MapVisualization;
 import ch.deif.meander.viz.SelectionOverlay;
 import ch.unibe.eclipse.util.ID;
 import ch.unibe.softwaremap.BaseTest;
-import ch.unibe.softwaremap.SoftwareMapCore;
+import ch.unibe.softwaremap.SoftwareMap;
 
 public class MapViewTest extends BaseTest {
 
