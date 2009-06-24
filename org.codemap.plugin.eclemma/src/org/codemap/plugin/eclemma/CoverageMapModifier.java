@@ -34,8 +34,9 @@ public class CoverageMapModifier implements MapModifier {
 			for (Pair<String, Double> pair: coverageInfo) {
 				if (pair.fst.equals(identifier)) {
 					Double ratio = pair.snd;
-					int redVal = (int)(ratio*255);
-					Colors col = new Colors(redVal, 255, 255);
+					int redVal = (int) ((1-ratio)*255);
+					int greenVal = (int)(ratio*255);
+					Colors col = new Colors(redVal, greenVal, 0);
 					loc.setColor(col);
 					break;
 				}
