@@ -1,5 +1,7 @@
 package ch.unibe.softwaremap;
 
+import java.util.List;
+
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -11,7 +13,13 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import ch.akuhn.hapax.index.TermDocumentMatrix;
+import ch.akuhn.util.Pair;
+import ch.deif.meander.Colors;
+import ch.deif.meander.Location;
+import ch.deif.meander.Map;
+import ch.deif.meander.MapModifier;
 import ch.deif.meander.Meander;
+import ch.deif.meander.NearestNeighborAlgorithm;
 import ch.deif.meander.viz.LabelsOverlay;
 import ch.deif.meander.viz.MapVisualization;
 import ch.deif.meander.viz.SelectionOverlay;
@@ -30,9 +38,10 @@ public class ProjectMap {
 
 	private final IProject project;
 	private TermDocumentMatrix tdm;
-	private MapVisualization map;
+	private MapVisualization mapViz;
 	private boolean mapBeingCalculated = false;
 	private boolean builderIsRunning = false;
+	private MapModifier modifier;
 	
 	// XXX: ugly hardcoded dimension
 	int mapDimension = 250;
@@ -97,7 +106,7 @@ public class ProjectMap {
 
 	public MapVisualization getVisualization() {
 		if (tdm == null) return null;
-		if (map != null && map.getWidth() == mapDimension) return map;
+		if (mapViz != null && mapViz.getWidth() == mapDimension) return mapViz;
 		if (mapBeingCalculated) return null;
 		startBackgroundTask();
 		return null;
@@ -111,7 +120,14 @@ public class ProjectMap {
 		if (mapBeingCalculated) return Status.OK_STATUS;
 		mapBeingCalculated = true;
 		monitor.beginTask("Making map", 5);
-		map = Meander.script().useCorpus(tdm).makeMap(mapDimension).useHillshading().add(LabelsOverlay.class).add(SelectionOverlay.class).getVisualization();
+		mapViz = Meander.script().useCorpus(tdm)
+								 .makeMap(mapDimension)
+								 .applyModifier(modifier)
+								 .useHillshading()
+								 .add(LabelsOverlay.class)
+								 .add(SelectionOverlay.class)
+								 .runAlgorithm(new NearestNeighborAlgorithm())
+								 .getVisualization();
 		notifyMapView();
 		monitor.done();
 		mapBeingCalculated = false;
@@ -132,6 +148,10 @@ public class ProjectMap {
 		// XXX: ugly hardcoded map-size
 		this.mapDimension = Math.max(newMapDimension, 512);
 		return this;
+	}
+
+	public void setModifier(MapModifier mod) {
+		modifier = mod;
 	}
 
 }

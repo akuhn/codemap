@@ -181,14 +181,14 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 	private void compilationUnitsSelected(IJavaProject javaProject, Collection<ICompilationUnit> units) {
 		this.project = EclipseUtil.adapt(javaProject, IProject.class);
 		this.selectedUnits = units;
-		compilationUnitsSelected(units);
+		compilationUnitsSelected();
 	}
 
-	private void compilationUnitsSelected(Collection<ICompilationUnit> units) {
+	private void compilationUnitsSelected() {
 		MapVisualization viz = SoftwareMapCore.at(project).enableBuilder().getVisualization();
 		if (viz == null) return;
 		updateMapVisualization(viz);
-		softwareMapUpdateSelection(units);
+		softwareMapUpdateSelection(selectedUnits);
 	}
 
 	public void updateMapVisualization(MapVisualization viz) {
@@ -216,7 +216,7 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 
 	public void newProjectMapAvailable(IProject project) {
 		if (!this.project.equals(project)) return;
-		this.compilationUnitsSelected(selectedUnits);
+		this.compilationUnitsSelected();
 	}
 
 	@Override
@@ -285,7 +285,7 @@ public class MapView extends ViewPart implements ISelectionListener, ISelectionP
 		openInEditor(javaElement);
 	}
 
-	protected EclipseProcessingBridge softwareMap() {
+	public EclipseProcessingBridge softwareMap() {
 		return softwareMap;
 	}
 

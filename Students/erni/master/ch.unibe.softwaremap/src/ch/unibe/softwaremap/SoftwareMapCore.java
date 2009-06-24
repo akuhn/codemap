@@ -1,6 +1,8 @@
 package ch.unibe.softwaremap;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
@@ -25,9 +27,12 @@ public class SoftwareMapCore extends AbstractUIPlugin {
 	private static MapView mapView;
 	private static int currentMapDimension;
 	private static IProject currentProject;
+	
+	private static List<IMeanderPlugin> plugins;
 	private MeanderQueryListener queryListener;
 
 	public SoftwareMapCore() {
+		plugins = new ArrayList<IMeanderPlugin>();
 	}
 
 	@Override
@@ -77,7 +82,10 @@ public class SoftwareMapCore extends AbstractUIPlugin {
 			hashmap.put(project, map = new ProjectMap(project));
 		}
 		return map.updateSize(currentMapDimension);
-
+	}
+	
+	public static IProject currentProject() {
+		return currentProject;
 	}
 
 	public static void setMapView(MapView mapView) {
@@ -94,5 +102,9 @@ public class SoftwareMapCore extends AbstractUIPlugin {
 		if (viz != null) {
 			mapView.updateMapVisualization(viz);
 		}
+	}
+
+	public static void register(IMeanderPlugin plugin) {
+		plugins.add(plugin);
 	}
 }
