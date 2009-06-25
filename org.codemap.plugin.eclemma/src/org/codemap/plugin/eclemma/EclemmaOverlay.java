@@ -63,7 +63,7 @@ public class EclemmaOverlay extends AbstractUIPlugin implements IStartup, IMeand
 	public void earlyStartup() {
 		plugin = this;
 		// TODO: define extension point(s) in ch.unibe.softwaremap and load this lazily
-		System.out.println("starting up ...");
+//		System.out.println("starting up ...");
 		CoverageTools.addJavaCoverageListener(new MeanderCoverageListener());
 		
 		Display.getDefault().asyncExec(new Runnable() {

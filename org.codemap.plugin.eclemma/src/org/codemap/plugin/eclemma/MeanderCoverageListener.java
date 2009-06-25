@@ -65,7 +65,7 @@ public class MeanderCoverageListener implements IJavaCoverageListener {
 		for(IJavaProject each: projects) {
 			if (! each.isOpen()) continue;
 			isEmptyCoverage = false;
-			System.out.println("coverage changed for: " + each.getHandleIdentifier());
+//			System.out.println("coverage changed for: " + each.getHandleIdentifier());
 //			IJavaElementCoverage coverageInfo = CoverageTools.getCoverageInfo(each);
 //			System.out.println(coverageInfo.getMethodCounter().getRatio());
 			
