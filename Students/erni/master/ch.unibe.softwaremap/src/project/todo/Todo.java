@@ -11,9 +11,7 @@ enum Todo {
 	// TODO View: can we provide a context menu? ^^
 	
 	// TODO Map: show shores of entire map but only selected elevations
-	// TODO Map: use white font to write labels
 	// TODO Map: use a more visible selection (what would apple do?)
-	// TODO Map: drop shadow for labels / decorations
 	
 	// TODO check MDS performance
 	// TODO refresh map while editing
@@ -27,13 +25,15 @@ enum Todo {
 	// TODO overlays (eclemma)	
 	// TODO overlays (metrics)
 	
-	// TODO make standalone-plugin work on mac
 	// TODO cleanup the map-width definition again 
 	
 }
 
 enum Done {
 	
+	// DONE Map: drop shadow for labels / decorations
+	// DONE Map: use white font to write labels
+	// DONE make standalone-plugin work on mac
 	// DONE deal with empty projects
 	// DONE selection as overlay
 	// DONE port MDS to java
