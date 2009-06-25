@@ -6,12 +6,16 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import ch.unibe.softwaremap.Log;
+
 public class LazyPluginAction extends Action {
 	
 	private static final String ATT_TEXT = "text";
-	private static final String ATT_ICON = "icon";	
+	private static final String ATT_ICON = "icon";
+	private static final String ATT_CLASS = "class";		
 
 	private IConfigurationElement configElement;
+	private ICodeMapPluginAction pluginAction;
 
 	public LazyPluginAction(IConfigurationElement elem) {
 		super("", AS_CHECK_BOX); // lol, we can't set the style value some other way ...
@@ -34,7 +38,27 @@ public class LazyPluginAction extends Action {
 	private String textFromConfig() {
 		return configElement.getAttribute(ATT_TEXT);
 	}
-	
-	
 
+	@Override
+	public void run() {
+		ICodeMapPluginAction action = getAction();
+		if (action == null) return;
+		
+		action.run(this);
+	}
+
+	private ICodeMapPluginAction getAction() {
+		if (pluginAction == null){
+			createPluginAction();
+		}
+		return pluginAction;
+	}
+
+	private void createPluginAction() {
+		try {
+			pluginAction = (ICodeMapPluginAction) configElement.createExecutableExtension(ATT_CLASS);
+		} catch (Exception e) {
+			Log.instantiatePluginError(e, configElement, ATT_CLASS);
+		}
+	}
 }

@@ -1,5 +1,6 @@
 package ch.unibe.softwaremap;
 
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
@@ -84,6 +85,12 @@ public class Log {
 	 */
 	private static void log(IStatus status) {
 		SoftwareMap.core().getLog().log(status);
+	}
+
+	public static void instantiatePluginError(Exception e, IConfigurationElement configElement, String attClass) {
+		String msg = "Failed to instatiate plugin: " + configElement.getAttribute(attClass)
+		+ " in plugin: "+ configElement.getDeclaringExtension().getNamespaceIdentifier();
+		error(msg, e);
 	}
 
 }
