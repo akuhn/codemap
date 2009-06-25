@@ -5,7 +5,7 @@
           point="ch.unibe.softwaremap.mapview">
        <toolbar
              class="org.codemap.plugin.eclemma.ShowCoverageAction"
-             icon="icons/eclipse/category.gif"
+             icon="icons/eclipse/coverage.gif"
              text="Display coverage">
        </toolbar>
     </extension>
