@@ -1,21 +1,23 @@
 package org.codemap.plugin.eclemma;
 
 import org.eclipse.jface.action.Action;
-import ch.unibe.softwaremap.Icon;
-import ch.unibe.softwaremap.SoftwareMap;
 
-public class ShowCoverageAction extends Action {
+import ch.unibe.softwaremap.SoftwareMap;
+import ch.unibe.softwaremap.ui.ICodeMapPluginAction;
+
+public class ShowCoverageAction implements ICodeMapPluginAction {
 	
-	public ShowCoverageAction() {
-		super("Show Coverage.", AS_CHECK_BOX);
-		setImageDescriptor(Icon.getImageDescriptor(Icon.CATEGORY));		
-	}
+	private Action action;
 
 	@Override
-	public void run() {
+	public void run(Action act) {
+		action = act;
 		SoftwareMap.core().updateMap();
 	}
 
-	
+	public boolean isChecked() {
+		if (action == null) return false;
+		return action.isChecked();
+	}
 
 }
