@@ -8,6 +8,10 @@ import ch.unibe.softwaremap.ui.ICodeMapPluginAction;
 public class ShowCoverageAction implements ICodeMapPluginAction {
 	
 	private Action action;
+	
+	public ShowCoverageAction() {
+		EclemmaOverlay.registerCoverageAction(this);
+	}
 
 	@Override
 	public void run(Action act) {
