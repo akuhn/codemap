@@ -13,5 +13,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/Hapax"/>
 	<classpathentry kind="lib" path="lib/jexample-4.4-r281.jar"/>
 	<classpathentry kind="src" path="/hitmdsj"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ch.unibe.scg.util"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
