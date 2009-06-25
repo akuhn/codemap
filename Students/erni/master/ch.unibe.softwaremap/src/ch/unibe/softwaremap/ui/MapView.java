@@ -3,24 +3,36 @@ package ch.unibe.softwaremap.ui;
 import static ch.unibe.eclipse.util.ID.PACKAGE_EXPLORER;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -84,8 +96,22 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	    tbm.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	    tbm.add(new Separator());
 	    tbm.add(new LinkWithSelectionAction(selectionTracker));
+	    
+	    IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(SoftwareMap.PLUGIN_ID, "mapview");
+	    IExtension[] extensions_arr = extensionPoint.getExtensions();
+	    List<IExtension> extensions = Arrays.asList(extensions_arr);
+	    for (IExtension extension: extensions) {
+	    	parseConfig(extension.getConfigurationElements(), tbm);
+	    }
 	}
 	
+	private void parseConfig(IConfigurationElement[] configurationElements, IToolBarManager tbm) {
+		List<IConfigurationElement> configelems = Arrays.asList(configurationElements);
+		for (IConfigurationElement each: configelems) {
+			tbm.add(new LazyPluginAction(each));
+		}
+	}
+
 	public IToolBarManager getToolBarManager() {
 		return getViewSite().getActionBars().getToolBarManager();
 	}
