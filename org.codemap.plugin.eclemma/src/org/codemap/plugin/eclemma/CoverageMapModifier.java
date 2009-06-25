@@ -7,6 +7,7 @@ import ch.deif.meander.Colors;
 import ch.deif.meander.Location;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapModifier;
+import ch.unibe.softwaremap.ProjectMap;
 
 public class CoverageMapModifier implements MapModifier {
 	
@@ -22,26 +23,36 @@ public class CoverageMapModifier implements MapModifier {
 	}
 
 	private List<Pair<String, Double>> coverageInfo;
+	private ShowCoverageAction showCoverageAction;
 
-	public CoverageMapModifier(List<Pair<String, Double>> coverageInfo) {
+	public CoverageMapModifier(List<Pair<String, Double>> coverageInfo, ShowCoverageAction action) {
 		this.coverageInfo = coverageInfo;
+		this.showCoverageAction = action;
 	}
 
 	@Override
 	public void applyOn(Map map) {
 		for (Location loc: map.locations) {
-			String identifier = loc.document().getIdentifier();
-			for (Pair<String, Double> pair: coverageInfo) {
-				if (pair.fst.equals(identifier)) {
-					Double ratio = pair.snd;
-					int redVal = (int) ((1-ratio)*255);
-					int greenVal = (int)(ratio*255);
-					Colors col = new Colors(redVal, greenVal, 0);
-					loc.setColor(col);
-					break;
-				}
+			if ( showCoverageAction.isChecked()) {
+				String identifier = loc.document().getIdentifier();
+				for (Pair<String, Double> pair: coverageInfo) {
+					if (pair.fst.equals(identifier)) {
+						Double ratio = pair.snd;
+						int redVal = (int) ((1-ratio)*255);
+						int greenVal = (int)(ratio*255);
+						Colors col = new Colors(redVal, greenVal, 0);
+						loc.setColor(col);
+						break;
+					}
+				}				
+			} else {
+				loc.removeColor();
 			}
 		}	
+	}
+
+	public void addTo(ProjectMap map) {
+		map.addModifier(this);
 	}
 
 }

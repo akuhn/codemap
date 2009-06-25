@@ -70,8 +70,9 @@ public class MeanderCoverageListener implements IJavaCoverageListener {
 //			System.out.println(coverageInfo.getMethodCounter().getRatio());
 			
 			List<Pair<String, Double>> coverageInfo = compilationUnitCoverage(each);
-			CoverageMapModifier coverageMod = new CoverageMapModifier(coverageInfo);
-			SoftwareMap.core().mapForProject(each.getProject()).addModifier(coverageMod);
+			CoverageMapModifier coverageMod = new CoverageMapModifier(coverageInfo, EclemmaOverlay.showCoverageAction);
+			ProjectMap mapForProject = SoftwareMap.core().mapForProject(each.getProject());
+			coverageMod.addTo(mapForProject);
 		}
 		if(! isEmptyCoverage) {
 			SoftwareMap.core().updateMap();
