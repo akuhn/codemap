@@ -2,10 +2,12 @@
 <?eclipse version="3.4"?>
 <plugin>
     <extension
-         point="org.eclipse.ui.startup">
-      <startup
-            class="org.codemap.plugin.eclemma.EclemmaOverlay">
-      </startup>
-   </extension>
+          point="ch.unibe.softwaremap.mapview">
+       <toolbar
+             class="org.codemap.plugin.eclemma.EclemmaOverlay"
+             icon="icons/eclipse/category.gif"
+             text="Display coverage">
+       </toolbar>
+    </extension>
 
 </plugin>

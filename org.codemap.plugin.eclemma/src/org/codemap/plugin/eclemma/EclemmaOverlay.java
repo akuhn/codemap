@@ -15,7 +15,7 @@ import com.mountainminds.eclemma.core.CoverageTools;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class EclemmaOverlay extends AbstractUIPlugin implements IStartup, IMeanderPlugin {
+public class EclemmaOverlay extends AbstractUIPlugin implements IMeanderPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.codemap.plugin.eclemma";
@@ -59,24 +59,24 @@ public class EclemmaOverlay extends AbstractUIPlugin implements IStartup, IMeand
 		return plugin;
 	}
 
-	@Override
-	public void earlyStartup() {
-		plugin = this;
-		// TODO: define extension point(s) in ch.unibe.softwaremap and load this lazily
-//		System.out.println("starting up ...");
-		CoverageTools.addJavaCoverageListener(new MeanderCoverageListener());
-		
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				SoftwareMap.core().register(EclemmaOverlay.this);
-				MapView mapView = SoftwareMap.core().getMapView();
-				IToolBarManager tbm = mapView.getToolBarManager();
-				tbm.add(showCoverageAction);
-				mapView.getViewSite().getActionBars().updateActionBars();
-				tbm.markDirty();
-			}
-		});
-	}
+//	@Override
+//	public void earlyStartup() {
+//		plugin = this;
+//		// TODO: define extension point(s) in ch.unibe.softwaremap and load this lazily
+////		System.out.println("starting up ...");
+//		CoverageTools.addJavaCoverageListener(new MeanderCoverageListener());
+//		
+//		Display.getDefault().asyncExec(new Runnable() {
+//			@Override
+//			public void run() {
+//				SoftwareMap.core().register(EclemmaOverlay.this);
+//				MapView mapView = SoftwareMap.core().getMapView();
+//				IToolBarManager tbm = mapView.getToolBarManager();
+//				tbm.add(showCoverageAction);
+//				mapView.getViewSite().getActionBars().updateActionBars();
+//				tbm.markDirty();
+//			}
+//		});
+//	}
 
 }
