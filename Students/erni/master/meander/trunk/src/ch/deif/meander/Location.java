@@ -100,5 +100,9 @@ public class Location {
 	public String toString() {
 		return px + ", " + py + " elevation: " + elevation;
 	}
+
+	public void removeColor() {
+		color = null;
+	}
 	
 }
