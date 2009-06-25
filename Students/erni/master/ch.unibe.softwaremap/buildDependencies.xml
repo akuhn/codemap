@@ -21,8 +21,8 @@
 		    <fileset dir="../hitmdsj/bin"/> 
             <fileset dir="../Meander/bin"/>
 			<fileset dir="../Meander/src"/>
-            <fileset dir="../SCG util package/bin"/>
-			<fileset dir="../SCG util package/src"/>
+            <fileset dir="../ch.unibe.scg.util/bin"/>
+			<fileset dir="../ch.unibe.scg.util/src"/>
             <zipfileset src="../Hapax/lib/snowball.jar" />
 			<zipfileset src="../Hapax/lib/svdlib-r50M.jar" />
 			<zipfileset src="../Meander/lib/core.jar" />

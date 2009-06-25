@@ -116,4 +116,8 @@ public class SoftwareMap extends AbstractUIPlugin {
 	public void register(IMeanderPlugin plugin) {
 		plugins.add(plugin);
 	}
+	
+	public List<IMeanderPlugin> getPlugins() {
+		return plugins;
+	}
 }

@@ -25,7 +25,6 @@ public class LinkWithSelectionAction extends Action {
 
 	@Override
 	public void run() {
-		System.out.println(isChecked());
 	    selectionTracker.setEnabled(isChecked());
 	}
 	

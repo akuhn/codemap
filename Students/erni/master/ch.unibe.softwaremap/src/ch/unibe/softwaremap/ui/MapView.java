@@ -14,9 +14,6 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -83,10 +80,14 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	}
 	
 	private void configureToolbar() {
-	    IToolBarManager tbm = getViewSite().getActionBars().getToolBarManager();
+	    IToolBarManager tbm = getToolBarManager();
 	    tbm.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	    tbm.add(new Separator());
 	    tbm.add(new LinkWithSelectionAction(selectionTracker));
+	}
+	
+	public IToolBarManager getToolBarManager() {
+		return getViewSite().getActionBars().getToolBarManager();
 	}
 
 	protected void mapDimensionChanged(Point point) {
