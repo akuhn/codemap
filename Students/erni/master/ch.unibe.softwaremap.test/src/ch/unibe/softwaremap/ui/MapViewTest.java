@@ -38,7 +38,7 @@ import ch.deif.meander.viz.MapVisualization;
 import ch.deif.meander.viz.SelectionOverlay;
 import ch.unibe.eclipse.util.ID;
 import ch.unibe.softwaremap.BaseTest;
-import ch.unibe.softwaremap.SoftwareMap;
+import ch.unibe.softwaremap.CodemapCore;
 
 public class MapViewTest extends BaseTest {
 
@@ -156,7 +156,7 @@ public class MapViewTest extends BaseTest {
 	}
 
 	private Layers testLayersLoaded() {
-		MapVisualization visualization = mapView.softwareMap().getApplet().visualization();
+		MapVisualization visualization = mapView.softwareMap().getApplet().getVisualization();
 		assertTrue(visualization instanceof Layers);
 		Layers layers = (Layers) visualization;
 		MapVisualization mapVisualization = layers.get(SelectionOverlay.class);
