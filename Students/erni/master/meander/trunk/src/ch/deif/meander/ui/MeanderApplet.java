@@ -42,6 +42,7 @@ public class MeanderApplet extends PApplet {
 		}
 
 		public void doubleClicked(final Location location) {
+			// TODO comment WHY we use a thread here
 			if (listeners != null) new Thread() {
 				@Override
 				public void run() {
@@ -53,6 +54,7 @@ public class MeanderApplet extends PApplet {
 		}
 
 		public void selectionChanged(final Location... locations) {
+			// TODO comment WHY we use a thread here
 			if (listeners != null) new Thread() {
 				@Override
 				public void run() {
