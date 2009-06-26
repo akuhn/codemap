@@ -1,76 +1,16 @@
 <?xml version="1.0" ?>
 <project default="package" basedir=".">
 
-    <target name="package">
-      <delete file="${file.jar}"/>
-      <jar id="files" zipfile="${file.jar}" duplicate="preserve">
-        <fileset dir="bin"><patternset refid="the.patternset"/></fileset>
-        <fileset dir="src"><patternset refid="the.patternset"/></fileset>
-        <fileset dir="../ForEach DSL/bin"><patternset refid="the.patternset"/></fileset>
-        <fileset dir="../ForEach DSL/src"><patternset refid="the.patternset"/></fileset>
-        <fileset dir="../ch.akuhn.util/bin"><patternset refid="the.patternset"/></fileset>
-        <fileset dir="../ch.akuhn.util/src"><patternset refid="the.patternset"/></fileset>
-    	<zipfileset src="lib/snowball.jar">
-            <include name="org/tartarus/snowball/Among*.*"/> 
-            <include name="org/tartarus/snowball/Snowball*.*"/> 
-            <include name="org/tartarus/snowball/ext/porter*"/> 
-        </zipfileset>
-      </jar>
-      <zipfileset id="files" src="${file.jar}"/>
-      <pathconvert property="listing" refid="files" pathsep="${line.separator}">
-    	<globmapper from="${basedir}${file.separator}*" to="*"/>
-      </pathconvert>	
-      <echo message="${listing}"/>
-    </target>
-	
-    <target name="lib-package">
-      <delete file="hapax-lib.jar"/>
-      <jar id="files" zipfile="hapax-lib.jar" duplicate="preserve">
-        <fileset dir="bin"><patternset refid="the.lib-patternset"/></fileset>
-        <fileset dir="src"><patternset refid="the.lib-patternset"/></fileset>
-        <zipfileset src="lib/snowball.jar">
-            <include name="org/tartarus/snowball/Among*.*"/> 
-            <include name="org/tartarus/snowball/Snowball*.*"/> 
-            <include name="org/tartarus/snowball/ext/porter*"/> 
-        </zipfileset>
-      </jar>
-      <zipfileset id="files" src="hapax-lib.jar"/>
-      <pathconvert property="listing" refid="files" pathsep="${line.separator}">
-        <globmapper from="${basedir}${file.separator}*" to="*"/>
-      </pathconvert>    
-      <echo message="${listing}"/>
-    </target>	
-	
-    <!--from http://www.innovationontherun.com/creating-a-build-number-with-ant-and-subversion-->
-    <exec outputproperty="svnversion" executable="svnversion" dir=".">
-      <arg line="-n -c" />
-      <redirector>
-        <outputfilterchain>
-          <tokenfilter>
-            <replaceregex pattern="^[0-9]*:?" replace="" flags="g"/>
-          </tokenfilter>
-        </outputfilterchain>
-      </redirector>
-    </exec>	
-
-    <property name="file.jar" value="hapax-r${svnversion}.jar"/>
-    <property name="include.sources" value="true"/>
-    <property name="DONT-include.tests" value="off"/>
-
-    <patternset id="the.patternset">
-        <include name="COPYING*"/>
-        <include name="ch/**/*.java" if="include.sources"/>
-        <include name="ch/**/*.class"/>
-        <include name="ch/**/resources/*"/>
-        <exclude name="**/*Test*" unless="include.tests"/>                   
-    </patternset>
-	
-    <patternset id="the.lib-patternset">
-        <include name="COPYING*"/>
-        <include name="ch/**/*.java" if="include.sources"/>
-        <include name="ch/**/*.class"/>
-        <include name="ch/**/resources/*"/>          
-    </patternset>	
-	
+	<target name="package">
+        <delete file="package.jar"/>
+		<jar id="files" destfile="package.jar">
+			<fileset dir="../ch.akuhn.util/bin"/>
+			<fileset dir="../ch.akuhn.util/src"/>
+            <fileset dir="../ForEach DSL/bin"/>
+			<fileset dir="../ForEach DSL/src"/>
+            <fileset dir="../ch.unibe.scg.util/bin"/>
+			<fileset dir="../ch.unibe.scg.util/src"/>
+		</jar>
+	</target>
 	
 </project>

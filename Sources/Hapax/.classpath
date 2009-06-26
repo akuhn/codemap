@@ -7,7 +7,7 @@
 	<classpathentry kind="lib" path="lib/snowball.jar"/>
 	<classpathentry kind="lib" path="lib/chunks-r8MP.jar"/>
 	<classpathentry kind="lib" path="lib/svdlib-r50M.jar"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/ch.akuhn.util"/>
 	<classpathentry kind="lib" path="lib/jexample-r285.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.codemap.util"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
