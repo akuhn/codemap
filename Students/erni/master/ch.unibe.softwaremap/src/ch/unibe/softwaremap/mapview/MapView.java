@@ -64,6 +64,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	private Composite container;
 	private MeanderApplet theApplet;
 	private final MapController theController;
+	private int currentSize;
 
 	
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -193,10 +194,18 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	}
 
 	void updateVisualization() {
-		MapVisualization viz = CodemapCore.getPlugin().mapForChangedProject(currentProject).enableBuilder().getVisualization();
+		MapVisualization viz = CodemapCore.getPlugin()
+			.mapForChangedProject(currentProject)
+			.updateSize(getCurrentSize())
+			.enableBuilder()
+			.getVisualization();
 		if (viz == null) return;
 		updateMapVisualization(viz);
 		softwareMapUpdateSelection(selectedUnits);
+	}
+
+	private int getCurrentSize() {
+		return currentSize; 
 	}
 
 	public void updateMapVisualization(MapVisualization viz) {
@@ -291,6 +300,10 @@ public class MapView extends ViewPart implements MeanderEventListener {
 
 	public IProject getCurrentProject() {
 		return currentProject;
+	}
+
+	public void setCurrentSize(int newDimension) {
+		currentSize = newDimension;
 	}
 
 }

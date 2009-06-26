@@ -23,7 +23,7 @@ public class CodemapCore extends AbstractUIPlugin {
 	
 	private Map<IProject,MapPerProject> mapPerProjectCache;
 	private MapView theView;
-	private int currentMapDimension;
+	//private int currentMapDimension;
 	//private IProject currentProject;
 	private MeanderQueryListener queryListener;
 
@@ -65,15 +65,14 @@ public class CodemapCore extends AbstractUIPlugin {
 	}
 	
 	public MapPerProject mapForProject(IProject project) {
-		if (mapPerProjectCache == null) {
-			
+		if (queryListener == null) {
 			getPlugin().registerQueryListener(); // FIXME fix for start-up problem, see #start()
 		}
 		MapPerProject map = mapPerProjectCache.get(project);
 		if (map == null) {
 			mapPerProjectCache.put(project, map = new MapPerProject(project));
 		}
-		return map.updateSize(currentMapDimension);
+		return map;
 	}
 	
 	public MapPerProject mapForChangedProject(IProject project) {
@@ -89,8 +88,8 @@ public class CodemapCore extends AbstractUIPlugin {
 	}
 
 	public void updateMapdimension(int newDimension) {
-		currentMapDimension = newDimension;
-		MapVisualization viz = mapForChangedProject(theView.getCurrentProject()).updateSize(currentMapDimension).getVisualization();
+		theView.setCurrentSize(newDimension);
+		MapVisualization viz = mapForChangedProject(theView.getCurrentProject()).updateSize(newDimension).getVisualization();
 		if (viz != null) {
 			theView.updateMapVisualization(viz);
 		}
