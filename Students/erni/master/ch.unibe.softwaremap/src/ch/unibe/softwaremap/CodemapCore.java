@@ -8,7 +8,6 @@ import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import ch.deif.meander.viz.MapVisualization;
 import ch.unibe.softwaremap.mapview.MapView;
 import ch.unibe.softwaremap.search.MeanderQueryListener;
 
@@ -23,8 +22,6 @@ public class CodemapCore extends AbstractUIPlugin {
 	
 	private Map<IProject,MapPerProject> mapPerProjectCache;
 	private MapView theView;
-	//private int currentMapDimension;
-	//private IProject currentProject;
 	private MeanderQueryListener queryListener;
 
 	
@@ -75,28 +72,12 @@ public class CodemapCore extends AbstractUIPlugin {
 		return map;
 	}
 	
-	public MapPerProject mapForChangedProject(IProject project) {
-		return mapForProject(project);
-	}
-	
-	public void setMapView(MapView view) {
-		theView = view;
+	public void setMapView(MapView caller) {
+		theView = caller;
 	}
 
 	public MapView getMapView() {
 		return theView;
 	}
-
-	public void updateMapdimension(int newDimension) {
-		theView.setCurrentSize(newDimension);
-		MapVisualization viz = mapForChangedProject(theView.getCurrentProject()).updateSize(newDimension).getVisualization();
-		if (viz != null) {
-			theView.updateMapVisualization(viz);
-		}
-		getMapView().redrawContainer();
-	}
 	
-	public void updateMap() {
-		mapForProject(theView.getCurrentProject()).updateMap();
-	}
 }

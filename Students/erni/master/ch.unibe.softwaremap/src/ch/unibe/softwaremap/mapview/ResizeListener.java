@@ -75,7 +75,8 @@ public class ResizeListener implements ControlListener {
 		theController.onResize();
 //		System.out.println("resize the map");
 		Point size = eventsource.getSize();
-		CodemapCore.getPlugin().updateMapdimension(Math.min(size.x, size.y));
+		CodemapCore r = CodemapCore.getPlugin();
+		r.getMapView().updateMapdimension(r, Math.min(size.x, size.y));
 	}
 
 	@Override

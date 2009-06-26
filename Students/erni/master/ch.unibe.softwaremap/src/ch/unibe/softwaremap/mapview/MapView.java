@@ -173,7 +173,8 @@ public class MapView extends ViewPart implements MeanderEventListener {
 
 	protected void mapDimensionChanged(Point point) {
 		int newDimension = Math.min(point.x, point.y);
-		CodemapCore.getPlugin().updateMapdimension(newDimension);
+		CodemapCore r = CodemapCore.getPlugin();
+		r.getMapView().updateMapdimension(r, newDimension);
 	}	
 
 	/**
@@ -194,8 +195,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	}
 
 	void updateVisualization() {
-		MapVisualization viz = CodemapCore.getPlugin()
-			.mapForChangedProject(currentProject)
+		MapVisualization viz = CodemapCore.getPlugin().mapForProject(currentProject)
 			.updateSize(getCurrentSize())
 			.enableBuilder()
 			.getVisualization();
@@ -304,6 +304,19 @@ public class MapView extends ViewPart implements MeanderEventListener {
 
 	public void setCurrentSize(int newDimension) {
 		currentSize = newDimension;
+	}
+
+	public void updateMapdimension(CodemapCore codemapCore, int newDimension) {
+		setCurrentSize(newDimension);
+		MapVisualization viz = codemapCore.mapForProject(getCurrentProject()).updateSize(newDimension).getVisualization();
+		if (viz != null) {
+			updateMapVisualization(viz);
+		}
+		redrawContainer();
+	}
+
+	public void updateMap(CodemapCore codemapCore) {
+		codemapCore.mapForProject(getCurrentProject()).updateMap();
 	}
 
 }
