@@ -1,5 +1,7 @@
 package ch.unibe.softwaremap.mapview;
 
+import org.eclipse.swt.graphics.Point;
+
 import ch.unibe.softwaremap.CodemapCore;
 
 public class MapController {
@@ -14,8 +16,9 @@ public class MapController {
 		this.plugin = CodemapCore.getPlugin();
 	}
 
-	public void onResize() {
-		System.out.println("-- resize@" + serial++);
+	public void onResize(Point dimension) {		
+		int size =  Math.min(dimension.x, dimension.y);
+		view.updateMapdimension(size);
 	}
 	
 	public void onOpenView() {

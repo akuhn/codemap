@@ -134,7 +134,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		}
 	}
 	
-	void showMap() {
+	private void showMap() {
 		clearContainer();
 		
 		bridge = new EclipseProcessingBridge(container, theApplet);
@@ -171,12 +171,6 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		return getViewSite().getActionBars().getToolBarManager();
 	}
 
-	protected void mapDimensionChanged(Point point) {
-		int newDimension = Math.min(point.x, point.y);
-		CodemapCore r = CodemapCore.getPlugin();
-		r.getMapView().updateMapdimension(r, newDimension);
-	}	
-
 	/**
 	 * Sent when view is closed.
 	 * 
@@ -194,7 +188,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		map.setFocus();
 	}
 
-	void updateVisualization() {
+	private void updateVisualization() {
 		MapVisualization viz = CodemapCore.getPlugin().mapForProject(currentProject)
 			.updateSize(getCurrentSize())
 			.enableBuilder()
@@ -289,7 +283,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		return bridge;
 	}
 
-	void compilationUnitsSelected(IJavaProject javaProject, Collection<ICompilationUnit> units) {
+	public void compilationUnitsSelected(IJavaProject javaProject, Collection<ICompilationUnit> units) {
 		IProject project0 = EclipseUtil.adapt(javaProject, IProject.class);
 		if (project0 != currentProject) selectionTracker.theController.onProjectChanged();
 		currentProject = project0;
@@ -306,9 +300,9 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		currentSize = newDimension;
 	}
 
-	public void updateMapdimension(CodemapCore codemapCore, int newDimension) {
+	public void updateMapdimension(int newDimension) {
 		setCurrentSize(newDimension);
-		MapVisualization viz = codemapCore.mapForProject(getCurrentProject()).updateSize(newDimension).getVisualization();
+		MapVisualization viz = CodemapCore.getPlugin().mapForProject(getCurrentProject()).updateSize(newDimension).getVisualization();
 		if (viz != null) {
 			updateMapVisualization(viz);
 		}

@@ -28,8 +28,8 @@ import org.eclipse.jface.viewers.StructuredSelection;
  */
 public class MapSelectionProvider implements ISelectionProvider {
 
-	List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
-	ISelection theSelection = StructuredSelection.EMPTY;
+	private List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
+	private ISelection selection = StructuredSelection.EMPTY;
 	private MapView view;
 
 	public MapSelectionProvider(MapView mapView) {
@@ -42,7 +42,7 @@ public class MapSelectionProvider implements ISelectionProvider {
 	}
 
 	public ISelection getSelection() {
-		return theSelection;
+		return selection;
 	}
 
 	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
@@ -50,7 +50,7 @@ public class MapSelectionProvider implements ISelectionProvider {
 	}
 
 	public void setSelection(ISelection selection) {
-		theSelection = selection;
+		this.selection = selection;
 		final SelectionChangedEvent e = new SelectionChangedEvent(this, selection);
 		for (final ISelectionChangedListener each: listeners) {
 			SafeRunner.run(new SafeRunnable() {
