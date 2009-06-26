@@ -60,6 +60,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	private SelectionTracker selectionTracker;
 	private Composite container;
 	private MeanderApplet theApplet;
+	private final MapController theController;
 
 	
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
@@ -78,6 +79,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	}
 
 	public MapView() {
+		theController = new MapController(this);
 	}
 
 	@Override
@@ -134,7 +136,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		softwareMap().getApplet().addListener(this);
 		
 		CodemapCore.getPlugin().setMapView(this);
-		new ResizeListener(container, softwareMap());
+		new ResizeListener(container, softwareMap(), theController);
 		redrawContainer();
 	}
 

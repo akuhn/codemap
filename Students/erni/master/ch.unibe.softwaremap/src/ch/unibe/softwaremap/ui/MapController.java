@@ -4,6 +4,8 @@ import ch.unibe.softwaremap.CodemapCore;
 
 public class MapController {
 
+	private static int serial = 0;
+	
 	private MapView view;
 	private CodemapCore plugin;
 	
@@ -13,6 +15,7 @@ public class MapController {
 	}
 
 	public void onResize() {
+		System.out.println("-- resize@" + serial++);
 	}
 	
 	public void onOpenView() {

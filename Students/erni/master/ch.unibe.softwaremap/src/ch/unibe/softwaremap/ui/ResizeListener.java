@@ -18,11 +18,12 @@ public class ResizeListener implements ControlListener {
 	private EclipseProcessingBridge target;
 	private boolean mouseDown;
 	private boolean resized;
+	private MapController theController;
 
-	public ResizeListener(Composite eventsource, EclipseProcessingBridge softwareMap) {
+	public ResizeListener(Composite eventsource, EclipseProcessingBridge softwareMap, MapController theController) {
 		this.eventsource = eventsource;
 		this.target = softwareMap;
-		
+		this.theController = theController;
 		setupListeners();
 	}
 
@@ -73,6 +74,7 @@ public class ResizeListener implements ControlListener {
 	}
 
 	private void processResize() {
+		theController.onResize();
 //		System.out.println("resize the map");
 		Point size = target.getSize();
 		CodemapCore.getPlugin().updateMapdimension(Math.min(size.x, size.y));
