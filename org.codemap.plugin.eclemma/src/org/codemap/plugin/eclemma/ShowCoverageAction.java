@@ -3,7 +3,7 @@ package org.codemap.plugin.eclemma;
 import org.eclipse.jface.action.Action;
 
 import ch.unibe.softwaremap.CodemapCore;
-import ch.unibe.softwaremap.ui.ICodeMapPluginAction;
+import ch.unibe.softwaremap.mapview.ICodeMapPluginAction;
 
 public class ShowCoverageAction implements ICodeMapPluginAction {
 	
