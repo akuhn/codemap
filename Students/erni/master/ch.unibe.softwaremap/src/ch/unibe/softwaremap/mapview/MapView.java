@@ -137,7 +137,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		softwareMap().getApplet().addListener(this);
 		
 		CodemapCore.getPlugin().setMapView(this);
-		new ResizeListener(container, softwareMap(), theController);
+		new ResizeListener(container, theController);
 		redrawContainer();
 		theController.onShowMap();
 	}
