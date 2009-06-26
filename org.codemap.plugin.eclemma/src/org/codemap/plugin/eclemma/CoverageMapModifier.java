@@ -8,7 +8,7 @@ import ch.deif.meander.Colors;
 import ch.deif.meander.Location;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapModifier;
-import ch.unibe.softwaremap.ProjectMap;
+import ch.unibe.softwaremap.MapPerProject;
 
 public class CoverageMapModifier implements MapModifier {
 	
@@ -52,7 +52,7 @@ public class CoverageMapModifier implements MapModifier {
 		}	
 	}
 
-	public void addTo(ProjectMap map) {
+	public void addTo(MapPerProject map) {
 		map.addModifier(this);
 	}
 
