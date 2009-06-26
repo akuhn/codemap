@@ -92,10 +92,11 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		theApplet = EclipseProcessingBridge.createApplet();
 
 		selectionProvider = new MapSelectionProvider(this);
-		selectionTracker = new SelectionTracker(this);
+		selectionTracker = new SelectionTracker(this, theController);
 		configureToolbar();
 		
 		showMap();
+		theController.onOpenView();
 	}
 
 	private void showButton() {
@@ -138,6 +139,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		CodemapCore.getPlugin().setMapView(this);
 		new ResizeListener(container, softwareMap(), theController);
 		redrawContainer();
+		theController.onShowMap();
 	}
 
 	private void configureToolbar() {

@@ -55,7 +55,9 @@ public class SelectionTracker {
 		public void partVisible(IWorkbenchPartReference partRef) {}
 		
 		@Override
-		public void partOpened(IWorkbenchPartReference partRef) {}
+		public void partOpened(IWorkbenchPartReference partRef) {
+			theController.onEditorOpened();
+		}
 		
 		
 		@Override
@@ -65,7 +67,9 @@ public class SelectionTracker {
 		public void partDeactivated(IWorkbenchPartReference partRef) {}
 		
 		@Override
-		public void partClosed(IWorkbenchPartReference partRef) {}
+		public void partClosed(IWorkbenchPartReference partRef) {
+			theController.onEditorClosed();
+		}
 		
 		@Override
 		public void partBroughtToTop(IWorkbenchPartReference partRef) {}
@@ -78,6 +82,7 @@ public class SelectionTracker {
 
 		@Override
 		public void partActivated(IWorkbenchPartReference partRef) {
+			theController.onEditorActivated();
 //			System.out.println("part activated " + partRef);
 		}
 		
@@ -90,14 +95,17 @@ public class SelectionTracker {
 	};
 	
 	private MapView view;
-	private boolean enabled = false;	
+	private boolean enabled = false;
+
+	private MapController theController;	
 	
-	public SelectionTracker(MapView view) {
+	public SelectionTracker(MapView view, MapController theController) {
 		this.view = view;
+		this.theController = theController;
 		addListeners();
 	}
 
-	void editorActivated(IEditorPart editor) {
+	private void editorActivated(IEditorPart editor) {
 		IEditorInput editorInput= editor.getEditorInput();
 		if (editorInput == null)
 			return;
@@ -209,7 +217,7 @@ public class SelectionTracker {
 	 * @param selection
 	 * @throws CoreException
 	 */
-	void selectionChanged(IStructuredSelection selection) throws CoreException {
+	private void selectionChanged(IStructuredSelection selection) throws CoreException {
 		IJavaProject javaProject = null;
 		Collection<ICompilationUnit> units = new HashSet<ICompilationUnit>();
 		for (Object each: selection.toList()) {
@@ -248,8 +256,11 @@ public class SelectionTracker {
 	}
 
 	private void compilationUnitsSelected(IJavaProject javaProject, Collection<ICompilationUnit> units) {
-		view.project = EclipseUtil.adapt(javaProject, IProject.class);
+		IProject project = EclipseUtil.adapt(javaProject, IProject.class);
+		if (project != view.project) theController.onProjectChanged();
+		view.project = project;
 		view.selectedUnits = units;
+		theController.onSelectionChanged();
 		view.updateVisualization();
 	}
 

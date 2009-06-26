@@ -19,23 +19,23 @@ public class MapController {
 	}
 	
 	public void onOpenView() {
-		
+		System.out.println("-- openView@" + serial++);
 	}
 	
 	public void onShowMap() {
-		
+		System.out.println("-- showMap@" + serial++);
 	}
 	
 	public void onProjectChanged() {
-		
+		System.out.println("-- projectChanged@" + serial++);
 	}
 	
 	public void onSelectionChanged() {
-		
+		System.out.println("-- selectionChanged@" + serial++);
 	}
 	
 	public void onEditorOpened() {
-		
+
 	}
 	
 	public void onEditorClosed() {
@@ -43,7 +43,7 @@ public class MapController {
 	}
 	
 	public void onEditorActivated() {
-		
+		System.out.println("-- editorActivated@" + serial++);
 	}
 	
 }
