@@ -72,7 +72,8 @@ public class MeanderCoverageListener implements IJavaCoverageListener {
 			coverageMod.addTo(mapForProject);
 		}
 		if(! isEmptyCoverage) {
-			CodemapCore.getPlugin().updateMap();
+			CodemapCore r = CodemapCore.getPlugin();
+			r.getMapView().updateMap(r);
 		}
 			
 	}

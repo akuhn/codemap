@@ -16,7 +16,8 @@ public class ShowCoverageAction implements ICodeMapPluginAction {
 	@Override
 	public void run(Action act) {
 		action = act;
-		CodemapCore.getPlugin().updateMap();
+		CodemapCore r = CodemapCore.getPlugin();
+		r.getMapView().updateMap(r);
 	}
 
 	public boolean isChecked() {
