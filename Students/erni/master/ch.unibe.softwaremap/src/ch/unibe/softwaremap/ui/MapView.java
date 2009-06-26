@@ -93,7 +93,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	@Override
 	public void createPartControl(final Composite parent) {
 		container = new Composite(parent, SWT.NONE);
-		container.setLayout(new FillLayout(SWT.CENTER));
+		container.setLayout(new FillLayout(SWT.LEFT));
 		
 		showButton();
 		
@@ -121,9 +121,14 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		redrawContainer();
 	}
 
-	private void redrawContainer() {
-		container.layout();
-		container.redraw();
+	public void redrawContainer() {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				container.layout();
+				container.redraw();
+			}
+		});
 	}
 
 	private void clearContainer() {
@@ -190,7 +195,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		map.setFocus();
 	}
 
-	void compilationUnitsSelected() {
+	void updateVisualization() {
 		MapVisualization viz = SoftwareMap.core().mapForChangedProject(project).enableBuilder().getVisualization();
 		if (viz == null) return;
 		updateMapVisualization(viz);
@@ -199,6 +204,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 
 	public void updateMapVisualization(MapVisualization viz) {
 		softwareMap().setMapVizualization(viz);
+		redrawContainer();
 	}
 
 	private void softwareMapUpdateSelection(Collection<ICompilationUnit> units) {
@@ -222,7 +228,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 
 	public void newProjectMapAvailable(IProject project) {
 		if (!this.project.equals(project)) return;
-		this.compilationUnitsSelected();
+		this.updateVisualization();
 	}
 
 	@Override

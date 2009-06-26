@@ -250,7 +250,7 @@ public class SelectionTracker {
 	private void compilationUnitsSelected(IJavaProject javaProject, Collection<ICompilationUnit> units) {
 		view.project = EclipseUtil.adapt(javaProject, IProject.class);
 		view.selectedUnits = units;
-		view.compilationUnitsSelected();
+		view.updateVisualization();
 	}
 
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 import ch.deif.meander.viz.MapVisualization;
 
@@ -39,8 +40,17 @@ public class EclipseProcessingBridge extends Composite {
 		mapFrame.setSize(dimension.width, dimension.height);
 	}
 
-	public void setMapVizualization(MapVisualization viz) {
+	public void setMapVizualization(final MapVisualization viz) {
 		getApplet().setVisualization(viz);
+		mapFrame.setSize(viz.getWidth(), viz.getWidth());
+		Display.getDefault().asyncExec(new Runnable() {
+			
+			@Override
+			public void run() {
+				EclipseProcessingBridge.this.setSize(viz.getWidth(), viz.getWidth());
+				
+			}
+		});
 		mapFrame.repaint();
 	}
 

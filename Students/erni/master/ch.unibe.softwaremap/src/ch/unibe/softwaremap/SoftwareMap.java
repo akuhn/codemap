@@ -1,8 +1,6 @@
 package ch.unibe.softwaremap;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
@@ -105,6 +103,7 @@ public class SoftwareMap extends AbstractUIPlugin {
 		if (viz != null) {
 			mapView.updateMapVisualization(viz);
 		}
+		getMapView().redrawContainer();
 	}
 	
 	public void updateMap() {
