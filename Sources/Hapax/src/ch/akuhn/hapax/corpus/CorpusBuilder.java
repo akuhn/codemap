@@ -3,7 +3,6 @@ package ch.akuhn.hapax.corpus;
 import static ch.akuhn.util.Get.each;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -11,8 +10,6 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
-
-import com.sun.corba.se.spi.ior.MakeImmutable;
 
 import ch.akuhn.hapax.util.Ziperator;
 import ch.akuhn.hapax.util.Ziperator.Each;
