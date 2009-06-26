@@ -17,20 +17,6 @@
       [Enter License Description here.]
    </license>
 
-   <requires>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.jdt.core"/>
-      <import plugin="org.eclipse.jface.text"/>
-      <import plugin="org.eclipse.jdt.ui"/>
-      <import plugin="org.eclipse.ui.ide"/>
-      <import plugin="org.eclipse.search"/>
-      <import plugin="com.mountainminds.eclemma.core" version="1.4.1" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.jdt.core" version="3.5.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.resources" version="3.5.0" match="greaterOrEqual"/>
-   </requires>
-
    <plugin
          id="ch.unibe.softwaremap"
          download-size="0"
@@ -39,10 +25,24 @@
          unpack="false"/>
 
    <plugin
-         id="org.codemap.plugin.eclemma"
+         id="org.codemap.util"
          download-size="0"
          install-size="0"
-         version="1.0.0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ch.akuhn.hapax"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.codemap.meander"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>
