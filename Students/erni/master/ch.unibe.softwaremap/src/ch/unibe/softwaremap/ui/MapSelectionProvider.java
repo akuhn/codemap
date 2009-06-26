@@ -26,13 +26,13 @@ import org.eclipse.jface.viewers.StructuredSelection;
  * Copied from "org.eclipse.ui.internal.part" package.
  * 
  */
-public class SelectionProvider implements ISelectionProvider {
+public class MapSelectionProvider implements ISelectionProvider {
 
 	List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
 	ISelection theSelection = StructuredSelection.EMPTY;
 	private MapView view;
 
-	public SelectionProvider(MapView mapView) {
+	public MapSelectionProvider(MapView mapView) {
 		this.view = mapView;
 		view.getSite().setSelectionProvider(this);
 	}

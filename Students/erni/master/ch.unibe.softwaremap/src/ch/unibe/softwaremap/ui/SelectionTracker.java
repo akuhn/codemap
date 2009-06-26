@@ -28,7 +28,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 
 import ch.unibe.eclipse.util.EclipseUtil;
-import ch.unibe.softwaremap.Log;
+import ch.unibe.softwaremap.util.Log;
 
 public class SelectionTracker {
 	

@@ -10,16 +10,16 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
 import ch.deif.meander.ui.EclipseProcessingBridge;
-import ch.unibe.softwaremap.SoftwareMap;
+import ch.unibe.softwaremap.CodemapCore;
 
-public class ResizeUpdate implements ControlListener {
+public class ResizeListener implements ControlListener {
 	
 	private Composite eventsource;
 	private EclipseProcessingBridge target;
 	private boolean mouseDown;
 	private boolean resized;
 
-	public ResizeUpdate(Composite eventsource, EclipseProcessingBridge softwareMap) {
+	public ResizeListener(Composite eventsource, EclipseProcessingBridge softwareMap) {
 		this.eventsource = eventsource;
 		this.target = softwareMap;
 		
@@ -75,7 +75,7 @@ public class ResizeUpdate implements ControlListener {
 	private void processResize() {
 //		System.out.println("resize the map");
 		Point size = target.getSize();
-		SoftwareMap.core().updateMapdimension(Math.min(size.x, size.y));
+		CodemapCore.getPlugin().updateMapdimension(Math.min(size.x, size.y));
 	}
 
 	@Override

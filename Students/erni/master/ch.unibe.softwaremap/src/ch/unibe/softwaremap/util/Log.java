@@ -1,8 +1,10 @@
-package ch.unibe.softwaremap;
+package ch.unibe.softwaremap.util;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+
+import ch.unibe.softwaremap.CodemapCore;
 
 public class Log {
 
@@ -74,7 +76,7 @@ public class Log {
 	 * @return, the status object (not <code>null</code>).
 	 */
 	private static IStatus createStatus(int severity, int code, String message, Throwable exception) {
-		return new Status(severity, SoftwareMap.PLUGIN_ID, code, message, exception);
+		return new Status(severity, CodemapCore.PLUGIN_ID, code, message, exception);
 	}
 
 	/**
@@ -84,7 +86,7 @@ public class Log {
 	 *            , the status to log.
 	 */
 	private static void log(IStatus status) {
-		SoftwareMap.core().getLog().log(status);
+		CodemapCore.getPlugin().getLog().log(status);
 	}
 
 	public static void instantiatePluginError(Exception e, IConfigurationElement configElement, String attClass) {

@@ -1,4 +1,4 @@
-package ch.unibe.softwaremap.ui;
+package ch.unibe.softwaremap.tagcloudview;
 
 import java.awt.Dimension;
 import java.awt.Frame;

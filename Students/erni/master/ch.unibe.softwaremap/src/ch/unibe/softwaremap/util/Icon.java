@@ -1,9 +1,11 @@
-package ch.unibe.softwaremap;
+package ch.unibe.softwaremap.util;
 
 import java.net.URL;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+
+import ch.unibe.softwaremap.CodemapCore;
 
 public class Icon {
 
@@ -23,8 +25,8 @@ public class Icon {
 		return reg;
 	}
 
-	protected static SoftwareMap getActivator() {
-		return SoftwareMap.core();
+	protected static CodemapCore getActivator() {
+		return CodemapCore.getPlugin();
 	}
 
 }

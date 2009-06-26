@@ -55,23 +55,21 @@ import ch.deif.meander.ui.EclipseProcessingBridge;
 import ch.deif.meander.ui.MeanderApplet;
 import ch.deif.meander.ui.MeanderEventListener;
 import ch.deif.meander.viz.MapVisualization;
-import ch.unibe.softwaremap.Log;
-import ch.unibe.softwaremap.SoftwareMap;
+import ch.unibe.softwaremap.CodemapCore;
+import ch.unibe.softwaremap.util.Log;
 
 public class MapView extends ViewPart implements MeanderEventListener {
 
-	public static final String MAP_VIEW_ID = SoftwareMap.makeID(MapView.class);
-	
-	private EclipseProcessingBridge softwareMap;
+	public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
+	private EclipseProcessingBridge bridge;
 	IProject project;
 	Collection<ICompilationUnit> selectedUnits;
-	private SelectionProvider selectionProvider;
+	private MapSelectionProvider selectionProvider;
 	private SelectionTracker selectionTracker;
-
 	private Composite container;
+	private MeanderApplet theApplet;
 
-	private MeanderApplet applet;
-
+	
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 		public String getColumnText(Object obj, int index) {
 			return getText(obj);
@@ -97,11 +95,13 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		
 		container.layout();
 		
-		applet = EclipseProcessingBridge.createApplet();
+		theApplet = EclipseProcessingBridge.createApplet();
 
-		selectionProvider = new SelectionProvider(this);
+		selectionProvider = new MapSelectionProvider(this);
 		selectionTracker = new SelectionTracker(this);
 		configureToolbar();
+		
+		showMap();
 	}
 
 	private void showButton() {
@@ -138,11 +138,11 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	void showMap() {
 		clearContainer();
 		
-		softwareMap = new EclipseProcessingBridge(container, applet);
+		bridge = new EclipseProcessingBridge(container, theApplet);
 		softwareMap().getApplet().addListener(this);
 		
-		SoftwareMap.core().setMapView(this);
-		new ResizeUpdate(container, softwareMap());
+		CodemapCore.getPlugin().setMapView(this);
+		new ResizeListener(container, softwareMap());
 		redrawContainer();
 	}
 
@@ -152,7 +152,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	    tbm.add(new Separator());
 	    tbm.add(new LinkWithSelectionAction(selectionTracker));
 	    
-	    IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(SoftwareMap.PLUGIN_ID, "mapview");
+	    IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CodemapCore.PLUGIN_ID, "mapview");
 	    IExtension[] extensions_arr = extensionPoint.getExtensions();
 	    List<IExtension> extensions = Arrays.asList(extensions_arr);
 	    for (IExtension extension: extensions) {
@@ -173,7 +173,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 
 	protected void mapDimensionChanged(Point point) {
 		int newDimension = Math.min(point.x, point.y);
-		SoftwareMap.core().updateMapdimension(newDimension);
+		CodemapCore.getPlugin().updateMapdimension(newDimension);
 	}	
 
 	/**
@@ -182,7 +182,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	 */
 	@Override
 	public void dispose() {
-		SoftwareMap.core().setMapView(null);
+		CodemapCore.getPlugin().setMapView(null);
 		selectionTracker.dispose();
 	}
 
@@ -194,7 +194,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	}
 
 	void updateVisualization() {
-		MapVisualization viz = SoftwareMap.core().mapForChangedProject(project).enableBuilder().getVisualization();
+		MapVisualization viz = CodemapCore.getPlugin().mapForChangedProject(project).enableBuilder().getVisualization();
 		if (viz == null) return;
 		updateMapVisualization(viz);
 		softwareMapUpdateSelection(selectedUnits);
@@ -278,7 +278,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	}
 
 	public EclipseProcessingBridge softwareMap() {
-		return softwareMap;
+		return bridge;
 	}
 
 }

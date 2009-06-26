@@ -9,6 +9,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import ch.deif.meander.viz.MapVisualization;
+import ch.unibe.softwaremap.builder.ProjectMap;
 import ch.unibe.softwaremap.search.MeanderQueryListener;
 import ch.unibe.softwaremap.ui.MapView;
 
@@ -16,10 +17,10 @@ import ch.unibe.softwaremap.ui.MapView;
  * One singleton to rule them all.
  * 
  */
-public class SoftwareMap extends AbstractUIPlugin {
+public class CodemapCore extends AbstractUIPlugin {
 
-	public static final String PLUGIN_ID = SoftwareMap.class.getPackage().getName();
-	private static SoftwareMap plugin;
+	public static final String PLUGIN_ID = CodemapCore.class.getPackage().getName();
+	private static CodemapCore plugin;
 	
 	private Map<IProject,ProjectMap> hashmap;
 	// TODO is there a better way to manage the single MapView instance?
@@ -29,7 +30,7 @@ public class SoftwareMap extends AbstractUIPlugin {
 	
 	private MeanderQueryListener queryListener;
 
-	public SoftwareMap() {
+	public CodemapCore() {
 	}
 
 	@Override
@@ -58,7 +59,7 @@ public class SoftwareMap extends AbstractUIPlugin {
 		NewSearchUI.removeQueryListener(queryListener);
 	}
 
-	public static SoftwareMap core() {
+	public static CodemapCore getPlugin() {
 		return plugin;
 	}
 
@@ -69,7 +70,7 @@ public class SoftwareMap extends AbstractUIPlugin {
 	public ProjectMap mapForProject(IProject project) {
 		if (hashmap == null) {
 			// FIXME find out why we can't call that from start()
-			core().registerQueryListener();
+			getPlugin().registerQueryListener();
 			
 			hashmap = new HashMap<IProject,ProjectMap>();
 		}

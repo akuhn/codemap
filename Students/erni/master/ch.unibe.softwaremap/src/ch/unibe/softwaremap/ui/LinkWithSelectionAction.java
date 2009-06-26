@@ -2,7 +2,7 @@ package ch.unibe.softwaremap.ui;
 
 import org.eclipse.jface.action.Action;
 
-import ch.unibe.softwaremap.Icon;
+import ch.unibe.softwaremap.util.Icon;
 
 public class LinkWithSelectionAction extends Action {
 

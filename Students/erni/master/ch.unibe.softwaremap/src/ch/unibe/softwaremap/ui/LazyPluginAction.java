@@ -6,7 +6,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import ch.unibe.softwaremap.Log;
+import ch.unibe.softwaremap.util.Log;
 
 public class LazyPluginAction extends Action {
 	

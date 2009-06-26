@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Hapax Vocabulary Corpus Builder
 Bundle-SymbolicName: ch.unibe.softwaremap;singleton:=true
 Bundle-Version: 1.0.0
-Bundle-Activator: ch.unibe.softwaremap.SoftwareMap
+Bundle-Activator: ch.unibe.softwaremap.CodemapCore
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,

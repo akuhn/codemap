@@ -13,8 +13,8 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 
 import ch.akuhn.hapax.index.TermDocumentMatrix;
-import ch.unibe.softwaremap.Log;
-import ch.unibe.softwaremap.SoftwareMap;
+import ch.unibe.softwaremap.CodemapCore;
+import ch.unibe.softwaremap.util.Log;
 
 /**
  * Creates TDM in the background.
@@ -24,7 +24,7 @@ import ch.unibe.softwaremap.SoftwareMap;
  */
 public class HapaxBuilder extends IncrementalProjectBuilder {
 
-	public static final String BUILDER_ID = SoftwareMap.makeID(HapaxBuilder.class);
+	public static final String BUILDER_ID = CodemapCore.makeID(HapaxBuilder.class);
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -69,7 +69,7 @@ public class HapaxBuilder extends IncrementalProjectBuilder {
 			each.getCorrespondingResource().accept(visitor);
 		}
 		TermDocumentMatrix result = visitor.getResult();
-		SoftwareMap.core().mapForChangedProject(getProject()).putTDM(result);
+		CodemapCore.getPlugin().mapForChangedProject(getProject()).putTDM(result);
 		return defaultReturnValue();
 	}
 }

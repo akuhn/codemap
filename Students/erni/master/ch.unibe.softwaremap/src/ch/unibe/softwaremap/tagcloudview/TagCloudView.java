@@ -1,4 +1,4 @@
-package ch.unibe.softwaremap.ui;
+package ch.unibe.softwaremap.tagcloudview;
 
 import static ch.unibe.eclipse.util.ID.CONTENT_OUTLINE;
 import static ch.unibe.eclipse.util.ID.PACKAGE_EXPLORER;
@@ -23,7 +23,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import processing.core.PApplet;
 import ch.unibe.eclipse.util.EclipseUtil;
-import ch.unibe.softwaremap.SoftwareMap;
+import ch.unibe.softwaremap.CodemapCore;
 
 public class TagCloudView extends ViewPart implements ISelectionListener, ControlListener {
 
@@ -115,7 +115,7 @@ public class TagCloudView extends ViewPart implements ISelectionListener, Contro
 	private void compilationUnitsSelected(IJavaProject project, Collection<ICompilationUnit> units) {
 		System.out.println(units.size() + " in " + project.getHandleIdentifier());
 		IProject resource = EclipseUtil.adapt(project, IProject.class);
-		SoftwareMap.core().mapForChangedProject(resource).enableBuilder();
+		CodemapCore.getPlugin().mapForChangedProject(resource).enableBuilder();
 	}
 
 	private void multipleProjectSelected() {

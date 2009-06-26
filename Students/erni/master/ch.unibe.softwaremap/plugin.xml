@@ -29,14 +29,14 @@
       </view>
       <view
             category="ch.unibe.softwaremap"
-            class="ch.unibe.softwaremap.ui.SelectionView"
+            class="ch.unibe.softwaremap.tagcloudview.SelectionView"
             id="ch.unibe.softwaremap.SelectionView"
             name="Selection View"
             restorable="true">
       </view>
       <view
             category="ch.unibe.softwaremap"
-            class="ch.unibe.softwaremap.ui.TagCloudView"
+            class="ch.unibe.softwaremap.tagcloudview.TagCloudView"
             id="ch.unibe.softwaremap.TagCloudView"
             name="Word Cloud"
             restorable="true">

@@ -1,4 +1,4 @@
-package ch.unibe.softwaremap;
+package ch.unibe.softwaremap.builder;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,9 +21,9 @@ import ch.deif.meander.viz.LabelsOverlay;
 import ch.deif.meander.viz.MapVisualization;
 import ch.deif.meander.viz.SelectionOverlay;
 import ch.unibe.scg.util.Extension;
-import ch.unibe.softwaremap.builder.HapaxBuilder;
-import ch.unibe.softwaremap.builder.MapMakerBackgroundJob;
+import ch.unibe.softwaremap.CodemapCore;
 import ch.unibe.softwaremap.ui.MapView;
+import ch.unibe.softwaremap.util.Log;
 
 /**
  * Caches the map of a project.
@@ -140,7 +140,7 @@ public class ProjectMap {
 	}
 
 	private void notifyMapView() {
-		MapView mapView = SoftwareMap.core().getMapView();
+		MapView mapView = CodemapCore.getPlugin().getMapView();
 		if (mapView != null) {
 			mapView.newProjectMapAvailable(project);
 		}

@@ -1,4 +1,4 @@
-package ch.unibe.softwaremap.ui;
+package ch.unibe.softwaremap.tagcloudview;
 
 import static ch.unibe.eclipse.util.ID.PACKAGE_EXPLORER;
 
@@ -19,15 +19,15 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.ViewPart;
 
-import ch.unibe.softwaremap.Log;
-import ch.unibe.softwaremap.SoftwareMap;
+import ch.unibe.softwaremap.CodemapCore;
+import ch.unibe.softwaremap.util.Log;
 /**
  * This view simply mirrors the current selection in the workbench window. It works for both, element and text
  * selection.
  */
 public class SelectionView extends ViewPart {
 	
-	public static final String SELECTION_VIEW_ID = SoftwareMap.makeID(SelectionView.class);
+	public static final String SELECTION_VIEW_ID = CodemapCore.makeID(SelectionView.class);
 
 	private PageBook pagebook;
 	private TableViewer tableviewer;
