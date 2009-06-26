@@ -9,7 +9,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import ch.deif.meander.viz.MapVisualization;
-import ch.unibe.softwaremap.builder.ProjectMap;
 import ch.unibe.softwaremap.search.MeanderQueryListener;
 import ch.unibe.softwaremap.ui.MapView;
 
