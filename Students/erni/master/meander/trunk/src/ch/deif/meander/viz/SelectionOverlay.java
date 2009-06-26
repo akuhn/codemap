@@ -12,8 +12,8 @@ import java.util.List;
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.Map;
-import ch.deif.meander.MaxDistNearestNeighbor;
-import ch.deif.meander.NearestNeighbor;
+import ch.deif.meander.internal.MaxDistNearestNeighbor;
+import ch.deif.meander.internal.NearestNeighbor;
 
 public class SelectionOverlay extends MapVisualization {
 	

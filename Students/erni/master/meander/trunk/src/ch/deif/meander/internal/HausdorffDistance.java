@@ -1,4 +1,7 @@
-package ch.deif.meander;
+package ch.deif.meander.internal;
+
+import ch.deif.meander.Location;
+import ch.deif.meander.Map;
 
 /**
  * @see Dubuisson, M.-P., Jain, A.K., "A modified Hausdorff distance for object matching," Proceedings of the 12th IAPR

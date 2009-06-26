@@ -1,5 +1,8 @@
-package ch.deif.meander;
+package ch.deif.meander.internal;
 
+import ch.deif.meander.Location;
+import ch.deif.meander.Map;
+import ch.deif.meander.MapAlgorithm;
 import ch.deif.meander.Map.Pixel;
 
 /** Computes the nearest neighbor for each pixel

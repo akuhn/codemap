@@ -5,10 +5,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import sketchbook.LabelSketch;
-import ch.deif.meander.Colors;
 import ch.deif.meander.Location;
 import ch.deif.meander.Map;
-import ch.deif.meander.NearestNeighborAlgorithm;
+import ch.deif.meander.internal.Colors;
+import ch.deif.meander.internal.NearestNeighborAlgorithm;
 import ch.deif.meander.ui.EclipseProcessingBridge;
 import ch.deif.meander.viz.Layers;
 import ch.deif.meander.viz.SelectionOverlay;

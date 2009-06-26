@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import ch.deif.meander.Map.Pixel;
+import ch.deif.meander.internal.DEMAlgorithm;
 
 public class DEMAlgorithmTest {
 

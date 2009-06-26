@@ -1,6 +1,9 @@
-package ch.deif.meander;
+package ch.deif.meander.internal;
 
 import java.awt.Point;
+
+import ch.deif.meander.Location;
+import ch.deif.meander.Map;
 
 public class NearestNeighbor {
 

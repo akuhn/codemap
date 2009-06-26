@@ -1,4 +1,4 @@
-package ch.deif.meander;
+package ch.deif.meander.internal;
 
 public final class Colors {
 

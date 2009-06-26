@@ -9,6 +9,12 @@ import ch.akuhn.hapax.corpus.CorpusBuilder;
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
+import ch.deif.meander.internal.ContourLineAlgorithm;
+import ch.deif.meander.internal.DEMAlgorithm;
+import ch.deif.meander.internal.HillshadeAlgorithm;
+import ch.deif.meander.internal.JMDS;
+import ch.deif.meander.internal.NearestNeighborAlgorithm;
+import ch.deif.meander.internal.NormalizeElevationAlgorithm;
 import ch.deif.meander.viz.Layers;
 import ch.deif.meander.viz.MapVisualization;
 
@@ -146,6 +152,10 @@ public class Meander {
 			each.applyOn(map);
 		}
 		return this;
+	}
+
+	public Meander runNearestNeighborAlgorithm() {
+		return runAlgorithm(new NearestNeighborAlgorithm());
 	}
 
 }

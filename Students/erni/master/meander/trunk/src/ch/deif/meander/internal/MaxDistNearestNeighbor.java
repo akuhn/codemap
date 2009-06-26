@@ -1,6 +1,8 @@
-package ch.deif.meander;
+package ch.deif.meander.internal;
 
 import java.awt.Point;
+
+import ch.deif.meander.Map;
 
 public class MaxDistNearestNeighbor extends NearestNeighbor {
 

@@ -1,5 +1,7 @@
-package ch.deif.meander;
+package ch.deif.meander.internal;
 
+import ch.deif.meander.Map;
+import ch.deif.meander.MapAlgorithm;
 import ch.deif.meander.Map.Pixel;
 
 public class NormalizeElevationAlgorithm extends MapAlgorithm {

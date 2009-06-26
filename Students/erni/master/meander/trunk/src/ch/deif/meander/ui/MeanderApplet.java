@@ -179,7 +179,7 @@ public class MeanderApplet extends PApplet {
 		repaint();
 	}
 	
-	public MapVisualization visualization() {
+	public MapVisualization getVisualization() {
 		return viz;
 	}
 

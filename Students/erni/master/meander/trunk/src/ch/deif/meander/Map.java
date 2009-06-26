@@ -1,6 +1,12 @@
 package ch.deif.meander;
 
 import ch.akuhn.util.Providable;
+import ch.deif.meander.internal.Colors;
+import ch.deif.meander.internal.ContourLineAlgorithm;
+import ch.deif.meander.internal.DEMAlgorithm;
+import ch.deif.meander.internal.HillshadeAlgorithm;
+import ch.deif.meander.internal.NearestNeighborAlgorithm;
+import ch.deif.meander.internal.NormalizeElevationAlgorithm;
 import ch.deif.meander.viz.HillshadeVisualization;
 import ch.deif.meander.viz.MapVisualization;
 import ch.deif.meander.viz.SketchVisualization;

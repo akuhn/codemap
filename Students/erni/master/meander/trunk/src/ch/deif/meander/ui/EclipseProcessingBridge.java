@@ -17,8 +17,8 @@ import ch.deif.meander.viz.MapVisualization;
  */
 public class EclipseProcessingBridge extends Composite {
 
-	private Frame mapFrame;
-	private MeanderApplet applet;
+	private final Frame mapFrame;
+	private final MeanderApplet applet;
 
 	public EclipseProcessingBridge(Composite parent, MeanderApplet applet) {
 		super(parent, SWT.EMBEDDED);

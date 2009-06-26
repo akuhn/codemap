@@ -1,4 +1,8 @@
-package ch.deif.meander;
+package ch.deif.meander.internal;
+
+import ch.deif.meander.Location;
+import ch.deif.meander.Map;
+import ch.deif.meander.MapAlgorithm;
 
 /** Creates the digital elevation model of a map. A digital elevation model (DEM) is a raster of z-ordinates for each pixel. 
  *<p> 

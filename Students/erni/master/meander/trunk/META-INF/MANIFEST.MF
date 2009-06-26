@@ -10,7 +10,6 @@ Require-Bundle: org.codemap.util,
  org.eclipse.swt;bundle-version="3.5.0"
 Export-Package: ch.deif.meander,
  ch.deif.meander.ui,
- ch.deif.meander.util,
  ch.deif.meander.viz,
  processing.core
 Bundle-ClassPath: lib/core.jar,

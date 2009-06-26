@@ -1,9 +1,10 @@
-package ch.deif.meander;
+package ch.deif.meander.internal;
 
 import org.codemap.hitmds.Hitmds2;
 
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.util.As;
+import ch.deif.meander.Location;
 
 public class JMDS {
 
