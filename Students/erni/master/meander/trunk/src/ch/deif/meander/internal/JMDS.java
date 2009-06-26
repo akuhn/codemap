@@ -68,8 +68,8 @@ public class JMDS {
 		double width = maxX - minX;
 		double height = maxY - minY;
 		for (int n = 0; n < x.length; n++) {
-			x[n] = (x[n] - minX) / width * 0.5 + 0.25; // XXX
-			y[n] = (y[n] - minY) / height * 0.5 + 0.25; // XXX
+			x[n] = (x[n] - minX) / width * 0.8 + 0.1; // XXX
+			y[n] = (y[n] - minY) / height * 0.8 + 0.1; // XXX
 		}
 	}	
 	
