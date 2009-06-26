@@ -15,7 +15,7 @@ public class LazyPluginAction extends Action {
 	private static final String ATT_CLASS = "class";		
 
 	private IConfigurationElement configElement;
-	private ICodeMapPluginAction pluginAction;
+	private ICodemapPluginAction pluginAction;
 
 	public LazyPluginAction(IConfigurationElement elem) {
 		super("", AS_CHECK_BOX); // lol, we can't set the style value some other way ...
@@ -41,13 +41,13 @@ public class LazyPluginAction extends Action {
 
 	@Override
 	public void run() {
-		ICodeMapPluginAction action = getAction();
+		ICodemapPluginAction action = getAction();
 		if (action == null) return;
 		
 		action.run(this);
 	}
 
-	private ICodeMapPluginAction getAction() {
+	private ICodemapPluginAction getAction() {
 		if (pluginAction == null){
 			createPluginAction();
 		}
@@ -56,7 +56,7 @@ public class LazyPluginAction extends Action {
 
 	private void createPluginAction() {
 		try {
-			pluginAction = (ICodeMapPluginAction) configElement.createExecutableExtension(ATT_CLASS);
+			pluginAction = (ICodemapPluginAction) configElement.createExecutableExtension(ATT_CLASS);
 		} catch (Exception e) {
 			Log.instantiatePluginError(e, configElement, ATT_CLASS);
 		}

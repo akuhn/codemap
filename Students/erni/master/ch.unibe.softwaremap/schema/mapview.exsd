@@ -52,8 +52,7 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  a fully qualified name of the class that implements 
-&lt;samp&gt;ch.unibe.softwaremap.IMeanderPlugin&lt;/samp&gt;.
+                  
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn=":ch.unibe.softwaremap.ui.ICodeMapPluginAction"/>
