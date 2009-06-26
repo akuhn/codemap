@@ -32,16 +32,6 @@ public class LocationList implements Iterable<Location> {
 		return location;
 	}
 
-//	@Override
-//		public String getName() {
-//		if (document == null) return String.valueOf(name);
-//		String name = (new File(document.name()).getName());
-//		if (name.contains("{")) {
-//			name = name.substring(name.indexOf("{") + 1, name.length());
-//		}
-//		return $(name).removeSuffix(".java");
-//	}
-
 	public Location at(int index) {
 		return locations.get(index);
 	}

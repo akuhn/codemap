@@ -16,7 +16,7 @@ public class Map {
 	private float[][] DEM;
 	private double[][] hillshade;
 	private boolean[][] contours;
-	public LocationList locations;
+	private LocationList locations;
 	private Parameters parameters;
 	private Location[][] NN;
 

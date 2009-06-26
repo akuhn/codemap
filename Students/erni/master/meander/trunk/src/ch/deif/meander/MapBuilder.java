@@ -7,8 +7,6 @@ public class MapBuilder {
 
 	private Parameters params;
 	private LocationList locations;
-	private Location recentLocation;
-	private boolean useNormalization;
 
 	public MapBuilder() {
 		params = new Parameters();
@@ -21,7 +19,7 @@ public class MapBuilder {
 	}
 
 	public MapBuilder location(double x, double y, double elevation) {
-		recentLocation = locations.makeLocation(x, y, elevation);
+		locations.makeLocation(x, y, elevation);
 		return this;
 	}
 
@@ -36,17 +34,17 @@ public class MapBuilder {
 	}
 
 	public MapBuilder color(Colors red) {
-		recentLocation.setColor(red);		
+		locations.last().setColor(red);		
 		return this;
 	}
 
 	public MapBuilder document(Document document) {
-		recentLocation.setDocument(document);		
+		locations.last().setDocument(document);		
 		return this;
 	}
 
 	public MapBuilder name(String string) {
-		recentLocation.setName(string);		
+		locations.last().setName(string);		
 		return this;
 	}
 

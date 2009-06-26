@@ -29,11 +29,9 @@ public class SoftwareMap extends AbstractUIPlugin {
 	private int currentMapDimension;
 	private IProject currentProject;
 	
-	private List<IMeanderPlugin> plugins;
 	private MeanderQueryListener queryListener;
 
 	public SoftwareMap() {
-		plugins = new ArrayList<IMeanderPlugin>();
 	}
 
 	@Override
@@ -111,13 +109,5 @@ public class SoftwareMap extends AbstractUIPlugin {
 	
 	public void updateMap() {
 		mapForProject(currentProject()).updateMap();
-	}
-
-	public void register(IMeanderPlugin plugin) {
-		plugins.add(plugin);
-	}
-	
-	public List<IMeanderPlugin> getPlugins() {
-		return plugins;
 	}
 }

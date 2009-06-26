@@ -10,7 +10,7 @@ public class LinkWithSelectionAction extends Action {
 	private SelectionTracker selectionTracker;
 
 	public LinkWithSelectionAction(SelectionTracker tracker) {
-		super("Link with selection", AS_CHECK_BOX);
+		super("Link with Selection", AS_CHECK_BOX);
 		selectionTracker = tracker;
 		
 		setChecked(DEFAULT);

@@ -8,7 +8,7 @@ public class HausdorffDistance {
 
 	public double d(Location a, Map B) {
 		double min = Double.POSITIVE_INFINITY;
-		for (Location b: B.locations) {
+		for (Location b: B.locations()) {
 			double dist = (a.x() - b.x()) * (a.x() - b.x()) + (a.y() - b.y()) * (a.y() - b.y());
 			if (dist < min) min = dist;
 		}
@@ -26,7 +26,7 @@ public class HausdorffDistance {
 
 	public double d6(Map A, Map B) {
 		double sum = 0;
-		for (Location a: A.locations) {
+		for (Location a: A.locations()) {
 			// WAS do we need Kahan summation here? -- nope, we dont need, err =
 			// approx 1e-16
 			sum += d(a, B);
@@ -37,7 +37,7 @@ public class HausdorffDistance {
 	public double kahan_d6(Map A, Map B) {
 		double sum = 0;
 		double c = 0; // compensation
-		for (Location a: A.locations) {
+		for (Location a: A.locations()) {
 			double y = d(a, B) - c;
 			double t = sum + y;
 			c = (t - sum) - y;

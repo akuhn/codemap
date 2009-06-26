@@ -152,7 +152,7 @@ public class MapViewTest extends BaseTest {
 		selectJavaProject();
 		Layers layers = testLayersLoaded();
 		Map map = layers.map;
-		assertEquals(2, map.locations.count());
+		assertEquals(2, map.locationCount());
 	}
 
 	private Layers testLayersLoaded() {
