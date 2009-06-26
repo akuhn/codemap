@@ -1,4 +1,4 @@
-package ch.unibe.softwaremap.tagcloudview;
+package ch.unibe.softwaremap.util;
 
 import static ch.unibe.softwaremap.util.ID.PACKAGE_EXPLORER;
 
@@ -20,7 +20,6 @@ import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.ViewPart;
 
 import ch.unibe.softwaremap.CodemapCore;
-import ch.unibe.softwaremap.util.Log;
 /**
  * This view simply mirrors the current selection in the workbench window. It works for both, element and text
  * selection.

@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
@@ -43,19 +44,21 @@ import org.eclipse.ui.part.ISetSelectionTarget;
 import org.eclipse.ui.part.ViewPart;
 
 import ch.deif.meander.Location;
-import ch.deif.meander.ui.EclipseProcessingBridge;
 import ch.deif.meander.ui.MeanderApplet;
 import ch.deif.meander.ui.MeanderEventListener;
 import ch.deif.meander.viz.MapVisualization;
 import ch.unibe.softwaremap.CodemapCore;
+import ch.unibe.softwaremap.util.EclipseProcessingBridge;
+import ch.unibe.softwaremap.util.EclipseUtil;
 import ch.unibe.softwaremap.util.Log;
 
 public class MapView extends ViewPart implements MeanderEventListener {
 
 	public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
+	
 	private EclipseProcessingBridge bridge;
-	IProject project;
-	Collection<ICompilationUnit> selectedUnits;
+	private IProject project;
+	private Collection<ICompilationUnit> selectedUnits;
 	private MapSelectionProvider selectionProvider;
 	private SelectionTracker selectionTracker;
 	private Composite container;
@@ -275,6 +278,15 @@ public class MapView extends ViewPart implements MeanderEventListener {
 
 	public EclipseProcessingBridge softwareMap() {
 		return bridge;
+	}
+
+	void compilationUnitsSelected(IJavaProject javaProject, Collection<ICompilationUnit> units) {
+		IProject project0 = EclipseUtil.adapt(javaProject, IProject.class);
+		if (project0 != project) selectionTracker.theController.onProjectChanged();
+		project = project0;
+		selectedUnits = units;
+		selectionTracker.theController.onSelectionChanged();
+		updateVisualization();
 	}
 
 }

@@ -9,8 +9,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
-import ch.deif.meander.ui.EclipseProcessingBridge;
 import ch.unibe.softwaremap.CodemapCore;
+import ch.unibe.softwaremap.util.EclipseProcessingBridge;
 
 public class ResizeListener implements ControlListener {
 	

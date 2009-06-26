@@ -19,29 +19,27 @@ import ch.unibe.softwaremap.search.MeanderQueryListener;
 public class CodemapCore extends AbstractUIPlugin {
 
 	public static final String PLUGIN_ID = CodemapCore.class.getPackage().getName();
-	private static CodemapCore plugin;
+	private static CodemapCore THE_PLUGIN;
 	
 	private Map<IProject,MapPerProject> hashmap;
-	// TODO is there a better way to manage the single MapView instance?
-	private MapView mapView;
+	private MapView theView;
 	private int currentMapDimension;
 	private IProject currentProject;
-	
 	private MeanderQueryListener queryListener;
 
+	
 	public CodemapCore() {
 	}
 
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		plugin = this;
-		
-		// FIXME find out why this does not work that way
-//		registerQueryListener();
+		THE_PLUGIN = this;
+		// FIXME find out why this does not work at start-up!
+		// registerQueryListener();
 	}
 
-	protected void registerQueryListener() {
+	private void registerQueryListener() {
 		queryListener = new MeanderQueryListener();
 		NewSearchUI.addQueryListener(queryListener);
 	}
@@ -49,17 +47,16 @@ public class CodemapCore extends AbstractUIPlugin {
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		unregisterQueryListener();
-		
-		plugin = null;
+		THE_PLUGIN = null;
 		super.stop(context);
 	}
 
-	protected void unregisterQueryListener() {
+	private void unregisterQueryListener() {
 		NewSearchUI.removeQueryListener(queryListener);
 	}
 
 	public static CodemapCore getPlugin() {
-		return plugin;
+		return THE_PLUGIN;
 	}
 
 	public final static String makeID(Class<?> javaClass) {
@@ -68,10 +65,8 @@ public class CodemapCore extends AbstractUIPlugin {
 	
 	public MapPerProject mapForProject(IProject project) {
 		if (hashmap == null) {
-			// FIXME find out why we can't call that from start()
-			getPlugin().registerQueryListener();
-			
 			hashmap = new HashMap<IProject,MapPerProject>();
+			getPlugin().registerQueryListener(); // FIXME fix for start-up problem, see #start()
 		}
 		MapPerProject map = hashmap.get(project);
 		if (map == null) {
@@ -90,18 +85,18 @@ public class CodemapCore extends AbstractUIPlugin {
 	}
 
 	public void setMapView(MapView view) {
-		mapView = view;
+		theView = view;
 	}
 
 	public MapView getMapView() {
-		return mapView;
+		return theView;
 	}
 
 	public void updateMapdimension(int newDimension) {
 		currentMapDimension = newDimension;
 		MapVisualization viz = mapForChangedProject(currentProject()).updateSize(currentMapDimension).getVisualization();
 		if (viz != null) {
-			mapView.updateMapVisualization(viz);
+			theView.updateMapVisualization(viz);
 		}
 		getMapView().redrawContainer();
 	}

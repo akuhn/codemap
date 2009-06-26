@@ -34,16 +34,16 @@ import ch.unibe.softwaremap.util.Log;
 public class MapPerProject {
 
 	private static final int MINIMAL_SIZE = 300;
+
 	private final IProject project;
 	private TermDocumentMatrix tdm;
 	private MapVisualization mapViz;
 	private boolean mapBeingCalculated = false;
 	private boolean builderIsRunning = false;
 	private Set<MapModifier> modifiers;
-	
-	// XXX: ugly hardcoded dimension
-	int mapDimension = MINIMAL_SIZE;
+	private int mapDimension = MINIMAL_SIZE;
 
+	
 	public MapPerProject(IProject project) {
 		this.project = project;
 		modifiers = new HashSet<MapModifier>();

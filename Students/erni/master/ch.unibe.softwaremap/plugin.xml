@@ -29,16 +29,9 @@
       </view>
       <view
             category="ch.unibe.softwaremap"
-            class="ch.unibe.softwaremap.tagcloudview.SelectionView"
+            class="ch.unibe.softwaremap.util.SelectionView"
             id="ch.unibe.softwaremap.SelectionView"
             name="Selection View"
-            restorable="true">
-      </view>
-      <view
-            category="ch.unibe.softwaremap"
-            class="ch.unibe.softwaremap.tagcloudview.TagCloudView"
-            id="ch.unibe.softwaremap.TagCloudView"
-            name="Word Cloud"
             restorable="true">
       </view>
    </extension>

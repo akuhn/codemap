@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -97,7 +96,7 @@ public class SelectionTracker {
 	private MapView view;
 	private boolean enabled = false;
 
-	private MapController theController;	
+	MapController theController;	
 	
 	public SelectionTracker(MapView view, MapController theController) {
 		this.view = view;
@@ -256,12 +255,7 @@ public class SelectionTracker {
 	}
 
 	private void compilationUnitsSelected(IJavaProject javaProject, Collection<ICompilationUnit> units) {
-		IProject project = EclipseUtil.adapt(javaProject, IProject.class);
-		if (project != view.project) theController.onProjectChanged();
-		view.project = project;
-		view.selectedUnits = units;
-		theController.onSelectionChanged();
-		view.updateVisualization();
+		view.compilationUnitsSelected(javaProject, units);
 	}
 
 }
