@@ -4,6 +4,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/Meander"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="lib" path="lib/meander-kingsize.jar"/>
+	<classpathentry kind="lib" path="/Meander/lib/core.jar" sourcepath="/Meander/lib/core.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

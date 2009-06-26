@@ -11,16 +11,12 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.text,
  org.eclipse.jdt.ui,
  org.eclipse.ui.ide,
- org.eclipse.search
+ org.eclipse.search,
+ ch.akuhn.hapax;bundle-version="1.0.0",
+ org.codemap.util;bundle-version="1.0.0",
+ org.codemap.meander;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: Adrian Kuhn and David Erni
-Bundle-ClassPath: .,
- lib/meander-kingsize.jar
-Export-Package: ch.akuhn.hapax.corpus,
- ch.akuhn.util,
- ch.deif.meander,
- ch.deif.meander.ui,
- ch.deif.meander.viz,
- ch.unibe.softwaremap,
+Export-Package: ch.unibe.softwaremap,
  ch.unibe.softwaremap.ui

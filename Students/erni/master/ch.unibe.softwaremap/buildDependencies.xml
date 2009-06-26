@@ -11,20 +11,22 @@
         <unzip src="../Meander/lib/core.zip" dest="tmp"/>
 		
 		<jar id="files" destfile="${package.jar}">
+			<!--
 			<fileset dir="../ch.akuhn.util/bin"/>
 			<fileset dir="../ch.akuhn.util/src"/>
             <fileset dir="../ForEach DSL/bin"/>
 			<fileset dir="../ForEach DSL/src"/>
             <fileset dir="../Hapax/bin"/>
             <fileset dir="../Hapax/src"/> 
-			<fileset dir="../hitmdsj/src"/>
-		    <fileset dir="../hitmdsj/bin"/> 
-            <fileset dir="../Meander/bin"/>
-			<fileset dir="../Meander/src"/>
             <fileset dir="../ch.unibe.scg.util/bin"/>
 			<fileset dir="../ch.unibe.scg.util/src"/>
             <zipfileset src="../Hapax/lib/snowball.jar" />
 			<zipfileset src="../Hapax/lib/svdlib-r50M.jar" />
+			-->
+			<fileset dir="../hitmdsj/src"/>
+		    <fileset dir="../hitmdsj/bin"/> 
+            <fileset dir="../Meander/bin"/>
+			<fileset dir="../Meander/src"/>
 			<zipfileset src="../Meander/lib/core.jar" />
 			<fileset dir="tmp/src"/>
 	        <!--
