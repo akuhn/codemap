@@ -3,9 +3,9 @@ package org.codemap.plugin.eclemma;
 import org.eclipse.jface.action.Action;
 
 import ch.unibe.softwaremap.CodemapCore;
-import ch.unibe.softwaremap.mapview.ICodeMapPluginAction;
+import ch.unibe.softwaremap.mapview.ICodemapPluginAction;
 
-public class ShowCoverageAction implements ICodeMapPluginAction {
+public class ShowCoverageAction implements ICodemapPluginAction {
 	
 	private Action action;
 	
