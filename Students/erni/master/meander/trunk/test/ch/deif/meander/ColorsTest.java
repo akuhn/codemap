@@ -6,7 +6,6 @@ import java.awt.Color;
 
 import org.junit.Test;
 
-import ch.deif.meander.internal.Colors;
 
 
 public class ColorsTest {

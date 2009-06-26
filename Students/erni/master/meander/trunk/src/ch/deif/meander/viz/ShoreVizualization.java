@@ -1,9 +1,9 @@
 package ch.deif.meander.viz;
 
 import processing.core.PGraphics;
+import ch.deif.meander.Colors;
 import ch.deif.meander.Map;
 import ch.deif.meander.Map.Pixel;
-import ch.deif.meander.internal.Colors;
 
 public class ShoreVizualization extends MapVisualization {
 

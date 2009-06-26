@@ -1,7 +1,6 @@
 package ch.deif.meander;
 
 import ch.akuhn.hapax.corpus.Document;
-import ch.deif.meander.internal.Colors;
 
 
 

@@ -2,9 +2,9 @@ package sketchbook;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
+import ch.deif.meander.Colors;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
-import ch.deif.meander.internal.Colors;
 import ch.deif.meander.internal.ContourLineAlgorithm;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.internal.HillshadeAlgorithm;
