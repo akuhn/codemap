@@ -32,7 +32,7 @@ public class CoverageMapModifier implements MapModifier {
 
 	@Override
 	public void applyOn(Map map) {
-		for (Location loc: map.locations) {
+		for (Location loc: map.locations()) {
 			if ( showCoverageAction.isChecked()) {
 				String identifier = loc.document().getIdentifier();
 				for (Pair<String, Double> pair: coverageInfo) {
