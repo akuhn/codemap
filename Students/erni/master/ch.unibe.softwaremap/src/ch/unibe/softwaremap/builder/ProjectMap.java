@@ -16,7 +16,6 @@ import org.eclipse.core.runtime.jobs.Job;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.deif.meander.MapModifier;
 import ch.deif.meander.Meander;
-import ch.deif.meander.NearestNeighborAlgorithm;
 import ch.deif.meander.viz.LabelsOverlay;
 import ch.deif.meander.viz.MapVisualization;
 import ch.deif.meander.viz.SelectionOverlay;
@@ -131,7 +130,7 @@ public class ProjectMap {
 								 .useHillshading()
 								 .add(LabelsOverlay.class)
 								 .add(SelectionOverlay.class)
-								 .runAlgorithm(new NearestNeighborAlgorithm())
+								 .runNearestNeighborAlgorithm()
 								 .getVisualization();
 		notifyMapView();
 		monitor.done();
