@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Hapax Vocabulary Corpus Builder
+Bundle-Name: Codemap plugin
 Bundle-SymbolicName: ch.unibe.softwaremap;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: ch.unibe.softwaremap.CodemapCore

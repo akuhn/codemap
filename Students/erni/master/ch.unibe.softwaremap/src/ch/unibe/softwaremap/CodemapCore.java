@@ -12,8 +12,13 @@ import ch.unibe.softwaremap.mapview.MapView;
 import ch.unibe.softwaremap.search.MeanderQueryListener;
 
 /**
- * One singleton to rule them all.
- * 
+ * Single instance of the running Codemap plug-in.
+ *<P>
+ * Keeps a cache of MapPerProject instances, a pointer to the open MapView (if
+ * any) and listens to Eclipse search queries. Do not use this class to store
+ * any other information. Either use the view (for UI related state) or the map
+ * instances (for project specific state).
+ *   
  */
 public class CodemapCore extends AbstractUIPlugin {
 

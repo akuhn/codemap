@@ -26,9 +26,8 @@ import ch.unibe.softwaremap.mapview.MapView;
 import ch.unibe.softwaremap.util.Log;
 
 /**
- * Caches the map of a project.
- * 
- * @author Adrian Kuhn
+ * Holds corpus, map and visualization of a project. 
+ * Use this class to store project specific information.
  * 
  */
 public class MapPerProject {

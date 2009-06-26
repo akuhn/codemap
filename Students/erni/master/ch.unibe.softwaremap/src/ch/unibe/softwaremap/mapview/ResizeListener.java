@@ -3,14 +3,10 @@ package ch.unibe.softwaremap.mapview;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.ControlListener;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-
-import ch.unibe.softwaremap.CodemapCore;
-import ch.unibe.softwaremap.util.EclipseProcessingBridge;
 
 public class ResizeListener implements ControlListener {
 	
