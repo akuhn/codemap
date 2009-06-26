@@ -1,6 +1,6 @@
 package ch.unibe.softwaremap.tagcloudview;
 
-import static ch.unibe.eclipse.util.ID.PACKAGE_EXPLORER;
+import static ch.unibe.softwaremap.util.ID.PACKAGE_EXPLORER;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;

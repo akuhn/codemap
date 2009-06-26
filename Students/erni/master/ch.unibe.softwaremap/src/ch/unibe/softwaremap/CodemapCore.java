@@ -9,8 +9,8 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import ch.deif.meander.viz.MapVisualization;
+import ch.unibe.softwaremap.mapview.MapView;
 import ch.unibe.softwaremap.search.MeanderQueryListener;
-import ch.unibe.softwaremap.ui.MapView;
 
 /**
  * One singleton to rule them all.

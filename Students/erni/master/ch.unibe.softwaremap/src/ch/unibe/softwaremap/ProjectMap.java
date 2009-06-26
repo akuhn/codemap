@@ -22,7 +22,7 @@ import ch.deif.meander.viz.SelectionOverlay;
 import ch.unibe.scg.util.Extension;
 import ch.unibe.softwaremap.builder.HapaxBuilder;
 import ch.unibe.softwaremap.builder.MapMakerBackgroundJob;
-import ch.unibe.softwaremap.ui.MapView;
+import ch.unibe.softwaremap.mapview.MapView;
 import ch.unibe.softwaremap.util.Log;
 
 /**

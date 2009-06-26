@@ -1,4 +1,4 @@
-package ch.unibe.eclipse.util;
+package ch.unibe.softwaremap.util;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.ICompilationUnit;

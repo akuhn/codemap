@@ -1,4 +1,4 @@
-package ch.unibe.softwaremap.ui;
+package ch.unibe.softwaremap.mapview;
 
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;

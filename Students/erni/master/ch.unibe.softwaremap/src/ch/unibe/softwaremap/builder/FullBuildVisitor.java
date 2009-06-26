@@ -14,7 +14,7 @@ import org.eclipse.jdt.core.JavaModelException;
 
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
-import ch.unibe.eclipse.util.EclipseUtil;
+import ch.unibe.softwaremap.util.EclipseUtil;
 
 /**
  * Creates TDM from all ICompilationUnit resources in an IProject.

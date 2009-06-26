@@ -1,4 +1,4 @@
-package ch.unibe.eclipse.util;
+package ch.unibe.softwaremap.util;
 
 public enum ID {
 	

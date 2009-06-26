@@ -1,8 +1,8 @@
 package ch.unibe.softwaremap.tagcloudview;
 
-import static ch.unibe.eclipse.util.ID.CONTENT_OUTLINE;
-import static ch.unibe.eclipse.util.ID.PACKAGE_EXPLORER;
-import static ch.unibe.eclipse.util.ID.RESOURCE_NAVIGATOR;
+import static ch.unibe.softwaremap.util.ID.CONTENT_OUTLINE;
+import static ch.unibe.softwaremap.util.ID.PACKAGE_EXPLORER;
+import static ch.unibe.softwaremap.util.ID.RESOURCE_NAVIGATOR;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -22,8 +22,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
 import processing.core.PApplet;
-import ch.unibe.eclipse.util.EclipseUtil;
 import ch.unibe.softwaremap.CodemapCore;
+import ch.unibe.softwaremap.util.EclipseUtil;
 
 public class TagCloudView extends ViewPart implements ISelectionListener, ControlListener {
 

@@ -1,4 +1,4 @@
-package ch.unibe.softwaremap.ui;
+package ch.unibe.softwaremap.mapview;
 
 import ch.unibe.softwaremap.CodemapCore;
 

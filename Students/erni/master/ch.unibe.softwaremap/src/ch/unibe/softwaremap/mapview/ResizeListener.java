@@ -1,4 +1,4 @@
-package ch.unibe.softwaremap.ui;
+package ch.unibe.softwaremap.mapview;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;

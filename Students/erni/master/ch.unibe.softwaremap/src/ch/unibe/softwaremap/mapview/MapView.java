@@ -1,6 +1,6 @@
-package ch.unibe.softwaremap.ui;
+package ch.unibe.softwaremap.mapview;
 
-import static ch.unibe.eclipse.util.ID.PACKAGE_EXPLORER;
+import static ch.unibe.softwaremap.util.ID.PACKAGE_EXPLORER;
 
 import java.util.ArrayList;
 import java.util.Arrays;
