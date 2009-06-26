@@ -1,6 +1,6 @@
 package ch.unibe.softwaremap.ui;
 
-import static ch.unibe.softwaremap.ui.MapView.MAP_VIEW_ID;
+import static ch.unibe.softwaremap.mapview.MapView.MAP_VIEW_ID;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotNull;
 
@@ -36,9 +36,10 @@ import ch.deif.meander.Map;
 import ch.deif.meander.viz.Layers;
 import ch.deif.meander.viz.MapVisualization;
 import ch.deif.meander.viz.SelectionOverlay;
-import ch.unibe.eclipse.util.ID;
 import ch.unibe.softwaremap.BaseTest;
 import ch.unibe.softwaremap.CodemapCore;
+import ch.unibe.softwaremap.mapview.MapView;
+import ch.unibe.softwaremap.util.ID;
 
 public class MapViewTest extends BaseTest {
 
