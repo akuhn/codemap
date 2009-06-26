@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="lib/hitmds2-r000.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/SWT &amp; JFace"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/core.jar" sourcepath="lib/core.zip"/>
-	<classpathentry kind="lib" path="lib/itext.jar"/>
-	<classpathentry kind="lib" path="lib/pdf.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/itext.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/pdf.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ch.akuhn.util"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Hapax"/>
-	<classpathentry kind="lib" path="lib/jexample-4.4-r281.jar"/>
-	<classpathentry kind="src" path="/hitmdsj"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ch.unibe.scg.util"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
