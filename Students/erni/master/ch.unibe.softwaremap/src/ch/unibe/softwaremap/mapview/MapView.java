@@ -57,7 +57,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
 	
 	private EclipseProcessingBridge bridge;
-	private IProject project;
+	private IProject currentProject;
 	private Collection<ICompilationUnit> selectedUnits;
 	private MapSelectionProvider selectionProvider;
 	private SelectionTracker selectionTracker;
@@ -193,7 +193,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	}
 
 	void updateVisualization() {
-		MapVisualization viz = CodemapCore.getPlugin().mapForChangedProject(project).enableBuilder().getVisualization();
+		MapVisualization viz = CodemapCore.getPlugin().mapForChangedProject(currentProject).enableBuilder().getVisualization();
 		if (viz == null) return;
 		updateMapVisualization(viz);
 		softwareMapUpdateSelection(selectedUnits);
@@ -224,7 +224,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	}
 
 	public void newProjectMapAvailable(IProject project) {
-		if (!this.project.equals(project)) return;
+		if (!this.currentProject.equals(project)) return;
 		this.updateVisualization();
 	}
 
@@ -282,11 +282,15 @@ public class MapView extends ViewPart implements MeanderEventListener {
 
 	void compilationUnitsSelected(IJavaProject javaProject, Collection<ICompilationUnit> units) {
 		IProject project0 = EclipseUtil.adapt(javaProject, IProject.class);
-		if (project0 != project) selectionTracker.theController.onProjectChanged();
-		project = project0;
+		if (project0 != currentProject) selectionTracker.theController.onProjectChanged();
+		currentProject = project0;
 		selectedUnits = units;
 		selectionTracker.theController.onSelectionChanged();
 		updateVisualization();
+	}
+
+	public IProject getCurrentProject() {
+		return currentProject;
 	}
 
 }

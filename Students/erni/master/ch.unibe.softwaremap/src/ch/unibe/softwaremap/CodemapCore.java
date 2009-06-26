@@ -21,14 +21,15 @@ public class CodemapCore extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = CodemapCore.class.getPackage().getName();
 	private static CodemapCore THE_PLUGIN;
 	
-	private Map<IProject,MapPerProject> hashmap;
+	private Map<IProject,MapPerProject> mapPerProjectCache;
 	private MapView theView;
 	private int currentMapDimension;
-	private IProject currentProject;
+	//private IProject currentProject;
 	private MeanderQueryListener queryListener;
 
 	
 	public CodemapCore() {
+		mapPerProjectCache = new HashMap<IProject,MapPerProject>();
 	}
 
 	@Override
@@ -64,26 +65,21 @@ public class CodemapCore extends AbstractUIPlugin {
 	}
 	
 	public MapPerProject mapForProject(IProject project) {
-		if (hashmap == null) {
-			hashmap = new HashMap<IProject,MapPerProject>();
+		if (mapPerProjectCache == null) {
+			
 			getPlugin().registerQueryListener(); // FIXME fix for start-up problem, see #start()
 		}
-		MapPerProject map = hashmap.get(project);
+		MapPerProject map = mapPerProjectCache.get(project);
 		if (map == null) {
-			hashmap.put(project, map = new MapPerProject(project));
+			mapPerProjectCache.put(project, map = new MapPerProject(project));
 		}
 		return map.updateSize(currentMapDimension);
 	}
 	
 	public MapPerProject mapForChangedProject(IProject project) {
-		currentProject = project;
 		return mapForProject(project);
 	}
 	
-	public IProject currentProject() {
-		return currentProject;
-	}
-
 	public void setMapView(MapView view) {
 		theView = view;
 	}
@@ -94,7 +90,7 @@ public class CodemapCore extends AbstractUIPlugin {
 
 	public void updateMapdimension(int newDimension) {
 		currentMapDimension = newDimension;
-		MapVisualization viz = mapForChangedProject(currentProject()).updateSize(currentMapDimension).getVisualization();
+		MapVisualization viz = mapForChangedProject(theView.getCurrentProject()).updateSize(currentMapDimension).getVisualization();
 		if (viz != null) {
 			theView.updateMapVisualization(viz);
 		}
@@ -102,6 +98,6 @@ public class CodemapCore extends AbstractUIPlugin {
 	}
 	
 	public void updateMap() {
-		mapForProject(currentProject()).updateMap();
+		mapForProject(theView.getCurrentProject()).updateMap();
 	}
 }
