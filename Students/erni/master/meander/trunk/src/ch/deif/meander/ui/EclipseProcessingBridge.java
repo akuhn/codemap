@@ -19,13 +19,18 @@ public class EclipseProcessingBridge extends Composite {
 	private Frame mapFrame;
 	private MeanderApplet applet;
 
-	public EclipseProcessingBridge(Composite parent) {
+	public EclipseProcessingBridge(Composite parent, MeanderApplet applet) {
 		super(parent, SWT.EMBEDDED);
 		mapFrame = SWT_AWT.new_Frame(this);
 		mapFrame.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-		applet = new MeanderApplet();
-		getApplet().init();
+		this.applet = applet;
 		mapFrame.add(getApplet());
+	}
+
+	public static MeanderApplet createApplet() {
+		MeanderApplet meanderApplet = new MeanderApplet();
+		meanderApplet.init();
+		return meanderApplet;
 	}
 
 	public void setMaximumSize(Dimension dimension) {

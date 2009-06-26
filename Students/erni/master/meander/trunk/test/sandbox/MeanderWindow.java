@@ -29,7 +29,7 @@ public class MeanderWindow {
 	}
 	
 	private static void createMeander(Shell shell) {
-		bridge = new EclipseProcessingBridge(shell);
+		bridge = new EclipseProcessingBridge(shell, EclipseProcessingBridge.createApplet());
 		Layers layers = LabelSketch.createLabeledSketch();
 		new NearestNeighborAlgorithm(layers.map).run();
 		layers.add(SelectionOverlay.class);

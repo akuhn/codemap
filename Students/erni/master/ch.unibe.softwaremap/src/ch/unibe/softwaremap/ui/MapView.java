@@ -27,10 +27,17 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.HelpListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.ISharedImages;
@@ -45,6 +52,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import ch.deif.meander.Location;
 import ch.deif.meander.ui.EclipseProcessingBridge;
+import ch.deif.meander.ui.MeanderApplet;
 import ch.deif.meander.ui.MeanderEventListener;
 import ch.deif.meander.viz.MapVisualization;
 import ch.unibe.softwaremap.Log;
@@ -59,6 +67,10 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	Collection<ICompilationUnit> selectedUnits;
 	private SelectionProvider selectionProvider;
 	private SelectionTracker selectionTracker;
+
+	private Composite container;
+
+	private MeanderApplet applet;
 
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 		public String getColumnText(Object obj, int index) {
@@ -80,17 +92,57 @@ public class MapView extends ViewPart implements MeanderEventListener {
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		softwareMap = new EclipseProcessingBridge(parent);
+		container = new Composite(parent, SWT.NONE);
+		container.setLayout(new FillLayout(SWT.CENTER));
+		
+		showButton();
+		
+		container.layout();
+		
+		applet = EclipseProcessingBridge.createApplet();
+
+		selectionProvider = new SelectionProvider(this);
+		selectionTracker = new SelectionTracker(this);
+		configureToolbar();
+	}
+
+	private void showButton() {
+		clearContainer();
+		
+		Button button = new Button(container, SWT.PUSH);
+		button.setText("generate Map");
+		button.addSelectionListener(new SelectionAdapter() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				MapView.this.showMap();
+			}
+		});
+		redrawContainer();
+	}
+
+	private void redrawContainer() {
+		container.layout();
+		container.redraw();
+	}
+
+	private void clearContainer() {
+		for(Control each: container.getChildren()) {
+			each.dispose();
+		}
+	}
+	
+	void showMap() {
+		clearContainer();
+		
+		softwareMap = new EclipseProcessingBridge(container, applet);
 		softwareMap().getApplet().addListener(this);
 		
 		SoftwareMap.core().setMapView(this);
-		new ResizeUpdate(parent, softwareMap());
-		
-		selectionProvider = new SelectionProvider(this);
-		selectionTracker = new SelectionTracker(this);
-		configureToolbar();	
+		new ResizeUpdate(container, softwareMap());
+		redrawContainer();
 	}
-	
+
 	private void configureToolbar() {
 	    IToolBarManager tbm = getToolBarManager();
 	    tbm.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
@@ -133,7 +185,9 @@ public class MapView extends ViewPart implements MeanderEventListener {
 
 	@Override
 	public void setFocus() {
-		softwareMap().setFocus();
+		EclipseProcessingBridge map = softwareMap();
+		if (map == null) return;
+		map.setFocus();
 	}
 
 	void compilationUnitsSelected() {
