@@ -95,8 +95,6 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		container = new Composite(parent, SWT.NONE);
 		container.setLayout(new FillLayout(SWT.LEFT));
 		
-		showButton();
-		
 		container.layout();
 		
 		applet = EclipseProcessingBridge.createApplet();
