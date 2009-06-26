@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Codemap utilities
+Bundle-SymbolicName: org.codemap.util
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Adrian Kuhn et al
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: package.jar,
+ .
+Export-Package: ch.akuhn.util,
+ ch.akuhn.util.query,
+ ch.unibe.scg.util
