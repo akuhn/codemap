@@ -2,7 +2,7 @@ package org.codemap.plugin.eclemma;
 
 import org.eclipse.jface.action.Action;
 
-import ch.unibe.softwaremap.SoftwareMap;
+import ch.unibe.softwaremap.CodemapCore;
 import ch.unibe.softwaremap.ui.ICodeMapPluginAction;
 
 public class ShowCoverageAction implements ICodeMapPluginAction {
@@ -16,7 +16,7 @@ public class ShowCoverageAction implements ICodeMapPluginAction {
 	@Override
 	public void run(Action act) {
 		action = act;
-		SoftwareMap.core().updateMap();
+		CodemapCore.getPlugin().updateMap();
 	}
 
 	public boolean isChecked() {
