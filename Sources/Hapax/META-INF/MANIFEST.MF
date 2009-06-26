@@ -13,6 +13,7 @@ Export-Package: ch.akuhn.hapax,
  ch.akuhn.hapax.resources,
  ch.akuhn.hapax.util
 Require-Bundle: org.codemap.util
-Bundle-ClassPath: lib/snowball.jar,
+Bundle-ClassPath: .,
+ lib/snowball.jar,
  lib/svdlib-r50M.jar,
- .
+ lib/chunks-r8MP.jar
