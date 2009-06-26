@@ -31,8 +31,9 @@ import ch.unibe.softwaremap.util.Log;
  * @author Adrian Kuhn
  * 
  */
-public class ProjectMap {
+public class MapPerProject {
 
+	private static final int MINIMAL_SIZE = 300;
 	private final IProject project;
 	private TermDocumentMatrix tdm;
 	private MapVisualization mapViz;
@@ -41,14 +42,14 @@ public class ProjectMap {
 	private Set<MapModifier> modifiers;
 	
 	// XXX: ugly hardcoded dimension
-	int mapDimension = 250;
+	int mapDimension = MINIMAL_SIZE;
 
-	public ProjectMap(IProject project) {
+	public MapPerProject(IProject project) {
 		this.project = project;
 		modifiers = new HashSet<MapModifier>();
 	}
 
-	public ProjectMap enableBuilder() {
+	public MapPerProject enableBuilder() {
 		try {
 			addBuilderToProjectDescriptionCommands();
 			if (tdm == null) {
@@ -102,7 +103,7 @@ public class ProjectMap {
 	}
 
 	private void startBackgroundTask() {
-		new MapMakerBackgroundJob(ProjectMap.this).schedule();
+		new MapMakerBackgroundJob(MapPerProject.this).schedule();
 	}
 
 	public MapVisualization getVisualization() {
@@ -146,12 +147,12 @@ public class ProjectMap {
 		}
 	}
 
-	public ProjectMap updateSize(int newMapDimension) {
+	public MapPerProject updateSize(int newMapDimension) {
 //		if (project != null) {
 //			System.out.println("adapting map of " + project.getName() + " to dimension " + newMapDimension);
 //		}
 		// XXX: ugly hardcoded map-size
-		this.mapDimension = Math.max(newMapDimension, 512);
+		this.mapDimension = Math.max(newMapDimension, MINIMAL_SIZE);
 		return this;
 	}
 

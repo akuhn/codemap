@@ -21,7 +21,7 @@ public class CodemapCore extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = CodemapCore.class.getPackage().getName();
 	private static CodemapCore plugin;
 	
-	private Map<IProject,ProjectMap> hashmap;
+	private Map<IProject,MapPerProject> hashmap;
 	// TODO is there a better way to manage the single MapView instance?
 	private MapView mapView;
 	private int currentMapDimension;
@@ -66,21 +66,21 @@ public class CodemapCore extends AbstractUIPlugin {
 		return PLUGIN_ID + "." + javaClass.getSimpleName();
 	}
 	
-	public ProjectMap mapForProject(IProject project) {
+	public MapPerProject mapForProject(IProject project) {
 		if (hashmap == null) {
 			// FIXME find out why we can't call that from start()
 			getPlugin().registerQueryListener();
 			
-			hashmap = new HashMap<IProject,ProjectMap>();
+			hashmap = new HashMap<IProject,MapPerProject>();
 		}
-		ProjectMap map = hashmap.get(project);
+		MapPerProject map = hashmap.get(project);
 		if (map == null) {
-			hashmap.put(project, map = new ProjectMap(project));
+			hashmap.put(project, map = new MapPerProject(project));
 		}
 		return map.updateSize(currentMapDimension);
 	}
 	
-	public ProjectMap mapForChangedProject(IProject project) {
+	public MapPerProject mapForChangedProject(IProject project) {
 		currentProject = project;
 		return mapForProject(project);
 	}

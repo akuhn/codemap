@@ -4,7 +4,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
 
-import ch.unibe.softwaremap.ProjectMap;
+import ch.unibe.softwaremap.MapPerProject;
 
 
 /**
@@ -17,9 +17,9 @@ public class MapMakerBackgroundJob extends Job {
 
 	// TODO, merge this class with builder
 
-	private ProjectMap projectMap;
+	private MapPerProject projectMap;
 
-	public MapMakerBackgroundJob(ProjectMap projectMap) {
+	public MapMakerBackgroundJob(MapPerProject projectMap) {
 		super("Making map of " + projectMap.getProject().getName());
 		this.projectMap = projectMap;
 	}
