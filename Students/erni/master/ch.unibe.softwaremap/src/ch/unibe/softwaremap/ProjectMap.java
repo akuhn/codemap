@@ -79,7 +79,10 @@ public class ProjectMap {
 	}
 
 	private void addBuilderToProjectDescriptionCommands() throws CoreException {
-		IProjectDescription desc = getProject().getDescription();
+		IProject project = getProject();
+		if (! project.isOpen()) return;
+		
+		IProjectDescription desc  = project.getDescription();
 		ICommand[] commands = desc.getBuildSpec();
 		for (ICommand command: commands) {
 			if (command.getBuilderName().equals(HapaxBuilder.BUILDER_ID)) {
