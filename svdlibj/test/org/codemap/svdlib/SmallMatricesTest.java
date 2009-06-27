@@ -3,7 +3,6 @@ package org.codemap.svdlib;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.codemap.svdlib.Svdlib.*;
 
 public class SmallMatricesTest {
 

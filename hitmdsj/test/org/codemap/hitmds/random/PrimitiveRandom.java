@@ -1,5 +1,4 @@
 package org.codemap.hitmds.random;
-import java.lang.Math;
 import java.util.Random;
 
 @SuppressWarnings("serial")

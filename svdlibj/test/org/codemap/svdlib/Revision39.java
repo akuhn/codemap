@@ -1,6 +1,9 @@
 package org.codemap.svdlib;
 
-import static org.codemap.svdlib.Revision39.storeVals.*;
+import static org.codemap.svdlib.Revision39.storeVals.RETRP;
+import static org.codemap.svdlib.Revision39.storeVals.RETRQ;
+import static org.codemap.svdlib.Revision39.storeVals.STORP;
+import static org.codemap.svdlib.Revision39.storeVals.STORQ;
 
 import java.io.File;
 import java.io.FileNotFoundException;
