@@ -1,8 +1,9 @@
 package ch.unibe.softwaremap.ui;
 
 import static ch.unibe.softwaremap.mapview.MapView.MAP_VIEW_ID;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,6 @@ import ch.deif.meander.viz.Layers;
 import ch.deif.meander.viz.MapVisualization;
 import ch.deif.meander.viz.SelectionOverlay;
 import ch.unibe.softwaremap.BaseTest;
-import ch.unibe.softwaremap.CodemapCore;
 import ch.unibe.softwaremap.mapview.MapView;
 import ch.unibe.softwaremap.util.ID;
 
