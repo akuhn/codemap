@@ -2,9 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Hapax (software vocabulary search)
 Bundle-SymbolicName: ch.akuhn.hapax
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.0
 Bundle-Vendor: Adrian Kuhn
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: ch.akuhn.hapax,
  ch.akuhn.hapax.cluster,
  ch.akuhn.hapax.corpus,
@@ -16,3 +15,5 @@ Bundle-ClassPath: .,
  lib/snowball.jar,
  lib/svdlib-r50M.jar,
  lib/chunks-r8MP.jar
+Require-Bundle: org.codemap.util
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
