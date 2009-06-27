@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/ch.unibe.softwaremap_1.0.0.jar" id="ch.unibe.softwaremap" version="1.0.0">
-      <category name="org.codemap"/>
+   <feature url="features/ch.unibe.softwaremap.feature_1.0.0.jar" id="ch.unibe.softwaremap.feature" version="1.0.0">
+      <category name="Codemap"/>
    </feature>
-   <category-def name="org.codemap" label="Software Map">
+   <category-def name="Codemap" label="Codemap">
       <description>
-         This is a description.
+         A map for your code.
       </description>
    </category-def>
 </site>

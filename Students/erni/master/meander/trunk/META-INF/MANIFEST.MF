@@ -2,11 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Meander (software cartography)
 Bundle-SymbolicName: org.codemap.meander
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.0
 Bundle-Vendor: David Erni et al
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.codemap.util,
- ch.akuhn.hapax;bundle-version="1.0.0"
+ ch.akuhn.hapax
 Export-Package: ch.deif.meander,
  ch.deif.meander.ui,
  ch.deif.meander.viz,
@@ -16,3 +15,4 @@ Bundle-ClassPath: lib/core.jar,
  lib/pdf.jar,
  .,
  lib/hitmds2-r000.jar
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

@@ -2,9 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Softwaremap Tests
 Bundle-SymbolicName: ch.unibe.softwaremap.test
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.0
 Fragment-Host: ch.unibe.softwaremap
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.junit4;bundle-version="4.5.0",
  org.eclipse.jdt.launching;bundle-version="3.5.0"
 Bundle-ClassPath: lib/jexample-r285.jar,
