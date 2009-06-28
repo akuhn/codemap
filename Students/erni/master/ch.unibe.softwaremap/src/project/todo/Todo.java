@@ -13,6 +13,7 @@ enum Todo {
 	// TODO Map: show shores of entire map but only selected elevations
 	// TODO Map: use a more visible selection (what would apple do?)
 	
+	// TODO listen to size-changes of the whole shell (currently the map does not get updated when the whole shell changes its size)
 	// TODO check MDS performance
 	// TODO refresh map while editing
 	// TODO color overlay

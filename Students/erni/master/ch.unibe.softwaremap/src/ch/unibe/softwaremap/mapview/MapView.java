@@ -95,7 +95,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		theApplet = EclipseProcessingBridge.createApplet();
 
 		selectionProvider = new MapSelectionProvider(this);
-		selectionTracker = new SelectionTracker(this, theController);
+		selectionTracker = new SelectionTracker(theController);
 		configureToolbar();
 		
 		showMap();
@@ -287,7 +287,6 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		if (project0 != currentProject) selectionTracker.theController.onProjectChanged();
 		currentProject = project0;
 		selectedUnits = units;
-		selectionTracker.theController.onSelectionChanged();
 		updateVisualization();
 	}
 
