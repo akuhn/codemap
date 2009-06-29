@@ -249,6 +249,10 @@ public class Map {
 		return getParameters().width;
 	}
 
+	public Location randomLocation() {
+		return locations.at((int) (locationCount() * Math.random()));
+	}
+	
 	public Location locationAt(int index) {
 		return locations.at(index);
 	}

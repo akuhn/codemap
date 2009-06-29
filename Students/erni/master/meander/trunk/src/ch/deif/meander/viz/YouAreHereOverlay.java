@@ -4,22 +4,27 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.Map;
+import ch.deif.meander.MapSelection;
 
 public class YouAreHereOverlay extends MapVisualization {
 
-	private Location here;
+	public final MapSelection elements;
 	
 	public YouAreHereOverlay(Map map) {
 		super(map);
+		elements = new MapSelection();
 	}
 
 	@Override
 	public void draw(PGraphics pg) {
-		if (here == null) return;
+		for (Location each: elements) drawLocation(pg, each);
+	}
+	
+	public void drawLocation(PGraphics pg, Location each) {
 		pg.fill(255);
 		pg.stroke(0);
 		pg.pushMatrix();
-		pg.translate(here.px(), here.py());
+		pg.translate(each.px(), each.py());
 		pg.beginShape();
 		pg.vertex(0, 0);
 		pg.vertex(6, -6);
@@ -32,8 +37,4 @@ public class YouAreHereOverlay extends MapVisualization {
 		pg.popMatrix();
 	}
 
-	public void setHere(Location location) {
-		here = location;
-	}
-	
 }

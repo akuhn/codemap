@@ -19,7 +19,10 @@ public class YouAreHereOverlaySketch {
 		Map map = builder.done();
 
 		YouAreHereOverlay overlay = new YouAreHereOverlay(map);
-		overlay.setHere(map.locationAt((int) (Math.random() * map.locationCount())));
+		overlay.elements
+			.add(map.randomLocation())
+			.add(map.randomLocation())
+			.add(map.randomLocation());
 		new Layers(map).useHillshading().add(overlay).openApplet();
 	}
 
