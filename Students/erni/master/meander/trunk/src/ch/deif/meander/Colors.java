@@ -4,7 +4,8 @@ public final class Colors {
 
 	public static final Colors HILLGREEN = new Colors(196, 236, 0);
 	public static final Colors SHORE = new Colors(92, 142, 255);
-	public static final Colors WATER = new Colors(0, 68, 255);
+//	public static final Colors WATER = new Colors(0, 68, 255);
+	public static final Colors WATER = new Colors(0, 68, 255);	
 	public static final Colors GRAY_204 = new Colors(204, 204, 204);
 
 	private final int red, green, blue, rgb;
@@ -16,6 +17,18 @@ public final class Colors {
 		this.rgb = 0xFF000000 | red << 16 | green << 8 | blue;
 	}
 	
+	public int getRed() {
+		return red;
+	}
+
+	public int getGreen() {
+		return green;
+	}
+
+	public int getBlue() {
+		return blue;
+	}
+
 	public int scaledRGB(double factor) {
 		if (factor < 0.0) return 0xFF000000;
 		if (factor == 1.0) return rgb;

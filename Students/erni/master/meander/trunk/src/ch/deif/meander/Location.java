@@ -1,6 +1,8 @@
 package ch.deif.meander;
 
 import ch.akuhn.hapax.corpus.Document;
+import ch.akuhn.util.Throw;
+import ch.deif.meander.util.MeanderError;
 
 
 
@@ -62,7 +64,7 @@ public class Location {
 
 	public String name() {
 		if (name == null) {
-			if (document == null) return "";
+			if (document() == null) return "";
 			return selectFileNameOnly(document.name());			
 		}
 		return name;
@@ -106,8 +108,8 @@ public class Location {
 	}
 
 	public String getIdentifier() {
-		// TODO Auto-generated method stub
-		throw null;
+		if (document() == null) Throw.exception(new MeanderError("Document is not expected to be null."));
+		return document().getIdentifier();
 	}
 	
 }

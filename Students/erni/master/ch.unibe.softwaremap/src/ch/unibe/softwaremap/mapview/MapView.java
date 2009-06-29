@@ -26,6 +26,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
@@ -42,6 +43,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ISetSelectionTarget;
 import org.eclipse.ui.part.ViewPart;
 
+import ch.deif.meander.Colors;
 import ch.deif.meander.Location;
 import ch.deif.meander.ui.MeanderApplet;
 import ch.deif.meander.ui.MeanderEventListener;
@@ -93,7 +95,9 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		container.setLayout(new FillLayout(SWT.LEFT));
 		
 		container.layout();
-		
+		Colors water = Colors.WATER;
+		Color SWTColor = new Color(null, water.getRed(), water.getGreen(), water.getBlue());		
+		container.setBackground(SWTColor);
 		theApplet = EclipseProcessingBridge.createApplet();
 
 		selectionProvider = new MapSelectionProvider(this);

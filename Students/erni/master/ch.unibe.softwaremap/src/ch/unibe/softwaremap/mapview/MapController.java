@@ -63,8 +63,10 @@ public class MapController {
 	
 	public void onSelectionChanged(IJavaProject javaProject, Collection<ICompilationUnit> units) {
 		log("-- selectionChanged@");
-//		currently disable the normal selection
-//		view.compilationUnitsSelected(javaProject, units);		
+//		currently disable display of the normal selection
+//		FIXME this is a dirty, dirty hack.
+		units.clear();
+		view.compilationUnitsSelected(javaProject, units);
 	}
 	
 	public void onEditorOpened(EditorEvent editorEvent) {
