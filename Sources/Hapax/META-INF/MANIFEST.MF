@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Hapax (software vocabulary search)
 Bundle-SymbolicName: ch.akuhn.hapax
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Adrian Kuhn
 Export-Package: ch.akuhn.hapax,
  ch.akuhn.hapax.cluster,
