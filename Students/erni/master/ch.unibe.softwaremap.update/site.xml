@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/ch.unibe.softwaremap.feature_1.0.0.200906291429.jar" id="ch.unibe.softwaremap.feature" version="1.0.0.200906291429">
+   <feature url="features/ch.unibe.softwaremap.feature_1.0.0.qualifier.jar" id="ch.unibe.softwaremap.feature" version="1.0.0.qualifier">
       <category name="Codemap"/>
    </feature>
    <category-def name="Codemap" label="Codemap">
       <description>
-         A map for your code.
+         Software Cartography, your roadmap to software!
       </description>
    </category-def>
 </site>
