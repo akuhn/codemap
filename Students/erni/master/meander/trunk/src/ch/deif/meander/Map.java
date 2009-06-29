@@ -1,11 +1,15 @@
 package ch.deif.meander;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.akuhn.util.Providable;
 import ch.deif.meander.internal.ContourLineAlgorithm;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.internal.HillshadeAlgorithm;
 import ch.deif.meander.internal.NearestNeighborAlgorithm;
 import ch.deif.meander.internal.NormalizeElevationAlgorithm;
+import ch.deif.meander.util.RunLengthEncodedList;
 import ch.deif.meander.viz.HillshadeVisualization;
 import ch.deif.meander.viz.MapVisualization;
 import ch.deif.meander.viz.SketchVisualization;
@@ -23,7 +27,7 @@ public class Map {
 	private boolean[][] contours;
 	private LocationList locations;
 	private Parameters parameters;
-	private Location[][] NN;
+	private List<RunLengthEncodedList<Location>> NN;
 
 	public Map(Parameters parameters, LocationList locations) {
 		this.parameters = parameters;
@@ -212,7 +216,7 @@ public class Map {
 		}
 		
 		public Colors nearestNeighborColor() {
-			return NN == null ? Colors.HILLGREEN : NN[px][py].color();
+			return NN == null ? Colors.HILLGREEN : NN.get(px).get(py).color();
 		}
 
 	}
@@ -262,7 +266,11 @@ public class Map {
 	}
 
 	public void setNearestNeighbors(Location[][] NN) {
-		this.NN = NN;
+		this.NN = new ArrayList<RunLengthEncodedList<Location>>(NN.length);
+		for (int row = 0; row < NN.length; row++) {
+			// TODO use a simple List of RLE list in worst case
+			this.NN.add(new RunLengthEncodedList<Location>(NN[row]));
+		}
 	}
 
 	public void needElevationModel() {
