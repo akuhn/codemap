@@ -27,6 +27,10 @@ public class EclipseProcessingBridge extends Composite {
 		
 		mapFrame = SWT_AWT.new_Frame(this);
 		mapFrame.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		mapFrame.setBackground(new java.awt.Color(
+				parent.getBackground().getRed(),
+				parent.getBackground().getGreen(),
+				parent.getBackground().getBlue()));
 		this.applet = applet;
 		mapFrame.add(getApplet());
 	}
