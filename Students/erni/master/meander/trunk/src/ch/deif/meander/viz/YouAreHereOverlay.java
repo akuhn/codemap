@@ -24,22 +24,23 @@ public class YouAreHereOverlay extends MapVisualization {
 	@Override
 	public void draw(PGraphics pg) {
 		elements.convertElements(getMap());
+		pg.fill(255);
+		pg.stroke(0);
+		pg.strokeWeight(1);
 		for (Location each: elements) drawLocation(pg, each);
 	}
 	
 	public void drawLocation(PGraphics pg, Location each) {
-		pg.fill(255);
-		pg.stroke(0);
 		pg.pushMatrix();
 		pg.translate(each.px(), each.py());
 		pg.beginShape();
 		pg.vertex(0, 0);
-		pg.vertex(6, -6);
-		pg.vertex(12, -6);
+		//pg.vertex(6, -6);
+		//pg.vertex(12, -6);
 		pg.vertex(12, -24);
 		pg.vertex(-12, -24);
-		pg.vertex(-12, -6);
-		pg.vertex(-6, -6);
+		//pg.vertex(-12, -6);
+		//pg.vertex(-6, -6);
 		pg.endShape(PConstants.CLOSE);
 		pg.popMatrix();
 	}
