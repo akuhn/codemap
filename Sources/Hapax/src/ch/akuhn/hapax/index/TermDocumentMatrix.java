@@ -138,11 +138,11 @@ public class TermDocumentMatrix extends Corpus {
         return doc;
     }
     
-        public Document makeDocument(String name, String version, String identifier) {
-        Document doc = new Doc(name, version, this);
-        doc.setIdentifier(identifier);
-        this.indexDocument(doc);
-        return doc;
+    public Document makeDocument(String name, String version, String identifier) {
+    	Document doc = new Doc(name, version, this);
+    	doc.setIdentifier(identifier);
+    	this.indexDocument(doc);
+    	return doc;
     }    
 
     public TermDocumentMatrix rejectAndWeight() {

@@ -19,7 +19,7 @@ public abstract class Document implements Comparable<Document> {
 	public String getIdentifier() {
 		return identifier;
 	}
-
+	
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
 	}
