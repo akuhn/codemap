@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/ch.unibe.softwaremap.feature_1.0.0.200906291409.jar" id="ch.unibe.softwaremap.feature" version="1.0.0.200906291409">
+   <feature url="features/ch.unibe.softwaremap.feature_1.0.0.200906291429.jar" id="ch.unibe.softwaremap.feature" version="1.0.0.200906291429">
       <category name="Codemap"/>
    </feature>
    <category-def name="Codemap" label="Codemap">
