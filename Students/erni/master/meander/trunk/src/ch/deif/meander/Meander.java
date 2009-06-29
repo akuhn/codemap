@@ -12,7 +12,7 @@ import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.deif.meander.internal.ContourLineAlgorithm;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.internal.HillshadeAlgorithm;
-import ch.deif.meander.internal.JMDS;
+import ch.deif.meander.internal.MDS;
 import ch.deif.meander.internal.NearestNeighborAlgorithm;
 import ch.deif.meander.internal.NormalizeElevationAlgorithm;
 import ch.deif.meander.viz.Layers;
@@ -22,7 +22,12 @@ import ch.deif.meander.viz.MapVisualization;
  * Creates maps from source files
  * 
  * <PRE>
- * Meander.script().addDocuments(&quot;../JExample&quot;, &quot;.java&quot;).makeMap().useHillshading().add(LabelsOverlay.class).openApplet();
+ * Meander.script()
+ *   .addDocuments(&quot;../JExample&quot;, &quot;.java&quot;)
+ *   .makeMap()
+ *   .useHillshading()
+ *   .add(LabelsOverlay.class)
+ *   .openApplet();
  *</PRE>
  * 
  * @author Adrian Kuhn
@@ -49,7 +54,7 @@ public class Meander {
 	private Map map;
 	private Layers layers;
 	private boolean doneDEM = false;
-	private JMDS mds;
+	private MDS mds;
 	private Hapax hapax;
 	private LatentSemanticIndex lsi;
 
@@ -68,8 +73,8 @@ public class Meander {
 		return this;
 	}
 
-	public Meander makeMap(int dimension) {
-		return makeMap(null, dimension);
+	public Meander makeMap(int size) {
+		return makeMap(null, size);
 	}
 
 	public Meander doTheNumberCrunching() {
@@ -82,14 +87,14 @@ public class Meander {
 		else {
 			lsi = hapax.getIndex();
 		}
-		mds = JMDS.fromCorrelationMatrix(lsi);
+		mds = MDS.fromCorrelationMatrix(lsi);
 		mds.normalize();
 		return this;
 	}
 	
-	public Meander makeMap(String version, int dimension) {
+	public Meander makeMap(String version, int pixelSize) {
 		this.doTheNumberCrunching();
-		MapBuilder builder = Map.builder().pixelSize(dimension);
+		MapBuilder builder = Map.builder().pixelSize(pixelSize);
 		Iterator<Document> iterator = lsi.documents.iterator();
 		for (int n = 0; n < mds.x.length; n++) {
 			Document each = iterator.next();

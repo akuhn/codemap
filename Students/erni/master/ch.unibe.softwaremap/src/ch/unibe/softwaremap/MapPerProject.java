@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.ICompilationUnit;
 
+import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapModifier;
@@ -45,8 +46,10 @@ public class MapPerProject {
 	private boolean mapBeingCalculated = false;
 	private boolean builderIsRunning = false;
 	private Set<MapModifier> modifiers;
-	private int mapDimension = MINIMAL_SIZE;
+	private int mapSize = MINIMAL_SIZE;
 	private MapSelection mapSelection;
+
+	private Hapax hapax;
 
 	
 	public MapPerProject(IProject project) {
@@ -114,7 +117,7 @@ public class MapPerProject {
 
 	public MapVisualization getVisualization() {
 		if (tdm == null) return null;
-		if (mapViz != null && mapViz.getWidth() == mapDimension) return mapViz;
+		if (mapViz != null && mapViz.getWidth() == mapSize) return mapViz;
 		updateMap();
 		return null;
 	}
@@ -132,15 +135,21 @@ public class MapPerProject {
 		if (mapBeingCalculated) return Status.OK_STATUS;
 		mapBeingCalculated = true;
 		monitor.beginTask("Making map", 5);
-		mapViz = Meander.script().useCorpus(tdm)
-								 .makeMap(mapDimension)
-								 .applyModifier(modifiers)
-								 .useHillshading()
-								 .add(LabelsOverlay.class)
-								 .add(SelectionOverlay.class)
-								 .add(new YouAreHereOverlay(mapSelection))
-								 .runNearestNeighborAlgorithm()
-								 .getVisualization();
+		if (hapax == null) {
+			hapax = Hapax.legomenon()
+				.addCorpus(tdm)
+				.closeCorpus()
+				.createIndex();
+		}
+		mapViz = new Meander(hapax)
+				.makeMap(mapSize)
+				.applyModifier(modifiers)
+				.useHillshading()
+				.add(LabelsOverlay.class)
+				.add(SelectionOverlay.class)
+				.add(new YouAreHereOverlay(mapSelection))
+				.runNearestNeighborAlgorithm()
+				.getVisualization();
 		notifyMapView();
 		monitor.done();
 		mapBeingCalculated = false;
@@ -159,7 +168,7 @@ public class MapPerProject {
 //			System.out.println("adapting map of " + project.getName() + " to dimension " + newMapDimension);
 //		}
 		// XXX: ugly hardcoded map-size
-		this.mapDimension = Math.max(newMapDimension, MINIMAL_SIZE);
+		this.mapSize = Math.max(newMapDimension, MINIMAL_SIZE);
 		return this;
 	}
 

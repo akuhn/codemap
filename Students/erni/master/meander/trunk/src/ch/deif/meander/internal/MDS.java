@@ -6,21 +6,21 @@ import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.util.As;
 import ch.deif.meander.Location;
 
-public class JMDS {
+public class MDS {
 
 	public double[] x, y;
 	public double r0;
 	public double r;
 
-	public static JMDS fromCorrelationMatrix(LatentSemanticIndex index) {
-		return new JMDS().compute(index, null);
+	public static MDS fromCorrelationMatrix(LatentSemanticIndex index) {
+		return new MDS().compute(index, null);
 	}
 
-	public static JMDS fromCorrelationMatrix(LatentSemanticIndex index, Iterable<Location> matchingLocations) {
-		return new JMDS().compute(index, matchingLocations);
+	public static MDS fromCorrelationMatrix(LatentSemanticIndex index, Iterable<Location> matchingLocations) {
+		return new MDS().compute(index, matchingLocations);
 	}
 
-	private JMDS compute(LatentSemanticIndex index, Iterable<Location> matchingLocations) {
+	private MDS compute(LatentSemanticIndex index, Iterable<Location> matchingLocations) {
 		assert matchingLocations == null || index.documents.size() == As.list(matchingLocations).size();
 
 		int size = index.documents.size();
