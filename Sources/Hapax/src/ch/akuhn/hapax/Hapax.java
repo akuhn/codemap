@@ -48,6 +48,7 @@ public class Hapax {
 
     public Hapax createIndex() {
         // TODO fix this mess, these semantics or so screwed up!!!
+    	if (this.index != null) return this;
         TermDocumentMatrix tdm = (TermDocumentMatrix) corpora.iterator().next();
         this.index = tdm.weight(localWeighting, globalWeighting).createIndex();
         return this;
@@ -96,6 +97,7 @@ public class Hapax {
             if (stemmer != null) buffer = buffer.stem(stemmer);
             corpora.add(buffer);
         }
+        index = null;
         buffer = null;
         return this;
     }
@@ -204,5 +206,11 @@ public class Hapax {
     public Corpora corpora() {
         return corpora;
     }
+
+	public Hapax addCorpus(TermDocumentMatrix tdm) {
+		this.closeCorpus();
+		buffer = tdm;
+		return this;
+	}
 
 }
