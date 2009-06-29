@@ -35,7 +35,7 @@ public class CoverageMapModifier implements MapModifier {
 	public void applyOn(Map map) {
 		for (Location loc: map.locations()) {
 			if ( showCoverageAction.isChecked()) {
-				String identifier = loc.document().getIdentifier();
+				String identifier = loc.getIdentifier();
 				for (Pair<String, Double> pair: coverageInfo) {
 					if (pair.fst.equals(identifier)) {
 						Double ratio = pair.snd;
