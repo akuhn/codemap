@@ -15,7 +15,7 @@ import ch.deif.meander.Map;
 import ch.deif.meander.internal.MaxDistNearestNeighbor;
 import ch.deif.meander.internal.NearestNeighbor;
 
-public class SelectionOverlay extends MapVisualization {
+public class CurrentSelectionOverlay extends MapVisualization {
 	
 	protected final int SELECTION_SIZE = 12;
 	protected final int POINT_STROKE = 3;
@@ -27,7 +27,7 @@ public class SelectionOverlay extends MapVisualization {
 
 	private Point dragStop;	
 
-	public SelectionOverlay(Map map) {
+	public CurrentSelectionOverlay(Map map) {
 		super(map);
 		points = Collections.synchronizedSet(new HashSet<Point>());
 	}

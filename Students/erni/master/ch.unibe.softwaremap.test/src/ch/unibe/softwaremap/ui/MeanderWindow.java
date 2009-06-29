@@ -10,7 +10,7 @@ import ch.deif.meander.Location;
 import ch.deif.meander.Map;
 import ch.deif.meander.internal.NearestNeighborAlgorithm;
 import ch.deif.meander.viz.Layers;
-import ch.deif.meander.viz.SelectionOverlay;
+import ch.deif.meander.viz.CurrentSelectionOverlay;
 import ch.unibe.softwaremap.util.EclipseProcessingBridge;
 
 public class MeanderWindow {
@@ -32,7 +32,7 @@ public class MeanderWindow {
 		bridge = new EclipseProcessingBridge(shell, EclipseProcessingBridge.createApplet());
 		Layers layers = LabelSketch.createLabeledSketch();
 		new NearestNeighborAlgorithm(layers.getMap()).run();
-		layers.add(SelectionOverlay.class);
+		layers.add(CurrentSelectionOverlay.class);
 		
 		Location loc = findLocation(layers.getMap(), "the");
 		loc.setColor(new Colors(255, 0, 0));

@@ -23,7 +23,8 @@ import ch.deif.meander.MapSelection;
 import ch.deif.meander.Meander;
 import ch.deif.meander.viz.LabelsOverlay;
 import ch.deif.meander.viz.MapVisualization;
-import ch.deif.meander.viz.SelectionOverlay;
+import ch.deif.meander.viz.OpenFilesOverlay;
+import ch.deif.meander.viz.CurrentSelectionOverlay;
 import ch.deif.meander.viz.YouAreHereOverlay;
 import ch.unibe.scg.util.Extension;
 import ch.unibe.softwaremap.builder.HapaxBuilder;
@@ -47,15 +48,18 @@ public class MapPerProject {
 	private boolean builderIsRunning = false;
 	private Set<MapModifier> modifiers;
 	private int mapSize = MINIMAL_SIZE;
-	private MapSelection mapSelection;
+	private MapSelection youAreHereSelection;
+	private MapSelection openFilesSelection;
 
 	private Hapax hapax;
+
 
 	
 	public MapPerProject(IProject project) {
 		this.project = project;
 		modifiers = new HashSet<MapModifier>();
-		mapSelection = new MapSelection();
+		youAreHereSelection = new MapSelection();
+		openFilesSelection = new MapSelection();
 	}
 
 	public MapPerProject enableBuilder() {
@@ -90,7 +94,7 @@ public class MapPerProject {
 
 	private void addBuilderToProjectDescriptionCommands() throws CoreException {
 		IProject project = getProject();
-		if (! project.isOpen()) return;
+		if (project == null || !project.isOpen()) return;
 		
 		IProjectDescription desc  = project.getDescription();
 		ICommand[] commands = desc.getBuildSpec();
@@ -146,8 +150,9 @@ public class MapPerProject {
 				.applyModifier(modifiers)
 				.useHillshading()
 				.add(LabelsOverlay.class)
-				.add(SelectionOverlay.class)
-				.add(new YouAreHereOverlay(mapSelection))
+				.add(CurrentSelectionOverlay.class)
+				.add(new OpenFilesOverlay(openFilesSelection))
+				.add(new YouAreHereOverlay(youAreHereSelection))
 				.runNearestNeighborAlgorithm()
 				.getVisualization();
 		notifyMapView();
@@ -181,7 +186,21 @@ public class MapPerProject {
 	}
 
 	public void setYouAreHere(ICompilationUnit javaElement) {
-		mapSelection.clear().add(javaElement.getHandleIdentifier());
+		youAreHereSelection.clear().add(javaElement.getHandleIdentifier());
+	}
+
+	public void setOpenUnits(Set<ICompilationUnit> units) {
+		for (ICompilationUnit each: units) {
+			openFilesSelection.add(each.getHandleIdentifier());			
+		}
+	}
+
+	public void addOpenUnit(ICompilationUnit unit) {
+		openFilesSelection.add(unit.getHandleIdentifier());
+	}
+
+	public void removeClosedUnit(ICompilationUnit unit) {
+		openFilesSelection.remove(unit.getHandleIdentifier());
 	}
 
 }

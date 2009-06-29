@@ -1,10 +1,8 @@
 package ch.unibe.softwaremap.mapview;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -12,7 +10,6 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorReference;
-import org.eclipse.ui.PartInitException;
 
 import ch.unibe.softwaremap.CodemapCore;
 
@@ -30,14 +27,11 @@ public class MapController {
 	
 	private State state = State.UNINITIALIZED;
 
-	// FIXME: move this, maybe to MapPerProject
-	private HashMap<IJavaProject,Set<ICompilationUnit>> selections;
+	// FIXME: move this, maybe to MapPerProjec
 	
 	public MapController(MapView view) {
 		this.view = view;
 		this.plugin = CodemapCore.getPlugin();
-		
-		selections = new HashMap<IJavaProject, Set<ICompilationUnit>>();		
 	}
 	
 	public MapView getView() {
@@ -63,9 +57,6 @@ public class MapController {
 	
 	public void onSelectionChanged(IJavaProject javaProject, Collection<ICompilationUnit> units) {
 		log("-- selectionChanged@");
-//		currently disable display of the normal selection
-//		FIXME this is a dirty, dirty hack.
-		units.clear();
 		view.compilationUnitsSelected(javaProject, units);
 	}
 	
@@ -76,10 +67,8 @@ public class MapController {
 		if (!(javaElement instanceof ICompilationUnit)) return;		
 		// TODO merge this with other methods
 		IJavaProject javaProject = javaElement.getJavaProject();
-		Set<ICompilationUnit> units = getUnitsForProject(javaProject);
-		units.add((ICompilationUnit) javaElement);		
 		
-		view.compilationUnitsSelected(javaProject, units);
+		view.compilationUnitOpen(javaProject, (ICompilationUnit)javaElement);
 		log("-- editorOpened(" + editorEvent.getInput().getHandleIdentifier() + ")@");
 	}
 	
@@ -90,10 +79,8 @@ public class MapController {
 		if (!(javaElement instanceof ICompilationUnit)) return;		
 		// TODO merge this with other methods
 		IJavaProject javaProject = javaElement.getJavaProject();
-		Set<ICompilationUnit> units = getUnitsForProject(javaProject);
-		units.remove((ICompilationUnit) javaElement);		
 		
-		view.compilationUnitsSelected(javaProject, units);
+		view.compilationUnitClosed(javaProject, (ICompilationUnit)javaElement);
 		log("-- editorClosed(" + editorEvent.getInput().getHandleIdentifier() + ")@");
 	}
 	
@@ -121,7 +108,7 @@ public class MapController {
 	 */
 	private void onFirstEditorEvent() {
 		state = State.INITIALIZED;
-		
+		HashMap<IJavaProject,Set<ICompilationUnit>> selections = new HashMap<IJavaProject,Set<ICompilationUnit>>();
 		selections = new HashMap<IJavaProject, Set<ICompilationUnit>>();
 		
 		IEditorReference[] editorReferences = view.getSite().getPage().getEditorReferences();
@@ -133,18 +120,18 @@ public class MapController {
 			if (!(javaElement instanceof ICompilationUnit)) continue;
 			
 			IJavaProject javaProject = javaElement.getJavaProject();
-			Set<ICompilationUnit> units = getUnitsForProject(javaProject);
+			Set<ICompilationUnit> units = getUnitsForProject(selections, javaProject);
 			units.add((ICompilationUnit) javaElement);				
 		}
 		
 		for(IJavaProject each: selections.keySet()) {
 			Set<ICompilationUnit> units = selections.get(each);
-			view.compilationUnitsSelected(each, units);				
+			view.compilationUnitsOpen(each, units);				
 		}
 		log("-- firstEditorEvent@");
 	}
 
-	private Set<ICompilationUnit> getUnitsForProject(IJavaProject javaProject) {
+	private Set<ICompilationUnit> getUnitsForProject(HashMap<IJavaProject,Set<ICompilationUnit>> selections, IJavaProject javaProject) {
 		Set<ICompilationUnit> units = selections.get(javaProject);
 		if (units == null) {
 			units = new HashSet<ICompilationUnit>();

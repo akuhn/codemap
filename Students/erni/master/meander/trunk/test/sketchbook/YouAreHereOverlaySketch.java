@@ -2,8 +2,6 @@ package sketchbook;
 
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
-import ch.deif.meander.viz.Layers;
-import ch.deif.meander.viz.YouAreHereOverlay;
 
 public class YouAreHereOverlaySketch {
 
@@ -18,12 +16,12 @@ public class YouAreHereOverlaySketch {
 		}
 		Map map = builder.done();
 
-		YouAreHereOverlay overlay = new YouAreHereOverlay(map);
-		overlay.elements
-			.add(map.randomLocation())
-			.add(map.randomLocation())
-			.add(map.randomLocation());
-		new Layers(map).useHillshading().add(overlay).openApplet();
+//		YouAreHereOverlay overlay = new YouAreHereOverlay(map);
+//		overlay.elements
+//			.add(map.randomLocation())
+//			.add(map.randomLocation())
+//			.add(map.randomLocation());
+//		new Layers(map).useHillshading().add(overlay).openApplet();
 	}
 
 }

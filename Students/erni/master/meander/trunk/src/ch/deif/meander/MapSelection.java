@@ -7,60 +7,76 @@ import java.util.Set;
 public class MapSelection implements Iterable<Location> {
 
 	private Set<Location> elements;
-	private HashSet<String> pendingElements;
+	
+	private HashSet<String> identifiers;
+	private Map map;
 	
 	public MapSelection() {
 		elements = new HashSet<Location>();
-		pendingElements = new HashSet<String>();
+		identifiers = new HashSet<String>();		
 	}
 	
 	@Override
 	public Iterator<Location> iterator() {
-		return elements.iterator();
+		return currentLocations().iterator();
 	}
 
-	public int size() {
-		return elements.size();
-	}
-	
-	public MapSelection add(Location... selection) {
-		for (Location each: selection) {
-			elements.add(each);
-		}
-		return this;
-	}
-	
-	public MapSelection add(Iterable<Location> selection) {
-		for (Location each: selection) {
-			elements.add(each);
-		}
-		return this;
-	}
-
-	public MapSelection clear() {
-		elements.clear();
-		pendingElements.clear();
-		return this;
-	}
-	
-	public boolean contains(Location element) {
-		return elements.contains(elements);
-	}
-
-	public void add(String handleIdentifier) {
-		pendingElements.add(handleIdentifier);
-	}
-
-	public MapSelection convertElements(Map map) {
-		for(String identifier: pendingElements){
+	private HashSet<Location> currentLocations() {
+		HashSet<Location> currentLocations = new HashSet<Location>();
+		for(String identifier: identifiers){
 			for(Location each: map.locations()) {
 				if (each.document().getIdentifier().equals(identifier)) {
-					add(each);
+					currentLocations.add(each);
 					break;
 				}
 			}			
 		}
-		pendingElements.clear();
+		return currentLocations;
+	}
+
+	public int size() {
+		return identifiers.size();
+	}
+	
+	public MapSelection add(Location... selection) {
+//		for (Location each: selection) {
+//			elements.add(each);
+//		}
+//		return this;
+//		currentlty disabled
+		throw null;
+	}
+	
+	public MapSelection add(Iterable<Location> selection) {
+//		for (Location each: selection) {
+//			elements.add(each);
+//		}
+//		return this;
+//		currentlty disabled
+		throw null;		
+	}
+
+	public MapSelection clear() {
+		elements.clear();
+		identifiers.clear();
+		return this;
+	}
+	
+	public boolean contains(Location element) {
+		return currentLocations().contains(elements);
+	}
+
+	public void add(String handleIdentifier) {
+		identifiers.add(handleIdentifier);
+	}
+
+	public void remove(String handleIdentifier) {
+		identifiers.remove(handleIdentifier);
+	}
+	
+	public MapSelection registerMap(Map map) {
+		if (this.map != null) return this;
+		this.map = map;
 		return this;
 	}
 	

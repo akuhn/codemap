@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -322,5 +323,29 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		mapPerProject.setYouAreHere(javaElement);
 		updateVisualization();
 	}
+
+	public void compilationUnitsOpen(IJavaProject javaProject, Set<ICompilationUnit> units) {
+		IProject project = javaProject.getProject();
+		MapPerProject mapPerProject = CodemapCore.getPlugin().mapForProject(project);
+		mapPerProject.setOpenUnits(units);
+		updateVisualization();
+	}
+
+	public void compilationUnitOpen(IJavaProject javaProject, ICompilationUnit unit) {
+		IProject project = javaProject.getProject();
+		MapPerProject mapPerProject = CodemapCore.getPlugin().mapForProject(project);
+		mapPerProject.addOpenUnit(unit);
+		updateVisualization();		
+		
+	}
+
+	public void compilationUnitClosed(IJavaProject javaProject, ICompilationUnit unit) {
+		IProject project = javaProject.getProject();
+		MapPerProject mapPerProject = CodemapCore.getPlugin().mapForProject(project);
+		mapPerProject.removeClosedUnit(unit);
+		updateVisualization();		
+	}
+
+
 
 }

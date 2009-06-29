@@ -36,7 +36,7 @@ import org.junit.Test;
 import ch.deif.meander.Map;
 import ch.deif.meander.viz.Layers;
 import ch.deif.meander.viz.MapVisualization;
-import ch.deif.meander.viz.SelectionOverlay;
+import ch.deif.meander.viz.CurrentSelectionOverlay;
 import ch.unibe.softwaremap.BaseTest;
 import ch.unibe.softwaremap.mapview.MapView;
 import ch.unibe.softwaremap.util.ID;
@@ -160,9 +160,9 @@ public class MapViewTest extends BaseTest {
 		MapVisualization visualization = mapView.softwareMap().getApplet().getVisualization();
 		assertTrue(visualization instanceof Layers);
 		Layers layers = (Layers) visualization;
-		MapVisualization mapVisualization = layers.get(SelectionOverlay.class);
-		assertTrue(mapVisualization instanceof SelectionOverlay);
-		SelectionOverlay overlay = (SelectionOverlay) mapVisualization;
+		MapVisualization mapVisualization = layers.get(CurrentSelectionOverlay.class);
+		assertTrue(mapVisualization instanceof CurrentSelectionOverlay);
+		CurrentSelectionOverlay overlay = (CurrentSelectionOverlay) mapVisualization;
 		return layers;
 	}
 
