@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Build huge meatball of JAR files" default="package" basedir=".">
+
+	<property name="package.jar" value="package.jar"/>
+
+	<target name="package">
+        <delete file="${package.jar}"/>
+		<jar id="files" destfile="${package.jar}">
+			<fileset dir="../ch.akuhn.util/bin"/>
+			<fileset dir="../ch.akuhn.util/src"/>
+            <fileset dir="../ForEach DSL/bin"/>
+			<fileset dir="../ForEach DSL/src"/>
+            <fileset dir="../ch.unibe.scg.util/bin"/>
+			<fileset dir="../ch.unibe.scg.util/src"/>
+		</jar>
+	</target>
+
+</project>
