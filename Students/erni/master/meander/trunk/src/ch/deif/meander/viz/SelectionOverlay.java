@@ -17,8 +17,8 @@ import ch.deif.meander.internal.NearestNeighbor;
 
 public class SelectionOverlay extends MapVisualization {
 	
-	protected final int SELECTION_SIZE = 10;
-	protected final int POINT_STROKE = 2;
+	protected final int SELECTION_SIZE = 12;
+	protected final int POINT_STROKE = 3;
 	protected final int BOX_STROKE = 2;	
 	
 	private Collection<Point> points;
@@ -39,11 +39,13 @@ public class SelectionOverlay extends MapVisualization {
 		
 		drawSelectedPoints(pg);
 		drawSelectionBox(pg);
-		
+
+		pg.strokeWeight(2);
 		pg.stroke(Color.BLACK.getRGB());
 	}
 	
 	private void drawSelectedPoints(PGraphics pg) {
+		pg.strokeWeight(POINT_STROKE);		
 		synchronized (points) {
 			for (Point each: points) {
 				pg.ellipse(each.x, each.y, SELECTION_SIZE, SELECTION_SIZE);
@@ -59,7 +61,6 @@ public class SelectionOverlay extends MapVisualization {
 		int deltaX = dragStop.x - dragStart.x;
 		int deltaY = dragStop.y - dragStart.y;
 		pg.rect(dragStart.x, dragStart.y, deltaX, deltaY);
-		pg.strokeWeight(POINT_STROKE);
 	}
 	
 
