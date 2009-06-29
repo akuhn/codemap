@@ -114,7 +114,7 @@ public class SelectionOverlay extends MapVisualization {
 	public void addSelection(List<String> handleIdentifiers) {
 		synchronized (points) {
 			for (Location each: map.locations()) {
-				if (handleIdentifiers.contains(each.document().getIdentifier())) {
+				if (handleIdentifiers.contains(each.getIdentifier())) {
 					points.add(new Point(each.px(), each.py()));
 				}
 			}			

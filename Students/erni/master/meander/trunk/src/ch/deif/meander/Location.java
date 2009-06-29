@@ -104,5 +104,10 @@ public class Location {
 	public void removeColor() {
 		color = null;
 	}
+
+	public String getIdentifier() {
+		// TODO Auto-generated method stub
+		throw null;
+	}
 	
 }

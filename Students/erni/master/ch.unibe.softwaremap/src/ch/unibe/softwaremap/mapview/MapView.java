@@ -235,8 +235,8 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	public void selectionChanged(Location... locations) {
 		final ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
 		for (Location each: locations) {
-			if (each.document().getIdentifier() == null) continue;
-			IJavaElement javaElement = JavaCore.create(each.document().getIdentifier());
+			if (each.getIdentifier() == null) continue;
+			IJavaElement javaElement = JavaCore.create(each.getIdentifier());
 			selection.add(javaElement);
 		}
 		Display.getDefault().asyncExec(new Runnable() {
@@ -274,8 +274,8 @@ public class MapView extends ViewPart implements MeanderEventListener {
 
 	@Override
 	public void doubleClicked(Location location) {
-		if (location.document().getIdentifier() == null) return;
-		IJavaElement javaElement = JavaCore.create(location.document().getIdentifier());		
+		if (location.getIdentifier() == null) return;
+		IJavaElement javaElement = JavaCore.create(location.getIdentifier());		
 		openInEditor(javaElement);
 	}
 
