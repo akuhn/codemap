@@ -124,6 +124,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	}
 
 	public void redrawContainer() {
+		System.out.println("redrawContainer on MapView");
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
@@ -147,7 +148,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		
 		CodemapCore.getPlugin().setMapView(this);
 		new ResizeListener(container, theController);
-		redrawContainer();
+//		redrawContainer();
 		theController.onShowMap();
 	}
 
@@ -209,7 +210,6 @@ public class MapView extends ViewPart implements MeanderEventListener {
 
 	public void updateMapVisualization(MapVisualization viz) {
 		softwareMap().setMapVizualization(viz);
-		redrawContainer();
 	}
 
 	private void softwareMapUpdateSelection(Collection<ICompilationUnit> units) {
@@ -310,7 +310,6 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		if (viz != null) {
 			updateMapVisualization(viz);
 		}
-		redrawContainer();
 	}
 
 	public void updateMap(CodemapCore codemapCore) {
