@@ -54,4 +54,13 @@ public class As {
         return new HashSet<E>(Arrays.asList(elements));
     }
 
+    public static int[] intArray(Iterable<? extends Number> numbers) {
+    	int[] result = new int[Size.of(numbers)];
+    	int index = 0;
+    	for (Number each: numbers) {
+    		result[index++] = each.intValue();
+    	}
+    	return result;
+    }
+
 }

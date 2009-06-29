@@ -1,5 +1,6 @@
 package ch.akuhn.util;
 
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
 
@@ -10,9 +11,11 @@ import java.util.Iterator;
  */
 public class Size {
 
-    public static final <T> int of(Iterable<T> values) {
+    @SuppressWarnings("unchecked")
+	public static final <T> int of(Iterable<T> collection) {
+    	if (collection instanceof Collection) return ((Collection) collection).size();
         int count = 0;
-        for (@SuppressWarnings("unused") T each: values) count++;
+        for (@SuppressWarnings("unused") T each: collection) count++;
         return count;
     }
     
