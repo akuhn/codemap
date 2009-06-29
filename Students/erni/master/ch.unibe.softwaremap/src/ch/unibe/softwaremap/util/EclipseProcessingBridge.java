@@ -23,6 +23,8 @@ public class EclipseProcessingBridge extends Composite {
 
 	public EclipseProcessingBridge(Composite parent, MeanderApplet applet) {
 		super(parent, SWT.EMBEDDED);
+		setBackground(parent.getBackground());
+		
 		mapFrame = SWT_AWT.new_Frame(this);
 		mapFrame.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		this.applet = applet;
