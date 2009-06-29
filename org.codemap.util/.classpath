@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="package.jar"/>
+	<classpathentry kind="lib" path="package.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ch.akuhn.util"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ch.unibe.scg.util"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ForEach DSL"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/ch.akuhn.util"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/ch.unibe.scg.util"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/ForEach DSL"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
