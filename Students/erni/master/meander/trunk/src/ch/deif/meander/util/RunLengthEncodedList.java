@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ch.akuhn.util.As;
+
 
 public class RunLengthEncodedList<E> {
 
@@ -26,11 +28,7 @@ public class RunLengthEncodedList<E> {
 			keys.add(size - 1);
 			values.add(current = each);
 		}
-		this.keys = new int[keys.size()];
-		int n = 0;
-		for (int each: keys) {
-			this.keys[n++] = each;
-		}
+		this.keys = As.intArray(keys);
 		this.values = values.toArray();
 	}
 	

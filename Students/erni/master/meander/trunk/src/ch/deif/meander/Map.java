@@ -10,6 +10,7 @@ import ch.deif.meander.internal.HillshadeAlgorithm;
 import ch.deif.meander.internal.NearestNeighborAlgorithm;
 import ch.deif.meander.internal.NormalizeElevationAlgorithm;
 import ch.deif.meander.util.RunLengthEncodedList;
+import ch.deif.meander.util.SparseTrueBooleanList;
 import ch.deif.meander.viz.HillshadeVisualization;
 import ch.deif.meander.viz.MapVisualization;
 import ch.deif.meander.viz.SketchVisualization;
@@ -24,7 +25,7 @@ public class Map {
 
 	private float[][] DEM;
 	private double[][] hillshade;
-	private boolean[][] contours;
+	private List<SparseTrueBooleanList> contours;
 	private LocationList locations;
 	private Parameters parameters;
 	private List<RunLengthEncodedList<Location>> NN;
@@ -39,8 +40,9 @@ public class Map {
 		return DEM;
 	}
 
-	private boolean[][] getContours() {
-		return contours == null ? contours = new boolean[getWidth()][getWidth()] : contours;
+	private List<SparseTrueBooleanList> getContours() {
+		if (contours == null) throw null;
+		return contours;
 	}
 
 	public Parameters getParameters() {
@@ -204,11 +206,7 @@ public class Map {
 		}
 
 		public boolean hasContourLine() {
-			return getContours()[px][py];
-		}
-
-		public void setContourLine(boolean bool) {
-			getContours()[px][py] = bool;
+			return getContours().get(px).get(py);
 		}
 
 		public void normalizeElevation(double maxElevation) {
@@ -281,6 +279,14 @@ public class Map {
 		if (hillshade == null) {
 			new HillshadeAlgorithm(this).run();
 			new ContourLineAlgorithm(this).run();
+		}
+	}
+
+	public void setContourLines(boolean[][] contours) {
+		this.contours = new ArrayList<SparseTrueBooleanList>(contours.length);
+		for (int row = 0; row < contours.length; row++) {
+			// TODO use a simple List of RLE list in worst case
+			this.contours.add(new SparseTrueBooleanList(contours[row]));
 		}
 	}
 
