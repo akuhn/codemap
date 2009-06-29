@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Codemap plugin
 Bundle-SymbolicName: ch.unibe.softwaremap;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: ch.unibe.softwaremap.CodemapCore
 Require-Bundle: org.codemap.util,
  org.codemap.meander,
