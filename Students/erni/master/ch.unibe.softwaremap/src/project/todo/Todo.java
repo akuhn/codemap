@@ -14,6 +14,7 @@ enum Todo {
 	// TODO Map: use a more visible selection (what would apple do?)
 	
 	// TODO listen to size-changes of the whole shell (currently the map does not get updated when the whole shell changes its size)
+	// TODO ^^ same for maximize buttons on mac, currently there is no redraw on maximize
 	// TODO check MDS performance
 	// TODO refresh map while editing
 	// TODO color overlay

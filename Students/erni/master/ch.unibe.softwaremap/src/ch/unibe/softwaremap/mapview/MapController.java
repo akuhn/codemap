@@ -2,6 +2,10 @@ package ch.unibe.softwaremap.mapview;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -25,10 +29,15 @@ public class MapController {
 	private CodemapCore plugin;
 	
 	private State state = State.UNINITIALIZED;
+
+	// FIXME: move this, maybe to MapPerProject
+	private HashMap<IJavaProject,Set<ICompilationUnit>> selections;
 	
 	public MapController(MapView view) {
 		this.view = view;
 		this.plugin = CodemapCore.getPlugin();
+		
+		selections = new HashMap<IJavaProject, Set<ICompilationUnit>>();		
 	}
 	
 	public MapView getView() {
@@ -54,16 +63,35 @@ public class MapController {
 	
 	public void onSelectionChanged(IJavaProject javaProject, Collection<ICompilationUnit> units) {
 		log("-- selectionChanged@");
-		view.compilationUnitsSelected(javaProject, units);		
+//		currently disable the normal selection
+//		view.compilationUnitsSelected(javaProject, units);		
 	}
 	
 	public void onEditorOpened(EditorEvent editorEvent) {
-		if (! editorEvent.hasInput()) return;				
+		if (! editorEvent.hasInput()) return;
+
+		IJavaElement javaElement = editorEvent.getInput();
+		if (!(javaElement instanceof ICompilationUnit)) return;		
+		// TODO merge this with other methods
+		IJavaProject javaProject = javaElement.getJavaProject();
+		Set<ICompilationUnit> units = getUnitsForProject(javaProject);
+		units.add((ICompilationUnit) javaElement);		
+		
+		view.compilationUnitsSelected(javaProject, units);
 		log("-- editorOpened(" + editorEvent.getInput().getHandleIdentifier() + ")@");
 	}
 	
 	public void onEditorClosed(EditorEvent editorEvent) {
-		if (! editorEvent.hasInput()) return;		
+		if (! editorEvent.hasInput()) return;
+		
+		IJavaElement javaElement = editorEvent.getInput();
+		if (!(javaElement instanceof ICompilationUnit)) return;		
+		// TODO merge this with other methods
+		IJavaProject javaProject = javaElement.getJavaProject();
+		Set<ICompilationUnit> units = getUnitsForProject(javaProject);
+		units.remove((ICompilationUnit) javaElement);		
+		
+		view.compilationUnitsSelected(javaProject, units);
 		log("-- editorClosed(" + editorEvent.getInput().getHandleIdentifier() + ")@");
 	}
 	
@@ -81,17 +109,41 @@ public class MapController {
 		log("-- editorActivated(" + editorEvent.getInput().getHandleIdentifier() + ")@");
 	}
 	
+	/**
+	 *  Initializes the map with the CompilationUnits that are displayed in the tab-bar of the editor.  
+	 */
 	private void onFirstEditorEvent() {
 		state = State.INITIALIZED;
+		
+		selections = new HashMap<IJavaProject, Set<ICompilationUnit>>();
+		
 		IEditorReference[] editorReferences = view.getSite().getPage().getEditorReferences();
-		ArrayList<String> openTabs = new ArrayList<String>();
 		for(IEditorReference ref: editorReferences) {
 			EditorEvent event = new EditorEvent(ref);
-			if (event.hasInput()) {
-				openTabs.add(event.getInput().getHandleIdentifier());
-			}
+			if (! event.hasInput()) continue;
+			
+			IJavaElement javaElement = event.getInput();
+			if (!(javaElement instanceof ICompilationUnit)) continue;
+			
+			IJavaProject javaProject = javaElement.getJavaProject();
+			Set<ICompilationUnit> units = getUnitsForProject(javaProject);
+			units.add((ICompilationUnit) javaElement);				
 		}
-		log("-- firstEditorEvent, open Tabs(" + openTabs + ")@");
+		
+		for(IJavaProject each: selections.keySet()) {
+			Set<ICompilationUnit> units = selections.get(each);
+			view.compilationUnitsSelected(each, units);				
+		}
+		log("-- firstEditorEvent@");
+	}
+
+	private Set<ICompilationUnit> getUnitsForProject(IJavaProject javaProject) {
+		Set<ICompilationUnit> units = selections.get(javaProject);
+		if (units == null) {
+			units = new HashSet<ICompilationUnit>();
+			selections.put(javaProject, units);
+		}
+		return units;
 	}
 
 	private void log(String msg) {

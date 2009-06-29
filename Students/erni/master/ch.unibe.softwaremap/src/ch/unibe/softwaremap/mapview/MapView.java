@@ -51,6 +51,7 @@ import ch.unibe.softwaremap.util.EclipseProcessingBridge;
 import ch.unibe.softwaremap.util.EclipseUtil;
 import ch.unibe.softwaremap.util.Log;
 
+// TODO factor out MeanderEventListener
 public class MapView extends ViewPart implements MeanderEventListener {
 
 	public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
@@ -283,9 +284,9 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	}
 
 	public void compilationUnitsSelected(IJavaProject javaProject, Collection<ICompilationUnit> units) {
-		IProject project0 = EclipseUtil.adapt(javaProject, IProject.class);
-		if (project0 != currentProject) selectionTracker.theController.onProjectChanged();
-		currentProject = project0;
+		IProject project = EclipseUtil.adapt(javaProject, IProject.class);
+		if (project != currentProject) selectionTracker.theController.onProjectChanged();
+		currentProject = project;
 		selectedUnits = units;
 		updateVisualization();
 	}
