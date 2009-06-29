@@ -47,6 +47,7 @@ import ch.deif.meander.ui.MeanderApplet;
 import ch.deif.meander.ui.MeanderEventListener;
 import ch.deif.meander.viz.MapVisualization;
 import ch.unibe.softwaremap.CodemapCore;
+import ch.unibe.softwaremap.MapPerProject;
 import ch.unibe.softwaremap.util.EclipseProcessingBridge;
 import ch.unibe.softwaremap.util.EclipseUtil;
 import ch.unibe.softwaremap.util.Log;
@@ -284,7 +285,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	}
 
 	public void compilationUnitsSelected(IJavaProject javaProject, Collection<ICompilationUnit> units) {
-		IProject project = EclipseUtil.adapt(javaProject, IProject.class);
+		IProject project = javaProject.getProject();
 		if (project != currentProject) selectionTracker.theController.onProjectChanged();
 		currentProject = project;
 		selectedUnits = units;
@@ -310,6 +311,13 @@ public class MapView extends ViewPart implements MeanderEventListener {
 
 	public void updateMap(CodemapCore codemapCore) {
 		codemapCore.mapForProject(getCurrentProject()).updateMap();
+	}
+
+	public void compilationUnitActivated(IJavaProject javaProject, ICompilationUnit javaElement) {
+		IProject project = javaProject.getProject();
+		MapPerProject mapPerProject = CodemapCore.getPlugin().mapForProject(project);
+		mapPerProject.setYouAreHere(javaElement);
+		updateVisualization();
 	}
 
 }

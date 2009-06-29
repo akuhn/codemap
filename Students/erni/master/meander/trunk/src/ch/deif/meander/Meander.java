@@ -158,4 +158,10 @@ public class Meander {
 		return runAlgorithm(new NearestNeighborAlgorithm());
 	}
 
+	public Meander add(MapVisualization overlay) {
+		overlay.setMap(map);
+		layers.add(overlay);
+		return this;
+	}
+
 }

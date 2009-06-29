@@ -21,10 +21,10 @@ public class ShoreVizualization extends MapVisualization {
 		pg.loadPixels();
 		int[] pixels = pg.pixels;
 		int index = 0;
-		for (Pixel each: map.pixels()) {
-			if (each.elevation() > map.getParameters().waterHeight) 
+		for (Pixel each: getMap().pixels()) {
+			if (each.elevation() > getMap().getParameters().waterHeight) 
 				pixels[index] = color.asRGB();
-			if (alsoShow != null && alsoShow[each.px][each.py] > map.getParameters().waterHeight)
+			if (alsoShow != null && alsoShow[each.px][each.py] > getMap().getParameters().waterHeight)
 				pixels[index] = color.asRGB();
 			index++;
 		}

@@ -106,6 +106,11 @@ public class MapController {
 		if (state == State.UNINITIALIZED) {
 			onFirstEditorEvent();
 		}
+		IJavaElement javaElement = editorEvent.getInput();
+		if (!(javaElement instanceof ICompilationUnit)) return;
+		
+		IJavaProject javaProject = javaElement.getJavaProject();
+		view.compilationUnitActivated(javaProject, (ICompilationUnit)javaElement);
 		log("-- editorActivated(" + editorEvent.getInput().getHandleIdentifier() + ")@");
 	}
 	

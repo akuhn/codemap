@@ -15,11 +15,11 @@ import ch.deif.meander.ui.MeanderApplet.Events;
 
 public abstract class MapVisualization implements Drawable {
 
-	public final Map map;
+	private Map map;
 	private Events events;
 
 	public MapVisualization(Map map) {
-		this.map = map;
+		this.setMap(map);
 	}
 
 	public void openApplet() {
@@ -65,7 +65,7 @@ public abstract class MapVisualization implements Drawable {
 	}
 
 	public int getWidth() {
-		return map.getWidth();
+		return getMap().getWidth();
 	}
 
 	public final void drawToPNG(String name) {
@@ -110,6 +110,14 @@ public abstract class MapVisualization implements Drawable {
 	
 	public Events events() {
 		return events;
+	}
+
+	public void setMap(Map map) {
+		this.map = map;
+	}
+
+	public Map getMap() {
+		return map;
 	}
 
 }

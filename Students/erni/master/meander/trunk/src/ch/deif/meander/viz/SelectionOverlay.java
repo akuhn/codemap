@@ -76,21 +76,21 @@ public class SelectionOverlay extends MapVisualization {
 			clearPoints();
 		}
 		if (e.getClickCount() == 2) {
-			NearestNeighbor nn = new MaxDistNearestNeighbor(map, getWidth() / 10).forLocation(point);
+			NearestNeighbor nn = new MaxDistNearestNeighbor(getMap(), getWidth() / 10).forLocation(point);
 			if (nn.hasResult()) {
 				addSelection(nn.point());
 				events().doubleClicked(nn.location());
 			}
 		} else if (e.getButton() == MouseEvent.BUTTON1) {
 			// button1 is 1st mouse button
-			NearestNeighbor nn = new MaxDistNearestNeighbor(map, getWidth() / 10).forLocation(point);
+			NearestNeighbor nn = new MaxDistNearestNeighbor(getMap(), getWidth() / 10).forLocation(point);
 			if (nn.hasResult()) {
 				addSelection(nn.point());
 				events().selectionChanged(nn.location());
 			}
 		} else if (e.getButton() == MouseEvent.BUTTON3) {
 			// button3 is 2nd mouse button
-			NearestNeighbor nn = new NearestNeighbor(map).forLocation(point);
+			NearestNeighbor nn = new NearestNeighbor(getMap()).forLocation(point);
 			addSelection(nn.point());
 			events().selectionChanged(nn.location());
 		}
@@ -113,7 +113,7 @@ public class SelectionOverlay extends MapVisualization {
 	@Override
 	public void addSelection(List<String> handleIdentifiers) {
 		synchronized (points) {
-			for (Location each: map.locations()) {
+			for (Location each: getMap().locations()) {
 				if (handleIdentifiers.contains(each.getIdentifier())) {
 					points.add(new Point(each.px(), each.py()));
 				}
@@ -127,7 +127,7 @@ public class SelectionOverlay extends MapVisualization {
 		List<Location> locations = new ArrayList<Location>();
 		synchronized (points) {
 			for (int index: indices) {
-				Location location = map.locationAt(index);
+				Location location = getMap().locationAt(index);
 				locations.add(location);
 				points.add(new Point(location.px(), location.py()));
 			}			
@@ -138,7 +138,7 @@ public class SelectionOverlay extends MapVisualization {
 		List<Location> selected = new ArrayList<Location>();
 		clearPoints();
 		synchronized (points) {
-			for (Location each: map.locations()) {
+			for (Location each: getMap().locations()) {
 				int x = (int) Math.round(each.x() * getWidth());
 				int y = (int) Math.round(each.y() * getWidth());
 				if (x < dragStop.x && x > dragStart.x && y < dragStop.y && y > dragStart.y) {

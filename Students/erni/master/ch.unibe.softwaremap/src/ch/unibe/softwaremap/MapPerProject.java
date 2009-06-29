@@ -3,6 +3,7 @@ package ch.unibe.softwaremap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.codemap.hitmds.Visualization;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -12,13 +13,17 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jdt.core.ICompilationUnit;
 
 import ch.akuhn.hapax.index.TermDocumentMatrix;
+import ch.deif.meander.Location;
 import ch.deif.meander.MapModifier;
+import ch.deif.meander.MapSelection;
 import ch.deif.meander.Meander;
 import ch.deif.meander.viz.LabelsOverlay;
 import ch.deif.meander.viz.MapVisualization;
 import ch.deif.meander.viz.SelectionOverlay;
+import ch.deif.meander.viz.YouAreHereOverlay;
 import ch.unibe.scg.util.Extension;
 import ch.unibe.softwaremap.builder.HapaxBuilder;
 import ch.unibe.softwaremap.builder.MapMakerBackgroundJob;
@@ -41,11 +46,13 @@ public class MapPerProject {
 	private boolean builderIsRunning = false;
 	private Set<MapModifier> modifiers;
 	private int mapDimension = MINIMAL_SIZE;
+	private MapSelection mapSelection;
 
 	
 	public MapPerProject(IProject project) {
 		this.project = project;
 		modifiers = new HashSet<MapModifier>();
+		mapSelection = new MapSelection();
 	}
 
 	public MapPerProject enableBuilder() {
@@ -131,6 +138,7 @@ public class MapPerProject {
 								 .useHillshading()
 								 .add(LabelsOverlay.class)
 								 .add(SelectionOverlay.class)
+								 .add(new YouAreHereOverlay(mapSelection))
 								 .runNearestNeighborAlgorithm()
 								 .getVisualization();
 		notifyMapView();
@@ -161,6 +169,10 @@ public class MapPerProject {
 			modifiers.remove(mod);
 			modifiers.add(mod);
 		}
+	}
+
+	public void setYouAreHere(ICompilationUnit javaElement) {
+		mapSelection.clear().add(javaElement.getHandleIdentifier());
 	}
 
 }

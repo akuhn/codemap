@@ -20,7 +20,7 @@ public class Layers extends MapVisualization {
 	}
 
 	public void useSketchBackground() {
-		background = new SketchVisualization(map);
+		background = new SketchVisualization(getMap());
 	}
 
 	public Layers add(MapVisualization overlay) {
@@ -37,16 +37,16 @@ public class Layers extends MapVisualization {
 
 	public Layers useHillshading() {
 		background = Composite.of(
-				new WaterVisualization(map),
-				new ShoreVizualization(map),
-				new HillshadeVisualization(map),
-				new LabelsOverlay(map));
+				new WaterVisualization(getMap()),
+				new ShoreVizualization(getMap()),
+				new HillshadeVisualization(getMap()),
+				new LabelsOverlay(getMap()));
 		return this;
 	}
 
 	public Layers add(Class<? extends MapVisualization> overlay) {
 		try {
-			add(overlay.getConstructor(Map.class).newInstance(map));
+			add(overlay.getConstructor(Map.class).newInstance(getMap()));
 			return this;
 		} catch (Exception ex) {
 			throw Throw.exception(ex);

@@ -152,7 +152,7 @@ public class MapViewTest extends BaseTest {
 	public void testView() throws PartInitException {
 		selectJavaProject();
 		Layers layers = testLayersLoaded();
-		Map map = layers.map;
+		Map map = layers.getMap();
 		assertEquals(2, map.locationCount());
 	}
 

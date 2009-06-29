@@ -7,9 +7,11 @@ import java.util.Set;
 public class MapSelection implements Iterable<Location> {
 
 	private Set<Location> elements;
+	private HashSet<String> pendingElements;
 	
 	public MapSelection() {
 		elements = new HashSet<Location>();
+		pendingElements = new HashSet<String>();
 	}
 	
 	@Override
@@ -37,11 +39,29 @@ public class MapSelection implements Iterable<Location> {
 
 	public MapSelection clear() {
 		elements.clear();
+		pendingElements.clear();
 		return this;
 	}
 	
 	public boolean contains(Location element) {
 		return elements.contains(elements);
+	}
+
+	public void add(String handleIdentifier) {
+		pendingElements.add(handleIdentifier);
+	}
+
+	public MapSelection convertElements(Map map) {
+		for(String identifier: pendingElements){
+			for(Location each: map.locations()) {
+				if (each.document().getIdentifier().equals(identifier)) {
+					add(each);
+					break;
+				}
+			}			
+		}
+		pendingElements.clear();
+		return this;
 	}
 	
 }

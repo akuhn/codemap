@@ -14,12 +14,12 @@ public class SketchVisualization extends MapVisualization {
 
 	@Override
 	public void draw(PGraphics pg) {
-		float width = map.getWidth();
+		float width = getMap().getWidth();
 		pg.background(204);
 		pg.stroke(0);
 		pg.noFill();
 		pg.smooth();
-		for (Location each: map.locations()) {
+		for (Location each: getMap().locations()) {
 			float x = (float) (each.x() * width);
 			float y = (float) (each.y() * width);
 			float r = (float) (each.elevation() / 500 * width);

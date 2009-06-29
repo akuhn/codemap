@@ -15,8 +15,15 @@ public class YouAreHereOverlay extends MapVisualization {
 		elements = new MapSelection();
 	}
 
+	public YouAreHereOverlay(MapSelection mapSelection) {
+		// map will be set as soon as this overlay is added to Meander
+		super(null);
+		elements = mapSelection;
+	}
+	
 	@Override
 	public void draw(PGraphics pg) {
+		elements.convertElements(getMap());
 		for (Location each: elements) drawLocation(pg, each);
 	}
 	

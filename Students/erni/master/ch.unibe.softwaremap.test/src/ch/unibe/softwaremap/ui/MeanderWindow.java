@@ -31,22 +31,22 @@ public class MeanderWindow {
 	private static void createMeander(Shell shell) {
 		bridge = new EclipseProcessingBridge(shell, EclipseProcessingBridge.createApplet());
 		Layers layers = LabelSketch.createLabeledSketch();
-		new NearestNeighborAlgorithm(layers.map).run();
+		new NearestNeighborAlgorithm(layers.getMap()).run();
 		layers.add(SelectionOverlay.class);
 		
-		Location loc = findLocation(layers.map, "the");
+		Location loc = findLocation(layers.getMap(), "the");
 		loc.setColor(new Colors(255, 0, 0));
 		
-		loc = findLocation(layers.map, "for");
+		loc = findLocation(layers.getMap(), "for");
 		loc.setColor(new Colors(255, 0, 0));	
 		
-		loc = findLocation(layers.map, "fox");
+		loc = findLocation(layers.getMap(), "fox");
 		loc.setColor(new Colors(255, 0, 0));			
 		
 		bridge.setMapVizualization(layers);
 		
 		
-		int dim = layers.map.getParameters().width;
+		int dim = layers.getMap().getParameters().width;
 		shell.setSize(dim, dim);
 	}
 	

@@ -20,8 +20,8 @@ public class HillshadeVisualization extends MapVisualization {
 		pg.loadPixels();
 		int[] pixels = pg.pixels;
 		int index = 0;
-		for (Pixel p: map.pixels()) {
-			if (p.elevation() > map.getParameters().beachHeight) {
+		for (Pixel p: getMap().pixels()) {
+			if (p.elevation() > getMap().getParameters().beachHeight) {
 				double shading = p.hillshade();
 				if (p.hasContourLine()) shading *= 0.5;
 				pixels[index] = colorOf(p).scaledRGB(shading);

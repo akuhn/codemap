@@ -157,7 +157,7 @@ public class MeanderApplet extends PApplet {
 	}
 
 	private int height() {
-		return viz == null ? 0 : viz.map.getParameters().width;
+		return viz == null ? 0 : viz.getMap().getParameters().width;
 	}
 
 	public void updateSelection(List<String> handleIdentifiers) {
@@ -172,7 +172,7 @@ public class MeanderApplet extends PApplet {
 		size(width(), height());
 		
 		// TODO somehow clean up the parameters ... maybe singleton 
-		int dimension = viz.map.getParameters().width;
+		int dimension = viz.getMap().getParameters().width;
 		if (bg == null || dimension != this.bg.width) {
 			bg = createGraphics(dimension, dimension, JAVA2D);
 		}
