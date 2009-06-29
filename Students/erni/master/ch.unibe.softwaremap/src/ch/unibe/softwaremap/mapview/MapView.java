@@ -96,8 +96,8 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		
 		container.layout();
 		Colors water = Colors.WATER;
-		Color SWTColor = new Color(null, water.getRed(), water.getGreen(), water.getBlue());		
-		container.setBackground(SWTColor);
+		Color swtColor = new Color(null, water.getRed(), water.getGreen(), water.getBlue());		
+		container.setBackground(swtColor);
 		theApplet = EclipseProcessingBridge.createApplet();
 
 		selectionProvider = new MapSelectionProvider(this);
