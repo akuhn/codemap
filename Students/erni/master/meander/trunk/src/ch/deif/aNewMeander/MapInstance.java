@@ -8,8 +8,10 @@ import ch.akuhn.util.Providable;
 import ch.deif.meander.util.RunLengthEncodedList;
 import ch.deif.meander.util.SparseTrueBooleanList;
 
-public class MapConfigurationWithSize extends MapConfiguration {
+public class MapInstance {
 
+	private Collection<Location> locations;
+	
 	public final int width, height;
 	public int getWidth() {
 		return width;
@@ -20,16 +22,20 @@ public class MapConfigurationWithSize extends MapConfiguration {
 	private int beachContourLevel = 10;
 	private int contourLineStep = 10;
 	
-	public MapConfigurationWithSize(MapConfiguration map, int size) {
-		super(makeLocationsWithSize(map, size));
+	public Iterable<Location> locations() {
+		return locations;
+	}
+	
+	public MapInstance(MapConfiguration map, int size) {
+		locations = makeLocationsWithSize(map, size);
 		this.width = this.height = size;
 	}
 
-	private static Collection<LocationWithSize> makeLocationsWithSize(MapConfiguration map, int size) {
-		Collection<LocationWithSize> result = new ArrayList<LocationWithSize>();
-		for (Location each: map.locations()) {
-			result.add(new LocationWithSize(each, 
-					Math.sqrt(each.documentSize), 
+	private Collection<Location> makeLocationsWithSize(MapConfiguration map, int size) {
+		Collection<Location> result = new ArrayList<Location>();
+		for (Point each: map.locations()) {
+			result.add(new Location(each, 
+					Math.sqrt(each.getDocument().termSize()), // TODO do this in a mapper. maybe
 					(int) (each.getX() * size),
 					(int) (each.getY() * size)));
 		}
@@ -97,7 +103,7 @@ public class MapConfigurationWithSize extends MapConfiguration {
 	private float[][] DEM;
 	private double[][] hillshade;
 	private List<SparseTrueBooleanList> contours;
-	private List<RunLengthEncodedList<Location>> NN;
+	private List<RunLengthEncodedList<Point>> NN;
 	private List<SparseTrueBooleanList> getContours() {
 		if (contours == null) throw null;
 		return contours;
@@ -260,8 +266,7 @@ public class MapConfigurationWithSize extends MapConfiguration {
 		return contourLineStep;
 	}	
 	
-	public MapConfigurationWithSize normalizeElevation() {
-		MapConfigurationWithSize clone = (MapConfigurationWithSize) this.makeClone();
+	public MapInstance normalizeElevation() {
 		double max = 0.0;
 		return this;
 	}

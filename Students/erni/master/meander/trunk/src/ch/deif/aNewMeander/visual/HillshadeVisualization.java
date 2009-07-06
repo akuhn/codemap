@@ -2,13 +2,13 @@ package ch.deif.aNewMeander.visual;
 
 import processing.core.PGraphics;
 import ch.deif.aNewMeander.MapColor;
-import ch.deif.aNewMeander.MapConfigurationWithSize;
-import ch.deif.aNewMeander.MapConfigurationWithSize.Pixel;
+import ch.deif.aNewMeander.MapInstance;
+import ch.deif.aNewMeander.MapInstance.Pixel;
 
 public class HillshadeVisualization implements Layer {
 
 	@Override
-	public void draw(MapConfigurationWithSize map, PGraphics pg) {
+	public void draw(MapInstance map, PGraphics pg) {
 		assert map.width == pg.width;
 		assert map.height == pg.height;
 		map.needElevationModel();
@@ -29,7 +29,7 @@ public class HillshadeVisualization implements Layer {
 		pg.updatePixels();
 	}
 
-	private MapColor colorOf(MapConfigurationWithSize map, Pixel p) {
+	private MapColor colorOf(MapInstance map, Pixel p) {
 		return map.isGrayscale() ? MapColor.GRAY_204 : p.nearestNeighborColor();
 	}
 

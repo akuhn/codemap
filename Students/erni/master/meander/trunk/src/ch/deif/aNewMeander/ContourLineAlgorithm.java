@@ -3,13 +3,13 @@ package ch.deif.aNewMeander;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.deif.aNewMeander.MapConfigurationWithSize.Kernel;
+import ch.deif.aNewMeander.MapInstance.Kernel;
 import ch.deif.meander.util.SparseTrueBooleanList;
 
 public class ContourLineAlgorithm implements MapAlgorithm<List<SparseTrueBooleanList>> {
 
 	@Override
-	public List<SparseTrueBooleanList> runWith(MapConfigurationWithSize map) {
+	public List<SparseTrueBooleanList> runWith(MapInstance map) {
 		int step = map.getContourLineStep();
 		boolean[][] contour = new boolean[map.getWidth()][map.getWidth()];
 		for (Kernel k: map.kernels()) {

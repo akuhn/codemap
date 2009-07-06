@@ -20,10 +20,10 @@ public class DEMAlgorithm implements MapAlgorithm<float[][]> {
 	private static final double THRESHOLD = 1.0;
 	private float[][] DEM;
 	private int radius;
-	private MapConfigurationWithSize map;
+	private MapInstance map;
 
 	@Override
-	public float[][] runWith(MapConfigurationWithSize map) {
+	public float[][] runWith(MapInstance map) {
 		this.map = map;
 		setup();
 		compute();
@@ -33,11 +33,11 @@ public class DEMAlgorithm implements MapAlgorithm<float[][]> {
 	private void compute() {
 		// TODO a map configuration on map should return locations on map
 		for (Location each: map.locations()) {
-			elevateHill((LocationWithSize) each, computePie((LocationWithSize) each));
+			elevateHill(each, computePie(each));
 		}
 	}
 
-	private void elevateHill(LocationWithSize each, float[][] pie) {
+	private void elevateHill(Location each, float[][] pie) {
 		final int y0, x0, top, bottom, left, right;
 		y0 = each.getPy();
 		x0 = each.getPx();
@@ -55,7 +55,7 @@ public class DEMAlgorithm implements MapAlgorithm<float[][]> {
 		}
 	}
 
-	private float[][] computePie(LocationWithSize each) {
+	private float[][] computePie(Location each) {
 		float[][] pie = new float[DEM.length][];
 		double elevationFactor = each.getElevation();
 		double distFactor2 = -1.0 

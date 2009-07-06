@@ -3,7 +3,7 @@ package ch.deif.aNewMeander.builder;
 import ch.akuhn.hapax.Hapax;
 import ch.deif.aNewMeander.MapColor;
 import ch.deif.aNewMeander.MapConfiguration;
-import ch.deif.aNewMeander.MapConfigurationWithSize;
+import ch.deif.aNewMeander.MapInstance;
 import ch.deif.aNewMeander.MapScheme;
 import ch.deif.aNewMeander.visual.Layer;
 import ch.deif.aNewMeander.visual.MapVisualization;
@@ -33,7 +33,7 @@ public class MeanderExample {
 				//.withSelection(new YouAreHereOverlay(), currentEditorSelection)
 				.makeLayer();
 		
-		MapConfigurationWithSize mapWithSize = map.withSize(512);
+		MapInstance mapWithSize = map.withSize(512);
 		new MapVisualization(mapWithSize, layer).openApplet();
 
 	}

@@ -5,11 +5,18 @@ import java.util.Collection;
 
 import ch.deif.meander.util.Collect;
 
+/** A set of documents on the visualization pane, each document has logical coordinates.
+ *<P>
+ * Instances of this class are immutable.
+ *  
+ * @author Adrian Kuhn
+ *
+ */
 public class MapConfiguration {
 
-	private Location[] locations;
+	private Point[] locations;
 	
-	private MapConfiguration(Location... locations) {
+	private MapConfiguration(Point... locations) {
 		this.locations = locations;
 	}
 	
@@ -17,11 +24,11 @@ public class MapConfiguration {
 		this(Arrays.copyOf(map.locations, map.locations.length));
 	}
 	
-	public MapConfiguration(Collection<? extends Location> locations) {
-		this(locations.toArray(new Location[locations.size()]));
+	public MapConfiguration(Collection<? extends Point> locations) {
+		this(locations.toArray(new Point[locations.size()]));
 	}
 	
-	public Iterable<Location> locations() {
+	public Iterable<Point> locations() {
 		return Arrays.asList(locations);
 	}
 	
@@ -38,15 +45,15 @@ public class MapConfiguration {
 		}
 		double width = maxX - minX;
 		double height = maxY - minY;
-		Collect<Location> query = Collect.fromArray(locations);
-		for (Collect<Location> each: query) {
+		Collect<Point> query = Collect.fromArray(locations);
+		for (Collect<Point> each: query) {
 			each.value = each.value.normalize(minX, minY, width, height);
 		}
 		return new MapConfiguration(query.asArray());
 	}
 
-	public MapConfigurationWithSize withSize(int size) {
-		return new MapConfigurationWithSize(this, size).normalizeElevation();
+	public MapInstance withSize(int size) {
+		return new MapInstance(this, size).normalizeElevation();
 	}
 
 	public Object makeClone() {

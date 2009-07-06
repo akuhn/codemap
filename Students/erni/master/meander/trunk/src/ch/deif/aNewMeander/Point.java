@@ -1,16 +1,16 @@
 package ch.deif.aNewMeander;
 
-public class Point implements Cloneable {
+import ch.akuhn.hapax.corpus.Document;
+
+public class Point {
 
 	protected double x, y;
+	protected Document document;
 
-	public Point(double x, double y) {
+	public Point(double x, double y, Document document) {
 		this.x = x;
 		this.y = y;
-	}
-	
-	public Point(Point p) {
-		this(p.x, p.y);
+		this.document = document;
 	}
 
 	public double getX() {
@@ -19,23 +19,14 @@ public class Point implements Cloneable {
 	
 	public double getY() {
 		return y;
-	}
+	}	
 	
-	public Object makeClone() {
-		try {
-			return super.clone();
-		} catch (CloneNotSupportedException ex) {
-			throw new Error("Java specification forces us to catch an exception,"
-					+ " that by the very specification itself may never occur. "
-					+ " Weclome to the nightmare lands of static typing!", ex);
-		}
+	public Document getDocument() {
+		return document;
 	}
-	
-	public Point withXY(double x, double y) {
-		Point clone = (Point) this.makeClone();
-		clone.x = x;
-		clone.y = y;
-		return clone;
+
+	public Point normalize(double minX, double minY, double width, double height) {
+		return new Point((x - minX) / width, (y - minY) / height, document);
 	}
-	
+
 }

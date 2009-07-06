@@ -2,31 +2,44 @@ package ch.deif.aNewMeander;
 
 import ch.akuhn.hapax.corpus.Document;
 
-public class Location extends Point {
 
-	protected int documentSize;
-	protected Document document;
+public class Location {
 
-	public Location(Point p, Document document, int documentSize) {
-		super(p);
-		this.documentSize = documentSize;
-		this.document = document;
-	}
-	
-	public Location(Location location) {
-		this(location, location.document, location.documentSize);
-	}
-
-	public int getDocumentSize() {
-		return documentSize;
-	}
+	protected int px, py;
+	protected double elevation;
+	private Point point;
 
 	public Document getDocument() {
-		return document;
+		return point.getDocument();
+	}
+	
+	public Location(Point point, double elevation, int px, int py) {
+		this.point = point;
+		this.elevation = elevation;
+		this.px = px;
+		this.py = py;
 	}
 
-	public Location normalize(double minX, double minY, double width, double height) {
-		return (Location) this.withXY((x - minX) / width, (y - minY) / height);
+	public Location(Location loc) {
+		this(loc.point, loc.elevation, loc.px, loc.py); 
+	}
+
+	public Location withElevation(double elevation) {
+		Location clone = new Location(this);
+		clone.elevation = elevation;
+		return clone;
+	}
+
+	public int getPx() {
+		return px;
+	}
+
+	public int getPy() {
+		return py;
+	}
+
+	public double getElevation() {
+		return elevation;
 	}
 
 }

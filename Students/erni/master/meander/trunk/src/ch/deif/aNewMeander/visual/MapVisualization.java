@@ -11,14 +11,14 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.pdf.PGraphicsPDF;
-import ch.deif.aNewMeander.MapConfigurationWithSize;
+import ch.deif.aNewMeander.MapInstance;
 
 public class MapVisualization {
 
-	private MapConfigurationWithSize map;
+	private MapInstance map;
 	private Layer visual;
 
-	public MapVisualization(MapConfigurationWithSize map, Layer visual) {
+	public MapVisualization(MapInstance map, Layer visual) {
 		assert map != null;
 		assert visual != null;
 		this.map = map;
@@ -96,7 +96,7 @@ public class MapVisualization {
 		return img;
 	}
 
-	public static Applet makeApplet(MapConfigurationWithSize map2, MapVisualization visual) {
+	public static Applet makeApplet(MapInstance map2, MapVisualization visual) {
 		// TODO Auto-generated method stub
 		return null;
 	}

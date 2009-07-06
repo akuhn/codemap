@@ -6,11 +6,10 @@ import java.util.Collection;
 import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
-import ch.deif.aNewMeander.Location;
+import ch.deif.aNewMeander.Point;
 import ch.deif.aNewMeander.MapColor;
 import ch.deif.aNewMeander.MapConfiguration;
 import ch.deif.aNewMeander.MapScheme;
-import ch.deif.aNewMeander.Point;
 import ch.deif.aNewMeander.visual.Composite;
 import ch.deif.aNewMeander.visual.HillshadeVisualization;
 import ch.deif.aNewMeander.visual.Layer;
@@ -46,11 +45,10 @@ public class Meander implements MapBuilder, VisualizationBuilder {
 		LatentSemanticIndex lsi = hapax.getIndex();
 		MDS mds = MDS.fromCorrelationMatrix(lsi);
 		mds.normalize();
-		Collection<Location> locations = new ArrayList<Location>();
+		Collection<Point> locations = new ArrayList<Point>();
 		int index = 0;
 		for (Document each: lsi.documents) {
-			Point p = new Point(mds.x[index], mds.y[index]);
-			locations.add(new Location(p, each, each.termSize()));
+			locations.add(new Point(mds.x[index], mds.y[index], each));
 			index++;
 		}
 		return new MapConfiguration(locations).normalize();

@@ -3,22 +3,22 @@ package ch.deif.aNewMeander.visual;
 import java.util.ArrayList;
 
 import processing.core.PGraphics;
-import ch.deif.aNewMeander.MapConfigurationWithSize;
+import ch.deif.aNewMeander.MapInstance;
 
 
 @SuppressWarnings("serial")
 public class Composite<E extends Layer> extends ArrayList<E> implements Layer {
 
-	public void drawFigure(MapConfigurationWithSize map, PGraphics pg) {
+	public void drawFigure(MapInstance map, PGraphics pg) {
 		// by default, do nothing
 	}
 
-	public final void draw(MapConfigurationWithSize map, PGraphics pg) {
+	public final void draw(MapInstance map, PGraphics pg) {
 		this.drawFigure(map, pg);
 		this.drawChildren(map, pg);
 	}
 
-	public void drawChildren(MapConfigurationWithSize map, PGraphics pg) {
+	public void drawChildren(MapInstance map, PGraphics pg) {
 		for (Layer each: this) {
 			each.draw(map, pg);
 		}

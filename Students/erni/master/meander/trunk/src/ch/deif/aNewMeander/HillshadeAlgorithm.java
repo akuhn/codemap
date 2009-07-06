@@ -6,7 +6,7 @@ import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
-import ch.deif.aNewMeander.MapConfigurationWithSize.Kernel;
+import ch.deif.aNewMeander.MapInstance.Kernel;
 
 /**
  * @see http://edndoc.esri.com/arcobjects/9.2/NET/shared/geoprocessing/ spatial_analyst_tools/how_hillshade_works.htm
@@ -18,7 +18,7 @@ public class HillshadeAlgorithm implements MapAlgorithm<double[][]> {
 	private static final double Z_FACTOR = 0.6e-3;
 
 	@Override
-	public double[][] runWith(MapConfigurationWithSize map) {
+	public double[][] runWith(MapInstance map) {
 		// zenith: height of sun over horizon (90 = horizon, 0 = zenith).
 		double zenithRad = 45 * PI / 180;
 		// azimuth: direction of sun on x-y-plane

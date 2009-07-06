@@ -12,7 +12,7 @@ public class MapScheme<Value> {
 		this.defaultValue = defaultValue;
 	}
 	
-	public Value forLocation(Location location) {
+	public Value forLocation(Point location) {
 		return defaultValue;
 	}
 	

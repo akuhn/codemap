@@ -1,10 +1,10 @@
 package ch.deif.aNewMeander.visual;
 
 import processing.core.PGraphics;
-import ch.deif.aNewMeander.MapConfigurationWithSize;
+import ch.deif.aNewMeander.MapInstance;
 
 public interface Layer {
 
-	public abstract void draw(MapConfigurationWithSize map, PGraphics pg);
+	public abstract void draw(MapInstance map, PGraphics pg);
 	
 }
