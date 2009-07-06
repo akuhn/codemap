@@ -6,12 +6,12 @@ import ch.deif.aNewMeander.ContourLineAlgorithm;
 import ch.deif.aNewMeander.DEMAlgorithm;
 import ch.deif.aNewMeander.HillshadeAlgorithm;
 import ch.deif.aNewMeander.visual.HillshadeVisualization;
+import ch.deif.aNewMeander.visual.SketchVisualization;
 import ch.deif.meander.internal.NearestNeighborAlgorithm;
 import ch.deif.meander.internal.NormalizeElevationAlgorithm;
 import ch.deif.meander.util.RunLengthEncodedList;
 import ch.deif.meander.util.SparseTrueBooleanList;
 import ch.deif.meander.viz.MapVisualization;
-import ch.deif.meander.viz.SketchVisualization;
 
 /**
  * Main data container of maps.

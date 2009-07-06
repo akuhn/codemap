@@ -51,8 +51,9 @@ public class Meander implements MapBuilder, VisualizationBuilder {
 		for (Document each: lsi.documents) {
 			Point p = new Point(mds.x[index], mds.y[index]);
 			locations.add(new Location(p, each, each.termSize()));
+			index++;
 		}
-		return new MapConfiguration(locations);
+		return new MapConfiguration(locations).normalize();
 	}
 
 	private Composite<Layer> layers = new Composite<Layer>();
@@ -65,6 +66,9 @@ public class Meander implements MapBuilder, VisualizationBuilder {
 		layers.add(new WaterVisualization());
 		layers.add(new ShoreVizualization());
 		layers.add(new HillshadeVisualization());
+		
+		//layers.add(new SketchVisualization());
+		
 		return this;
 	}
 

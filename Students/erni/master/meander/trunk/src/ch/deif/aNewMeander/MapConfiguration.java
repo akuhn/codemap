@@ -46,8 +46,18 @@ public class MapConfiguration {
 	}
 
 	public MapConfigurationWithSize withSize(int size) {
-		return new MapConfigurationWithSize(this, size);
+		return new MapConfigurationWithSize(this, size).normalizeElevation();
 	}
 
+	public Object makeClone() {
+		try {
+			return super.clone();
+		} catch (CloneNotSupportedException ex) {
+			throw new Error("Java specification forces us to catch an exception,"
+					+ " that by the very specification itself may never occur. "
+					+ " Weclome to the nightmare lands of static typing!", ex);
+		}
+	}
+	
 }
   

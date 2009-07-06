@@ -51,6 +51,8 @@ public class MapVisualization {
 	}
 
 	public void draw(PGraphics pg) {
+		assert map.width == pg.width;
+		assert map.height == pg.height;
 		visual.draw(map, pg);
 	}
 
@@ -115,11 +117,15 @@ public class MapVisualization {
 					visual.draw(map, g);
 				}
 			};
+			setResizable(false);
+			pa.setSize(map.width, map.height);
+			pa.setMaximumSize(pa.getSize());
+			pa.setMinimumSize(pa.getSize());
+			// TODO use a layout that does not resize the applet.
 			getContentPane().add(pa, BorderLayout.CENTER);
 			pa.init();
 			pack();
 			setVisible(true);
-			setSize(map.width, map.height);
 			setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		}
 	}

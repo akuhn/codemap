@@ -2,9 +2,9 @@ package sketchbook;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
+import ch.deif.aNewMeander.visual.SketchVisualization;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
-import ch.deif.meander.viz.SketchVisualization;
 
 public class SketchSketch {
 

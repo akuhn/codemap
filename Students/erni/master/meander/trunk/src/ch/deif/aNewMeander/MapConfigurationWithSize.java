@@ -125,10 +125,6 @@ public class MapConfigurationWithSize extends MapConfiguration {
 			bottomRight = getDEM()[xRight][yBottom];
 		}
 
-		public void setHillshade(double hillshade) {
-			getHillshade()[px][py] = hillshade;
-		}
-
 	}
 	
 	public Iterable<Kernel> kernels() {
@@ -263,5 +259,11 @@ public class MapConfigurationWithSize extends MapConfiguration {
 	public int getContourLineStep() {
 		return contourLineStep;
 	}	
+	
+	public MapConfigurationWithSize normalizeElevation() {
+		MapConfigurationWithSize clone = (MapConfigurationWithSize) this.makeClone();
+		double max = 0.0;
+		return this;
+	}
 	
 }
