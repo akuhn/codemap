@@ -1,4 +1,8 @@
-package ch.deif.meander;
+package ch.deif.meander.internal;
+
+import ch.deif.meander.Location;
+import ch.deif.meander.MapAlgorithm;
+import ch.deif.meander.MapInstance;
 
 /** Creates the digital elevation model of a map. A digital elevation model (DEM) is a raster of z-ordinates for each pixel. 
  *<p> 
@@ -39,8 +43,8 @@ public class DEMAlgorithm implements MapAlgorithm<float[][]> {
 
 	private void elevateHill(Location each, float[][] pie) {
 		final int y0, x0, top, bottom, left, right;
-		y0 = each.getPy();
-		x0 = each.getPx();
+		y0 = each.py;
+		x0 = each.px;
 		top = y0 > radius ? 1 - radius : 0 - y0;
 		left = x0 > radius ? 1 - radius : 0 - x0;
 		bottom = y0 + radius < DEM.length ? radius : DEM.length - y0; 

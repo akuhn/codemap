@@ -1,8 +1,10 @@
-package ch.deif.meander;
+package ch.deif.meander.internal;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.deif.meander.MapAlgorithm;
+import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapInstance.Kernel;
 import ch.deif.meander.util.SparseTrueBooleanList;
 

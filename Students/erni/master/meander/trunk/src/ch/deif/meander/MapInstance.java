@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.List;
 
 import ch.akuhn.util.Providable;
+import ch.deif.meander.internal.ContourLineAlgorithm;
+import ch.deif.meander.internal.DEMAlgorithm;
+import ch.deif.meander.internal.HillshadeAlgorithm;
 import ch.deif.meander.util.RunLengthEncodedList;
 import ch.deif.meander.util.SparseTrueBooleanList;
 
@@ -159,11 +162,11 @@ public class MapInstance {
 
 	private Collection<Location> makeLocationsWithSize(MapConfiguration map, int size) {
 		Collection<Location> result = new ArrayList<Location>();
-		for (Point each: map.locations()) {
+		for (Point each: map.points()) {
 			result.add(new Location(each, 
 					Math.sqrt(each.getDocument().termSize()), // TODO do this in a mapper. maybe
-					(int) (each.getX() * size),
-					(int) (each.getY() * size)));
+					(int) (each.x * size),
+					(int) (each.y * size)));
 		}
 		return result;
 	}

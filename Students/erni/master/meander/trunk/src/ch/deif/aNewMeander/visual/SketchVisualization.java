@@ -16,8 +16,8 @@ public class SketchVisualization implements Layer {
 		pg.noFill();
 		pg.smooth();
 		for (Location each: map.locations()) {
-			float x = (float) (each.getPx());
-			float y = (float) (each.getPy());
+			float x = (float) (each.px);
+			float y = (float) (each.py);
 			float r = (float) (each.getElevation() / 500 * width);
 			pg.ellipse(x, y, r, r);
 		}

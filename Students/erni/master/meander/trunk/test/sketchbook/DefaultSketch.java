@@ -2,12 +2,12 @@ package sketchbook;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import ch.deif.meander.ContourLineAlgorithm;
-import ch.deif.meander.DEMAlgorithm;
-import ch.deif.meander.HillshadeAlgorithm;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
 import ch.deif.meander.MapColor;
+import ch.deif.meander.internal.ContourLineAlgorithm;
+import ch.deif.meander.internal.DEMAlgorithm;
+import ch.deif.meander.internal.HillshadeAlgorithm;
 import ch.deif.meander.internal.NearestNeighborAlgorithm;
 import ch.deif.meander.internal.NormalizeElevationAlgorithm;
 import ch.deif.meander.viz.Layers;

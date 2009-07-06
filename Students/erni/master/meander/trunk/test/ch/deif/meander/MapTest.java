@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import ch.akuhn.util.All;
 import ch.akuhn.util.Size;
 import ch.deif.meander.Map.Pixel;
+import ch.deif.meander.internal.DEMAlgorithm;
 import ch.unibe.jexample.Given;
 import ch.unibe.jexample.JExample;
 

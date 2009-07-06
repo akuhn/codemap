@@ -1,4 +1,4 @@
-package ch.deif.meander;
+package ch.deif.meander.internal;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.atan;
@@ -6,6 +6,8 @@ import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
+import ch.deif.meander.MapAlgorithm;
+import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapInstance.Kernel;
 
 /**
