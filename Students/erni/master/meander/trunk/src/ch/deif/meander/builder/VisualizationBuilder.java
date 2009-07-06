@@ -1,9 +1,9 @@
 package ch.deif.meander.builder;
 
-import ch.deif.aNewMeander.visual.Layer;
 import ch.deif.meander.MapColor;
 import ch.deif.meander.MapScheme;
 import ch.deif.meander.MapSelection;
+import ch.deif.meander.visual.Layer;
 import ch.deif.meander.viz.MapSelectionOverlay;
 
 public interface VisualizationBuilder {

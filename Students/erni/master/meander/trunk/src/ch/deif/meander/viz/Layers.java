@@ -6,11 +6,11 @@ import java.util.List;
 
 import processing.core.PGraphics;
 import ch.akuhn.util.Throw;
-import ch.deif.aNewMeander.visual.ShoreVizualization;
-import ch.deif.aNewMeander.visual.SketchVisualization;
-import ch.deif.aNewMeander.visual.WaterVisualization;
 import ch.deif.meander.Map;
 import ch.deif.meander.ui.MeanderApplet.Events;
+import ch.deif.meander.visual.ShoreVizualization;
+import ch.deif.meander.visual.SketchVisualization;
+import ch.deif.meander.visual.WaterVisualization;
 
 public class Layers extends MapVisualization {
 

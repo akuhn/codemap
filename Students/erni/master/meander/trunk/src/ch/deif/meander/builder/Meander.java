@@ -6,17 +6,17 @@ import java.util.Collection;
 import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
-import ch.deif.aNewMeander.visual.Composite;
-import ch.deif.aNewMeander.visual.HillshadeVisualization;
-import ch.deif.aNewMeander.visual.Layer;
-import ch.deif.aNewMeander.visual.ShoreVizualization;
-import ch.deif.aNewMeander.visual.WaterVisualization;
 import ch.deif.meander.MapColor;
 import ch.deif.meander.MapConfiguration;
 import ch.deif.meander.MapScheme;
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.Point;
 import ch.deif.meander.internal.MDS;
+import ch.deif.meander.visual.Composite;
+import ch.deif.meander.visual.HillshadeVisualization;
+import ch.deif.meander.visual.Layer;
+import ch.deif.meander.visual.ShoreVizualization;
+import ch.deif.meander.visual.WaterVisualization;
 import ch.deif.meander.viz.MapSelectionOverlay;
 
 /** Not thread-safe.
