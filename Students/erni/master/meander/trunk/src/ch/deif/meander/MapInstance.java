@@ -1,4 +1,4 @@
-package ch.deif.aNewMeander;
+package ch.deif.meander;
 
 import java.util.ArrayList;
 import java.util.Collection;

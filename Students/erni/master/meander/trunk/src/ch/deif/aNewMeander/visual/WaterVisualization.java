@@ -1,8 +1,8 @@
 package ch.deif.aNewMeander.visual;
 
 import processing.core.PGraphics;
-import ch.deif.aNewMeander.MapColor;
-import ch.deif.aNewMeander.MapInstance;
+import ch.deif.meander.MapColor;
+import ch.deif.meander.MapInstance;
 
 public class WaterVisualization implements Layer {
 

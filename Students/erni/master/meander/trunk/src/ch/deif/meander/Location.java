@@ -1,4 +1,4 @@
-package ch.deif.aNewMeander;
+package ch.deif.meander;
 
 import ch.akuhn.hapax.corpus.Document;
 
@@ -40,6 +40,10 @@ public class Location {
 
 	public double getElevation() {
 		return elevation;
+	}
+
+	public String getIdentifier() {
+		return getDocument().getIdentifier();
 	}
 
 }

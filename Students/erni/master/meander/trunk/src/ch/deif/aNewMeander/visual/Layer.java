@@ -1,7 +1,7 @@
 package ch.deif.aNewMeander.visual;
 
 import processing.core.PGraphics;
-import ch.deif.aNewMeander.MapInstance;
+import ch.deif.meander.MapInstance;
 
 public interface Layer {
 

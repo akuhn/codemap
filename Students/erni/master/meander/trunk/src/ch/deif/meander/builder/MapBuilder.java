@@ -1,7 +1,7 @@
-package ch.deif.aNewMeander.builder;
+package ch.deif.meander.builder;
 
 import ch.akuhn.hapax.Hapax;
-import ch.deif.aNewMeander.MapConfiguration;
+import ch.deif.meander.MapConfiguration;
 
 public interface MapBuilder {
 

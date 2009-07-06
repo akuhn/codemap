@@ -1,4 +1,4 @@
-package ch.deif.aNewMeander.builder;
+package ch.deif.meander.builder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,16 +6,16 @@ import java.util.Collection;
 import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
-import ch.deif.aNewMeander.Point;
-import ch.deif.aNewMeander.MapColor;
-import ch.deif.aNewMeander.MapConfiguration;
-import ch.deif.aNewMeander.MapScheme;
 import ch.deif.aNewMeander.visual.Composite;
 import ch.deif.aNewMeander.visual.HillshadeVisualization;
 import ch.deif.aNewMeander.visual.Layer;
 import ch.deif.aNewMeander.visual.ShoreVizualization;
 import ch.deif.aNewMeander.visual.WaterVisualization;
+import ch.deif.meander.MapColor;
+import ch.deif.meander.MapConfiguration;
+import ch.deif.meander.MapScheme;
 import ch.deif.meander.MapSelection;
+import ch.deif.meander.Point;
 import ch.deif.meander.internal.MDS;
 import ch.deif.meander.viz.MapSelectionOverlay;
 

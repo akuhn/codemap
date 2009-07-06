@@ -1,4 +1,4 @@
-package ch.deif.aNewMeander.builder;
+package ch.deif.meander.builder;
 
 public class MeanderBuilder {
 

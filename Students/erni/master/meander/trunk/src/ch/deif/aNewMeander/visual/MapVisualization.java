@@ -11,7 +11,7 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.pdf.PGraphicsPDF;
-import ch.deif.aNewMeander.MapInstance;
+import ch.deif.meander.MapInstance;
 
 public class MapVisualization {
 

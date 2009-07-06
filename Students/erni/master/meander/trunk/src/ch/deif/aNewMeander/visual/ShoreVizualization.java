@@ -1,9 +1,9 @@
 package ch.deif.aNewMeander.visual;
 
 import processing.core.PGraphics;
-import ch.deif.aNewMeander.MapColor;
-import ch.deif.aNewMeander.MapInstance;
-import ch.deif.aNewMeander.MapInstance.Pixel;
+import ch.deif.meander.MapColor;
+import ch.deif.meander.MapInstance;
+import ch.deif.meander.MapInstance.Pixel;
 
 public class ShoreVizualization implements Layer {
 

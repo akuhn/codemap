@@ -1,52 +1,28 @@
 package ch.deif.meander;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 
-public class MapSelection implements Iterable<Location> {
+public class MapSelection {
 
 	private HashSet<String> identifiers;
-	private Map map;
 	
 	public MapSelection() {
 		identifiers = new HashSet<String>();		
 	}
 	
-	@Override
-	public Iterator<Location> iterator() {
-		return currentLocations().iterator();
-	}
-
-	private Iterable<Location> currentLocations() {
-		HashSet<Location> currentLocations = new HashSet<Location>();
+	public Iterable<Location> locationsOn(MapInstance map) {
+		Collection<Location> result = new ArrayList<Location>();
 		for(Location each: map.locations()) {
-			if (identifiers.contains(each.getIdentifier())) {
-				currentLocations.add(each);
-			}
+			if (!this.contains(each)) continue;
+			result.add(each);
 		}
-		return currentLocations;
+		return result;
 	}
 
 	public int size() {
 		return identifiers.size();
-	}
-	
-	public MapSelection add(Location... selection) {
-//		for (Location each: selection) {
-//			elements.add(each);
-//		}
-//		return this;
-//		currentlty disabled
-		throw null;
-	}
-	
-	public MapSelection add(Iterable<Location> selection) {
-//		for (Location each: selection) {
-//			elements.add(each);
-//		}
-//		return this;
-//		currentlty disabled
-		throw null;		
 	}
 
 	public MapSelection clear() {
@@ -58,18 +34,12 @@ public class MapSelection implements Iterable<Location> {
 		return identifiers.contains(element.getIdentifier());
 	}
 
-	public void add(String handleIdentifier) {
-		identifiers.add(handleIdentifier);
+	public void add(String identifier) {
+		identifiers.add(identifier);
 	}
 
-	public void remove(String handleIdentifier) {
-		identifiers.remove(handleIdentifier);
-	}
-	
-	public MapSelection registerMap(Map map) {
-		if (this.map != null) return this;
-		this.map = map;
-		return this;
+	public void remove(String identifier) {
+		identifiers.remove(identifier);
 	}
 	
 }

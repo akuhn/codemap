@@ -1,4 +1,4 @@
-package ch.deif.aNewMeander;
+package ch.deif.meander;
 
 public interface MapAlgorithm<Kind> {
 

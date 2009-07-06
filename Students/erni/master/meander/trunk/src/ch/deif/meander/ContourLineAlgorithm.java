@@ -1,9 +1,9 @@
-package ch.deif.aNewMeander;
+package ch.deif.meander;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.deif.aNewMeander.MapInstance.Kernel;
+import ch.deif.meander.MapInstance.Kernel;
 import ch.deif.meander.util.SparseTrueBooleanList;
 
 public class ContourLineAlgorithm implements MapAlgorithm<List<SparseTrueBooleanList>> {

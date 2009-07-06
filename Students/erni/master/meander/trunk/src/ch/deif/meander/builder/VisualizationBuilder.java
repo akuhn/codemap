@@ -1,8 +1,8 @@
-package ch.deif.aNewMeander.builder;
+package ch.deif.meander.builder;
 
-import ch.deif.aNewMeander.MapColor;
-import ch.deif.aNewMeander.MapScheme;
 import ch.deif.aNewMeander.visual.Layer;
+import ch.deif.meander.MapColor;
+import ch.deif.meander.MapScheme;
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.viz.MapSelectionOverlay;
 

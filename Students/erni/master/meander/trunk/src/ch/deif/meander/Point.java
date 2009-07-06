@@ -1,4 +1,4 @@
-package ch.deif.aNewMeander;
+package ch.deif.meander;
 
 import ch.akuhn.hapax.corpus.Document;
 

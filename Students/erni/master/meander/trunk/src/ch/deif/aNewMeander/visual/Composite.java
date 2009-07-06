@@ -3,7 +3,7 @@ package ch.deif.aNewMeander.visual;
 import java.util.ArrayList;
 
 import processing.core.PGraphics;
-import ch.deif.aNewMeander.MapInstance;
+import ch.deif.meander.MapInstance;
 
 
 @SuppressWarnings("serial")

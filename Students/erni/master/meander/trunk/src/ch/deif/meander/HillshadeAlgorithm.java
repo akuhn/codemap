@@ -1,4 +1,4 @@
-package ch.deif.aNewMeander;
+package ch.deif.meander;
 
 import static java.lang.Math.PI;
 import static java.lang.Math.atan;
@@ -6,7 +6,7 @@ import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
-import ch.deif.aNewMeander.MapInstance.Kernel;
+import ch.deif.meander.MapInstance.Kernel;
 
 /**
  * @see http://edndoc.esri.com/arcobjects/9.2/NET/shared/geoprocessing/ spatial_analyst_tools/how_hillshade_works.htm

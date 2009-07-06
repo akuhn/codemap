@@ -1,4 +1,4 @@
-package ch.deif.aNewMeander;
+package ch.deif.meander;
 
 /** Creates the digital elevation model of a map. A digital elevation model (DEM) is a raster of z-ordinates for each pixel. 
  *<p> 

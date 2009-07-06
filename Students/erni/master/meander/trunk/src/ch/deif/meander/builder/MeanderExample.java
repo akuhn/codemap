@@ -1,14 +1,14 @@
-package ch.deif.aNewMeander.builder;
+package ch.deif.meander.builder;
 
 import ch.akuhn.hapax.Hapax;
-import ch.deif.aNewMeander.MapColor;
-import ch.deif.aNewMeander.MapConfiguration;
-import ch.deif.aNewMeander.MapInstance;
-import ch.deif.aNewMeander.MapScheme;
-import ch.deif.aNewMeander.Point;
 import ch.deif.aNewMeander.visual.Layer;
 import ch.deif.aNewMeander.visual.MapVisualization;
+import ch.deif.meander.MapColor;
+import ch.deif.meander.MapConfiguration;
+import ch.deif.meander.MapInstance;
+import ch.deif.meander.MapScheme;
 import ch.deif.meander.MapSelection;
+import ch.deif.meander.Point;
 
 public class MeanderExample {
 

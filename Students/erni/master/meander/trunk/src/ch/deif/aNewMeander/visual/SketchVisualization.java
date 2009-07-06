@@ -1,8 +1,8 @@
 package ch.deif.aNewMeander.visual;
 
 import processing.core.PGraphics;
-import ch.deif.aNewMeander.Location;
-import ch.deif.aNewMeander.MapInstance;
+import ch.deif.meander.Location;
+import ch.deif.meander.MapInstance;
 
 public class SketchVisualization implements Layer {
 

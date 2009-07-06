@@ -1,6 +1,6 @@
 package sketchbook;
 
-import ch.deif.aNewMeander.DEMAlgorithm;
+import ch.deif.meander.DEMAlgorithm;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapTest;
 import ch.deif.meander.viz.DebugDEMVisualization;
