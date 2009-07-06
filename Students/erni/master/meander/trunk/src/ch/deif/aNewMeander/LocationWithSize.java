@@ -25,4 +25,16 @@ public class LocationWithSize extends Location {
 		return clone;
 	}
 
+	public int getPx() {
+		return px;
+	}
+
+	public int getPy() {
+		return py;
+	}
+
+	public double getElevation() {
+		return elevation;
+	}
+
 }

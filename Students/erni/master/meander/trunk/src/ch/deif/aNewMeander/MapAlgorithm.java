@@ -1,7 +1,7 @@
 package ch.deif.aNewMeander;
 
-public abstract class MapAlgorithm {
+public interface MapAlgorithm<Kind> {
 
-	public abstract MapConfiguration applyOn(MapConfiguration map);
+	public Kind runWith(MapConfigurationWithSize map);
 	
 }

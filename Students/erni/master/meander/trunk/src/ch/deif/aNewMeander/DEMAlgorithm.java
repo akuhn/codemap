@@ -1,8 +1,4 @@
-package ch.deif.meander.internal;
-
-import ch.deif.meander.Location;
-import ch.deif.meander.Map;
-import ch.deif.meander.MapAlgorithm;
+package ch.deif.aNewMeander;
 
 /** Creates the digital elevation model of a map. A digital elevation model (DEM) is a raster of z-ordinates for each pixel. 
  *<p> 
@@ -12,46 +8,39 @@ import ch.deif.meander.MapAlgorithm;
  * 100.0 has a diameter of 41% of the map.
  *<p>
  * The algorithm has been optimized to run fast.
- * 
+ *<p> 
+ * Not thread-safe.
+ *  
  * @author Adrian Kuhn
  *
  */
-public class DEMAlgorithm extends MapAlgorithm {
+public class DEMAlgorithm implements MapAlgorithm<float[][]> {
 
 	private static final int MAGIC_VALUE = 8*320; // TODO magic number!
-
 	private static final double THRESHOLD = 1.0;
-
 	private float[][] DEM;
-
 	private int radius;
-
-	public DEMAlgorithm(Map map) {
-		super(map);
-	}
+	private MapConfigurationWithSize map;
 
 	@Override
-	public void run() {
+	public float[][] runWith(MapConfigurationWithSize map) {
+		this.map = map;
 		setup();
 		compute();
-		update(getMap());
+		return DEM;
 	}
 	
-	private void update(Map map) {
-		map.updateDEM(DEM);
-		DEM = null;
-	}
-
 	private void compute() {
-		for (Location each: getMap().locations()) {
-			elevateHill(each, computePie(each));
+		// TODO a map configuration on map should return locations on map
+		for (Location each: map.locations()) {
+			elevateHill((LocationWithSize) each, computePie((LocationWithSize) each));
 		}
 	}
 
-	private void elevateHill(Location each, float[][] pie) {
+	private void elevateHill(LocationWithSize each, float[][] pie) {
 		final int y0, x0, top, bottom, left, right;
-		y0 = each.py();
-		x0 = each.px();
+		y0 = each.getPy();
+		x0 = each.getPx();
 		top = y0 > radius ? 1 - radius : 0 - y0;
 		left = x0 > radius ? 1 - radius : 0 - x0;
 		bottom = y0 + radius < DEM.length ? radius : DEM.length - y0; 
@@ -66,9 +55,9 @@ public class DEMAlgorithm extends MapAlgorithm {
 		}
 	}
 
-	private float[][] computePie(Location each) {
+	private float[][] computePie(LocationWithSize each) {
 		float[][] pie = new float[DEM.length][];
-		double elevationFactor = each.elevation();
+		double elevationFactor = each.getElevation();
 		double distFactor2 = -1.0 
 				/ (elevationFactor * elevationFactor) 
 				* (MAGIC_VALUE * MAGIC_VALUE)
@@ -94,7 +83,8 @@ public class DEMAlgorithm extends MapAlgorithm {
 	}
 
 	private void setup() {
-		DEM = new float[getMap().getWidth()][getMap().getWidth()];
+		DEM = new float[map.getWidth()][map.getWidth()];
 	}
+
 
 }

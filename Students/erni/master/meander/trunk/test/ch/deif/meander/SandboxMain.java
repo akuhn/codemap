@@ -2,9 +2,9 @@ package ch.deif.meander;
 
 import org.junit.Test;
 
-import ch.deif.meander.internal.ContourLineAlgorithm;
-import ch.deif.meander.internal.DEMAlgorithm;
-import ch.deif.meander.internal.HillshadeAlgorithm;
+import ch.deif.aNewMeander.ContourLineAlgorithm;
+import ch.deif.aNewMeander.DEMAlgorithm;
+import ch.deif.aNewMeander.HillshadeAlgorithm;
 import ch.deif.meander.ui.PViewer;
 import ch.deif.meander.viz.DebugDEMVisualization;
 import ch.deif.meander.viz.HillshadeVisualization;

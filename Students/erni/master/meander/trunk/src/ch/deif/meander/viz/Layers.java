@@ -6,6 +6,7 @@ import java.util.List;
 
 import processing.core.PGraphics;
 import ch.akuhn.util.Throw;
+import ch.deif.aNewMeander.visual.ShoreVizualization;
 import ch.deif.aNewMeander.visual.WaterVisualization;
 import ch.deif.meander.Map;
 import ch.deif.meander.ui.MeanderApplet.Events;
