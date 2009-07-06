@@ -19,6 +19,8 @@ public class MapVisualization {
 	private Layer visual;
 
 	public MapVisualization(MapConfigurationWithSize map, Layer visual) {
+		assert map != null;
+		assert visual != null;
 		this.map = map;
 		this.visual = visual;
 	}
@@ -92,8 +94,7 @@ public class MapVisualization {
 		return img;
 	}
 
-	public static Applet makeApplet(MapConfigurationWithSize map2,
-			MapVisualization visual) {
+	public static Applet makeApplet(MapConfigurationWithSize map2, MapVisualization visual) {
 		// TODO Auto-generated method stub
 		return null;
 	}

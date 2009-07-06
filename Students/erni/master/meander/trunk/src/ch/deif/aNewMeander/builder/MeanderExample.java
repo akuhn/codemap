@@ -4,10 +4,9 @@ import ch.akuhn.hapax.Hapax;
 import ch.deif.aNewMeander.MapColor;
 import ch.deif.aNewMeander.MapConfiguration;
 import ch.deif.aNewMeander.MapScheme;
+import ch.deif.aNewMeander.visual.Layer;
+import ch.deif.aNewMeander.visual.MapVisualization;
 import ch.deif.meander.MapSelection;
-import ch.deif.meander.viz.MapVisualization;
-import ch.deif.meander.viz.OpenFilesOverlay;
-import ch.deif.meander.viz.YouAreHereOverlay;
 
 public class MeanderExample {
 
@@ -25,15 +24,15 @@ public class MeanderExample {
 		MapSelection openEditorSelection = new MapSelection();
 		MapSelection currentEditorSelection = new MapSelection();
 
-		MapVisualization visual = Meander.visualization()
+		Layer layer = Meander.visualization()
 				.withColors(colorScheme)
-				.withLabels(labelScheme)
+				//.withLabels(labelScheme)
 				// .withSelection(new CurrentSelectionOverlay(), currentSelection)
-				.withSelection(new OpenFilesOverlay(), openEditorSelection)
-				.withSelection(new YouAreHereOverlay(), currentEditorSelection)
-				.makeVisualization();
-
-		MapVisualization.makeApplet(map.withSize(512), visual).start();
+				//.withSelection(new OpenFilesOverlay(), openEditorSelection)
+				//.withSelection(new YouAreHereOverlay(), currentEditorSelection)
+				.makeLayer();
+		
+		new MapVisualization(map.withSize(512), layer).openApplet();
 
 	}
 

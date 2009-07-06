@@ -11,11 +11,14 @@ import ch.deif.aNewMeander.MapColor;
 import ch.deif.aNewMeander.MapConfiguration;
 import ch.deif.aNewMeander.MapScheme;
 import ch.deif.aNewMeander.Point;
+import ch.deif.aNewMeander.visual.Composite;
+import ch.deif.aNewMeander.visual.HillshadeVisualization;
+import ch.deif.aNewMeander.visual.Layer;
+import ch.deif.aNewMeander.visual.ShoreVizualization;
+import ch.deif.aNewMeander.visual.WaterVisualization;
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.internal.MDS;
-import ch.deif.meander.viz.Layers;
 import ch.deif.meander.viz.MapSelectionOverlay;
-import ch.deif.meander.viz.MapVisualization;
 
 /** Not thread-safe.
  * 
@@ -52,15 +55,22 @@ public class Meander implements MapBuilder, VisualizationBuilder {
 		return new MapConfiguration(locations);
 	}
 
-	private Layers layers = new Layers();
+	private Composite<Layer> layers = new Composite<Layer>();
 	
 	public static VisualizationBuilder visualization() {
-		return new Meander();
+		return new Meander().useHillshade();
+	}
+
+	private VisualizationBuilder useHillshade() {
+		layers.add(new WaterVisualization());
+		layers.add(new ShoreVizualization());
+		layers.add(new HillshadeVisualization());
+		return this;
 	}
 
 	@Override
-	public MapVisualization makeVisualization() {
-		return null;
+	public Layer makeLayer() {
+		return layers;
 	}
 
 	@Override

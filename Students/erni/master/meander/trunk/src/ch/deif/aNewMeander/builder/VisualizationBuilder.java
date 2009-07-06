@@ -2,9 +2,9 @@ package ch.deif.aNewMeander.builder;
 
 import ch.deif.aNewMeander.MapColor;
 import ch.deif.aNewMeander.MapScheme;
+import ch.deif.aNewMeander.visual.Layer;
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.viz.MapSelectionOverlay;
-import ch.deif.meander.viz.MapVisualization;
 
 public interface VisualizationBuilder {
 
@@ -14,6 +14,6 @@ public interface VisualizationBuilder {
 
 	VisualizationBuilder withSelection(MapSelectionOverlay currentSelectionOverlay, MapSelection currentSelection);
 
-	MapVisualization makeVisualization();
+	Layer makeLayer();
 
 }

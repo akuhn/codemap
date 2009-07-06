@@ -1,10 +1,10 @@
 package ch.deif.aNewMeander;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import ch.akuhn.util.Providable;
-import ch.deif.meander.Location;
 import ch.deif.meander.util.RunLengthEncodedList;
 import ch.deif.meander.util.SparseTrueBooleanList;
 
@@ -21,8 +21,19 @@ public class MapConfigurationWithSize extends MapConfiguration {
 	private int contourLineStep = 10;
 	
 	public MapConfigurationWithSize(MapConfiguration map, int size) {
-		super(map);
+		super(makeLocationsWithSize(map, size));
 		this.width = this.height = size;
+	}
+
+	private static Collection<LocationWithSize> makeLocationsWithSize(MapConfiguration map, int size) {
+		Collection<LocationWithSize> result = new ArrayList<LocationWithSize>();
+		for (Location each: map.locations()) {
+			result.add(new LocationWithSize(each, 
+					Math.sqrt(each.documentSize), 
+					(int) (each.getX() * size),
+					(int) (each.getY() * size)));
+		}
+		return result;
 	}
 
 	public void setGrayscale(boolean grayscale) {
@@ -77,7 +88,9 @@ public class MapConfigurationWithSize extends MapConfiguration {
 		}
 		
 		public MapColor nearestNeighborColor() {
-			return NN == null ? MapColor.HILLGREEN : NN.get(px).get(py).color();
+			// TODO go over color scheme
+			// return NN == null ? MapColor.HILLGREEN : NN.get(px).get(py).color();
+			return MapColor.HILLGREEN;
 		}
 
 	}

@@ -5,18 +5,16 @@ public class LocationWithSize extends Location {
 
 	protected int px, py;
 	protected double elevation;
-	protected MapColor color;
 
-	public LocationWithSize(Location location, double elevation, int px, int py, MapColor color) {
+	public LocationWithSize(Location location, double elevation, int px, int py) {
 		super(location);
 		this.elevation = elevation;
 		this.px = px;
 		this.py = py;
-		this.color = color;
 	}
 
 	public LocationWithSize(LocationWithSize loc) {
-		this(loc, loc.elevation, loc.px, loc.py, loc.color);
+		this(loc, loc.elevation, loc.px, loc.py);
 	}
 
 	public LocationWithSize withElevation(double elevation) {

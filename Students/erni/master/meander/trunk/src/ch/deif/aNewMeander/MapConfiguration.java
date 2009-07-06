@@ -17,7 +17,7 @@ public class MapConfiguration {
 		this(Arrays.copyOf(map.locations, map.locations.length));
 	}
 	
-	public MapConfiguration(Collection<Location> locations) {
+	public MapConfiguration(Collection<? extends Location> locations) {
 		this(locations.toArray(new Location[locations.size()]));
 	}
 	
@@ -46,8 +46,7 @@ public class MapConfiguration {
 	}
 
 	public MapConfigurationWithSize withSize(int size) {
-		// TODO Auto-generated method stub
-		return null;
+		return new MapConfigurationWithSize(this, size);
 	}
 
 }
