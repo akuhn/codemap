@@ -1,8 +1,10 @@
-package ch.deif.meander.viz;
+package ch.deif.meander.visual;
 
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.Map;
+import ch.deif.meander.viz.Composite;
+import ch.deif.meander.viz.Drawable;
 
 public class ArrowOverlay extends MapVisualization {
 

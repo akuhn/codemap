@@ -4,8 +4,8 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
+import ch.deif.meander.visual.LabelsOverlay;
 import ch.deif.meander.viz.Label;
-import ch.deif.meander.viz.LabelsOverlay;
 import ch.deif.meander.viz.Layers;
 
 public class LabelSketch {

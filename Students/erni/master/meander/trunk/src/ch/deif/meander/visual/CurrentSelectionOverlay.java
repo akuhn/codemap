@@ -1,4 +1,4 @@
-package ch.deif.meander.viz;
+package ch.deif.meander.visual;
 
 import java.awt.Color;
 import java.awt.Point;

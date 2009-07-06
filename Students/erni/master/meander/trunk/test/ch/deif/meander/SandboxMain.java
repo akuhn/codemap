@@ -6,7 +6,7 @@ import ch.deif.meander.internal.ContourLineAlgorithm;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.internal.HillshadeAlgorithm;
 import ch.deif.meander.ui.PViewer;
-import ch.deif.meander.viz.DebugDEMVisualization;
+import ch.deif.meander.visual.DebugDEMVisualization;
 import ch.deif.meander.viz.HillshadeVisualization;
 import ch.deif.meander.viz.MapVisualization;
 

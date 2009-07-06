@@ -1,4 +1,4 @@
-package ch.deif.meander.viz;
+package ch.deif.meander.visual;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;

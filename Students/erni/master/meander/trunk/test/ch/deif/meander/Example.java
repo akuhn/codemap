@@ -1,6 +1,6 @@
 package ch.deif.meander;
 
-import ch.deif.meander.viz.ArrowOverlay;
+import ch.deif.meander.visual.ArrowOverlay;
 import ch.deif.meander.viz.Layers;
 
 public class Example {

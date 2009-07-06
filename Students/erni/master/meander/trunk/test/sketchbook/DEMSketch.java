@@ -3,7 +3,7 @@ package sketchbook;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapTest;
 import ch.deif.meander.internal.DEMAlgorithm;
-import ch.deif.meander.viz.DebugDEMVisualization;
+import ch.deif.meander.visual.DebugDEMVisualization;
 
 public class DEMSketch {
 

@@ -2,7 +2,7 @@ package sketchbook;
 
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
-import ch.deif.meander.viz.ArrowOverlay;
+import ch.deif.meander.visual.ArrowOverlay;
 import ch.deif.meander.viz.Layers;
 
 public class ArrowOverlaySketch {

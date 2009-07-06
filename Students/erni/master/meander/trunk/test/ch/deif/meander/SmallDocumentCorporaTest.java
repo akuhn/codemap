@@ -2,7 +2,7 @@ package ch.deif.meander;
 
 import org.junit.Test;
 
-import ch.deif.meander.viz.LabelsOverlay;
+import ch.deif.meander.visual.LabelsOverlay;
 
 public class SmallDocumentCorporaTest {
 

@@ -15,9 +15,9 @@ import ch.deif.meander.internal.MDS;
 import ch.deif.meander.visual.Composite;
 import ch.deif.meander.visual.HillshadeVisualization;
 import ch.deif.meander.visual.Layer;
+import ch.deif.meander.visual.MapSelectionOverlay;
 import ch.deif.meander.visual.ShoreVizualization;
 import ch.deif.meander.visual.WaterVisualization;
-import ch.deif.meander.viz.MapSelectionOverlay;
 
 /** Not thread-safe.
  * 

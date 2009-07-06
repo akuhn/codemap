@@ -1,6 +1,6 @@
 package ch.deif.meander;
 
-import ch.deif.meander.viz.LabelsOverlay;
+import ch.deif.meander.visual.LabelsOverlay;
 
 public class FromSourceFilesToMap {
 
