@@ -2,17 +2,13 @@ package ch.deif.meander;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 
 public class MapSelection implements Iterable<Location> {
 
-	private Set<Location> elements;
-	
 	private HashSet<String> identifiers;
 	private Map map;
 	
 	public MapSelection() {
-		elements = new HashSet<Location>();
 		identifiers = new HashSet<String>();		
 	}
 	
@@ -21,15 +17,12 @@ public class MapSelection implements Iterable<Location> {
 		return currentLocations().iterator();
 	}
 
-	private HashSet<Location> currentLocations() {
+	private Iterable<Location> currentLocations() {
 		HashSet<Location> currentLocations = new HashSet<Location>();
-		for(String identifier: identifiers){
-			for(Location each: map.locations()) {
-				if (each.document().getIdentifier().equals(identifier)) {
-					currentLocations.add(each);
-					break;
-				}
-			}			
+		for(Location each: map.locations()) {
+			if (identifiers.contains(each.getIdentifier())) {
+				currentLocations.add(each);
+			}
 		}
 		return currentLocations;
 	}
@@ -57,13 +50,12 @@ public class MapSelection implements Iterable<Location> {
 	}
 
 	public MapSelection clear() {
-		elements.clear();
 		identifiers.clear();
 		return this;
 	}
 	
 	public boolean contains(Location element) {
-		return currentLocations().contains(elements);
+		return identifiers.contains(element.getIdentifier());
 	}
 
 	public void add(String handleIdentifier) {

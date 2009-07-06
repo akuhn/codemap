@@ -307,7 +307,9 @@ public class MapView extends ViewPart implements MeanderEventListener {
 
 	public void updateMapdimension(int newDimension) {
 		setCurrentSize(newDimension);
-		MapVisualization viz = CodemapCore.getPlugin().mapForProject(getCurrentProject()).updateSize(newDimension).getVisualization();
+		IProject project = getCurrentProject();
+		if (project == null) return;
+		MapVisualization viz = CodemapCore.getPlugin().mapForProject(project).updateSize(newDimension).getVisualization();
 		if (viz != null) {
 			updateMapVisualization(viz);
 		}
@@ -328,7 +330,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		IProject project = javaProject.getProject();
 		MapPerProject mapPerProject = CodemapCore.getPlugin().mapForProject(project);
 		mapPerProject.setOpenUnits(units);
-		updateVisualization();
+//		updateVisualization();
 	}
 
 	public void compilationUnitOpen(IJavaProject javaProject, ICompilationUnit unit) {
