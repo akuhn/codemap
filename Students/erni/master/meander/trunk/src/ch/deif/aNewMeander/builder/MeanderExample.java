@@ -5,6 +5,7 @@ import ch.deif.aNewMeander.MapColor;
 import ch.deif.aNewMeander.MapConfiguration;
 import ch.deif.aNewMeander.MapInstance;
 import ch.deif.aNewMeander.MapScheme;
+import ch.deif.aNewMeander.Point;
 import ch.deif.aNewMeander.visual.Layer;
 import ch.deif.aNewMeander.visual.MapVisualization;
 import ch.deif.meander.MapSelection;
@@ -38,4 +39,16 @@ public class MeanderExample {
 
 	}
 
+	// TODO move this to codemap plug-in
+	MapScheme<String> eclipseMapper = new MapScheme<String>() {
+		@Override
+		public String forLocation(Point location) {
+			String name = location.getDocument().getIdentifier();
+			int lastPathSeparator = Math.max(name.lastIndexOf('\\'), name.lastIndexOf('/'));
+			int lastDot = name.lastIndexOf('.');
+			if (lastPathSeparator < lastDot) return name.substring(lastPathSeparator + 1, lastDot);
+			return name;
+		}
+	};
+	
 }

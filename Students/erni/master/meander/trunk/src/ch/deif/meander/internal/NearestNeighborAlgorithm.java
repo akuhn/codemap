@@ -1,9 +1,7 @@
 package ch.deif.meander.internal;
 
-import ch.deif.meander.Location;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapAlgorithm;
-import ch.deif.meander.Map.Pixel;
 
 /** Computes the nearest neighbor for each pixel
  *<P>
@@ -32,6 +30,14 @@ public class NearestNeighborAlgorithm extends MapAlgorithm {
 
 	private void update(Map map) {
 		map.setNearestNeighbors(this.NN);
+//		public void setNearestNeighbors(Location[][] NN) {
+//			this.NN = new ArrayList<RunLengthEncodedList<Location>>(NN.length);
+//			for (int row = 0; row < NN.length; row++) {
+//				// TODO use a simple List of RLE list in worst case
+//				this.NN.add(new RunLengthEncodedList<Location>(NN[row]));
+//			}
+//		}
+
 	}
 
 	private void compute() {
