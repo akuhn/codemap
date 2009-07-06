@@ -1,9 +1,10 @@
 package ch.akuhn.foreach;
 
-import static ch.akuhn.foreach.State.EACH;
-import static ch.akuhn.foreach.State.FIRST;
 import static ch.akuhn.foreach.State.NULL;
+import static ch.akuhn.foreach.State.VOID;
+import static ch.akuhn.foreach.State.YIELD;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -50,9 +51,11 @@ public abstract class Collect<E> implements Iterable<Each<E>> {
 		return Collect.fromCollection(elements);
 	}
 
-	public abstract E[] asArray();
+	public abstract E[] resultArray();
 
-	public abstract List<E> asList();
+	public abstract E[] resultArray(Class<? extends E> type);
+
+	public abstract List<E> getResult();
 	
 }
 
@@ -72,7 +75,7 @@ class CollectFromArray<E> extends Collect<E> implements Iterator<Each<E>> {
 	@Override
 	public Iterator<Each<E>> iterator() {
 		if (state != NULL) throw new IllegalStateException("Cannot run query twice!");
-		state = State.FIRST;
+		state = VOID;
 		each = new Each<E>();
 		result = elements.clone();
 		index = 0;
@@ -81,8 +84,10 @@ class CollectFromArray<E> extends Collect<E> implements Iterator<Each<E>> {
 	
 	@Override
 	public boolean hasNext() {
-		if (state == FIRST) state = EACH;
-		else result[index - 1] = each.yield;
+		if (state == YIELD) {
+			result[index - 1] = each.yield;
+			state = VOID;
+		}
 		if (index < elements.length) return true;
 		elements = null;
 		return false;
@@ -91,8 +96,9 @@ class CollectFromArray<E> extends Collect<E> implements Iterator<Each<E>> {
 	@Override
 	public Each<E> next() {
 		if (!hasNext()) throw new NoSuchElementException();
-		each.value = elements[index];
+		each.yield = each.value = elements[index];
 		each.index = index++;
+		state = YIELD;
 		return each;
 	}
 	
@@ -102,13 +108,19 @@ class CollectFromArray<E> extends Collect<E> implements Iterator<Each<E>> {
 	}
 	
 	@Override
-	public E[] asArray() {
+	public E[] resultArray() {
+		if (state == YIELD) hasNext();
 		return result;
 	}
 
 	@Override
-	public List<E> asList() {
+	public List<E> getResult() {
 		return Arrays.asList(result);
+	}
+
+	@Override
+	public E[] resultArray(Class<? extends E> type) {
+		return result;
 	}
 	
 }
@@ -129,7 +141,7 @@ class FromCollection<E> extends Collect<E> implements Iterator<Each<E>> {
 	@Override
 	public Iterator<Each<E>> iterator() {
 		if (state != NULL) throw new IllegalStateException("Cannot run query twice!");
-		state = State.FIRST;
+		state = VOID;
 		each = new Each<E>();
 		result = new ArrayList<E>();
 		index = 0;
@@ -138,8 +150,10 @@ class FromCollection<E> extends Collect<E> implements Iterator<Each<E>> {
 
 	@Override
 	public boolean hasNext() {
-		if (state == FIRST) state = EACH;
-		else result.add(each.yield);
+		if (state == YIELD) {
+			result.add(each.yield);
+			state = VOID;
+		}
 		if (elements.hasNext()) return true;
 		elements = null;
 		return false;
@@ -148,8 +162,9 @@ class FromCollection<E> extends Collect<E> implements Iterator<Each<E>> {
 	@Override
 	public Each<E> next() {
 		if (!hasNext()) throw new NoSuchElementException();
-		each.value = elements.next();
+		each.yield = each.value = elements.next();
 		each.index = index++;
+		state = YIELD;
 		return each;
 	}
 
@@ -160,13 +175,20 @@ class FromCollection<E> extends Collect<E> implements Iterator<Each<E>> {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public E[] asArray() {
-		return (E[]) result.toArray();
+	public E[] resultArray() {
+		return resultArray((Class<? extends E>) getResult().iterator().next().getClass());
 	}
 
 	@Override
-	public List<E> asList() {
+	public List<E> getResult() {
+		if (state == YIELD) hasNext();
 		return result;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public E[] resultArray(Class<? extends E> type) {
+		return getResult().toArray((E[]) Array.newInstance(type, result.size()));
 	}
 	
 }
