@@ -3,7 +3,8 @@ package ch.deif.meander;
 import java.util.Arrays;
 import java.util.Collection;
 
-import ch.deif.meander.util.Collect;
+import ch.akuhn.foreach.Collect;
+import ch.akuhn.foreach.Each;
 
 /** A set of documents on the visualization pane.
  * Each document is placed at a logical coordinate.
@@ -45,10 +46,10 @@ public class MapConfiguration {
 		double width = maxX - minX;
 		double height = maxY - minY;
 		Collect<Point> query = Collect.fromArray(points);
-		for (Collect<Point> each: query) {
-			each.value = each.value.normalize(minX, minY, width, height);
+		for (Each<Point> each: query) {
+			each.yield = each.value.normalize(minX, minY, width, height);
 		}
-		return new MapConfiguration(query.asArray());
+		return new MapConfiguration(query.resultArray());
 	}
 
 	public MapInstance withSize(int size) {

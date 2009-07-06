@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import ch.akuhn.foreach.Collect;
+import ch.akuhn.foreach.Each;
 import ch.akuhn.util.Providable;
 import ch.deif.meander.internal.ContourLineAlgorithm;
 import ch.deif.meander.internal.DEMAlgorithm;
@@ -101,6 +103,27 @@ public class MapInstance {
 		locations = makeLocationsWithSize(map, size);
 		this.width = this.height = size;
 	}
+
+	private MapInstance(Collection<Location> locations, int size) {
+		this.locations = locations;
+		this.width = this.height = size;
+	}
+	
+	public MapInstance(MapInstance map) {
+		this.locations = new ArrayList<Location>(map.locations);
+		this.beachContourLevel = map.beachContourLevel;
+		this.contourLineStep = map.contourLineStep;
+		this.contours = map.contours;
+		this.DEM = map.DEM;
+		this.grayscale = map.grayscale;
+		this.hillshade = map.hillshade;
+		this.locations = map.locations;
+		this.NN = map.NN;
+		this.waterContourLevel = map.waterContourLevel;
+		this.width = map.width;
+		this.height = map.height;
+	}
+	
 	public Pixel get(int x, int y) {
 		return new Pixel(x, y);
 	}
@@ -183,7 +206,21 @@ public class MapInstance {
 	}
 	public MapInstance normalizeElevation() {
 		double max = 0.0;
-		return this;
+		for (Location each: locations()) {
+			max = Math.max(max, each.getElevation());
+		}
+		if (max < 0.0) return this;
+		Collect<Location> query = Collect.from(locations);
+		for (Each<Location> each: query) {
+			each.yield = each.value.withElevation(each.value.getElevation() / max * 100);
+		}
+		MapInstance result = new MapInstance(query.getResult(), width);
+		result.beachContourLevel = this.beachContourLevel;
+		result.contourLineStep = this.contourLineStep;
+		result.grayscale = this.grayscale;
+		result.NN = this.NN;
+		result.waterContourLevel = this.waterContourLevel;
+		return result;
 	}
 
 	public Iterable<Pixel> pixels() {
