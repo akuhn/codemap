@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.akuhn.util.Providable;
+import ch.deif.aNewMeander.MapColor;
 import ch.deif.meander.internal.ContourLineAlgorithm;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.internal.HillshadeAlgorithm;
@@ -213,8 +214,8 @@ public class Map {
 			DEM0[px][py] = (float) (100.0 * (DEM0[px][py] / maxElevation));
 		}
 		
-		public Colors nearestNeighborColor() {
-			return NN == null ? Colors.HILLGREEN : NN.get(px).get(py).color();
+		public MapColor nearestNeighborColor() {
+			return NN == null ? MapColor.HILLGREEN : NN.get(px).get(py).color();
 		}
 
 	}

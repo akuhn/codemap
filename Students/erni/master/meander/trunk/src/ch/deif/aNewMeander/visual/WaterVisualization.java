@@ -1,8 +1,9 @@
-package ch.deif.meander.viz;
+package ch.deif.aNewMeander.visual;
 
 import processing.core.PGraphics;
-import ch.deif.meander.Colors;
+import ch.deif.aNewMeander.MapColor;
 import ch.deif.meander.Map;
+import ch.deif.meander.viz.MapVisualization;
 
 public class WaterVisualization extends MapVisualization {
 
@@ -13,7 +14,7 @@ public class WaterVisualization extends MapVisualization {
 	@Override
 	public void draw(PGraphics pg) {
 		pg.noStroke();
-		pg.fill(getMap().getParameters().blackAndWhite ? 0xFFFFFFFF : Colors.WATER.asRGB());
+		pg.fill(getMap().getParameters().blackAndWhite ? 0xFFFFFFFF : MapColor.WATER.asRGB());
 		pg.rect(0, 0, getWidth(), getWidth());
 	}
 

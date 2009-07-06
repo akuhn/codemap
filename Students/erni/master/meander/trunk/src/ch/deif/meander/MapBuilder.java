@@ -1,6 +1,7 @@
 package ch.deif.meander;
 
 import ch.akuhn.hapax.corpus.Document;
+import ch.deif.aNewMeander.MapColor;
 
 
 public class MapBuilder {
@@ -33,7 +34,7 @@ public class MapBuilder {
 		locations.normalizeLocations();
 	}
 
-	public MapBuilder color(Colors red) {
+	public MapBuilder color(MapColor red) {
 		locations.last().setColor(red);		
 		return this;
 	}

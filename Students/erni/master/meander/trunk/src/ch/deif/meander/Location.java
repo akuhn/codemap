@@ -2,6 +2,7 @@ package ch.deif.meander;
 
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.util.Throw;
+import ch.deif.aNewMeander.MapColor;
 import ch.deif.meander.util.MeanderError;
 
 
@@ -18,7 +19,7 @@ public class Location {
 	private int px, py;
 	private String name; // TODO is this name freetext? or does codemap use it for identifiers?
 	private Document document;
-	private Colors color;
+	private MapColor color;
 
 	public Location(double x, double y, double elevation) {
 		this.x = x;
@@ -91,12 +92,12 @@ public class Location {
 		this.y = (this.y - top) / height;
 	}
 
-	public void setColor(Colors color) {
+	public void setColor(MapColor color) {
 		this.color = color;
 	}
 
-	public Colors color() {
-		return color == null ? Colors.HILLGREEN : color;
+	public MapColor color() {
+		return color == null ? MapColor.HILLGREEN : color;
 	}
 	
 	public String toString() {

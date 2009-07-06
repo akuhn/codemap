@@ -2,14 +2,13 @@ package ch.deif.meander.viz;
 
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
-import ch.deif.meander.MapSelection;
 
 public class OpenFilesOverlay extends MapSelectionOverlay {
 	
 	protected final int SELECTION_SIZE = 12;
 	protected final int POINT_STROKE = 1;	
 
-	public OpenFilesOverlay(MapSelection mapSelection) {
+	public OpenFilesOverlay() {
 		super(mapSelection);
 	}
 

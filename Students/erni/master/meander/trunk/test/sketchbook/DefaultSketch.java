@@ -2,7 +2,7 @@ package sketchbook;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import ch.deif.meander.Colors;
+import ch.deif.aNewMeander.MapColor;
 import ch.deif.meander.Map;
 import ch.deif.meander.MapBuilder;
 import ch.deif.meander.internal.ContourLineAlgorithm;
@@ -39,10 +39,10 @@ public class DefaultSketch {
 		for (int a = 5; a < 100; a += 9) {
 			double rad = Math.PI / 180 * a;
 			builder.location(0.8 * sin(rad), 0.8 * cos(rad), a + 25).name(String.valueOf(a));
-			builder.color(new Colors((int) (a * 2.5), 0, 0));
+			builder.color(new MapColor((int) (a * 2.5), 0, 0));
 		}
 		Map map = builder.done();
-		map.locationAt(7).setColor(Colors.HILLGREEN);
+		map.locationAt(7).setColor(MapColor.HILLGREEN);
 		return map;
 	}
 

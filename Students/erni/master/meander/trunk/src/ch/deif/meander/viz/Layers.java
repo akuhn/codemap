@@ -6,6 +6,7 @@ import java.util.List;
 
 import processing.core.PGraphics;
 import ch.akuhn.util.Throw;
+import ch.deif.aNewMeander.visual.WaterVisualization;
 import ch.deif.meander.Map;
 import ch.deif.meander.ui.MeanderApplet.Events;
 
@@ -14,8 +15,7 @@ public class Layers extends MapVisualization {
 	private Drawable background;
 	private Composite<MapVisualization> layers = Composite.newInstance();
 
-	public Layers(Map map) {
-		super(map);
+	public Layers() {
 		useSketchBackground();
 	}
 

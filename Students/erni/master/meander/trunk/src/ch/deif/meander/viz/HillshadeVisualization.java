@@ -1,7 +1,7 @@
 package ch.deif.meander.viz;
 
 import processing.core.PGraphics;
-import ch.deif.meander.Colors;
+import ch.deif.aNewMeander.MapColor;
 import ch.deif.meander.Map;
 import ch.deif.meander.Map.Pixel;
 
@@ -31,8 +31,8 @@ public class HillshadeVisualization extends MapVisualization {
 		pg.updatePixels();
 	}
 
-	private Colors colorOf(Pixel p) {
-		return blackAndWhite ? Colors.GRAY_204 : p.nearestNeighborColor();
+	private MapColor colorOf(Pixel p) {
+		return blackAndWhite ? MapColor.GRAY_204 : p.nearestNeighborColor();
 	}
 
 }

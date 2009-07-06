@@ -1,5 +1,6 @@
 package ch.deif.meander.viz;
 
+import java.applet.Applet;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -9,17 +10,16 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.pdf.PGraphicsPDF;
-import ch.deif.meander.Map;
+import ch.deif.aNewMeander.MapConfigurationWithSize;
 import ch.deif.meander.ui.PViewer;
 import ch.deif.meander.ui.MeanderApplet.Events;
 
 public abstract class MapVisualization implements Drawable {
 
-	private Map map;
 	private Events events;
 
-	public MapVisualization(Map map) {
-		this.setMap(map);
+	public MapVisualization() {
+
 	}
 
 	public void openApplet() {
@@ -62,10 +62,6 @@ public abstract class MapVisualization implements Drawable {
 		if (pg instanceof PGraphicsPDF) pg.textMode(PConstants.SHAPE);
 		this.draw(pg);
 		pg.endDraw();
-	}
-
-	public int getWidth() {
-		return getMap().getWidth();
 	}
 
 	public final void drawToPNG(String name) {
@@ -112,12 +108,9 @@ public abstract class MapVisualization implements Drawable {
 		return events;
 	}
 
-	public void setMap(Map map) {
-		this.map = map;
-	}
-
-	public Map getMap() {
-		return map;
+	public static Applet makeApplet(MapConfigurationWithSize map2, MapVisualization visual) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

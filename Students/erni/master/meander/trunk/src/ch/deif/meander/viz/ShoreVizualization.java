@@ -1,19 +1,19 @@
 package ch.deif.meander.viz;
 
 import processing.core.PGraphics;
-import ch.deif.meander.Colors;
+import ch.deif.aNewMeander.MapColor;
 import ch.deif.meander.Map;
 import ch.deif.meander.Map.Pixel;
 
 public class ShoreVizualization extends MapVisualization {
 
-	private final Colors color;
+	private final MapColor color;
 	private float[][] alsoShow;
 
 	public ShoreVizualization(Map map) {
 		super(map);
 		map.needElevationModel();
-		color = map.getParameters().blackAndWhite ? new Colors(204,204,204) : Colors.SHORE;
+		color = map.getParameters().blackAndWhite ? new MapColor(204,204,204) : MapColor.SHORE;
 	}
 
 	@Override

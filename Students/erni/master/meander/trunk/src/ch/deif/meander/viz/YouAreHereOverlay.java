@@ -3,11 +3,10 @@ package ch.deif.meander.viz;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
-import ch.deif.meander.MapSelection;
 
 public class YouAreHereOverlay extends MapSelectionOverlay {
 
-	public YouAreHereOverlay(MapSelection mapSelection) {
+	public YouAreHereOverlay() {
 		super(mapSelection);
 	}
 	@Override
