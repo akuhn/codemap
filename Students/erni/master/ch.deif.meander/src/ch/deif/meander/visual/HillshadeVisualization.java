@@ -1,6 +1,5 @@
 package ch.deif.meander.visual;
 
-import processing.core.PApplet;
 import processing.core.PGraphics;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapSetting;
@@ -14,11 +13,6 @@ public class HillshadeVisualization extends Layer {
 
 	public static final MapSetting<Integer> COAST_LEVEL = MapSetting.define("COAST_LEVEL", 10);
 	
-	@Override
-	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
-		draw(map, pg, pa);
-	}
-
 	@Override
 	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
 		assert map.width == pg.width;

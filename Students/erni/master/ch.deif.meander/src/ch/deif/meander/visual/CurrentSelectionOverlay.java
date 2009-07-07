@@ -23,11 +23,6 @@ public class CurrentSelectionOverlay extends MapSelectionOverlay {
 	private Point dragStop;	
 
 	@Override
-	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
-		draw(map, pg, pa);
-	}
-
-	@Override
 	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
 		pg.noFill();
 		pg.stroke(Color.RED.getRGB());

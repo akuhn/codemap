@@ -1,6 +1,5 @@
 package ch.deif.meander.visual;
 
-import processing.core.PApplet;
 import processing.core.PGraphics;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapSetting;
@@ -13,11 +12,6 @@ public class ShoreVizualization extends Layer {
 
 	public static final MapSetting<Integer> WATER_LEVEL = MapSetting.define("WATER_LEVEL", 2);
 	
-	@Override
-	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
-		draw(map, pg, pa);
-	}
-
 	@Override
 	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
 		map.get(DEMAlgorithm.class);

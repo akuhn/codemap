@@ -1,6 +1,5 @@
 package ch.deif.meander.visual;
 
-import processing.core.PApplet;
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
@@ -9,11 +8,6 @@ import ch.deif.meander.ui.MeanderApplet;
 public class SketchVisualization extends Layer {
 
 	// TODO make sure circle size has same diameter as coastline of shaded hills
-
-	@Override
-	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
-		draw(map, pg, pa);
-	}
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {

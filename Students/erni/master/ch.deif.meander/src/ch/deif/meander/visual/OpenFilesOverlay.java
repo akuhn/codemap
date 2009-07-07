@@ -1,6 +1,5 @@
 package ch.deif.meander.visual;
 
-import processing.core.PApplet;
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
@@ -10,11 +9,6 @@ public class OpenFilesOverlay extends MapSelectionOverlay {
 	
 	protected final int SELECTION_SIZE = 12;
 	protected final int POINT_STROKE = 1;	
-
-	@Override
-	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
-		draw(map, pg, pa);
-	}
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {

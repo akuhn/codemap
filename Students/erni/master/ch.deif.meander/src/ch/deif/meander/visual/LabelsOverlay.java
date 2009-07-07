@@ -4,7 +4,6 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 import ch.akuhn.util.Get;
@@ -14,11 +13,6 @@ import ch.deif.meander.builder.MeanderExample;
 import ch.deif.meander.ui.MeanderApplet;
 
 public class LabelsOverlay extends Layer {
-
-	@Override
-	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
-		draw(map, pg, pa);
-	}
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
@@ -109,11 +103,6 @@ public class LabelsOverlay extends Layer {
 	public void initializeWidth(PGraphics pg) {
 		pg.textSize(size);
 		width = pg.textWidth(text);
-	}
-
-	@Override
-	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
-		draw(map, pg, pa);
 	}
 
 	@Override

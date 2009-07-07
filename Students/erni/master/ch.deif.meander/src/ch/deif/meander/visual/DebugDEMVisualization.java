@@ -1,6 +1,5 @@
 package ch.deif.meander.visual;
 
-import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
 import ch.deif.meander.MapInstance;
@@ -8,11 +7,6 @@ import ch.deif.meander.MapInstance.Pixel;
 import ch.deif.meander.ui.MeanderApplet;
 
 public class DebugDEMVisualization extends Layer {
-
-	@Override
-	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
-		draw(map, pg, pa);
-	}
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {

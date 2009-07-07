@@ -1,6 +1,5 @@
 package ch.deif.meander.visual;
 
-import processing.core.PApplet;
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
@@ -14,11 +13,6 @@ public abstract class MapSelectionOverlay extends Layer {
 	public MapSelectionOverlay setSelection(MapSelection selection) {
 		this.selection = selection;
 		return this;
-	}
-
-	@Override
-	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
-		draw(map, pg, pa);
 	}
 
 	@Override
