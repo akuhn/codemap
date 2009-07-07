@@ -247,4 +247,19 @@ public class MapInstance {
 		settings.put(setting, value);
 	}
 	
+	public Location nearestNeighbor(int px, int py) {
+		int nearestDist2 = Integer.MAX_VALUE;
+		Location nearestLocation = null;
+		for (Location each : locations()) {
+			int dx = each.px - px;
+			int dy = each.py - py;
+			int dist2 = dx * dx + dy * dy;
+			if (dist2 < nearestDist2) {
+				nearestDist2 = dist2;
+				nearestLocation = each;
+			}
+		}
+		return nearestLocation;
+	}
+	
 }

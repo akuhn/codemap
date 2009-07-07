@@ -22,18 +22,7 @@ public class NearestNeighborAlgorithm extends
 	public ArrayList<RunLengthEncodedList<Location>> call() {
 		Location[][] NN = new Location[map.width][map.height];
 		for (Pixel p : map.pixels()) {
-			int nearestDist2 = Integer.MAX_VALUE;
-			Location nearestLocation = null;
-			for (Location each : map.locations()) {
-				int dx = each.px - p.px;
-				int dy = each.py - p.py;
-				double dist2 = dx * dx + dy * dy;
-				if (dist2 < nearestDist2) {
-					nearestDist2 = (int) dist2;
-					nearestLocation = each;
-				}
-			}
-			NN[p.px][p.py] = nearestLocation;
+			NN[p.px][p.py] = map.nearestNeighbor(p.px, p.py);
 		}
 		ArrayList<RunLengthEncodedList<Location>> result =
 				new ArrayList<RunLengthEncodedList<Location>>(NN.length);
