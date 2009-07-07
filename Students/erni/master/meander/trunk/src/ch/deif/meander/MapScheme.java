@@ -1,5 +1,11 @@
 package ch.deif.meander;
 
+/** Maps handles to values.
+ * 
+ * @author akuhn
+ *
+ * @param <Value>
+ */
 public class MapScheme<Value> {
 
 	private Value defaultValue;

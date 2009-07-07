@@ -14,7 +14,7 @@ import ch.akuhn.hapax.corpus.Document;
 public class Point {
 
 	public final double x, y;
-	private Document document;
+	private final Document document;
 
 	public Point(double x, double y, Document document) {
 		this.x = x;
@@ -63,7 +63,7 @@ public class Point {
 		
 	}
 	
-	public Neighbor nearestNeighbor(MapConfiguration map) {
+	public Neighbor nearestNeighbor(Configuration map) {
 		Neighbor nearest = null;
 		for (Point each: map.points()) {
 			Neighbor neighbor = new Neighbor(each);

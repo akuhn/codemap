@@ -4,15 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.deif.meander.MapAlgorithm;
-import ch.deif.meander.MapInstance;
+import ch.deif.meander.MapSetting;
 import ch.deif.meander.MapInstance.Kernel;
 import ch.deif.meander.util.SparseTrueBooleanList;
 
-public class ContourLineAlgorithm implements MapAlgorithm<List<SparseTrueBooleanList>> {
+public class ContourLineAlgorithm extends MapAlgorithm<List<SparseTrueBooleanList>> {
 
+	public static final MapSetting<Integer> CONTOUR_STEP = MapSetting.define("CONTOUR_STEP", 10);
+	
 	@Override
-	public List<SparseTrueBooleanList> runWith(MapInstance map) {
-		int step = map.getContourLineStep();
+	public List<SparseTrueBooleanList> call() {
+		int step = map.get(CONTOUR_STEP);
 		boolean[][] contour = new boolean[map.getWidth()][map.getWidth()];
 		for (Kernel k: map.kernels()) {
 			int top = (int) Math.floor(k.top / step);

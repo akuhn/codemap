@@ -7,7 +7,6 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 import ch.deif.meander.MapAlgorithm;
-import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapInstance.Kernel;
 
 /**
@@ -15,12 +14,12 @@ import ch.deif.meander.MapInstance.Kernel;
  * @see Burrough, P. A. and McDonell, R.A., 1998. Principles of Geographical Information Systems (Oxford University
  *      Press, New York), p. 190.
  */
-public class HillshadeAlgorithm implements MapAlgorithm<double[][]> {
+public class HillshadeAlgorithm extends MapAlgorithm<double[][]> {
 
 	private static final double Z_FACTOR = 0.6e-3;
 
 	@Override
-	public double[][] runWith(MapInstance map) {
+	public double[][] call() {
 		// zenith: height of sun over horizon (90 = horizon, 0 = zenith).
 		double zenithRad = 45 * PI / 180;
 		// azimuth: direction of sun on x-y-plane

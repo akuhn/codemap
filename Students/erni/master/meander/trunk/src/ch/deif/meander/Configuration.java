@@ -16,23 +16,23 @@ import ch.akuhn.foreach.Each;
  * @author Adrian Kuhn
  *
  */
-public class MapConfiguration {
+public class Configuration {
 
 	private Point[] points;
 	
-	private MapConfiguration(Point... locations) {
+	private Configuration(Point... locations) {
 		this.points = locations;
 	}
 	
-	public MapConfiguration(MapConfiguration map) {
+	public Configuration(Configuration map) {
 		this(Arrays.copyOf(map.points, map.points.length));
 	}
 	
-	public MapConfiguration(Collection<? extends Point> locations) {
+	public Configuration(Collection<? extends Point> locations) {
 		this(locations.toArray(new Point[locations.size()]));
 	}
 	
-	public MapConfiguration normalize() {
+	public Configuration normalize() {
 		double minX = 0;
 		double maxX = 0;
 		double minY = 0;
@@ -49,7 +49,7 @@ public class MapConfiguration {
 		for (Each<Point> each: query) {
 			each.yield = each.value.normalize(minX, minY, width, height);
 		}
-		return new MapConfiguration(query.resultArray());
+		return new Configuration(query.resultArray());
 	}
 
 	public MapInstance withSize(int size) {

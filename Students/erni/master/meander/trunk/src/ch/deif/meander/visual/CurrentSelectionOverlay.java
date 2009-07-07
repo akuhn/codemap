@@ -11,28 +11,24 @@ import java.util.List;
 
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
-import ch.deif.meander.internal.MaxDistNearestNeighbor;
-import ch.deif.meander.internal.NearestNeighbor;
+import ch.deif.meander.MapInstance;
 
-public class CurrentSelectionOverlay extends MapVisualization {
+public class CurrentSelectionOverlay implements Layer {
 	
 	protected final int SELECTION_SIZE = 12;
 	protected final int POINT_STROKE = 3;
 	protected final int BOX_STROKE = 2;	
 	
 	private Collection<Point> points;
-
 	private Point dragStart;
-
 	private Point dragStop;	
 
 	public CurrentSelectionOverlay() {
-		super(map);
 		points = Collections.synchronizedSet(new HashSet<Point>());
 	}
 
 	@Override
-	public void draw(PGraphics pg) {
+	public void draw(MapInstance map, PGraphics pg) {
 		pg.noFill();
 		pg.stroke(Color.RED.getRGB());
 		
@@ -102,14 +98,14 @@ public class CurrentSelectionOverlay extends MapVisualization {
 		}
 	}
 	
-	@Override
+	//@Override
 	public void updateSelection(List<String> handleIdentifiers) {
 		super.updateSelection(handleIdentifiers);
 		clearPoints();
 		addSelection(handleIdentifiers);		
 	}
 	
-	@Override
+	//@Override
 	public void addSelection(List<String> handleIdentifiers) {
 		synchronized (points) {
 			for (Location each: getMap().locations()) {
@@ -120,7 +116,7 @@ public class CurrentSelectionOverlay extends MapVisualization {
 		}
 	}
 	
-	@Override
+	//@Override
 	public void indicesSelected(int[] indices) {
 		clearPoints();
 		List<Location> locations = new ArrayList<Location>();
@@ -169,17 +165,17 @@ public class CurrentSelectionOverlay extends MapVisualization {
 		}
 	}
 	
-	@Override
+	//@Override
 	public void mouseDragStarted(Point dragStart) {
 		this.dragStart = dragStart;
 	}
 	
-	@Override
+	//@Override
 	public void mouseDraggedTo(Point dragStop) {
 		this.dragStop = dragStop;
 	}
 	
-	@Override
+	//@Override
 	public void mouseDragStopped() {
 		ensureDragPointOrder();
 		handleDragSelection();

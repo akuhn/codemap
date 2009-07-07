@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import ch.deif.meander.Location;
 import ch.deif.meander.MapAlgorithm;
-import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapInstance.Pixel;
 import ch.deif.meander.util.RunLengthEncodedList;
 
@@ -16,11 +15,11 @@ import ch.deif.meander.util.RunLengthEncodedList;
  * @author Adrian Kuhn
  * 
  */
-public class NearestNeighborAlgorithm implements
+public class NearestNeighborAlgorithm extends
 		MapAlgorithm<ArrayList<RunLengthEncodedList<Location>>> {
 
 	@Override
-	public ArrayList<RunLengthEncodedList<Location>> runWith(MapInstance map) {
+	public ArrayList<RunLengthEncodedList<Location>> call() {
 		Location[][] NN = new Location[map.width][map.height];
 		for (Pixel p : map.pixels()) {
 			int nearestDist2 = Integer.MAX_VALUE;

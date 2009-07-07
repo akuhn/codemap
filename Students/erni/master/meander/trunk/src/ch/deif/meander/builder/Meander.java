@@ -6,12 +6,12 @@ import java.util.Collection;
 import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
-import ch.deif.meander.MapColor;
-import ch.deif.meander.MapConfiguration;
+import ch.deif.meander.Configuration;
 import ch.deif.meander.MapScheme;
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.Point;
 import ch.deif.meander.internal.MDS;
+import ch.deif.meander.util.MColor;
 import ch.deif.meander.visual.Composite;
 import ch.deif.meander.visual.HillshadeVisualization;
 import ch.deif.meander.visual.Layer;
@@ -40,7 +40,7 @@ public class Meander implements MapBuilder, VisualizationBuilder {
 	}
 
 	@Override
-	public MapConfiguration makeMap() {
+	public Configuration makeMap() {
 		if (this.hapax == null) throw new IllegalStateException();
 		LatentSemanticIndex lsi = hapax.getIndex();
 		MDS mds = MDS.fromCorrelationMatrix(lsi);
@@ -51,7 +51,7 @@ public class Meander implements MapBuilder, VisualizationBuilder {
 			locations.add(new Point(mds.x[index], mds.y[index], each));
 			index++;
 		}
-		return new MapConfiguration(locations).normalize();
+		return new Configuration(locations).normalize();
 	}
 
 	private Composite<Layer> layers = new Composite<Layer>();
@@ -76,7 +76,7 @@ public class Meander implements MapBuilder, VisualizationBuilder {
 	}
 
 	@Override
-	public VisualizationBuilder withColors(MapScheme<MapColor> colorScheme) {
+	public VisualizationBuilder withColors(MapScheme<MColor> colorScheme) {
 		
 		return this;
 	}

@@ -2,7 +2,6 @@ package ch.deif.meander.internal;
 
 import ch.deif.meander.Location;
 import ch.deif.meander.MapAlgorithm;
-import ch.deif.meander.MapInstance;
 
 /** Creates the digital elevation model of a map. A digital elevation model (DEM) is a raster of z-ordinates for each pixel. 
  *<p> 
@@ -18,17 +17,15 @@ import ch.deif.meander.MapInstance;
  * @author Adrian Kuhn
  *
  */
-public class DEMAlgorithm implements MapAlgorithm<float[][]> {
+public class DEMAlgorithm extends MapAlgorithm<float[][]> {
 
 	private static final int MAGIC_VALUE = 8*320; // TODO magic number!
 	private static final double THRESHOLD = 1.0;
 	private float[][] DEM;
 	private int radius;
-	private MapInstance map;
 
 	@Override
-	public float[][] runWith(MapInstance map) {
-		this.map = map;
+	public float[][] call() {
 		setup();
 		compute();
 		return DEM;

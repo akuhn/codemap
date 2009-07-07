@@ -4,6 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
+/** A set of identifier handels.
+ * External classes can use the collection interface to add and remove handles. 
+ * Internal classes use {@link #locationsOn(MapInstance)} to iterate over all selected locations of a given map instance. 
+ * 
+ * @author Adrian Kuhn
+ * @author David Erni
+ *
+ */
 public class MapSelection {
 
 	private HashSet<String> identifiers;

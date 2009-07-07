@@ -1,16 +1,16 @@
-package ch.deif.meander;
+package ch.deif.meander.util;
 
-public final class MapColor {
+public final class MColor {
 
-	public static final MapColor HILLGREEN = new MapColor(196, 236, 0);
-	public static final MapColor SHORE = new MapColor(92, 142, 255);
+	public static final MColor HILLGREEN = new MColor(196, 236, 0);
+	public static final MColor SHORE = new MColor(92, 142, 255);
 //	public static final Colors WATER = new Colors(0, 68, 255);
-	public static final MapColor WATER = new MapColor(0, 68, 255);	
-	public static final MapColor GRAY_204 = new MapColor(204, 204, 204);
+	public static final MColor WATER = new MColor(0, 68, 255);	
+	public static final MColor GRAY_204 = new MColor(204, 204, 204);
 
 	private final int red, green, blue, rgb;
 
-	public MapColor(int red, int green, int blue) {
+	public MColor(int red, int green, int blue) {
 		this.red = red;
 		this.green = green;
 		this.blue = blue;
@@ -38,7 +38,7 @@ public final class MapColor {
 				| ((int) (blue * factor) & 0xFF);
 	}
 	
-	public Iterable<MapColor> upto(MapColor end, int steps) {
+	public Iterable<MColor> upto(MColor end, int steps) {
 		// TODO
 		throw null;
 	}

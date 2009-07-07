@@ -1,14 +1,14 @@
 package ch.deif.meander.builder;
 
-import ch.deif.meander.MapColor;
 import ch.deif.meander.MapScheme;
 import ch.deif.meander.MapSelection;
+import ch.deif.meander.util.MColor;
 import ch.deif.meander.visual.Layer;
 import ch.deif.meander.visual.MapSelectionOverlay;
 
 public interface VisualizationBuilder {
 
-	VisualizationBuilder withColors(MapScheme<MapColor> colorScheme);
+	VisualizationBuilder withColors(MapScheme<MColor> colorScheme);
 
 	VisualizationBuilder withLabels(MapScheme<String> labelScheme);
 

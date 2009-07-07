@@ -1,7 +1,17 @@
 package ch.deif.meander;
 
-public interface MapAlgorithm<Kind> {
+import java.util.concurrent.Callable;
 
-	public Kind runWith(MapInstance map);
+public abstract class MapAlgorithm<V> implements Callable<V> {
+
+	protected MapInstance map;
+
+	public MapAlgorithm<V> setMap(MapInstance map) {
+		this.map = map;
+		return this;
+	}
+
+	@Override
+	public abstract V call();
 	
 }

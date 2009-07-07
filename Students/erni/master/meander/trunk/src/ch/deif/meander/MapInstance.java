@@ -2,7 +2,8 @@ package ch.deif.meander;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import ch.akuhn.foreach.Collect;
 import ch.akuhn.foreach.Each;
@@ -10,153 +11,44 @@ import ch.akuhn.util.Providable;
 import ch.deif.meander.internal.ContourLineAlgorithm;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.internal.HillshadeAlgorithm;
-import ch.deif.meander.util.RunLengthEncodedList;
-import ch.deif.meander.util.SparseTrueBooleanList;
+import ch.deif.meander.util.MColor;
 
 public class MapInstance {
 
-	public class Kernel extends Pixel {
-
-		public double topLeft, top, topRight, left, here, right, bottomLeft, bottom, bottomRight;
-
-		public Kernel(int x, int y) {
-			super(x, y);
-			int yTop = (y == 0 ? 0 : y - 1);
-			int xLeft = (x == 0 ? 0 : x - 1);
-			int yBottom = (y == (getWidth() - 1) ? (getWidth() - 1) : y + 1);
-			int xRight = (x == (getWidth() - 1) ? (getWidth() - 1) : x + 1);
-
-			topLeft = getDEM()[xLeft][yTop];
-			top = getDEM()[x][yTop];
-			topRight = getDEM()[xRight][yTop];
-			left = getDEM()[xLeft][y];
-			here = getDEM()[x][y];
-			right = getDEM()[xRight][y];
-			bottomLeft = getDEM()[xLeft][yBottom];
-			bottom = getDEM()[x][yBottom];
-			bottomRight = getDEM()[xRight][yBottom];
-		}
-
-	}
-	
-	public class Pixel {
-
-		private float[][] DEM0;
-		public int px;
-		public int py;
-
-		public Pixel(int px, int py) {
-			assert px < width && py < width : px + "," + py;
-			this.px = px;
-			this.py = py;
-			this.DEM0 = getDEM();
-		}
-
-		public double elevation() {
-			return DEM0[px][py];
-		}
-
-		public boolean hasContourLine() {
-			return getContours().get(px).get(py);
-		}
-
-		public double hillshade() {
-			return getHillshade()[px][py];
-		}
-
-		public void increaseElevation(double elevation) {
-			if (elevation < 0) return;
-			DEM0[px][py] += elevation;
-		}
-
-		public MapColor nearestNeighborColor() {
-			// TODO go over color scheme
-			// return NN == null ? MapColor.HILLGREEN : NN.get(px).get(py).color();
-			return MapColor.HILLGREEN;
-		}
-
-		public void normalizeElevation(double maxElevation) {
-			DEM0[px][py] = (float) (100.0 * (DEM0[px][py] / maxElevation));
-		}
-
-		public double x() {
-			return (double) px / (width - 1);
-		}
-		
-		public double y() {
-			return (double) py / (width - 1);
-		}
-
-	}
-	private int beachContourLevel = 10;
-	private int contourLineStep = 10;
-	private List<SparseTrueBooleanList> contours;
-	private float[][] DEM;
-	private boolean grayscale;
-	private double[][] hillshade;
+	private MapCaches caches = new MapCaches(this);
+	private ConcurrentMap<MapSetting<?>, Object> settings = new ConcurrentHashMap<MapSetting<?>, Object>();
 	private Collection<Location> locations;
-	private List<RunLengthEncodedList<Point>> NN;
-	private int waterContourLevel = 2;
 	public final int width, height;
-
-	public MapInstance(MapConfiguration map, int size) {
-		locations = makeLocationsWithSize(map, size);
-		this.width = this.height = size;
-	}
 
 	private MapInstance(Collection<Location> locations, int size) {
 		this.locations = locations;
 		this.width = this.height = size;
 	}
-	
+	public MapInstance(Configuration map, int size) {
+		locations = makeLocationsWithSize(map, size);
+		this.width = this.height = size;
+	}
+
 	public MapInstance(MapInstance map) {
 		this.locations = new ArrayList<Location>(map.locations);
-		this.beachContourLevel = map.beachContourLevel;
-		this.contourLineStep = map.contourLineStep;
-		this.contours = map.contours;
-		this.DEM = map.DEM;
-		this.grayscale = map.grayscale;
-		this.hillshade = map.hillshade;
-		this.locations = map.locations;
-		this.NN = map.NN;
-		this.waterContourLevel = map.waterContourLevel;
+		this.settings = new ConcurrentHashMap<MapSetting<?>, Object>(settings);
+		this.caches = map.caches;
 		this.width = map.width;
 		this.height = map.height;
 	}
-	
+
 	public Pixel get(int x, int y) {
 		return new Pixel(x, y);
 	}
-	public int getBeachContourLevel() {
-		return beachContourLevel;
-	}
-	public int getContourLineStep() {
-		return contourLineStep;
-	}
-	private List<SparseTrueBooleanList> getContours() {
-		if (contours == null) throw null;
-		return contours;
-	}
-	public float[][] getDEM() {
-		return DEM;
-	}
 
-	private double[][] getHillshade() {
-		return hillshade == null ? hillshade = new double[getWidth()][getWidth()] : hillshade;
-	}
-	
-	public int getWaterContourLevel() {
-		return waterContourLevel;
-	}
-	
 	public int getWidth() {
 		return width;
 	}
-
-	public boolean isGrayscale() {
-		return grayscale;
+	
+	public <V> V get(Class<? extends MapAlgorithm<V>> key) {
+		return caches.get(key);
 	}
-
+	
 	public Iterable<Kernel> kernels() {
 		return new Providable<Kernel>() {
 			private int x, y;
@@ -183,7 +75,7 @@ public class MapInstance {
 		return locations;
 	}
 
-	private Collection<Location> makeLocationsWithSize(MapConfiguration map, int size) {
+	private Collection<Location> makeLocationsWithSize(Configuration map, int size) {
 		Collection<Location> result = new ArrayList<Location>();
 		for (Point each: map.points()) {
 			result.add(new Location(each, 
@@ -194,16 +86,6 @@ public class MapInstance {
 		return result;
 	}
 
-	public void needElevationModel() {
-		if (DEM == null) DEM = new DEMAlgorithm().runWith(this);
-	}
-
-	public void needHillshading() {
-		if (hillshade == null) {
-			hillshade = new HillshadeAlgorithm().runWith(this);
-			contours = new ContourLineAlgorithm().runWith(this);
-		}
-	}
 	public MapInstance normalizeElevation() {
 		double max = 0.0;
 		for (Location each: locations()) {
@@ -215,19 +97,13 @@ public class MapInstance {
 			each.yield = each.value.withElevation(each.value.getElevation() / max * 100);
 		}
 		MapInstance result = new MapInstance(query.getResult(), width);
-		result.beachContourLevel = this.beachContourLevel;
-		result.contourLineStep = this.contourLineStep;
-		result.grayscale = this.grayscale;
-		result.NN = this.NN;
-		result.waterContourLevel = this.waterContourLevel;
+		result.settings = new ConcurrentHashMap<MapSetting<?>, Object>(this.settings);
 		return result;
 	}
 
 	public Iterable<Pixel> pixels() {
 		return pixelsByRows();
 	}
-
-
 	public Iterable<Pixel> pixelsByColumns() {
 		return new Providable<Pixel>() {
 			private final int height = getWidth();
@@ -280,29 +156,95 @@ public class MapInstance {
 		};
 	}
 
-	public void setBeachContourLevel(int beachContourLevel) {
-		this.beachContourLevel = beachContourLevel;
-	}
 
-	public void setContourLines(boolean[][] contours) {
-		this.contours = new ArrayList<SparseTrueBooleanList>(contours.length);
-		for (int row = 0; row < contours.length; row++) {
-			// TODO use a simple List of RLE list in worst case
-			this.contours.add(new SparseTrueBooleanList(contours[row]));
+	public class Kernel extends Pixel {
+
+		public double topLeft, top, topRight, left, here, right, bottomLeft, bottom, bottomRight;
+
+		public Kernel(int x, int y) {
+			super(x, y);
+			int yTop = (y == 0 ? 0 : y - 1);
+			int xLeft = (x == 0 ? 0 : x - 1);
+			int yBottom = (y == (getWidth() - 1) ? (getWidth() - 1) : y + 1);
+			int xRight = (x == (getWidth() - 1) ? (getWidth() - 1) : x + 1);
+
+			float[][] DEM = get(DEMAlgorithm.class);
+			
+			topLeft = DEM[xLeft][yTop];
+			top = DEM[x][yTop];
+			topRight = DEM[xRight][yTop];
+			left = DEM[xLeft][y];
+			here = DEM[x][y];
+			right = DEM[xRight][y];
+			bottomLeft = DEM[xLeft][yBottom];
+			bottom = DEM[x][yBottom];
+			bottomRight = DEM[xRight][yBottom];
 		}
-	}
 
-	public void setContourLineStep(int contourLineStep) {
-		this.contourLineStep = contourLineStep;
-	}
-
-	public void setGrayscale(boolean grayscale) {
-		// TODO withGrayscale
-		this.grayscale = grayscale;
 	}	
 	
-	public void setWaterContourLevel(int waterContourLevel) {
-		this.waterContourLevel = waterContourLevel;
+	public class Pixel {
+
+		private float[][] DEM0;
+		public int px;
+		public int py;
+
+		public Pixel(int px, int py) {
+			assert px < width && py < width : px + "," + py;
+			this.px = px;
+			this.py = py;
+			this.DEM0 = get(DEMAlgorithm.class);
+		}
+
+		public double elevation() {
+			return DEM0[px][py];
+		}
+
+		public boolean hasContourLine() {
+			return get(ContourLineAlgorithm.class).get(px).get(py);
+		}
+
+		public double hillshade() {
+			return get(HillshadeAlgorithm.class)[px][py];
+		}
+
+		public void increaseElevation(double elevation) {
+			if (elevation < 0) return;
+			DEM0[px][py] += elevation;
+		}
+
+		public MColor nearestNeighborColor() {
+			// TODO go over color scheme
+			// return NN == null ? MapColor.HILLGREEN : NN.get(px).get(py).color();
+			return MColor.HILLGREEN;
+		}
+
+		public void normalizeElevation(double maxElevation) {
+			DEM0[px][py] = (float) (100.0 * (DEM0[px][py] / maxElevation));
+		}
+
+		public double x() {
+			return (double) px / (width - 1);
+		}
+		
+		public double y() {
+			return (double) py / (width - 1);
+		}
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public <V> V get(MapSetting<V> setting) {
+		settings.putIfAbsent(setting, setting.defaultValue);
+		return (V) settings.get(setting);
+	}
+	
+	public <V> void reset(MapSetting<V> setting) {
+		settings.remove(setting);
+	}
+	
+	public <V> void set(MapSetting<V> setting, V value) {
+		settings.put(setting, value);
 	}
 	
 }
