@@ -18,7 +18,7 @@ import ch.akuhn.foreach.Each;
  */
 public class Configuration {
 
-	private Point[] points;
+	private final Point[] points;
 	
 	private Configuration(Point... locations) {
 		this.points = locations;

@@ -26,77 +26,83 @@ import ch.deif.meander.visual.WaterVisualization;
  * @author akuhn
  *
  */
-public class Meander implements MapBuilder, VisualizationBuilder {
+public class Meander {
 
-	private Hapax hapax = null;
-	
-	public static MapBuilder builder() {
-		return new Meander();
-	}
+	private static class MyVisualizationBuilder implements VisualizationBuilder {
+		
+		private Composite<Layer> layers;
+		private HillshadeVisualization hillShade;
 
-	@Override
-	public MapBuilder addCorpus(Hapax hapax) {
-		if (this.hapax != null) throw new IllegalStateException();
-		this.hapax = hapax;
-		return this;
-	}
-
-	@Override
-	public Configuration makeMap() {
-		if (this.hapax == null) throw new IllegalStateException();
-		LatentSemanticIndex lsi = hapax.getIndex();
-		MDS mds = MDS.fromCorrelationMatrix(lsi);
-		mds.normalize();
-		Collection<Point> locations = new ArrayList<Point>();
-		int index = 0;
-		for (Document each: lsi.documents) {
-			locations.add(new Point(mds.x[index], mds.y[index], each));
-			index++;
+		public MyVisualizationBuilder() {
+			layers = new Composite<Layer>();
+			hillShade = new HillshadeVisualization();
+			Background bg = new Background();
+			bg.append(new WaterVisualization());
+			bg.append(new ShoreVizualization());
+			bg.append(hillShade);
+			layers.append(bg);							
 		}
-		return new Configuration(locations).normalize();
+
+		@Override
+		public VisualizationBuilder withSelection(
+				MapSelectionOverlay overlay,
+				MapSelection selection) {
+			layers.append(overlay.setSelection(selection));
+			return this;
+		}
+
+		@Override
+		public VisualizationBuilder withLabels(MapScheme<String> labelScheme) {
+			layers.append(new LabelsOverlay(labelScheme));
+			return this;
+		}
+
+		@Override
+		public VisualizationBuilder withColors(MapScheme<MColor> colorScheme) {
+			hillShade.setColorScheme(colorScheme);
+			return this;
+		}
+
+		@Override
+		public Layer makeLayer() {
+			return layers;
+		}
 	}
 
-	private Composite<Layer> layers = new Composite<Layer>();
+
+	private static final class MapBuilderImplementation implements MapBuilder {
+		private Hapax hapax = null;
+
+		@Override
+		public Configuration makeMap() {
+			if (this.hapax == null) throw new IllegalStateException();
+			LatentSemanticIndex lsi = hapax.getIndex();
+			MDS mds = MDS.fromCorrelationMatrix(lsi);
+			mds.normalize();
+			Collection<Point> locations = new ArrayList<Point>();
+			int index = 0;
+			for (Document each: lsi.documents) {
+				locations.add(new Point(mds.x[index], mds.y[index], each));
+				index++;
+			}
+			return new Configuration(locations).normalize();
+		}
+
+		@Override
+		public MapBuilder addCorpus(Hapax hapax) {
+			if (this.hapax != null) throw new IllegalStateException();
+			this.hapax = hapax;
+			return this;
+		}
+	}
+
+
+	public static MapBuilder builder() {
+		return new MapBuilderImplementation();
+	}
+	
 	
 	public static VisualizationBuilder visualization() {
-		return new Meander().useHillshade();
+		return new MyVisualizationBuilder();
 	}
-
-	private VisualizationBuilder useHillshade() {
-		Background bg = new Background();
-		bg.append(new WaterVisualization());
-		bg.append(new ShoreVizualization());
-		bg.append(new HillshadeVisualization());
-		layers.append(bg);
-		
-		//layers.add(new SketchVisualization());
-		
-		return this;
-	}
-
-	@Override
-	public Layer makeLayer() {
-		return layers;
-	}
-
-	@Override
-	public VisualizationBuilder withColors(MapScheme<MColor> colorScheme) {
-		
-		return this;
-	}
-
-	@Override
-	public VisualizationBuilder withLabels(MapScheme<String> labelScheme) {
-		layers.append(new LabelsOverlay(labelScheme));
-		return this;
-	}
-
-	@Override
-	public VisualizationBuilder withSelection(
-			MapSelectionOverlay overlay,
-			MapSelection selection) {
-		layers.append(overlay.setSelection(selection));
-		return this;
-	}
-
 }

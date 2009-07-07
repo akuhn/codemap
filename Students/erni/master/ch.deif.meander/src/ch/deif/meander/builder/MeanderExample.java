@@ -29,6 +29,7 @@ public class MeanderExample {
 		Layer layer = Meander.visualization()
 				.withColors(colorScheme)
 				.withLabels(filenames_only)
+				.withColors(colorScheme)
 				.withSelection(new CurrentSelectionOverlay(), currentSelection)
 				//.withSelection(new OpenFilesOverlay(), openEditorSelection)
 				//.withSelection(new YouAreHereOverlay(), currentEditorSelection)
