@@ -38,7 +38,11 @@ public class MeanderApplet extends PApplet {
 	public void draw() {
 		smooth();
 		noFill();
-		if (viz != null) viz.draw(g, this);
+		try {
+			if (viz != null) viz.draw(g, this);						
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 	}
 
 	public boolean hasDragInput() {
