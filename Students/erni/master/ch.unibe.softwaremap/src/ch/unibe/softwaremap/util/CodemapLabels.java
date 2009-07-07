@@ -3,11 +3,11 @@ package ch.unibe.softwaremap.util;
 import ch.deif.meander.Point;
 import ch.deif.meander.util.MapScheme;
 
-public class JavaLabelScheme extends MapScheme<String> {
+public class CodemapLabels extends MapScheme<String> {
 	
 	private static final String DEFAULT_JAVA_FILENAME = "";
 	
-	public JavaLabelScheme() {
+	public CodemapLabels() {
 		super(DEFAULT_JAVA_FILENAME);
 	}
 
