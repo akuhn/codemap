@@ -1,9 +1,5 @@
 package ch.unibe.softwaremap;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -13,19 +9,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jdt.core.ICompilationUnit;
 
 import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.deif.meander.Configuration;
-import ch.deif.meander.Location;
-import ch.deif.meander.MapSelection;
 import ch.deif.meander.builder.Meander;
-import ch.deif.meander.visual.LabelsOverlay;
+import ch.deif.meander.visual.CurrentSelectionOverlay;
 import ch.deif.meander.visual.Layer;
 import ch.deif.meander.visual.MapVisualization;
 import ch.deif.meander.visual.OpenFilesOverlay;
-import ch.deif.meander.visual.CurrentSelectionOverlay;
 import ch.deif.meander.visual.YouAreHereOverlay;
 import ch.unibe.scg.util.Extension;
 import ch.unibe.softwaremap.builder.HapaxBuilder;

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
@@ -14,7 +13,6 @@ import org.eclipse.ui.IEditorReference;
 
 import ch.deif.meander.MapSelection;
 import ch.unibe.softwaremap.CodemapCore;
-import ch.unibe.softwaremap.MapPerProject;
 
 public class MapController {
 	

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -45,17 +44,14 @@ import org.eclipse.ui.part.ISetSelectionTarget;
 import org.eclipse.ui.part.ViewPart;
 
 import ch.deif.meander.Location;
-import ch.deif.meander.util.MColor;
 import ch.deif.meander.ui.CodemapEvent;
 import ch.deif.meander.ui.CodemapListener;
 import ch.deif.meander.ui.MeanderApplet;
-import ch.deif.meander.ui.MeanderEventListener;
+import ch.deif.meander.util.MColor;
 import ch.deif.meander.visual.CurrentSelectionOverlay;
 import ch.deif.meander.visual.MapVisualization;
 import ch.unibe.softwaremap.CodemapCore;
-import ch.unibe.softwaremap.MapPerProject;
 import ch.unibe.softwaremap.util.EclipseProcessingBridge;
-import ch.unibe.softwaremap.util.EclipseUtil;
 import ch.unibe.softwaremap.util.Log;
 
 // TODO factor out MeanderEventListener

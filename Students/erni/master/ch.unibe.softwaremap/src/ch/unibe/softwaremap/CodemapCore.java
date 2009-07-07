@@ -9,7 +9,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import ch.deif.meander.MapSelection;
-import ch.deif.meander.util.MColor;
 import ch.deif.meander.util.MapScheme;
 import ch.unibe.softwaremap.mapview.MapView;
 import ch.unibe.softwaremap.search.MeanderQueryListener;
