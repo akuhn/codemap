@@ -27,6 +27,7 @@ public class CurrentSelectionOverlay extends MapSelectionOverlay {
 		pg.stroke(Color.RED.getRGB());
 		if (pa != null) handleEvents(map, pa);
 		if (isDragging) updateSelection(map);
+		pg.strokeWeight(POINT_STROKE);
 		super.draw(map, pg, pa);
 		drawSelectionBox(pg);
 	}
