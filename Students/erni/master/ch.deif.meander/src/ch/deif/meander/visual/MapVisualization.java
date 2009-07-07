@@ -140,4 +140,12 @@ public class MapVisualization {
 		
 	}
 
+	public int getWidth() {
+		return map.width;	
+	}
+	
+	public int getHeight() {
+		return map.height;
+	}
+	
 }

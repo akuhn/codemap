@@ -3,7 +3,6 @@ package ch.unibe.softwaremap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.codemap.hitmds.Visualization;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -17,15 +16,16 @@ import org.eclipse.jdt.core.ICompilationUnit;
 
 import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
+import ch.deif.meander.Configuration;
 import ch.deif.meander.Location;
-import ch.deif.meander.MapModifier;
 import ch.deif.meander.MapSelection;
-import ch.deif.meander.Meander;
-import ch.deif.meander.viz.LabelsOverlay;
-import ch.deif.meander.viz.MapVisualization;
-import ch.deif.meander.viz.OpenFilesOverlay;
-import ch.deif.meander.viz.CurrentSelectionOverlay;
-import ch.deif.meander.viz.YouAreHereOverlay;
+import ch.deif.meander.builder.Meander;
+import ch.deif.meander.visual.LabelsOverlay;
+import ch.deif.meander.visual.Layer;
+import ch.deif.meander.visual.MapVisualization;
+import ch.deif.meander.visual.OpenFilesOverlay;
+import ch.deif.meander.visual.CurrentSelectionOverlay;
+import ch.deif.meander.visual.YouAreHereOverlay;
 import ch.unibe.scg.util.Extension;
 import ch.unibe.softwaremap.builder.HapaxBuilder;
 import ch.unibe.softwaremap.builder.MapMakerBackgroundJob;
@@ -46,18 +46,21 @@ public class MapPerProject {
 	private MapVisualization mapViz;
 	private boolean mapBeingCalculated = false;
 	private boolean builderIsRunning = false;
-	private Set<MapModifier> modifiers;
+	//private Set<MapModifier> modifiers;
 	private int mapSize = MINIMAL_SIZE;
 	private MapSelection youAreHereSelection;
 	private MapSelection openFilesSelection;
 
 	private Hapax hapax;
 
+	private Configuration configuration;
+	private Layer layer;
+
 
 	
 	public MapPerProject(IProject project) {
 		this.project = project;
-		modifiers = new HashSet<MapModifier>();
+		//modifiers = new HashSet<MapModifier>();
 		youAreHereSelection = new MapSelection();
 		openFilesSelection = new MapSelection();
 	}
@@ -144,17 +147,26 @@ public class MapPerProject {
 				.addCorpus(tdm)
 				.closeCorpus()
 				.createIndex();
+			configuration = Meander.builder()
+					.addCorpus(hapax)
+					.makeMap();
+			layer = Meander.visualization()
+					.withLabels(null)
+					.makeLayer();
 		}
-		mapViz = new Meander(hapax)
-				.makeMap(mapSize)
-				.applyModifier(modifiers)
-				.useHillshading()
-				.add(LabelsOverlay.class)
-				.add(CurrentSelectionOverlay.class)
-				.add(new OpenFilesOverlay(openFilesSelection))
-				.add(new YouAreHereOverlay(youAreHereSelection))
-				.runNearestNeighborAlgorithm()
-				.getVisualization();
+		
+		mapViz = new MapVisualization(configuration.withSize(mapSize), layer);
+		
+//		mapViz = Meander(hapax)
+//				.makeMap(mapSize)
+//				.applyModifier(modifiers)
+//				.useHillshading()
+//				.add(LabelsOverlay.class)
+//				.add(CurrentSelectionOverlay.class)
+//				.add(new OpenFilesOverlay(openFilesSelection))
+//				.add(new YouAreHereOverlay(youAreHereSelection))
+//				.runNearestNeighborAlgorithm()
+//				.getVisualization();
 		notifyMapView();
 		monitor.done();
 		mapBeingCalculated = false;
@@ -177,13 +189,13 @@ public class MapPerProject {
 		return this;
 	}
 
-	public void addModifier(MapModifier mod) {
-		boolean added = modifiers.add(mod);
-		if (!added) {
-			modifiers.remove(mod);
-			modifiers.add(mod);
-		}
-	}
+//	public void addModifier(MapModifier mod) {
+//		boolean added = modifiers.add(mod);
+//		if (!added) {
+//			modifiers.remove(mod);
+//			modifiers.add(mod);
+//		}
+//	}
 
 	public void setYouAreHere(ICompilationUnit javaElement) {
 		youAreHereSelection.clear().add(javaElement.getHandleIdentifier());

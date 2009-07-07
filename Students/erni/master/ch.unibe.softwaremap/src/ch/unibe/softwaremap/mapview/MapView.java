@@ -44,11 +44,11 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ISetSelectionTarget;
 import org.eclipse.ui.part.ViewPart;
 
-import ch.deif.meander.Colors;
 import ch.deif.meander.Location;
+import ch.deif.meander.util.MColor;
 import ch.deif.meander.ui.MeanderApplet;
 import ch.deif.meander.ui.MeanderEventListener;
-import ch.deif.meander.viz.MapVisualization;
+import ch.deif.meander.visual.MapVisualization;
 import ch.unibe.softwaremap.CodemapCore;
 import ch.unibe.softwaremap.MapPerProject;
 import ch.unibe.softwaremap.util.EclipseProcessingBridge;
@@ -96,7 +96,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		container.setLayout(new FillLayout(SWT.LEFT));
 		
 		container.layout();
-		Colors water = Colors.WATER;
+		MColor water = MColor.WATER;
 		Color swtColor = new Color(null, water.getRed(), water.getGreen(), water.getBlue());		
 		container.setBackground(swtColor);
 		theApplet = EclipseProcessingBridge.createApplet();

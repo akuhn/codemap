@@ -92,7 +92,7 @@ public class MeanderApplet extends PApplet {
 		smooth();
 		noFill();
 //		strokeWeight(POINT_STROKE);
-		viz.draw(g, this);
+		if (viz != null) viz.draw(g, this);
 		needsRedraw = false;
 	}
 

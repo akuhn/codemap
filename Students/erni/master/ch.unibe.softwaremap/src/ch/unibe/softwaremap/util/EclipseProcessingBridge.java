@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 
 import ch.deif.meander.ui.MeanderApplet;
-import ch.deif.meander.viz.MapVisualization;
+import ch.deif.meander.visual.MapVisualization;
 
 /**
  * Bridges between Eclipse (which uses SWT) and Processing (which uses AWT).
@@ -62,11 +62,11 @@ public class EclipseProcessingBridge extends Composite {
 	}
 
 	public void updateSelection(List<String> handleIdentifiers) {
-		getApplet().updateSelection(handleIdentifiers);
+		// getApplet().updateSelection(handleIdentifiers); FIXME 
 	}
 
 	public void addSelection(List<String> handleIdentifiers) {
-		getApplet().addSelection(handleIdentifiers);
+		// getApplet().addSelection(handleIdentifiers); FIXME 
 	}	
 
 	public MeanderApplet getApplet() {
