@@ -53,7 +53,6 @@ public class CurrentSelectionOverlay extends MapSelectionOverlay {
 	
 	private void drawSelectionBox(PGraphics pg) {
 		if (!isDragging) return;
-		System.out.println("...");
 		pg.stroke(Color.RED.getRGB());
 		pg.strokeWeight(BOX_STROKE);
 		int deltaX = dragStop.x - dragStart.x;

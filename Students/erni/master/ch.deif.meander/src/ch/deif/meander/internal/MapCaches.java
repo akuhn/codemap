@@ -41,7 +41,6 @@ public class MapCaches {
 					throw new RuntimeException(e);
 				}
 				future = new FutureTask<V>(callable);
-				System.out.println("Running " + key);
 				cache.put(key, future);
 				executor.execute(future);
 			}

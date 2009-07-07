@@ -1,7 +1,5 @@
 package ch.deif.meander.ui;
 
-import java.awt.Point;
-
 import processing.core.PApplet;
 import ch.deif.meander.visual.MapVisualization;
 
@@ -9,8 +7,6 @@ import ch.deif.meander.visual.MapVisualization;
 public class MeanderApplet extends PApplet {
 
 	private MapVisualization viz;
-	private Point dragStart;
-	private Point dragStop;
 	private CodemapEventRegistry events;
 
 	public MeanderApplet() {
@@ -45,15 +41,11 @@ public class MeanderApplet extends PApplet {
 		}
 	}
 
-	public boolean hasDragInput() {
-		return dragStart != null && dragStop != null;
-	}
-
 	public void setVisualization(MapVisualization viz) {
 		if (viz == this.viz) return;
+		// Processing requires that use use #size instead of #setSize! 
 		size(viz.getWidth(), viz.getHeight());
 		this.viz = viz;
-		//repaint();
 	}
 	
 	public MapVisualization getVisualization() {

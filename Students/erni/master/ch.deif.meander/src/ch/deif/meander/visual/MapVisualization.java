@@ -1,7 +1,6 @@
 package ch.deif.meander.visual;
 
 import java.applet.Applet;
-import java.awt.FlowLayout;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
@@ -33,7 +32,6 @@ public class MapVisualization {
 		applet.init();
 		applet.setVisualization(this);
 		JFrame win = new JFrame("Map Viewer");
-		win.setLayout(new FlowLayout());
 		win.setResizable(false);
 		win.getContentPane().add(applet);
 		win.pack();
@@ -68,8 +66,11 @@ public class MapVisualization {
 			return;
 		}
 		oldMouseEvent = pa.mouseEvent;
-		// refresh  = false; FIXME
+		refresh  = false; // FIXME
+		long nano = System.nanoTime();
 		visual.draw(map, pg, pa);
+		nano = System.nanoTime() - nano;
+		System.out.printf("MapVisualization#draw:%5d\n", (int) (nano / 1e9 * pa.frameRate * 100));
 	}
 
 	public final void drawToPGraphics(PGraphics pg) {
