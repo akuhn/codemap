@@ -2,17 +2,17 @@ package ch.deif.meander;
 
 import org.junit.Test;
 
-import ch.deif.meander.visual.LabelsOverlay;
+import ch.akuhn.hapax.Hapax;
+import ch.deif.meander.builder.Meander;
 
 public class SmallDocumentCorporaTest {
 
 	@Test
 	public void corpusWithoutDocuments() {
-		Meander.script()
-			.addDocuments(".", ".foobar")
-			.makeMap(512)
-			.useHillshading()
-			.add(LabelsOverlay.class);
+		Meander.builder()
+			.addCorpus(Hapax.legomenon().makeCorpus(".", ".foobar"))
+			.makeMap()
+			.withSize(512);
 	}
 	
 }
