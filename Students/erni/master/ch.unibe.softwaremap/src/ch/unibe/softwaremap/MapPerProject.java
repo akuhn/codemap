@@ -1,5 +1,6 @@
 package ch.unibe.softwaremap;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,8 +34,7 @@ import ch.unibe.softwaremap.mapview.MapView;
 import ch.unibe.softwaremap.util.Log;
 
 /**
- * Holds corpus, map and visualization of a project. 
- * Use this class to store project specific information.
+ * Holds corpus, map and visualization of a project. Use this class to store project specific information.
  * 
  */
 public class MapPerProject {
@@ -46,23 +46,18 @@ public class MapPerProject {
 	private MapVisualization mapViz;
 	private boolean mapBeingCalculated = false;
 	private boolean builderIsRunning = false;
-	//private Set<MapModifier> modifiers;
+	// private Set<MapModifier> modifiers;
 	private int mapSize = MINIMAL_SIZE;
-	private MapSelection youAreHereSelection;
-	private MapSelection openFilesSelection;
+
 
 	private Hapax hapax;
 
 	private Configuration configuration;
 	private Layer layer;
 
-
-	
 	public MapPerProject(IProject project) {
 		this.project = project;
-		//modifiers = new HashSet<MapModifier>();
-		youAreHereSelection = new MapSelection();
-		openFilesSelection = new MapSelection();
+		// modifiers = new HashSet<MapModifier>();
 	}
 
 	public MapPerProject enableBuilder() {
@@ -85,7 +80,8 @@ public class MapPerProject {
 				try {
 					builderIsRunning = true;
 					if (getProject() != null) {
-						getProject().build(IncrementalProjectBuilder.FULL_BUILD, HapaxBuilder.BUILDER_ID, null, monitor);
+						getProject()
+								.build(IncrementalProjectBuilder.FULL_BUILD, HapaxBuilder.BUILDER_ID, null, monitor);
 					}
 				} catch (CoreException e) {
 					Log.error(e);
@@ -100,8 +96,8 @@ public class MapPerProject {
 	private void addBuilderToProjectDescriptionCommands() throws CoreException {
 		IProject project = getProject();
 		if (project == null || !project.isOpen()) return;
-		
-		IProjectDescription desc  = project.getDescription();
+
+		IProjectDescription desc = project.getDescription();
 		ICommand[] commands = desc.getBuildSpec();
 		for (ICommand command: commands) {
 			if (command.getBuilderName().equals(HapaxBuilder.BUILDER_ID)) {
@@ -146,29 +142,31 @@ public class MapPerProject {
 		monitor.beginTask("Making map", 5);
 		if (hapax == null) {
 			hapax = Hapax.legomenon()
-				.addCorpus(tdm)
-				.closeCorpus()
-				.createIndex();
+					.addCorpus(tdm)
+					.closeCorpus()
+					.createIndex();
 			configuration = Meander.builder()
 					.addCorpus(hapax)
 					.makeMap();
 			layer = Meander.visualization()
 					.withLabels(null)
+					.withSelection(new OpenFilesOverlay(), getOpenFilesSelection())
+					.withSelection(new YouAreHereOverlay(), getYouAreHereSelection())
 					.makeLayer();
 		}
-		
+
 		mapViz = new MapVisualization(configuration.withSize(mapSize), layer);
-		
-//		mapViz = Meander(hapax)
-//				.makeMap(mapSize)
-//				.applyModifier(modifiers)
-//				.useHillshading()
-//				.add(LabelsOverlay.class)
-//				.add(CurrentSelectionOverlay.class)
-//				.add(new OpenFilesOverlay(openFilesSelection))
-//				.add(new YouAreHereOverlay(youAreHereSelection))
-//				.runNearestNeighborAlgorithm()
-//				.getVisualization();
+
+		// mapViz = Meander(hapax)
+		// .makeMap(mapSize)
+		// .applyModifier(modifiers)
+		// .useHillshading()
+		// .add(LabelsOverlay.class)
+		// .add(CurrentSelectionOverlay.class)
+		// .add(new OpenFilesOverlay(openFilesSelection))
+		// .add(new YouAreHereOverlay(youAreHereSelection))
+		// .runNearestNeighborAlgorithm()
+		// .getVisualization();
 		notifyMapView();
 		monitor.done();
 		mapBeingCalculated = false;
@@ -183,38 +181,46 @@ public class MapPerProject {
 	}
 
 	public MapPerProject updateSize(int newMapDimension) {
-//		if (project != null) {
-//			System.out.println("adapting map of " + project.getName() + " to dimension " + newMapDimension);
-//		}
+		// if (project != null) {
+		// System.out.println("adapting map of " + project.getName() + " to dimension " + newMapDimension);
+		// }
 		// XXX: ugly hardcoded map-size
 		this.mapSize = Math.max(newMapDimension, MINIMAL_SIZE);
 		return this;
 	}
 
-//	public void addModifier(MapModifier mod) {
-//		boolean added = modifiers.add(mod);
-//		if (!added) {
-//			modifiers.remove(mod);
-//			modifiers.add(mod);
-//		}
-//	}
+	// public void addModifier(MapModifier mod) {
+	// boolean added = modifiers.add(mod);
+	// if (!added) {
+	// modifiers.remove(mod);
+	// modifiers.add(mod);
+	// }
+	// }
 
 	public void setYouAreHere(ICompilationUnit javaElement) {
-		youAreHereSelection.clear().add(javaElement.getHandleIdentifier());
+		getYouAreHereSelection().clear().add(javaElement.getHandleIdentifier());
 	}
 
-	public void setOpenUnits(Set<ICompilationUnit> units) {
+	public void setOpenUnits(Collection<ICompilationUnit> units) {
 		for (ICompilationUnit each: units) {
-			openFilesSelection.add(each.getHandleIdentifier());			
+			getOpenFilesSelection().add(each.getHandleIdentifier());
 		}
 	}
 
 	public void addOpenUnit(ICompilationUnit unit) {
-		openFilesSelection.add(unit.getHandleIdentifier());
+		getOpenFilesSelection().add(unit.getHandleIdentifier());
 	}
 
 	public void removeClosedUnit(ICompilationUnit unit) {
-		openFilesSelection.remove(unit.getHandleIdentifier());
+		getOpenFilesSelection().remove(unit.getHandleIdentifier());
+	}
+	
+	private MapSelection getYouAreHereSelection() {
+		return CodemapCore.getPlugin().getYouAreHereSelection();
+	}
+	
+	private MapSelection getOpenFilesSelection() {
+		return CodemapCore.getPlugin().getOpenFilesSelection();
 	}
 
 }

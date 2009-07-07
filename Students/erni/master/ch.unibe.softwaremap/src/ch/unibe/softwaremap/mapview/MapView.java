@@ -235,7 +235,7 @@ public class MapView extends ViewPart {
 		map.setFocus();
 	}
 
-	private void updateVisualization() {
+	public void updateVisualization() {
 		MapVisualization viz = CodemapCore.getPlugin()
 			.mapForProject(currentProject)
 			.updateSize(getCurrentSize())
@@ -330,36 +330,5 @@ public class MapView extends ViewPart {
 	public void updateMap(CodemapCore codemapCore) {
 		codemapCore.mapForProject(getCurrentProject()).updateMap();
 	}
-
-	public void compilationUnitActivated(IJavaProject javaProject, ICompilationUnit javaElement) {
-		IProject project = javaProject.getProject();
-		MapPerProject mapPerProject = CodemapCore.getPlugin().mapForProject(project);
-		mapPerProject.setYouAreHere(javaElement);
-		updateVisualization();
-	}
-
-	public void compilationUnitsOpen(IJavaProject javaProject, Set<ICompilationUnit> units) {
-		IProject project = javaProject.getProject();
-		MapPerProject mapPerProject = CodemapCore.getPlugin().mapForProject(project);
-		mapPerProject.setOpenUnits(units);
-//		updateVisualization();
-	}
-
-	public void compilationUnitOpen(IJavaProject javaProject, ICompilationUnit unit) {
-		IProject project = javaProject.getProject();
-		MapPerProject mapPerProject = CodemapCore.getPlugin().mapForProject(project);
-		mapPerProject.addOpenUnit(unit);
-		updateVisualization();		
-		
-	}
-
-	public void compilationUnitClosed(IJavaProject javaProject, ICompilationUnit unit) {
-		IProject project = javaProject.getProject();
-		MapPerProject mapPerProject = CodemapCore.getPlugin().mapForProject(project);
-		mapPerProject.removeClosedUnit(unit);
-		updateVisualization();		
-	}
-
-
 
 }

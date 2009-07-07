@@ -8,6 +8,7 @@ import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import ch.deif.meander.MapSelection;
 import ch.unibe.softwaremap.mapview.MapView;
 import ch.unibe.softwaremap.search.MeanderQueryListener;
 
@@ -28,10 +29,23 @@ public class CodemapCore extends AbstractUIPlugin {
 	private Map<IProject,MapPerProject> mapPerProjectCache;
 	private MapView theView;
 	private MeanderQueryListener queryListener;
+	
 
+	private final MapSelection youAreHereSelection;
+	private final MapSelection openFilesSelection;
+
+	public MapSelection getYouAreHereSelection() {
+		return youAreHereSelection;
+	}
+	
+	public MapSelection getOpenFilesSelection() {
+		return openFilesSelection;
+	}
 	
 	public CodemapCore() {
 		mapPerProjectCache = new HashMap<IProject,MapPerProject>();
+		youAreHereSelection = new MapSelection();
+		openFilesSelection = new MapSelection();		
 	}
 
 	@Override
