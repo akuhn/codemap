@@ -4,8 +4,6 @@
       <category name="Codemap"/>
    </feature>
    <category-def name="Codemap" label="Codemap">
-      <description>
-         Software Cartography, your roadmap to software!
-      </description>
+      <description>Software Cartography, your roadmap to software.</description>
    </category-def>
 </site>

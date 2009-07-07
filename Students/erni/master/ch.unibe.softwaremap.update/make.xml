@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="default" basedir=".">
+
+    <target name="default">
+        <delete dir="features"/>
+    	<delete dir="plugins"/>
+        <delete file="artifacts.jar"/>
+        <delete file="content.jar"/>
+    	<copy file="site_qualifier.txt" tofile="site.xml"/>
+    </target>    
+
+</project>
