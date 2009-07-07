@@ -21,8 +21,8 @@ public class MeanderApplet extends PApplet {
 		events.removeListener(listener);
 	}
 
-	public void fireEvent(String key, Object value) {
-		events.fireEvent(key, null, value); // TODO do we need the source field?
+	public void fireEvent(String key, Object source, Object value) {
+		events.fireEvent(key, source, value);
 	}
 	
 	@Override

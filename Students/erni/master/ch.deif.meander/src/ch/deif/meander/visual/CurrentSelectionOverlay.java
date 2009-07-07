@@ -12,96 +12,113 @@ import ch.deif.meander.MapInstance;
 import ch.deif.meander.ui.MeanderApplet;
 
 public class CurrentSelectionOverlay extends MapSelectionOverlay {
-	
+
 	protected final int SELECTION_SIZE = 12;
 	protected final int POINT_STROKE = 3;
-	protected final int BOX_STROKE = 2;	
+	protected final int BOX_STROKE = 2;
 	
+	public static final String EVT_DOUBLE_CLICKED = "doubleClicked";
+	public static final String EVT_SELECTION_CHANGED = "selectionChanged";
+
 	private boolean isDragging = false;
 	private Point dragStart;
-	private Point dragStop;	
+	private Point dragStop;
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
 		pg.noFill();
 		pg.stroke(Color.RED.getRGB());
-		if (pa != null) handleEvents(map, pa);
-		if (isDragging) updateSelection(map);
+		if (pa != null)
+			handleEvents(map, pa);
+		if (isDragging)
+			updateSelection(map);
 		pg.strokeWeight(POINT_STROKE);
 		super.draw(map, pg, pa);
 		drawSelectionBox(pg);
 	}
-	
+
 	private void handleEvents(MapInstance map, MeanderApplet pa) {
-		if (isDragging) handleDragging(map, pa);
-		else handleNonDragging(map, pa);
+		if (isDragging)
+			handleDragging(map, pa);
+		else
+			handleNonDragging(map, pa);
 	}
 
 	private void handleNonDragging(MapInstance map, MeanderApplet pa) {
-		if (pa.mouseEvent == null) return;
-		if (pa.mouseEvent.getID() == MouseEvent.MOUSE_DRAGGED) {
+		MouseEvent event = pa.mouseEvent;
+		if (event == null) return;
+		if (event.getID() == MouseEvent.MOUSE_DRAGGED) {
 			isDragging = true;
 			dragStop = dragStart = new Point(pa.mouseX, pa.mouseY);
+		} else if (event.getID() == MouseEvent.MOUSE_CLICKED) {
+			if (! (event.getClickCount() == 2)) return;
+			Point point = event.getPoint();
+			Location neighbor = map.nearestNeighbor(point.x, point.y);
+			System.out.println("double clicked on: " + neighbor.getIdentifier());
+			pa.fireEvent(EVT_DOUBLE_CLICKED, this, neighbor);
 		}
 	}
 
 	private void handleDragging(MapInstance map, MeanderApplet pa) {
 		dragStop = new Point(pa.mouseX, pa.mouseY);
-		if (pa.mouseEvent == null || pa.mouseEvent.getID() != MouseEvent.MOUSE_DRAGGED) {
+		if (pa.mouseEvent == null
+				|| pa.mouseEvent.getID() != MouseEvent.MOUSE_DRAGGED) {
 			isDragging = false;
 		}
 	}
-	
+
 	private void drawSelectionBox(PGraphics pg) {
-		if (!isDragging) return;
+		if (!isDragging)
+			return;
 		pg.stroke(Color.RED.getRGB());
 		pg.strokeWeight(BOX_STROKE);
 		int deltaX = dragStop.x - dragStart.x;
 		int deltaY = dragStop.y - dragStart.y;
 		pg.rect(dragStart.x, dragStart.y, deltaX, deltaY);
 	}
-	
 
-//	@Override
-//	public void mouseClicked(MouseEvent e) {
-//		
-//		Point point = e.getPoint();
-//		if (!e.isControlDown()) {
-//			clearPoints();
-//		}
-//		if (e.getClickCount() == 2) {
-//			NearestNeighbor nn = new MaxDistNearestNeighbor(getMap(), getWidth() / 10).forLocation(point);
-//			if (nn.hasResult()) {
-//				addSelection(nn.point());
-//				events().doubleClicked(nn.location());
-//			}
-//		} else if (e.getButton() == MouseEvent.BUTTON1) {
-//			// button1 is 1st mouse button
-//			NearestNeighbor nn = new MaxDistNearestNeighbor(getMap(), getWidth() / 10).forLocation(point);
-//			if (nn.hasResult()) {
-//				addSelection(nn.point());
-//				events().selectionChanged(nn.location());
-//			}
-//		} else if (e.getButton() == MouseEvent.BUTTON3) {
-//			// button3 is 2nd mouse button
-//			NearestNeighbor nn = new NearestNeighbor(getMap()).forLocation(point);
-//			addSelection(nn.point());
-//			events().selectionChanged(nn.location());
-//		}
-//		unsetSelectionBox();	
-//	}
+	// @Override
+	// public void mouseClicked(MouseEvent e) {
+	//		
+	// Point point = e.getPoint();
+	// if (!e.isControlDown()) {
+	// clearPoints();
+	// }
+	// if (e.getClickCount() == 2) {
+	// NearestNeighbor nn = new MaxDistNearestNeighbor(getMap(), getWidth() /
+	// 10).forLocation(point);
+	// if (nn.hasResult()) {
+	// addSelection(nn.point());
+	// events().doubleClicked(nn.location());
+	// }
+	// } else if (e.getButton() == MouseEvent.BUTTON1) {
+	// // button1 is 1st mouse button
+	// NearestNeighbor nn = new MaxDistNearestNeighbor(getMap(), getWidth() /
+	// 10).forLocation(point);
+	// if (nn.hasResult()) {
+	// addSelection(nn.point());
+	// events().selectionChanged(nn.location());
+	// }
+	// } else if (e.getButton() == MouseEvent.BUTTON3) {
+	// // button3 is 2nd mouse button
+	// NearestNeighbor nn = new NearestNeighbor(getMap()).forLocation(point);
+	// addSelection(nn.point());
+	// events().selectionChanged(nn.location());
+	// }
+	// unsetSelectionBox();
+	// }
 
 	private void updateSelection(MapInstance map) {
 		Collection<String> ids = new ArrayList<String>();
-		for (Location each: map.locations()) {
-			if (each.px < dragStop.x && each.px > dragStart.x && 
+		for (Location each : map.locations()) {
+			if (each.px < dragStop.x && each.px > dragStart.x &&
 					each.py < dragStop.y && each.py > dragStart.y) {
 				ids.add(each.getIdentifier());
 			}
 		}
 		getSelection().replaceWith(ids);
 	}
-	
+
 	private void ensureDragPointOrder() {
 		int minX = Math.min(dragStart.x, dragStop.x);
 		int minY = Math.min(dragStart.y, dragStop.y);
@@ -110,7 +127,7 @@ public class CurrentSelectionOverlay extends MapSelectionOverlay {
 		dragStart = new Point(minX, minY);
 		dragStop = new Point(maxX, maxY);
 	}
-	
+
 	@Override
 	public void drawLocation(PGraphics pg, Location each) {
 		pg.ellipse(each.px, each.py, SELECTION_SIZE, SELECTION_SIZE);
