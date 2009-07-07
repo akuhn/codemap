@@ -49,20 +49,11 @@ public class MeanderApplet extends PApplet {
 		return dragStart != null && dragStop != null;
 	}
 
-	private int width() {
-		return height();
-	}
-
-	private int height() {
-		return viz == null ? 0 : viz.getMap().height;
-	}
-
 	public void setVisualization(MapVisualization viz) {
 		if (viz == this.viz) return;
+		setSize(viz.getWidth(), viz.getHeight());
 		this.viz = viz;
-		this.viz.registerEventHandler(events);
-		size(width(), height());
-		repaint();
+		//repaint();
 	}
 	
 	public MapVisualization getVisualization() {

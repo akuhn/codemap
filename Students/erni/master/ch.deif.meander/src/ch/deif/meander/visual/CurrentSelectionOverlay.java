@@ -6,7 +6,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import processing.core.PApplet;
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
@@ -32,12 +31,12 @@ public class CurrentSelectionOverlay extends MapSelectionOverlay {
 		drawSelectionBox(pg);
 	}
 	
-	private void handleEvents(MapInstance map, PApplet pa) {
+	private void handleEvents(MapInstance map, MeanderApplet pa) {
 		if (isDragging) handleDragging(map, pa);
 		else handleNonDragging(map, pa);
 	}
 
-	private void handleNonDragging(MapInstance map, PApplet pa) {
+	private void handleNonDragging(MapInstance map, MeanderApplet pa) {
 		if (pa.mouseEvent == null) return;
 		if (pa.mouseEvent.getID() == MouseEvent.MOUSE_DRAGGED) {
 			isDragging = true;
@@ -45,7 +44,7 @@ public class CurrentSelectionOverlay extends MapSelectionOverlay {
 		}
 	}
 
-	private void handleDragging(MapInstance map, PApplet pa) {
+	private void handleDragging(MapInstance map, MeanderApplet pa) {
 		dragStop = new Point(pa.mouseX, pa.mouseY);
 		if (pa.mouseEvent == null || pa.mouseEvent.getID() != MouseEvent.MOUSE_DRAGGED) {
 			isDragging = false;

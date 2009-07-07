@@ -6,14 +6,13 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 
 import javax.swing.JFrame;
-import javax.swing.WindowConstants;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.pdf.PGraphicsPDF;
 import ch.deif.meander.MapInstance;
-import ch.deif.meander.ui.CodemapEventRegistry;
+import ch.deif.meander.ui.MeanderApplet;
 
 public class MapVisualization {
 
@@ -30,7 +29,16 @@ public class MapVisualization {
 	}
 
 	public void openApplet() {
-		new PViewer();
+		MeanderApplet applet = new MeanderApplet();
+		applet.init();
+		applet.setVisualization(this);
+		JFrame win = new JFrame("Map Viewer");
+		win.setLayout(new BorderLayout());
+		win.setResizable(false);
+		win.setSize(map.width, map.height);
+		win.getContentPane().add(applet);
+		win.pack();
+		win.setVisible(true);
 	}
 
 	public final void drawToPDF(String name, Object... args) {
@@ -54,7 +62,7 @@ public class MapVisualization {
 		pg = null;
 	}
 
-	public void draw(PGraphics pg, PApplet pa) {
+	public void draw(PGraphics pg, MeanderApplet pa) {
 		assert map.width == pg.width;
 		assert map.height == pg.height;
 		if (!refresh && pa != null && pa.mouseEvent == oldMouseEvent) {
@@ -110,42 +118,8 @@ public class MapVisualization {
 		return null;
 	}
 
-	@SuppressWarnings("serial")
-	private class PViewer extends JFrame {
-		public PViewer() {
-			super("Map Viewer");
-			setLayout(new BorderLayout());
-			PApplet pa = new PApplet() {
-				@Override
-				public void setup() {
-					size(map.width, map.height);
-					frameRate(25);
-				}
-				@Override
-				public void draw() {
-					MapVisualization.this.draw(g, this);
-				}
-			};
-			setResizable(false);
-			pa.setSize(map.width, map.height);
-			pa.setMaximumSize(pa.getSize());
-			pa.setMinimumSize(pa.getSize());
-			// TODO use a layout that does not resize the applet.
-			getContentPane().add(pa, BorderLayout.CENTER);
-			pa.init();
-			pack();
-			setVisible(true);
-			setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		}
-	}
-
 	public MapInstance getMap() {
 		return map;
-	}
-
-	public void registerEventHandler(CodemapEventRegistry events) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public int getWidth() {

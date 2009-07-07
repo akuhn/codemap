@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import processing.core.PApplet;
 import processing.core.PGraphics;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.ui.MeanderApplet;
@@ -17,7 +16,7 @@ public class Composite<E extends Layer> extends Layer implements Iterable<E> {
 		this.children = new ArrayList<E>();
 	}
 	
-	public void drawFigure(MapInstance map, PGraphics pg, PApplet pa) {
+	public void drawFigure(MapInstance map, PGraphics pg, MeanderApplet pa) {
 		// by default, do nothing
 	}
 
@@ -26,7 +25,7 @@ public class Composite<E extends Layer> extends Layer implements Iterable<E> {
 		this.drawChildren(map, pg, pa);
 	}
 
-	public void drawChildren(MapInstance map, PGraphics pg, PApplet pa) {
+	public void drawChildren(MapInstance map, PGraphics pg, MeanderApplet pa) {
 		for (Layer each: children) {
 			each.draw(map, pg, pa);
 		}
