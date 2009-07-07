@@ -150,8 +150,8 @@ public class MapPerProject {
 					.makeMap();
 			layer = Meander.visualization()
 					.withLabels(null)
-					.withSelection(new OpenFilesOverlay(), getOpenFilesSelection())
-					.withSelection(new YouAreHereOverlay(), getYouAreHereSelection())
+					.withSelection(new OpenFilesOverlay(), CodemapCore.getPlugin().getOpenFilesSelection())
+					.withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())
 					.makeLayer();
 		}
 
@@ -196,31 +196,5 @@ public class MapPerProject {
 	// modifiers.add(mod);
 	// }
 	// }
-
-	public void setYouAreHere(ICompilationUnit javaElement) {
-		getYouAreHereSelection().clear().add(javaElement.getHandleIdentifier());
-	}
-
-	public void setOpenUnits(Collection<ICompilationUnit> units) {
-		for (ICompilationUnit each: units) {
-			getOpenFilesSelection().add(each.getHandleIdentifier());
-		}
-	}
-
-	public void addOpenUnit(ICompilationUnit unit) {
-		getOpenFilesSelection().add(unit.getHandleIdentifier());
-	}
-
-	public void removeClosedUnit(ICompilationUnit unit) {
-		getOpenFilesSelection().remove(unit.getHandleIdentifier());
-	}
-	
-	private MapSelection getYouAreHereSelection() {
-		return CodemapCore.getPlugin().getYouAreHereSelection();
-	}
-	
-	private MapSelection getOpenFilesSelection() {
-		return CodemapCore.getPlugin().getOpenFilesSelection();
-	}
 
 }

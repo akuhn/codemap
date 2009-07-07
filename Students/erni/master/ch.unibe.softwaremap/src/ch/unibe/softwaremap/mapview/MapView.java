@@ -102,6 +102,7 @@ public class MapView extends ViewPart {
 		Color swtColor = new Color(null, water.getRed(), water.getGreen(), water.getBlue());		
 		container.setBackground(swtColor);
 		theApplet = EclipseProcessingBridge.createApplet();
+		theApplet.addListener(makeListener());
 
 		selectionProvider = new MapSelectionProvider(this);
 		selectionTracker = new SelectionTracker(theController);
