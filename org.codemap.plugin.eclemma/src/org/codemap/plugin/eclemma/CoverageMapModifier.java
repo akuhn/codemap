@@ -1,59 +1,46 @@
-
 package org.codemap.plugin.eclemma;
 
 import java.util.List;
 
 import ch.akuhn.util.Pair;
-import ch.deif.meander.Colors;
-import ch.deif.meander.Location;
-import ch.deif.meander.Map;
-import ch.deif.meander.MapModifier;
-import ch.unibe.softwaremap.MapPerProject;
+import ch.deif.meander.util.MColor;
+import ch.unibe.softwaremap.util.CodemapColors;
 
-public class CoverageMapModifier implements MapModifier {
-	
+public class CoverageMapModifier {
+
 	/**
 	 * CoverageMapModifiers equal each other regardless of the coverageInfo they
-	 * contain.
- 	 * Thus two instances of this class are always equal to each other.
+	 * contain. Thus two instances of this class are always equal to each other.
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (obj.getClass().equals(this.getClass())) return true;
+		if (obj.getClass().equals(this.getClass()))
+			return true;
 		return super.equals(obj);
 	}
 
 	private List<Pair<String, Double>> coverageInfo;
 	private ShowCoverageAction showCoverageAction;
 
-	public CoverageMapModifier(List<Pair<String, Double>> coverageInfo, ShowCoverageAction action) {
+	public CoverageMapModifier(List<Pair<String, Double>> coverageInfo,
+			ShowCoverageAction action) {
 		this.coverageInfo = coverageInfo;
 		this.showCoverageAction = action;
 	}
 
-	@Override
-	public void applyOn(Map map) {
-		for (Location loc: map.locations()) {
-			if ( showCoverageAction.isChecked()) {
-				String identifier = loc.getIdentifier();
-				for (Pair<String, Double> pair: coverageInfo) {
-					if (pair.fst.equals(identifier)) {
-						Double ratio = pair.snd;
-						int redVal = (int) ((1-ratio)*255);
-						int greenVal = (int)(ratio*255);
-						Colors col = new Colors(redVal, greenVal, 0);
-						loc.setColor(col);
-						break;
-					}
-				}				
-			} else {
-				loc.removeColor();
+	public void addTo(CodemapColors colorScheme) {
+		if (showCoverageAction.isChecked()) {
+			for (Pair<String, Double> pair : coverageInfo) {
+				String identifier = pair.fst;
+				Double ratio = pair.snd;
+				int redVal = (int) ((1 - ratio) * 255);
+				int greenVal = (int) (ratio * 255);
+				MColor col = new MColor(redVal, greenVal, 0);
+				colorScheme.setColor(identifier, col);
 			}
-		}	
-	}
-
-	public void addTo(MapPerProject map) {
-		map.addModifier(this);
+		} else {
+			colorScheme.clearColors();
+		}
 	}
 
 }

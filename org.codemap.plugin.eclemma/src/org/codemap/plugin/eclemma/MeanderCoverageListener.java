@@ -15,8 +15,11 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
 import ch.akuhn.util.Pair;
+import ch.deif.meander.util.MColor;
+import ch.deif.meander.util.MapScheme;
 import ch.unibe.softwaremap.CodemapCore;
 import ch.unibe.softwaremap.MapPerProject;
+import ch.unibe.softwaremap.util.CodemapColors;
 
 import com.mountainminds.eclemma.core.CoverageTools;
 import com.mountainminds.eclemma.core.analysis.IJavaCoverageListener;
@@ -68,8 +71,8 @@ public class MeanderCoverageListener implements IJavaCoverageListener {
 			
 			List<Pair<String, Double>> coverageInfo = compilationUnitCoverage(each);
 			CoverageMapModifier coverageMod = new CoverageMapModifier(coverageInfo, EclemmaOverlay.getCoverageAction());
-			MapPerProject mapForProject = CodemapCore.getPlugin().mapForProject(each.getProject());
-			coverageMod.addTo(mapForProject);
+			CodemapColors colorScheme = CodemapCore.getPlugin().getColorScheme();
+			coverageMod.addTo(colorScheme);
 		}
 		if(! isEmptyCoverage) {
 			CodemapCore r = CodemapCore.getPlugin();

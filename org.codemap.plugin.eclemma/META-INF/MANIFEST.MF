@@ -5,12 +5,12 @@ Bundle-SymbolicName: org.codemap.plugin.eclemma;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.codemap.plugin.eclemma.EclemmaOverlay
 Require-Bundle: org.codemap.meander,
- ch.akuhn.hapax;bundle-version="1.0.0",
+ ch.akuhn.hapax,
  org.eclipse.ui,
  org.eclipse.core.runtime,
  com.mountainminds.eclemma.core;bundle-version="1.4.1",
  org.eclipse.jdt.core;bundle-version="3.5.0",
- ch.unibe.softwaremap;bundle-version="1.0.0",
+ ch.unibe.softwaremap,
  org.eclipse.core.resources;bundle-version="3.5.0",
  org.codemap.util
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
