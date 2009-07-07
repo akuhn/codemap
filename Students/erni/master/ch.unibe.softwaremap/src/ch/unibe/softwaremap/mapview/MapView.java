@@ -46,6 +46,8 @@ import org.eclipse.ui.part.ViewPart;
 
 import ch.deif.meander.Location;
 import ch.deif.meander.util.MColor;
+import ch.deif.meander.ui.CodemapEvent;
+import ch.deif.meander.ui.CodemapListener;
 import ch.deif.meander.ui.MeanderApplet;
 import ch.deif.meander.ui.MeanderEventListener;
 import ch.deif.meander.visual.MapVisualization;
@@ -56,7 +58,7 @@ import ch.unibe.softwaremap.util.EclipseUtil;
 import ch.unibe.softwaremap.util.Log;
 
 // TODO factor out MeanderEventListener
-public class MapView extends ViewPart implements MeanderEventListener {
+public class MapView extends ViewPart {
 
 	public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
 	
@@ -143,14 +145,52 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	
 	private void showMap() {
 		clearContainer();
-		
 		bridge = new EclipseProcessingBridge(container, theApplet);
-		softwareMap().getApplet().addListener(this);
-		
+		softwareMap().getApplet().addListener(makeListener());
 		CodemapCore.getPlugin().setMapView(this);
 		new ResizeListener(container, theController);
 //		redrawContainer();
 		theController.onShowMap();
+	}
+
+	private CodemapListener makeListener() {
+		return new CodemapListener() {
+
+			@Override
+			public void handleEvent(CodemapEvent event) {
+				if ("doubleClicked" == event.getKind()) doubleClicked((Location) event.getValue());
+				if ("selectionChanged" == event.getKind()) selectionChanged((Location[]) event.getValue());
+			}
+
+			public void selectionChanged(Location... locations) {
+				final ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
+				for (Location each: locations) {
+					if (each.getIdentifier() == null) continue;
+					IJavaElement javaElement = JavaCore.create(each.getIdentifier());
+					selection.add(javaElement);
+				}
+				Display.getDefault().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							final StructuredSelection structuredSelection = new StructuredSelection(selection);
+							selectionProvider.setSelection(structuredSelection);
+
+							IViewPart showView = getSite().getPage().showView(PACKAGE_EXPLORER.id);
+							((ISetSelectionTarget) showView).selectReveal(structuredSelection);
+						} catch (PartInitException e) {
+							Log.error(e);
+						}
+					}
+				});
+			}	
+
+			public void doubleClicked(Location location) {
+				if (location.getIdentifier() == null) return;
+				IJavaElement javaElement = JavaCore.create(location.getIdentifier());		
+				openInEditor(javaElement);
+			}
+		};
 	}
 
 	private void configureToolbar() {
@@ -238,29 +278,7 @@ public class MapView extends ViewPart implements MeanderEventListener {
 		this.updateVisualization();
 	}
 
-	@Override
-	public void selectionChanged(Location... locations) {
-		final ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
-		for (Location each: locations) {
-			if (each.getIdentifier() == null) continue;
-			IJavaElement javaElement = JavaCore.create(each.getIdentifier());
-			selection.add(javaElement);
-		}
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					final StructuredSelection structuredSelection = new StructuredSelection(selection);
-					selectionProvider.setSelection(structuredSelection);
-					
-					IViewPart showView = getSite().getPage().showView(PACKAGE_EXPLORER.id);
-					((ISetSelectionTarget) showView).selectReveal(structuredSelection);
-				} catch (PartInitException e) {
-					Log.error(e);
-				}
-			}
-		});
-	}	
+	
 
 	private void openInEditor(IJavaElement javaElement) {
 		final IWorkbenchPage page = getSite().getPage();
@@ -277,13 +295,6 @@ public class MapView extends ViewPart implements MeanderEventListener {
 				}
 			}
 		});
-	}
-
-	@Override
-	public void doubleClicked(Location location) {
-		if (location.getIdentifier() == null) return;
-		IJavaElement javaElement = JavaCore.create(location.getIdentifier());		
-		openInEditor(javaElement);
 	}
 
 	public EclipseProcessingBridge softwareMap() {
