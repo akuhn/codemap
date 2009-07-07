@@ -1,30 +1,38 @@
 package ch.deif.meander.visual;
 
-import java.util.Map;
-
+import processing.core.PApplet;
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
+import ch.deif.meander.MapInstance;
 
-public class ArrowOverlay implements Layer {
-
-	public ArrowOverlay(Map map) {
-		super(map);
-	}
-
-	private Composite<Arrow> arrows = Composite.newInstance();
-	
-	public void arrow(Location from, Location to, double d) {
-		arrows.add(new Arrow(from, to, (float) d));
-	}
+public class ArrowOverlay extends Layer {
 
 	@Override
-	public void draw(PGraphics pg) {
-		arrows.draw(pg);
+	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
+		new Helper(map).draw(pg);
 	}
 
-}
-
-class Arrow implements Drawable {
+	static class Helper {
+	
+		private MapInstance map;
+	
+		public Helper(MapInstance map2) {
+			this.map = map2;
+		}
+		
+		private Composite<Arrow> arrows = Composite.newInstance();
+		
+		public void arrow(Location from, Location to, double d) {
+			arrows.append(new Arrow(from, to, (float) d));
+		}
+		
+		public void draw(PGraphics pg) {
+			arrows.draw(null, pg, null);
+		}
+		
+	}
+	
+	static class Arrow extends Layer {
 
 	public Arrow(Location from, Location to, float weight) {
 		this.from = from;
@@ -32,11 +40,11 @@ class Arrow implements Drawable {
 		this.weight = weight;
 	}
 
-	public void draw(PGraphics pg) {
-		int x1 = from.px();
-		int y1 = from.py();
-		int x2 = to.px();
-		int y2 = to.py();
+	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
+		int x1 = from.px;
+		int y1 = from.py;
+		int x2 = to.px;
+		int y2 = to.py;
 		float w = Math.max(4.0f, weight);
 		pg.noFill();
 		pg.stroke(0, 0, 0, 20);
@@ -66,4 +74,6 @@ class Arrow implements Drawable {
 
 	public Location from, to;
 	public float weight;
+}
+	
 }

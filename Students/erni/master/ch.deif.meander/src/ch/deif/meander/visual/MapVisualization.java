@@ -2,6 +2,7 @@ package ch.deif.meander.visual;
 
 import java.applet.Applet;
 import java.awt.BorderLayout;
+import java.awt.event.MouseEvent;
 import java.io.File;
 
 import javax.swing.JFrame;
@@ -18,6 +19,8 @@ public class MapVisualization {
 
 	private MapInstance map;
 	private Layer visual;
+	private boolean refresh = true;
+	private MouseEvent oldMouseEvent;
 
 	public MapVisualization(MapInstance map, Layer visual) {
 		assert map != null;
@@ -54,6 +57,11 @@ public class MapVisualization {
 	public void draw(PGraphics pg, PApplet pa) {
 		assert map.width == pg.width;
 		assert map.height == pg.height;
+		if (!refresh && pa != null && pa.mouseEvent == oldMouseEvent) {
+			return;
+		}
+		oldMouseEvent = pa.mouseEvent;
+		refresh  = false;
 		visual.draw(map, pg, pa);
 	}
 
@@ -115,7 +123,7 @@ public class MapVisualization {
 				}
 				@Override
 				public void draw() {
-					visual.draw(map, g, this);
+					MapVisualization.this.draw(g, this);
 				}
 			};
 			setResizable(false);
