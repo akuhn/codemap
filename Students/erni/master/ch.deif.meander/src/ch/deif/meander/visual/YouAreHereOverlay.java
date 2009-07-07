@@ -1,5 +1,6 @@
 package ch.deif.meander.visual;
 
+import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
@@ -9,11 +10,16 @@ public class YouAreHereOverlay extends MapSelectionOverlay {
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg) {
+		draw(map, pg, null);
+	}
+
+	@Override
+	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
 		pg.fill(255);
 		pg.stroke(0);
 		pg.strokeWeight(1);
 		
-		super.draw(map, pg);
+		super.draw(map, pg, pa);
 	}
 	
 	public void drawLocation(PGraphics pg, Location each) {

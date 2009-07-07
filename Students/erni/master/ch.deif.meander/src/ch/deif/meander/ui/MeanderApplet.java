@@ -1,7 +1,6 @@
 package ch.deif.meander.ui;
 
 import java.awt.Point;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,34 +109,6 @@ public class MeanderApplet extends PApplet {
 		image(bg, 0, 0);
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		super.mouseClicked(e);
-		viz.mouseClicked(e);
-		setNeedsRedraw();
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		super.mouseDragged(e);
-		if (dragStart == null) {
-			dragStart = e.getPoint();
-			viz.mouseDragStarted(dragStart);
-		}
-		dragStop = e.getPoint();
-		viz.mouseDraggedTo(dragStop);
-		setNeedsRedraw();
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		super.mouseReleased();
-		if (!hasDragInput()) return;
-		viz.mouseDragStopped();
-		dragStart = null;
-		dragStop = null;
-		setNeedsRedraw();
-	}
 
 	protected void setNeedsRedraw() {
 		needsRedraw = true;

@@ -1,5 +1,6 @@
 package ch.deif.meander.visual;
 
+import processing.core.PApplet;
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
@@ -10,6 +11,11 @@ public class SketchVisualization extends Layer {
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg) {
+		draw(map, pg, null);
+	}
+
+	@Override
+	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
 		float width = map.getWidth();
 		pg.background(204);
 		pg.stroke(0);

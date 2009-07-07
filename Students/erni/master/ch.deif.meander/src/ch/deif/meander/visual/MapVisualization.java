@@ -2,8 +2,6 @@ package ch.deif.meander.visual;
 
 import java.applet.Applet;
 import java.awt.BorderLayout;
-import java.awt.Point;
-import java.awt.event.MouseEvent;
 import java.io.File;
 
 import javax.swing.JFrame;
@@ -56,7 +54,7 @@ public class MapVisualization {
 	public void draw(PGraphics pg) {
 		assert map.width == pg.width;
 		assert map.height == pg.height;
-		visual.draw(map, pg);
+		visual.draw(map, pg, null);
 	}
 
 	public final void drawToPGraphics(PGraphics pg) {
@@ -117,7 +115,7 @@ public class MapVisualization {
 				}
 				@Override
 				public void draw() {
-					visual.draw(map, g);
+					visual.draw(map, g, null);
 				}
 			};
 			setResizable(false);
@@ -133,28 +131,13 @@ public class MapVisualization {
 		}
 	}
 
-	public void mouseDragStarted(Point dragStart) {
-		visual.mouseDraggedStarted(dragStart);
-	}
-
-	public void mouseClicked(MouseEvent e) {
-		visual.mouseClicked(e);
-	}
-
-	public void mouseDraggedTo(Point dragStop) {
-		visual.mouseDraggedTo(dragStop);
-	}
-
-	public void mouseDragStopped() {
-		visual.mouseDragStopped();
-	}
-
 	public MapInstance getMap() {
 		return map;
 	}
 
 	public void registerEventHandler(Events events) {
-		visual.registerEventHandlers(events);
+		// TODO Auto-generated method stub
+		
 	}
 
 }

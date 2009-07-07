@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
+import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
 import ch.akuhn.util.Get;
@@ -15,6 +16,11 @@ public class LabelsOverlay extends Layer {
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg) {
+		draw(map, pg, null);
+	}
+
+	@Override
+	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
 		new Helper(map).draw(map, pg);
 	}
 
@@ -48,7 +54,7 @@ public class LabelsOverlay extends Layer {
 			this.layout(pg);
 			pg.fill(255, 0, 0);
 			pg.textSize(20);
-			labels.draw(map, pg);
+			labels.draw(map, pg, null);
 		}
 
 		private void layout(PGraphics pg) {
@@ -106,6 +112,11 @@ public class LabelsOverlay extends Layer {
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg) {
+		draw(map, pg, null);
+	}
+
+	@Override
+	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
 		if (DRAFT) {
 			pg.stroke(0);
 			pg.noFill();

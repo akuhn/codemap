@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import processing.core.PApplet;
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
@@ -29,6 +30,11 @@ public class CurrentSelectionOverlay extends Layer {
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg) {
+		draw(map, pg, null);
+	}
+
+	@Override
+	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
 		pg.noFill();
 		pg.stroke(Color.RED.getRGB());
 		
