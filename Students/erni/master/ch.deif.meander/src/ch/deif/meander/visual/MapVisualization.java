@@ -35,6 +35,7 @@ public class MapVisualization {
 		win.setResizable(false);
 		win.getContentPane().add(applet);
 		win.pack();
+		win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		win.setVisible(true);
 	}
 
