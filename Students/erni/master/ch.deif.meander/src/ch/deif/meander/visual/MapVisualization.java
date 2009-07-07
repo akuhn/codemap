@@ -61,7 +61,7 @@ public class MapVisualization {
 			return;
 		}
 		oldMouseEvent = pa.mouseEvent;
-		refresh  = false;
+		// refresh  = false; FIXME
 		visual.draw(map, pg, pa);
 	}
 
