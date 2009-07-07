@@ -33,6 +33,7 @@ public class CodemapCore extends AbstractUIPlugin {
 
 	private final MapSelection youAreHereSelection;
 	private final MapSelection openFilesSelection;
+	private final MapSelection currentSelection;
 
 	public MapSelection getYouAreHereSelection() {
 		return youAreHereSelection;
@@ -42,10 +43,15 @@ public class CodemapCore extends AbstractUIPlugin {
 		return openFilesSelection;
 	}
 	
+	public MapSelection getCurrentSelection() {
+		return currentSelection;
+	}
+	
 	public CodemapCore() {
 		mapPerProjectCache = new HashMap<IProject,MapPerProject>();
 		youAreHereSelection = new MapSelection();
-		openFilesSelection = new MapSelection();		
+		openFilesSelection = new MapSelection();	
+		currentSelection = new MapSelection();
 	}
 
 	@Override

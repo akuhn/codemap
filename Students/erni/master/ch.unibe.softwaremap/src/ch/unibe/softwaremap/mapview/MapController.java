@@ -60,6 +60,10 @@ public class MapController {
 	
 	public void onSelectionChanged(IJavaProject javaProject, Collection<ICompilationUnit> units) {
 		log("-- selectionChanged@");
+		MapSelection selection = getCurrentSelection().clear();
+		for (ICompilationUnit each: units) {
+			selection.add(each.getHandleIdentifier());
+		}
 		view.compilationUnitsSelected(javaProject, units);
 	}
 	
@@ -170,6 +174,10 @@ public class MapController {
 	
 	private MapSelection getOpenFilesSelection() {
 		return CodemapCore.getPlugin().getOpenFilesSelection();
-	}	
+	}
+	
+	private MapSelection getCurrentSelection() {
+		return CodemapCore.getPlugin().getCurrentSelection();
+	}
 
 }

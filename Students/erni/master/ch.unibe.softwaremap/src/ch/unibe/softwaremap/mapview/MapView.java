@@ -64,7 +64,6 @@ public class MapView extends ViewPart {
 	
 	private EclipseProcessingBridge bridge;
 	private IProject currentProject;
-	private Collection<ICompilationUnit> selectedUnits;
 	private MapSelectionProvider selectionProvider;
 	private SelectionTracker selectionTracker;
 	private Composite container;
@@ -244,7 +243,6 @@ public class MapView extends ViewPart {
 			.getVisualization();
 		if (viz == null) return;
 		updateMapVisualization(viz);
-		softwareMapUpdateSelection(selectedUnits);
 	}
 
 	private int getCurrentSize() {
@@ -254,14 +252,6 @@ public class MapView extends ViewPart {
 	public void updateMapVisualization(MapVisualization viz) {
 		softwareMap().setMapVizualization(viz);
 	}
-
-	private void softwareMapUpdateSelection(Collection<ICompilationUnit> units) {
-		List<String> handleIdentifiers = new ArrayList<String>();
-		for (ICompilationUnit each: units) {
-			handleIdentifiers.add(each.getHandleIdentifier());
-		}
-		updateSelection(handleIdentifiers);
-	}
 	
 	public void addSelection(String handleIdentifier) {
 		List<String> list = new ArrayList<String>();
@@ -269,17 +259,10 @@ public class MapView extends ViewPart {
 		softwareMap().addSelection(list);
 	}
 
-	public void updateSelection(List<String> handleIdentifiers) {
-		softwareMap().updateSelection(handleIdentifiers);
-		
-	}
-
 	public void newProjectMapAvailable(IProject project) {
 		if (!this.currentProject.equals(project)) return;
 		this.updateVisualization();
 	}
-
-	
 
 	private void openInEditor(IJavaElement javaElement) {
 		final IWorkbenchPage page = getSite().getPage();
@@ -306,7 +289,6 @@ public class MapView extends ViewPart {
 		IProject project = javaProject.getProject();
 		if (project != currentProject) selectionTracker.theController.onProjectChanged();
 		currentProject = project;
-		selectedUnits = units;
 		updateVisualization();
 	}
 

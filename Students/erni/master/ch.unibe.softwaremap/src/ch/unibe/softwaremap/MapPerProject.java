@@ -150,6 +150,7 @@ public class MapPerProject {
 					.makeMap();
 			layer = Meander.visualization()
 					.withLabels(null)
+					.withSelection(new CurrentSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
 					.withSelection(new OpenFilesOverlay(), CodemapCore.getPlugin().getOpenFilesSelection())
 					.withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())
 					.makeLayer();
