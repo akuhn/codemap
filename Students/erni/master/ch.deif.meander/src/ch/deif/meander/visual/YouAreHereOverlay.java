@@ -9,11 +9,6 @@ import ch.deif.meander.MapInstance;
 public class YouAreHereOverlay extends MapSelectionOverlay {
 
 	@Override
-	public void draw(MapInstance map, PGraphics pg) {
-		draw(map, pg, null);
-	}
-
-	@Override
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
 		pg.fill(255);
 		pg.stroke(0);

@@ -14,11 +14,6 @@ public class HillshadeVisualization extends Layer {
 	public static final MapSetting<Integer> COAST_LEVEL = MapSetting.define("COAST_LEVEL", 10);
 	
 	@Override
-	public void draw(MapInstance map, PGraphics pg) {
-		draw(map, pg, null);
-	}
-
-	@Override
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
 		assert map.width == pg.width;
 		assert map.height == pg.height;

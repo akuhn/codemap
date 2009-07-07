@@ -10,11 +10,6 @@ public class SketchVisualization extends Layer {
 	// TODO make sure circle size has same diameter as coastline of shaded hills
 
 	@Override
-	public void draw(MapInstance map, PGraphics pg) {
-		draw(map, pg, null);
-	}
-
-	@Override
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
 		float width = map.getWidth();
 		pg.background(204);

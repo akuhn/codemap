@@ -15,11 +15,6 @@ public abstract class MapSelectionOverlay extends Layer {
 	}
 
 	@Override
-	public void draw(MapInstance map, PGraphics pg) {
-		draw(map, pg, null);
-	}
-
-	@Override
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
 		for (Location each: selection.locationsOn(map)) {
 			drawLocation(pg, each);

@@ -46,15 +46,15 @@ public class MapVisualization {
 		pa.init();
 		pg.setParent(pa);
 		pg.setPath(prependCurrentDirectory(name, "pdf"));
-		draw(pg);
+		draw(pg, null);
 		pg.dispose();
 		pg = null;
 	}
 
-	public void draw(PGraphics pg) {
+	public void draw(PGraphics pg, PApplet pa) {
 		assert map.width == pg.width;
 		assert map.height == pg.height;
-		visual.draw(map, pg, null);
+		visual.draw(map, pg, pa);
 	}
 
 	public final void drawToPGraphics(PGraphics pg) {
@@ -64,7 +64,7 @@ public class MapVisualization {
 		pg.beginDraw();
 		if (pg instanceof PGraphicsPDF)
 			pg.textMode(PConstants.SHAPE);
-		this.draw(pg);
+		this.draw(pg, null);
 		pg.endDraw();
 	}
 
@@ -76,7 +76,7 @@ public class MapVisualization {
 		PGraphics pg = pa.createGraphics(map.width, map.height,
 				PConstants.JAVA2D);
 		pg.beginDraw();
-		draw(pg);
+		draw(pg, null);
 		pg.endDraw();
 		pg.save(prependCurrentDirectory(name, "png"));
 		pa.destroy();
@@ -92,7 +92,7 @@ public class MapVisualization {
 		PGraphics img = new PGraphics();
 		img.loadPixels();
 		img.updatePixels();
-		this.draw(img);
+		this.draw(img, null);
 		img.updatePixels();
 		return img;
 	}

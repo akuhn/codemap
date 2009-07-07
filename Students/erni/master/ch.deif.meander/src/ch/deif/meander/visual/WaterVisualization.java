@@ -8,11 +8,6 @@ import ch.deif.meander.util.MColor;
 public class WaterVisualization extends Layer {
 
 	@Override
-	public void draw(MapInstance map, PGraphics pg) {
-		draw(map, pg, null);
-	}
-
-	@Override
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
 		pg.noStroke();
 		pg.fill(map.get(GRAYSCALE) ? 0xFFFFFFFF : MColor.WATER.asRGB());

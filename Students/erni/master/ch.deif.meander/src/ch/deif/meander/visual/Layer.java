@@ -9,8 +9,6 @@ public abstract class Layer {
 
 	public static final MapSetting<Boolean> GRAYSCALE = MapSetting.define("GRAYSCALE", false);
 	
-	public abstract void draw(MapInstance map, PGraphics pg);
-
 	public abstract void draw(MapInstance map, PGraphics pg, PApplet pa);
 	
 }

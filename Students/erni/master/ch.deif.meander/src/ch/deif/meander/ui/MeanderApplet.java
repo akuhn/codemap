@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import processing.core.PApplet;
-import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.visual.MapVisualization;
 
@@ -15,7 +14,6 @@ public class MeanderApplet extends PApplet {
 	private MapVisualization viz;
 
 	private boolean needsRedraw;
-	private PGraphics bg;
 
 	private Point dragStart;
 	private Point dragStop;
@@ -87,12 +85,6 @@ public class MeanderApplet extends PApplet {
 		frameRate(25);
 	}
 
-	private void setupBackground() {
-		bg.beginDraw();
-		viz.draw(bg);
-		bg.endDraw();
-	}
-
 	@Override
 	public void draw() {
 		if (!needsRedraw) return;
@@ -100,15 +92,9 @@ public class MeanderApplet extends PApplet {
 		smooth();
 		noFill();
 //		strokeWeight(POINT_STROKE);
-		drawBackground();
-		viz.draw(g);
+		viz.draw(g, this);
 		needsRedraw = false;
 	}
-
-	private void drawBackground() {
-		image(bg, 0, 0);
-	}
-
 
 	protected void setNeedsRedraw() {
 		needsRedraw = true;
@@ -132,11 +118,6 @@ public class MeanderApplet extends PApplet {
 		this.viz.registerEventHandler(events);
 		size(width(), height());
 		
-		int dimension = this.getWidth();
-		if (bg == null || dimension != this.bg.width) {
-			bg = createGraphics(dimension, dimension, JAVA2D);
-		}
-		setupBackground();
 		setNeedsRedraw();
 		repaint();
 	}

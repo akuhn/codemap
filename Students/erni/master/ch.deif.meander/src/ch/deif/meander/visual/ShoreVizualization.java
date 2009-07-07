@@ -13,11 +13,6 @@ public class ShoreVizualization extends Layer {
 	public static final MapSetting<Integer> WATER_LEVEL = MapSetting.define("WATER_LEVEL", 2);
 	
 	@Override
-	public void draw(MapInstance map, PGraphics pg) {
-		draw(map, pg, null);
-	}
-
-	@Override
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
 		map.get(DEMAlgorithm.class);
 		MColor color = map.get(GRAYSCALE) ? new MColor(204,204,204) : MColor.SHORE;

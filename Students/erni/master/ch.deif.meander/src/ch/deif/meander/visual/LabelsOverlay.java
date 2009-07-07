@@ -15,11 +15,6 @@ import ch.deif.meander.builder.MeanderExample;
 public class LabelsOverlay extends Layer {
 
 	@Override
-	public void draw(MapInstance map, PGraphics pg) {
-		draw(map, pg, null);
-	}
-
-	@Override
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
 		new Helper(map).draw(map, pg);
 	}
@@ -108,11 +103,6 @@ public class LabelsOverlay extends Layer {
 	public void initializeWidth(PGraphics pg) {
 		pg.textSize(size);
 		width = pg.textWidth(text);
-	}
-
-	@Override
-	public void draw(MapInstance map, PGraphics pg) {
-		draw(map, pg, null);
 	}
 
 	@Override

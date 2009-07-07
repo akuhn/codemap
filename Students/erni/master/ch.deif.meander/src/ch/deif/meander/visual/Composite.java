@@ -16,22 +16,18 @@ public class Composite<E extends Layer> extends Layer implements Iterable<E> {
 		this.children = new ArrayList<E>();
 	}
 	
-	public void drawFigure(MapInstance map, PGraphics pg) {
+	public void drawFigure(MapInstance map, PGraphics pg, PApplet pa) {
 		// by default, do nothing
 	}
 
-	public final void draw(MapInstance map, PGraphics pg) {
-		draw(map, pg, null);
-	}
-
 	public final void draw(MapInstance map, PGraphics pg, PApplet pa) {
-		this.drawFigure(map, pg);
-		this.drawChildren(map, pg);
+		this.drawFigure(map, pg, pa);
+		this.drawChildren(map, pg, pa);
 	}
 
-	public void drawChildren(MapInstance map, PGraphics pg) {
+	public void drawChildren(MapInstance map, PGraphics pg, PApplet pa) {
 		for (Layer each: children) {
-			each.draw(map, pg, null);
+			each.draw(map, pg, pa);
 		}
 	}
 

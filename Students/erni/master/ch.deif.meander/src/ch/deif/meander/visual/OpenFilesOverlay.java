@@ -11,11 +11,6 @@ public class OpenFilesOverlay extends MapSelectionOverlay {
 	protected final int POINT_STROKE = 1;	
 
 	@Override
-	public void draw(MapInstance map, PGraphics pg) {
-		draw(map, pg, null);
-	}
-
-	@Override
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
 		pg.strokeWeight(1);
 		pg.fill(255);
