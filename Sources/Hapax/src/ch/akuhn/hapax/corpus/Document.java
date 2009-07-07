@@ -28,7 +28,7 @@ public abstract class Document implements Comparable<Document> {
 		// ASSUME Use intern, since thousands of documents share the same
 		// version.
 		this.version = version == null ? UNVERSIONED : version.intern();
-		this.name = name;
+		this.identifier = this.name = name;
 	}
 
 	public abstract Document addTerms(Terms terms);
