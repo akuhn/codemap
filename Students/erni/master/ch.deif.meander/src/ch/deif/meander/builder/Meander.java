@@ -14,6 +14,7 @@ import ch.deif.meander.internal.MDS;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.visual.Composite;
 import ch.deif.meander.visual.HillshadeVisualization;
+import ch.deif.meander.visual.LabelsOverlay;
 import ch.deif.meander.visual.Layer;
 import ch.deif.meander.visual.MapSelectionOverlay;
 import ch.deif.meander.visual.ShoreVizualization;
@@ -83,8 +84,8 @@ public class Meander implements MapBuilder, VisualizationBuilder {
 
 	@Override
 	public VisualizationBuilder withLabels(MapScheme<String> labelScheme) {
-		// TODO Auto-generated method stub
-		return null;
+		layers.append(new LabelsOverlay());
+		return this;
 	}
 
 	@Override

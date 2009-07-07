@@ -28,7 +28,7 @@ public class MeanderExample {
 
 		Layer layer = Meander.visualization()
 				.withColors(colorScheme)
-				//.withLabels(labelScheme)
+				.withLabels(labelScheme)
 				// .withSelection(new CurrentSelectionOverlay(), currentSelection)
 				//.withSelection(new OpenFilesOverlay(), openEditorSelection)
 				//.withSelection(new YouAreHereOverlay(), currentEditorSelection)
@@ -40,7 +40,7 @@ public class MeanderExample {
 	}
 
 	// TODO move this to codemap plug-in
-	MapScheme<String> eclipseMapper = new MapScheme<String>() {
+	public static final MapScheme<String> NAME = new MapScheme<String>() {
 		@Override
 		public String forLocation(Point location) {
 			String name = location.getDocument().getIdentifier();

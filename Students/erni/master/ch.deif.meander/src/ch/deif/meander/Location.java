@@ -46,4 +46,8 @@ public class Location {
 		return getDocument().getIdentifier();
 	}
 
+	public Point getPoint() {
+		return point;
+	}
+
 }

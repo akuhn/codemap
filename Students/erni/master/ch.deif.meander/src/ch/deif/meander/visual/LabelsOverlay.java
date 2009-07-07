@@ -3,80 +3,85 @@ package ch.deif.meander.visual;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import processing.core.PFont;
 import processing.core.PGraphics;
 import ch.akuhn.util.Get;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
+import ch.deif.meander.builder.MeanderExample;
 
 public class LabelsOverlay extends Layer {
 
-	private PFont PFONT = new PFont(PFont.findFont("Arial Narrow"), true, PFont.DEFAULT_CHARSET);
-	private boolean layoutDone = false;
-	private Composite<Label> labels = Composite.newInstance();
-	
-	public LabelsOverlay(Map map) {
-		super(map);
-		double max = maxElevation(map);
-		for (Location each: map.locations()) {
-			Label l = new Label(each.name());
-			labels.add(l);
-			l.x = l.x0 = each.px();
-			l.y = l.y0 = each.py();
-			l.size = (float) (each.elevation() / max * map.getWidth() / 24);
-		}
-	}
-
-	private double maxElevation(Map map) {
-		double max = Double.MIN_VALUE;
-		for (Location each: map.locations()) {
-			max = Math.max(max, each.elevation());
-		}
-		return max;
-	}
-
 	@Override
-	public void draw(PGraphics pg) {
-		pg.textFont(PFONT);
-		this.layout(pg);
-		pg.fill(255, 0, 0);
-		pg.textSize(20);
-		labels.draw(pg);
+	public void draw(MapInstance map, PGraphics pg) {
+		new Helper(map).draw(map, pg);
 	}
 
-	private void layout(PGraphics pg) {
-		if (layoutDone) return;
-		for (Label each: labels)
-			each.initializeWidth(pg);
-		List<Label> done = new ArrayList<Label>();
-		for (Label each: Get.sorted(labels)) {
-			layoutLoopBody(done, each);
+	private static class Helper {
+		
+		private PFont PFONT = new PFont(PFont.findFont("Arial Narrow"), true, PFont.DEFAULT_CHARSET);
+		private boolean layoutDone = false;
+		private Composite<Label> labels = Composite.newInstance();
+	
+		public Helper(MapInstance map) {
+			double max = maxElevation(map);
+			for (Location each: map.locations()) {
+				Label l = new Label(MeanderExample.NAME.forLocation(each.getPoint()));
+				labels.append(l);
+				l.x = l.x0 = each.px;
+				l.y = l.y0 = each.py;
+				l.size = (float) (each.getElevation() / max * map.getWidth() / 24);
+			}
 		}
-		layoutDone = true;
-	}
 
-	private void layoutLoopBody(List<Label> done, Label each) {
-		for (; each.hasNextPosition(); each.nextPosition()) {
-			Rectangle bounds = each.getBounds();
-			if (intersectsAnyDone(done, bounds)) continue;
-			done.add(each);
-			return;
+		private double maxElevation(MapInstance map) {
+			double max = Double.MIN_VALUE;
+			for (Location each: map.locations()) {
+				max = Math.max(max, each.getElevation());
+			}
+			return max;
 		}
-		each.hidden = true;
-	}
 
-	private boolean intersectsAnyDone(List<Label> done, Rectangle bounds) {
-		for (Label eachDone: done) {
-			if (bounds.intersects(eachDone.getBounds())) return true;
+		public void draw(MapInstance map, PGraphics pg) {
+			pg.textFont(PFONT);
+			this.layout(pg);
+			pg.fill(255, 0, 0);
+			pg.textSize(20);
+			labels.draw(map, pg);
 		}
-		return false;
+
+		private void layout(PGraphics pg) {
+			if (layoutDone) return;
+			for (Label each: labels)
+				each.initializeWidth(pg);
+			List<Label> done = new ArrayList<Label>();
+			for (Label each: Get.sorted(labels)) {
+				layoutLoopBody(done, each);
+			}
+			layoutDone = true;
+		}
+
+		private void layoutLoopBody(List<Label> done, Label each) {
+			for (; each.hasNextPosition(); each.nextPosition()) {
+				Rectangle bounds = each.getBounds();
+				if (intersectsAnyDone(done, bounds)) continue;
+				done.add(each);
+				return;
+			}
+			each.hidden = true;
+		}
+
+		private boolean intersectsAnyDone(List<Label> done, Rectangle bounds) {
+			for (Label eachDone: done) {
+				if (bounds.intersects(eachDone.getBounds())) return true;
+			}
+			return false;
+		}
+
 	}
 
-}
-
-class Label implements Layer, Comparable<Label> {
+	private static class Label extends Layer implements Comparable<Label> {
 
 	// TODO extract parts of this class into a figure superclass, eg positioning and bounding box
 
@@ -142,5 +147,5 @@ class Label implements Layer, Comparable<Label> {
 		TOPRIGHT, TOPLEFT, BOTTOMLEFT, BOTTOMRIGHT;
 
 	}
-
+	}
 }

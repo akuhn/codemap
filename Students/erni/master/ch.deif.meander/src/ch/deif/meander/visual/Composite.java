@@ -1,12 +1,13 @@
 package ch.deif.meander.visual;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import processing.core.PGraphics;
 import ch.deif.meander.MapInstance;
 
-public class Composite<E extends Layer> extends Layer {
+public class Composite<E extends Layer> extends Layer implements Iterable<E> {
 
 	private List<E> children;
 	
@@ -41,6 +42,11 @@ public class Composite<E extends Layer> extends Layer {
 
 	public void append(E element) {
 		children.add(element);
+	}
+
+	@Override
+	public Iterator<E> iterator() {
+		return children.iterator();
 	}
 	
 }
