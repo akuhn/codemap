@@ -84,7 +84,9 @@ public class MapPerProject {
 				if (builderIsRunning) return Status.OK_STATUS;
 				try {
 					builderIsRunning = true;
-					getProject().build(IncrementalProjectBuilder.FULL_BUILD, HapaxBuilder.BUILDER_ID, null, monitor);
+					if (getProject() != null) {
+						getProject().build(IncrementalProjectBuilder.FULL_BUILD, HapaxBuilder.BUILDER_ID, null, monitor);
+					}
 				} catch (CoreException e) {
 					Log.error(e);
 				} finally {

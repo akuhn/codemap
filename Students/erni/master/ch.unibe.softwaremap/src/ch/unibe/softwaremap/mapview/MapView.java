@@ -196,7 +196,8 @@ public class MapView extends ViewPart implements MeanderEventListener {
 	}
 
 	private void updateVisualization() {
-		MapVisualization viz = CodemapCore.getPlugin().mapForProject(currentProject)
+		MapVisualization viz = CodemapCore.getPlugin()
+			.mapForProject(currentProject)
 			.updateSize(getCurrentSize())
 			.enableBuilder()
 			.getVisualization();
