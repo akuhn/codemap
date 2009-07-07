@@ -50,6 +50,7 @@ import ch.deif.meander.ui.CodemapEvent;
 import ch.deif.meander.ui.CodemapListener;
 import ch.deif.meander.ui.MeanderApplet;
 import ch.deif.meander.ui.MeanderEventListener;
+import ch.deif.meander.visual.CurrentSelectionOverlay;
 import ch.deif.meander.visual.MapVisualization;
 import ch.unibe.softwaremap.CodemapCore;
 import ch.unibe.softwaremap.MapPerProject;
@@ -158,7 +159,7 @@ public class MapView extends ViewPart {
 
 			@Override
 			public void handleEvent(CodemapEvent event) {
-				if ("doubleClicked" == event.getKind()) doubleClicked((Location) event.getValue());
+				if (CurrentSelectionOverlay.EVT_DOUBLE_CLICKED == event.getKind()) doubleClicked((Location) event.getValue());
 				if ("selectionChanged" == event.getKind()) selectionChanged((Location[]) event.getValue());
 			}
 
