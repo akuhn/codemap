@@ -4,11 +4,17 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
+import ch.deif.meander.ui.MeanderApplet;
 
 public class ArrowOverlay extends Layer {
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
+		draw(map, pg, pa);
+	}
+
+	@Override
+	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
 		new Helper(map).draw(pg);
 	}
 
@@ -41,6 +47,10 @@ public class ArrowOverlay extends Layer {
 	}
 
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
+		draw(map, pg, pa);
+	}
+
+	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
 		int x1 = from.px;
 		int y1 = from.py;
 		int x2 = to.px;

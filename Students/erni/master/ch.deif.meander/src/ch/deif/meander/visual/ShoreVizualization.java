@@ -6,6 +6,7 @@ import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapSetting;
 import ch.deif.meander.MapInstance.Pixel;
 import ch.deif.meander.internal.DEMAlgorithm;
+import ch.deif.meander.ui.MeanderApplet;
 import ch.deif.meander.util.MColor;
 
 public class ShoreVizualization extends Layer {
@@ -14,6 +15,11 @@ public class ShoreVizualization extends Layer {
 	
 	@Override
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
+		draw(map, pg, pa);
+	}
+
+	@Override
+	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
 		map.get(DEMAlgorithm.class);
 		MColor color = map.get(GRAYSCALE) ? new MColor(204,204,204) : MColor.SHORE;
 		pg.loadPixels();

@@ -10,6 +10,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
+import ch.deif.meander.ui.MeanderApplet;
 
 public class CurrentSelectionOverlay extends MapSelectionOverlay {
 	
@@ -23,6 +24,11 @@ public class CurrentSelectionOverlay extends MapSelectionOverlay {
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
+		draw(map, pg, pa);
+	}
+
+	@Override
+	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
 		pg.noFill();
 		pg.stroke(Color.RED.getRGB());
 		if (pa != null) handleEvents(map, pa);

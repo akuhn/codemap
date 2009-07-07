@@ -7,6 +7,7 @@ import java.util.List;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import ch.deif.meander.MapInstance;
+import ch.deif.meander.ui.MeanderApplet;
 
 public class Composite<E extends Layer> extends Layer implements Iterable<E> {
 
@@ -21,6 +22,10 @@ public class Composite<E extends Layer> extends Layer implements Iterable<E> {
 	}
 
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
+		draw(map, pg, pa);
+	}
+
+	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
 		this.drawFigure(map, pg, pa);
 		this.drawChildren(map, pg, pa);
 	}

@@ -4,6 +4,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
+import ch.deif.meander.ui.MeanderApplet;
 
 public class OpenFilesOverlay extends MapSelectionOverlay {
 	
@@ -12,6 +13,11 @@ public class OpenFilesOverlay extends MapSelectionOverlay {
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
+		draw(map, pg, pa);
+	}
+
+	@Override
+	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
 		pg.strokeWeight(1);
 		pg.fill(255);
 		pg.stroke(0);		

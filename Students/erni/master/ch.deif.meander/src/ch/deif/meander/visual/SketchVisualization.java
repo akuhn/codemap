@@ -4,6 +4,7 @@ import processing.core.PApplet;
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
+import ch.deif.meander.ui.MeanderApplet;
 
 public class SketchVisualization extends Layer {
 
@@ -11,6 +12,11 @@ public class SketchVisualization extends Layer {
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
+		draw(map, pg, pa);
+	}
+
+	@Override
+	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
 		float width = map.getWidth();
 		pg.background(204);
 		pg.stroke(0);

@@ -11,11 +11,17 @@ import ch.akuhn.util.Get;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.builder.MeanderExample;
+import ch.deif.meander.ui.MeanderApplet;
 
 public class LabelsOverlay extends Layer {
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
+		draw(map, pg, pa);
+	}
+
+	@Override
+	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
 		new Helper(map).draw(map, pg);
 	}
 
@@ -107,6 +113,11 @@ public class LabelsOverlay extends Layer {
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
+		draw(map, pg, pa);
+	}
+
+	@Override
+	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
 		if (DRAFT) {
 			pg.stroke(0);
 			pg.noFill();

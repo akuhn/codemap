@@ -13,7 +13,7 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.pdf.PGraphicsPDF;
 import ch.deif.meander.MapInstance;
-import ch.deif.meander.ui.MeanderApplet.Events;
+import ch.deif.meander.ui.CodemapEventRegistry;
 
 public class MapVisualization {
 
@@ -143,7 +143,7 @@ public class MapVisualization {
 		return map;
 	}
 
-	public void registerEventHandler(Events events) {
+	public void registerEventHandler(CodemapEventRegistry events) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -1,4 +1,4 @@
-package ch.deif.meander;
+package ch.deif.meander.util;
 
 import static org.junit.Assert.assertEquals;
 

@@ -7,6 +7,7 @@ import ch.deif.meander.MapSetting;
 import ch.deif.meander.MapInstance.Pixel;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.internal.HillshadeAlgorithm;
+import ch.deif.meander.ui.MeanderApplet;
 import ch.deif.meander.util.MColor;
 
 public class HillshadeVisualization extends Layer {
@@ -15,6 +16,11 @@ public class HillshadeVisualization extends Layer {
 	
 	@Override
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
+		draw(map, pg, pa);
+	}
+
+	@Override
+	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
 		assert map.width == pg.width;
 		assert map.height == pg.height;
 		map.get(DEMAlgorithm.class);

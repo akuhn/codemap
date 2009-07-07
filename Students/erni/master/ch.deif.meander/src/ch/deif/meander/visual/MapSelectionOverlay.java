@@ -5,6 +5,7 @@ import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapSelection;
+import ch.deif.meander.ui.MeanderApplet;
 
 public abstract class MapSelectionOverlay extends Layer {
 
@@ -17,6 +18,11 @@ public abstract class MapSelectionOverlay extends Layer {
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
+		draw(map, pg, pa);
+	}
+
+	@Override
+	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
 		for (Location each: selection.locationsOn(map)) {
 			drawLocation(pg, each);
 		}
