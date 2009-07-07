@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/ch.unibe.softwaremap.feature_1.0.0.qualifier.jar" id="ch.unibe.softwaremap.feature" version="1.0.0.qualifier">
+   <feature 
+        url="features/ch.unibe.softwaremap.feature_0.7.7.qualifier.jar" 
+        id="ch.unibe.softwaremap.feature" version="0.7.7.qualifier">
       <category name="Codemap"/>
    </feature>
    <category-def name="Codemap" label="Codemap">

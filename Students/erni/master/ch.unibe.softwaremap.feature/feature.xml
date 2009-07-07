@@ -2,7 +2,7 @@
 <feature
       id="ch.unibe.softwaremap.feature"
       label="Software Map"
-      version="1.0.0.qualifier"
+      version="0.7.7.qualifier"
       provider-name="David Erni and Adrian Kuhn">
 
    <description url="http://scg.unibe.ch/codemap">
@@ -21,28 +21,28 @@
          id="ch.unibe.softwaremap"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="0.7.7.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.codemap.util"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="0.7.7.qualifier"
          unpack="false"/>
 
    <plugin
          id="ch.akuhn.hapax"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="0.7.7.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.codemap.meander"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="0.7.7.qualifier"
          unpack="false"/>
 
 </feature>
