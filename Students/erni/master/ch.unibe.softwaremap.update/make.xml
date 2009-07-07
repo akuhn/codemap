@@ -9,4 +9,13 @@
     	<copy file="site_qualifier.txt" tofile="site.xml"/>
     </target>    
 
+    <target name="upload">
+        <exec executable="scp" dir=".">
+            <arg line="-p -r site.xml features plugins artifacts.jar content.jar scg@haddock.unibe.ch:download/codemap/"/>
+        </exec>
+        <exec executable="ssh" dir=".">
+            <arg line="scg@haddock.unibe.ch 'cd download; cd codemap; chmod -R 755 *'"/>
+        </exec>
+    </target>	
+		
 </project>
