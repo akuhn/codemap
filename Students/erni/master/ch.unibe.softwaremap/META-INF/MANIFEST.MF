@@ -18,5 +18,6 @@ Require-Bundle: org.codemap.util,
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Adrian Kuhn and David Erni
 Export-Package: ch.unibe.softwaremap,
- ch.unibe.softwaremap.mapview
+ ch.unibe.softwaremap.mapview,
+ ch.unibe.softwaremap.util
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

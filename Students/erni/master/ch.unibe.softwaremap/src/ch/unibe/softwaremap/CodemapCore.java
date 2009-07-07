@@ -39,7 +39,7 @@ public class CodemapCore extends AbstractUIPlugin {
 	private final MapSelection openFilesSelection;
 	private final MapSelection currentSelection;
 	private final MapScheme<String> labelScheme;
-	private final MapScheme<MColor> colorScheme;
+	private final CodemapColors colorScheme;
 	
 
 	public MapSelection getYouAreHereSelection() {
@@ -118,7 +118,7 @@ public class CodemapCore extends AbstractUIPlugin {
 		return labelScheme;
 	}
 
-	public MapScheme<MColor> getColorScheme() {
+	public CodemapColors getColorScheme() {
 		return colorScheme;
 	}
 	
