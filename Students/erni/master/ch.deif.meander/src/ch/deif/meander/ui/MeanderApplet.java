@@ -87,7 +87,7 @@ public class MeanderApplet extends PApplet {
 
 	@Override
 	public void draw() {
-		if (!needsRedraw) return;
+		//if (!needsRedraw) return;
 
 		smooth();
 		noFill();

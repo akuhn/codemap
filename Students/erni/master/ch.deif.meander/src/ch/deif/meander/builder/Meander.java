@@ -12,6 +12,7 @@ import ch.deif.meander.MapSelection;
 import ch.deif.meander.Point;
 import ch.deif.meander.internal.MDS;
 import ch.deif.meander.util.MColor;
+import ch.deif.meander.visual.Background;
 import ch.deif.meander.visual.Composite;
 import ch.deif.meander.visual.HillshadeVisualization;
 import ch.deif.meander.visual.LabelsOverlay;
@@ -62,9 +63,11 @@ public class Meander implements MapBuilder, VisualizationBuilder {
 	}
 
 	private VisualizationBuilder useHillshade() {
-		layers.append(new WaterVisualization());
-		layers.append(new ShoreVizualization());
-		layers.append(new HillshadeVisualization());
+		Background bg = new Background();
+		bg.append(new WaterVisualization());
+		bg.append(new ShoreVizualization());
+		bg.append(new HillshadeVisualization());
+		layers.append(bg);
 		
 		//layers.add(new SketchVisualization());
 		

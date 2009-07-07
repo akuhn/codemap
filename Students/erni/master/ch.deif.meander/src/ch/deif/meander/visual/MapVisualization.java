@@ -115,7 +115,7 @@ public class MapVisualization {
 				}
 				@Override
 				public void draw() {
-					visual.draw(map, g, null);
+					visual.draw(map, g, this);
 				}
 			};
 			setResizable(false);

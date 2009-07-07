@@ -20,7 +20,7 @@ public class Composite<E extends Layer> extends Layer implements Iterable<E> {
 		// by default, do nothing
 	}
 
-	public final void draw(MapInstance map, PGraphics pg, PApplet pa) {
+	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
 		this.drawFigure(map, pg, pa);
 		this.drawChildren(map, pg, pa);
 	}
