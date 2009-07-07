@@ -14,4 +14,6 @@ public abstract class MapAlgorithm<V> implements Callable<V> {
 	@Override
 	public abstract V call();
 	
+	
+	
 }

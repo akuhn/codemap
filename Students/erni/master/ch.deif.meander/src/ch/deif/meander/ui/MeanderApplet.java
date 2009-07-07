@@ -8,7 +8,7 @@ import java.util.List;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
-import ch.deif.meander.viz.MapVisualization;
+import ch.deif.meander.visual.MapVisualization;
 
 @SuppressWarnings("serial")
 public class MeanderApplet extends PApplet {
@@ -139,11 +139,6 @@ public class MeanderApplet extends PApplet {
 		setNeedsRedraw();
 	}
 
-	public void indicesSelected(int[] indices) {
-		viz.indicesSelected(indices);
-		setNeedsRedraw();
-	}
-
 	protected void setNeedsRedraw() {
 		needsRedraw = true;
 	}
@@ -157,12 +152,7 @@ public class MeanderApplet extends PApplet {
 	}
 
 	private int height() {
-		return viz == null ? 0 : viz.getMap().getParameters().width;
-	}
-
-	public void updateSelection(List<String> handleIdentifiers) {
-		viz.updateSelection(handleIdentifiers);
-		setNeedsRedraw();
+		return viz == null ? 0 : viz.getMap().height;
 	}
 
 	public void setVisualization(MapVisualization viz) {
@@ -171,8 +161,7 @@ public class MeanderApplet extends PApplet {
 		this.viz.registerEventHandler(events);
 		size(width(), height());
 		
-		// TODO somehow clean up the parameters ... maybe singleton 
-		int dimension = viz.getMap().getParameters().width;
+		int dimension = this.getWidth();
 		if (bg == null || dimension != this.bg.width) {
 			bg = createGraphics(dimension, dimension, JAVA2D);
 		}
@@ -183,11 +172,6 @@ public class MeanderApplet extends PApplet {
 	
 	public MapVisualization getVisualization() {
 		return viz;
-	}
-
-	public void addSelection(List<String> handleIdentifiers) {
-		viz.addSelection(handleIdentifiers);
-		setNeedsRedraw();
 	}
 
 }

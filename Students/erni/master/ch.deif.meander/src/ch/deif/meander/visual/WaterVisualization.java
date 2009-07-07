@@ -4,7 +4,7 @@ import processing.core.PGraphics;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.util.MColor;
 
-public class WaterVisualization implements Layer {
+public class WaterVisualization extends Layer {
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg) {

@@ -1,12 +1,11 @@
 package ch.deif.meander.visual;
 
+import java.util.Map;
+
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
-import ch.deif.meander.Map;
-import ch.deif.meander.viz.Composite;
-import ch.deif.meander.viz.Drawable;
 
-public class ArrowOverlay extends MapVisualization {
+public class ArrowOverlay implements Layer {
 
 	public ArrowOverlay(Map map) {
 		super(map);

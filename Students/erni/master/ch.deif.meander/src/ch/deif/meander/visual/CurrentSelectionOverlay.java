@@ -13,7 +13,7 @@ import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
 
-public class CurrentSelectionOverlay implements Layer {
+public class CurrentSelectionOverlay extends Layer {
 	
 	protected final int SELECTION_SIZE = 12;
 	protected final int POINT_STROKE = 3;

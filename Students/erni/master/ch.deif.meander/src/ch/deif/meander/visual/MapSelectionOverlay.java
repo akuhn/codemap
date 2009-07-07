@@ -5,7 +5,7 @@ import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapSelection;
 
-public abstract class MapSelectionOverlay implements Layer {
+public abstract class MapSelectionOverlay extends Layer {
 
 	private MapSelection selection;
 

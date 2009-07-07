@@ -61,9 +61,9 @@ public class Meander implements MapBuilder, VisualizationBuilder {
 	}
 
 	private VisualizationBuilder useHillshade() {
-		layers.add(new WaterVisualization());
-		layers.add(new ShoreVizualization());
-		layers.add(new HillshadeVisualization());
+		layers.append(new WaterVisualization());
+		layers.append(new ShoreVizualization());
+		layers.append(new HillshadeVisualization());
 		
 		//layers.add(new SketchVisualization());
 		

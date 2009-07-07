@@ -4,7 +4,7 @@ import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
 
-public class SketchVisualization implements Layer {
+public class SketchVisualization extends Layer {
 
 	// TODO make sure circle size has same diameter as coastline of shaded hills
 

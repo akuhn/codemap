@@ -1,14 +1,19 @@
 package ch.deif.meander.visual;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import processing.core.PGraphics;
 import ch.deif.meander.MapInstance;
 
+public class Composite<E extends Layer> extends Layer {
 
-@SuppressWarnings("serial")
-public class Composite<E extends Layer> extends ArrayList<E> implements Layer {
-
+	private List<E> children;
+	
+	public Composite() {
+		this.children = new ArrayList<E>();
+	}
+	
 	public void drawFigure(MapInstance map, PGraphics pg) {
 		// by default, do nothing
 	}
@@ -19,7 +24,7 @@ public class Composite<E extends Layer> extends ArrayList<E> implements Layer {
 	}
 
 	public void drawChildren(MapInstance map, PGraphics pg) {
-		for (Layer each: this) {
+		for (Layer each: children) {
 			each.draw(map, pg);
 		}
 	}
@@ -30,8 +35,12 @@ public class Composite<E extends Layer> extends ArrayList<E> implements Layer {
 
 	public static final <T extends Layer> Composite<T> of(T... elements) {
 		Composite<T> composite = new Composite<T>();
-		for (T each: elements) composite.add(each);
+		for (T each: elements) composite.append(each);
 		return composite;
 	}
 
+	public void append(E element) {
+		children.add(element);
+	}
+	
 }

@@ -10,9 +10,8 @@ import processing.core.PGraphics;
 import ch.akuhn.util.Get;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
-import ch.deif.meander.viz.Composite;
 
-public class LabelsOverlay implements Layer {
+public class LabelsOverlay extends Layer {
 
 	private PFont PFONT = new PFont(PFont.findFont("Arial Narrow"), true, PFont.DEFAULT_CHARSET);
 	private boolean layoutDone = false;

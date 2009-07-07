@@ -7,7 +7,7 @@ import ch.deif.meander.MapInstance.Pixel;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.util.MColor;
 
-public class ShoreVizualization implements Layer {
+public class ShoreVizualization extends Layer {
 
 	public static final MapSetting<Integer> WATER_LEVEL = MapSetting.define("WATER_LEVEL", 2);
 	

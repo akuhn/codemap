@@ -8,7 +8,7 @@ import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.internal.HillshadeAlgorithm;
 import ch.deif.meander.util.MColor;
 
-public class HillshadeVisualization implements Layer {
+public class HillshadeVisualization extends Layer {
 
 	public static final MapSetting<Integer> COAST_LEVEL = MapSetting.define("COAST_LEVEL", 10);
 	

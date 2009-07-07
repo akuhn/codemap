@@ -2,6 +2,8 @@ package ch.deif.meander.visual;
 
 import java.applet.Applet;
 import java.awt.BorderLayout;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
 import java.io.File;
 
 import javax.swing.JFrame;
@@ -12,6 +14,7 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.pdf.PGraphicsPDF;
 import ch.deif.meander.MapInstance;
+import ch.deif.meander.ui.MeanderApplet.Events;
 
 public class MapVisualization {
 
@@ -128,6 +131,30 @@ public class MapVisualization {
 			setVisible(true);
 			setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		}
+	}
+
+	public void mouseDragStarted(Point dragStart) {
+		visual.mouseDraggedStarted(dragStart);
+	}
+
+	public void mouseClicked(MouseEvent e) {
+		visual.mouseClicked(e);
+	}
+
+	public void mouseDraggedTo(Point dragStop) {
+		visual.mouseDraggedTo(dragStop);
+	}
+
+	public void mouseDragStopped() {
+		visual.mouseDragStopped();
+	}
+
+	public MapInstance getMap() {
+		return map;
+	}
+
+	public void registerEventHandler(Events events) {
+		visual.registerEventHandlers(events);
 	}
 
 }

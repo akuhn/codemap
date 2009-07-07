@@ -5,7 +5,7 @@ import processing.core.PImage;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapInstance.Pixel;
 
-public class DebugDEMVisualization implements Layer {
+public class DebugDEMVisualization extends Layer {
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg) {
