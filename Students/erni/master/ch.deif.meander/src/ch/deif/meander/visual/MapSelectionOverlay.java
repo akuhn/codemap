@@ -10,8 +10,9 @@ public abstract class MapSelectionOverlay extends Layer {
 
 	private MapSelection selection;
 
-	public void setSelection(MapSelection selection) {
+	public MapSelectionOverlay setSelection(MapSelection selection) {
 		this.selection = selection;
+		return this;
 	}
 
 	@Override

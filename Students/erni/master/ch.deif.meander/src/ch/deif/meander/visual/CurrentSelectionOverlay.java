@@ -5,58 +5,55 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
 
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
 
-public class CurrentSelectionOverlay extends Layer {
+public class CurrentSelectionOverlay extends MapSelectionOverlay {
 	
 	protected final int SELECTION_SIZE = 12;
 	protected final int POINT_STROKE = 3;
 	protected final int BOX_STROKE = 2;	
 	
-	private Collection<Point> points;
+	private boolean isDragging = false;
 	private Point dragStart;
 	private Point dragStop;	
-
-	public CurrentSelectionOverlay() {
-		points = Collections.synchronizedSet(new HashSet<Point>());
-	}
-
-	@Override
-	public void draw(MapInstance map, PGraphics pg) {
-		draw(map, pg, null);
-	}
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg, PApplet pa) {
 		pg.noFill();
 		pg.stroke(Color.RED.getRGB());
-		
-		drawSelectedPoints(pg);
+		if (pa != null) handleEvents(map, pa);
+		if (isDragging) updateSelection(map);
+		super.draw(map, pg, pa);
 		drawSelectionBox(pg);
-
-		pg.strokeWeight(2);
-		pg.stroke(Color.BLACK.getRGB());
 	}
 	
-	private void drawSelectedPoints(PGraphics pg) {
-		pg.strokeWeight(POINT_STROKE);		
-		synchronized (points) {
-			for (Point each: points) {
-				pg.ellipse(each.x, each.y, SELECTION_SIZE, SELECTION_SIZE);
-			}			
+	private void handleEvents(MapInstance map, PApplet pa) {
+		if (isDragging) handleDragging(map, pa);
+		else handleNonDragging(map, pa);
+	}
+
+	private void handleNonDragging(MapInstance map, PApplet pa) {
+		if (pa.mouseEvent == null) return;
+		if (pa.mouseEvent.getID() == MouseEvent.MOUSE_DRAGGED) {
+			isDragging = true;
+			dragStop = dragStart = new Point(pa.mouseX, pa.mouseY);
+		}
+	}
+
+	private void handleDragging(MapInstance map, PApplet pa) {
+		dragStop = new Point(pa.mouseX, pa.mouseY);
+		if (pa.mouseEvent == null || pa.mouseEvent.getID() != MouseEvent.MOUSE_DRAGGED) {
+			isDragging = false;
 		}
 	}
 	
 	private void drawSelectionBox(PGraphics pg) {
-		if (!hasDragInput()) return;
-
+		if (!isDragging) return;
+		System.out.println("...");
 		pg.stroke(Color.RED.getRGB());
 		pg.strokeWeight(BOX_STROKE);
 		int deltaX = dragStop.x - dragStart.x;
@@ -65,90 +62,44 @@ public class CurrentSelectionOverlay extends Layer {
 	}
 	
 
-	private boolean hasDragInput() {
-		return dragStart != null && dragStop != null;
-	}	
-	
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		
-		Point point = e.getPoint();
-		if (!e.isControlDown()) {
-			clearPoints();
-		}
-		if (e.getClickCount() == 2) {
-			NearestNeighbor nn = new MaxDistNearestNeighbor(getMap(), getWidth() / 10).forLocation(point);
-			if (nn.hasResult()) {
-				addSelection(nn.point());
-				events().doubleClicked(nn.location());
-			}
-		} else if (e.getButton() == MouseEvent.BUTTON1) {
-			// button1 is 1st mouse button
-			NearestNeighbor nn = new MaxDistNearestNeighbor(getMap(), getWidth() / 10).forLocation(point);
-			if (nn.hasResult()) {
-				addSelection(nn.point());
-				events().selectionChanged(nn.location());
-			}
-		} else if (e.getButton() == MouseEvent.BUTTON3) {
-			// button3 is 2nd mouse button
-			NearestNeighbor nn = new NearestNeighbor(getMap()).forLocation(point);
-			addSelection(nn.point());
-			events().selectionChanged(nn.location());
-		}
-		unsetSelectionBox();	
-	}
+//	@Override
+//	public void mouseClicked(MouseEvent e) {
+//		
+//		Point point = e.getPoint();
+//		if (!e.isControlDown()) {
+//			clearPoints();
+//		}
+//		if (e.getClickCount() == 2) {
+//			NearestNeighbor nn = new MaxDistNearestNeighbor(getMap(), getWidth() / 10).forLocation(point);
+//			if (nn.hasResult()) {
+//				addSelection(nn.point());
+//				events().doubleClicked(nn.location());
+//			}
+//		} else if (e.getButton() == MouseEvent.BUTTON1) {
+//			// button1 is 1st mouse button
+//			NearestNeighbor nn = new MaxDistNearestNeighbor(getMap(), getWidth() / 10).forLocation(point);
+//			if (nn.hasResult()) {
+//				addSelection(nn.point());
+//				events().selectionChanged(nn.location());
+//			}
+//		} else if (e.getButton() == MouseEvent.BUTTON3) {
+//			// button3 is 2nd mouse button
+//			NearestNeighbor nn = new NearestNeighbor(getMap()).forLocation(point);
+//			addSelection(nn.point());
+//			events().selectionChanged(nn.location());
+//		}
+//		unsetSelectionBox();	
+//	}
 
-	private void clearPoints() {
-		synchronized (points) {
-			points.clear();				
-		}
-	}
-	
-	//@Override
-	public void updateSelection(List<String> handleIdentifiers) {
-		super.updateSelection(handleIdentifiers);
-		clearPoints();
-		addSelection(handleIdentifiers);		
-	}
-	
-	//@Override
-	public void addSelection(List<String> handleIdentifiers) {
-		synchronized (points) {
-			for (Location each: getMap().locations()) {
-				if (handleIdentifiers.contains(each.getIdentifier())) {
-					points.add(new Point(each.px(), each.py()));
-				}
-			}			
-		}
-	}
-	
-	//@Override
-	public void indicesSelected(int[] indices) {
-		clearPoints();
-		List<Location> locations = new ArrayList<Location>();
-		synchronized (points) {
-			for (int index: indices) {
-				Location location = getMap().locationAt(index);
-				locations.add(location);
-				points.add(new Point(location.px(), location.py()));
-			}			
-		}
-	}
-	
-	private void handleDragSelection() {
-		List<Location> selected = new ArrayList<Location>();
-		clearPoints();
-		synchronized (points) {
-			for (Location each: getMap().locations()) {
-				int x = (int) Math.round(each.x() * getWidth());
-				int y = (int) Math.round(each.y() * getWidth());
-				if (x < dragStop.x && x > dragStart.x && y < dragStop.y && y > dragStart.y) {
-					selected.add(each);
-					points.add(new Point(x, y));
-				}
+	private void updateSelection(MapInstance map) {
+		Collection<String> ids = new ArrayList<String>();
+		for (Location each: map.locations()) {
+			if (each.px < dragStop.x && each.px > dragStart.x && 
+					each.py < dragStop.y && each.py > dragStart.y) {
+				ids.add(each.getIdentifier());
 			}
 		}
-		events().selectionChanged(selected.toArray(new Location[0]));
+		getSelection().replaceWith(ids);
 	}
 	
 	private void ensureDragPointOrder() {
@@ -160,32 +111,9 @@ public class CurrentSelectionOverlay extends Layer {
 		dragStop = new Point(maxX, maxY);
 	}
 	
-	private void unsetSelectionBox() {
-		dragStart = null;
-		dragStop = null;
-	}	
-	
-	private void addSelection(Point point) {
-		synchronized (points) {
-			points.add(point);			
-		}
-	}
-	
-	//@Override
-	public void mouseDragStarted(Point dragStart) {
-		this.dragStart = dragStart;
-	}
-	
-	//@Override
-	public void mouseDraggedTo(Point dragStop) {
-		this.dragStop = dragStop;
-	}
-	
-	//@Override
-	public void mouseDragStopped() {
-		ensureDragPointOrder();
-		handleDragSelection();
-		unsetSelectionBox();		
+	@Override
+	public void drawLocation(PGraphics pg, Location each) {
+		pg.ellipse(each.px, each.py, SELECTION_SIZE, SELECTION_SIZE);
 	}
 
 }

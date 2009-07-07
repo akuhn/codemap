@@ -7,6 +7,7 @@ import ch.deif.meander.MapScheme;
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.Point;
 import ch.deif.meander.util.MColor;
+import ch.deif.meander.visual.CurrentSelectionOverlay;
 import ch.deif.meander.visual.Layer;
 import ch.deif.meander.visual.MapVisualization;
 
@@ -22,14 +23,14 @@ public class MeanderExample {
 
 		MapScheme<MColor> colorScheme = MapScheme.with(MColor.HILLGREEN);
 		MapScheme<String> labelScheme = MapScheme.with("Name");
-		// MapSelection currentSelection = new MapSelection();
+		MapSelection currentSelection = new MapSelection();
 		MapSelection openEditorSelection = new MapSelection();
 		MapSelection currentEditorSelection = new MapSelection();
 
 		Layer layer = Meander.visualization()
 				.withColors(colorScheme)
 				.withLabels(labelScheme)
-				// .withSelection(new CurrentSelectionOverlay(), currentSelection)
+				.withSelection(new CurrentSelectionOverlay(), currentSelection)
 				//.withSelection(new OpenFilesOverlay(), openEditorSelection)
 				//.withSelection(new YouAreHereOverlay(), currentEditorSelection)
 				.makeLayer();

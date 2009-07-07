@@ -93,10 +93,10 @@ public class Meander implements MapBuilder, VisualizationBuilder {
 
 	@Override
 	public VisualizationBuilder withSelection(
-			MapSelectionOverlay currentSelectionOverlay,
-			MapSelection currentSelection) {
-		// TODO Auto-generated method stub
-		return null;
+			MapSelectionOverlay overlay,
+			MapSelection selection) {
+		layers.append(overlay.setSelection(selection));
+		return this;
 	}
 
 }

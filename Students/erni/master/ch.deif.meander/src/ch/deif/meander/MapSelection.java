@@ -49,5 +49,9 @@ public class MapSelection {
 	public void remove(String identifier) {
 		identifiers.remove(identifier);
 	}
+
+	public void replaceWith(Collection<String> ids) {
+		identifiers = new HashSet<String>(ids);
+	}
 	
 }

@@ -111,7 +111,7 @@ public class MapVisualization {
 				@Override
 				public void setup() {
 					size(map.width, map.height);
-					frameRate(1);
+					frameRate(25);
 				}
 				@Override
 				public void draw() {
