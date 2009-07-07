@@ -87,7 +87,7 @@ public class Meander implements MapBuilder, VisualizationBuilder {
 
 	@Override
 	public VisualizationBuilder withLabels(MapScheme<String> labelScheme) {
-		layers.append(new LabelsOverlay());
+		layers.append(new LabelsOverlay(labelScheme));
 		return this;
 	}
 

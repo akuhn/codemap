@@ -149,7 +149,7 @@ public class MapPerProject {
 					.addCorpus(hapax)
 					.makeMap();
 			layer = Meander.visualization()
-					.withLabels(null)
+					.withLabels(CodemapCore.getPlugin().getLabelScheme())
 					.withSelection(new CurrentSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
 					.withSelection(new OpenFilesOverlay(), CodemapCore.getPlugin().getOpenFilesSelection())
 					.withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())

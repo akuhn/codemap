@@ -9,14 +9,20 @@ import processing.core.PGraphics;
 import ch.akuhn.util.Get;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
-import ch.deif.meander.builder.MeanderExample;
 import ch.deif.meander.ui.MeanderApplet;
+import ch.deif.meander.util.MapScheme;
 
 public class LabelsOverlay extends Layer {
 
+	private final MapScheme<String> labelScheme;
+
+	public LabelsOverlay(MapScheme<String> labelScheme) {
+		this.labelScheme = labelScheme;
+	}
+
 	@Override
 	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
-		new Helper(map).draw(map, pg);
+		new Helper(map, labelScheme).draw(map, pg);
 	}
 
 	private static class Helper {
@@ -25,10 +31,10 @@ public class LabelsOverlay extends Layer {
 		private boolean layoutDone = false;
 		private Composite<Label> labels = Composite.newInstance();
 	
-		public Helper(MapInstance map) {
+		public Helper(MapInstance map, MapScheme<String> labelScheme) {
 			double max = maxElevation(map);
 			for (Location each: map.locations()) {
-				Label l = new Label(MeanderExample.NAME.forLocation(each.getPoint()));
+				Label l = new Label(labelScheme.forLocation(each.getPoint()));
 				labels.append(l);
 				l.x = l.x0 = each.px;
 				l.y = l.y0 = each.py;

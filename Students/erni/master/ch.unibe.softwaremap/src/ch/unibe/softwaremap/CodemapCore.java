@@ -9,8 +9,10 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import ch.deif.meander.MapSelection;
+import ch.deif.meander.util.MapScheme;
 import ch.unibe.softwaremap.mapview.MapView;
 import ch.unibe.softwaremap.search.MeanderQueryListener;
+import ch.unibe.softwaremap.util.JavaLabelScheme;
 
 /**
  * Single instance of the running Codemap plug-in.
@@ -34,6 +36,8 @@ public class CodemapCore extends AbstractUIPlugin {
 	private final MapSelection youAreHereSelection;
 	private final MapSelection openFilesSelection;
 	private final MapSelection currentSelection;
+	private final MapScheme<String> labelScheme;
+	
 
 	public MapSelection getYouAreHereSelection() {
 		return youAreHereSelection;
@@ -52,6 +56,7 @@ public class CodemapCore extends AbstractUIPlugin {
 		youAreHereSelection = new MapSelection();
 		openFilesSelection = new MapSelection();	
 		currentSelection = new MapSelection();
+		labelScheme = new JavaLabelScheme();		
 	}
 
 	@Override
@@ -103,6 +108,10 @@ public class CodemapCore extends AbstractUIPlugin {
 
 	public MapView getMapView() {
 		return theView;
+	}
+	
+	public MapScheme<String> getLabelScheme() {
+		return labelScheme;
 	}
 	
 }

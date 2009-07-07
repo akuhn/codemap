@@ -22,14 +22,13 @@ public class MeanderExample {
 				.makeMap();
 
 		MapScheme<MColor> colorScheme = MapScheme.with(MColor.HILLGREEN);
-		MapScheme<String> labelScheme = MapScheme.with("Name");
 		MapSelection currentSelection = new MapSelection();
 		MapSelection openEditorSelection = new MapSelection();
 		MapSelection currentEditorSelection = new MapSelection();
 
 		Layer layer = Meander.visualization()
 				.withColors(colorScheme)
-				.withLabels(labelScheme)
+				.withLabels(filenames_only)
 				.withSelection(new CurrentSelectionOverlay(), currentSelection)
 				//.withSelection(new OpenFilesOverlay(), openEditorSelection)
 				//.withSelection(new YouAreHereOverlay(), currentEditorSelection)
@@ -40,8 +39,7 @@ public class MeanderExample {
 
 	}
 
-	// TODO move this to codemap plug-in
-	public static final MapScheme<String> NAME = new MapScheme<String>() {
+	private static final MapScheme<String> filenames_only = new MapScheme<String>() {
 		@Override
 		public String forLocation(Point location) {
 			String name = location.getDocument().getIdentifier();
