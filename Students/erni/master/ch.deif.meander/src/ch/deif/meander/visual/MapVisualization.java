@@ -60,15 +60,13 @@ public class MapVisualization {
 	}
 
 	public void draw(PGraphics pg, MeanderApplet pa) {
-		assert map.width == pg.width : "Width does not match (map vs processing) " + map.width + " vs " + pg.width;
+		assert map.width == pg.width : "Width mismatch (map vs P5): " + map.width + " vs " + pg.width;
 		assert map.height == pg.height;
-		if (!refresh && pa != null && pa.mouseEvent == oldMouseEvent) {
-			return;
-		}
-		oldMouseEvent = pa.mouseEvent;
-		refresh  = false; // FIXME
+		if (!refresh && pa != null && pa.mouseEvent == null) return;
+		refresh  = false; 
 		long nano = System.nanoTime();
 		visual.draw(map, pg, pa);
+		pa.mouseEvent = null; // Don't remove this line, we depend in this!
 		nano = System.nanoTime() - nano;
 		System.out.printf("MapVisualization#draw:%5d\n", (int) (nano / 1e9 * pa.frameRate * 100));
 	}
