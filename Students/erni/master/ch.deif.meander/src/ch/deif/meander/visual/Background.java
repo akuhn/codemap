@@ -17,7 +17,7 @@ public class Background extends Composite<Layer> {
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
-		if (background == null) {
+		if (background == null || background.width != map.width || background.height != map.height) {
 			background = pa.createGraphics(map.width, map.height, PConstants.JAVA2D);
 			this.drawChildren(map, background, null);
 		}

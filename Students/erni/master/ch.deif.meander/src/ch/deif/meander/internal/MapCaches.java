@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.deif.meander;
+package ch.deif.meander.internal;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +12,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.RunnableFuture;
+
+import ch.deif.meander.MapAlgorithm;
+import ch.deif.meander.MapInstance;
 
 public class MapCaches {
 	

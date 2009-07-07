@@ -11,6 +11,7 @@ import ch.akuhn.util.Providable;
 import ch.deif.meander.internal.ContourLineAlgorithm;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.internal.HillshadeAlgorithm;
+import ch.deif.meander.internal.MapCaches;
 import ch.deif.meander.util.MColor;
 
 public class MapInstance {

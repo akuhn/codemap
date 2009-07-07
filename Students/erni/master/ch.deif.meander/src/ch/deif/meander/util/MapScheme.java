@@ -1,4 +1,6 @@
-package ch.deif.meander;
+package ch.deif.meander.util;
+
+import ch.deif.meander.Point;
 
 /** Maps handles to values.
  * 
