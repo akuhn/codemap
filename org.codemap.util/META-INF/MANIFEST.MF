@@ -7,6 +7,7 @@ Bundle-Vendor: Adrian Kuhn
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: package.jar,
  .
-Export-Package: ch.akuhn.util,
+Export-Package: ch.akuhn.foreach,
+ ch.akuhn.util,
  ch.akuhn.util.query,
  ch.unibe.scg.util
