@@ -1,7 +1,7 @@
 package ch.deif.meander.visual;
 
 import java.applet.Applet;
-import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
@@ -33,9 +33,8 @@ public class MapVisualization {
 		applet.init();
 		applet.setVisualization(this);
 		JFrame win = new JFrame("Map Viewer");
-		win.setLayout(new BorderLayout());
+		win.setLayout(new FlowLayout());
 		win.setResizable(false);
-		win.setSize(map.width, map.height);
 		win.getContentPane().add(applet);
 		win.pack();
 		win.setVisible(true);
@@ -63,7 +62,7 @@ public class MapVisualization {
 	}
 
 	public void draw(PGraphics pg, MeanderApplet pa) {
-		assert map.width == pg.width;
+		assert map.width == pg.width : "Width does not match (map vs processing) " + map.width + " vs " + pg.width;
 		assert map.height == pg.height;
 		if (!refresh && pa != null && pa.mouseEvent == oldMouseEvent) {
 			return;

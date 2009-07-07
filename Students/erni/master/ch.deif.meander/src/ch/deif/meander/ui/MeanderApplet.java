@@ -51,7 +51,7 @@ public class MeanderApplet extends PApplet {
 
 	public void setVisualization(MapVisualization viz) {
 		if (viz == this.viz) return;
-		setSize(viz.getWidth(), viz.getHeight());
+		size(viz.getWidth(), viz.getHeight());
 		this.viz = viz;
 		//repaint();
 	}
