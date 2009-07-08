@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature 
-        url="features/ch.unibe.softwaremap.feature_0.7.7.qualifier.jar" 
-        id="ch.unibe.softwaremap.feature" version="0.7.7.qualifier">
+   <feature url="features/ch.unibe.softwaremap.feature_0.7.7.qualifier.jar" id="ch.unibe.softwaremap.feature" version="0.7.7.qualifier">
       <category name="Codemap"/>
    </feature>
+   <feature url="features/org.codemap.plugin.eclemma.feature_0.7.7.qualifier.jar" id="org.codemap.plugin.eclemma.feature" version="0.7.7.qualifier">
+      <category name="Codemap Eclemma Integration (optional)"/>
+   </feature>
    <category-def name="Codemap" label="Codemap">
-      <description>Software Cartography, your roadmap to software.</description>
+      <description>
+         Software Cartography, your roadmap to software.
+      </description>
+   </category-def>
+   <category-def name="Codemap Eclemma Integration (optional)" label="Codemap Eclemma Integration (optional)">
+      <description>
+         Eclemma integration for Codemap.
+      </description>
    </category-def>
 </site>
