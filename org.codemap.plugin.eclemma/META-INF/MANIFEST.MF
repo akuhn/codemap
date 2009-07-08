@@ -8,9 +8,9 @@ Require-Bundle: org.codemap.util,
  ch.akuhn.hapax,
  ch.deif.meander,
  org.codemap,
+ com.mountainminds.eclemma.core;bundle-version="1.4.1",
  org.eclipse.ui,
  org.eclipse.core.runtime,
- com.mountainminds.eclemma.core;bundle-version="1.4.1",
  org.eclipse.jdt.core,
  org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

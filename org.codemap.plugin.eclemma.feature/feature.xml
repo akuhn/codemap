@@ -6,7 +6,7 @@
       provider-name="David Erni">
 
    <description url="http://scg.unibe.ch/codemap">
-      Shows coverage data on the Codemap view. 
+      Shows coverage data on the Codemap view.
    </description>
 
    <copyright>
@@ -16,19 +16,6 @@
    <license url="http://www.gnu.org/licenses/agpl.txt">
       %license
    </license>
-
-   <requires>
-      <import plugin="org.codemap.meander"/>
-      <import plugin="ch.akuhn.hapax"/>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="com.mountainminds.eclemma.core" version="1.4.1" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.jdt.core"/>
-      <import plugin="ch.unibe.softwaremap"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.codemap.util"/>
-      <import plugin="com.mountainminds.eclemma.ui"/>
-   </requires>
 
    <plugin
          id="org.codemap.plugin.eclemma"
