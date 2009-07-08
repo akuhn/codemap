@@ -34,6 +34,8 @@ public class EclemmaOverlay extends AbstractUIPlugin {
 		plugin = this;
 		
 		coverageListener = new MeanderCoverageListener();
+		// call it on plug-in startup to load a coverage report if there is any.
+//		coverageListener.coverageChanged();
 		CoverageTools.addJavaCoverageListener(coverageListener);
 	}
 
