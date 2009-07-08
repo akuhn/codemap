@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.codemap.plugin.eclemma.feature"
+      label="Codemap Eclemma Integration"
+      version="0.7.7.qualifier"
+      provider-name="David Erni">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <requires>
+      <import plugin="org.codemap.meander"/>
+      <import plugin="ch.akuhn.hapax"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="com.mountainminds.eclemma.core" version="1.4.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="ch.unibe.softwaremap"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.codemap.util"/>
+      <import plugin="com.mountainminds.eclemma.ui"/>
+   </requires>
+
+   <plugin
+         id="org.codemap.plugin.eclemma"
+         download-size="0"
+         install-size="0"
+         version="0.7.7.qualifier"
+         unpack="false"/>
+
+</feature>
