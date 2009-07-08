@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Codemap Search Overlay
+Bundle-SymbolicName: org.codemap.plugin.search;singleton:=true
+Bundle-Version: 0.7.7.qualifier
+Bundle-Activator: org.codemap.plugin.search.SearchOverlay
+Require-Bundle: org.codemap,
+ org.eclipse.ui,
+ org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
