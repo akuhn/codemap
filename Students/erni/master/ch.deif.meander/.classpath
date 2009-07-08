@@ -9,7 +9,7 @@
 	<classpathentry kind="lib" path="lib/core.jar" sourcepath="lib/core.zip"/>
 	<classpathentry exported="true" kind="lib" path="lib/itext.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/pdf.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Hapax"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ch.akuhn.hapax"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
