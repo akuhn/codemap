@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Meander (software cartography)
-Bundle-SymbolicName: org.codemap.meander
+Bundle-SymbolicName: ch.deif.meander
 Bundle-Version: 0.7.7.qualifier
 Bundle-Vendor: David Erni et al
 Require-Bundle: 

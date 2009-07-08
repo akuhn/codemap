@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="ch.unibe.softwaremap.feature"
+      id="org.codemap.feature"
       label="Codemap (software cartography)"
       version="0.7.7.qualifier"
       provider-name="%author">
@@ -10,19 +10,12 @@
    </description>
 
    <copyright>
-      Copyright (c) 2009, %author<!-- -->.
+      Copyright (c) 2009, %author.
    </copyright>
 
    <license url="http://www.gnu.org/licenses/agpl.txt">
       %license
    </license>
-
-   <plugin
-         id="ch.unibe.softwaremap"
-         download-size="0"
-         install-size="0"
-         version="0.7.7.qualifier"
-         unpack="false"/>
 
    <plugin
          id="org.codemap.util"
@@ -39,7 +32,14 @@
          unpack="false"/>
 
    <plugin
-         id="org.codemap.meander"
+         id="org.codemap"
+         download-size="0"
+         install-size="0"
+         version="0.7.7.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="ch.deif.meander"
          download-size="0"
          install-size="0"
          version="0.7.7.qualifier"
