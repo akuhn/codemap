@@ -13,8 +13,7 @@ Require-Bundle: org.codemap.util,
  org.eclipse.jdt.core,
  org.eclipse.jface.text,
  org.eclipse.jdt.ui,
- org.eclipse.ui.ide,
- org.eclipse.search
+ org.eclipse.ui.ide
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Adrian Kuhn and David Erni
 Export-Package: org.codemap,

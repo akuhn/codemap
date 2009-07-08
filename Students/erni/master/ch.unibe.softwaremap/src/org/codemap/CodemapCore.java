@@ -4,11 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.codemap.mapview.MapView;
-import org.codemap.search.MeanderQueryListener;
 import org.codemap.util.CodemapColors;
 import org.codemap.util.CodemapLabels;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -31,7 +29,6 @@ public class CodemapCore extends AbstractUIPlugin {
 	
 	private Map<IProject,MapPerProject> mapPerProjectCache;
 	private MapView theView;
-	private MeanderQueryListener queryListener;
 	
 
 	private final MapSelection youAreHereSelection;
@@ -70,20 +67,10 @@ public class CodemapCore extends AbstractUIPlugin {
 		// registerQueryListener();
 	}
 
-	private void registerQueryListener() {
-		queryListener = new MeanderQueryListener();
-		NewSearchUI.addQueryListener(queryListener);
-	}
-
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		unregisterQueryListener();
 		THE_PLUGIN = null;
 		super.stop(context);
-	}
-
-	private void unregisterQueryListener() {
-		NewSearchUI.removeQueryListener(queryListener);
 	}
 
 	public static CodemapCore getPlugin() {
@@ -95,9 +82,6 @@ public class CodemapCore extends AbstractUIPlugin {
 	}
 	
 	public MapPerProject mapForProject(IProject project) {
-		if (queryListener == null) {
-			getPlugin().registerQueryListener(); // FIXME fix for start-up problem, see #start()
-		}
 		MapPerProject map = mapPerProjectCache.get(project);
 		if (map == null) {
 			mapPerProjectCache.put(project, map = new MapPerProject(project));
