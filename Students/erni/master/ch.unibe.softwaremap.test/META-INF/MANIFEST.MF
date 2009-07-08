@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Softwaremap Tests
-Bundle-SymbolicName: ch.unibe.softwaremap.test
+Bundle-SymbolicName: org.codemap.test
 Bundle-Version: 1.0.0.qualifier
-Fragment-Host: ch.unibe.softwaremap
+Fragment-Host: org.codemap
 Require-Bundle: org.junit4;bundle-version="4.5.0",
  org.eclipse.jdt.launching;bundle-version="3.5.0"
 Bundle-ClassPath: lib/jexample-r285.jar,
