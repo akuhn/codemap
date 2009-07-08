@@ -5,8 +5,8 @@ Bundle-SymbolicName: org.codemap;singleton:=true
 Bundle-Version: 0.7.7.qualifier
 Bundle-Activator: ch.unibe.softwaremap.CodemapCore
 Require-Bundle: org.codemap.util,
- org.codemap.meander,
  ch.akuhn.hapax,
+ ch.deif.meander,
  org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
