@@ -61,14 +61,6 @@ public class EclipseProcessingBridge extends Composite {
 		mapFrame.repaint();
 	}
 
-	public void updateSelection(List<String> handleIdentifiers) {
-		// getApplet().updateSelection(handleIdentifiers); FIXME 
-	}
-
-	public void addSelection(List<String> handleIdentifiers) {
-		// getApplet().addSelection(handleIdentifiers); FIXME 
-	}	
-
 	public MeanderApplet getApplet() {
 		return applet;
 	}

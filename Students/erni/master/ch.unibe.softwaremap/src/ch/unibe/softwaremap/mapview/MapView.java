@@ -4,7 +4,6 @@ import static ch.unibe.softwaremap.util.ID.PACKAGE_EXPLORER;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
@@ -14,7 +13,6 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -54,7 +52,7 @@ import ch.unibe.softwaremap.CodemapCore;
 import ch.unibe.softwaremap.util.EclipseProcessingBridge;
 import ch.unibe.softwaremap.util.Log;
 
-// TODO factor out MeanderEventListener
+// TODO let MapController track the currently active project.
 public class MapView extends ViewPart {
 
 	public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
@@ -249,12 +247,6 @@ public class MapView extends ViewPart {
 	public void updateMapVisualization(MapVisualization viz) {
 		softwareMap().setMapVizualization(viz);
 	}
-	
-	public void addSelection(String handleIdentifier) {
-		List<String> list = new ArrayList<String>();
-		list.add(handleIdentifier);
-		softwareMap().addSelection(list);
-	}
 
 	public void newProjectMapAvailable(IProject project) {
 		if (!this.currentProject.equals(project)) return;
@@ -282,7 +274,7 @@ public class MapView extends ViewPart {
 		return bridge;
 	}
 
-	public void compilationUnitsSelected(IJavaProject javaProject, Collection<ICompilationUnit> units) {
+	public void onProjectSelectionChanged(IJavaProject javaProject) {
 		IProject project = javaProject.getProject();
 		if (project != currentProject) selectionTracker.theController.onProjectChanged();
 		currentProject = project;

@@ -38,7 +38,7 @@ public class MeanderSearchResultListener implements ISearchResultListener {
 
 			ICompilationUnit compilationUnit = (ICompilationUnit) javaElement.getAdapter(ICompilationUnit.class);
 			String ident = compilationUnit.getHandleIdentifier();
-			CodemapCore.getPlugin().getMapView().addSelection(ident);
+//			CodemapCore.getPlugin().getMapView().addSelection(ident);
 		}
 	}
 

@@ -61,9 +61,8 @@ public class MapController {
 		MapSelection selection = getCurrentSelection().clear();
 		for (ICompilationUnit each: units) {
 			selection.add(each.getHandleIdentifier());
-		}
-		// TODO: state that this is only changing the project 
-		view.compilationUnitsSelected(javaProject, units);
+		} 
+		view.onProjectSelectionChanged(javaProject);
 		redrawCodemap();
 	}
 	
@@ -99,7 +98,8 @@ public class MapController {
 		IJavaElement javaElement = editorEvent.getInput();
 		if (!(javaElement instanceof ICompilationUnit)) return;
 		
-		youAreHereChanged((ICompilationUnit)javaElement);
+		view.onProjectSelectionChanged(javaElement.getJavaProject());
+		youAreHereChanged((ICompilationUnit) javaElement);
 		log("-- editorActivated(" + editorEvent.getInput().getHandleIdentifier() + ")@");
 	}
 	
