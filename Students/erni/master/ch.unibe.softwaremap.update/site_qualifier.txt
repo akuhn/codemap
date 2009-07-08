@@ -4,16 +4,16 @@
       <category name="Codemap"/>
    </feature>
    <feature url="features/org.codemap.plugin.eclemma.feature_0.7.7.qualifier.jar" id="org.codemap.plugin.eclemma.feature" version="0.7.7.qualifier">
-      <category name="Codemap Eclemma Integration (optional)"/>
+      <category name="Codemap Plugins (optional)"/>
    </feature>
    <category-def name="Codemap" label="Codemap">
       <description>
          Software Cartography, your roadmap to software.
       </description>
    </category-def>
-   <category-def name="Codemap Eclemma Integration (optional)" label="Codemap Eclemma Integration (optional)">
+   <category-def name="Codemap Plugins (optional)" label="Codemap Plugins (optional)">
       <description>
-         Eclemma integration for Codemap.
+         Optional Codemap plugins.
       </description>
    </category-def>
 </site>
