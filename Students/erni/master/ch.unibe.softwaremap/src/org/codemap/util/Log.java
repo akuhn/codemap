@@ -1,10 +1,10 @@
-package ch.unibe.softwaremap.util;
+package org.codemap.util;
 
+import org.codemap.CodemapCore;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-import ch.unibe.softwaremap.CodemapCore;
 
 public class Log {
 

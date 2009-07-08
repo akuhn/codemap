@@ -1,4 +1,4 @@
-package ch.unibe.softwaremap.mapview;
+package org.codemap.mapview;
 
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;

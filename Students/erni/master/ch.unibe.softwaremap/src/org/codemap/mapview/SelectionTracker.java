@@ -1,9 +1,11 @@
-package ch.unibe.softwaremap.mapview;
+package org.codemap.mapview;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.codemap.util.EclipseUtil;
+import org.codemap.util.Log;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -18,8 +20,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 
-import ch.unibe.softwaremap.util.EclipseUtil;
-import ch.unibe.softwaremap.util.Log;
 
 public class SelectionTracker {
 	

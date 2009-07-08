@@ -1,11 +1,14 @@
-package ch.unibe.softwaremap.mapview;
+package org.codemap.mapview;
 
-import static ch.unibe.softwaremap.util.ID.PACKAGE_EXPLORER;
+import static org.codemap.util.ID.PACKAGE_EXPLORER;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.codemap.CodemapCore;
+import org.codemap.util.EclipseProcessingBridge;
+import org.codemap.util.Log;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -48,9 +51,6 @@ import ch.deif.meander.ui.MeanderApplet;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.visual.CurrentSelectionOverlay;
 import ch.deif.meander.visual.MapVisualization;
-import ch.unibe.softwaremap.CodemapCore;
-import ch.unibe.softwaremap.util.EclipseProcessingBridge;
-import ch.unibe.softwaremap.util.Log;
 
 // TODO let MapController track the currently active project.
 public class MapView extends ViewPart {

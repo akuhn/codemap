@@ -1,7 +1,9 @@
-package ch.unibe.softwaremap.builder;
+package org.codemap.builder;
 
 import java.util.Map;
 
+import org.codemap.CodemapCore;
+import org.codemap.util.Log;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
@@ -13,8 +15,6 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 
 import ch.akuhn.hapax.index.TermDocumentMatrix;
-import ch.unibe.softwaremap.CodemapCore;
-import ch.unibe.softwaremap.util.Log;
 
 /**
  * Creates TDM in the background.

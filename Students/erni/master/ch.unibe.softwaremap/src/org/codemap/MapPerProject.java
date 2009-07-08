@@ -1,5 +1,9 @@
-package ch.unibe.softwaremap;
+package org.codemap;
 
+import org.codemap.builder.HapaxBuilder;
+import org.codemap.builder.MapMakerBackgroundJob;
+import org.codemap.mapview.MapView;
+import org.codemap.util.Log;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -20,10 +24,6 @@ import ch.deif.meander.visual.MapVisualization;
 import ch.deif.meander.visual.OpenFilesOverlay;
 import ch.deif.meander.visual.YouAreHereOverlay;
 import ch.unibe.scg.util.Extension;
-import ch.unibe.softwaremap.builder.HapaxBuilder;
-import ch.unibe.softwaremap.builder.MapMakerBackgroundJob;
-import ch.unibe.softwaremap.mapview.MapView;
-import ch.unibe.softwaremap.util.Log;
 
 /**
  * Holds corpus, map and visualization of a project. Use this class to store project specific information.

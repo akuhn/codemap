@@ -1,10 +1,11 @@
-package ch.unibe.softwaremap.mapview;
+package org.codemap.mapview;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.codemap.CodemapCore;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
@@ -12,7 +13,6 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorReference;
 
 import ch.deif.meander.MapSelection;
-import ch.unibe.softwaremap.CodemapCore;
 
 public class MapController {
 	

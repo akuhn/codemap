@@ -1,4 +1,4 @@
-package ch.unibe.softwaremap.mapview;
+package org.codemap.mapview;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;

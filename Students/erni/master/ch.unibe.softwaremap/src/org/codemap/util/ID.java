@@ -1,4 +1,4 @@
-package ch.unibe.softwaremap.util;
+package org.codemap.util;
 
 public enum ID {
 	

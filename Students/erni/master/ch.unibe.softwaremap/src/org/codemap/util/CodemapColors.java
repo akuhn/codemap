@@ -1,4 +1,4 @@
-package ch.unibe.softwaremap.util;
+package org.codemap.util;
 
 import java.util.HashMap;
 import java.util.Map;

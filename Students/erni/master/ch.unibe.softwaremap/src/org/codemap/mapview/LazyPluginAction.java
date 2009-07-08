@@ -1,12 +1,12 @@
-package ch.unibe.softwaremap.mapview;
+package org.codemap.mapview;
 
+import org.codemap.util.Log;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
-import ch.unibe.softwaremap.util.Log;
 
 public class LazyPluginAction extends Action {
 	

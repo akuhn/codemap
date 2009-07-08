@@ -1,4 +1,4 @@
-package ch.unibe.softwaremap.search;
+package org.codemap.search;
 
 import org.eclipse.search.ui.IQueryListener;
 import org.eclipse.search.ui.ISearchQuery;

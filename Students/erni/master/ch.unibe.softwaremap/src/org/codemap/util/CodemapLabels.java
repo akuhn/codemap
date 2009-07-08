@@ -1,4 +1,4 @@
-package ch.unibe.softwaremap.util;
+package org.codemap.util;
 
 import ch.deif.meander.Point;
 import ch.deif.meander.util.MapScheme;

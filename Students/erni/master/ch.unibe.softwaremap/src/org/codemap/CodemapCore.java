@@ -1,8 +1,12 @@
-package ch.unibe.softwaremap;
+package org.codemap;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.codemap.mapview.MapView;
+import org.codemap.search.MeanderQueryListener;
+import org.codemap.util.CodemapColors;
+import org.codemap.util.CodemapLabels;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -10,10 +14,6 @@ import org.osgi.framework.BundleContext;
 
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.util.MapScheme;
-import ch.unibe.softwaremap.mapview.MapView;
-import ch.unibe.softwaremap.search.MeanderQueryListener;
-import ch.unibe.softwaremap.util.CodemapColors;
-import ch.unibe.softwaremap.util.CodemapLabels;
 
 /**
  * Single instance of the running Codemap plug-in.

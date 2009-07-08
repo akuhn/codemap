@@ -9,7 +9,7 @@
       <builder
             hasNature="false">
          <run
-               class="ch.unibe.softwaremap.builder.HapaxBuilder">
+               class="org.codemap.builder.HapaxBuilder">
          </run>
       </builder>
    </extension>
@@ -21,7 +21,7 @@
       </category>
       <view
             category="ch.unibe.softwaremap"
-            class="ch.unibe.softwaremap.mapview.MapView"
+            class="org.codemap.mapview.MapView"
             icon="icons/sample.gif"
             id="ch.unibe.softwaremap.MapView"
             name="Map View"
@@ -29,7 +29,7 @@
       </view>
       <view
             category="ch.unibe.softwaremap"
-            class="ch.unibe.softwaremap.util.SelectionView"
+            class="org.codemap.util.SelectionView"
             id="ch.unibe.softwaremap.SelectionView"
             name="Selection View"
             restorable="true">

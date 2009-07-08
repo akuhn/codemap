@@ -1,11 +1,11 @@
-package ch.unibe.softwaremap.util;
+package org.codemap.util;
 
 import java.net.URL;
 
+import org.codemap.CodemapCore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 
-import ch.unibe.softwaremap.CodemapCore;
 
 public class Icon {
 

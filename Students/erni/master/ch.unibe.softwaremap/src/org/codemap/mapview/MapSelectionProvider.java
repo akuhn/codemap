@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package ch.unibe.softwaremap.mapview;
+package org.codemap.mapview;
 
 import java.util.ArrayList;
 import java.util.List;

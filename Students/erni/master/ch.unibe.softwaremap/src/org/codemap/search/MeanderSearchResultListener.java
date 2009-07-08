@@ -1,8 +1,9 @@
-package ch.unibe.softwaremap.search;
+package org.codemap.search;
 
 import java.util.Arrays;
 import java.util.List;
 
+import org.codemap.CodemapCore;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -12,7 +13,6 @@ import org.eclipse.search.ui.SearchResultEvent;
 import org.eclipse.search.ui.text.Match;
 import org.eclipse.search.ui.text.MatchEvent;
 
-import ch.unibe.softwaremap.CodemapCore;
 
 public class MeanderSearchResultListener implements ISearchResultListener {
 

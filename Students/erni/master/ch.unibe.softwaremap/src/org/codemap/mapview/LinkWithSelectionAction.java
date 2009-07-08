@@ -1,8 +1,8 @@
-package ch.unibe.softwaremap.mapview;
+package org.codemap.mapview;
 
+import org.codemap.util.Icon;
 import org.eclipse.jface.action.Action;
 
-import ch.unibe.softwaremap.util.Icon;
 
 public class LinkWithSelectionAction extends Action {
 

@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Codemap plugin
 Bundle-SymbolicName: org.codemap;singleton:=true
 Bundle-Version: 0.7.7.qualifier
-Bundle-Activator: ch.unibe.softwaremap.CodemapCore
+Bundle-Activator: org.codemap.CodemapCore
 Require-Bundle: org.codemap.util,
  ch.akuhn.hapax,
  ch.deif.meander,
@@ -17,7 +17,7 @@ Require-Bundle: org.codemap.util,
  org.eclipse.search
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Adrian Kuhn and David Erni
-Export-Package: ch.unibe.softwaremap,
- ch.unibe.softwaremap.mapview,
- ch.unibe.softwaremap.util
+Export-Package: org.codemap,
+ org.codemap.mapview,
+ org.codemap.util
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

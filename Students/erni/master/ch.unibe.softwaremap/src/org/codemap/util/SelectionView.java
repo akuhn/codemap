@@ -1,7 +1,8 @@
-package ch.unibe.softwaremap.util;
+package org.codemap.util;
 
-import static ch.unibe.softwaremap.util.ID.PACKAGE_EXPLORER;
+import static org.codemap.util.ID.PACKAGE_EXPLORER;
 
+import org.codemap.CodemapCore;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IMarkSelection;
@@ -19,7 +20,6 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.part.PageBook;
 import org.eclipse.ui.part.ViewPart;
 
-import ch.unibe.softwaremap.CodemapCore;
 /**
  * This view simply mirrors the current selection in the workbench window. It works for both, element and text
  * selection.
