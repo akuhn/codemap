@@ -2,16 +2,16 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Codemap Eclemma Overlay
 Bundle-SymbolicName: org.codemap.plugin.eclemma;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 0.7.7.qualifier
 Bundle-Activator: org.codemap.plugin.eclemma.EclemmaOverlay
 Require-Bundle: org.codemap.meander,
  ch.akuhn.hapax,
  org.eclipse.ui,
  org.eclipse.core.runtime,
  com.mountainminds.eclemma.core;bundle-version="1.4.1",
- org.eclipse.jdt.core;bundle-version="3.5.0",
+ org.eclipse.jdt.core,
  ch.unibe.softwaremap,
- org.eclipse.core.resources;bundle-version="3.5.0",
+ org.eclipse.core.resources,
  org.codemap.util
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy

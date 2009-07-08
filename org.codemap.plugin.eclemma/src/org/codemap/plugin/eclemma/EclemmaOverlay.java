@@ -16,7 +16,7 @@ public class EclemmaOverlay extends AbstractUIPlugin {
 	// The shared instance
 	private static EclemmaOverlay plugin;
 
-	private static ShowCoverageAction showCoverageAction;
+	private ShowCoverageAction showCoverageAction;
 	private MeanderCoverageListener coverageListener;
 	
 	/**
@@ -53,15 +53,15 @@ public class EclemmaOverlay extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static EclemmaOverlay getDefault() {
+	public static EclemmaOverlay getPlugin() {
 		return plugin;
 	}
 
-	public static void registerCoverageAction(ShowCoverageAction action) {
+	public void registerCoverageAction(ShowCoverageAction action) {
 		showCoverageAction = action;
 	}
 
-	public static ShowCoverageAction getCoverageAction() {
+	public ShowCoverageAction getCoverageAction() {
 		return showCoverageAction;
 	}
 }
