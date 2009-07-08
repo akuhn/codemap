@@ -6,6 +6,9 @@ Bundle-Version: 0.7.7.qualifier
 Bundle-Activator: org.codemap.plugin.search.SearchOverlay
 Require-Bundle: org.codemap,
  org.eclipse.ui,
- org.eclipse.core.runtime
+ org.eclipse.core.runtime,
+ org.eclipse.search,
+ org.eclipse.core.resources,
+ org.eclipse.jdt.core
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

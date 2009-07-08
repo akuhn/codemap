@@ -1,5 +1,6 @@
 package org.codemap.plugin.search;
 
+import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -13,6 +14,8 @@ public class SearchOverlay extends AbstractUIPlugin {
 
 	// The shared instance
 	private static SearchOverlay plugin;
+
+	private MeanderQueryListener queryListener;
 	
 	/**
 	 * The constructor
@@ -27,6 +30,8 @@ public class SearchOverlay extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+		
+		registerQueryListener();
 	}
 
 	/*
@@ -36,6 +41,8 @@ public class SearchOverlay extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
 		super.stop(context);
+		
+		unregisterQueryListener();
 	}
 
 	/**
@@ -46,5 +53,15 @@ public class SearchOverlay extends AbstractUIPlugin {
 	public static SearchOverlay getPlugin() {
 		return plugin;
 	}
+	
+
+	private void registerQueryListener() {
+		queryListener = new MeanderQueryListener();
+		NewSearchUI.addQueryListener(queryListener);
+	}
+
+	private void unregisterQueryListener() {
+		NewSearchUI.removeQueryListener(queryListener);
+	}	
 
 }

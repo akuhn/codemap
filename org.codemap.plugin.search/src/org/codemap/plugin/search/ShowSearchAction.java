@@ -8,7 +8,6 @@ public class ShowSearchAction implements ICodemapPluginAction {
 	
 	private Action action;
 
-
 	@Override
 	public void run(Action act) {
 		action = act;
