@@ -2,13 +2,13 @@ package org.codemap.plugin.eclemma;
 
 import java.util.List;
 
+import org.codemap.CodemapCore;
+import org.codemap.mapview.ICodemapPluginAction;
+import org.codemap.util.CodemapColors;
 import org.eclipse.jface.action.Action;
 
 import ch.akuhn.util.Pair;
 import ch.deif.meander.util.MColor;
-import ch.unibe.softwaremap.CodemapCore;
-import ch.unibe.softwaremap.mapview.ICodemapPluginAction;
-import ch.unibe.softwaremap.util.CodemapColors;
 
 public class ShowCoverageAction implements ICodemapPluginAction {
 	

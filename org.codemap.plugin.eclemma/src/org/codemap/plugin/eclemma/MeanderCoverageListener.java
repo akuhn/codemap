@@ -15,9 +15,6 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
 import ch.akuhn.util.Pair;
-import ch.deif.meander.util.MColor;
-import ch.unibe.softwaremap.CodemapCore;
-import ch.unibe.softwaremap.util.CodemapColors;
 
 import com.mountainminds.eclemma.core.CoverageTools;
 import com.mountainminds.eclemma.core.analysis.IJavaCoverageListener;
