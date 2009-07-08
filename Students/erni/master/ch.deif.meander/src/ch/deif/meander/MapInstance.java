@@ -88,10 +88,7 @@ public class MapInstance {
 	}
 
 	public MapInstance normalizeElevation() {
-		double max = 0.0;
-		for (Location each: locations()) {
-			max = Math.max(max, each.getElevation());
-		}
+		double max = maxElevation();
 		if (max < 0.0) return this;
 		Collect<Location> query = Collect.from(locations);
 		for (Each<Location> each: query) {
@@ -261,6 +258,14 @@ public class MapInstance {
 			}
 		}
 		return nearestLocation;
+	}
+	
+	public double maxElevation() {
+		double max = 0.0;
+		for (Location each: locations()) {
+			max = Math.max(max, each.getElevation());
+		}
+		return max;
 	}
 	
 }
