@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
 import ch.akuhn.util.Pair;
+import ch.deif.meander.util.MColor;
 import ch.unibe.softwaremap.CodemapCore;
 import ch.unibe.softwaremap.util.CodemapColors;
 
@@ -45,7 +46,7 @@ public class MeanderCoverageListener implements IJavaCoverageListener {
 			String identifier = compilationUnit.getHandleIdentifier();
 			IJavaElementCoverage coverageInfo = CoverageTools.getCoverageInfo(compilationUnit);
 			if (coverageInfo == null) {
-				// for interfaces we do not have coverage information
+				// for interfaces where we do not have coverage information
 				return false;
 			}
 			identifiers.add(new Pair<String, Double>(identifier, coverageInfo.getLineCounter().getRatio()));
@@ -67,15 +68,29 @@ public class MeanderCoverageListener implements IJavaCoverageListener {
 //			System.out.println(coverageInfo.getMethodCounter().getRatio());
 			
 			List<Pair<String, Double>> coverageInfo = compilationUnitCoverage(each);
-			CoverageMapModifier coverageMod = new CoverageMapModifier(coverageInfo, EclemmaOverlay.getCoverageAction());
-			CodemapColors colorScheme = CodemapCore.getPlugin().getColorScheme();
-			coverageMod.addTo(colorScheme);
+			displayCoverage(coverageInfo);
 		}
 		if(! isEmptyCoverage) {
-			CodemapCore r = CodemapCore.getPlugin();
-			r.getMapView().updateMap(r);
+			CodemapCore.getPlugin().redrawCodemapBackground();
 		}
-			
+	}
+
+	private void displayCoverage(List<Pair<String, Double>> coverageInfo) {
+		ShowCoverageAction showCoverageAction = EclemmaOverlay.getCoverageAction();
+		CodemapColors colorScheme = CodemapCore.getPlugin().getColorScheme();
+		
+		if (showCoverageAction.isChecked()) {
+			for (Pair<String, Double> pair : coverageInfo) {
+				String identifier = pair.fst;
+				Double ratio = pair.snd;
+				int redVal = (int) ((1 - ratio) * 255);
+				int greenVal = (int) (ratio * 255);
+				MColor col = new MColor(redVal, greenVal, 0);
+				colorScheme.setColor(identifier, col);
+			}
+		} else {
+			colorScheme.clearColors();
+		}		
 	}
 
 	private List<Pair<String, Double>> compilationUnitCoverage(IJavaProject project) {
