@@ -21,7 +21,7 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>ch.unibe.softwaremap.HapaxBuilder</name>
+			<name>org.codemap.HapaxBuilder</name>
 			<arguments>
 			</arguments>
 		</buildCommand>
