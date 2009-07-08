@@ -46,6 +46,8 @@ public class ShowCoverageAction implements ICodemapPluginAction {
 	}
 
 	private void showCoverage() {
+		if (lastCoverageInfo == null) return;
+		
 		CodemapColors colorScheme = CodemapCore.getPlugin().getColorScheme();
 		for (Pair<String, Double> pair : lastCoverageInfo) {
 			String identifier = pair.fst;

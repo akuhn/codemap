@@ -55,6 +55,8 @@ public class MeanderCoverageListener implements IJavaCoverageListener {
 	@Override
 	public void coverageChanged() {
 		IJavaModelCoverage coverage = CoverageTools.getJavaModelCoverage();
+		if (coverage == null) return;
+		
 		List<IJavaProject> projects = Arrays.asList(coverage.getInstrumentedProjects());
 		for(IJavaProject each: projects) {
 			if (! each.isOpen()) continue;

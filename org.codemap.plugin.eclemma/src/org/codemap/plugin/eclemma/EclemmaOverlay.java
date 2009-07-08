@@ -34,8 +34,6 @@ public class EclemmaOverlay extends AbstractUIPlugin {
 		plugin = this;
 		
 		coverageListener = new MeanderCoverageListener();
-		// call it on plug-in startup to load a coverage report if there is any.
-//		coverageListener.coverageChanged();
 		CoverageTools.addJavaCoverageListener(coverageListener);
 	}
 
@@ -58,9 +56,18 @@ public class EclemmaOverlay extends AbstractUIPlugin {
 	public static EclemmaOverlay getPlugin() {
 		return plugin;
 	}
-
+	
+	/**
+	 * Called from the ShowCoverageAction constructor. The ShowCoverageAction is 
+	 * part of an extension point and is called at an unknown point in time.
+	 * 
+	 * @param action
+	 */
 	public void registerCoverageAction(ShowCoverageAction action) {
 		showCoverageAction = action;
+		// check if there is already a coverage report loaded. if it is, the 
+		// coverage will be displayed.
+		coverageListener.coverageChanged();
 	}
 
 	public ShowCoverageAction getCoverageAction() {
