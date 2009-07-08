@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
     <extension
-          point="ch.unibe.softwaremap.mapview">
+          point="org.codemap.mapview">
        <toolbar
              class="org.codemap.plugin.eclemma.ShowCoverageAction"
              icon="icons/eclipse/coverage.gif"

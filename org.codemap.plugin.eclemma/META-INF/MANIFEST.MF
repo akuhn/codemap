@@ -4,14 +4,14 @@ Bundle-Name: Codemap Eclemma Overlay
 Bundle-SymbolicName: org.codemap.plugin.eclemma;singleton:=true
 Bundle-Version: 0.7.7.qualifier
 Bundle-Activator: org.codemap.plugin.eclemma.EclemmaOverlay
-Require-Bundle: org.codemap.meander,
+Require-Bundle: org.codemap.util,
  ch.akuhn.hapax,
+ ch.deif.meander,
+ org.codemap,
  org.eclipse.ui,
  org.eclipse.core.runtime,
  com.mountainminds.eclemma.core;bundle-version="1.4.1",
  org.eclipse.jdt.core,
- org.codemap,
- org.eclipse.core.resources,
- org.codemap.util
+ org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
