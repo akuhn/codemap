@@ -315,4 +315,8 @@ public class MapView extends ViewPart {
 		theApplet.redraw();
 	}
 
+	public void redrawCodemapBackground() {
+		theApplet.redrawBackground(true);
+	}
+
 }

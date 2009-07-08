@@ -28,12 +28,12 @@ import ch.deif.meander.visual.WaterVisualization;
  */
 public class Meander {
 
-	private static class MyVisualizationBuilder implements VisualizationBuilder {
+	private static class MeanderVizBuilder implements VisualizationBuilder {
 		
 		private Composite<Layer> layers;
 		private HillshadeVisualization hillShade;
 
-		public MyVisualizationBuilder() {
+		public MeanderVizBuilder() {
 			layers = new Composite<Layer>();
 			hillShade = new HillshadeVisualization();
 			Background bg = new Background();
@@ -69,8 +69,7 @@ public class Meander {
 		}
 	}
 
-
-	private static final class MapBuilderImplementation implements MapBuilder {
+	private static final class MeanderMapBuilder implements MapBuilder {
 		private Hapax hapax = null;
 
 		@Override
@@ -96,13 +95,11 @@ public class Meander {
 		}
 	}
 
-
 	public static MapBuilder builder() {
-		return new MapBuilderImplementation();
+		return new MeanderMapBuilder();
 	}
 	
-	
 	public static VisualizationBuilder visualization() {
-		return new MyVisualizationBuilder();
+		return new MeanderVizBuilder();
 	}
 }

@@ -1,7 +1,6 @@
 package ch.deif.meander.visual;
 
 import java.applet.Applet;
-import java.awt.event.MouseEvent;
 import java.io.File;
 
 import javax.swing.JFrame;
@@ -18,7 +17,6 @@ public class MapVisualization {
 	private MapInstance map;
 	private Layer visual;
 	private boolean redraw = true;
-	private MouseEvent oldMouseEvent;
 
 	public MapVisualization(MapInstance map, Layer visual) {
 		assert map != null;

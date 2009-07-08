@@ -125,4 +125,9 @@ public class CodemapCore extends AbstractUIPlugin {
 		getMapView().redraw();
 	}
 	
+	public void redrawCodemapBackground() {
+		getMapView().redrawCodemapBackground();
+		getMapView().redraw();
+	}
+	
 }

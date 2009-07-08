@@ -12,6 +12,11 @@ public class Background extends Composite<Layer> {
 
 	@Override
 	public void draw(MapInstance map, PGraphics pg, MeanderApplet pa) {
+		if (pa.needsRedrawBackground()) {
+			// force redraw
+			background = null;
+			pa.redrawBackground(false);
+		}
 		if (pg instanceof PGraphicsJava2D) drawOnJava2D(map, (PGraphicsJava2D) pg);
 		else this.drawChildren(map, pg, pa);
 	}

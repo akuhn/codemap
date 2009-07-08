@@ -8,6 +8,7 @@ public class MeanderApplet extends PApplet {
 
 	private MapVisualization viz;
 	private CodemapEventRegistry events;
+	private boolean redrawBG = false;
 
 	public MeanderApplet() {
 		events = new CodemapEventRegistry();
@@ -19,6 +20,14 @@ public class MeanderApplet extends PApplet {
 		// we might be called during initialization when we do not have a visualization yet.
 		if (viz == null) return;
 		viz.redraw();
+	}
+	
+	public void redrawBackground(boolean redraw) {
+		redrawBG  = redraw;
+	}
+	
+	public boolean needsRedrawBackground() {
+		return redrawBG;
 	}
 
 	public void addListener(CodemapListener listener) {
