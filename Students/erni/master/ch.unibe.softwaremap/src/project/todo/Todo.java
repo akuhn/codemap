@@ -5,33 +5,32 @@ enum Todo {
 
 	// TODO TESTS! TESTS! TEST!
 	
-	// TODO View: define toolbar buttons / actions to toggle overlays (ie search, coverage)
 	// TODO View: define toolbar pull-down manu actions
 	// TODO View: define a filter to eg just show one package
 	// TODO View: can we provide a context menu? ^^
 	
 	// TODO Map: show shores of entire map but only selected elevations
-	// TODO Map: use a more visible selection (what would apple do?)
 	
-	// TODO listen to size-changes of the whole shell (currently the map does not get updated when the whole shell changes its size)
-	// TODO ^^ same for maximize buttons on mac, currently there is no redraw on maximize
+	// TODO for maximize buttons on mac, currently there is no redraw on maximize
 	// TODO check MDS performance
 	// TODO refresh map while editing
-	// TODO color overlay
 	// TODO evaluate further eclipse integration
 	// TODO search on the map
 	
 	// TODO polymetric views overlay
 	// TODO overlays (eclipse search results)
-	// TODO overlays (unitTests)
-	// TODO overlays (eclemma)	
-	// TODO overlays (metrics)
-	
-	// TODO cleanup the map-width definition again 
-	
+	// TODO overlays (unitTests)	
+	// TODO overlays (metrics) 
 }
 
 enum Done {
+
+	// DONE cleanup the map-width definition again
+	// DONE overlays (eclemma)	
+	// DONE color overlay	
+	// DONE listen to size-changes of the whole shell (currently the map does not get updated when the whole shell changes its size)	
+	// DONE Map: use a more visible selection (what would apple do?)	
+	// DONE View: define toolbar buttons / actions to toggle overlays (ie search, coverage)	
 	
 	// DONE Map: drop shadow for labels / decorations
 	// DONE Map: use white font to write labels
