@@ -77,55 +77,20 @@ public class CurrentSelectionOverlay extends MapSelectionOverlay {
 		pg.rect(dragStart.x, dragStart.y, deltaX, deltaY);
 	}
 
-	// @Override
-	// public void mouseClicked(MouseEvent e) {
-	//		
-	// Point point = e.getPoint();
-	// if (!e.isControlDown()) {
-	// clearPoints();
-	// }
-	// if (e.getClickCount() == 2) {
-	// NearestNeighbor nn = new MaxDistNearestNeighbor(getMap(), getWidth() /
-	// 10).forLocation(point);
-	// if (nn.hasResult()) {
-	// addSelection(nn.point());
-	// events().doubleClicked(nn.location());
-	// }
-	// } else if (e.getButton() == MouseEvent.BUTTON1) {
-	// // button1 is 1st mouse button
-	// NearestNeighbor nn = new MaxDistNearestNeighbor(getMap(), getWidth() /
-	// 10).forLocation(point);
-	// if (nn.hasResult()) {
-	// addSelection(nn.point());
-	// events().selectionChanged(nn.location());
-	// }
-	// } else if (e.getButton() == MouseEvent.BUTTON3) {
-	// // button3 is 2nd mouse button
-	// NearestNeighbor nn = new NearestNeighbor(getMap()).forLocation(point);
-	// addSelection(nn.point());
-	// events().selectionChanged(nn.location());
-	// }
-	// unsetSelectionBox();
-	// }
-
 	private void updateSelection(MapInstance map) {
+		int minX = Math.min(dragStart.x, dragStop.x);
+		int minY = Math.min(dragStart.y, dragStop.y);
+		int maxX = Math.max(dragStart.x, dragStop.x);
+		int maxY = Math.max(dragStart.y, dragStop.y);		
+		
+		
 		Collection<String> ids = new ArrayList<String>();
 		for (Location each : map.locations()) {
-			if (each.px < dragStop.x && each.px > dragStart.x &&
-					each.py < dragStop.y && each.py > dragStart.y) {
+			if (each.px < maxX && each.px > minX && each.py < maxY && each.py > minY) {			
 				ids.add(each.getIdentifier());
 			}
 		}
 		getSelection().replaceWith(ids);
-	}
-
-	private void ensureDragPointOrder() {
-		int minX = Math.min(dragStart.x, dragStop.x);
-		int minY = Math.min(dragStart.y, dragStop.y);
-		int maxX = Math.max(dragStart.x, dragStop.x);
-		int maxY = Math.max(dragStart.y, dragStop.y);
-		dragStart = new Point(minX, minY);
-		dragStop = new Point(maxX, maxY);
 	}
 
 	@Override
