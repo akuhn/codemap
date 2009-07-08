@@ -10,7 +10,7 @@ Require-Bundle: org.codemap.meander,
  org.eclipse.core.runtime,
  com.mountainminds.eclemma.core;bundle-version="1.4.1",
  org.eclipse.jdt.core,
- ch.unibe.softwaremap,
+ org.codemap,
  org.eclipse.core.resources,
  org.codemap.util
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

@@ -4,6 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ch.deif.meander"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ch.unibe.softwaremap"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.codemap"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
