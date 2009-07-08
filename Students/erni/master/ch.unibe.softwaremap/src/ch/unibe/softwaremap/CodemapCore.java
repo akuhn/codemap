@@ -120,5 +120,9 @@ public class CodemapCore extends AbstractUIPlugin {
 	public CodemapColors getColorScheme() {
 		return colorScheme;
 	}
+
+	public void redrawCodemap() {
+		getMapView().redraw();
+	}
 	
 }

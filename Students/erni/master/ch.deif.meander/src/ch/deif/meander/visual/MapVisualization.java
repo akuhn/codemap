@@ -17,7 +17,7 @@ public class MapVisualization {
 
 	private MapInstance map;
 	private Layer visual;
-	private boolean refresh = true;
+	private boolean redraw = true;
 	private MouseEvent oldMouseEvent;
 
 	public MapVisualization(MapInstance map, Layer visual) {
@@ -25,6 +25,10 @@ public class MapVisualization {
 		assert visual != null;
 		this.map = map;
 		this.visual = visual;
+	}
+	
+	public void redraw() {
+		redraw = true;
 	}
 
 	public void openApplet() {
@@ -63,8 +67,8 @@ public class MapVisualization {
 	public void draw(PGraphics pg, MeanderApplet pa) {
 		assert map.width == pg.width : "Width mismatch (map vs P5): " + map.width + " vs " + pg.width;
 		assert map.height == pg.height;
-		if (!refresh && pa != null && pa.mouseEvent == null) return;
-		refresh  = false; 
+		if (!redraw && pa != null && pa.mouseEvent == null) return;
+		redraw  = false; 
 		long nano = System.nanoTime();
 		visual.draw(map, pg, pa);
 		pa.mouseEvent = null; // Don't remove this line, we depend in this!

@@ -11,6 +11,14 @@ public class MeanderApplet extends PApplet {
 
 	public MeanderApplet() {
 		events = new CodemapEventRegistry();
+	}	
+
+	@Override
+	public synchronized void redraw() {
+		super.redraw();
+		// we might be called during initialization when we do not have a visualization yet.
+		if (viz == null) return;
+		viz.redraw();
 	}
 
 	public void addListener(CodemapListener listener) {

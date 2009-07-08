@@ -311,4 +311,8 @@ public class MapView extends ViewPart {
 		codemapCore.mapForProject(getCurrentProject()).updateMap();
 	}
 
+	public void redraw() {
+		theApplet.redraw();
+	}
+
 }

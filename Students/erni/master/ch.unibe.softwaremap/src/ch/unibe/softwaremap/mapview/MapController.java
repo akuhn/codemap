@@ -62,26 +62,24 @@ public class MapController {
 		for (ICompilationUnit each: units) {
 			selection.add(each.getHandleIdentifier());
 		}
+		// TODO: state that this is only changing the project 
 		view.compilationUnitsSelected(javaProject, units);
+		redrawCodemap();
 	}
 	
 	public void onEditorOpened(EditorEvent editorEvent) {
 		if (! editorEvent.hasInput()) return;
-
 		IJavaElement javaElement = editorEvent.getInput();
 		if (!(javaElement instanceof ICompilationUnit)) return;		
-		// TODO merge this with other methods
 		
-		compilationUnitOpen((ICompilationUnit)javaElement);
+		compilationUnitOpened((ICompilationUnit)javaElement);
 		log("-- editorOpened(" + editorEvent.getInput().getHandleIdentifier() + ")@");
 	}
 
 	public void onEditorClosed(EditorEvent editorEvent) {
 		if (! editorEvent.hasInput()) return;
-		
 		IJavaElement javaElement = editorEvent.getInput();
 		if (!(javaElement instanceof ICompilationUnit)) return;		
-		// TODO merge this with other methods
 		
 		compilationUnitClosed((ICompilationUnit)javaElement);
 		log("-- editorClosed(" + editorEvent.getInput().getHandleIdentifier() + ")@");
@@ -102,7 +100,6 @@ public class MapController {
 		if (!(javaElement instanceof ICompilationUnit)) return;
 		
 		youAreHereChanged((ICompilationUnit)javaElement);
-//		view.updateVisualization();
 		log("-- editorActivated(" + editorEvent.getInput().getHandleIdentifier() + ")@");
 	}
 	
@@ -129,28 +126,31 @@ public class MapController {
 		
 		for(IJavaProject each: selections.keySet()) {
 			Set<ICompilationUnit> units = selections.get(each);
-			compilationUnitsOpen(units);				
+			compilationUnitsOpened(units);				
 		}
 		log("-- firstEditorEvent@");
 	}
 	
 	private void youAreHereChanged(ICompilationUnit unit) {
 		getYouAreHereSelection().clear().add(unit.getHandleIdentifier());
+		redrawCodemap();
 	}	
 
-	private void compilationUnitsOpen(Set<ICompilationUnit> units) {
+	private void compilationUnitsOpened(Set<ICompilationUnit> units) {
 		for(ICompilationUnit unit: units) {
-			compilationUnitOpen(unit);
+			compilationUnitOpened(unit);
 		}
 	}
 	
-	private void compilationUnitOpen(ICompilationUnit unit) {
+	private void compilationUnitOpened(ICompilationUnit unit) {
 		getOpenFilesSelection().add(unit.getHandleIdentifier());
+		redrawCodemap();
 	}
 	
 	private void compilationUnitClosed(ICompilationUnit unit) {
 		getYouAreHereSelection().remove(unit.getHandleIdentifier());
 		getOpenFilesSelection().remove(unit.getHandleIdentifier());
+		redrawCodemap();
 	}	
 
 	private Set<ICompilationUnit> getUnitsForProject(HashMap<IJavaProject,Set<ICompilationUnit>> selections, IJavaProject javaProject) {
@@ -177,5 +177,9 @@ public class MapController {
 	private MapSelection getCurrentSelection() {
 		return CodemapCore.getPlugin().getCurrentSelection();
 	}
+
+	private void redrawCodemap() {
+		CodemapCore.getPlugin().redrawCodemap();
+	}	
 
 }

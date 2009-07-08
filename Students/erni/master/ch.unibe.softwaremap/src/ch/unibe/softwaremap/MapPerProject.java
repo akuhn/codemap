@@ -121,6 +121,7 @@ public class MapPerProject {
 
 	public void updateMap() {
 		if (mapBeingCalculated) return;
+		mapViz.redraw();
 		startBackgroundTask();
 	}
 
