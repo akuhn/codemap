@@ -3,8 +3,9 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Codemap Search Overlay
 Bundle-SymbolicName: org.codemap.plugin.search;singleton:=true
 Bundle-Version: 0.7.7.qualifier
-Bundle-Activator: org.codemap.plugin.search.SearchOverlay
-Require-Bundle: org.codemap,
+Bundle-Activator: org.codemap.plugin.search.SearchPluginCore
+Require-Bundle: ch.deif.meander,
+ org.codemap,
  org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.search,

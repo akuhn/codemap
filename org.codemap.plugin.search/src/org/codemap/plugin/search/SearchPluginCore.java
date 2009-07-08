@@ -1,26 +1,33 @@
 package org.codemap.plugin.search;
 
+import org.codemap.CodemapCore;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import ch.deif.meander.MapSelection;
+
 /**
  * The activator class controls the plug-in life cycle
  */
-public class SearchOverlay extends AbstractUIPlugin {
+public class SearchPluginCore extends AbstractUIPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "org.codemap.plugin.search";
 
 	// The shared instance
-	private static SearchOverlay plugin;
+	private static SearchPluginCore plugin;
 
 	private MeanderQueryListener queryListener;
+
+	private SearchResultsOverlay searchResultsOverlay;
+
+	private MapSelection searchSelection;
 	
 	/**
 	 * The constructor
 	 */
-	public SearchOverlay() {
+	public SearchPluginCore() {
 	}
 
 	/*
@@ -32,6 +39,10 @@ public class SearchOverlay extends AbstractUIPlugin {
 		plugin = this;
 		
 		registerQueryListener();
+		searchSelection = new MapSelection();
+		searchResultsOverlay = new SearchResultsOverlay();
+		searchResultsOverlay.setSelection(searchSelection);
+		CodemapCore.getPlugin().addLayer(searchResultsOverlay);
 	}
 
 	/*
@@ -40,9 +51,15 @@ public class SearchOverlay extends AbstractUIPlugin {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		plugin = null;
-		super.stop(context);
-		
+		CodemapCore.getPlugin().removeLayer(searchResultsOverlay);
+		searchResultsOverlay = null;
+		searchSelection = null;
 		unregisterQueryListener();
+		super.stop(context);
+	}
+	
+	public MapSelection getSearchSelection() {
+		return searchSelection;
 	}
 
 	/**
@@ -50,7 +67,7 @@ public class SearchOverlay extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static SearchOverlay getPlugin() {
+	public static SearchPluginCore getPlugin() {
 		return plugin;
 	}
 	
