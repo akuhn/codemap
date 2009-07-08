@@ -18,6 +18,7 @@ import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.builder.Meander;
+import ch.deif.meander.visual.Composite;
 import ch.deif.meander.visual.CurrentSelectionOverlay;
 import ch.deif.meander.visual.Layer;
 import ch.deif.meander.visual.MapVisualization;
@@ -147,6 +148,7 @@ public class MapPerProject {
 					.withSelection(new CurrentSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
 					.withSelection(new OpenFilesOverlay(), CodemapCore.getPlugin().getOpenFilesSelection())
 					.withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())
+					.appendLayer(CodemapCore.getPlugin().getDynamicLayer())
 					.makeLayer();
 		}
 

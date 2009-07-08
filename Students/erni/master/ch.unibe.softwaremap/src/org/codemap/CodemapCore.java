@@ -1,3 +1,4 @@
+
 package org.codemap;
 
 import java.util.HashMap;
@@ -6,12 +7,14 @@ import java.util.Map;
 import org.codemap.mapview.MapView;
 import org.codemap.util.CodemapColors;
 import org.codemap.util.CodemapLabels;
+import org.codemap.util.DynamicCodemapLayer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.util.MapScheme;
+import ch.deif.meander.visual.Layer;
 
 /**
  * Single instance of the running Codemap plug-in.
@@ -36,6 +39,7 @@ public class CodemapCore extends AbstractUIPlugin {
 	private final MapSelection currentSelection;
 	private final MapScheme<String> labelScheme;
 	private final CodemapColors colorScheme;
+	private DynamicCodemapLayer dynamicMapLayer;
 	
 
 	public MapSelection getYouAreHereSelection() {
@@ -57,6 +61,7 @@ public class CodemapCore extends AbstractUIPlugin {
 		currentSelection = new MapSelection();
 		labelScheme = new CodemapLabels();	
 		colorScheme = new CodemapColors();
+		dynamicMapLayer = new DynamicCodemapLayer();
 	}
 
 	@Override
@@ -112,6 +117,18 @@ public class CodemapCore extends AbstractUIPlugin {
 	public void redrawCodemapBackground() {
 		getMapView().redrawCodemapBackground();
 		getMapView().redraw();
+	}
+
+	public void addLayer(Layer layer) {
+		dynamicMapLayer.append(layer);
+	}
+
+	public void removeLayer(Layer layer) {
+		dynamicMapLayer.remove(layer);
+	}
+
+	protected Layer getDynamicLayer() {
+		return dynamicMapLayer;
 	}
 	
 }

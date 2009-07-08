@@ -64,8 +64,14 @@ public class Meander {
 		}
 
 		@Override
-		public Layer makeLayer() {
+		public Composite<Layer> makeLayer() {
 			return layers;
+		}
+
+		@Override
+		public VisualizationBuilder appendLayer(Layer anotherLayer) {
+			layers.append(anotherLayer);
+			return this;
 		}
 	}
 

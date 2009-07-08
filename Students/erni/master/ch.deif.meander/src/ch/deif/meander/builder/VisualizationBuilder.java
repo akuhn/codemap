@@ -16,4 +16,6 @@ public interface VisualizationBuilder {
 
 	Layer makeLayer();
 
+	VisualizationBuilder appendLayer(Layer dynamicLayer);
+
 }
