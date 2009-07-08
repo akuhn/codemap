@@ -50,4 +50,8 @@ public class Composite<E extends Layer> extends Layer implements Iterable<E> {
 		return children.iterator();
 	}
 	
+	public void remove(E element) {
+		children.remove(element);
+	}
+	
 }
