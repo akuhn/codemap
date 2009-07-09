@@ -31,7 +31,7 @@ public class ComparisonTest {
 	@Test
 	public void testSameOutput() throws IOException {
 		File file = new File("primitive_rand-hitmds/genes_endo_4824_result.dat");
-		assertTrue(file.exists());
+		assertTrue("File missing!",file.exists());
 		Scanner scanner = new Scanner(file);
 		assertTrue(scanner.nextLine().startsWith("#"));
 		assertTrue(scanner.nextLine().startsWith("#"));

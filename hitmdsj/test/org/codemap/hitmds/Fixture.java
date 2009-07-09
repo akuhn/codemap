@@ -11,6 +11,9 @@ public class Fixture {
 	public static String ZIPFILE = "lib/hitmds2.zip";
 	public static final int NOF_LINES = 4824;
 
+	public static double[][] genesEndo() {
+		return genesEndo(NOF_LINES);
+	}
 	
 	public static double[][] genesEndo(int maxLines) {
 		try {
