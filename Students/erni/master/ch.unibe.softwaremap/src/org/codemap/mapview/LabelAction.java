@@ -19,8 +19,8 @@ class LabelAction extends Action {
 	
 	public static class NoLabelAction extends LabelAction {
 
-		public NoLabelAction(String text) {
-			super(text);
+		public NoLabelAction() {
+			super("No Labels");
 		}
 
 		@Override
@@ -33,8 +33,9 @@ class LabelAction extends Action {
 	
 	public static class IdentifierLabelAction extends LabelAction {
 
-		public IdentifierLabelAction(String text) {
-			super(text);
+		public IdentifierLabelAction() {
+			super("Class Name");
+			setChecked(true);
 		}
 
 		@Override
@@ -47,8 +48,8 @@ class LabelAction extends Action {
 	
 	public static class LogLHLabelAction extends LabelAction {
 
-		public LogLHLabelAction(String text) {
-			super(text);
+		public LogLHLabelAction() {
+			super("Log-likelihood");
 		}
 
 		@Override

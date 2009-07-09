@@ -195,39 +195,8 @@ public class MapView extends ViewPart {
 	    IToolBarManager tbm = getToolBarManager();
 	    tbm.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	    tbm.add(new Separator());
-	    tbm.add(new LinkWithSelectionAction(selectionTracker));
-	    
-	    IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CodemapCore.PLUGIN_ID, "mapview");
-	    IExtension[] extensions_arr = extensionPoint.getExtensions();
-	    List<IExtension> extensions = Arrays.asList(extensions_arr);
-	    for (IExtension extension: extensions) {
-	    	parseConfig(extension.getConfigurationElements(), tbm);
-	    }
-	    
-	    IMenuManager mm = getMenuManager();
-	    MenuManager labelManager = new MenuManager("Labels");
-	    LabelAction classNameAction = new LabelAction.IdentifierLabelAction("Class Name");
-	    classNameAction.setChecked(true);
-	    labelManager.add(classNameAction);
-	    labelManager.add(new LabelAction.LogLHLabelAction("Log-likelihood"));
-	    labelManager.add(new LabelAction.NoLabelAction("No Labels"));	    
-	    mm.add(labelManager);
-	    
-//	    mm.add(new SelectEntryModeAction(ViewSettings.ENTRYMODE_PROJECTS, settings,
-//	        this));
-//	    mm.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));	    
-	    
-	}
-	
-	private IMenuManager getMenuManager() {
-		return getViewSite().getActionBars().getMenuManager();
-	}
-
-	private void parseConfig(IConfigurationElement[] configurationElements, IToolBarManager tbm) {
-		List<IConfigurationElement> configelems = Arrays.asList(configurationElements);
-		for (IConfigurationElement each: configelems) {
-			tbm.add(new LazyPluginAction(each));
-		}
+	    tbm.add(new LayerDropDownAction(selectionTracker));
+	    tbm.add(new LabelDrowDownAction());
 	}
 
 	public IToolBarManager getToolBarManager() {

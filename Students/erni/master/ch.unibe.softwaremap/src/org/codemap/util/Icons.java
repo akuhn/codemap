@@ -7,10 +7,12 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 
 
-public class Icon {
+public class Icons {
 
-	public static final String LINKED = "icons/eclipse/linked.gif";
-	public static final String CATEGORY = "icons/eclipse/category.gif";	
+	private static final String DIR_PREFIX = "icons/eclipse/";
+	public static final String LINKED = DIR_PREFIX + "linked.gif";
+	public static final String LAYERS = DIR_PREFIX + "layers.gif";	
+	public static final String LABELS = DIR_PREFIX + "labels.gif";
 
 	public static ImageDescriptor getImageDescriptor(String key) {
 		return loadImage(key).getDescriptor(key);
