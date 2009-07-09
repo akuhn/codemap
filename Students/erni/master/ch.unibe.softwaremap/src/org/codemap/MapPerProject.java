@@ -133,15 +133,17 @@ public class MapPerProject {
 	public IStatus makeMap(IProgressMonitor monitor) {
 		if (mapBeingCalculated) return Status.OK_STATUS;
 		mapBeingCalculated = true;
-		monitor.beginTask("Making map", 5);
+		monitor.beginTask("Making map", 50);
 		if (hapax == null) {
 			hapax = Hapax.legomenon()
 					.addCorpus(tdm)
 					.closeCorpus()
 					.createIndex();
+			monitor.worked(10);
 			configuration = Meander.builder()
 					.addCorpus(hapax)
 					.makeMap();
+			monitor.worked(5);
 			layer = Meander.visualization()
 					.withLabels(CodemapCore.getPlugin().getLabelScheme())
 					.withColors(CodemapCore.getPlugin().getColorScheme())
@@ -150,9 +152,13 @@ public class MapPerProject {
 					.withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())
 					.appendLayer(CodemapCore.getPlugin().getSharedLayer())
 					.makeLayer();
+			monitor.worked(5);
+		} else {
+			monitor.worked(20);
 		}
 
 		mapViz = new MapVisualization(configuration.withSize(mapSize), layer);
+		monitor.worked(20);
 
 		// mapViz = Meander(hapax)
 		// .makeMap(mapSize)
