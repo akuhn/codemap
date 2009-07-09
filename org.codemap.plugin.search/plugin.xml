@@ -6,7 +6,7 @@
        <toolbar
              class="org.codemap.plugin.search.ShowSearchAction"
              icon="icons/eclipse/search.gif"
-             text="Link with Search Results">
+             text="Show Search Results">
        </toolbar>
     </extension>
 

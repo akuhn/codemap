@@ -6,7 +6,7 @@
        <toolbar
              class="org.codemap.plugin.eclemma.ShowCoverageAction"
              icon="icons/eclipse/coverage.gif"
-             text="Link with Coverage">
+             text="Show Coverage">
        </toolbar>
     </extension>
 
