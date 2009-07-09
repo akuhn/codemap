@@ -3,10 +3,11 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Meander (software cartography)
 Bundle-SymbolicName: ch.deif.meander
 Bundle-Version: 0.7.7.qualifier
-Bundle-Vendor: David Erni et al
+Bundle-Vendor: David Erni and Adrian Kuhn
 Require-Bundle: 
  org.codemap.util,
- ch.akuhn.hapax
+ ch.akuhn.hapax,
+ org.eclipse.swt;bundle-version="3.4.0"
 Export-Package: 
  ch.deif.meander,
  ch.deif.meander.builder,
@@ -16,7 +17,5 @@ Export-Package:
  processing.core
 Bundle-ClassPath: .,
  lib/core.jar,
- lib/itext.jar,
- lib/pdf.jar,
  lib/hitmds2-r000.jar
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

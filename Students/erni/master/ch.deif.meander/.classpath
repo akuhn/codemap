@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry exported="true" kind="lib" path="lib/hitmds2-r000.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ch.akuhn.util"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
@@ -9,7 +8,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/core.jar" sourcepath="lib/core.zip"/>
 	<classpathentry exported="true" kind="lib" path="lib/itext.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/pdf.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ch.akuhn.hapax"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
