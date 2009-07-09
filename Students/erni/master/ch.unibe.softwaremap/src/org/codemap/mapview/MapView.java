@@ -19,8 +19,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
@@ -69,15 +67,6 @@ public class MapView extends ViewPart {
 	private MeanderApplet theApplet;
 	private final MapController theController;
 	private int currentSize;
-	
-	private static class MyAction extends Action {
-		
-		public MyAction(String text) {
-			super(text, IAction.AS_RADIO_BUTTON);
-		}
-		
-		
-	}
 	
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 		public String getColumnText(Object obj, int index) {
@@ -217,10 +206,11 @@ public class MapView extends ViewPart {
 	    
 	    IMenuManager mm = getMenuManager();
 	    MenuManager labelManager = new MenuManager("Labels");
-	    MyAction classNameAction = new MyAction("Class Name");
+	    LabelAction classNameAction = new LabelAction.IdentifierLabelAction("Class Name");
 	    classNameAction.setChecked(true);
 	    labelManager.add(classNameAction);
-	    labelManager.add(new MyAction("Log-likelihood"));
+	    labelManager.add(new LabelAction.LogLHLabelAction("Log-likelihood"));
+	    labelManager.add(new LabelAction.NoLabelAction("No Labels"));	    
 	    mm.add(labelManager);
 	    
 //	    mm.add(new SelectEntryModeAction(ViewSettings.ENTRYMODE_PROJECTS, settings,

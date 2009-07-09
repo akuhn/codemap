@@ -13,7 +13,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import ch.deif.meander.MapSelection;
-import ch.deif.meander.util.MapScheme;
 import ch.deif.meander.visual.Layer;
 
 /**
@@ -37,7 +36,7 @@ public class CodemapCore extends AbstractUIPlugin {
 	private final MapSelection youAreHereSelection;
 	private final MapSelection openFilesSelection;
 	private final MapSelection currentSelection;
-	private final MapScheme<String> labelScheme;
+	private final CodemapLabels labelScheme;
 	private final CodemapColors colorScheme;
 	private SharedCodemapLayer sharedLayer;
 	
@@ -102,7 +101,7 @@ public class CodemapCore extends AbstractUIPlugin {
 		return theView;
 	}
 	
-	public MapScheme<String> getLabelScheme() {
+	public CodemapLabels getLabelScheme() {
 		return labelScheme;
 	}
 
