@@ -19,7 +19,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -65,7 +69,15 @@ public class MapView extends ViewPart {
 	private MeanderApplet theApplet;
 	private final MapController theController;
 	private int currentSize;
-
+	
+	private static class MyAction extends Action {
+		
+		public MyAction(String text) {
+			super(text, IAction.AS_RADIO_BUTTON);
+		}
+		
+		
+	}
 	
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 		public String getColumnText(Object obj, int index) {
@@ -200,8 +212,25 @@ public class MapView extends ViewPart {
 	    for (IExtension extension: extensions) {
 	    	parseConfig(extension.getConfigurationElements(), tbm);
 	    }
+	    
+	    IMenuManager mm = getMenuManager();
+	    MenuManager labelManager = new MenuManager("Labels");
+	    MyAction classNameAction = new MyAction("Class Name");
+	    classNameAction.setChecked(true);
+	    labelManager.add(classNameAction);
+	    labelManager.add(new MyAction("Log-likelihood"));
+	    mm.add(labelManager);
+	    
+//	    mm.add(new SelectEntryModeAction(ViewSettings.ENTRYMODE_PROJECTS, settings,
+//	        this));
+//	    mm.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));	    
+	    
 	}
 	
+	private IMenuManager getMenuManager() {
+		return getViewSite().getActionBars().getMenuManager();
+	}
+
 	private void parseConfig(IConfigurationElement[] configurationElements, IToolBarManager tbm) {
 		List<IConfigurationElement> configelems = Arrays.asList(configurationElements);
 		for (IConfigurationElement each: configelems) {
