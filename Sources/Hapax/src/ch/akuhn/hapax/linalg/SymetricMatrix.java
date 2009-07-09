@@ -46,4 +46,14 @@ public class SymetricMatrix extends Matrix {
     public int used() {
         throw new UnsupportedOperationException();
     }
+
+	public double[][] asArray() {
+		double[][] result = new double[values.length][values.length];
+		for (int x = 0; x < result.length; x++) {
+			for (int y = 0; y < result.length; y++) {
+				result[x][y] = 1.0 - get(x,y);
+			}
+		}
+		return result;
+	}
 }
