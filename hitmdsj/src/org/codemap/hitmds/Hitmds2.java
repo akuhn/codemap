@@ -577,7 +577,7 @@ public class Hitmds2 {
     public double[][] run(double[][] data, ProgressMonitor progress) {
         if (data.length == 0) return new double[0][];
         // run(100, 1.0, 1.0487507802749606, null, data.length, data[0].length, data, -2, null, progress);
-        run(100, 10.0, 1.0487507802749606, null, data.length, data[0].length, data, -2, null, progress);
+        run(100, 0.01, 1.0487507802749606, null, data.length, data[0].length, data, -2, null, progress);
         return points;
     }
 
