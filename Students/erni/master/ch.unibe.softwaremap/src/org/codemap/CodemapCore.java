@@ -7,7 +7,7 @@ import java.util.Map;
 import org.codemap.mapview.MapView;
 import org.codemap.util.CodemapColors;
 import org.codemap.util.CodemapLabels;
-import org.codemap.util.DynamicCodemapLayer;
+import org.codemap.util.SharedCodemapLayer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -39,7 +39,7 @@ public class CodemapCore extends AbstractUIPlugin {
 	private final MapSelection currentSelection;
 	private final MapScheme<String> labelScheme;
 	private final CodemapColors colorScheme;
-	private DynamicCodemapLayer dynamicMapLayer;
+	private SharedCodemapLayer sharedLayer;
 	
 
 	public MapSelection getYouAreHereSelection() {
@@ -61,7 +61,7 @@ public class CodemapCore extends AbstractUIPlugin {
 		currentSelection = new MapSelection();
 		labelScheme = new CodemapLabels();	
 		colorScheme = new CodemapColors();
-		dynamicMapLayer = new DynamicCodemapLayer();
+		sharedLayer = new SharedCodemapLayer();
 	}
 
 	@Override
@@ -118,17 +118,23 @@ public class CodemapCore extends AbstractUIPlugin {
 		getMapView().redrawCodemapBackground();
 		getMapView().redraw();
 	}
-
+	
+	/**
+	 * Add a shared layer to Codmap. This layer will be shared by all 
+	 * Mapinstances.
+	 * 
+	 * @param layer
+	 */
 	public void addLayer(Layer layer) {
-		dynamicMapLayer.append(layer);
+		sharedLayer.append(layer);
 	}
 
 	public void removeLayer(Layer layer) {
-		dynamicMapLayer.remove(layer);
+		sharedLayer.remove(layer);
 	}
 
-	protected Layer getDynamicLayer() {
-		return dynamicMapLayer;
+	Layer getSharedLayer() {
+		return sharedLayer;
 	}
 	
 }

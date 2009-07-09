@@ -148,7 +148,7 @@ public class MapPerProject {
 					.withSelection(new CurrentSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
 					.withSelection(new OpenFilesOverlay(), CodemapCore.getPlugin().getOpenFilesSelection())
 					.withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())
-					.appendLayer(CodemapCore.getPlugin().getDynamicLayer())
+					.appendLayer(CodemapCore.getPlugin().getSharedLayer())
 					.makeLayer();
 		}
 

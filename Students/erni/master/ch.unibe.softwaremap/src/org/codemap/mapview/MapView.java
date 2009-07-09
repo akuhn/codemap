@@ -162,11 +162,13 @@ public class MapView extends ViewPart {
 
 	private CodemapListener makeListener() {
 		return new CodemapListener() {
-
 			@Override
 			public void handleEvent(CodemapEvent event) {
-				if (CurrentSelectionOverlay.EVT_DOUBLE_CLICKED == event.getKind()) doubleClicked((Location) event.getValue());
-				if ("selectionChanged" == event.getKind()) selectionChanged((Location[]) event.getValue());
+				if (CurrentSelectionOverlay.EVT_DOUBLE_CLICKED == event.getKind()) {
+					doubleClicked((Location) event.getValue());					
+				} else if (CurrentSelectionOverlay.EVT_SELECTION_CHANGED == event.getKind()) {
+					selectionChanged((Location[]) event.getValue());
+				}
 			}
 
 			public void selectionChanged(Location... locations) {

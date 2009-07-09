@@ -31,7 +31,7 @@ public class CurrentSelectionOverlay extends MapSelectionOverlay {
 		if (pa != null)
 			handleEvents(map, pa);
 		if (isDragging)
-			updateSelection(map);
+			updateSelection(map, pa);
 		pg.strokeWeight(POINT_STROKE);
 		super.draw(map, pg, pa);
 		drawSelectionBox(pg);
@@ -61,10 +61,27 @@ public class CurrentSelectionOverlay extends MapSelectionOverlay {
 
 	private void handleDragging(MapInstance map, MeanderApplet pa) {
 		dragStop = new Point(pa.mouseX, pa.mouseY);
-		if (pa.mouseEvent == null
-				|| pa.mouseEvent.getID() != MouseEvent.MOUSE_DRAGGED) {
-			isDragging = false;
+		if (pa.mouseEvent == null || pa.mouseEvent.getID() != MouseEvent.MOUSE_DRAGGED) {
+			handleDraggingStopped(map, pa);
 		}
+	}
+
+	private void handleDraggingStopped(MapInstance map, MeanderApplet pa) {
+		isDragging = false;
+		
+		int minX = Math.min(dragStart.x, dragStop.x);
+		int minY = Math.min(dragStart.y, dragStop.y);
+		int maxX = Math.max(dragStart.x, dragStop.x);
+		int maxY = Math.max(dragStart.y, dragStop.y);		
+		
+		
+		ArrayList<Location> selection = new ArrayList<Location>();
+		for (Location each : map.locations()) {
+			if (each.px < maxX && each.px > minX && each.py < maxY && each.py > minY) {			
+				selection.add(each);
+			}
+		}
+		pa.fireEvent(EVT_SELECTION_CHANGED, this, selection.toArray(new Location[]{}));
 	}
 
 	private void drawSelectionBox(PGraphics pg) {
@@ -77,7 +94,7 @@ public class CurrentSelectionOverlay extends MapSelectionOverlay {
 		pg.rect(dragStart.x, dragStart.y, deltaX, deltaY);
 	}
 
-	private void updateSelection(MapInstance map) {
+	private void updateSelection(MapInstance map, MeanderApplet pa) {
 		int minX = Math.min(dragStart.x, dragStop.x);
 		int minY = Math.min(dragStart.y, dragStop.y);
 		int maxX = Math.max(dragStart.x, dragStop.x);
