@@ -14,8 +14,10 @@ Export-Package:
  ch.deif.meander.ui,
  ch.deif.meander.util,
  ch.deif.meander.visual,
- processing.core
+ processing.core,
+ processing.pdf
 Bundle-ClassPath: .,
  lib/core.jar,
- lib/hitmds2-r000.jar
+ lib/hitmds2-r000.jar,
+ lib/pdf.jar
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
