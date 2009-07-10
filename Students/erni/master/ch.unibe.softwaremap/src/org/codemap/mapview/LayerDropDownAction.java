@@ -13,11 +13,13 @@ import org.eclipse.swt.widgets.Menu;
 
 public class LayerDropDownAction extends DropDownAction {
 	
-	private SelectionTracker tracker;
+	private SelectionTracker selectionTracker;
+	private MapSelectionProvider selectionProvider;
 	
-	public LayerDropDownAction(SelectionTracker tracker) {
+	public LayerDropDownAction(SelectionTracker tracker, MapSelectionProvider provider) {
 		super();
-		this.tracker = tracker;
+		selectionTracker = tracker;
+		selectionProvider = provider;
 	}
 	
 	@Override
@@ -28,7 +30,8 @@ public class LayerDropDownAction extends DropDownAction {
 
 	@Override
 	protected void createMenu(Menu menu) {
-		addActionToMenu(menu, new LinkWithSelectionAction(tracker));
+		addActionToMenu(menu, new LinkWithSelectionAction(selectionTracker));
+		addActionToMenu(menu, new ForceSelectionAction(selectionProvider));
 	    
 	    IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CodemapCore.PLUGIN_ID, "mapview");
 	    IExtension[] extensions_arr = extensionPoint.getExtensions();

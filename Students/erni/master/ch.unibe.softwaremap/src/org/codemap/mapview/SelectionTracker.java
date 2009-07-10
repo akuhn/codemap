@@ -31,7 +31,7 @@ public class SelectionTracker {
 		@Override
 		public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 			if (part == theController.getView()) return;
-			if (! isEnabled()) return;	
+	
 			if (! (selection instanceof IStructuredSelection)) return;
 			
 			try {
@@ -108,10 +108,9 @@ public class SelectionTracker {
 		private void editorSelectionChanged(IWorkbenchPartReference partRef) {
 			theController.onEditorActivated(new EditorEvent(partRef));
 		}
-		
 	};
 	
-	private boolean enabled = false;
+	private boolean enabled = LinkWithSelectionAction.DEFAULT_VALUE;
 	MapController theController;	
 	
 	public SelectionTracker(MapController controller) {
@@ -182,17 +181,23 @@ public class SelectionTracker {
 				}
 			}
 		}
-		if (javaProject != null) {
-			compilationUnitsSelected(javaProject, units);
+		if (javaProject == null) return;
+		projectSelected(javaProject);
+		if (isEnabled()) {
+			compilationUnitsSelected(units);			
 		}
+	}
+
+	private void projectSelected(IJavaProject javaProject) {
+		theController.onProjectChanged(javaProject);
 	}
 
 	private void multipleProjectsSelected() {
 		System.out.println("!!! multiple projects selected !!!");
 	}
 
-	private void compilationUnitsSelected(IJavaProject javaProject, Collection<ICompilationUnit> units) {
-		theController.onSelectionChanged(javaProject, units);
+	private void compilationUnitsSelected(Collection<ICompilationUnit> units) {
+		theController.onSelectionChanged(units);
 	}
 
 }

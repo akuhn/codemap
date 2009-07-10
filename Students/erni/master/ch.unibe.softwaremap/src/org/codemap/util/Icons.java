@@ -10,9 +10,11 @@ import org.eclipse.jface.resource.ImageRegistry;
 public class Icons {
 
 	private static final String DIR_PREFIX = "icons/eclipse/";
+	
 	public static final String LINKED = DIR_PREFIX + "linked.gif";
 	public static final String LAYERS = DIR_PREFIX + "layers.gif";	
 	public static final String LABELS = DIR_PREFIX + "labels.gif";
+	public static final String PACKAGE = DIR_PREFIX + "package.gif";	
 
 	public static ImageDescriptor getImageDescriptor(String key) {
 		return loadImage(key).getDescriptor(key);

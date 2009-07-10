@@ -167,20 +167,8 @@ public class MapView extends ViewPart {
 					IJavaElement javaElement = JavaCore.create(each.getIdentifier());
 					selection.add(javaElement);
 				}
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							final StructuredSelection structuredSelection = new StructuredSelection(selection);
-							selectionProvider.setSelection(structuredSelection);
-
-							IViewPart showView = getSite().getPage().showView(PACKAGE_EXPLORER.id);
-							((ISetSelectionTarget) showView).selectReveal(structuredSelection);
-						} catch (PartInitException e) {
-							Log.error(e);
-						}
-					}
-				});
+				StructuredSelection structuredSelection = new StructuredSelection(selection);
+				selectionProvider.setSelection(structuredSelection);
 			}	
 
 			public void doubleClicked(Location location) {
@@ -195,7 +183,7 @@ public class MapView extends ViewPart {
 	    IToolBarManager tbm = getToolBarManager();
 	    tbm.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	    tbm.add(new Separator());
-	    tbm.add(new LayerDropDownAction(selectionTracker));
+	    tbm.add(new LayerDropDownAction(selectionTracker, selectionProvider));
 	    tbm.add(new LabelDrowDownAction());
 	}
 
@@ -266,7 +254,8 @@ public class MapView extends ViewPart {
 
 	public void onProjectSelectionChanged(IJavaProject javaProject) {
 		IProject project = javaProject.getProject();
-		if (project != currentProject) selectionTracker.theController.onProjectChanged();
+//		if (project != currentProject) selectionTracker.theController.onProjectChanged();
+		if (project == currentProject) return;
 		currentProject = project;
 		updateVisualization();
 	}

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.codemap.CodemapCore;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
@@ -27,6 +28,7 @@ public class MapController {
 	private CodemapCore plugin;
 	
 	private State state = State.UNINITIALIZED;
+	private IProject currentProject;	
 
 	// FIXME: move this, maybe to MapPerProjec
 	
@@ -52,17 +54,18 @@ public class MapController {
 		log("-- showMap@");
 	}
 	
-	public void onProjectChanged() {
+	public void onProjectChanged(IJavaProject javaProject) {
 		log("-- projectChanged@");
+		view.onProjectSelectionChanged(javaProject);
+		redrawCodemap();
 	}
 	
-	public void onSelectionChanged(IJavaProject javaProject, Collection<ICompilationUnit> units) {
+	public void onSelectionChanged(Collection<ICompilationUnit> units) {
 		log("-- selectionChanged@");
 		MapSelection selection = getCurrentSelection().clear();
 		for (ICompilationUnit each: units) {
 			selection.add(each.getHandleIdentifier());
 		} 
-		view.onProjectSelectionChanged(javaProject);
 		redrawCodemap();
 	}
 	
@@ -98,7 +101,8 @@ public class MapController {
 		IJavaElement javaElement = editorEvent.getInput();
 		if (!(javaElement instanceof ICompilationUnit)) return;
 		
-		view.onProjectSelectionChanged(javaElement.getJavaProject());
+		onProjectChanged(javaElement.getJavaProject());
+//		view.onProjectSelectionChanged();
 		youAreHereChanged((ICompilationUnit) javaElement);
 		log("-- editorActivated(" + editorEvent.getInput().getHandleIdentifier() + ")@");
 	}
