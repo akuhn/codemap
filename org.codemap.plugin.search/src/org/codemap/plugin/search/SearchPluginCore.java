@@ -57,10 +57,10 @@ public class SearchPluginCore extends AbstractUIPlugin {
 		
 		appendListeners(queries);
 		// new queries are at position 0
-		rerunNewestQuery(queries[0]);
+		reRunNewestQuery(queries[0]);
 	}
 
-	private void rerunNewestQuery(ISearchQuery query) {
+	private void reRunNewestQuery(ISearchQuery query) {
 		// copy-paste from package org.eclipse.search2.internal.ui.SearchAgainAction#run;
 		NewSearchUI.cancelQuery(query);
 		ISearchResultViewPart fView = NewSearchUI.getSearchResultView();
@@ -82,7 +82,6 @@ public class SearchPluginCore extends AbstractUIPlugin {
 		for(ISearchQuery each: queries) {
 			each.getSearchResult().addListener(new SearchResultListener());
 		}
-		
 	}
 
 	private void init() {
@@ -123,12 +122,12 @@ public class SearchPluginCore extends AbstractUIPlugin {
 	}
 
 	private void registerQueryListener() {
-		queryListener = new QueryListener();
+		SearchResultListener searchResultListener = new SearchResultListener();
+		queryListener = new QueryListener(searchResultListener);
 		NewSearchUI.addQueryListener(queryListener);
 	}
 
 	private void unregisterQueryListener() {
 		NewSearchUI.removeQueryListener(queryListener);
 	}	
-
 }
