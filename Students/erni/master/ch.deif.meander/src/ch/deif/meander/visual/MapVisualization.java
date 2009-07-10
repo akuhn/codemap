@@ -67,11 +67,8 @@ public class MapVisualization {
 		assert map.height == pg.height;
 		if (!redraw && pa != null && pa.mouseEvent == null) return;
 		redraw  = false; 
-		long nano = System.nanoTime();
 		visual.draw(map, pg, pa);
 		pa.mouseEvent = null; // Don't remove this line, we depend in this!
-		nano = System.nanoTime() - nano;
-		System.out.printf("MapVisualization#draw:%5d\n", (int) (nano / 1e9 * pa.frameRate * 100));
 	}
 
 	public final void drawToPGraphics(PGraphics pg) {
