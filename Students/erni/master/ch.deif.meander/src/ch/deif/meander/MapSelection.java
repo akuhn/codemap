@@ -53,5 +53,13 @@ public class MapSelection {
 	public void replaceWith(Collection<String> ids) {
 		identifiers = new HashSet<String>(ids);
 	}
+
+	public void addAll(Collection<String> ids) {
+		identifiers.addAll(ids);
+	}
+
+	public void removeAll(Collection<String> ids) {
+		identifiers.removeAll(ids);
+	}
 	
 }
