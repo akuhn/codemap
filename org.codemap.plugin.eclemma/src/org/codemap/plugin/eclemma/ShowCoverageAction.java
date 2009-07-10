@@ -40,9 +40,9 @@ public class ShowCoverageAction implements ICodemapPluginAction {
 
 	public void newCoverageAvailable(List<Pair<String, Double>> coverageInfo) {
 		lastCoverageInfo = coverageInfo;		
-		if (!isChecked()) return;
-		
-		showCoverage();
+		if (isChecked()) {
+			showCoverage();
+		}		
 	}
 
 	private void showCoverage() {

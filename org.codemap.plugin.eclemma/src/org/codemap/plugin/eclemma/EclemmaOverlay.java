@@ -19,12 +19,6 @@ public class EclemmaOverlay extends AbstractUIPlugin {
 	private ShowCoverageAction showCoverageAction;
 	private MeanderCoverageListener coverageListener;
 	
-	/**
-	 * The constructor
-	 */
-	public EclemmaOverlay() {
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
