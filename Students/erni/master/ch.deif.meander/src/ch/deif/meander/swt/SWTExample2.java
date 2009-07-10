@@ -12,7 +12,7 @@ import ch.deif.meander.MapInstance;
 public class SWTExample2 extends SWTLayer {
 
 	public static void main(String[] args) {
-		new CodemapVisualization(null).add(new SWTExample2()).open();
+		new CodemapVisualization(null).add(new SWTExample2()).openAndBlock();
 	}
 	
 	@Override

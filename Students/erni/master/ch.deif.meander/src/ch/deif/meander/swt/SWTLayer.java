@@ -12,11 +12,14 @@ import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.graphics.GC;
 
 import ch.deif.meander.MapInstance;
+import ch.deif.meander.ui.CodemapEvent;
 
 public abstract class SWTLayer implements 
 		MouseListener, MouseMoveListener, MouseTrackListener, MouseWheelListener,
 		MenuDetectListener, DragDetectListener {
 
+	/*default*/ CodemapVisualization root; // FIXME better design
+	
 	public abstract void paintMap(MapInstance map, GC gc);
 
 	@Override
@@ -67,6 +70,18 @@ public abstract class SWTLayer implements
 	@Override
 	public void mouseScrolled(MouseEvent e) {
 		// do nothing
+	}
+	
+	public void fireEvent(CodemapEvent e) {
+		root.fireEvent(e);
+	}
+
+	public void fireEvent(String kind, Object value) {
+		root.fireEvent(new CodemapEvent(kind, this, value));
+	}
+	
+	public void redraw() {
+		root.redraw();
 	}
 	
 }

@@ -30,7 +30,6 @@ public class LabelOverlay extends SWTLayer {
 	public void paintMap(MapInstance map, GC gc) {
 		//if (true == true) return;
 		//gc.setTextAntialias(SWT.OFF);
-		long nanoTime = System.nanoTime();
 		
 		String fname = "Arial Narrow";
 		Display display = Display.getCurrent();
@@ -52,8 +51,6 @@ public class LabelOverlay extends SWTLayer {
 		//font.dispose();
 		black.dispose();
 		white.dispose();
-		
-		System.out.println((System.nanoTime() - nanoTime) * 1e-9 * 25);
 		
 	}
 

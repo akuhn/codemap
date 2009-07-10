@@ -21,11 +21,13 @@ public class CompositeLayer extends SWTLayer {
 	
 	public CompositeLayer add(SWTLayer layer) {
 		children.add(layer);
+		layer.root = this.root;
 		return this;
 	}
 
 	public CompositeLayer remove(SWTLayer layer) {
 		children.remove(layer);
+		layer.root = null;
 		return this;
 	}
 

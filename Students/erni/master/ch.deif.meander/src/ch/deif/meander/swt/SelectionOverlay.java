@@ -8,7 +8,7 @@ import ch.deif.meander.MapSelection;
 
 public abstract class SelectionOverlay extends SWTLayer {
 
-	private MapSelection selection;
+	protected MapSelection selection;
 
 	public SelectionOverlay setSelection(MapSelection selection) {
 		this.selection = selection;
