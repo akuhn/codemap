@@ -4,9 +4,9 @@
     <extension
           point="org.codemap.mapview">
        <toolbar
-             class="org.codemap.plugin.search.ShowSearchAction"
+             class="org.codemap.plugin.search.ShowSearchResultsAction"
              icon="icons/eclipse/search.gif"
-             text="Show Search Results">
+             text="Search Results">
        </toolbar>
     </extension>
 

@@ -18,7 +18,7 @@ public class SearchPluginCore extends AbstractUIPlugin {
 	// The shared instance
 	private static SearchPluginCore plugin;
 
-	private MeanderQueryListener queryListener;
+	private QueryListener queryListener;
 
 	private SearchResultsOverlay searchResultsOverlay;
 
@@ -38,7 +38,11 @@ public class SearchPluginCore extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		
+		init();
 		registerQueryListener();
+	}
+
+	private void init() {
 		searchSelection = new MapSelection();
 		searchResultsOverlay = new SearchResultsOverlay();
 		searchResultsOverlay.setSelection(searchSelection);
@@ -50,12 +54,16 @@ public class SearchPluginCore extends AbstractUIPlugin {
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
+		unregisterQueryListener();
+		destroy();
+		super.stop(context);
+	}
+
+	private void destroy() {
 		plugin = null;
 		CodemapCore.getPlugin().removeLayer(searchResultsOverlay);
 		searchResultsOverlay = null;
 		searchSelection = null;
-		unregisterQueryListener();
-		super.stop(context);
 	}
 	
 	public MapSelection getSearchSelection() {
@@ -70,10 +78,9 @@ public class SearchPluginCore extends AbstractUIPlugin {
 	public static SearchPluginCore getPlugin() {
 		return plugin;
 	}
-	
 
 	private void registerQueryListener() {
-		queryListener = new MeanderQueryListener();
+		queryListener = new QueryListener();
 		NewSearchUI.addQueryListener(queryListener);
 	}
 

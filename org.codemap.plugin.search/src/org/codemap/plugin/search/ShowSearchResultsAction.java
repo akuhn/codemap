@@ -4,7 +4,7 @@ import org.codemap.mapview.ICodemapPluginAction;
 import org.eclipse.jface.action.Action;
 
 
-public class ShowSearchAction implements ICodemapPluginAction {
+public class ShowSearchResultsAction implements ICodemapPluginAction {
 	
 	private Action action;
 
