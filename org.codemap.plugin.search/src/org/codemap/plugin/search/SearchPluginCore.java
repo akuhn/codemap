@@ -1,7 +1,15 @@
 package org.codemap.plugin.search;
 
 import org.codemap.CodemapCore;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.search.ui.ISearchQuery;
+import org.eclipse.search.ui.ISearchResult;
+import org.eclipse.search.ui.ISearchResultViewPart;
 import org.eclipse.search.ui.NewSearchUI;
+import org.eclipse.search2.internal.ui.SearchMessages;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -40,6 +48,30 @@ public class SearchPluginCore extends AbstractUIPlugin {
 		
 		init();
 		registerQueryListener();
+		
+		
+		ISearchQuery[] queries = NewSearchUI.getQueries();
+		if (queries.length == 0) return;
+		// new queries are at position 0
+		ISearchQuery query = queries[0];
+		ISearchResult searchResult = query.getSearchResult();
+		query.getSearchResult().addListener(new SearchResultListener());
+		
+		// copy-paste from package org.eclipse.search2.internal.ui.SearchAgainAction#run;
+		NewSearchUI.cancelQuery(query);
+		ISearchResultViewPart fView = NewSearchUI.getSearchResultView();
+		if (query.canRerun()) {
+			if (query.canRunInBackground())
+				NewSearchUI.runQueryInBackground(query, fView);
+			else {
+				Shell shell= fView.getSite().getShell();
+				ProgressMonitorDialog pmd= new ProgressMonitorDialog(shell);
+				IStatus status= NewSearchUI.runQueryInForeground(pmd, query, fView);
+				if (!status.isOK() && status.getSeverity() != IStatus.CANCEL) {
+					ErrorDialog.openError(shell, "Search Again", "Problems while searching again", status);
+				}
+			}
+		}
 	}
 
 	private void init() {
