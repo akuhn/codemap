@@ -3,30 +3,33 @@ package org.codemap.plugin.search;
 import org.eclipse.search.ui.IQueryListener;
 import org.eclipse.search.ui.ISearchQuery;
 
+/**
+ * Listen for query-added events and forward each new query
+ * {@link org.codemap.plugin.search.SearchResultController } for further
+ * processing.
+ * 
+ * @author deif
+ */
 public class QueryListener implements IQueryListener {
 	
-	private final SearchResultListener searchResultListener;
+	private SearchResultController theController;
 
-	public QueryListener(SearchResultListener searchResultListener) {
-		this.searchResultListener = searchResultListener;
+	public QueryListener(SearchResultController controller) {
+		theController = controller;
 	}
 
 	@Override
 	public void queryAdded(ISearchQuery query) {
-		query.getSearchResult().addListener(searchResultListener);
+		theController.onQueryAdded(query);
 	}
 
 	@Override
 	public void queryFinished(ISearchQuery query) {}
 
 	@Override
-	public void queryRemoved(ISearchQuery query) {
-//		System.out.println("query removed.");
-	}
+	public void queryRemoved(ISearchQuery query) {}
 
 	@Override
-	public void queryStarting(ISearchQuery query) {
-//		System.out.println("query starting");
-	}
+	public void queryStarting(ISearchQuery query) {}
 
 }

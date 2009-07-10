@@ -3,12 +3,15 @@ package org.codemap.plugin.search;
 import org.codemap.mapview.ICodemapPluginAction;
 import org.eclipse.jface.action.Action;
 
-// XXX factor out searchResultsController which can: 
-//		- remember old results and enable/disable them on request.
-//		- load the results from older queries.
 public class ShowSearchResultsAction implements ICodemapPluginAction {
 	
 	private Action action;
+	private SearchResultController controller;
+	
+	public ShowSearchResultsAction() {
+		controller = SearchPluginCore.getPlugin().getController();
+		controller.registerAction(this);
+	}
 
 	@Override
 	public void run(Action act) {
@@ -18,11 +21,11 @@ public class ShowSearchResultsAction implements ICodemapPluginAction {
 	}
 
 	private void hideSearchResults() {
-		SearchPluginCore.getPlugin().getSearchSelection().clear();
+		controller.onLayerDeactivated();
 	}
 
 	private void showSearchResults() {
-		
+		controller.onLayerActivated();
 	}
 
 	public boolean isChecked() {

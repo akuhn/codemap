@@ -1,23 +1,29 @@
 package org.codemap.plugin.search;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
-import org.codemap.CodemapCore;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.search.ui.ISearchResultListener;
 import org.eclipse.search.ui.SearchResultEvent;
 import org.eclipse.search.ui.text.Match;
 import org.eclipse.search.ui.text.MatchEvent;
 import org.eclipse.search.ui.text.RemoveAllEvent;
 
-
+/**
+ * Listen for changes to an {@link org.eclipse.search.ui.ISearchResult}.
+ * Filter the received events and forward the ones not filtered to
+ * {@link org.codemap.plugin.search.SearchResultController}.
+ * 
+ * @author deif
+ */
 public class SearchResultListener implements ISearchResultListener {
 	
+	private SearchResultController theController;
+
+	public SearchResultListener(SearchResultController controller) {
+		theController = controller;
+	}
+
 	@Override
 	public void searchResultChanged(SearchResultEvent e) {
 		if (e instanceof MatchEvent) {
@@ -29,61 +35,25 @@ public class SearchResultListener implements ISearchResultListener {
 	}
 
 	private void handleRemoveAllEvent() {
-		SearchPluginCore.getPlugin().getSearchSelection().clear();
-		CodemapCore.getPlugin().redrawCodemap();
+		theController.onAllQueriesRemoved();
 	}
 
 	private void handleMatchEvent(MatchEvent me) {
 		switch (me.getKind()) {
 		case MatchEvent.ADDED:
-			elementsAdded(extractMatches(me));
+			theController.onElementsAdded(extractElements(me));
 			break;
 		case MatchEvent.REMOVED:
-			elementsRemoved(extractMatches(me));
+			theController.onElementsRemoved(extractElements(me));
 			break;
 		}
-		CodemapCore.getPlugin().redrawCodemap();		
 	}
 
-	private void elementsRemoved(List<String> list) {
-		for (String each: list) {
-			SearchPluginCore.getPlugin().getSearchSelection().remove(each);			
+	private Collection<Object> extractElements(MatchEvent me) {
+		Collection<Object> elements = new ArrayList<Object>();
+		for(Match each: me.getMatches()) {
+			elements.add(each.getElement());
 		}
-	}
-
-	private void elementsAdded(List<String> list) {
-		for (String each: list) {
-			SearchPluginCore.getPlugin().getSearchSelection().add(each);			
-		}
-	}
-
-	private List<String> extractMatches(MatchEvent me) {
-		List<Match> matches = Arrays.asList(me.getMatches());
-		List<String> idents = new ArrayList<String>();
-		for (Match match: matches) {
-			processMatch(match, idents);
-		}
-		return idents;
-	}
-
-	private void processMatch(Match match, List<String> idents) {		
-		Object element = match.getElement();
-		if (element instanceof IJavaElement) {
-			// create it that way to get the correct element (the compilation unit)
-			IJavaElement javaElement = crateJavaElement(element);
-
-			if (javaElement == null || javaElement.isReadOnly()) return;
-			if (javaElement.getElementType() != IJavaElement.COMPILATION_UNIT) return;
-
-			ICompilationUnit compilationUnit = (ICompilationUnit) javaElement.getAdapter(ICompilationUnit.class);
-			String ident = compilationUnit.getHandleIdentifier();
-			idents.add(ident);
-		}
-	}
-
-	private IJavaElement crateJavaElement(Object element) {
-		IResource resource = ((IJavaElement) element).getResource();
-		IJavaElement javaElement = JavaCore.create(resource);
-		return javaElement;
+		return elements;
 	}
 }
