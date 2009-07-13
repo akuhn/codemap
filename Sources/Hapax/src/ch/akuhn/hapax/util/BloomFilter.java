@@ -1,5 +1,5 @@
 package ch.akuhn.hapax.util;
-
+//TODO: this class is NOT TESTED!
 import static java.lang.Math.pow;
 
 import java.util.BitSet;
