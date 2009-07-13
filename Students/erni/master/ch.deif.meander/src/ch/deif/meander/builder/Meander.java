@@ -2,10 +2,12 @@ package ch.deif.meander.builder;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
+import ch.akuhn.util.Pair;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.Point;
@@ -76,6 +78,7 @@ public class Meander {
 	}
 
 	private static final class MeanderMapBuilder implements MapBuilder {
+		
 		private Hapax hapax = null;
 
 		@Override
@@ -92,12 +95,29 @@ public class Meander {
 			}
 			return new Configuration(locations).normalize();
 		}
-
+		
 		@Override
 		public MapBuilder addCorpus(Hapax hapax) {
 			if (this.hapax != null) throw new IllegalStateException();
 			this.hapax = hapax;
 			return this;
+		}
+
+		@Override
+		public Configuration makeMap(Map<String, Pair<Double, Double>> cachedPoints) {
+			// we need a hapax for later recalculations
+			if (this.hapax == null) throw new IllegalStateException();
+			Collection<Point> locations = new ArrayList<Point>();
+			for (Document each: hapax.getIndex().documents) {
+				Pair<Double, Double> coordinates = cachedPoints.get(each.getIdentifier());
+				if (coordinates == null) {
+					// cached data does not match current data, so we start from scratch.
+					return makeMap();
+				}
+				locations.add(new Point(coordinates.fst, coordinates.snd, each));
+			}
+			// no normalize here, the cached data is already normalized.
+			return new Configuration(locations);
 		}
 	}
 

@@ -60,7 +60,7 @@ public class MapView extends ViewPart {
 	public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
 	
 	private EclipseProcessingBridge bridge;
-	private IProject currentProject;
+	private IJavaProject currentProject;
 	private MapSelectionProvider selectionProvider;
 	private SelectionTracker selectionTracker;
 	private Composite container;
@@ -210,7 +210,7 @@ public class MapView extends ViewPart {
 
 	public void updateVisualization() {
 		MapVisualization viz = CodemapCore.getPlugin()
-			.mapForProject(currentProject)
+			.mapForProject(getCurrentProject())
 			.updateSize(getCurrentSize())
 			.enableBuilder()
 			.getVisualization();
@@ -226,8 +226,8 @@ public class MapView extends ViewPart {
 		softwareMap().setMapVizualization(viz);
 	}
 
-	public void newProjectMapAvailable(IProject project) {
-		if (!this.currentProject.equals(project)) return;
+	public void newProjectMapAvailable(IJavaProject project) {
+		if (!this.getCurrentProject().equals(project)) return;
 		this.updateVisualization();
 	}
 
@@ -252,15 +252,14 @@ public class MapView extends ViewPart {
 		return bridge;
 	}
 
-	public void onProjectSelectionChanged(IJavaProject javaProject) {
-		IProject project = javaProject.getProject();
+	public void onProjectSelectionChanged(IJavaProject project) {
 //		if (project != currentProject) selectionTracker.theController.onProjectChanged();
 		if (project == currentProject) return;
 		currentProject = project;
 		updateVisualization();
 	}
 
-	public IProject getCurrentProject() {
+	public IJavaProject getCurrentProject() {
 		return currentProject;
 	}
 
@@ -270,7 +269,7 @@ public class MapView extends ViewPart {
 
 	public void updateMapdimension(int newDimension) {
 		setCurrentSize(newDimension);
-		IProject project = getCurrentProject();
+		IJavaProject project = getCurrentProject();
 		if (project == null) return;
 		MapVisualization viz = CodemapCore.getPlugin().mapForProject(project).updateSize(newDimension).getVisualization();
 		if (viz != null) {

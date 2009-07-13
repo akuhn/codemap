@@ -1,5 +1,8 @@
 package org.codemap;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.codemap.builder.HapaxBuilder;
 import org.codemap.builder.MapMakerBackgroundJob;
 import org.codemap.mapview.MapView;
@@ -8,17 +11,23 @@ import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.jdt.core.IJavaProject;
+import org.osgi.service.prefs.BackingStoreException;
 
 import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
+import ch.akuhn.util.Pair;
 import ch.deif.meander.Configuration;
+import ch.deif.meander.Point;
 import ch.deif.meander.builder.Meander;
-import ch.deif.meander.visual.Composite;
 import ch.deif.meander.visual.CurrentSelectionOverlay;
 import ch.deif.meander.visual.Layer;
 import ch.deif.meander.visual.MapVisualization;
@@ -32,14 +41,14 @@ import ch.unibe.scg.util.Extension;
  */
 public class MapPerProject {
 
+	private static final String POINT_NODE_ID = CodemapCore.PLUGIN_ID + ".points"; 
 	private static final int MINIMAL_SIZE = 300;
 
-	private final IProject project;
+	private final IJavaProject project;
 	private TermDocumentMatrix tdm;
 	private MapVisualization mapViz;
 	private boolean mapBeingCalculated = false;
 	private boolean builderIsRunning = false;
-	// private Set<MapModifier> modifiers;
 	private int mapSize = MINIMAL_SIZE;
 
 
@@ -48,9 +57,8 @@ public class MapPerProject {
 	private Configuration configuration;
 	private Layer layer;
 
-	public MapPerProject(IProject project) {
+	public MapPerProject(IJavaProject project) {
 		this.project = project;
-		// modifiers = new HashSet<MapModifier>();
 	}
 
 	public MapPerProject enableBuilder() {
@@ -72,9 +80,8 @@ public class MapPerProject {
 				if (builderIsRunning) return Status.OK_STATUS;
 				try {
 					builderIsRunning = true;
-					if (getProject() != null) {
-						getProject()
-								.build(IncrementalProjectBuilder.FULL_BUILD, HapaxBuilder.BUILDER_ID, null, monitor);
+					if (getJavaProject() != null) {
+						getProject().build(IncrementalProjectBuilder.FULL_BUILD, HapaxBuilder.BUILDER_ID, null, monitor);
 					}
 				} catch (CoreException e) {
 					Log.error(e);
@@ -87,10 +94,9 @@ public class MapPerProject {
 	}
 
 	private void addBuilderToProjectDescriptionCommands() throws CoreException {
-		IProject project = getProject();
-		if (project == null || !project.isOpen()) return;
+		if (getJavaProject() == null || !getJavaProject().isOpen()) return;
 
-		IProjectDescription desc = project.getDescription();
+		IProjectDescription desc = getProject().getDescription();
 		ICommand[] commands = desc.getBuildSpec();
 		for (ICommand command: commands) {
 			if (command.getBuilderName().equals(HapaxBuilder.BUILDER_ID)) {
@@ -125,8 +131,12 @@ public class MapPerProject {
 		mapViz.redraw();
 		startBackgroundTask();
 	}
-
+	
 	public IProject getProject() {
+		return getJavaProject().getProject();
+	}
+
+	private IJavaProject getJavaProject() {
 		return project;
 	}
 
@@ -142,7 +152,7 @@ public class MapPerProject {
 			monitor.worked(10);
 			configuration = Meander.builder()
 					.addCorpus(hapax)
-					.makeMap();
+					.makeMap(reloadMapState());
 			monitor.worked(5);
 			layer = Meander.visualization()
 					.withLabels(CodemapCore.getPlugin().getLabelScheme())
@@ -160,20 +170,32 @@ public class MapPerProject {
 		mapViz = new MapVisualization(configuration.withSize(mapSize), layer);
 		monitor.worked(20);
 
-		// mapViz = Meander(hapax)
-		// .makeMap(mapSize)
-		// .applyModifier(modifiers)
-		// .useHillshading()
-		// .add(LabelsOverlay.class)
-		// .add(CurrentSelectionOverlay.class)
-		// .add(new OpenFilesOverlay(openFilesSelection))
-		// .add(new YouAreHereOverlay(youAreHereSelection))
-		// .runNearestNeighborAlgorithm()
-		// .getVisualization();
 		notifyMapView();
 		monitor.done();
 		mapBeingCalculated = false;
 		return Status.OK_STATUS;
+	}
+
+	private Map<String, Pair<Double,Double>> reloadMapState() {
+		IEclipsePreferences node = getPointNode();
+		Map<String, Pair<Double,Double>> points = new HashMap<String,Pair<Double,Double>>();
+		try {
+			for(String key: node.keys()) {
+				String pointString = node.get(key, null);
+				String[] split = pointString.split("#");
+				if (split.length != 2 ) {
+					Log.error(new RuntimeException("Invalid format of point storage for " + getProject().getName() + ": " + pointString));
+					continue;
+				}
+				double x = Double.parseDouble(split[0]);
+				double y = Double.parseDouble(split[1]);
+				points.put(key, new Pair<Double, Double>(x, y));
+			}
+			return points;
+		} catch (BackingStoreException e) {
+			Log.error(e);
+		}
+		return null;
 	}
 
 	private void notifyMapView() {
@@ -184,20 +206,26 @@ public class MapPerProject {
 	}
 
 	public MapPerProject updateSize(int newMapDimension) {
-		// if (project != null) {
-		// System.out.println("adapting map of " + project.getName() + " to dimension " + newMapDimension);
-		// }
-		// XXX: ugly hardcoded map-size
 		this.mapSize = Math.max(newMapDimension, MINIMAL_SIZE);
 		return this;
 	}
 
-	// public void addModifier(MapModifier mod) {
-	// boolean added = modifiers.add(mod);
-	// if (!added) {
-	// modifiers.remove(mod);
-	// modifiers.add(mod);
-	// }
-	// }
+	public void saveMapState() {
+		IEclipsePreferences node = getPointNode();
+		for(Point each: configuration.points()) {
+			node.put(each.getDocument().getIdentifier(), each.x + " # " + each.y);
+		}
+		try {
+			node.flush();
+		} catch (BackingStoreException e) {
+			Log.error(e);
+		}		
+	}
+
+	private IEclipsePreferences getPointNode() {
+		IScopeContext context = new ProjectScope(getProject());
+		IEclipsePreferences node = context.getNode(POINT_NODE_ID);
+		return node;
+	}
 
 }

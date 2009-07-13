@@ -9,7 +9,11 @@ import org.codemap.util.CodemapColors;
 import org.codemap.util.CodemapLabels;
 import org.codemap.util.SharedCodemapLayer;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
+import org.eclipse.ui.views.markers.internal.MarkerSupportRegistry;
 import org.osgi.framework.BundleContext;
 
 import ch.deif.meander.MapSelection;
@@ -29,9 +33,8 @@ public class CodemapCore extends AbstractUIPlugin {
 	public static final String PLUGIN_ID = CodemapCore.class.getPackage().getName();
 	private static CodemapCore THE_PLUGIN;
 	
-	private Map<IProject,MapPerProject> mapPerProjectCache;
+	private Map<IJavaProject,MapPerProject> mapPerProjectCache;
 	private MapView theView;
-	
 
 	private final MapSelection youAreHereSelection;
 	private final MapSelection openFilesSelection;
@@ -54,7 +57,7 @@ public class CodemapCore extends AbstractUIPlugin {
 	}
 	
 	public CodemapCore() {
-		mapPerProjectCache = new HashMap<IProject,MapPerProject>();
+		mapPerProjectCache = new HashMap<IJavaProject,MapPerProject>();
 		youAreHereSelection = new MapSelection();
 		openFilesSelection = new MapSelection();	
 		currentSelection = new MapSelection();
@@ -67,14 +70,21 @@ public class CodemapCore extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		THE_PLUGIN = this;
-		// FIXME find out why this does not work at start-up!
-		// registerQueryListener();
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
+		saveMapState();
 		THE_PLUGIN = null;
 		super.stop(context);
+
+	}
+
+	private void saveMapState() {
+		for (MapPerProject each: mapPerProjectCache.values()) {
+			each.saveMapState();
+		}
+		
 	}
 
 	public static CodemapCore getPlugin() {
@@ -85,7 +95,7 @@ public class CodemapCore extends AbstractUIPlugin {
 		return PLUGIN_ID + "." + javaClass.getSimpleName();
 	}
 	
-	public MapPerProject mapForProject(IProject project) {
+	public MapPerProject mapForProject(IJavaProject project) {
 		MapPerProject map = mapPerProjectCache.get(project);
 		if (map == null) {
 			mapPerProjectCache.put(project, map = new MapPerProject(project));
@@ -119,7 +129,7 @@ public class CodemapCore extends AbstractUIPlugin {
 	}
 	
 	/**
-	 * Add a shared layer to Codmap. This layer will be shared by all 
+	 * Add a shared layer to Codmap. This layer is shared by all 
 	 * Mapinstances.
 	 * 
 	 * @param layer
