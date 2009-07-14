@@ -52,7 +52,7 @@ public class HapaxTest {
 		assertEquals(ma.columnCount(), mb.columnCount());
 		for (int n = 0; n < ma.rowCount(); n++) {
 			for (int m = 0; m < ma.columnCount(); m++) {
-				assertEquals(ma.get(n, m), mb.get(n, m));
+				assertEquals(ma.get(n, m), mb.get(n, m), 1e9);
 			}
 		}
 		assertEquals(ma.density(), mb.density(), 1e-14);
