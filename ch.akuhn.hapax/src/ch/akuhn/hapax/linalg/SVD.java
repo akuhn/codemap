@@ -13,12 +13,12 @@ import ch.akuhn.io.chunks.ReadFromChunk;
 
 public class SVD {
 
-    public SVD(double[] s, double[][] Ut, double[][] Vt) {
-        assert s.length == Ut.length;
-        assert s.length == Vt.length;
+    public SVD(double[] s, double[][] U, double[][] V) {
+        assert s.length == U[0].length;
+        assert s.length == V[0].length;
         this.s = s;
-        this.Ut = Ut;
-        this.Vt = Vt; 
+        this.U = U;
+        this.V = V; 
     }
     
     @ReadFromChunk("SVD")
@@ -27,23 +27,23 @@ public class SVD {
     	int n = chunk.readInt();
     	int k = chunk.readInt();
     	this.s = chunk.readDoubleArray(k);
-    	this.Ut = chunk.readDoubleArray(k,m);
-    	this.Vt = chunk.readDoubleArray(k,n);
+    	this.U = chunk.readDoubleArray(k,m);
+    	this.V = chunk.readDoubleArray(k,n);
     }
     
 
     private SVD decompose(SparseMatrix matrix, int dimensions) {
         if (matrix.rowCount() == 0 || matrix.columnCount() == 0) {
             s = new double[0];
-            Ut = new double[0][];
-            Vt = new double[0][];
+            U = new double[0][];
+            V = new double[0][];
             return this;
         }
         SMat input = makeSMat(matrix);
         SVDRec r = new Svdlib().svdLAS2(input, dimensions, 0, new double[] { -1e-30, 1e-30 }, 1e-6);
         s = r.S;
-        Ut = r.Ut.value;
-        Vt = r.Vt.value;
+        U = t(r.Ut.value);
+        V = t(r.Vt.value);
         return this;
     }
 
@@ -66,79 +66,137 @@ public class SVD {
 
     public double time;
 
-    public double[][] Ut;
+    public double[][] U;
 
-    public double[][] Vt;
+    public double[][] V;
 
-    public double similarityUU(int a, int b) {
-        int dim = s.length;
+	private int modeCount;
+
+	private double similarityS2(double[] a, double[] b) {
         double sim = 0;
         double suma = 0;
         double sumb = 0;
-        for (int n: range(dim)) {
-            sim += Ut[n][a] * Ut[n][b] * (s[n] * s[n]);
-            suma += Ut[n][a] * Ut[n][a] * (s[n] * s[n]);
-            sumb += Ut[n][b] * Ut[n][b] * (s[n] * s[n]);
+        for (int k = 0; k < b.length; k++) {
+        	double s2 = s[k] * s[k]; 
+            sim += a[k] * b[k] * s2;
+            suma += a[k] * a[k] * s2;
+            sumb += b[k] * b[k] * s2;
         }
         return (sim / (Math.sqrt(suma) * Math.sqrt(sumb)));
-    }
+	}
 
-    public double similarityUV(int a, int b) {
-        int dim = s.length;
+	private double similarityS1(double[] a, double[] b) {
         double sim = 0;
         double suma = 0;
         double sumb = 0;
-        for (int n: range(dim)) {
-            sim += Ut[n][a] * Vt[n][b] * s[n];
-            suma += Ut[n][a] * Ut[n][a] * s[n];
-            sumb += Vt[n][b] * Vt[n][b] * s[n];
+        for (int k = 0; k < b.length; k++) {
+        	double s2 = s[k]; 
+            sim += a[k] * b[k] * s2;
+            suma += a[k] * a[k] * s2;
+            sumb += b[k] * b[k] * s2;
         }
-        return sim / (Math.sqrt(suma) * Math.sqrt(sumb));
-    }
-
-    public double similarityV(int a, double[] pseudo) {
-        assert pseudo.length == s.length;
-        int dim = s.length;
-        double sim = 0;
-        double suma = 0;
-        double sumb = 0;
-        for (int n: range(dim)) {
-            sim += Vt[n][a] * pseudo[n] * s[n] * s[n];
-            suma += Vt[n][a] * Vt[n][a] * s[n] * s[n];
-            sumb += pseudo[n] * pseudo[n] * s[n] * s[n];
-        }
-        return sim / (Math.sqrt(suma) * Math.sqrt(sumb));
+        return (sim / (Math.sqrt(suma) * Math.sqrt(sumb)));
+	}
+	
+	
+    public double similarityUU(int a, int b) {
+    	if (s.length == 0) return Double.NaN;
+        return similarityS2(U[a], U[b]);
     }
 
     public double similarityVV(int a, int b) {
-        assert Vt != null;
-        assert s != null;
-        assert a < Vt[0].length : a + " < " + Vt[0].length;
-        assert b < Vt[0].length : b + " < " + Vt[0].length;
-        int dim = s.length;
-        double sim = 0;
-        double suma = 0;
-        double sumb = 0;
-        for (int n: range(dim)) {
-            assert Vt[n] != null : n;
-            sim += Vt[n][a] * Vt[n][b] * s[n] * s[n];
-            suma += Vt[n][a] * Vt[n][a] * s[n] * s[n];
-            sumb += Vt[n][b] * Vt[n][b] * s[n] * s[n];
-        }
-        return sim / (Math.sqrt(suma) * Math.sqrt(sumb));
+    	if (s.length == 0) return Double.NaN;
+        return similarityS2(V[a], V[b]);
     }
+
+    public double similarityUV(int a, int b) {
+    	if (s.length == 0) return Double.NaN;
+        return similarityS1(U[a], V[b]);
+    }
+
+    public double similarityVU(int a, int b) {
+    	if (s.length == 0) return Double.NaN;
+        return similarityS1(V[a], U[b]);
+    }
+
+    public double similarityV(int a, double[] pseudoV) {
+    	if (s.length == 0) return Double.NaN;
+        return similarityS2(V[a], pseudoV);
+    }
+
+    public double similarityU(int a, double[] pseudoU) {
+    	if (s.length == 0) return Double.NaN;
+        return similarityS2(U[a], pseudoU);
+    }
+    
     
     public SVD(SparseMatrix matrix, int dimensions) {
         this.decompose(matrix, dimensions);
         assert s != null;
-        assert Vt != null;
-        assert Ut != null;
-        assert Vt.length == s.length : Vt.length +"=="+ s.length;
-        assert Ut.length == s.length;
+        assert V != null;
+        assert U != null;
+        if (s.length == 0) {
+        	assert V.length == 0;
+        	assert U.length == 0;
+        }
+        else {
+        	assert V[0].length == s.length : V[0].length +"=="+ s.length;
+        	assert U[0].length == s.length;
+        }
     }
 
     public SVD transposed() {
-        return new SVD(s, Vt, Ut); // swap Ut and Vt
+        return new SVD(s, V, U); // swap U and V
     }
 
+    public double[] makePseudoV(double[] weightings) {
+    	return makePseudo(U, weightings);
+    }
+    
+    public double[] makePseudoU(double[] weightings) {
+    	return makePseudo(V, weightings);
+    }
+    
+    private double[] makePseudo(double[][] data, double[] weightings) {
+    	if (s.length == 0) return new double[] { };
+    	assert weightings.length == data[0].length;
+    	double[] result = new double[s.length];
+    	for (int n = 0; n < weightings.length; n++) {
+    		double weight = weightings[n];
+    		if (weight == 0) continue;
+    		double[] dn = data[n];
+    		for (int k = 0; k < s.length; k++) {
+				result[k] += weight * dn[k];
+            }
+    	}
+    	for (int k = 0; k < s.length; k++) {
+            result[k] /= s[k];
+        }
+        return result;
+    }
+    
+    public void updateU(int index, double[] values) {
+    	assert values.length == s.length;
+    	U[index] = values;
+    	modeCount++;
+    }
+
+    public void updateV(int index, double[] values) {
+    	assert values.length == s.length;
+    	V[index] = values;
+    	modeCount++;
+    }
+    
+    private double[][] t(double[][] array) {
+    	if (array.length == 0) return new double[][] {{}};
+    	int width = array[0].length, height = array.length;
+    	double[][] t = new double[width][height];
+    	for (int n = 0; n < width; n++) {
+			for (int m = 0; m < height; m++) {
+				t[n][m] = array[m][n];
+			}
+		}
+    	return t;
+    }
+    
 }

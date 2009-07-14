@@ -27,12 +27,12 @@ public class LatentSemanticIndex {
         this.terms = terms;
         this.svd = svd;
         this.globalWeighting = globalWeighting;
-        assert svd.s.length == 0 || svd.Ut.length != 0;
-        assert svd.s.length == 0 || svd.Ut.length != 0;
+        assert svd.s.length == 0 || svd.U[0].length != 0;
+        assert svd.s.length == 0 || svd.U[0].length != 0;
         if (svd.s.length == 0) return;
-        if (svd.Ut[0].length != terms.size()) svd = svd.transposed();
-        assert svd.Ut[0].length == terms.size();
-        assert svd.Vt[0].length == documents.size();
+        if (svd.U.length != terms.size()) svd = svd.transposed();
+        assert svd.U.length == terms.size();
+        assert svd.V.length == documents.size();
     }
 
     public double[] createPseudoDocument(String string) {
@@ -44,7 +44,7 @@ public class LatentSemanticIndex {
             if (t0 < 0) continue;
             double weight = each.count * (globalWeighting == null ? 1 : globalWeighting[t0]);
             for (int n: range(svd.s.length)) {
-                pseudo[n] += weight * svd.Ut[n][t0];
+                pseudo[n] += weight * svd.U[t0][n];
             }
         }
         for (int n: range(svd.s.length)) {
@@ -129,17 +129,17 @@ public class LatentSemanticIndex {
         for (Document each: documents) {
             if (each.version().equals(version)) selection.add(each);
         }
-        double[][] Vt = new double[svd.s.length][selection.size()];
-        for (int n = 0; n < selection.size(); n++) {
+        double[][] V = new double[selection.size()][svd.s.length];
+        for (int n = 0; n < V.length; n++) {
             int prev = documents.get(selection.get(n));
-            for (int k = 0; k < Vt.length; k++) {
-                Vt[k][n] = svd.Vt[k][prev];
+            for (int k = 0; k < selection.size(); k++) {
+                V[n][k] = svd.V[prev][k];
             }
         }
         return new LatentSemanticIndex(
                 terms, selection,
                 new double[selection.size()], // TODO
-                new SVD(svd.s, svd.Ut, Vt));
+                new SVD(svd.s, svd.U, V));
     }
 
     public Object documentCount() {

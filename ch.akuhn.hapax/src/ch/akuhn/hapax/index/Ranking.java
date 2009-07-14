@@ -39,7 +39,7 @@ public class Ranking<T> extends ArrayList<Rank<T>> {
     
     public Ranking<T> top(int ten) {
     	Ranking<T> result = new Ranking<T>();
-    	int end = Math.max(this.size(), ten);
+    	int end = Math.min(this.size(), ten);
     	for (Rank<T> each: this.subList(0, end)) result.add(each);
     	return result;
     }

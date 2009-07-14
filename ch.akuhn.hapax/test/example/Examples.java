@@ -3,6 +3,9 @@ package example;
 import org.junit.Test;
 
 import ch.akuhn.hapax.Hapax;
+import ch.akuhn.hapax.corpus.Document;
+import ch.akuhn.hapax.index.LatentSemanticIndex;
+import ch.akuhn.hapax.index.Ranking;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 
 public class Examples {
@@ -40,6 +43,12 @@ public class Examples {
 				.makeTDM();
 				
 		System.out.println(tdm);
+		 
+		LatentSemanticIndex lsi = tdm.createIndex(2);
+		
+		Ranking<Document> ranking = lsi.rankDocumentsByQuery("human computer interaction");
+		
+		System.out.println(ranking.top(10));
 		
 	}
 
