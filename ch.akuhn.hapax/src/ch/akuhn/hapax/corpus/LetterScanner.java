@@ -2,7 +2,7 @@ package ch.akuhn.hapax.corpus;
 
 import static java.lang.Character.isLetter;
 
-public class LetterScanner extends Scanner {
+public class LetterScanner extends TermScanner {
 
     @Override
     protected void scan() {

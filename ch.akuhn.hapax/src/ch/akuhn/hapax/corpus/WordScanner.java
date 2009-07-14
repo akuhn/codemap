@@ -2,7 +2,7 @@ package ch.akuhn.hapax.corpus;
 
 import static java.lang.Character.isWhitespace;
 
-public class WordScanner extends Scanner {
+public class WordScanner extends TermScanner {
 
     @Override
     protected void scan() {

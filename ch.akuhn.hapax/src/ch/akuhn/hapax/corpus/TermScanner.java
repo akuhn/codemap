@@ -6,7 +6,7 @@ import java.nio.BufferUnderflowException;
 
 import ch.akuhn.hapax.util.CharStream;
 
-public abstract class Scanner implements Runnable {
+public abstract class TermScanner implements Runnable {
 
     protected char ch;
 
@@ -18,7 +18,7 @@ public abstract class Scanner implements Runnable {
         ch = in.curr;
     }
 
-    public Scanner client(ScannerClient client) {
+    public TermScanner client(ScannerClient client) {
         this.client = client;
         return this;
     }
@@ -36,17 +36,17 @@ public abstract class Scanner implements Runnable {
         ch = in.curr;
     }
 
-    public Scanner onFile(File file) {
+    public TermScanner onFile(File file) {
         in = CharStream.fromFile(file);
         return this;
     }
 
-    public Scanner onString(String string) {
+    public TermScanner onString(String string) {
         this.in = CharStream.fromString(string);
         return this;
     }
     
-    public Scanner onString(CharSequence chars) {
+    public TermScanner onString(CharSequence chars) {
         return onString(chars.toString());
     }
 
@@ -68,7 +68,7 @@ public abstract class Scanner implements Runnable {
         client.yield(in.yank());
     }
 
-    public Scanner onStream(InputStream stream) {
+    public TermScanner onStream(InputStream stream) {
         in = CharStream.fromInputStream(stream);
         return this;
     }

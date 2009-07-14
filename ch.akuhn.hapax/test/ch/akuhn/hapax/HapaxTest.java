@@ -18,14 +18,15 @@ import ch.unibe.jexample.*;
 public class HapaxTest {
 
 	@Test
-	public Hapax sampleHapax() {
-		return Hapax.legomenon()
-			.makeCorpus(".", "java");
+	public TermDocumentMatrix sampleHapax() {
+		return Hapax.newCorpus()
+			.addFiles(".", "java")
+			.makeTDM();
 	}
 	
 	@Test
 	@Given("#sampleHapax")
-	public byte[] writeToChunk(Hapax sample) throws IOException {
+	public byte[] writeToChunk(TermDocumentMatrix sample) throws IOException {
 		ChunkOutput chunk = new ChunkOutput();
 		chunk.writeChunk(sample);
 		System.out.println(chunk.toByteArray().length);
@@ -34,16 +35,16 @@ public class HapaxTest {
 
 	@Test
 	@Given("#writeToChunk")
-	public Hapax readFromChunk(byte[] bytes) throws IOException {
+	public TermDocumentMatrix readFromChunk(byte[] bytes) throws IOException {
 		ChunkInput chunk = new ChunkInput(bytes);
-		return chunk.readChunk(Hapax.class);
+		return chunk.readChunk(TermDocumentMatrix.class);
 	}
 	
 	@Test
 	@Given("#sampleHapax,#readFromChunk")
-	public void compareSampleAndChunk(Hapax sample, Hapax chunk) {
-		Corpus a = sample.corpora().iterator().next();
-		Corpus b = chunk.corpora().iterator().next();
+	public void compareSampleAndChunk(TermDocumentMatrix sample, TermDocumentMatrix chunk) {
+		Corpus a = sample;
+		Corpus b = chunk;
 		assertEquals(a.documentCount(), b.documentCount());
 		assertEquals(a.termCount(), b.termCount());
 		Matrix ma = ((TermDocumentMatrix) a).matrix();

@@ -5,7 +5,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import ch.akuhn.hapax.corpus.Corpus;
-import ch.akuhn.hapax.corpus.CorpusBuilder;
+import ch.akuhn.hapax.corpus.CorpusBuilderHelper;
 import ch.akuhn.hapax.corpus.SimpleCorpus;
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.hapax.index.LogLikelihood;
@@ -15,8 +15,8 @@ public class LogLikelihoodExample {
 
     public static void main(String... args) {
         
-        Corpus c1 = new CorpusBuilder(new SimpleCorpus()).importAllFiles(new File("../Fame"), ".java");
-        Corpus c2 = new CorpusBuilder(new SimpleCorpus()).importAllFiles(new File("../CELLS"), ".java");
+        Corpus c1 = new CorpusBuilderHelper(new SimpleCorpus()).importAllFiles(new File("../Fame"), ".java");
+        Corpus c2 = new CorpusBuilderHelper(new SimpleCorpus()).importAllFiles(new File("../CELLS"), ".java");
         
         System.out.println(c1);
         System.out.println(c2);

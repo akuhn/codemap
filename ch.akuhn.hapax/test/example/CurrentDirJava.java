@@ -7,7 +7,7 @@ import static ch.akuhn.util.Out.puts;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import ch.akuhn.hapax.corpus.CorpusBuilder;
+import ch.akuhn.hapax.corpus.CorpusBuilderHelper;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.akuhn.util.Get;
@@ -17,7 +17,7 @@ public class CurrentDirJava {
     public static void main(String[] args) throws FileNotFoundException {
 
         TermDocumentMatrix tdm = new TermDocumentMatrix();
-        CorpusBuilder importer = new CorpusBuilder(tdm);
+        CorpusBuilderHelper importer = new CorpusBuilderHelper(tdm);
         importer.importAllFiles(new File("../Fame"), ".java");
         importer.importAllFiles(new File("."), ".java");
 

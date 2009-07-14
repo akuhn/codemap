@@ -4,7 +4,7 @@ import static java.lang.Character.isLetter;
 import static java.lang.Character.isLowerCase;
 import static java.lang.Character.isUpperCase;
 
-public class CamelCaseScanner extends Scanner {
+public class CamelCaseScanner extends TermScanner {
 
     @Override
     protected void scan() {

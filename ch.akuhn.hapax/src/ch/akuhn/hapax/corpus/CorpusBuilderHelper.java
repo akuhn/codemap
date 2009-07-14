@@ -17,17 +17,17 @@ import ch.akuhn.util.Files;
 import ch.akuhn.util.Throw;
 
 
-public class CorpusBuilder {
+public class CorpusBuilderHelper {
 
     private Corpus corpus;
 	private String version;
 
-    public CorpusBuilder(Corpus corpus) {
+    public CorpusBuilderHelper(Corpus corpus) {
         this.corpus = corpus;
         this.version = Document.UNVERSIONED;
     }
     
-    public CorpusBuilder version(String version) {
+    public CorpusBuilderHelper version(String version) {
     	this.version = version;
     	return this;
     }

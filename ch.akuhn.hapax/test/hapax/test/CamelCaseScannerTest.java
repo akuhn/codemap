@@ -8,12 +8,12 @@ import java.util.List;
 import org.junit.Test;
 
 import ch.akuhn.hapax.corpus.CamelCaseScanner;
-import ch.akuhn.hapax.corpus.Scanner;
+import ch.akuhn.hapax.corpus.TermScanner;
 import ch.akuhn.hapax.corpus.ScannerClient;
 
 public class CamelCaseScannerTest implements ScannerClient {
 
-    protected Scanner scanner = new CamelCaseScanner().client(this);
+    protected TermScanner scanner = new CamelCaseScanner().client(this);
     private List<String> terms = new ArrayList<String>();
 
     @Test
@@ -118,7 +118,7 @@ public class CamelCaseScannerTest implements ScannerClient {
         assertEquals("[Camel, Case, Scanner]", terms.toString());
     }
 
-    protected Scanner scannerOn(String string) {
+    protected TermScanner scannerOn(String string) {
         return scanner.onString(string);
     }
 
