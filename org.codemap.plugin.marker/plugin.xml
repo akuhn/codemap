@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.codemap.mapview">
+      <toolbar
+            class="org.codemap.plugin.marker.ShowMarkersAction"
+            icon="icons/eclipse/markers.gif"
+            text="Markers">
+      </toolbar>
+   </extension>
+
+</plugin>
