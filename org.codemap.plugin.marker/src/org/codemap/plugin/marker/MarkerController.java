@@ -186,7 +186,6 @@ public class MarkerController {
 //		}
 	}
 	
-	
 	private boolean isActive() {
 		if (showMarkersAction == null) return false;
 		return showMarkersAction.isChecked();
@@ -217,5 +216,4 @@ public class MarkerController {
 	private void issueRedraw() {
 		CodemapCore.getPlugin().redrawCodemap();
 	}		
-
 }
