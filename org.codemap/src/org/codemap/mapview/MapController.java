@@ -167,7 +167,8 @@ public class MapController {
 	}
 
 	private void log(String msg) {
-		System.out.println(msg + serial++);
+//		do not log at the moment.
+//		System.out.println(msg + serial++);
 	}
 	
 	private MapSelection getYouAreHereSelection() {

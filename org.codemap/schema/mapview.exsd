@@ -55,7 +55,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":ch.unibe.softwaremap.ui.ICodemapPluginAction"/>
+                  <meta.attribute kind="java" basedOn=":org.codemap.mapview.ICodemapPluginAction"/>
                </appinfo>
             </annotation>
          </attribute>

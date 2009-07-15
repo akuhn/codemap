@@ -7,13 +7,19 @@ import java.util.Map;
 import org.codemap.mapview.MapView;
 import org.codemap.util.CodemapColors;
 import org.codemap.util.CodemapLabels;
+import org.codemap.util.Log;
 import org.codemap.util.SharedCodemapLayer;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IMarkerDelta;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.eclipse.ui.preferences.ScopedPreferenceStore;
-import org.eclipse.ui.views.markers.internal.MarkerSupportRegistry;
 import org.osgi.framework.BundleContext;
 
 import ch.deif.meander.MapSelection;
@@ -65,7 +71,7 @@ public class CodemapCore extends AbstractUIPlugin {
 		colorScheme = new CodemapColors();
 		sharedLayer = new SharedCodemapLayer();
 	}
-
+	
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -118,7 +124,8 @@ public class CodemapCore extends AbstractUIPlugin {
 	public CodemapColors getColorScheme() {
 		return colorScheme;
 	}
-
+	
+	// TODO: the layers itself should issue the redraws
 	public void redrawCodemap() {
 		getMapView().redraw();
 	}

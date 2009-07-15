@@ -67,6 +67,31 @@ public class MapSelectionProvider implements ISelectionProvider {
 
 	private void provideSelection(final ISelection selection) {
 		final SelectionChangedEvent e = new SelectionChangedEvent(this, selection);
+		/*
+			TODO: listeners might need to be synchronized:
+			java.util.ConcurrentModificationException
+			at java.util.AbstractList$Itr.checkForComodification(AbstractList.java:372)
+			at java.util.AbstractList$Itr.next(AbstractList.java:343)
+			at org.codemap.mapview.MapSelectionProvider.provideSelection(MapSelectionProvider.java:70)
+			at org.codemap.mapview.MapSelectionProvider.setSelection(MapSelectionProvider.java:64)
+			at org.codemap.mapview.MapView$3.selectionChanged(MapView.java:171)
+			at org.codemap.mapview.MapView$3.handleEvent(MapView.java:159)
+			at ch.deif.meander.ui.CodemapEventRegistry$1.run(CodemapEventRegistry.java:19)
+			at java.lang.Thread.run(Thread.java:637)
+			at ch.deif.meander.ui.CodemapEventRegistry.fireEvent(CodemapEventRegistry.java:22)
+			at ch.deif.meander.ui.MeanderApplet.fireEvent(MeanderApplet.java:42)
+			at ch.deif.meander.visual.CurrentSelectionOverlay.handleDraggingStopped(CurrentSelectionOverlay.java:84)
+			at ch.deif.meander.visual.CurrentSelectionOverlay.handleDragging(CurrentSelectionOverlay.java:65)
+			at ch.deif.meander.visual.CurrentSelectionOverlay.handleEvents(CurrentSelectionOverlay.java:42)
+			at ch.deif.meander.visual.CurrentSelectionOverlay.draw(CurrentSelectionOverlay.java:32)
+			at ch.deif.meander.visual.Composite.drawChildren(Composite.java:30)
+			at ch.deif.meander.visual.Composite.draw(Composite.java:25)
+			at ch.deif.meander.visual.MapVisualization.draw(MapVisualization.java:70)
+			at ch.deif.meander.ui.MeanderApplet.draw(MeanderApplet.java:55)
+			at processing.core.PApplet.handleDraw(PApplet.java:1406)
+			at processing.core.PApplet.run(PApplet.java:1311)
+			at java.lang.Thread.run(Thread.java:637)
+		 */
 		for (final ISelectionChangedListener each: listeners) {
 			SafeRunner.run(new SafeRunnable() {
 				@Override
