@@ -6,9 +6,11 @@ import org.eclipse.jface.action.Action;
 public class ShowMarkersAction implements ICodemapPluginAction {
 
 	private Action action;
+	private MarkerController controller;
 
 	public ShowMarkersAction() {
-		MarkerPluginCore.getPlugin().register(this);
+		controller = MarkerPluginCore.getPlugin().getController();
+		controller.register(this);
 	}
 
 	@Override
@@ -24,11 +26,11 @@ public class ShowMarkersAction implements ICodemapPluginAction {
 	}	
 
 	private void showMarkers() {
-		
+		controller.onLayerActivated();
 	}
 
 	private void hideMarkers() {
-		
+		controller.onLayerDeactivated();
 	}
 
 }
