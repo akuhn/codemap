@@ -1,27 +1,16 @@
 package org.codemap.mapview;
 
-import static org.codemap.util.ID.PACKAGE_EXPLORER;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import org.codemap.CodemapCore;
 import org.codemap.util.EclipseProcessingBridge;
 import org.codemap.util.Log;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -37,13 +26,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.part.ISetSelectionTarget;
 import org.eclipse.ui.part.ViewPart;
 
 import ch.deif.meander.Location;
@@ -60,7 +47,7 @@ public class MapView extends ViewPart {
 	public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
 	
 	private EclipseProcessingBridge bridge;
-	private IJavaProject currentProject;
+//	private IJavaProject currentProject;
 	private MapSelectionProvider selectionProvider;
 	private SelectionTracker selectionTracker;
 	private Composite container;
@@ -253,14 +240,13 @@ public class MapView extends ViewPart {
 	}
 
 	public void onProjectSelectionChanged(IJavaProject project) {
-//		if (project != currentProject) selectionTracker.theController.onProjectChanged();
-		if (project == currentProject) return;
-		currentProject = project;
+//		if (project == currentProject) return;
+//		currentProject = project;
 		updateVisualization();
 	}
 
 	public IJavaProject getCurrentProject() {
-		return currentProject;
+		return theController.getCurrentProject();
 	}
 
 	public void setCurrentSize(int newDimension) {

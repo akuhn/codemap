@@ -28,6 +28,13 @@ import ch.akuhn.util.Pair;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.Point;
 import ch.deif.meander.builder.Meander;
+import ch.deif.meander.swt.Background;
+import ch.deif.meander.swt.CodemapVisualization;
+import ch.deif.meander.swt.CurrSelectionOverlay;
+import ch.deif.meander.swt.HillshadeLayer;
+import ch.deif.meander.swt.LabelOverlay;
+import ch.deif.meander.swt.ShoreLayer;
+import ch.deif.meander.swt.WaterBackground;
 import ch.deif.meander.visual.CurrentSelectionOverlay;
 import ch.deif.meander.visual.Layer;
 import ch.deif.meander.visual.MapVisualization;
@@ -46,16 +53,16 @@ public class MapPerProject {
 
 	private final IJavaProject project;
 	private TermDocumentMatrix tdm;
-	private MapVisualization mapViz;
 	private boolean mapBeingCalculated = false;
 	private boolean builderIsRunning = false;
 	private int mapSize = MINIMAL_SIZE;
 
-
 	private Hapax hapax;
-
 	private Configuration configuration;
-	private Layer layer;
+	
+	private MapVisualization mapViz;
+	private Layer awtLayer;
+	private CodemapVisualization visual;
 
 	public MapPerProject(IJavaProject project) {
 		this.project = project;
@@ -154,7 +161,17 @@ public class MapPerProject {
 					.addCorpus(hapax)
 					.makeMap(reloadMapState());
 			monitor.worked(5);
-			layer = Meander.visualization()
+			
+			visual = new CodemapVisualization(configuration.withSize(mapSize));
+			Background layer = new Background();
+			visual.add(layer);
+			layer.children.add(new WaterBackground());
+			layer.children.add(new ShoreLayer());
+			layer.children.add(new HillshadeLayer());
+			visual.add(new LabelOverlay());
+			visual.add(new CurrSelectionOverlay().setSelection(CodemapCore.getPlugin().getCurrentSelection()));
+			
+			awtLayer = Meander.visualization()
 					.withLabels(CodemapCore.getPlugin().getLabelScheme())
 					.withColors(CodemapCore.getPlugin().getColorScheme())
 					.withSelection(new CurrentSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
@@ -167,7 +184,7 @@ public class MapPerProject {
 			monitor.worked(20);
 		}
 
-		mapViz = new MapVisualization(configuration.withSize(mapSize), layer);
+		mapViz = new MapVisualization(configuration.withSize(mapSize), awtLayer);
 		monitor.worked(20);
 
 		notifyMapView();

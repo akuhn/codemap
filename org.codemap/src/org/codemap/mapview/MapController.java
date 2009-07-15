@@ -28,7 +28,7 @@ public class MapController {
 	private CodemapCore plugin;
 	
 	private State state = State.UNINITIALIZED;
-	private IProject currentProject;	
+	private IJavaProject currentProject;
 
 	// FIXME: move this, maybe to MapPerProjec
 	
@@ -54,10 +54,13 @@ public class MapController {
 		log("-- showMap@");
 	}
 	
-	public void onProjectChanged(IJavaProject javaProject) {
-		log("-- projectChanged@");
-		view.onProjectSelectionChanged(javaProject);
-		redrawCodemap();
+	public void onProjectSelected(IJavaProject javaProject) {
+		log("-- projectSelected@");
+		if (currentProject == javaProject) return;
+		
+		currentProject = javaProject;
+		view.onProjectSelectionChanged(currentProject);
+		redrawCodemap();			
 	}
 	
 	public void onSelectionChanged(Collection<ICompilationUnit> units) {
@@ -101,7 +104,7 @@ public class MapController {
 		IJavaElement javaElement = editorEvent.getInput();
 		if (!(javaElement instanceof ICompilationUnit)) return;
 		
-		onProjectChanged(javaElement.getJavaProject());
+		onProjectSelected(javaElement.getJavaProject());
 //		view.onProjectSelectionChanged();
 		youAreHereChanged((ICompilationUnit) javaElement);
 		log("-- editorActivated(" + editorEvent.getInput().getHandleIdentifier() + ")@");
@@ -185,6 +188,10 @@ public class MapController {
 
 	private void redrawCodemap() {
 		CodemapCore.getPlugin().redrawCodemap();
+	}
+
+	public IJavaProject getCurrentProject() {
+		return currentProject;
 	}	
 
 }

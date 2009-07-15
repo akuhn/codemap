@@ -189,7 +189,7 @@ public class SelectionTracker {
 	}
 
 	private void projectSelected(IJavaProject javaProject) {
-		theController.onProjectChanged(javaProject);
+		theController.onProjectSelected(javaProject);
 	}
 
 	private void multipleProjectsSelected() {
