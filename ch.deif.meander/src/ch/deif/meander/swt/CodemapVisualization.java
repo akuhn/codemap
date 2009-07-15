@@ -40,28 +40,39 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 		};
 	}
 
-	public void link(Canvas newCanvas) {
+	public void link(final Canvas newCanvas) {
 		if (canvas == newCanvas) return;
-		this.unlink();
+		this.unlink(canvas);
 		canvas = newCanvas;
-		canvas.addPaintListener(this);
-		canvas.addMouseListener(this);
-		canvas.addMouseMoveListener(this);
-		canvas.addMouseTrackListener(this);
-		canvas.addMouseWheelListener(this);
-		canvas.addDragDetectListener(this);
-		canvas.addMenuDetectListener(this);
+		
+		Display.getDefault().syncExec(new Runnable(){
+			@Override
+			public void run() {
+				newCanvas.addPaintListener(CodemapVisualization.this);
+				newCanvas.addMouseListener(CodemapVisualization.this);
+				newCanvas.addMouseMoveListener(CodemapVisualization.this);
+				newCanvas.addMouseTrackListener(CodemapVisualization.this);
+				newCanvas.addMouseWheelListener(CodemapVisualization.this);
+				newCanvas.addDragDetectListener(CodemapVisualization.this);
+				newCanvas.addMenuDetectListener(CodemapVisualization.this);				
+			}
+		});
 	}
 
-	public void unlink() {
-		if (canvas != null) {
-			canvas.removePaintListener(this);
-			canvas.removeMouseListener(this);
-			canvas.removeMouseMoveListener(this);
-			canvas.removeMouseTrackListener(this);
-			canvas.removeMouseWheelListener(this);
-			canvas.removeDragDetectListener(this);
-			canvas.removeMenuDetectListener(this);
+	public void unlink(final Canvas oldCanvas) {
+		if (oldCanvas != null) {
+			Display.getDefault().syncExec(new Runnable(){
+				@Override
+				public void run() {
+					oldCanvas.removePaintListener(CodemapVisualization.this);
+					oldCanvas.removeMouseListener(CodemapVisualization.this);
+					oldCanvas.removeMouseMoveListener(CodemapVisualization.this);
+					oldCanvas.removeMouseTrackListener(CodemapVisualization.this);
+					oldCanvas.removeMouseWheelListener(CodemapVisualization.this);
+					oldCanvas.removeDragDetectListener(CodemapVisualization.this);
+					oldCanvas.removeMenuDetectListener(CodemapVisualization.this);
+				}
+			});			
 		}
 	}
 

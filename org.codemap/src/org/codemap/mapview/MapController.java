@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.codemap.CodemapCore;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
@@ -22,10 +21,7 @@ public class MapController {
 		INITIALIZED
 	}
 
-	private static int serial = 0;
-	
 	private MapView view;
-	private CodemapCore plugin;
 	
 	private State state = State.UNINITIALIZED;
 	private IJavaProject currentProject;
@@ -34,7 +30,6 @@ public class MapController {
 	
 	public MapController(MapView view) {
 		this.view = view;
-		this.plugin = CodemapCore.getPlugin();
 	}
 	
 	public MapView getView() {
@@ -105,7 +100,6 @@ public class MapController {
 		if (!(javaElement instanceof ICompilationUnit)) return;
 		
 		onProjectSelected(javaElement.getJavaProject());
-//		view.onProjectSelectionChanged();
 		youAreHereChanged((ICompilationUnit) javaElement);
 		log("-- editorActivated(" + editorEvent.getInput().getHandleIdentifier() + ")@");
 	}

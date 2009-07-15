@@ -60,7 +60,7 @@ public class MapPerProject {
 	private Hapax hapax;
 	private Configuration configuration;
 	
-	private MapVisualization mapViz;
+//	private MapVisualization mapViz;
 	private Layer awtLayer;
 	private CodemapVisualization visual;
 
@@ -126,16 +126,17 @@ public class MapPerProject {
 		new MapMakerBackgroundJob(MapPerProject.this).schedule();
 	}
 
-	public MapVisualization getVisualization() {
+	public CodemapVisualization getVisualization() {
 		if (tdm == null) return null;
-		if (mapViz != null && mapViz.getWidth() == mapSize) return mapViz;
+//		if (mapViz != null && mapViz.getWidth() == mapSize) return mapViz;
+		if (visual != null) return visual;		
 		updateMap();
 		return null;
 	}
 
 	public void updateMap() {
 		if (mapBeingCalculated) return;
-		mapViz.redraw();
+		visual.redraw();
 		startBackgroundTask();
 	}
 	
@@ -184,7 +185,7 @@ public class MapPerProject {
 			monitor.worked(20);
 		}
 
-		mapViz = new MapVisualization(configuration.withSize(mapSize), awtLayer);
+//		mapViz = new MapVisualization(configuration.withSize(mapSize), awtLayer);
 		monitor.worked(20);
 
 		notifyMapView();

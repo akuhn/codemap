@@ -46,7 +46,7 @@ public class LabelOverlay extends SWTLayer {
 			//gc.setForeground(black);
 			//gc.drawText(name, each.px + 1, each.py + 1, SWT.DRAW_TRANSPARENT);
 			//gc.setAlpha(255);
-			gc.drawText(name, each.px, each.py, 0*SWT.DRAW_TRANSPARENT);
+			gc.drawText(name, each.px, each.py, SWT.DRAW_TRANSPARENT);
 		}
 		//font.dispose();
 		black.dispose();

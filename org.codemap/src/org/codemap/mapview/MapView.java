@@ -22,6 +22,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -34,6 +35,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
 
 import ch.deif.meander.Location;
+import ch.deif.meander.swt.CodemapVisualization;
 import ch.deif.meander.ui.CodemapEvent;
 import ch.deif.meander.ui.CodemapListener;
 import ch.deif.meander.ui.MeanderApplet;
@@ -46,14 +48,18 @@ public class MapView extends ViewPart {
 
 	public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
 	
-	private EclipseProcessingBridge bridge;
+//	private EclipseProcessingBridge bridge;
 //	private IJavaProject currentProject;
 	private MapSelectionProvider selectionProvider;
 	private SelectionTracker selectionTracker;
-	private Composite container;
-	private MeanderApplet theApplet;
+//	private Composite container;
+//	private MeanderApplet theApplet;
 	private final MapController theController;
 	private int currentSize;
+
+	private Canvas canvas;
+
+	private Composite container;
 	
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 		public String getColumnText(Object obj, int index) {
@@ -79,12 +85,12 @@ public class MapView extends ViewPart {
 		container = new Composite(parent, SWT.NONE);
 		container.setLayout(new FillLayout(SWT.LEFT));
 		
+		canvas = new Canvas(container, SWT.NONE);		
+		
 		container.layout();
 		MColor water = MColor.WATER;
 		Color swtColor = new Color(null, water.getRed(), water.getGreen(), water.getBlue());		
 		container.setBackground(swtColor);
-		theApplet = EclipseProcessingBridge.createApplet();
-		theApplet.addListener(makeListener());
 
 		selectionProvider = new MapSelectionProvider(this);
 		selectionTracker = new SelectionTracker(theController);
@@ -127,12 +133,11 @@ public class MapView extends ViewPart {
 	}
 	
 	private void showMap() {
-		clearContainer();
-		bridge = new EclipseProcessingBridge(container, theApplet);
-		softwareMap().getApplet().addListener(makeListener());
+//		clearContainer();
+//		bridge = new EclipseProcessingBridge(container, theApplet);
+//		softwareMap().getApplet().addListener(makeListener());
 		CodemapCore.getPlugin().setMapView(this);
 		new ResizeListener(container, theController);
-//		redrawContainer();
 		theController.onShowMap();
 	}
 
@@ -190,13 +195,12 @@ public class MapView extends ViewPart {
 
 	@Override
 	public void setFocus() {
-		EclipseProcessingBridge map = softwareMap();
-		if (map == null) return;
-		map.setFocus();
+//		FIXME: correct?
+		canvas.setFocus();
 	}
 
 	public void updateVisualization() {
-		MapVisualization viz = CodemapCore.getPlugin()
+		CodemapVisualization viz = CodemapCore.getPlugin()
 			.mapForProject(getCurrentProject())
 			.updateSize(getCurrentSize())
 			.enableBuilder()
@@ -209,8 +213,8 @@ public class MapView extends ViewPart {
 		return currentSize; 
 	}
 
-	public void updateMapVisualization(MapVisualization viz) {
-		softwareMap().setMapVizualization(viz);
+	public void updateMapVisualization(CodemapVisualization viz) {
+		viz.link(canvas);
 	}
 
 	public void newProjectMapAvailable(IJavaProject project) {
@@ -235,10 +239,6 @@ public class MapView extends ViewPart {
 		});
 	}
 
-	public EclipseProcessingBridge softwareMap() {
-		return bridge;
-	}
-
 	public void onProjectSelectionChanged(IJavaProject project) {
 //		if (project == currentProject) return;
 //		currentProject = project;
@@ -257,7 +257,7 @@ public class MapView extends ViewPart {
 		setCurrentSize(newDimension);
 		IJavaProject project = getCurrentProject();
 		if (project == null) return;
-		MapVisualization viz = CodemapCore.getPlugin().mapForProject(project).updateSize(newDimension).getVisualization();
+		CodemapVisualization viz = CodemapCore.getPlugin().mapForProject(project).updateSize(newDimension).getVisualization();
 		if (viz != null) {
 			updateMapVisualization(viz);
 		}
@@ -268,11 +268,13 @@ public class MapView extends ViewPart {
 	}
 
 	public void redraw() {
-		theApplet.redraw();
+//		FIXME
+//		theApplet.redraw();
 	}
 
 	public void redrawCodemapBackground() {
-		theApplet.redrawBackground(true);
+//		FIXME
+//		theApplet.redrawBackground(true);
 	}
 
 }
