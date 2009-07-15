@@ -15,8 +15,6 @@ import static org.codemap.util.ID.PACKAGE_EXPLORER;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.SafeRunner;
-import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -93,7 +91,7 @@ public class MapSelectionProvider implements ISelectionProvider {
 			at java.lang.Thread.run(Thread.java:637)
 		 */
 		for (final ISelectionChangedListener each: listeners) {
-			SafeRunner.run(new SafeRunnable() {
+			Display.getDefault().asyncExec(new Runnable() {
 				@Override
 				public void run() {
 					each.selectionChanged(e);
