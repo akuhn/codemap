@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import org.codemap.CodemapCore;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -102,22 +103,29 @@ public class SearchResultController {
 		return idents;		
 	}
 	
-	private void processMatch(Object element, Collection<String> idents) {		
+	private void processMatch(Object element, Collection<String> idents) {
+//		System.out.println(element.getClass());
+		if (element instanceof IFile) {
+			IJavaElement javaElement = JavaCore.create((IFile)element);
+			if (javaElement == null) return;
+			
+			idents.add(javaElement.getHandleIdentifier());
+		}
 		if (element instanceof IJavaElement) {
 			// create it that way to get the correct element (the compilation unit)
-			IJavaElement javaElement = crateJavaElement(element);
+			IJavaElement compilationElement = getCompilationUnitElement((IJavaElement)element);
 
-			if (javaElement == null || javaElement.isReadOnly()) return;
-			if (javaElement.getElementType() != IJavaElement.COMPILATION_UNIT) return;
+			if (compilationElement == null || compilationElement.isReadOnly()) return;
+			if (compilationElement.getElementType() != IJavaElement.COMPILATION_UNIT) return;
 
-			ICompilationUnit compilationUnit = (ICompilationUnit) javaElement.getAdapter(ICompilationUnit.class);
+			ICompilationUnit compilationUnit = (ICompilationUnit) compilationElement.getAdapter(ICompilationUnit.class);
 			String ident = compilationUnit.getHandleIdentifier();
 			idents.add(ident);
 		}
 	}
 	
-	private IJavaElement crateJavaElement(Object element) {
-		IResource resource = ((IJavaElement) element).getResource();
+	private IJavaElement getCompilationUnitElement(IJavaElement element) {
+		IResource resource = element.getResource();
 		IJavaElement javaElement = JavaCore.create(resource);
 		return javaElement;
 	}
