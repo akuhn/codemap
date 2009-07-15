@@ -61,13 +61,16 @@ public class CurrSelectionOverlay extends SelectionOverlay {
 	public void mouseMove(MouseEvent e) {
 		if (!isDragging) return;
 		dragStop = new Point(e.x, e.y);	
-		this.redraw();
+		redraw();
 	}
 
 	@Override
 	public void mouseUp(MouseEvent e) {
+		if (isDragging) {
+			updateSelection();			
+		}
 		isDragging = false;
-		updateSelection();
+		redraw();
 		fireEvent(EVT_SELECTION_CHANGED, selection);
 	}
 
