@@ -16,42 +16,40 @@ import ch.akuhn.util.Bag.Count;
 
 public class LatentSemanticIndex {
 
-    public final Index<Document> documents;
+    public final AssociativeList<Document> documents;
     public final double[] globalWeighting;
     public final SVD svd; 
-    public final Index<String> terms;
+    public final AssociativeList<String> terms;
 
-    public LatentSemanticIndex(Index<String> terms, Index<Document> documents,
+    public LatentSemanticIndex(AssociativeList<String> terms, AssociativeList<Document> documents,
             double[] globalWeighting, SVD svd) {
         this.documents = documents;
         this.terms = terms;
         this.svd = svd;
         this.globalWeighting = globalWeighting;
-        assert svd.s.length == 0 || svd.U[0].length != 0;
-        assert svd.s.length == 0 || svd.U[0].length != 0;
-        if (svd.s.length == 0) return;
-        if (svd.U.length != terms.size()) svd = svd.transposed();
-        assert svd.U.length == terms.size();
-        assert svd.V.length == documents.size();
+        if (svd.getRank() == 0) return;
+        if (svd.rowCount() != terms.size()) svd = svd.transposed();
+        assert svd.rowCount() == terms.size();
+        assert svd.columnCount() == documents.size();
     }
 
     public double[] createPseudoDocument(String string) {
         // apply: CamelCaseScanner, PorterStemmer, toLowerCase, and weighting
         Terms query = new Terms(string).toLowerCase().stem();
-        double[] pseudo = new double[svd.s.length];
-        for (Count<String> each: query.counts()) {
-            int t0 = terms.get(each.element);
-            if (t0 < 0) continue;
-            double weight = each.count * (globalWeighting == null ? 1 : globalWeighting[t0]);
-            for (int n: range(svd.s.length)) {
-                pseudo[n] += weight * svd.U[t0][n];
-            }
-        }
-        for (int n: range(svd.s.length)) {
-            pseudo[n] /= svd.s[n];
-        }
-        return pseudo;
+        return createPseudoDocument(query);
     }
+
+	public double[] createPseudoDocument(Terms query) {
+        double[] weightings = new double[termCount()];
+        // iterate over query, assume: quert.size() <<< terms.size()
+		for (Count<String> each: query.counts()) {
+			int index = terms.get(each.element);
+            if (index < 0) continue;
+            double weight = (globalWeighting == null ? 1 : globalWeighting[index]);
+            weightings[index] = each.count * weight;
+        }
+        return svd.makePseudoV(weightings);
+	}
 
     public Ranking<Document> rankDocumentsByDocument(Document d) {
         Ranking<Document> ranking = new Ranking<Document>();
@@ -125,25 +123,26 @@ public class LatentSemanticIndex {
     }
     
     public LatentSemanticIndex select(String version) {
-        Index<Document> selection = new Index<Document>();
+    	AssociativeList<Document> selection = new AssociativeList<Document>();
         for (Document each: documents) {
             if (each.version().equals(version)) selection.add(each);
         }
-        double[][] V = new double[selection.size()][svd.s.length];
-        for (int n = 0; n < V.length; n++) {
-            int prev = documents.get(selection.get(n));
-            for (int k = 0; k < selection.size(); k++) {
-                V[n][k] = svd.V[prev][k];
-            }
+        int[] indices = new int[selection.size()];
+        for (int n = 0; n < indices.length; n++) {
+            indices[documents.get(selection.get(n))] = n;
         }
         return new LatentSemanticIndex(
                 terms, selection,
-                new double[selection.size()], // TODO
-                new SVD(svd.s, svd.U, V));
+                new double[selection.size()], // TODO copy global weighting
+                svd.withSelectV(indices));
     }
 
-    public Object documentCount() {
+    public int documentCount() {
         return documents.size();
+    }
+    
+    public int termCount() {
+        return terms.size();
     }
     
 }

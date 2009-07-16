@@ -22,7 +22,8 @@ public final class CorpusBuilder {
 	private boolean rejectStopwords = true;
 	private boolean rejectRareTerms = true;
 	private boolean rejectCommonTerms = true;
-	private boolean ignoreCase = true;
+	boolean ignoreCase = true;
+	int latentDimensions;
 
 	
 	public CorpusBuilder addDocument(String name, String content) {
@@ -114,6 +115,16 @@ public final class CorpusBuilder {
 	public CorpusBuilder ignoreCase() {
 		ignoreCase = true;
 		return this;
+	}
+
+	public CorpusBuilder latentDimensions(int rank) {
+		latentDimensions = rank;
+		return this;
+	}
+
+
+	public Hapax build() {
+		return new Hapax(this);
 	}
 
 }

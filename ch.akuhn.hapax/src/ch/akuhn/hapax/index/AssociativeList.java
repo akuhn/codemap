@@ -5,18 +5,21 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
-public class Index<E> implements Cloneable, Iterable<E> {
+import ch.akuhn.foreach.Each;
+
+public class AssociativeList<E> implements Cloneable, Iterable<E> {
 
     private List<E> list;
     private Map<E,Integer> map;
 
-    public Index() {
+    public AssociativeList() {
         map = new HashMap<E,Integer>();
         list = new ArrayList<E>();
     }
 
-    public Index(Index<E> index) {
+    public AssociativeList(AssociativeList<E> index) {
         map = new HashMap<E,Integer>(index.map);
         list = new ArrayList<E>(index.list);
     }
@@ -32,8 +35,8 @@ public class Index<E> implements Cloneable, Iterable<E> {
     }
 
     @Override
-    public Index<E> clone() {
-        return new Index<E>(this);
+    public AssociativeList<E> clone() {
+        return new AssociativeList<E>(this);
     }
 
     public int get(E element) {
@@ -56,6 +59,38 @@ public class Index<E> implements Cloneable, Iterable<E> {
 
     public boolean contains(E element) {
         return map.containsKey(element);
+    }
+    
+    public Iterable<Each<E>> withIndices() {
+    	return new Iterable<Each<E>>() {
+			@Override
+			public Iterator<Each<E>> iterator() {
+				return new Iterator<Each<E>>() {
+
+					private Iterator<E> iterator = list.iterator();
+					private Each<E> each = new Each<E>();
+					private int index = 0;
+					
+					@Override
+					public boolean hasNext() {
+						return iterator.hasNext();
+					}
+
+					@Override
+					public Each<E> next() {
+						if (!hasNext()) throw new NoSuchElementException();
+						each.value = iterator.next();
+						each.index = index++;
+						return each;
+					}
+
+					@Override
+					public void remove() {
+						throw new UnsupportedOperationException();
+					}
+				};
+			}
+    	};
     }
 
 }

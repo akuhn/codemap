@@ -2,6 +2,7 @@ package ch.akuhn.hapax.corpus;
 
 import java.io.File;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.BufferUnderflowException;
 
 import ch.akuhn.hapax.util.CharStream;
@@ -71,6 +72,14 @@ public abstract class TermScanner implements Runnable {
     public TermScanner onStream(InputStream stream) {
         in = CharStream.fromInputStream(stream);
         return this;
+    }
+    
+    public TermScanner newInstance() {
+    	try {
+			return this.getClass().getConstructor().newInstance();
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
     }
 
 }

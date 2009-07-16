@@ -61,18 +61,18 @@ public class TermDocumentMatrix extends Corpus {
         
     }
     
-    private Index<Document> documents; // columns
+    private AssociativeList<Document> documents; // columns
     private double[] globalWeighting;
     private SparseMatrix matrix;
-    private Index<String> terms; // rows
+    private AssociativeList<String> terms; // rows
     
     public TermDocumentMatrix() {
         this.matrix = new SparseMatrix(0, 0);
-        this.terms = new Index<String>();
-        this.documents = new Index<Document>();
+        this.terms = new AssociativeList<String>();
+        this.documents = new AssociativeList<Document>();
     }
 
-    private TermDocumentMatrix(Index<String> terms, Index<Document> documents) {
+    private TermDocumentMatrix(AssociativeList<String> terms, AssociativeList<Document> documents) {
         this.matrix = new SparseMatrix(terms.size(), documents.size());
         this.terms = terms.clone();
         this.documents = documents.clone();
@@ -158,7 +158,7 @@ public class TermDocumentMatrix extends Corpus {
     }
 
     public TermDocumentMatrix rejectLegomena(int threshold) {
-        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<String>(), documents);
+        TermDocumentMatrix tdm = new TermDocumentMatrix(new AssociativeList<String>(), documents);
         for (Pair<String,Vector> each: termRowPairs()) {
             if (each.snd.used() <= threshold) continue;
             tdm.addToRow(each.fst, each.snd);
@@ -171,7 +171,7 @@ public class TermDocumentMatrix extends Corpus {
     }
 
     public TermDocumentMatrix rejectStopwords(Stopwords stopwords) {
-        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<String>(), documents);
+        TermDocumentMatrix tdm = new TermDocumentMatrix(new AssociativeList<String>(), documents);
         for (Pair<String,Vector> each: termRowPairs()) {
             if (stopwords.contains(each.fst)) continue;
             tdm.addToRow(each.fst, each.snd);
@@ -184,7 +184,7 @@ public class TermDocumentMatrix extends Corpus {
     }
 
     public TermDocumentMatrix stem(Stemmer stemmer) {
-        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<String>(), documents);
+        TermDocumentMatrix tdm = new TermDocumentMatrix(new AssociativeList<String>(), documents);
         for (Pair<String,Vector> each: termRowPairs()) {
             tdm.addToRow(stemmer.stem(each.fst), each.snd);
         }
@@ -252,7 +252,7 @@ public class TermDocumentMatrix extends Corpus {
     }
 
     public TermDocumentMatrix toLowerCase() {
-        TermDocumentMatrix tdm = new TermDocumentMatrix(new Index<String>(), documents);
+        TermDocumentMatrix tdm = new TermDocumentMatrix(new AssociativeList<String>(), documents);
         for (Pair<String,Vector> each: termRowPairs()) {
             tdm.addToRow(each.fst.toString().toLowerCase(), each.snd);
         }
@@ -309,9 +309,9 @@ public class TermDocumentMatrix extends Corpus {
     public TermDocumentMatrix(ChunkInput chunk) throws IOException {
     	int termCount = chunk.readInt();
     	int documentCount = chunk.readInt();
-    	terms = new Index<String>();
+    	terms = new AssociativeList<String>();
     	for (int n = 0; n < termCount; n++) terms.add(chunk.readUTF());
-    	documents = new Index<Document>();
+    	documents = new AssociativeList<Document>();
     	for (int i = 0; i < documentCount; i++) documents.add(new Doc(chunk.readUTF(), null, this));
     	matrix = chunk.readChunk(SparseMatrix.class);
     }

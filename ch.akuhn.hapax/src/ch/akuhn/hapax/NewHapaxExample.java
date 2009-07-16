@@ -6,24 +6,12 @@ public class NewHapaxExample {
 
 	public static void main(String[] args) {
 		
-		TermDocumentMatrix tdm;
-		
-		tdm = Hapax.newCorpus()
-				.useCamelCaseScanner()
-				.rejectRareTerms()
-				.rejectCommonTerms()
-				.useTFIDF()
-				.addFiles(".", ".java")
-				.makeTDM();
-		
-		System.out.println(tdm);
-		
-		tdm = Hapax.newCorpus()
+		Hapax hapax = Hapax.newCorpus()
 				.useLetterScanner()
 				.ignoreCase()
 				.rejectStopwords()
 				.rejectRareTerms()
-				.dontUseWeighting()
+				.useTFIDF()
 				.addDocument("c1", "Human machine interface for Lab ABC computer applications")
 				.addDocument("c2", "A survey of user opinion of computer system response time")
 				.addDocument("c3", "The EPS user interface management system")
@@ -33,10 +21,17 @@ public class NewHapaxExample {
 				.addDocument("m2", "The intersection graph of paths in trees")
 				.addDocument("m3", "Graph minors IV: Widths of trees and well-quasi-ordering")
 				.addDocument("m4", "Graph minors: A survey")
-				.makeTDM();
+				.latentDimensions(2)
+				.build();
 				
-		System.out.println(tdm);
-		
+		System.out.println(hapax.find("human computer interaction"));
+
+		Hapax hapax = hapax.updateCorpus()
+				.appendDocument("m5", "The EPS user interface management system")
+				.updateDocument("m2", "Human machine interface for Lab ABC computer applications")
+				.removeDocument("c2")
+				.done();
+
 	}
-	
+
 }
