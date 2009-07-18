@@ -18,15 +18,29 @@ public class CompositeLayer extends SWTLayer {
 		for (SWTLayer each: children ) each.paintMap(map, gc);
 	}
 	
+	@Override
+	public void setRoot(CodemapVisualization root) {
+		super.setRoot(root);
+		for (SWTLayer each: children) {
+			each.setRoot(root);
+		}
+	}
+
 	public CompositeLayer add(SWTLayer layer) {
 		children.add(layer);
-		layer.root = this.root;
+		layer.setRoot(getRoot());
 		return this;
 	}
+	
+	public CompositeLayer prepend(SWTLayer layer) {
+		children.add(0, layer);
+		layer.setRoot(getRoot());
+		return this;
+	}	
 
 	public CompositeLayer remove(SWTLayer layer) {
 		children.remove(layer);
-		layer.root = null;
+		layer.setRoot(null);
 		return this;
 	}
 

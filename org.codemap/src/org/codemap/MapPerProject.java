@@ -33,6 +33,7 @@ import ch.deif.meander.swt.CodemapVisualization;
 import ch.deif.meander.swt.CurrSelectionOverlay;
 import ch.deif.meander.swt.HillshadeLayer;
 import ch.deif.meander.swt.LabelOverlay;
+import ch.deif.meander.swt.SWTLayer;
 import ch.deif.meander.swt.ShoreLayer;
 import ch.deif.meander.swt.WaterBackground;
 import ch.deif.meander.util.MapScheme;
@@ -61,8 +62,6 @@ public class MapPerProject {
 	private Hapax hapax;
 	private Configuration configuration;
 	
-//	private MapVisualization mapViz;
-//	private Layer awtLayer;
 	private CodemapVisualization visual;
 
 	public MapPerProject(IJavaProject project) {
@@ -125,7 +124,7 @@ public class MapPerProject {
 	}
 
 	private void startBackgroundTask() {
-		new MapMakerBackgroundJob(MapPerProject.this).schedule();
+		new MapMakerBackgroundJob(this).schedule();
 	}
 
 	public CodemapVisualization getVisualization() {
@@ -163,20 +162,16 @@ public class MapPerProject {
 					.makeMap(reloadMapState());
 			monitor.worked(5);
 			
-			visual = new CodemapVisualization(configuration.withSize(mapSize, new MapScheme<Double>() {
-				@Override
-				public Double forLocation(Point each) {
-					return Math.sqrt(tdm.getDocument(each.getDocument()).size());
-				}
-			}));
-			Background layer = new Background();
-			visual.add(layer);
-			layer.children.add(new WaterBackground());
-			layer.children.add(new ShoreLayer());
-			layer.children.add(new HillshadeLayer());
-			visual.add(new LabelOverlay(CodemapCore.getPlugin().getLabelScheme()));
-			visual.add(new CurrSelectionOverlay().setSelection(CodemapCore.getPlugin().getCurrentSelection()));
+			SWTLayer layer = Meander.vizBuilder()
+				   .withBackground()
+				   .withLabels(CodemapCore.getPlugin().getLabelScheme())
+				   .withSelection(new CurrSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
+				   .makeLayer();
 			monitor.worked(5);
+				   
+			visual = new CodemapVisualization(configuration.withSize(mapSize, makeHeightScheme()));
+			visual.add(layer);
+			
 //			awtLayer = Meander.visualization()
 //					.withLabels(CodemapCore.getPlugin().getLabelScheme())
 //					.withColors(CodemapCore.getPlugin().getColorScheme())
@@ -196,6 +191,15 @@ public class MapPerProject {
 		monitor.done();
 		mapBeingCalculated = false;
 		return Status.OK_STATUS;
+	}
+
+	private MapScheme<Double> makeHeightScheme() {
+		return new MapScheme<Double>() {
+			@Override
+			public Double forLocation(Point each) {
+				return Math.sqrt(tdm.getDocument(each.getDocument()).size());
+			}
+		};
 	}
 
 	private Map<String, Pair<Double,Double>> reloadMapState() {

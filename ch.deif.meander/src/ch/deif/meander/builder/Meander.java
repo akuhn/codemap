@@ -11,6 +11,14 @@ import ch.deif.meander.Configuration;
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.Point;
 import ch.deif.meander.internal.MDS;
+import ch.deif.meander.legacy.builder.VisualizationBuilder;
+import ch.deif.meander.swt.CompositeLayer;
+import ch.deif.meander.swt.HillshadeLayer;
+import ch.deif.meander.swt.LabelOverlay;
+import ch.deif.meander.swt.SWTLayer;
+import ch.deif.meander.swt.SelectionOverlay;
+import ch.deif.meander.swt.ShoreLayer;
+import ch.deif.meander.swt.WaterBackground;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.util.MapScheme;
 import ch.deif.meander.visual.Background;
@@ -122,11 +130,57 @@ public class Meander {
 			return new Configuration(locations);
 		}
 	}
+	
+	private static class NewVizBuilder implements VizBuilder {
+		
+		private CompositeLayer layers;
+
+		public NewVizBuilder() {
+			layers = new CompositeLayer();
+		}
+
+		@Override
+		public VizBuilder withLabels(MapScheme<String> labelScheme) {
+			layers.add(new LabelOverlay(labelScheme));
+			return this;
+		}
+
+		@Override
+		public VizBuilder withSelection(SelectionOverlay overlay, MapSelection selection) {
+			overlay.setSelection(selection);
+			layers.add(overlay);
+			return this;
+		}
+
+		@Override
+		public VizBuilder withBackground() {
+			ch.deif.meander.swt.Background background = new ch.deif.meander.swt.Background();
+			background.children.add(new WaterBackground());
+			background.children.add(new ShoreLayer());
+			background.children.add(new HillshadeLayer());
+			layers.prepend(background);
+			return this;
+		}
+
+		@Override
+		public SWTLayer makeLayer() {
+			return layers;
+		}
+		
+	}
 
 	public static MapBuilder builder() {
 		return new MeanderMapBuilder();
 	}
 	
+	public static VizBuilder vizBuilder() {
+		return new NewVizBuilder();
+	}
+	
+	/**
+	 * @deprecated please switch to the SWT implementation and use <code>vizBuilder()</code>> 
+	 */
+	@Deprecated
 	public static VisualizationBuilder visualization() {
 		return new MeanderVizBuilder();
 	}

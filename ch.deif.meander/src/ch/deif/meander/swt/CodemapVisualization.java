@@ -30,10 +30,13 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 	/*default*/ MapInstance map; // FIXME
 	
 	public CodemapVisualization(MapInstance map) {
+		this();
 		this.map = map;
-		this.root = this;
 	}
-
+	
+	public CodemapVisualization() {
+		setRoot(this);
+	}	
 
 	private Runnable makeAnimationLoop() {
 		return new Runnable() {
@@ -71,6 +74,7 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 
 	@Override
 	public void paintControl(PaintEvent e) {
+		if (canvas == null) return;
 		offsetX = (canvas.getSize().x - map.getWidth()) / 2;
 		offsetY = (canvas.getSize().y - map.getWidth()) / 2;
 		Transform t = new Transform(e.gc.getDevice());
@@ -188,6 +192,7 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 	
 	@Override
 	public void mouseMove(MouseEvent e) {
+		if (canvas == null) return;
 		this.translate(e);
 		String name = !map.containsPoint(e.x, e.y) ? null
 				: map.get(NearestNeighborAlgorithm.class).get(e.x).get(e.y).getDocument();

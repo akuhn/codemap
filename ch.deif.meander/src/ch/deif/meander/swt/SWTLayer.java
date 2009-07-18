@@ -16,8 +16,16 @@ public abstract class SWTLayer implements
 		MouseListener, MouseMoveListener, MouseTrackListener, MouseWheelListener,
 		DragDetectListener {
 
-	/*default*/ CodemapVisualization root; // FIXME better design
+	private CodemapVisualization root;
 	
+	CodemapVisualization getRoot() {
+		return root;
+	}
+
+	public void setRoot(CodemapVisualization root) {
+		this.root = root;
+	}
+
 	public abstract void paintMap(MapInstance map, GC gc);
 
 	@Override

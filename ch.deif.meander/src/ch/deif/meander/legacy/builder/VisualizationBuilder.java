@@ -1,4 +1,4 @@
-package ch.deif.meander.builder;
+package ch.deif.meander.legacy.builder;
 
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.util.MColor;
