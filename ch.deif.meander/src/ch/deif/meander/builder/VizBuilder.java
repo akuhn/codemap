@@ -15,4 +15,6 @@ public interface VizBuilder {
 
 	SWTLayer makeLayer();
 
+	VizBuilder withLayer(SWTLayer sharedLayer);
+
 }

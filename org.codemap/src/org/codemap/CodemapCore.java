@@ -13,7 +13,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import ch.deif.meander.MapSelection;
-import ch.deif.meander.visual.Layer;
+import ch.deif.meander.swt.SWTLayer;
 
 /**
  * Single instance of the running Codemap plug-in.
@@ -117,7 +117,7 @@ public class CodemapCore extends AbstractUIPlugin {
 	
 	// TODO: the layers itself should issue the redraws
 	public void redrawCodemap() {
-		getMapView().redraw();
+		getMapView().redrawAsync();
 	}
 	
 	public void redrawCodemapBackground() {
@@ -131,15 +131,15 @@ public class CodemapCore extends AbstractUIPlugin {
 	 * 
 	 * @param layer
 	 */
-	public void addLayer(Layer layer) {
-		sharedLayer.append(layer);
+	public void addLayer(SWTLayer layer) {
+		sharedLayer.add(layer);
 	}
 
-	public void removeLayer(Layer layer) {
+	public void removeLayer(SWTLayer layer) {
 		sharedLayer.remove(layer);
 	}
 
-	Layer getSharedLayer() {
+	SWTLayer getSharedLayer() {
 		return sharedLayer;
 	}
 	

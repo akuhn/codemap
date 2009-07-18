@@ -161,12 +161,17 @@ public class Meander {
 			layers.prepend(background);
 			return this;
 		}
-
+		
+		@Override
+		public VizBuilder withLayer(SWTLayer layer) {
+			layers.add(layer);
+			return this;
+		}
+		
 		@Override
 		public SWTLayer makeLayer() {
 			return layers;
 		}
-		
 	}
 
 	public static MapBuilder builder() {

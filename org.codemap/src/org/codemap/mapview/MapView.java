@@ -244,7 +244,7 @@ public class MapView extends ViewPart {
 		}
 	}
 
-	private void redrawAsync() {
+	public void redrawAsync() {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {

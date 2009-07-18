@@ -28,16 +28,16 @@ public class CurrSelectionOverlay extends SelectionOverlay {
 	private Point dragStop;
 
 	@Override
-	public void paintBefore(MapInstance map, GC pg) {
-		Device device = pg.getDevice();
+	public void paintBefore(MapInstance map, GC gc) {
+		Device device = gc.getDevice();
 		Color red = new Color(device, 255, 0, 0);
-		pg.setLineWidth(POINT_STROKE);
-		pg.setForeground(red);
+		gc.setLineWidth(POINT_STROKE);
+		gc.setForeground(red);
 		if (isDragging) {
 			updateSelection();
 			int deltaX = dragStop.x - dragStart.x;
 			int deltaY = dragStop.y - dragStart.y;
-			pg.drawRectangle(dragStart.x, dragStart.y, deltaX, deltaY);
+			gc.drawRectangle(dragStart.x, dragStart.y, deltaX, deltaY);
 		}
 	}
 

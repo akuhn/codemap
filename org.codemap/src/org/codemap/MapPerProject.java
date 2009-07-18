@@ -166,6 +166,7 @@ public class MapPerProject {
 				   .withBackground()
 				   .withLabels(CodemapCore.getPlugin().getLabelScheme())
 				   .withSelection(new CurrSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
+				   .withLayer(CodemapCore.getPlugin().getSharedLayer())
 				   .makeLayer();
 			monitor.worked(5);
 				   
