@@ -137,8 +137,8 @@ public class MapView extends ViewPart {
 			public void selectionChanged(Location... locations) {
 				final ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
 				for (Location each: locations) {
-					if (each.getIdentifier() == null) continue;
-					IJavaElement javaElement = JavaCore.create(each.getIdentifier());
+					if (each.getDocument() == null) continue;
+					IJavaElement javaElement = JavaCore.create(each.getDocument());
 					selection.add(javaElement);
 				}
 				StructuredSelection structuredSelection = new StructuredSelection(selection);
@@ -146,8 +146,8 @@ public class MapView extends ViewPart {
 			}	
 
 			public void doubleClicked(Location location) {
-				if (location.getIdentifier() == null) return;
-				IJavaElement javaElement = JavaCore.create(location.getIdentifier());		
+				if (location.getDocument() == null) return;
+				IJavaElement javaElement = JavaCore.create(location.getDocument());		
 				openInEditor(javaElement);
 			}
 		};
