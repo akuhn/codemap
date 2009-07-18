@@ -2,8 +2,6 @@ package ch.deif.meander.swt;
 
 import org.eclipse.swt.events.DragDetectEvent;
 import org.eclipse.swt.events.DragDetectListener;
-import org.eclipse.swt.events.MenuDetectEvent;
-import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
@@ -16,7 +14,7 @@ import ch.deif.meander.ui.CodemapEvent;
 
 public abstract class SWTLayer implements 
 		MouseListener, MouseMoveListener, MouseTrackListener, MouseWheelListener,
-		MenuDetectListener, DragDetectListener {
+		DragDetectListener {
 
 	/*default*/ CodemapVisualization root; // FIXME better design
 	
@@ -54,11 +52,6 @@ public abstract class SWTLayer implements
 
 	@Override
 	public void mouseHover(MouseEvent e) {
-		// do nothing
-	}
-
-	@Override
-	public void menuDetected(MenuDetectEvent e) {
 		// do nothing
 	}
 

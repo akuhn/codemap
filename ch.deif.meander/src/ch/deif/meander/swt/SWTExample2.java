@@ -1,7 +1,6 @@
 package ch.deif.meander.swt;
 
 import org.eclipse.swt.events.DragDetectEvent;
-import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Transform;
@@ -58,11 +57,6 @@ public class SWTExample2 extends SWTLayer {
 	@Override
 	public void mouseScrolled(MouseEvent e) {
 		System.out.println("MouseWheeleListener.mouseScrolled()");
-	}
-
-	@Override
-	public void menuDetected(MenuDetectEvent e) {
-		System.out.println("MenuDetectListener.menuDetected()");
 	}
 
 	@Override

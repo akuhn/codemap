@@ -3,11 +3,8 @@ package ch.deif.meander.swt;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.Display;
 
 import ch.deif.meander.MapInstance;
@@ -30,9 +27,9 @@ public class Background extends SWTLayer {
 		for (SWTLayer each: children) each.paintMap(map, gc);
 		gc.dispose();
 		
-		ImageLoader imageLoader = new ImageLoader();
-		imageLoader.data = new ImageData[] { image.getImageData() };
-		imageLoader.save("background.jpg",SWT.IMAGE_JPEG);
+		//ImageLoader imageLoader = new ImageLoader();
+		//imageLoader.data = new ImageData[] { image.getImageData() };
+		//imageLoader.save("background.jpg",SWT.IMAGE_JPEG);
 		
 		return image;
 	}

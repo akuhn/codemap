@@ -268,5 +268,8 @@ public class MapInstance {
 		}
 		return max;
 	}
+	public boolean containsPoint(int x, int y) {
+		return 0 <= x && 0 <= y && x < width && y < height;
+	}
 	
 }

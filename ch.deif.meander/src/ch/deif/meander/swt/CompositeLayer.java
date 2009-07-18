@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.events.DragDetectEvent;
-import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.GC;
 
@@ -34,11 +33,6 @@ public class CompositeLayer extends SWTLayer {
 	@Override
 	public void dragDetected(DragDetectEvent e) {
 		for (SWTLayer each: children ) each.dragDetected(e);
-	}
-
-	@Override
-	public void menuDetected(MenuDetectEvent e) {
-		for (SWTLayer each: children ) each.menuDetected(e);
 	}
 
 	@Override
