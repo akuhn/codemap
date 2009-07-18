@@ -1,6 +1,5 @@
 package ch.deif.meander;
 
-import ch.akuhn.hapax.corpus.Document;
 
 /** Location of a document on a map instance.
  * Coordinates are in pixels.
@@ -17,7 +16,7 @@ public class Location {
 	protected double elevation;
 	private Point point;
 
-	public Document getDocument() {
+	public String getDocument() {
 		return point.getDocument();
 	}
 	
@@ -32,9 +31,9 @@ public class Location {
 		this(loc.point, loc.elevation, loc.px, loc.py); 
 	}
 
-	public Location withElevation(double elevation) {
+	public Location withElevation(double newElevation) {
 		Location clone = new Location(this);
-		clone.elevation = elevation;
+		clone.elevation = newElevation;
 		return clone;
 	}
 
@@ -42,8 +41,9 @@ public class Location {
 		return elevation;
 	}
 
+	@Deprecated
 	public String getIdentifier() {
-		return getDocument().getIdentifier();
+		return getDocument();
 	}
 
 	public Point getPoint() {

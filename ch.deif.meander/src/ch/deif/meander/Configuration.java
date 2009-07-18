@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import ch.akuhn.foreach.Collect;
 import ch.akuhn.foreach.Each;
+import ch.deif.meander.util.MapScheme;
 
 /** A set of documents on the visualization pane.
  * Each document is placed at a logical coordinate.
@@ -52,8 +53,8 @@ public class Configuration {
 		return new Configuration(query.resultArray());
 	}
 
-	public MapInstance withSize(int size) {
-		return new MapInstance(this, size).normalizeElevation();
+	public MapInstance withSize(int size, MapScheme<Double> elevation) {
+		return new MapInstance(this, size, elevation).normalizeElevation();
 	}
 
 	public Iterable<Point> points() {

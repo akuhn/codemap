@@ -21,9 +21,9 @@ public class MDS {
 	}
 
 	private MDS compute(LatentSemanticIndex index, Iterable<Location> matchingLocations) {
-		assert matchingLocations == null || index.documents.size() == As.list(matchingLocations).size();
+		assert matchingLocations == null || index.documentCount() == As.list(matchingLocations).size();
 
-		int size = index.documents.size();
+		int size = index.documentCount();
 		x = new double[size];
 		y = new double[size];
 		double[][] input = new double[size][size];

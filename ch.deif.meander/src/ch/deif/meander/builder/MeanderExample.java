@@ -1,5 +1,6 @@
 package ch.deif.meander.builder;
 
+
 import ch.akuhn.hapax.Hapax;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.MapInstance;
@@ -15,7 +16,9 @@ public class MeanderExample {
 
 	public static void main(String[] args) {
 
-		Hapax hapax = Hapax.legomenon().makeCorpus(".", ".java");
+		Hapax hapax = Hapax.newCorpus()
+			.addFiles(".", ".java")
+			.build();
 
 		Configuration map = Meander.builder()
 				.addCorpus(hapax)
@@ -35,7 +38,7 @@ public class MeanderExample {
 				//.withSelection(new YouAreHereOverlay(), currentEditorSelection)
 				.makeLayer();
 		
-		MapInstance mapWithSize = map.withSize(512);
+		MapInstance mapWithSize = map.withSize(512, MapBuilder.FILE_LENGTH_SQRT);
 		new MapVisualization(mapWithSize, layer).openApplet();
 
 	}
@@ -43,7 +46,7 @@ public class MeanderExample {
 	private static final MapScheme<String> filenames_only = new MapScheme<String>() {
 		@Override
 		public String forLocation(Point location) {
-			String name = location.getDocument().getIdentifier();
+			String name = location.getDocument();
 			int lastPathSeparator = Math.max(name.lastIndexOf('\\'), name.lastIndexOf('/'));
 			int lastDot = name.lastIndexOf('.');
 			if (lastPathSeparator < lastDot) return name.substring(lastPathSeparator + 1, lastDot);

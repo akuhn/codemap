@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import ch.akuhn.hapax.Hapax;
-import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.util.Pair;
 import ch.deif.meander.Configuration;
@@ -89,7 +88,7 @@ public class Meander {
 			mds.normalize();
 			Collection<Point> locations = new ArrayList<Point>();
 			int index = 0;
-			for (Document each: lsi.documents) {
+			for (String each: lsi.documents()) {
 				locations.add(new Point(mds.x[index], mds.y[index], each));
 				index++;
 			}
@@ -108,8 +107,8 @@ public class Meander {
 			// we need a hapax for later recalculations
 			if (this.hapax == null) throw new IllegalStateException();
 			Collection<Point> locations = new ArrayList<Point>();
-			for (Document each: hapax.getIndex().documents) {
-				Pair<Double, Double> coordinates = cachedPoints.get(each.getIdentifier());
+			for (String each: hapax.getIndex().documents()) {
+				Pair<Double, Double> coordinates = cachedPoints.get(each);
 				if (coordinates == null) {
 					// cached data does not match current data, so we start from scratch.
 					return makeMap();

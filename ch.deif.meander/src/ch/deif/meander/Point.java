@@ -1,6 +1,5 @@
 package ch.deif.meander;
 
-import ch.akuhn.hapax.corpus.Document;
 
 /** A point on the visualization pane, with associated document.
  *  Coordinates are logical coordinates.
@@ -14,15 +13,15 @@ import ch.akuhn.hapax.corpus.Document;
 public class Point {
 
 	public final double x, y;
-	private final Document document;
+	private final String document;
 
-	public Point(double x, double y, Document document) {
+	public Point(double x, double y, String document) {
 		this.x = x;
 		this.y = y;
 		this.document = document;
 	}
 
-	public Document getDocument() {
+	public String getDocument() {
 		return document;
 	}
 
@@ -64,7 +63,8 @@ public class Point {
 	}
 	
 	public Neighbor nearestNeighbor(Configuration map) {
-		Neighbor nearest = null;
+		if (!map.points().iterator().hasNext()) return null;
+		Neighbor nearest = new Neighbor(map.points().iterator().next());
 		for (Point each: map.points()) {
 			Neighbor neighbor = new Neighbor(each);
 			if (nearest.compareTo(neighbor) > 0) nearest = neighbor;

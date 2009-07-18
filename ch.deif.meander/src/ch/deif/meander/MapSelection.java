@@ -39,7 +39,7 @@ public class MapSelection {
 	}
 	
 	public boolean contains(Location element) {
-		return identifiers.contains(element.getIdentifier());
+		return identifiers.contains(element.getDocument());
 	}
 
 	public void add(String identifier) {

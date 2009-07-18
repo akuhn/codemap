@@ -13,6 +13,7 @@ import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.internal.HillshadeAlgorithm;
 import ch.deif.meander.internal.MapCaches;
 import ch.deif.meander.util.MColor;
+import ch.deif.meander.util.MapScheme;
 
 public class MapInstance {
 
@@ -25,8 +26,8 @@ public class MapInstance {
 		this.locations = locations;
 		this.width = this.height = size;
 	}
-	public MapInstance(Configuration map, int size) {
-		locations = makeLocationsWithSize(map, size);
+	public MapInstance(Configuration map, int size, MapScheme<Double> elevation) {
+		locations = makeLocationsWithSize(map, size, elevation);
 		this.width = this.height = size;
 	}
 
@@ -76,11 +77,11 @@ public class MapInstance {
 		return locations;
 	}
 
-	private Collection<Location> makeLocationsWithSize(Configuration map, int size) {
+	private Collection<Location> makeLocationsWithSize(Configuration map, int size, MapScheme<Double> elevation) {
 		Collection<Location> result = new ArrayList<Location>();
 		for (Point each: map.points()) {
 			result.add(new Location(each, 
-					Math.sqrt(each.getDocument().termSize()), // TODO do this in a mapper. maybe
+					elevation.forLocation(each),
 					(int) (each.x * size),
 					(int) (each.y * size)));
 		}
@@ -104,10 +105,10 @@ public class MapInstance {
 	}
 	public Iterable<Pixel> pixelsByColumns() {
 		return new Providable<Pixel>() {
-			private final int height = getWidth();
+			private final int fheight = getWidth();
 			private int n, m;
 			private Pixel pixel = new Pixel(0, 0);
-			private final int width = getWidth();
+			private final int fwidth = getWidth();
 
 			@Override
 			public void initialize() {
@@ -116,10 +117,10 @@ public class MapInstance {
 
 			@Override
 			public Pixel provide() {
-				if (m >= height) {
+				if (m >= fheight) {
 					m = 0;
 					n++;
-					if (n >= width) return done();
+					if (n >= fwidth) return done();
 				}
 				pixel.px = n;
 				pixel.py = m++;
@@ -130,9 +131,9 @@ public class MapInstance {
 
 	public Iterable<Pixel> pixelsByRows() {
 		return new Providable<Pixel>() {
-			private final int height = getWidth();
+			private final int fheight = getWidth();
 			private Pixel pixel = new Pixel(0, 0);
-			private final int width = getWidth();
+			private final int fwidth = getWidth();
 			private int x, y;
 
 			@Override
@@ -142,10 +143,10 @@ public class MapInstance {
 
 			@Override
 			public Pixel provide() {
-				if (x >= width) {
+				if (x >= fwidth) {
 					x = 0;
 					y++;
-					if (y >= height) return done();
+					if (y >= fheight) return done();
 				}
 				pixel.px = x++;
 				pixel.py = y;
