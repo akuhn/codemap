@@ -16,8 +16,12 @@ public class Background extends SWTLayer {
 	
 	@Override
 	public void paintMap(MapInstance map, GC gc) {
-		if (buffer == null) buffer = makeBuffer(map);
+		if (needsRepaint(map)) buffer = makeBuffer(map);
 		gc.drawImage(buffer, 0, 0);
+	}
+
+	private boolean needsRepaint(MapInstance map) {
+		return buffer == null || buffer.getBounds().width != map.getWidth();
 	}
 
 	private Image makeBuffer(MapInstance map) {

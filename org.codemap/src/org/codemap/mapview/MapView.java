@@ -183,7 +183,6 @@ public class MapView extends ViewPart {
 		CodemapVisualization viz = CodemapCore.getPlugin()
 			.mapForProject(getCurrentProject())
 			.updateSize(getCurrentSize())
-//			.enableBuilder()
 			.getVisualization();
 		if (viz == null) return;
 		updateMapVisualization(viz);

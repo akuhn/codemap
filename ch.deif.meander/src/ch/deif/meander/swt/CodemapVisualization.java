@@ -116,7 +116,7 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 					each.handleEvent(event);
 				}
 			}
-		}).start(); // FIXME start, not run, right?
+		}).start();
 	}
 	
 	public void removeListener(CodemapListener listener) {
@@ -253,6 +253,10 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 	public void mouseUp(MouseEvent e) {
 		this.translate(e);
 		super.mouseUp(e);
+	}
+
+	public int getSize() {
+		return map.getWidth();
 	}
 	
 }

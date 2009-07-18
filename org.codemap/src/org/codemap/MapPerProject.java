@@ -63,6 +63,7 @@ public class MapPerProject {
 	private Configuration configuration;
 	
 	private CodemapVisualization visual;
+	private SWTLayer layer;
 
 	public MapPerProject(IJavaProject project) {
 		this.project = project;
@@ -130,7 +131,7 @@ public class MapPerProject {
 	public CodemapVisualization getVisualization() {
 		if (tdm == null) return null;
 //		if (mapViz != null && mapViz.getWidth() == mapSize) return mapViz;
-		if (visual != null) return visual;		
+		if (visual != null && visual.getSize() == mapSize) return visual;		
 		updateMap();
 		return null;
 	}
@@ -162,16 +163,13 @@ public class MapPerProject {
 					.makeMap(reloadMapState());
 			monitor.worked(5);
 			
-			SWTLayer layer = Meander.vizBuilder()
+			layer = Meander.vizBuilder()
 				   .withBackground()
 				   .withLabels(CodemapCore.getPlugin().getLabelScheme())
 				   .withSelection(new CurrSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
 				   .withLayer(CodemapCore.getPlugin().getSharedLayer())
 				   .makeLayer();
-			monitor.worked(5);
-				   
-			visual = new CodemapVisualization(configuration.withSize(mapSize, makeHeightScheme()));
-			visual.add(layer);
+			monitor.worked(5);	
 			
 //			awtLayer = Meander.visualization()
 //					.withLabels(CodemapCore.getPlugin().getLabelScheme())
@@ -184,8 +182,8 @@ public class MapPerProject {
 		} else {
 			monitor.worked(20);
 		}
-
-//		mapViz = new MapVisualization(configuration.withSize(mapSize), awtLayer);
+		visual = new CodemapVisualization(configuration.withSize(mapSize, makeHeightScheme()));
+		visual.add(layer);		
 		monitor.worked(20);
 
 		notifyMapView();

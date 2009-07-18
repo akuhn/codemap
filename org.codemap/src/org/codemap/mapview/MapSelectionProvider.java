@@ -15,6 +15,7 @@ import static org.codemap.util.ID.PACKAGE_EXPLORER;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codemap.util.Log;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -109,8 +110,8 @@ public class MapSelectionProvider implements ISelectionProvider {
 				try {
 					IViewPart showView = view.getSite().getPage().showView(PACKAGE_EXPLORER.id);
 					((ISetSelectionTarget) showView).selectReveal(selection);
-				} catch (PartInitException e1) {
-					// TODO stuff
+				} catch (PartInitException e) {
+					Log.error(e);
 				}
 			}
 		});
