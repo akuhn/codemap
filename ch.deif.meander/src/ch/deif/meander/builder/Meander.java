@@ -104,8 +104,11 @@ public class Meander {
 
 		@Override
 		public Configuration makeMap(Map<String, Pair<Double, Double>> cachedPoints) {
-			// we need a hapax for later recalculations
+			// we need a hapax for later recalculations.
 			if (this.hapax == null) throw new IllegalStateException();
+			// fallback when there is no cache or cache-reload failed.
+			if (cachedPoints == null) return makeMap();
+			
 			Collection<Point> locations = new ArrayList<Point>();
 			for (String each: hapax.getIndex().documents()) {
 				Pair<Double, Double> coordinates = cachedPoints.get(each);

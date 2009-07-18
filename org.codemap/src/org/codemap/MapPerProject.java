@@ -62,14 +62,15 @@ public class MapPerProject {
 	private Configuration configuration;
 	
 //	private MapVisualization mapViz;
-	private Layer awtLayer;
+//	private Layer awtLayer;
 	private CodemapVisualization visual;
 
 	public MapPerProject(IJavaProject project) {
 		this.project = project;
+		enableBuilder();
 	}
 
-	public MapPerProject enableBuilder() {
+	private MapPerProject enableBuilder() {
 		try {
 			addBuilderToProjectDescriptionCommands();
 			if (tdm == null) {
@@ -137,7 +138,6 @@ public class MapPerProject {
 
 	public void updateMap() {
 		if (mapBeingCalculated) return;
-		visual.redraw();
 		startBackgroundTask();
 	}
 	
@@ -157,6 +157,7 @@ public class MapPerProject {
 			hapax = Hapax.withCorpus(tdm)
 					.build();
 			monitor.worked(10);
+			
 			configuration = Meander.builder()
 					.addCorpus(hapax)
 					.makeMap(reloadMapState());
@@ -175,16 +176,15 @@ public class MapPerProject {
 			layer.children.add(new HillshadeLayer());
 			visual.add(new LabelOverlay());
 			visual.add(new CurrSelectionOverlay().setSelection(CodemapCore.getPlugin().getCurrentSelection()));
-			
-			awtLayer = Meander.visualization()
-					.withLabels(CodemapCore.getPlugin().getLabelScheme())
-					.withColors(CodemapCore.getPlugin().getColorScheme())
-					.withSelection(new CurrentSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
-					.withSelection(new OpenFilesOverlay(), CodemapCore.getPlugin().getOpenFilesSelection())
-					.withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())
-					.appendLayer(CodemapCore.getPlugin().getSharedLayer())
-					.makeLayer();
 			monitor.worked(5);
+//			awtLayer = Meander.visualization()
+//					.withLabels(CodemapCore.getPlugin().getLabelScheme())
+//					.withColors(CodemapCore.getPlugin().getColorScheme())
+//					.withSelection(new CurrentSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
+//					.withSelection(new OpenFilesOverlay(), CodemapCore.getPlugin().getOpenFilesSelection())
+//					.withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())
+//					.appendLayer(CodemapCore.getPlugin().getSharedLayer())
+//					.makeLayer();
 		} else {
 			monitor.worked(20);
 		}

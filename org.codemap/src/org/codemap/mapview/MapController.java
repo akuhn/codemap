@@ -22,12 +22,9 @@ public class MapController {
 	}
 
 	private MapView view;
-	
 	private State state = State.UNINITIALIZED;
 	private IJavaProject currentProject;
 
-	// FIXME: move this, maybe to MapPerProjec
-	
 	public MapController(MapView view) {
 		this.view = view;
 	}
@@ -54,7 +51,8 @@ public class MapController {
 		if (currentProject == javaProject) return;
 		
 		currentProject = javaProject;
-		view.onProjectSelectionChanged(currentProject);
+		view.updateVisualization();
+//		view.onProjectSelectionChanged(currentProject);
 		redrawCodemap();			
 	}
 	

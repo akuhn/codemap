@@ -3,7 +3,6 @@ package org.codemap.mapview;
 import java.util.ArrayList;
 
 import org.codemap.CodemapCore;
-import org.codemap.util.EclipseProcessingBridge;
 import org.codemap.util.Log;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -38,30 +37,24 @@ import ch.deif.meander.Location;
 import ch.deif.meander.swt.CodemapVisualization;
 import ch.deif.meander.ui.CodemapEvent;
 import ch.deif.meander.ui.CodemapListener;
-import ch.deif.meander.ui.MeanderApplet;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.visual.CurrentSelectionOverlay;
-import ch.deif.meander.visual.MapVisualization;
 
-// TODO let MapController track the currently active project.
 public class MapView extends ViewPart {
 
 	public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
 	
-//	private EclipseProcessingBridge bridge;
-//	private IJavaProject currentProject;
+	private final MapController theController;
 	private MapSelectionProvider selectionProvider;
 	private SelectionTracker selectionTracker;
-//	private Composite container;
-//	private MeanderApplet theApplet;
-	private final MapController theController;
 	private int currentSize;
-
 	private Canvas canvas;
-
 	private Composite container;
+
+	private CodemapVisualization currentViz;
 	
 	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
+		
 		public String getColumnText(Object obj, int index) {
 			return getText(obj);
 		}
@@ -112,18 +105,7 @@ public class MapView extends ViewPart {
 				MapView.this.showMap();
 			}
 		});
-		redrawContainer();
-	}
-
-	public void redrawContainer() {
-		System.out.println("redrawContainer on MapView");
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				container.layout();
-				container.redraw();
-			}
-		});
+		redrawAsync();
 	}
 
 	private void clearContainer() {
@@ -196,14 +178,14 @@ public class MapView extends ViewPart {
 	@Override
 	public void setFocus() {
 //		FIXME: correct?
-		canvas.setFocus();
+		container.setFocus();
 	}
 
 	public void updateVisualization() {
 		CodemapVisualization viz = CodemapCore.getPlugin()
 			.mapForProject(getCurrentProject())
 			.updateSize(getCurrentSize())
-			.enableBuilder()
+//			.enableBuilder()
 			.getVisualization();
 		if (viz == null) return;
 		updateMapVisualization(viz);
@@ -214,7 +196,12 @@ public class MapView extends ViewPart {
 	}
 
 	public void updateMapVisualization(CodemapVisualization viz) {
-		viz.link(canvas);
+		if (currentViz != null) {
+			currentViz.unlink();
+		}
+		currentViz = viz;
+		currentViz.link(canvas);
+		redrawAsync();
 	}
 
 	public void newProjectMapAvailable(IJavaProject project) {
@@ -239,12 +226,6 @@ public class MapView extends ViewPart {
 		});
 	}
 
-	public void onProjectSelectionChanged(IJavaProject project) {
-//		if (project == currentProject) return;
-//		currentProject = project;
-		updateVisualization();
-	}
-
 	public IJavaProject getCurrentProject() {
 		return theController.getCurrentProject();
 	}
@@ -263,18 +244,22 @@ public class MapView extends ViewPart {
 		}
 	}
 
-	public void updateMap(CodemapCore codemapCore) {
-		codemapCore.mapForProject(getCurrentProject()).updateMap();
+	private void redrawAsync() {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				redraw();
+			}
+		});
 	}
 
 	public void redraw() {
-//		FIXME
-//		theApplet.redraw();
+		container.redraw();
 	}
 
 	public void redrawCodemapBackground() {
-//		FIXME
-//		theApplet.redrawBackground(true);
+		container.redraw();
+		// FIXME redraw background
 	}
 
 }

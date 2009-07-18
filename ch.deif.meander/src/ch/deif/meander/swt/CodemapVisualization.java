@@ -42,62 +42,31 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 
 	public void link(final Canvas newCanvas) {
 		if (canvas == newCanvas) return;
-		this.unlink(canvas);
-		canvas = newCanvas;
-		
-		Display.getDefault().syncExec(new Runnable(){
+		// remember the old canvas, call to unlink needs this ...
+		final Canvas oldCanvas = canvas;
+		Display.getDefault().asyncExec(new Runnable(){
 			@Override
 			public void run() {
-				newCanvas.addPaintListener(CodemapVisualization.this);
-				newCanvas.addMouseListener(CodemapVisualization.this);
-				newCanvas.addMouseMoveListener(CodemapVisualization.this);
-				newCanvas.addMouseTrackListener(CodemapVisualization.this);
-				newCanvas.addMouseWheelListener(CodemapVisualization.this);
-				newCanvas.addDragDetectListener(CodemapVisualization.this);
-				newCanvas.addMenuDetectListener(CodemapVisualization.this);				
+				linkInternal(newCanvas);
+				unlinkInternal(oldCanvas);
 			}
 		});
+		canvas = newCanvas;		
 	}
-
-	public void unlink(final Canvas oldCanvas) {
-		if (oldCanvas != null) {
-			Display.getDefault().syncExec(new Runnable(){
-				@Override
-				public void run() {
-					oldCanvas.removePaintListener(CodemapVisualization.this);
-					oldCanvas.removeMouseListener(CodemapVisualization.this);
-					oldCanvas.removeMouseMoveListener(CodemapVisualization.this);
-					oldCanvas.removeMouseTrackListener(CodemapVisualization.this);
-					oldCanvas.removeMouseWheelListener(CodemapVisualization.this);
-					oldCanvas.removeDragDetectListener(CodemapVisualization.this);
-					oldCanvas.removeMenuDetectListener(CodemapVisualization.this);
-				}
-			});			
-		}
+	
+	private void linkInternal(Canvas newCanvas) {
+		newCanvas.addPaintListener(CodemapVisualization.this);
+		newCanvas.addMouseListener(CodemapVisualization.this);
+		newCanvas.addMouseMoveListener(CodemapVisualization.this);
+		newCanvas.addMouseTrackListener(CodemapVisualization.this);
+		newCanvas.addMouseWheelListener(CodemapVisualization.this);
+		newCanvas.addDragDetectListener(CodemapVisualization.this);
+		newCanvas.addMenuDetectListener(CodemapVisualization.this);		
 	}
 
 	@Override
 	public void paintControl(PaintEvent e) {
 		this.paintMap(map, e.gc);
-	}
-	
-	public void openAndBlock() {
-		assert this.canvas == null;
-		Display display = Display.getDefault();
-		Shell shell = new Shell(display, SWT.SHELL_TRIM & ~SWT.RESIZE);
-		Canvas canvas = new Canvas(shell, SWT.NONE);
-		canvas.setSize(400,300);
-		if (map != null) canvas.setSize(map.width, map.height);
-		this.link(canvas);
-		shell.setText("Codemap: " + map);
-		shell.pack();
-		shell.open();
-		//this.startAnimationLoop();
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch())
-				display.sleep();
-		}
-		display.dispose();
 	}
 
 	@Override
@@ -130,7 +99,7 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 					each.handleEvent(event);
 				}
 			}
-		}).run();
+		}).start(); // FIXME start, not run, right?
 	}
 	
 	public void removeListener(CodemapListener listener) {
@@ -141,10 +110,54 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 		listeners.add(listener);
 	}
 
-
 	@Override
 	public void redraw() {
+		if (canvas == null) return;
 		canvas.redraw();
+	}
+	
+	/**
+	 * Open an new Shell and display the CodemapVisalization.
+	 * For testing purposes only.
+	 */
+	public void openAndBlock() {
+		assert this.canvas == null;
+		Display display = Display.getDefault();
+		Shell shell = new Shell(display, SWT.SHELL_TRIM | SWT.RESIZE);
+		Canvas canvas = new Canvas(shell, SWT.NONE);
+		canvas.setSize(400,300);
+		if (map != null) canvas.setSize(map.width, map.height);
+		this.link(canvas);
+		shell.setText("Codemap: " + map);
+		shell.pack();
+		shell.open();
+		//this.startAnimationLoop();
+		while (!shell.isDisposed()) {
+			if (!display.readAndDispatch())
+				display.sleep();
+		}
+		display.dispose();
+	}
+
+
+	public void unlink() {
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				unlinkInternal(canvas);
+			}
+		});
+		canvas = null;
 	}	
 	
+	private void unlinkInternal(Canvas linkedCanvas) {
+		if (linkedCanvas == null) return;
+		linkedCanvas.removePaintListener(CodemapVisualization.this);
+		linkedCanvas.removeMouseListener(CodemapVisualization.this);
+		linkedCanvas.removeMouseMoveListener(CodemapVisualization.this);
+		linkedCanvas.removeMouseTrackListener(CodemapVisualization.this);
+		linkedCanvas.removeMouseWheelListener(CodemapVisualization.this);
+		linkedCanvas.removeDragDetectListener(CodemapVisualization.this);
+		linkedCanvas.removeMenuDetectListener(CodemapVisualization.this);
+	}
 }
