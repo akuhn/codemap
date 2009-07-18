@@ -3,6 +3,7 @@ package ch.akuhn.hapax.index;
 import static ch.akuhn.util.Each.withIndex;
 import static ch.akuhn.util.Interval.range;
 
+import java.util.Collections;
 import java.util.Iterator;
 
 import ch.akuhn.hapax.corpus.Terms;
@@ -173,6 +174,10 @@ public class LatentSemanticIndex {
 		Integer index = documents.remove(doc);
 		if (index == null) return;
 		svd = svd.withoutV(index);
+	}
+
+	public Iterable<String> documents() {
+		return documents;
 	}
     
 }

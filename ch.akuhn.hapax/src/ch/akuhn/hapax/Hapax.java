@@ -4,6 +4,7 @@ import ch.akuhn.hapax.corpus.TermScanner;
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.Ranking;
+import ch.akuhn.hapax.index.TermDocumentMatrix;
 
 /** Searchable index of a text corpus.
  * 
@@ -24,7 +25,6 @@ public final class Hapax {
 
 	public static CorpusBuilder newCorpus() {
 		return new CorpusBuilder();
-
 	}
 	
 	public Ranking<String> find(String content) {
@@ -42,6 +42,14 @@ public final class Hapax {
 	
 	public synchronized void removeDocument(String doc) {
 		latentIndex.removeDocument(doc);
+	}
+	
+	public LatentSemanticIndex getIndex() {
+		return latentIndex;
+	}
+
+	public static CorpusBuilder withCorpus(TermDocumentMatrix tdm) {
+		return new CorpusBuilder(tdm);
 	}
 	
 }

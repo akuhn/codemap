@@ -14,7 +14,7 @@ import ch.akuhn.util.Files;
 
 public final class CorpusBuilder {
 
-	TermDocumentMatrix corpus = new TermDocumentMatrix();
+	TermDocumentMatrix corpus;
 	TermScanner scanner = new WordScanner();
 	private LocalWeighting local = LocalWeighting.NULL;
 	private GlobalWeighting global = GlobalWeighting.NULL;
@@ -25,6 +25,14 @@ public final class CorpusBuilder {
 	int latentDimensions;
 
 	
+	public CorpusBuilder(TermDocumentMatrix tdm) {
+		this.corpus = tdm;
+	}
+
+	public CorpusBuilder() {
+		this(new TermDocumentMatrix());
+	}
+
 	public CorpusBuilder addDocument(String doc, String contents) {
 		corpus.putDocument(doc, scanner.fromString(contents));
 		return this;
