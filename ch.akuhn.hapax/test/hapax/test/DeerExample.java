@@ -38,7 +38,7 @@ public class DeerExample {
     public TermDocumentMatrix makeTermDocumentMatrix() {
         TermDocumentMatrix tdm = new TermDocumentMatrix();
         for (String[] each: DATA) {
-            tdm.makeDocument(each[0]).addTerms(new Terms(each[1]));
+            tdm.putDocument(each[0], new Terms(each[1]));
         }
         assertEquals(9, tdm.documentCount());
         assertEquals(45, tdm.termCount());
@@ -61,18 +61,18 @@ public class DeerExample {
         return tdm;
     }
     
-    @Test
-    @Given("#rejectStopWords")
-    public void testImportExport(TermDocumentMatrix tdm) {
-        StringBuilder buf = new StringBuilder();
-        tdm.storeOn(buf);
-        TermDocumentMatrix tdm2 = TermDocumentMatrix.readFrom(new Scanner(buf.toString()));
-        StringBuilder buf2 = new StringBuilder();
-        tdm2.storeOn(buf2);
-        assertEquals(buf.toString(), buf2.toString());
-        assertEquals(tdm.documentCount(), tdm2.documentCount());
-        assertEquals(tdm.termCount(), tdm2.termCount());
-        assertEquals(tdm.density(), tdm2.density(), Double.MIN_VALUE);
-    }
+//    @Test
+//    @Given("#rejectStopWords")
+//    public void testImportExport(TermDocumentMatrix tdm) {
+//        StringBuilder buf = new StringBuilder();
+//        tdm.storeOn(buf);
+//        TermDocumentMatrix tdm2 = TermDocumentMatrix.readFrom(new Scanner(buf.toString()));
+//        StringBuilder buf2 = new StringBuilder();
+//        tdm2.storeOn(buf2);
+//        assertEquals(buf.toString(), buf2.toString());
+//        assertEquals(tdm.documentCount(), tdm2.documentCount());
+//        assertEquals(tdm.termCount(), tdm2.termCount());
+//        assertEquals(tdm.density(), tdm2.density(), Double.MIN_VALUE);
+//    }
 
 }

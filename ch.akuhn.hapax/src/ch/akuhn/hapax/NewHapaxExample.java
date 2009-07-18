@@ -24,13 +24,15 @@ public class NewHapaxExample {
 				.latentDimensions(2)
 				.build();
 				
+		System.out.println(hapax);
 		System.out.println(hapax.find("human computer interaction"));
 
-		Hapax hapax = hapax.updateCorpus()
-				.appendDocument("m5", "The EPS user interface management system")
-				.updateDocument("m2", "Human machine interface for Lab ABC computer applications")
-				.removeDocument("c2")
-				.done();
+		hapax.updateDocument("m5", "The EPS user interface management system");
+		hapax.updateDocument("m2", "Human machine interface for Lab ABC computer applications");
+		hapax.removeDocument("c2");
+		
+		System.out.println(hapax);
+		System.out.println(hapax.find("human computer interaction"));
 
 	}
 

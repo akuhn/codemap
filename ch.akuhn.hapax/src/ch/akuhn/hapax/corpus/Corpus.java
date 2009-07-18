@@ -1,42 +1,36 @@
 package ch.akuhn.hapax.corpus;
 
-import java.util.HashSet;
-import java.util.Set;
-
-
+/** Text corpus, with term frequencies for each document.
+ * Both terms and documents are identified by strings.
+ * 
+ * @author Adrian Kuhn
+ *
+ */
 public abstract class Corpus {
 
-    public abstract Document makeDocument(String name, String version);
-    
-    public Document makeDocument(String name) {
-        return makeDocument(name, null);
-    }
+    public abstract void putDocument(String name, Terms content);
     
     public Terms terms() {
         Terms terms = new Terms();
-        for (Document doc: this.documents()) terms.addAll(doc.terms());
+        for (String doc: documents()) terms.addAll(getDocument(doc));
         return terms;
     }
    
-
-    public Iterable<String> versions() {
-        Set<String> versions = new HashSet<String>();
-        for (Document each: this.documents()) versions.add(each.version());
-        return versions;
-    }
-    
-    public abstract Iterable<Document> documents();
+    public abstract Iterable<String> documents();
 
     public abstract int documentCount();
 
-    public abstract boolean contains(Document doc);
+    public abstract boolean containsDocument(String doc);
     
-    public abstract Terms terms(Document doc);
+    public boolean containsTerm(String term) {
+    	for (String doc: documents()) if (getDocument(doc).contains(term)) return true;
+    	return false;
+    }
+    
+    public abstract Terms getDocument(String doc);
     
     public int termCount() {
-        Terms terms = new Terms();
-        for (Document doc: this.documents()) terms.addAll(doc.terms());
-        return terms.uniqueSize();
+        return terms().uniqueSize();
     }
 
     @Override
@@ -45,21 +39,6 @@ public abstract class Corpus {
                 this.getClass().getName(),
                 documentCount(),
                 termCount());
-    }
-
-    public Document get(String name) {
-        for (Document each: documents()) if (each.name().equals(name)) return each;
-        throw new Error();
-    }
-    
-    public Terms terms(String version) {
-        Terms terms = new Terms();
-        for (Document each: documents()) {
-            if (version.equals(each.version())) {
-                terms.addAll(terms(each));
-            }
-        }
-        return terms;
     }
     
 }

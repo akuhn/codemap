@@ -6,12 +6,23 @@ import org.codemap.svdlib.Svdlib;
 import org.codemap.svdlib.Svdlib.SMat;
 import org.codemap.svdlib.Svdlib.SVDRec;
 
-import ch.akuhn.hapax.corpus.Document;
-import ch.akuhn.hapax.index.AssociativeList;
-import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.io.chunks.ChunkInput;
 import ch.akuhn.io.chunks.ReadFromChunk;
 
+/** Singular value decomposition of matrix A.
+ *<P> 
+ * Given a term-document matrix A, with dimension m on n, the decomposition consists of
+ * S = a diagonal matrix with the k largest singular values, 
+ * U = m left singular vectors of length k, one for each document, and
+ * V = n right singular vectors of length k, one for each term.
+ * The matrix A' = U * S * V^T is the closest rank k approximation of of matrix A
+ * [Eckard and Young].
+ *<P>
+ * Instances of this class are immutable. 
+ * 
+ * @author Adrian Kuhn, 2008-2009
+ *
+ */
 public class SVD {
 
     private final double[] s;
@@ -49,15 +60,15 @@ public class SVD {
     public SVD(SparseMatrix matrix, int dimensions) {
         if (matrix.rowCount() == 0 || matrix.columnCount() == 0) {
             s = new double[0];
-            U = new double[matrix.rowCount()][];
-            V = new double[matrix.columnCount()][];
+            U = new double[matrix.rowCount()][0];
+            V = new double[matrix.columnCount()][0];
         }
         else {
 	        SMat input = makeSMat(matrix);
 	        SVDRec r = new Svdlib().svdLAS2(input, dimensions, 0, new double[] { -1e-30, 1e-30 }, 1e-6);
 	        s = r.S;
-	        U = t(r.Ut.value);
-	        V = t(r.Vt.value);
+	        U = transpose(r.Ut.value);
+	        V = transpose(r.Vt.value);
         }
         assert invariant();
     }
@@ -78,23 +89,45 @@ public class SVD {
     	result[index] = values;
     	return result;
     }
+
+    /*default*/ static final double[][] remove(double[][] data, int index) {
+    	assert 0 <= index && index < data.length;
+    	double[][] result = new double[data.length - 1][];
+    	System.arraycopy(data, 0, result, 0, index);
+    	System.arraycopy(data, index + 1, result, index, data.length - index - 1);
+    	return result;
+    }
     
     
-	public SVD withAppendU(double[] pseudoU) {
-    	assert pseudoU.length == s.length;
-    	return new SVD(s, append(U, pseudoU), V);
+    /** Returns a copy with additional term.
+     * 
+     * @param u new term vector, length k.
+     * @return new copy of this instance.
+     */
+	public SVD withAppendU(double[] u) {
+    	assert u.length == s.length;
+    	return new SVD(s, append(U, u), V);
     }
 
-	public SVD withAppendV(double[] pseudoV) {
-    	assert pseudoV.length == s.length;
-    	return new SVD(s, U, append(V, pseudoV));
+	/** Returns a copy with additional document.
+	 * 
+	 * @param v new document vector, length k.
+	 * @return new copy of this instance.
+	 */
+	public SVD withAppendV(double[] v) {
+    	assert v.length == s.length;
+    	return new SVD(s, U, append(V, v));
     }
 
+	/** Returns the rank of this singular value decomposition.
+	 * 
+	 * @return a positive integer.
+	 */
     public int getRank() {
     	return s.length;
     }
 
-    private double[] makePseudo(double[][] data, double[] weightings) {
+    private double[] project(double[][] data, double[] weightings) {
     	if (s.length == 0) return new double[] { };
     	assert weightings.length == data.length;
     	double[] result = new double[s.length];
@@ -112,15 +145,25 @@ public class SVD {
         return result;
     }
 
+    /** Places a term at the weighted sum of its documents.
+     * 
+     * @param weightings document weight vector, length = m.
+     * @return pseudo term vector.
+     */
     public double[] makePseudoU(double[] weightings) {
-    	return makePseudo(V, weightings);
+    	return project(V, weightings);
     }
 
+    /** Places a document at the weighted sum of its terms.
+     * 
+     * @param weightings
+     * @return
+     */
     public double[] makePseudoV(double[] weightings) {
-    	return makePseudo(U, weightings);
+    	return project(U, weightings);
     }
 
-    private SMat makeSMat(SparseMatrix matrix) {
+    /*default*/ static final SMat makeSMat(SparseMatrix matrix) {
         SMat S = new Svdlib().new SMat(matrix.rowCount(), matrix.columnCount(), matrix.used());
         for (int j = 0, n = 0; j < matrix.columnCount(); j++) {
             S.pointr[j] = n;
@@ -135,7 +178,7 @@ public class SVD {
         return S;
     }
 
-    private double similarityS1(double[] a, double[] b) {
+    private double similaritySqrt(double[] a, double[] b) {
         double sim = 0;
         double suma = 0;
         double sumb = 0;
@@ -149,7 +192,7 @@ public class SVD {
 	}
     
     
-    private double similarityS2(double[] a, double[] b) {
+    private double similarity(double[] a, double[] b) {
         double sim = 0;
         double suma = 0;
         double sumb = 0;
@@ -162,37 +205,62 @@ public class SVD {
         return (sim / (Math.sqrt(suma) * Math.sqrt(sumb)));
 	}
 
-    public double similarityU(int a, double[] pseudoU) {
+    /** Computes the similarity between i-th term and pseudo-term t.
+     * 
+     * @param i index of a term, range 0..m.
+     * @param t a pseudo-term vector, length k
+     * @return a cosine value, typically greater then zero.
+     */
+    public double similarityU(int i, double[] t) {
     	if (s.length == 0) return Double.NaN;
-        return similarityS2(U[a], pseudoU);
+        return similarity(U[i], t);
     }
 
+    /** Computes the similarity between a-th and b-th term.
+     * 
+     * @param a index of a term, range 0..m.
+     * @param b index of a term, range 0..m.
+     * @return a cosine value, typically greater then zero.
+     */
     public double similarityUU(int a, int b) {
     	if (s.length == 0) return Double.NaN;
-        return similarityS2(U[a], U[b]);
+        return similarity(U[a], U[b]);
     }
     
-    public double similarityUV(int a, int b) {
+    /** Computes the similarity between i-th term and j-th document.
+     * 
+     * @param i index of a term, range 0..m.
+     * @param j index of a document, range 0..n.
+     * @return a cosine value, typically greater than zero.
+     */
+    public double similarityUV(int i, int j) {
     	if (s.length == 0) return Double.NaN;
-        return similarityS1(U[a], V[b]);
+        return similaritySqrt(U[i], V[j]);
     }
     
-    public double similarityV(int a, double[] pseudoV) {
+    /** Computes the similarity between j-th document and pseudo-document d.
+     * 
+     * @param j index of a document, range 0..n. 
+     * @param d a pseudo-document vector, length k.
+     * @return a cosine value, typically greater than zero.
+     */
+    public double similarityV(int j, double[] d) {
     	if (s.length == 0) return Double.NaN;
-        return similarityS2(V[a], pseudoV);
+        return similarity(V[j], d);
     }
     
-    public double similarityVU(int a, int b) {
-    	if (s.length == 0) return Double.NaN;
-        return similarityS1(V[a], U[b]);
-    }
-
+    /** Computes the similarity between a-th and b-th document.
+     * 
+     * @param a index of a document, range 0..n.
+     * @param b index of a document, range 0..n.
+     * @return a cosine value, typically greater then zero.
+     */
     public double similarityVV(int a, int b) {
     	if (s.length == 0) return Double.NaN;
-        return similarityS2(V[a], V[b]);
+        return similarity(V[a], V[b]);
     }
     
-    private double[][] t(double[][] array) {
+    /*default*/ static final double[][] transpose(double[][] array) {
     	if (array.length == 0) return new double[][] {{}};
     	int width = array[0].length, height = array.length;
     	double[][] t = new double[width][height];
@@ -204,28 +272,62 @@ public class SVD {
     	return t;
     }
     
+    /** Returns the decomposition of matrix A^T.
+     * 
+     * @return new copy of this instance.
+     */
     public SVD transposed() {
         return new SVD(s, V, U); // swap U and V
     }
     
+    /** Returns a copy, where one term is updated.
+     * 
+     * @param index index of a term, range 0..m.
+     * @param values new term vector, length k.
+     * @return new copy of this instance.
+     */
     public SVD withReplaceU(int index, double[] values) {
     	assert values.length == s.length;
     	return new SVD(s, replace(U, index, values), V);
     }
     
+    /** Returns a copy, where one document is updated.
+     * 
+     * @param index index of a document, range 0..n.
+     * @param values new document vector, length k.
+     * @return new copy of this instance.
+     */
     public SVD withReplaceV(int index, double[] values) {
     	assert values.length == s.length;
     	return new SVD(s, U, replace(V, index, values));
     }
 
+    /** Returns the number of right singular vectors in V,
+     * that is the number of columns of A (m x n).
+     * Given a term-document matrix, this is the number of documents.
+     * 
+     * @return the value of n.
+     */
 	public int columnCount() {
 		return V.length;
 	}
  
+    /** Returns the number of left singular vectors in U,
+     * that is the number of rows of A (m x n).
+     * Given a term-document matrix, this is the number of terms.
+     * 
+     * @return the value of m.
+     */
 	public int rowCount() {
 		return U.length;
 	}
 	
+	/** Returns a copy, with selected documents only.
+	 * 
+	 * @param indices list of indices of documents, range 0..n.
+	 * @return a new copy of this instance.
+	 * 
+	 */
     public SVD withSelectV(int[] indices) {
         double[][] selectV = new double[indices.length][s.length];
         for (int n = 0; n < indices.length; n++) {
@@ -234,6 +336,15 @@ public class SVD {
             }
         }
         return new SVD(s, U, selectV);
-    }	
+    }
+
+    /** Returns copy without given document.
+     * 
+     * @param doc index of a document, range 0..n.
+     * @return new copy of this instance.
+     */
+	public SVD withoutV(int doc) {
+		return new SVD(s, U, remove(V, doc));
+	}	
 	
 }

@@ -9,7 +9,6 @@ import java.util.List;
 
 import ch.akuhn.util.Bag;
 import ch.akuhn.util.PrintOn;
-import ch.akuhn.util.Bag.Count;
 
 public class Terms extends Bag<String> implements ScannerClient {
 

@@ -1,16 +1,15 @@
 package ch.akuhn.hapax;
 
-import static ch.akuhn.util.Interval.range;
-
-import java.util.Arrays;
-
 import ch.akuhn.hapax.corpus.TermScanner;
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
-import ch.akuhn.util.Bag.Count;
+import ch.akuhn.hapax.index.Ranking;
 
-
-
+/** Searchable index of a text corpus.
+ * 
+ * @author Adrian Kuhn, 2009.
+ *
+ */
 public final class Hapax {
 
     private TermScanner scanner;
@@ -28,12 +27,21 @@ public final class Hapax {
 
 	}
 	
-	public Query makeQuery(String content) {
+	public Ranking<String> find(String content) {
 		Terms query = new Terms();
 		scanner.newInstance().client(query).onString(content).run();
 		if (ignoreCase) query = query.toLowerCase();
-        double[] pseudoDocument = latentIndex.createPseudoDocument(query);
-        return new Query(pseudoDocument, latentIndex);
+        return latentIndex.rankDocumentsByQuery(query);
+	}
+	
+	public synchronized void updateDocument(String doc, String contents) {
+		Terms document = scanner.fromString(contents);
+		if (ignoreCase) document = document.toLowerCase();
+		latentIndex.updateDocument(doc, document);
+	}
+	
+	public synchronized void removeDocument(String doc) {
+		latentIndex.removeDocument(doc);
 	}
 	
 }

@@ -16,17 +16,17 @@ public class CurrentDirJava {
 
     public static void main(String[] args) throws FileNotFoundException {
 
+    	
+    	
         TermDocumentMatrix tdm = new TermDocumentMatrix();
         CorpusBuilderHelper importer = new CorpusBuilderHelper(tdm);
-        importer.importAllFiles(new File("../Fame"), ".java");
+        importer.importAllFiles(new File("../ch.deif.meander"), ".java");
         importer.importAllFiles(new File("."), ".java");
 
         puts(tdm);
 
-        tdm.storeOn("chdir.tdm");
-        
         puts(Get.head(tdm.documents()));
-        p(Get.head(tdm.documents()).terms());
+        p(tdm.getDocument(Get.head(tdm.documents())));
         
         puts(tdm);
 
@@ -44,7 +44,7 @@ public class CurrentDirJava {
 
         p(first(10, lsi.rankDocumentsByTerm("bag")));
         p(first(10, lsi.rankTermsByTerm("bag")));
-        p(first(10, lsi.rankDocumentsByTerm("famix")));
+        p(first(10, lsi.rankDocumentsByTerm("codemap")));
         p(first(10, lsi.rankDocumentsByQuery("split string by lower- and upper-case")));
         
     }

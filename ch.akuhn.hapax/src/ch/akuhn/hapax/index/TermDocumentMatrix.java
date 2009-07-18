@@ -4,10 +4,8 @@ import static ch.akuhn.util.Each.withIndex;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 import ch.akuhn.hapax.corpus.Corpus;
-import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.corpus.PorterStemmer;
 import ch.akuhn.hapax.corpus.Stemmer;
 import ch.akuhn.hapax.corpus.Stopwords;
@@ -21,58 +19,27 @@ import ch.akuhn.io.chunks.ChunkOutput;
 import ch.akuhn.io.chunks.ReadFromChunk;
 import ch.akuhn.io.chunks.WriteOnChunk;
 import ch.akuhn.util.Each;
-import ch.akuhn.util.Files;
 import ch.akuhn.util.Pair;
-import ch.akuhn.util.PrintOn;
 import ch.akuhn.util.Bag.Count;
 
 
 public class TermDocumentMatrix extends Corpus {
 
-    protected static class Doc extends Document {
-
-        private TermDocumentMatrix owner;
-        
-        protected Doc(String name, String version, TermDocumentMatrix owner) {
-            super(name, version);
-            this.owner = owner;
-        }
-
-        @Override
-        public Document addTerms(Terms terms) {
-            owner.addTerms(this, terms);
-            return this;
-        }
-
-        @Override
-        public Corpus owner() {
-            return owner;
-        }
-
-        @Override
-        public Terms terms() {
-            return owner.terms(this);
-        }
-
-        @Override
-        public int termSize() {
-            return terms().uniqueSize();
-        }
-        
-    }
+    private static final int DEFAULT_DIMENSIONS = 25;
     
-    private AssociativeList<Document> documents; // columns
-    private double[] globalWeighting;
+	private AssociativeList<String> documents; // columns
+    private double[] globalWeightings;
     private SparseMatrix matrix;
     private AssociativeList<String> terms; // rows
+    
     
     public TermDocumentMatrix() {
         this.matrix = new SparseMatrix(0, 0);
         this.terms = new AssociativeList<String>();
-        this.documents = new AssociativeList<Document>();
+        this.documents = new AssociativeList<String>();
     }
 
-    private TermDocumentMatrix(AssociativeList<String> terms, AssociativeList<Document> documents) {
+    private TermDocumentMatrix(AssociativeList<String> terms, AssociativeList<String> documents) {
         this.matrix = new SparseMatrix(terms.size(), documents.size());
         this.terms = terms.clone();
         this.documents = documents.clone();
@@ -83,9 +50,9 @@ public class TermDocumentMatrix extends Corpus {
         matrix.addToRow(row, values);
     }
 
-    public void addTerms(Document doc, Terms bag) {
-        int column = documents.get(doc);
-        if (column == -1) throw new NoSuchElementException();
+    @Override
+	public void putDocument(String doc, Terms bag) {
+        int column = this.indexDocument(doc);
         for (Count<String> term: bag.counts()) {
             int row = this.indexTerm(term.element);
             matrix.add(row, column, term.count);
@@ -93,16 +60,16 @@ public class TermDocumentMatrix extends Corpus {
     }
 
     @Override
-    public boolean contains(Document doc) {
+    public boolean containsDocument(String doc) {
         return documents.contains(doc);
     }
 
     public LatentSemanticIndex createIndex() {
-        return this.createIndex(20); //TODO magic number
+        return this.createIndex(DEFAULT_DIMENSIONS); 
     }
 
     public LatentSemanticIndex createIndex(int dimensions) {
-        return new LatentSemanticIndex(terms, documents, globalWeighting, new SVD(matrix, dimensions));
+        return new LatentSemanticIndex(terms, documents, globalWeightings, new SVD(matrix, dimensions));
     }
 
     public double density() {
@@ -110,7 +77,7 @@ public class TermDocumentMatrix extends Corpus {
     }
 
     @Override
-    public Iterable<Document> documents() {
+    public Iterable<String> documents() {
         return documents;
     }
 
@@ -125,25 +92,11 @@ public class TermDocumentMatrix extends Corpus {
         return index;
     }
     
-    private int indexDocument(Document doc) {
+    private int indexDocument(String doc) {
         int column = documents.add(doc);
         if (column == matrix.columnCount()) matrix.addColumn();
         return column;
     }
-
-    @Override
-    public Document makeDocument(String name, String version) {
-        Document doc = new Doc(name, version, this);
-        this.indexDocument(doc);
-        return doc;
-    }
-    
-    public Document makeDocument(String name, String version, String identifier) {
-    	Document doc = new Doc(name, version, this);
-    	doc.setIdentifier(identifier);
-    	this.indexDocument(doc);
-    	return doc;
-    }    
 
     public TermDocumentMatrix rejectAndWeight() {
         return toLowerCase()
@@ -191,47 +144,47 @@ public class TermDocumentMatrix extends Corpus {
         return tdm;
     }
     
-    public void storeOn(Appendable app) {
-        PrintOn out = new PrintOn(app);
-        out.print("# Term-Document-Matrix").cr();
-        out.print(this.termCount()).cr();
-        for (String term: terms) {
-            out.print(term).cr();
-        }
-        out.print(this.documentCount()).cr();
-        for (Document doc: documents) {
-            out.print(doc.name().replace(' ', '_')).tab().print(doc.version().replace(' ', '_')).cr();
-        }
-        matrix.storeSparseOn(app);
-    }
+//    public void storeOn(Appendable app) {
+//        PrintOn out = new PrintOn(app);
+//        out.print("# Term-Document-Matrix").cr();
+//        out.print(this.termCount()).cr();
+//        for (String term: terms) {
+//            out.print(term).cr();
+//        }
+//        out.print(this.documentCount()).cr();
+//        for (Document doc: documents) {
+//            out.print(doc.name().replace(' ', '_')).tab().print(doc.version().replace(' ', '_')).cr();
+//        }
+//        matrix.storeSparseOn(app);
+//    }
 
-    public void storeOn(String filename) {
-        this.storeOn(Files.openWrite(filename));
-    }        
+//    public void storeOn(String filename) {
+//        this.storeOn(Files.openWrite(filename));
+//    }        
     
-    public static TermDocumentMatrix readFrom(Scanner scan) {
-        TermDocumentMatrix tdm = new TermDocumentMatrix();
-        if (scan.hasNext("#")) scan.findInLine(".*");
-
-        int termSize = scan.nextInt();
-        for (int i = 0; i < termSize; i++) {
-            String term = scan.next();
-            tdm.indexTerm(term);
-        }
-        assert tdm.termCount() == termSize;
-        
-        int documentSize = scan.nextInt();
-        for (int i = 0; i < documentSize; i++) {
-            String name = scan.next();
-            String version = scan.next();
-            tdm.makeDocument(name, version);
-        }
-        assert tdm.documentCount() == documentSize;
-
-        tdm.matrix = SparseMatrix.readFrom(scan);
-        
-        return tdm;   
-    }
+//    public static TermDocumentMatrix readFrom(Scanner scan) {
+//        TermDocumentMatrix tdm = new TermDocumentMatrix();
+//        if (scan.hasNext("#")) scan.findInLine(".*");
+//
+//        int termSize = scan.nextInt();
+//        for (int i = 0; i < termSize; i++) {
+//            String term = scan.next();
+//            tdm.indexTerm(term);
+//        }
+//        assert tdm.termCount() == termSize;
+//        
+//        int documentSize = scan.nextInt();
+//        for (int i = 0; i < documentSize; i++) {
+//            String name = scan.next();
+//            String version = scan.next();
+//            tdm.makeDocument(name, version);
+//        }
+//        assert tdm.documentCount() == documentSize;
+//
+//        tdm.matrix = SparseMatrix.readFrom(scan);
+//        
+//        return tdm;   
+//    }
         
     @Override
     public Terms terms() {
@@ -261,9 +214,9 @@ public class TermDocumentMatrix extends Corpus {
 
     public TermDocumentMatrix weight(LocalWeighting localWeighting, GlobalWeighting globalWeighting) {
         TermDocumentMatrix tdm = new TermDocumentMatrix(this.terms, this.documents);
-        tdm.globalWeighting = new double[terms.size()];
+        tdm.globalWeightings = new double[terms.size()];
         for (Each<Vector> row: withIndex(matrix.rows())) {
-            double global = tdm.globalWeighting[row.index] = globalWeighting.weight(row.element);
+            double global = tdm.globalWeightings[row.index] = globalWeighting.weight(row.element);
             for (Entry column: row.element.entries()) {
                 tdm.matrix.put(row.index, column.index, localWeighting.weight(column.value) * global);
             }
@@ -272,7 +225,7 @@ public class TermDocumentMatrix extends Corpus {
     }
 
     @Override
-    public Terms terms(Document doc) {
+    public Terms getDocument(String doc) {
         int column = documents.get(doc);
         if (column == -1) throw new NoSuchElementException();
         Terms bag = new Terms();
@@ -283,25 +236,25 @@ public class TermDocumentMatrix extends Corpus {
         return bag;
     }
     
-    public TermDocumentMatrix copyUpto(String version, String[] versions) {
-        TermDocumentMatrix copy = new TermDocumentMatrix();
-        for (String each: versions) {
-            for (Document doc: this.documents()) {
-                if (doc.version().equals(version)) {
-                    copy.makeDocument(doc.name(), doc.version()).addTerms(doc.terms());
-                }
-            }
-            if (version.equals(each)) return copy;
-        }
-        throw new Error();
-    }
+//    public TermDocumentMatrix copyUpto(String version, String[] versions) {
+//        TermDocumentMatrix copy = new TermDocumentMatrix();
+//        for (String each: versions) {
+//            for (Document doc: this.documents()) {
+//                if (doc.version().equals(version)) {
+//                    copy.makeDocument(doc.name(), doc.version()).addTerms(doc.terms());
+//                }
+//            }
+//            if (version.equals(each)) return copy;
+//        }
+//        throw new Error();
+//    }
     
     @WriteOnChunk("TDM")
     public void storeOn(ChunkOutput chunk) throws IOException {
     	chunk.write(terms.size());
     	chunk.write(documents.size());
     	for (String each: terms) chunk.writeUTF(each);
-    	for (Document each: documents) chunk.writeUTF(each.name());
+    	for (String each: documents) chunk.writeUTF(each);
     	chunk.writeChunk(matrix);
     }
     
@@ -311,13 +264,13 @@ public class TermDocumentMatrix extends Corpus {
     	int documentCount = chunk.readInt();
     	terms = new AssociativeList<String>();
     	for (int n = 0; n < termCount; n++) terms.add(chunk.readUTF());
-    	documents = new AssociativeList<Document>();
-    	for (int i = 0; i < documentCount; i++) documents.add(new Doc(chunk.readUTF(), null, this));
+    	documents = new AssociativeList<String>();
+    	for (int i = 0; i < documentCount; i++) documents.add(chunk.readUTF());
     	matrix = chunk.readChunk(SparseMatrix.class);
     }
     
     public SparseMatrix matrix() {
     	return matrix;
     }
-    
+
 }

@@ -3,7 +3,6 @@ package ch.akuhn.hapax;
 import java.io.File;
 
 import ch.akuhn.hapax.corpus.CamelCaseScanner;
-import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.corpus.LetterScanner;
 import ch.akuhn.hapax.corpus.TermScanner;
 import ch.akuhn.hapax.corpus.Terms;
@@ -26,21 +25,15 @@ public final class CorpusBuilder {
 	int latentDimensions;
 
 	
-	public CorpusBuilder addDocument(String name, String content) {
-		Document document = corpus.makeDocument(name, null, name);
-		Terms terms = new Terms();
-		scanner.client(terms).onString(content).run();
-		document.addTerms(terms);
+	public CorpusBuilder addDocument(String doc, String contents) {
+		corpus.putDocument(doc, scanner.fromString(contents));
 		return this;
 	}
 
 	
 	public CorpusBuilder addFiles(String folder, String... extensions) {
 		for (File each : Files.find(folder, extensions)) {
-			Document document = corpus.makeDocument(each.getAbsolutePath(), null, each.getAbsolutePath());
-			Terms terms = new Terms();
-			scanner.client(terms).onFile(each).run();
-			document.addTerms(terms);
+			corpus.putDocument(each.getAbsolutePath(), scanner.fromFile(each));
 		}
 		return this;
 	}

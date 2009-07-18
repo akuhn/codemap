@@ -5,7 +5,6 @@ import static ch.akuhn.util.Interval.range;
 
 import java.util.Iterator;
 
-import ch.akuhn.hapax.corpus.Document;
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.hapax.linalg.SVD;
 import ch.akuhn.hapax.linalg.SymetricMatrix;
@@ -16,19 +15,21 @@ import ch.akuhn.util.Bag.Count;
 
 public class LatentSemanticIndex {
 
-    public final AssociativeList<Document> documents;
-    public final double[] globalWeighting;
-    public final SVD svd; 
-    public final AssociativeList<String> terms;
+    private AssociativeList<String> documents;
+    private AssociativeList<String> terms;
+    private SVD svd; 
+    
+    private double[] globalWeighting;
 
-    public LatentSemanticIndex(AssociativeList<String> terms, AssociativeList<Document> documents,
+    
+    public LatentSemanticIndex(AssociativeList<String> terms, AssociativeList<String> documents,
             double[] globalWeighting, SVD svd) {
         this.documents = documents;
         this.terms = terms;
         this.svd = svd;
         this.globalWeighting = globalWeighting;
         if (svd.getRank() == 0) return;
-        if (svd.rowCount() != terms.size()) svd = svd.transposed();
+        if (svd.rowCount() != terms.size()) this.svd = svd.transposed();
         assert svd.rowCount() == terms.size();
         assert svd.columnCount() == documents.size();
     }
@@ -51,34 +52,45 @@ public class LatentSemanticIndex {
         return svd.makePseudoV(weightings);
 	}
 
-    public Ranking<Document> rankDocumentsByDocument(Document d) {
-        Ranking<Document> ranking = new Ranking<Document>();
+    public Ranking<String> rankDocumentsByDocument(String d) {
+        Ranking<String> ranking = new Ranking<String>();
         int n = documents.get(d);
-        for (Each<Document> each: withIndex(documents)) {
+        for (Each<String> each: withIndex(documents)) {
             ranking.add(each.element, svd.similarityVV(n, each.index));
         }
         return ranking.sort();
     }
 
-    public Ranking<Document> rankDocumentsByQuery(String query) {
-        Ranking<Document> ranking = new Ranking<Document>();
+    public Ranking<String> rankDocumentsByQuery(String query) {
+        Ranking<String> ranking = new Ranking<String>();
         double[] pseudo = createPseudoDocument(query);
-        for (Each<Document> each: withIndex(documents)) {
+        for (Each<String> each: withIndex(documents)) {
             ranking.add(each.element, svd.similarityV(each.index, pseudo));
         }
         return ranking.sort();
     }
 
-    public Ranking<Document> rankDocumentsByTerm(String term) {
-        Ranking<Document> ranking = new Ranking<Document>();
+    public Ranking<String> rankDocumentsByQuery(Terms query) {
+        Ranking<String> ranking = new Ranking<String>();
+        double[] pseudo = createPseudoDocument(query);
+        for (Each<String> each: withIndex(documents)) {
+            ranking.add(each.element, svd.similarityV(each.index, pseudo));
+        }
+        return ranking.sort();
+    }
+    
+    
+    public Ranking<String> rankDocumentsByTerm(String term) {
+        Ranking<String> ranking = new Ranking<String>();
         int n = terms.get(term);
-        for (Each<Document> each: withIndex(documents)) {
+        assert n >= 0;
+        for (Each<String> each: withIndex(documents)) {
             ranking.add(each.element, svd.similarityUV(n, each.index));
         }
         return ranking.sort();
     }
 
-    public Ranking<CharSequence> rankTermsByDocument(Document d) {
+    public Ranking<CharSequence> rankTermsByDocument(String d) {
         Ranking<CharSequence> ranking = new Ranking<CharSequence>();
         int n = documents.get(d);
         for (Each<String> each: withIndex(terms)) {
@@ -122,20 +134,20 @@ public class LatentSemanticIndex {
         };
     }
     
-    public LatentSemanticIndex select(String version) {
-    	AssociativeList<Document> selection = new AssociativeList<Document>();
-        for (Document each: documents) {
-            if (each.version().equals(version)) selection.add(each);
-        }
-        int[] indices = new int[selection.size()];
-        for (int n = 0; n < indices.length; n++) {
-            indices[documents.get(selection.get(n))] = n;
-        }
-        return new LatentSemanticIndex(
-                terms, selection,
-                new double[selection.size()], // TODO copy global weighting
-                svd.withSelectV(indices));
-    }
+//    public LatentSemanticIndex select(String version) {
+//    	AssociativeList<String> selection = new AssociativeList<Document>();
+//        for (String each: documents) {
+//            if (each.version().equals(version)) selection.add(each);
+//        }
+//        int[] indices = new int[selection.size()];
+//        for (int n = 0; n < indices.length; n++) {
+//            indices[documents.get(selection.get(n))] = n;
+//        }
+//        return new LatentSemanticIndex(
+//                terms, selection,
+//                new double[selection.size()], // TODO copy global weighting
+//                svd.withSelectV(indices));
+//    }
 
     public int documentCount() {
         return documents.size();
@@ -144,5 +156,23 @@ public class LatentSemanticIndex {
     public int termCount() {
         return terms.size();
     }
+
+	public void updateDocument(String doc, Terms contents) {
+		double[] newDocument = createPseudoDocument(contents);
+		int index = documents.get(doc);
+		if (index >= 0) {
+			svd = svd.withReplaceV(index, newDocument);
+		}
+		else {
+			documents.add(doc);
+			svd = svd.withAppendV(newDocument);
+		}
+	}
+
+	public void removeDocument(String doc) {
+		Integer index = documents.remove(doc);
+		if (index == null) return;
+		svd = svd.withoutV(index);
+	}
     
 }

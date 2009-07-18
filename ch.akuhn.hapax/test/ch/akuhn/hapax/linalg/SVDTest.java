@@ -1,4 +1,4 @@
-package ch.akuhn.hapax;
+package ch.akuhn.hapax.linalg;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -80,6 +80,49 @@ public class SVDTest {
 		assertTrue(svd.similarityV(6, query) < 0.5);
 		assertTrue(svd.similarityV(7, query) < 0.5);
 		assertTrue(svd.similarityV(8, query) < 0.5);
+	}
+	
+	@Test
+	public void testRemoveFunction() {
+		double[][] d0 = new double[][] {{70},{71},{72},{73},{74}};
+		double[][] d = SVD.remove(d0, 2);
+		assertEquals(4, d.length);
+		assertEquals(70, d[0][0], 1e-6);
+		assertEquals(71, d[1][0], 1e-6);
+		assertEquals(73, d[2][0], 1e-6);
+		assertEquals(74, d[3][0], 1e-6);
+	}
+	
+	@Test
+	public void testRemoveFunctionFirst() {
+		double[][] d0 = new double[][] {{70},{71},{72},{73},{74}};
+		double[][] d = SVD.remove(d0, 0);
+		assertEquals(4, d.length);
+		assertEquals(71, d[0][0], 1e-6);
+		assertEquals(72, d[1][0], 1e-6);
+		assertEquals(73, d[2][0], 1e-6);
+		assertEquals(74, d[3][0], 1e-6);
+	}
+
+	@Test
+	public void testRemoveFunctionLast() {
+		double[][] d0 = new double[][] {{70},{71},{72},{73},{74}};
+		double[][] d = SVD.remove(d0, 4);
+		assertEquals(4, d.length);
+		assertEquals(70, d[0][0], 1e-6);
+		assertEquals(71, d[1][0], 1e-6);
+		assertEquals(72, d[2][0], 1e-6);
+		assertEquals(73, d[3][0], 1e-6);
+	}
+	
+	@Test(expected=AssertionError.class)
+	public void testRemoveFunctionBelow() {
+		SVD.remove(new double[][] {{},{},{}}, -1);
+	}
+	
+	@Test(expected=AssertionError.class)
+	public void testRemoveFunctionBeyond() {
+		SVD.remove(new double[][] {{},{},{}}, 3);
 	}
 	
 }

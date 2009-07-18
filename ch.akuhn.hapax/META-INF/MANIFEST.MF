@@ -9,8 +9,7 @@ Export-Package: ch.akuhn.hapax,
  ch.akuhn.hapax.corpus,
  ch.akuhn.hapax.index,
  ch.akuhn.hapax.linalg,
- ch.akuhn.hapax.resources,
- ch.akuhn.hapax.util
+ ch.akuhn.hapax.resources
 Bundle-ClassPath: .,
  lib/snowball.jar,
  lib/svdlib-r50M.jar,
