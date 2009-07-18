@@ -17,13 +17,15 @@ public class OpenFilesOverlay extends SelectionOverlay {
 		Display display = Display.getCurrent();
 		gc.setForeground(new Color(display, 0, 0, 0));
 		gc.setBackground(new Color(display, 255, 255, 255));
-		gc.setLineWidth(1);
+		gc.setLineWidth(POINT_STROKE);
 	}
 
 	@Override
 	public void paintChild(GC gc, Location each) {
-		gc.fillOval(each.px - 8, each.py - 6, each.px + 8, each.py + 6);
-		gc.drawOval(each.px - 8, each.py - 6, each.px + 8, each.py + 6);
+		gc.fillOval(each.px - SELECTION_SIZE/2, each.py - SELECTION_SIZE/2,
+				SELECTION_SIZE, SELECTION_SIZE);
+		gc.drawOval(each.px - SELECTION_SIZE/2, each.py - SELECTION_SIZE/2,
+				SELECTION_SIZE, SELECTION_SIZE);
 	}
 
 }

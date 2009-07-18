@@ -28,20 +28,12 @@ import ch.akuhn.util.Pair;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.Point;
 import ch.deif.meander.builder.Meander;
-import ch.deif.meander.swt.Background;
 import ch.deif.meander.swt.CodemapVisualization;
 import ch.deif.meander.swt.CurrSelectionOverlay;
-import ch.deif.meander.swt.HillshadeLayer;
-import ch.deif.meander.swt.LabelOverlay;
+import ch.deif.meander.swt.OpenFilesOverlay;
 import ch.deif.meander.swt.SWTLayer;
-import ch.deif.meander.swt.ShoreLayer;
-import ch.deif.meander.swt.WaterBackground;
+import ch.deif.meander.swt.YouAreHereOverlay;
 import ch.deif.meander.util.MapScheme;
-import ch.deif.meander.visual.CurrentSelectionOverlay;
-import ch.deif.meander.visual.Layer;
-import ch.deif.meander.visual.MapVisualization;
-import ch.deif.meander.visual.OpenFilesOverlay;
-import ch.deif.meander.visual.YouAreHereOverlay;
 import ch.unibe.scg.util.Extension;
 
 /**
@@ -167,6 +159,8 @@ public class MapPerProject {
 				   .withBackground()
 				   .withLabels(CodemapCore.getPlugin().getLabelScheme())
 				   .withSelection(new CurrSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
+				   .withSelection(new OpenFilesOverlay(), CodemapCore.getPlugin().getOpenFilesSelection())
+				   .withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())				   
 				   .withLayer(CodemapCore.getPlugin().getSharedLayer())
 				   .makeLayer();
 			monitor.worked(5);	
