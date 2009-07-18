@@ -13,16 +13,24 @@ import ch.deif.meander.util.MapScheme;
 
 public class LabelOverlay extends SWTLayer {
 
-	private MapScheme<String> NAME = new MapScheme<String>() {
-		@Override
-		public String forLocation(Point location) {
-			String name = location.getDocument();
-			int lastPathSeparator = Math.max(name.lastIndexOf('\\'), name.lastIndexOf('/'));
-			int lastDot = name.lastIndexOf('.');
-			if (lastPathSeparator < lastDot) return name.substring(lastPathSeparator + 1, lastDot);
-			return name;
-		}
-	};
+	private MapScheme<String> labelScheme;
+	
+	public LabelOverlay() {
+		labelScheme = new MapScheme<String>() {
+			@Override
+			public String forLocation(Point location) {
+				String name = location.getDocument();
+				int lastPathSeparator = Math.max(name.lastIndexOf('\\'), name.lastIndexOf('/'));
+				int lastDot = name.lastIndexOf('.');
+				if (lastPathSeparator < lastDot) return name.substring(lastPathSeparator + 1, lastDot);
+				return name;
+			}
+		};
+	}
+	
+	public LabelOverlay(MapScheme<String> scheme) {
+		labelScheme = scheme;
+	}
 
 	Font font;
 	
@@ -39,7 +47,7 @@ public class LabelOverlay extends SWTLayer {
 		//gc.setFont(font);
 		gc.setForeground(white);
 		for (Location each: map.locations()) {
-			String name = NAME.forLocation(each.getPoint());
+			String name = labelScheme.forLocation(each.getPoint());
 			//Font font = new Font(display, fname, (int) (Math.sqrt(each.getElevation()) * 2), SWT.NORMAL);
 			//gc.setFont(font);
 			//gc.setAlpha(128);

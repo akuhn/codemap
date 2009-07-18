@@ -174,7 +174,7 @@ public class MapPerProject {
 			layer.children.add(new WaterBackground());
 			layer.children.add(new ShoreLayer());
 			layer.children.add(new HillshadeLayer());
-			visual.add(new LabelOverlay());
+			visual.add(new LabelOverlay(CodemapCore.getPlugin().getLabelScheme()));
 			visual.add(new CurrSelectionOverlay().setSelection(CodemapCore.getPlugin().getCurrentSelection()));
 			monitor.worked(5);
 //			awtLayer = Meander.visualization()
