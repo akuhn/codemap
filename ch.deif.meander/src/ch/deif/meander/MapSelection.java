@@ -3,6 +3,7 @@ package ch.deif.meander;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 
 /** A set of identifier handles.
  * External classes can use the collection interface to add and remove handles. 
@@ -12,7 +13,7 @@ import java.util.HashSet;
  * @author David Erni
  *
  */
-public class MapSelection {
+public class MapSelection implements Iterable<String> {
 
 	private HashSet<String> identifiers;
 	
@@ -60,6 +61,11 @@ public class MapSelection {
 
 	public void removeAll(Collection<String> ids) {
 		identifiers.removeAll(ids);
+	}
+
+	@Override
+	public Iterator<String> iterator() {
+		return identifiers.iterator();
 	}
 	
 }

@@ -54,7 +54,7 @@ public class CurrentSelectionOverlay extends MapSelectionOverlay {
 			if (! (event.getClickCount() == 2)) return;
 			Point point = event.getPoint();
 			Location neighbor = map.nearestNeighbor(point.x, point.y);
-			System.out.println("double clicked on: " + neighbor.getIdentifier());
+			System.out.println("double clicked on: " + neighbor.getDocument());
 			pa.fireEvent(EVT_DOUBLE_CLICKED, this, neighbor);
 		}
 	}
@@ -104,7 +104,7 @@ public class CurrentSelectionOverlay extends MapSelectionOverlay {
 		Collection<String> ids = new ArrayList<String>();
 		for (Location each : map.locations()) {
 			if (each.px < maxX && each.px > minX && each.py < maxY && each.py > minY) {			
-				ids.add(each.getIdentifier());
+				ids.add(each.getDocument());
 			}
 		}
 		getSelection().replaceWith(ids);

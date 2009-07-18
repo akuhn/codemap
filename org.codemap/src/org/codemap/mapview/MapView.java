@@ -34,6 +34,7 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
 
 import ch.deif.meander.Location;
+import ch.deif.meander.MapSelection;
 import ch.deif.meander.swt.CodemapVisualization;
 import ch.deif.meander.ui.CodemapEvent;
 import ch.deif.meander.ui.CodemapListener;
@@ -41,6 +42,33 @@ import ch.deif.meander.util.MColor;
 import ch.deif.meander.visual.CurrentSelectionOverlay;
 
 public class MapView extends ViewPart {
+	
+	private CodemapListener codemapListener = new CodemapListener() {
+		@Override
+		public void handleEvent(CodemapEvent event) {
+			if (CurrentSelectionOverlay.EVT_DOUBLE_CLICKED == event.getKind()) {
+				doubleClicked((Location) event.getValue());					
+			} else if (CurrentSelectionOverlay.EVT_SELECTION_CHANGED == event.getKind()) {
+				selectionChanged((MapSelection) event.getValue());
+			}
+		}
+
+		public void selectionChanged(MapSelection mapSelection) {
+			final ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
+			for (String each: mapSelection) {
+				IJavaElement javaElement = JavaCore.create(each);
+				selection.add(javaElement);
+			}
+			StructuredSelection structuredSelection = new StructuredSelection(selection);
+			selectionProvider.setSelection(structuredSelection);
+		}	
+
+		public void doubleClicked(Location location) {
+			if (location.getDocument() == null) return;
+			IJavaElement javaElement = JavaCore.create(location.getDocument());		
+			openInEditor(javaElement);
+		}
+	};
 
 	public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
 	
@@ -123,36 +151,6 @@ public class MapView extends ViewPart {
 		theController.onShowMap();
 	}
 
-	private CodemapListener makeListener() {
-		return new CodemapListener() {
-			@Override
-			public void handleEvent(CodemapEvent event) {
-				if (CurrentSelectionOverlay.EVT_DOUBLE_CLICKED == event.getKind()) {
-					doubleClicked((Location) event.getValue());					
-				} else if (CurrentSelectionOverlay.EVT_SELECTION_CHANGED == event.getKind()) {
-					selectionChanged((Location[]) event.getValue());
-				}
-			}
-
-			public void selectionChanged(Location... locations) {
-				final ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
-				for (Location each: locations) {
-					if (each.getDocument() == null) continue;
-					IJavaElement javaElement = JavaCore.create(each.getDocument());
-					selection.add(javaElement);
-				}
-				StructuredSelection structuredSelection = new StructuredSelection(selection);
-				selectionProvider.setSelection(structuredSelection);
-			}	
-
-			public void doubleClicked(Location location) {
-				if (location.getDocument() == null) return;
-				IJavaElement javaElement = JavaCore.create(location.getDocument());		
-				openInEditor(javaElement);
-			}
-		};
-	}
-
 	private void configureToolbar() {
 	    IToolBarManager tbm = getToolBarManager();
 	    tbm.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
@@ -198,9 +196,11 @@ public class MapView extends ViewPart {
 	public void updateMapVisualization(CodemapVisualization viz) {
 		if (currentViz != null) {
 			currentViz.unlink();
+			currentViz.removeListener(codemapListener);
 		}
+		viz.link(canvas);
+		viz.addListener(codemapListener);
 		currentViz = viz;
-		currentViz.link(canvas);
 		redrawAsync();
 	}
 

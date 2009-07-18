@@ -53,7 +53,7 @@ public class CurrSelectionOverlay extends SelectionOverlay {
 	@Override
 	public void mouseDoubleClick(MouseEvent e) {
 		Location neighbor = root.map.nearestNeighbor(e.x, e.y);
-		System.out.println("double clicked on: " + neighbor.getIdentifier());
+		System.out.println("double clicked on: " + neighbor.getDocument());
 		fireEvent(EVT_DOUBLE_CLICKED, neighbor);
 	}
 
@@ -82,7 +82,7 @@ public class CurrSelectionOverlay extends SelectionOverlay {
 		Collection<String> ids = new ArrayList<String>();
 		for (Location each : root.map.locations()) {
 			if (each.px < maxX && each.px > minX && each.py < maxY && each.py > minY) {			
-				ids.add(each.getIdentifier());
+				ids.add(each.getDocument());
 			}
 		}
 		getSelection().replaceWith(ids);
