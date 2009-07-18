@@ -48,16 +48,16 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 
 	public void link(final Canvas newCanvas) {
 		if (canvas == newCanvas) return;
-		// remember the old canvas, call to unlink needs this ...
 		final Canvas oldCanvas = canvas;
 		Display.getDefault().asyncExec(new Runnable(){
 			@Override
 			public void run() {
 				linkInternal(newCanvas);
 				unlinkInternal(oldCanvas);
+				canvas = newCanvas;	
+				canvas.redraw();
 			}
 		});
-		canvas = newCanvas;		
 	}
 	
 	private void linkInternal(Canvas newCanvas) {
