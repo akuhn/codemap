@@ -49,12 +49,12 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 	public void link(final Canvas newCanvas) {
 		if (canvas == newCanvas) return;
 		final Canvas oldCanvas = canvas;
+		canvas = newCanvas;	
 		Display.getDefault().asyncExec(new Runnable(){
 			@Override
 			public void run() {
 				linkInternal(newCanvas);
 				unlinkInternal(oldCanvas);
-				canvas = newCanvas;	
 				canvas.redraw();
 			}
 		});
