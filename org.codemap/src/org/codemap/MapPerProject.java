@@ -35,6 +35,7 @@ import ch.deif.meander.swt.HillshadeLayer;
 import ch.deif.meander.swt.LabelOverlay;
 import ch.deif.meander.swt.ShoreLayer;
 import ch.deif.meander.swt.WaterBackground;
+import ch.deif.meander.util.MapScheme;
 import ch.deif.meander.visual.CurrentSelectionOverlay;
 import ch.deif.meander.visual.Layer;
 import ch.deif.meander.visual.MapVisualization;
@@ -153,17 +154,20 @@ public class MapPerProject {
 		mapBeingCalculated = true;
 		monitor.beginTask("Making map", 50);
 		if (hapax == null) {
-			hapax = Hapax.legomenon()
-					.addCorpus(tdm)
-					.closeCorpus()
-					.createIndex();
+			hapax = Hapax.withCorpus(tdm)
+					.build();
 			monitor.worked(10);
 			configuration = Meander.builder()
 					.addCorpus(hapax)
 					.makeMap(reloadMapState());
 			monitor.worked(5);
 			
-			visual = new CodemapVisualization(configuration.withSize(mapSize));
+			visual = new CodemapVisualization(configuration.withSize(mapSize, new MapScheme<Double>() {
+				@Override
+				public Double forLocation(Point each) {
+					return Math.sqrt(tdm.getDocument(each.getDocument()).size());
+				}
+			}));
 			Background layer = new Background();
 			visual.add(layer);
 			layer.children.add(new WaterBackground());
@@ -231,7 +235,7 @@ public class MapPerProject {
 	public void saveMapState() {
 		IEclipsePreferences node = getPointNode();
 		for(Point each: configuration.points()) {
-			node.put(each.getDocument().getIdentifier(), each.x + " # " + each.y);
+			node.put(each.getDocument(), each.x + " # " + each.y);
 		}
 		try {
 			node.flush();

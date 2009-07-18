@@ -6,13 +6,15 @@ import ch.deif.meander.util.MapScheme;
 public class CodemapLabels extends MapScheme<String> {
 	
 	private interface LabelStrategy {
+		// TODO inherit from MapScheme
 		public String forLocation(Point location);
 	}
 	
 	LabelStrategy identifierLabel = new LabelStrategy() {
 		@Override
 		public String forLocation(Point location) {
-			String name = location.getDocument().getIdentifier();
+			// TODO can we use EclipseUtil#shortenCompilationUnitName here?
+			String name = location.getDocument();
 			int lastPathSeparator = name.lastIndexOf('{');
 			int lastDot = name.lastIndexOf('.');
 			if (lastPathSeparator < lastDot) return name.substring(lastPathSeparator + 1, lastDot);

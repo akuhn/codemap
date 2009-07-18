@@ -26,7 +26,7 @@ public class CodemapColors extends MapScheme<MColor> {
 
 	@Override
 	public MColor forLocation(Point location) {
-		String identifier = location.getDocument().getIdentifier();
+		String identifier = location.getDocument();
 		if (forLocation.containsKey(identifier)) return forLocation.get(identifier);
 		return super.forLocation(location);
 	}

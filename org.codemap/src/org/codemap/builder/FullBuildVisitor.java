@@ -39,9 +39,8 @@ class FullBuildVisitor implements IResourceVisitor {
 	private boolean visit(ICompilationUnit compilationUnit) throws JavaModelException {
 		IBuffer buf = compilationUnit.getBuffer();
 		String contents = buf.getContents();
-		String name = EclipseUtil.shortenCompilationUnitName(compilationUnit);
 		String identifier = compilationUnit.getHandleIdentifier();
-		TDM.makeDocument(name, null, identifier).addTerms(new Terms(contents));
+		TDM.putDocument(identifier, new Terms(contents));
 		return false;
 	}
 	
