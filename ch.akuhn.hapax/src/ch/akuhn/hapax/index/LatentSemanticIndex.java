@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import ch.akuhn.hapax.corpus.Terms;
+import ch.akuhn.hapax.linalg.Matrix;
 import ch.akuhn.hapax.linalg.SVD;
 import ch.akuhn.hapax.linalg.SymetricMatrix;
 import ch.akuhn.util.Each;
@@ -109,8 +110,8 @@ public class LatentSemanticIndex {
         return ranking.sort();
     }
 
-    public SymetricMatrix documentCorrelation() {
-        SymetricMatrix correlation = new SymetricMatrix(documents.size());
+    public Matrix documentCorrelation() {
+        Matrix correlation = new SymetricMatrix(documents.size());
         for (int row: range(documents.size())) {
             for (int column: range(documents.size())) {
                 correlation.put(row, column, svd.similarityVV(row, column));

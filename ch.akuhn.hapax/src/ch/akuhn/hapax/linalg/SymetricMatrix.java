@@ -13,11 +13,6 @@ public class SymetricMatrix extends Matrix {
     }
 
     @Override
-    public Iterable<Vector> columns() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public int columnCount() {
         return rowCount();
     }
@@ -33,11 +28,6 @@ public class SymetricMatrix extends Matrix {
     }
 
     @Override
-    public Iterable<Vector> rows() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public int rowCount() {
         return values.length;
     }
@@ -47,13 +37,4 @@ public class SymetricMatrix extends Matrix {
         throw new UnsupportedOperationException();
     }
 
-	public double[][] asArray() {
-		double[][] result = new double[values.length][values.length];
-		for (int x = 0; x < result.length; x++) {
-			for (int y = 0; y < result.length; y++) {
-				result[x][y] = 1.0 - get(x,y);
-			}
-		}
-		return result;
-	}
 }

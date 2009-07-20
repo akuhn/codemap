@@ -2,39 +2,12 @@ package ch.akuhn.hapax.linalg;
 
 import static ch.akuhn.util.Interval.range;
 
-import java.util.Iterator;
 
 public class DenseVector extends Vector {
 
-    private class Iter implements Iterable<Entry>, Iterator<Entry> {
-
-        private int spot = 0;
-
-        //@Override
-        public boolean hasNext() {
-            return spot < values.length;
-        }
-
-        //@Override
-        public Iterator<Entry> iterator() {
-            return this;
-        }
-
-        //@Override
-        public Entry next() {
-            return new Entry(spot, values[spot++]);
-        }
-
-        //@Override
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
-
-    }
-
     private double unit = 0;
-
     private double[] values;
+    
 
     public DenseVector(double[] values) {
         this.values = values;
@@ -49,13 +22,9 @@ public class DenseVector extends Vector {
         double sum = 0;
         for (int n: range(values.length))
             sum += values[n] * other.values[n];
-        return sum / (this.unit() * other.unit());
+        return sum / (this.length() * other.length());
     }
 
-    @Override
-    public Iterable<Entry> entries() {
-        return new Iter();
-    }
 
     @Override
     public double get(int index) {
@@ -80,13 +49,15 @@ public class DenseVector extends Vector {
     }
 
     @Override
-    public double unit() {
-        if (unit != 0) return unit;
+    public double length() {
+        if (unit != 0) return unit; // FIXME should purge cache on edit
         double qsum = 0;
         for (double value: values)
             qsum += value * value;
         if (qsum == 0) qsum = 1;
         return unit = Math.sqrt(qsum);
     }
+
+ 
 
 }

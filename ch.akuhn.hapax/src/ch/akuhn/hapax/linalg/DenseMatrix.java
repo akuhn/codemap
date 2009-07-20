@@ -18,37 +18,18 @@ public class DenseMatrix extends Matrix {
     }
 
     @Override
-    public Iterable<Vector> columns() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public int columnCount() {
         return values[0].length;
     }
 
     @Override
-    public double density() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
     public double get(int row, int column) {
-        // TODO Auto-generated method stub
-        return 0;
+        return values[row][column];
     }
 
     @Override
     public double put(int row, int column, double value) {
         return values[row][column] = value;
-    }
-
-    @Override
-    public Iterable<Vector> rows() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override
@@ -59,7 +40,7 @@ public class DenseMatrix extends Matrix {
     @Override
     public int used() {
         // TODO Auto-generated method stub
-        return 0;
+        throw null;
     }
 
 }

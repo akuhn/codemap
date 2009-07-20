@@ -22,7 +22,7 @@ public final class CorpusBuilder {
 	private boolean rejectRareTerms = true;
 	private boolean rejectCommonTerms = true;
 	boolean ignoreCase = true;
-	int latentDimensions;
+	int latentDimensions = 25;
 
 	
 	public CorpusBuilder(TermDocumentMatrix tdm) {
