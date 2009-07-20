@@ -5,6 +5,8 @@ import ch.akuhn.hapax.linalg.Matrix;
 
 public class Main {
 
+	private static final boolean VIZ = !true;
+
 	public static void main(String[] args) {
 		
 		Ggobid gg = new Ggobid();
@@ -17,6 +19,8 @@ public class Main {
 			.useCamelCaseScanner()
 			.addFiles("..", ".java")
 			.build();
+		
+		System.out.println("done");
 
 		Matrix corr = hapax.getIndex().documentCorrelation();
 		double[][] dissimilarities = corr.asArray();
@@ -27,12 +31,15 @@ public class Main {
 			}
 		}
 		
-		mds.run(ggv, dissimilarities);
-		
-		//Viz viz = new Viz(ggv.pos.vals).open();
+		mds.init(ggv, dissimilarities);
+		Viz viz  = VIZ ? new Viz(ggv.pos.vals).open() : null;
 		while (true) {
-			mds.mds_once(true, ggv, gg);
-			//viz.points = ggv.pos.vals;
+			long t = System.nanoTime();
+			for (int n = 0; n < 10; n++)	{
+				mds.mds_once(true, ggv, gg);
+				if (VIZ) viz.points = ggv.pos.vals;
+			}
+			System.out.printf("%d\n", (int) (1e12 / (System.nanoTime() - t)) * 10);
 		}
 	}
 

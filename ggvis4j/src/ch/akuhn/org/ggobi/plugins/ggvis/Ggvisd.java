@@ -1,6 +1,5 @@
 package ch.akuhn.org.ggobi.plugins.ggvis;
 
-import java.util.Arrays;
 
 public class Ggvisd {
 
@@ -16,7 +15,7 @@ public class Ggvisd {
 
 	// FIXME GtkWidget *stressplot_da;
 	// FIXME GdkPixmap *stressplot_pix;
-	vector_d stressvalues;  /*-- allocated to hold NSTRESSVALUES values --*/
+	double[] stressvalues;  /*-- allocated to hold NSTRESSVALUES values --*/
 	int nstressvalues;     /*-- the number of stress values */
 
 	// FIXME dissimd *dissim;
@@ -40,17 +39,17 @@ public class Ggvisd {
 	double threshold_high;
 	double threshold_low;
 
-	vector_d pos_mean;
-	vector_d weights;
-	vector_d trans_dist;
-	vector_d config_dist;
-	vector_i point_status;
-	vector_i trans_dist_index, bl;
+	double[] pos_mean;
+	array_d weights;
+	array_d trans_dist;
+	array_d config_dist;
+	int[] point_status;
+	int[] trans_dist_index, bl;
 	array_d gradient;
-	vector_d bl_w;
+	double[] bl_w;
 	double pos_scl;
 	double Dtarget_max, Dtarget_min;
-	vector_d rand_sel;
+	array_d rand_sel;
 	int freeze_var;
 	int ndistances;
 	int num_active_dist;
@@ -68,7 +67,7 @@ public class Ggvisd {
 	MDSGroupInd group_ind;
 	/* anchors */
 	MDSAnchorInd anchor_ind;
-	vector_b anchor_group;
+	boolean[] anchor_group;
 	// FIXME  GtkWidget *anchor_frame, *anchor_table;
 	int n_anchors;
 
@@ -159,15 +158,15 @@ public class Ggvisd {
 //	  this.n_anchors = 0;
 
 	  /*-- used in mds.c --*/
-	  this.pos_mean = new vector_d();
-	  this.weights = new vector_d();
-	  this.rand_sel = new vector_d();
-	  this.trans_dist = new vector_d();
-	  this.config_dist = new vector_d();
-	  this.point_status = new vector_i();
-	  this.trans_dist_index = new vector_i();
-	  this.bl = new vector_i();
-	  this.bl_w = new vector_d();
+	  this.pos_mean = new double[] {};
+	  this.weights = new array_d();
+	  this.rand_sel = new array_d();
+	  this.trans_dist = new array_d();
+	  this.config_dist = new array_d();
+	  this.point_status = new int[] {};
+	  this.trans_dist_index = new int[] {};
+	  this.bl = new int[] {};
+	  this.bl_w = new double[] {};
 	  this.gradient = new array_d();
 
 	  this.pos_scl = 0.0;
@@ -313,52 +312,28 @@ class Ggobid {
 class GGobiData {
 
 	int nrows_in_plot;
-	vector_i rows_in_plot;
-	vector_b hidden_now;
-	vector_i clusterid;
+	int[] rows_in_plot;
+	boolean[] hidden_now;
+	int[] clusterid;
 	array_d tform;
 	
 }
 
 class array_d {
-	double vals[][];
-	int nrows, ncols;
+	double[][] vals, els;
+	int nrows, ncols, nels;
 	public void arrayd_free(int nrows2, int ncols2) { 
-		nrows = ncols = 0;
-		vals = null;
+		nels = nrows = ncols = 0;
+		els = vals = null;
 	}
 	public void arrayd_init_null() { throw null; }
 	public void arrayd_alloc(int nrows2, int ncols2) { 
 		nrows = nrows2; 
 		ncols = ncols2;
-		vals = new double[nrows][ncols];
+		nels = ncols * nrows;
+		els = vals = new double[nrows][ncols];
 	}
 	public void arrayd_zero() { 
-		vals = new double[nrows][ncols]; // LULZ
+		els = vals = new double[nrows][ncols]; // LULZ
 	}
-}
-
-class vector_d {
-	double els[];
-	int nels;
-	void vectord_realloc(int dim) { 
-		nels = dim;
-		els = new double[dim];
-	}
-	public void vectord_init_null() { throw null; }
-	void vectord_zero() {
-		Arrays.fill(els, 0.0);
-	}
-};
-
-class vector_b {
-	boolean els[];
-	int nels;
-}
-
-class vector_i {
-	int els[];
-	int nels;
-	void vectori_realloc(int nrows) { throw null; }
-	public void vectori_init_null() { throw null; }
 }

@@ -88,22 +88,19 @@ public class Mds {
 	void get_center (Ggvisd ggv) {
 		int i, k, n;
 
-		if (ggv.pos_mean.nels < ggv.dim) {
-			ggv.pos_mean.vectord_realloc(ggv.dim);
-		}
-		ggv.pos_mean.vectord_zero();
+		ggv.pos_mean = new double[ggv.dim];
 
 		n = 0;
 
 		for (i=0; i<ggv.pos.nrows; i++) {
-			if (!IS_EXCLUDED(i) && !IS_DRAGGED(i)) {
-				for(k=0; k<ggv.dim; k++) 
-					ggv.pos_mean.els[k] += ggv.pos.vals[i][k];
-					n++;
+			// FIXME if (IS_EXCLUDED(i) || IS_DRAGGED(i)) continue; 
+			for(k=0; k<ggv.dim; k++) {
+				ggv.pos_mean[k] += ggv.pos.vals[i][k];
 			}
+			n++;
 		}
 		for(k=0; k<ggv.dim; k++) {
-			ggv.pos_mean.els[k] /= n;
+			ggv.pos_mean[k] /= n;
 		}
 	}
 
@@ -123,13 +120,12 @@ public class Mds {
 		ggv.pos_scl = 0.;
 
 		for(i=0; i<ggv.pos.nrows; i++) {
-			if (!IS_EXCLUDED(i) && !IS_DRAGGED(i)) {
-				for (k=0; k<ggv.dim; k++) {
-					ggv.pos_scl += ((ggv.pos.vals[i][k] - ggv.pos_mean.els[k]) *
-							(ggv.pos.vals[i][k] - ggv.pos_mean.els[k]));
-				}
-				n++;
+			// FIXME if (IS_EXCLUDED(i) || IS_DRAGGED(i)) continue;
+			for (k=0; k<ggv.dim; k++) {
+				ggv.pos_scl += ((ggv.pos.vals[i][k] - ggv.pos_mean[k]) *
+						(ggv.pos.vals[i][k] - ggv.pos_mean[k]));
 			}
+			n++;
 		}
 		ggv.pos_scl = sqrt(ggv.pos_scl/(double)n/(double)ggv.dim);
 	}
@@ -142,10 +138,9 @@ public class Mds {
 		get_center_scale (ggv);
 
 		for (i=0; i<ggv.pos.nrows; i++) {
-			if (!IS_EXCLUDED(i) && !IS_DRAGGED(i)) {
-				for (k=0; k<ggv.dim; k++)
-					pos[i][k] = (pos[i][k] - ggv.pos_mean.els[k])/ggv.pos_scl;
-			}
+			// FIXME if (IS_EXCLUDED(i) || IS_DRAGGED(i)) continue;
+			for (k=0; k<ggv.dim; k++)
+				pos[i][k] = (pos[i][k] - ggv.pos_mean[k])/ggv.pos_scl;
 		}
 	}
 
@@ -157,8 +152,8 @@ public class Mds {
 		double pos[][] = ggv.pos.vals;
 
 		for (k=0; k<ggv.dim; k++) {
-			dsum += (pos[i][k] - ggv.pos_mean.els[k]) *
-			(pos[j][k] - ggv.pos_mean.els[k]);
+			dsum += (pos[i][k] - ggv.pos_mean[k]) *
+			(pos[j][k] - ggv.pos_mean[k]);
 		}
 		return(dsum);
 	}
@@ -168,7 +163,7 @@ public class Mds {
 		int k;
 
 		for (k = ggv.freeze_var; k < ggv.dim; k++) { 
-			dsum += (p1[k] - ggv.pos_mean.els[k])*(p1[k] - ggv.pos_mean.els[k]);
+			dsum += (p1[k] - ggv.pos_mean[k])*(p1[k] - ggv.pos_mean[k]);
 		}
 		return(dsum);
 	}
@@ -194,24 +189,23 @@ void set_weights (Ggvisd ggv) {
       ggv.within_between != 1.)) 
   {
     if (ggv.weights.nels < ggv.ndistances)  /* power weights */ {
-    	ggv.weights.vectord_realloc (ggv.ndistances);
+    	ggv.weights.arrayd_alloc (ggv.Dtarget.nrows,ggv.Dtarget.ncols);
     }
     
     for (i=0; i<ggv.Dtarget.nrows; i++) {
       for (j=0; j<ggv.Dtarget.ncols; j++) {
-    	  Integer IJ = null;
         if (ggv.Dtarget.vals[i][j] == Double.MAX_VALUE) {
-          ggv.weights.els[IJ] = Double.MAX_VALUE;
+          ggv.weights.els[i][j] = Double.MAX_VALUE;
           continue;
         }
         if (ggv.weight_power != 0.) {
           if(ggv.Dtarget.vals[i][j] == 0.) { /* cap them */
             if (ggv.weight_power < 0.) {
-              ggv.weights.els[IJ] = 1E5;
+              ggv.weights.els[i][j] = 1E5;
               continue;
             }
             else {
-              ggv.weights.els[IJ] = 1E-5;
+              ggv.weights.els[i][j] = 1E-5;
             }
           }
           this_weight = pow(ggv.Dtarget.vals[i][j], ggv.weight_power); 
@@ -223,13 +217,13 @@ void set_weights (Ggvisd ggv) {
             this_weight *= (2. - ggv.within_between);
           else
             this_weight *= ggv.within_between;
-          ggv.weights.els[IJ] = this_weight;
+          ggv.weights.els[i][j] = this_weight;
         } else { /* weightpow == 0. */
           if (SAMEGLYPH(ggv.dpos,i,j)) 
             this_weight = (2. - ggv.within_between);
           else 
             this_weight = ggv.within_between;
-          ggv.weights.els[IJ] = this_weight;
+          ggv.weights.els[i][j] = this_weight;
         }
       }
     }
@@ -238,22 +232,19 @@ void set_weights (Ggvisd ggv) {
 
 
 void set_random_selection (Ggvisd ggv) {
-
-	int i;
-
 	if (ggv.rand_select_val != 1.0) { 
-		assert false;
-		if (ggv.rand_sel.nels < ggv.ndistances) {
-			ggv.rand_sel.vectord_realloc(ggv.ndistances);
-			for (i=0; i<ggv.ndistances; i++) { 
-				ggv.rand_sel.els[i] = (double) Math.random();  /* uniform on [0,1] */
-			}
-		}
-		if (!Double.isNaN(ggv.rand_select_new)) {
-			for (i=0; i<ggv.ndistances; i++)
-				ggv.rand_sel.els[i] = (double) Math.random();
-			ggv.rand_select_new = Double.NaN;
-		}
+		throw null;
+//		if (ggv.rand_sel.length < ggv.ndistances) {
+//			ggv.rand_sel.vectord_realloc(ggv.ndistances);
+//			for (i=0; i<ggv.ndistances; i++) { 
+//				ggv.rand_sel.els[i] = (double) Math.random();  /* uniform on [0,1] */
+//			}
+//		}
+//		if (!Double.isNaN(ggv.rand_select_new)) {
+//			for (i=0; i<ggv.ndistances; i++)
+//				ggv.rand_sel.els[i] = (double) Math.random();
+//			ggv.rand_select_new = Double.NaN;
+//		}
 	}
 } /* end set_random_selection() */
 
@@ -266,16 +257,15 @@ void update_stress (Ggvisd ggv, Ggobid gg) {
 
   for (i=0; i < ggv.Dtarget.nrows; i++) 
     for (j=0; j < ggv.Dtarget.ncols; j++) {
-    	int IJ = i*ggv.Dtarget.ncols+j;
-      dist_trans  = ggv.trans_dist.els[IJ];
+      dist_trans  = ggv.trans_dist.els[i][j];
       if (dist_trans == Double.MAX_VALUE) continue;
-      dist_config = ggv.config_dist.els[IJ];
+      dist_config = ggv.config_dist.els[i][j];
       if (ggv.weight_power == 0. && ggv.within_between == 1.) { 
         stress_dx += dist_trans  * dist_config;
         stress_xx += dist_config * dist_config;
         stress_dd += dist_trans  * dist_trans;
       } else {
-        this_weight = ggv.weights.els[IJ];
+        this_weight = ggv.weights.els[i][j];
         stress_dx += dist_trans  * dist_config * this_weight;
         stress_xx += dist_config * dist_config * this_weight;
         stress_dd += dist_trans  * dist_trans  * this_weight;
@@ -304,34 +294,36 @@ void power_transform (Ggvisd ggv) {
   if (ggv.Dtarget_power == 1.) { 
     return; 
   } else if (ggv.Dtarget_power == 2.) {
-    if (ggv.KruskalShepard_classic == MDSKSInd.KruskalShepard) { 
-      for (i=0; i<ggv.ndistances; i++) {
-        tmp = ggv.trans_dist.els[i];
-        if (tmp != Double.MAX_VALUE)
-          ggv.trans_dist.els[i] = tmp*tmp/ggv.Dtarget_max;
-      }
-    } else { 
-      for (i=0; i<ggv.ndistances; i++) {
-        tmp = ggv.trans_dist.els[i];
-        if (tmp != Double.MAX_VALUE)
-          ggv.trans_dist.els[i] = -tmp*tmp/ggv.Dtarget_max;
-      }
-    }
+	  throw null;
+//    if (ggv.KruskalShepard_classic == MDSKSInd.KruskalShepard) { 
+//      for (i=0; i<ggv.ndistances; i++) {
+//        tmp = ggv.trans_dist.els[i];
+//        if (tmp != Double.MAX_VALUE)
+//          ggv.trans_dist.els[i] = tmp*tmp/ggv.Dtarget_max;
+//      }
+//    } else { 
+//      for (i=0; i<ggv.ndistances; i++) {
+//        tmp = ggv.trans_dist.els[i];
+//        if (tmp != Double.MAX_VALUE)
+//          ggv.trans_dist.els[i] = -tmp*tmp/ggv.Dtarget_max;
+//      }
+//    }
   } else {
-    fac = pow (ggv.Dtarget_max, ggv.Dtarget_power-1);
-    if (ggv.KruskalShepard_classic == MDSKSInd.KruskalShepard) { 
-      for(i=0; i<ggv.ndistances; i++) {
-        tmp = ggv.trans_dist.els[i];
-        if (tmp != Double.MAX_VALUE)
-          ggv.trans_dist.els[i] = pow(tmp, ggv.Dtarget_power)/fac;
-      }
-    } else { 
-      for(i=0; i<ggv.ndistances; i++) {
-        tmp = ggv.trans_dist.els[i];
-        if(tmp != Double.MAX_VALUE)
-          ggv.trans_dist.els[i] = -pow(-tmp, ggv.Dtarget_power)/fac;
-      }
-    }
+	  throw null;
+//    fac = pow (ggv.Dtarget_max, ggv.Dtarget_power-1);
+//    if (ggv.KruskalShepard_classic == MDSKSInd.KruskalShepard) { 
+//      for(i=0; i<ggv.ndistances; i++) {
+//        tmp = ggv.trans_dist.els[i];
+//        if (tmp != Double.MAX_VALUE)
+//          ggv.trans_dist.els[i] = pow(tmp, ggv.Dtarget_power)/fac;
+//      }
+//    } else { 
+//      for(i=0; i<ggv.ndistances; i++) {
+//        tmp = ggv.trans_dist.els[i];
+//        if(tmp != Double.MAX_VALUE)
+//          ggv.trans_dist.els[i] = -pow(-tmp, ggv.Dtarget_power)/fac;
+//      }
+//    }
   }
 
 } /* end power_transform() */
@@ -358,23 +350,23 @@ int realCompare(final Object aPtr, final Object bPtr) {
 void isotonic_transform (Ggvisd ggv, Ggobid gg) {
 	throw null;
 //
-//  int i, j, ii, ij, k;
+//  int i, j, ii, i][j, k;
 //  double tmp_dist, tmp_distsum, tmp_weightsum, this_weight,
 //    t_d_i, t_d_ii;
 //  gboolean finished;
 //
 //  /* the sort index for dist.data */
-//  if (ggv.trans_dist_index.nels < ggv.ndistances) {
+//  if (ggv.trans_dist_index.length < ggv.ndistances) {
 //    vectori_realloc (&ggv.trans_dist_index, ggv.ndistances);
 //    g_printerr ("allocated trans_dist_index \n");
 //  }
 //  /* block lengths */
-//  if (ggv.bl.nels < ggv.ndistances) {
+//  if (ggv.bl.length < ggv.ndistances) {
 //    vectori_realloc (&ggv.bl, ggv.ndistances);
 //    g_printerr ("allocated block lengths \n");
 //  }
 //  /* block weights */
-//  if (ggv.bl_w.nels < ggv.ndistances &&
+//  if (ggv.bl_w.length < ggv.ndistances &&
 //       (ggv.weight_power != 0. || ggv.within_between != 1.))
 //  {
 //    vectord_realloc (&ggv.bl_w, ggv.ndistances);
@@ -391,7 +383,7 @@ void isotonic_transform (Ggvisd ggv, Ggobid gg) {
 //     /* "tmpVector" is the vector by which to sort; see "realCompare" above */
 //    for (i = 0 ; i < ggv.Dtarget.nrows; i++) {
 //      for (j = 0; j < ggv.Dtarget.ncols; j++) {
-//        ggv.trans_dist_index.els[IJ] = IJ;
+//        ggv.trans_dist_index.els[i][j] = i][j;
 //    }}
 //
 //    Myqsort (ggv.trans_dist_index.els, ggv.ndistances,
@@ -484,33 +476,33 @@ void isotonic_transform (Ggvisd ggv, Ggobid gg) {
 //  if (ggv.isotonic_mix != 1.0) {
 //    for (i = 0 ; i < ggv.Dtarget.nrows; i++) 
 //      for (j = 0; j < ggv.Dtarget.ncols; j++) {
-//        ij = IJ;
-//        if (ggv.trans_dist.els[ij] != G_MAXDOUBLE) {
+//        i][j = i][j;
+//        if (ggv.trans_dist.els[i][j] != G_MAXDOUBLE) {
 //          if (ggv.Dtarget_power == 1.0) {
 //            if (ggv.KruskalShepard_classic == KruskalShepard) {
-//              ggv.trans_dist.els[ij] =
-//                ggv.isotonic_mix * ggv.trans_dist.els[ij] + 
+//              ggv.trans_dist.els[i][j] =
+//                ggv.isotonic_mix * ggv.trans_dist.els[i][j] + 
 //                 (1 - ggv.isotonic_mix) * ggv.Dtarget.vals[i][j];
 //            } else {
-//              ggv.trans_dist.els[ij] =
-//                ggv.isotonic_mix * ggv.trans_dist.els[ij] - 
+//              ggv.trans_dist.els[i][j] =
+//                ggv.isotonic_mix * ggv.trans_dist.els[i][j] - 
 //                (1 - ggv.isotonic_mix) *
 //                ggv.Dtarget.vals[i][j]*ggv.Dtarget.vals[i][j];
 //            }
 //          } else { /* Dtarget_power != 1.0 */
 //            if (ggv.KruskalShepard_classic == KruskalShepard) {
-//              ggv.trans_dist.els[ij] =
-//                ggv.isotonic_mix * ggv.trans_dist.els[ij] + 
+//              ggv.trans_dist.els[i][j] =
+//                ggv.isotonic_mix * ggv.trans_dist.els[i][j] + 
 //                (1 - ggv.isotonic_mix) *
 //                pow(ggv.Dtarget.vals[i][j], ggv.Dtarget_power);
 //            } else {
-//              ggv.trans_dist.els[ij] =
-//                ggv.isotonic_mix * ggv.trans_dist.els[ij] - 
+//              ggv.trans_dist.els[i][j] =
+//                ggv.isotonic_mix * ggv.trans_dist.els[i][j] - 
 //                (1 - ggv.isotonic_mix) *
 //                pow(ggv.Dtarget.vals[i][j], 2*ggv.Dtarget_power);
 //            }
 //          }
-//        } /* end if(trans_dist[ij] != G_MAXDOUBLE) */
+//        } /* end if(trans_dist[i][j] != G_MAXDOUBLE) */
 //      } /* end for (j = 0; j < dist.ncols; j++) */
 //  } /* end if(isotonic_mix != 1.0) */
 //
@@ -560,316 +552,14 @@ void mds_once (boolean doit, Ggvisd ggv, Ggobid gg) {
 
 
   int num_active_dist_prev = ggv.num_active_dist;
-  double dist_config, dist_trans, resid, weight;
-  int k, n;
-  double step_mag, gsum, psum, gfactor;
-  double tmp;
   
   GGobiData dpos = ggv.dpos;
 
-  /* preparation for transformation */
-  if (ggv.trans_dist.nels < ggv.ndistances) {
-    /* transformation of raw_dist */
-	  ggv.trans_dist.vectord_realloc (ggv.ndistances);
-  }
-  /* distances of configuration points */
-  if (ggv.config_dist.nels < ggv.ndistances) {
-	  ggv.config_dist.vectord_realloc (ggv.ndistances);
-  }
-  /* initialize everytime we come thru because missings may change
-      due to user interaction */
-  for (int i = 0 ; i < ggv.Dtarget.nrows; i++) {
-    for (int j = 0; j < ggv.Dtarget.ncols; j++) {
-    	int IJ = i*ggv.Dtarget.ncols+j;
-      ggv.config_dist.els[IJ] = Double.MAX_VALUE;
-      ggv.trans_dist.els[IJ]  = Double.MAX_VALUE;
-    } 
-  }
+  mds_once_part1(ggv);
 
-  /* weight vector */
-  set_weights (ggv);
+  mds_once_part2(ggv);
 
-  /* random selection vector */
-  set_random_selection (ggv);
-
-  /*-- set the status for each point: excluded, included, anchor, dragged --*/
-//  if (ggv.point_status.nels < ggv.pos.nrows) {
-//	  ggv.point_status.vectori_realloc ( ggv.pos.nrows);
-//  }
-//  for (i=0; i<ggv.pos.nrows; i++) 
-//    ggv.point_status.els[i] = EXCLUDED;
-//  for (i=0; i<dpos.nrows_in_plot; i++) { 
-//    n = dpos.rows_in_plot.els[i]; 
-//    if(!dpos.hidden_now.els[n])
-//      ggv.point_status.els[n] = INCLUDED;
-//  }
-
-/*  I think this has been accounted for.
-    for (i=0; i<ggv.pos.nrows; i++) {
-      if (d->clusterid.nels > 0 &&
-          d->clusv[(int)GROUPID(i)].excluded == 1) 
-      {
-        ggv.point_status.els[i] = EXCLUDED;
-      }
-    }
-*/
-  /* anchors of either kind */  
-// FIXME if (ggv.anchor_group.nels > 0 && ggv.n_anchors > 0 &&
-//      (ggv.anchor_ind == MDSAnchorInd.fixed || ggv.anchor_ind == MDSAnchorInd.scaled))
-//  {
-//    for (i=0; i<ggv.pos.nrows; i++) {
-//      if (!IS_EXCLUDED(i) &&
-//          ggv.anchor_group.els[ggv.dsrc.clusterid.els[i]])  /* which d? */
-//      {
-//        ggv.point_status.els[i] = ANCHOR;
-//      }
-//    }
-//  }
-
-  /* dragged by mouse */
-  if (/* TODO imode_get (gg) == MOVEPTS && gg->buttondown && dpos->nearest_point != -1 */
-		  dragged_by_mouse()) {
-// TODO    if (gg.movepts.cluster_p) {
-// TODO		  for (i=0; i<ggv.pos.nrows; i++) {
-// TODO			  if (!IS_EXCLUDED(i) && SAMEGLYPH(dpos,i,dpos->nearest_point)) {
-// TODO				  ggv.point_status.els[i] = DRAGGED;
-// TODO			  }
-// TODO		  }
-// TODO	  } else {
-// TODO		  ggv.point_status.els[dpos->nearest_point] = DRAGGED;
-// TODO	  }
-  }
-
-  /* allocate position and compute means */
-  get_center (ggv);
-
-  /*-- collect and count active dissimilarities (j's move i's) ------------*/
-  ggv.num_active_dist = 0;
-
-  /* i's are moved by j's */
-  for (int i = 0; i < ggv.Dtarget.nrows; i++) {
-    /* do not exclude moving i's: in nonmetric MDS it matters what
-       the set of distances is!  */
-
-    /* these points are not moved by the gradient */
-    if (IS_EXCLUDED(i) || IS_DRAGGED(i) || (ANCHOR_FIXED && IS_ANCHOR(i))) {
-      continue;
-    }
-
-    /* j's are moving i's */    
-    for (int j = 0; j < ggv.Dtarget.ncols; j++) {
-    	int IJ = i*ggv.Dtarget.ncols+j;
-    	int JI = j*ggv.Dtarget.ncols+i;
-
-      /* skip diagonal elements for distance scaling */
-      if (i == j && ggv.KruskalShepard_classic == MDSKSInd.KruskalShepard) continue; 
-
-      /* these points do not contribute to the gradient */
-      if (IS_EXCLUDED(j)) continue;
-      if ((ANCHOR_SCALE || ANCHOR_FIXED) && !IS_ANCHOR(j) && !IS_DRAGGED(j))
-        continue;
-
-      /* if the target distance is missing, skip */
-      if (ggv.Dtarget.vals[i][j] == Double.MAX_VALUE) continue;
-
-      /* if weight is zero, skip */
-      if (ggv.weights.nels != 0 && ggv.weights.els[IJ] == 0.) continue;
-
-      /* using groups */
-//      if (ggv.group_ind == MDSGroupInd.within && !SAMEGLYPH(dpos,i,j))
-//        continue;
-//      if (ggv.group_ind == MDSGroupInd.between && SAMEGLYPH(dpos,i,j))
-//        continue;
-
-      /*
-       * if the target distance is within the thresholds
-       * set using the barplot of distances, keep going.
-       */
-      if (ggv.Dtarget.vals[i][j] < ggv.threshold_low || 
-          ggv.Dtarget.vals[i][j] > ggv.threshold_high) continue;
-
-      /*
-       * random selection: needs to be done symmetrically
-       */
-      if (ggv.rand_select_val < 1.0) {
-        if (i < j && ggv.rand_sel.els[IJ] > ggv.rand_select_val) continue;
-        if (i > j && ggv.rand_sel.els[JI] > ggv.rand_select_val) continue;
-      }
-
-      /* 
-       * zero weights:
-       * assume weights exist if test is positive, and
-       * can now assume that weights are >0 for non-NA
-       */
-      if (ggv.weight_power != 0. || ggv.within_between != 1.) {
-        if (ggv.weights.els[IJ] == 0.) continue;
-      }        
-
-      /* another active dissimilarity */
-      ggv.num_active_dist++;  
-
-      /* configuration distance */
-      if (ggv.KruskalShepard_classic == MDSKSInd.KruskalShepard) {
-        ggv.config_dist.els[IJ] = Lp_distance_pow(i, j, ggv);
-        ggv.trans_dist.els[IJ]  = ggv.Dtarget.vals[i][j];
-      } else { /* CLASSIC */
-        ggv.config_dist.els[IJ] = dot_prod(i, j, ggv);
-        ggv.trans_dist.els[IJ]  = -ggv.Dtarget.vals[i][j]*
-                                    ggv.Dtarget.vals[i][j];
-      }
-      /* store untransformed dissimilarity in transform vector for now:
-       * METRIC will transform it; NONMETRIC will used it for sorting first.
-       */
-
-    } /* j */
-  } /* i */
-  /* ------------ end collecting active dissimilarities ------------------ */
-
-
-  /* ---------- for active dissimilarities, do some work ------------------ */ 
-  if (ggv.num_active_dist > 0) {
-    /*-- power transform for metric MDS; isotonic transform for nonmetric --*/
-    if (ggv.metric_nonmetric == MDSMetricInd.metric)
-      power_transform (ggv);
-    else
-      isotonic_transform (ggv, gg);
-    /*-- stress (always lags behind gradient by one step) --*/
-    update_stress (ggv, gg);
-  }
-
-  /* --- for active dissimilarities, do the gradient push if asked for ----*/
-  if (doit && ggv.num_active_dist > 0) {
-
-    /* all of the following need to be run thru rows_in_plot and erase ! */
-
-    /* Zero out the gradient matrix. */
-    if (ggv.gradient.nrows != ggv.pos.nrows ||
-        ggv.gradient.ncols != ggv.pos.ncols)
-    {
-    	ggv.gradient.arrayd_free(ggv.gradient.nrows, ggv.gradient.ncols);
-    	ggv.gradient.arrayd_alloc (ggv.pos.nrows, ggv.pos.ncols);
-    }
-    ggv.gradient.arrayd_zero();
-
-    /* ------------- gradient accumulation: j's push i's ----------- */
-    for (int i = 0; i < ggv.Dtarget.nrows; i++) {
-      for (int j = 0; j < ggv.Dtarget.ncols; j++) {
-      	int IJ = i*ggv.Dtarget.ncols+j;
-    	  
-        dist_trans  = ggv.trans_dist.els[IJ];
-        if (dist_trans  == Double.MAX_VALUE)
-          continue;
-        dist_config = ggv.config_dist.els[IJ];
-        if (ggv.weight_power == 0. && ggv.within_between == 1.) {
-          weight = 1.0;
-        } else {
-          weight = ggv.weights.els[IJ];
-        }
-
-        /* gradient */
-        if (ggv.KruskalShepard_classic == MDSKSInd.KruskalShepard) {
-          if (abs(dist_config) < delta) dist_config = delta;
-          /* scale independent version: */
-          resid = (dist_trans - stress_dx / stress_xx * dist_config);
-          /* scale dependent version: 
-          resid = (dist_trans - dist_config);
-          */
-          if (ggv.lnorm != 2) {
-            /* non-Euclidean Minkowski/Lebesgue metric */
-            step_mag = weight * resid *
-              pow (dist_config, 1 - ggv.lnorm_over_dist_power);
-            for (k = 0; k < ggv.dim; k++) {
-              ggv.gradient.vals[i][k] += step_mag * 
-                sig_pow(ggv.pos.vals[i][k]-ggv.pos.vals[j][k],
-                  ggv.lnorm-1.0);
-            }
-          } else { /* Euclidean Minkowski/Lebesgue metric */
-            /* Note the simplification of the code for the special
-             * cases when dist_power takes on an integer value.  */
-            if (ggv.dist_power == 1)
-              step_mag = weight * resid / dist_config;
-            else if(ggv.dist_power == 2)
-              step_mag = weight * resid;
-            else if (ggv.dist_power == 3)
-              step_mag = weight * resid * dist_config;
-            else if (ggv.dist_power == 4)
-              step_mag = weight * resid * dist_config * dist_config;
-            else
-              step_mag = weight * resid *
-                pow(dist_config, ggv.dist_power-2.);
-            for (k = 0; k < ggv.dim; k++) {
-              ggv.gradient.vals[i][k] += step_mag *
-                (ggv.pos.vals[i][k]-ggv.pos.vals[j][k]); /* Euclidean! */
-            }
-          }
-        } else { /* CLASSIC */
-          /* scale independent version: */
-           resid = (dist_trans - stress_dx / stress_xx * dist_config);
-          /**/
-          /* scale dependent version:
-          resid = (dist_trans - dist_config);
-          */
-          step_mag = weight * resid; 
-          for (k = 0; k < ggv.dim; k++) {
-            ggv.gradient.vals[i][k] += step_mag *
-              (ggv.pos.vals[j][k] - ggv.pos_mean.els[k]);
-            /* exact formula would be:
-             * ((1-1/pos.nrows)*pos.vals[j][k] -
-             *  (1-2/pos.nrows)*pos_mean[k] - pos.vals[i][k]/pos.nrows); 
-            */
-          }
-        }
-
-      } /* for (j = 0; j < dist.nrows; j++) */
-    } /* for (i = 0; i < dist.nrows; i++) */
-    /* ------------- end gradient accumulation ----------- */   
-
-    /* center the classical gradient */
-    if (ggv.KruskalShepard_classic == MDSKSInd.classic) {
-      for (k=0; k<ggv.dim; k++) {
-        tmp = 0.;  n = 0;
-        for (int i=0; i<ggv.pos.nrows; i++) {
-          if (IS_INCLUDED(i) || (ANCHOR_SCALE && IS_ANCHOR(i))) {
-            tmp += ggv.gradient.vals[i][k]; 
-            n++;
-          }
-        }
-        tmp /= n;
-        for (int i=0; i<ggv.pos.nrows; i++) {
-          if (IS_INCLUDED(i) || (ANCHOR_SCALE && IS_ANCHOR(i))) {
-            ggv.gradient.vals[i][k] -= tmp;
-          }
-        }
-      }
-    }
-
-    /* gradient normalizing factor to scale gradient to a fraction of
-       the size of the configuration */
-    gsum = psum = 0.0 ;
-    for (int i=0; i<ggv.pos.nrows; i++) {
-      if (IS_INCLUDED(i) || (ANCHOR_SCALE && IS_ANCHOR(i))) {
-        gsum += L2_norm (ggv.gradient.vals[i], ggv);
-        psum += L2_norm (ggv.pos.vals[i], ggv);
-      }
-    }
-    if (gsum < delta) gfactor = 0.0;
-    else gfactor = ggv.stepsize * sqrt(psum/gsum);
-
-    /* add the gradient matrix to the position matrix and drag points */
-    for (int i=0; i<ggv.pos.nrows; i++) {
-      if (!IS_DRAGGED(i)) {
-        for (k = ggv.freeze_var; k<ggv.dim; k++)
-          ggv.pos.vals[i][k] += (gfactor * ggv.gradient.vals[i][k]);
-      } else {
-        for (k=0; k < ggv.dim; k++) 
-          ggv.pos.vals[i][k] = dpos.tform.vals[i][k] ;
-      }
-    }
-
-    /* experiment: normalize point cloud after using simplified gradient */
-    ggv_center_scale_pos (ggv);
-
-  } /* close:  if (doit && num_active_dist > 0)  */
+  mds_once_part3(doit, ggv, gg, dpos); /* close:  if (doit && num_active_dist > 0)  */
 
   /* update Shepard labels */
   if (ggv.num_active_dist != num_active_dist_prev) {
@@ -877,6 +567,323 @@ void mds_once (boolean doit, Ggvisd ggv, Ggobid gg) {
   }
   
 } /* end mds_once() */
+
+private void mds_once_part3(boolean doit, Ggvisd ggv, Ggobid gg,
+		GGobiData dpos) {
+	double dist_trans;
+	double resid;
+	double dist_config;
+	double weight;
+	int k;
+	int n;
+	double step_mag;
+	double gsum;
+	double psum;
+	double gfactor;
+	double tmp;
+	/* ---------- for active dissimilarities, do some work ------------------ */ 
+	  if (ggv.num_active_dist > 0) {
+	    /*-- power transform for metric MDS; isotonic transform for nonmetric --*/
+	    if (ggv.metric_nonmetric == MDSMetricInd.metric)
+	      power_transform (ggv);
+	    else
+	      isotonic_transform (ggv, gg);
+	    /*-- stress (always lags behind gradient by one step) --*/
+	    update_stress (ggv, gg);
+	  }
+	
+	  /* --- for active dissimilarities, do the gradient push if asked for ----*/
+	  if (doit && ggv.num_active_dist > 0) {
+	
+	    /* all of the following need to be run thru rows_in_plot and erase ! */
+	
+	    /* Zero out the gradient matrix. */
+	    if (ggv.gradient.nrows != ggv.pos.nrows ||
+	        ggv.gradient.ncols != ggv.pos.ncols)
+	    {
+	    	ggv.gradient.arrayd_free(ggv.gradient.nrows, ggv.gradient.ncols);
+	    	ggv.gradient.arrayd_alloc (ggv.pos.nrows, ggv.pos.ncols);
+	    }
+	    ggv.gradient.arrayd_zero();
+	
+	    /* ------------- gradient accumulation: j's push i's ----------- */
+	    for (int i = 0; i < ggv.Dtarget.nrows; i++) {
+	      for (int j = 0; j < ggv.Dtarget.ncols; j++) {
+	    	  
+	        dist_trans  = ggv.trans_dist.els[i][j];
+	        if (dist_trans  == Double.MAX_VALUE)
+	          continue;
+	        dist_config = ggv.config_dist.els[i][j];
+	        if (ggv.weight_power == 0. && ggv.within_between == 1.) {
+	          weight = 1.0;
+	        } else {
+	          weight = ggv.weights.els[i][j];
+	        }
+	
+	        /* gradient */
+	        if (ggv.KruskalShepard_classic == MDSKSInd.KruskalShepard) {
+	          if (abs(dist_config) < delta) dist_config = delta;
+	          /* scale independent version: */
+	          resid = (dist_trans - stress_dx / stress_xx * dist_config);
+	          /* scale dependent version: 
+	          resid = (dist_trans - dist_config);
+	          */
+	          if (ggv.lnorm != 2) {
+	            /* non-Euclidean Minkowski/Lebesgue metric */
+	            step_mag = weight * resid *
+	              pow (dist_config, 1 - ggv.lnorm_over_dist_power);
+	            for (k = 0; k < ggv.dim; k++) {
+	              ggv.gradient.vals[i][k] += step_mag * 
+	                sig_pow(ggv.pos.vals[i][k]-ggv.pos.vals[j][k],
+	                  ggv.lnorm-1.0);
+	            }
+	          } else { /* Euclidean Minkowski/Lebesgue metric */
+	            /* Note the simplification of the code for the special
+	             * cases when dist_power takes on an integer value.  */
+	            if (ggv.dist_power == 1)
+	              step_mag = weight * resid / dist_config;
+	            else if(ggv.dist_power == 2)
+	              step_mag = weight * resid;
+	            else if (ggv.dist_power == 3)
+	              step_mag = weight * resid * dist_config;
+	            else if (ggv.dist_power == 4)
+	              step_mag = weight * resid * dist_config * dist_config;
+	            else
+	              step_mag = weight * resid *
+	                pow(dist_config, ggv.dist_power-2.);
+	            for (k = 0; k < ggv.dim; k++) {
+	              ggv.gradient.vals[i][k] += step_mag *
+	                (ggv.pos.vals[i][k]-ggv.pos.vals[j][k]); /* Euclidean! */
+	            }
+	          }
+	        } else { /* CLASSIC */
+	          /* scale independent version: */
+	           resid = (dist_trans - stress_dx / stress_xx * dist_config);
+	          /**/
+	          /* scale dependent version:
+	          resid = (dist_trans - dist_config);
+	          */
+	          step_mag = weight * resid; 
+	          for (k = 0; k < ggv.dim; k++) {
+	            ggv.gradient.vals[i][k] += step_mag *
+	              (ggv.pos.vals[j][k] - ggv.pos_mean[k]);
+	            /* exact formula would be:
+	             * ((1-1/pos.nrows)*pos.vals[j][k] -
+	             *  (1-2/pos.nrows)*pos_mean[k] - pos.vals[i][k]/pos.nrows); 
+	            */
+	          }
+	        }
+	
+	      } /* for (j = 0; j < dist.nrows; j++) */
+	    } /* for (i = 0; i < dist.nrows; i++) */
+	    /* ------------- end gradient accumulation ----------- */   
+	
+	    /* center the classical gradient */
+	    if (ggv.KruskalShepard_classic == MDSKSInd.classic) {
+	      for (k=0; k<ggv.dim; k++) {
+	        tmp = 0.;  n = 0;
+	        for (int i=0; i<ggv.pos.nrows; i++) {
+	          if (IS_INCLUDED(i) || (ANCHOR_SCALE && IS_ANCHOR(i))) {
+	            tmp += ggv.gradient.vals[i][k]; 
+	            n++;
+	          }
+	        }
+	        tmp /= n;
+	        for (int i=0; i<ggv.pos.nrows; i++) {
+	          if (IS_INCLUDED(i) || (ANCHOR_SCALE && IS_ANCHOR(i))) {
+	            ggv.gradient.vals[i][k] -= tmp;
+	          }
+	        }
+	      }
+	    }
+	
+	    /* gradient normalizing factor to scale gradient to a fraction of
+	       the size of the configuration */
+	    gsum = psum = 0.0 ;
+	    for (int i=0; i<ggv.pos.nrows; i++) {
+	      if (IS_INCLUDED(i) || (ANCHOR_SCALE && IS_ANCHOR(i))) {
+	        gsum += L2_norm (ggv.gradient.vals[i], ggv);
+	        psum += L2_norm (ggv.pos.vals[i], ggv);
+	      }
+	    }
+	    if (gsum < delta) gfactor = 0.0;
+	    else gfactor = ggv.stepsize * sqrt(psum/gsum);
+	
+	    /* add the gradient matrix to the position matrix and drag points */
+	    for (int i=0; i<ggv.pos.nrows; i++) {
+	      if (!IS_DRAGGED(i)) {
+	        for (k = ggv.freeze_var; k<ggv.dim; k++)
+	          ggv.pos.vals[i][k] += (gfactor * ggv.gradient.vals[i][k]);
+	      } else {
+	        for (k=0; k < ggv.dim; k++) 
+	          ggv.pos.vals[i][k] = dpos.tform.vals[i][k] ;
+	      }
+	    }
+	
+	    /* experiment: normalize point cloud after using simplified gradient */
+	    // FIXME can we avoid this? ggv_center_scale_pos (ggv);
+	
+	  }
+}
+
+private void mds_once_part2(Ggvisd ggv) {
+	/* allocate position and compute means */
+	  get_center (ggv);
+	
+	  /*-- collect and count active dissimilarities (j's move i's) ------------*/
+	  ggv.num_active_dist = 0;
+	
+	  /* i's are moved by j's */
+	  for (int i = 0; i < ggv.Dtarget.nrows; i++) {
+	    /* do not exclude moving i's: in nonmetric MDS it matters what
+	       the set of distances is!  */
+	
+	    /* these points are not moved by the gradient */
+	    // FIXME if (IS_EXCLUDED(i) || IS_DRAGGED(i) || (ANCHOR_FIXED && IS_ANCHOR(i))) {
+	    //  continue;
+	    //}
+	
+	    /* j's are moving i's */    
+	    for (int j = 0; j < ggv.Dtarget.ncols; j++) {
+	
+	      /* skip diagonal elements for distance scaling */
+	      if (i == j && ggv.KruskalShepard_classic == MDSKSInd.KruskalShepard) continue; 
+	
+	      /* these points do not contribute to the gradient */
+	      if (IS_EXCLUDED(j)) continue;
+	      if ((ANCHOR_SCALE || ANCHOR_FIXED) && !IS_ANCHOR(j) && !IS_DRAGGED(j))
+	        continue;
+	
+	      /* if the target distance is missing, skip */
+	      if (ggv.Dtarget.vals[i][j] == Double.MAX_VALUE) continue;
+	
+	      /* if weight is zero, skip */
+	      if (ggv.weights.nels != 0 && ggv.weights.els[i][j] == 0.) continue;
+	
+	      /* using groups */
+	//      if (ggv.group_ind == MDSGroupInd.within && !SAMEGLYPH(dpos,i,j))
+	//        continue;
+	//      if (ggv.group_ind == MDSGroupInd.between && SAMEGLYPH(dpos,i,j))
+	//        continue;
+	
+	      /*
+	       * if the target distance is within the thresholds
+	       * set using the barplot of distances, keep going.
+	       */
+	      if (ggv.Dtarget.vals[i][j] < ggv.threshold_low || 
+	          ggv.Dtarget.vals[i][j] > ggv.threshold_high) continue;
+	
+	      /*
+	       * random selection: needs to be done symmetrically
+	       */
+	      if (ggv.rand_select_val < 1.0) {
+	        if (i < j && ggv.rand_sel.els[i][j] > ggv.rand_select_val) continue;
+	        if (i > j && ggv.rand_sel.els[j][i] > ggv.rand_select_val) continue;
+	      }
+	
+	      /* 
+	       * zero weights:
+	       * assume weights exist if test is positive, and
+	       * can now assume that weights are >0 for non-NA
+	       */
+	      if (ggv.weight_power != 0. || ggv.within_between != 1.) {
+	        if (ggv.weights.els[i][j] == 0.) continue;
+	      }        
+	
+	      /* another active dissimilarity */
+	      ggv.num_active_dist++;  
+	
+	      /* configuration distance */
+	      if (ggv.KruskalShepard_classic == MDSKSInd.KruskalShepard) {
+	        ggv.config_dist.els[i][j] = Lp_distance_pow(i, j, ggv);
+	        ggv.trans_dist.els[i][j]  = ggv.Dtarget.vals[i][j];
+	      } else { /* CLASSIC */
+	        ggv.config_dist.els[i][j] = dot_prod(i, j, ggv);
+	        ggv.trans_dist.els[i][j]  = -ggv.Dtarget.vals[i][j]*
+	                                    ggv.Dtarget.vals[i][j];
+	      }
+	      /* store untransformed dissimilarity in transform vector for now:
+	       * METRIC will transform it; NONMETRIC will used it for sorting first.
+	       */
+	
+	    } /* j */
+	  } /* i */
+	  /* ------------ end collecting active dissimilarities ------------------ */
+}
+
+private void mds_once_part1(Ggvisd ggv) {
+	/* preparation for transformation */
+	  if (ggv.trans_dist.nels < ggv.ndistances) {
+	    /* transformation of raw_dist */
+		  ggv.trans_dist.arrayd_alloc (ggv.Dtarget.nrows,ggv.Dtarget.ncols);
+	  }
+	  /* distances of configuration points */
+	  if (ggv.config_dist.nels < ggv.ndistances) {
+		  ggv.config_dist.arrayd_alloc (ggv.Dtarget.nrows,ggv.Dtarget.ncols);
+	  }
+	  /* initialize everytime we come thru because missings may change
+	      due to user interaction */
+	  for (int i = 0 ; i < ggv.Dtarget.nrows; i++) {
+	    for (int j = 0; j < ggv.Dtarget.ncols; j++) {
+	      ggv.config_dist.els[i][j] = Double.MAX_VALUE;
+	      ggv.trans_dist.els[i][j]  = Double.MAX_VALUE;
+	    } 
+	  }
+	
+	  /* weight vector */
+	  set_weights (ggv);
+	
+	  /* random selection vector */
+	  set_random_selection (ggv);
+	
+	  /*-- set the status for each point: excluded, included, anchor, dragged --*/
+	//  if (ggv.point_status.length < ggv.pos.nrows) {
+	//	  ggv.point_status.vectori_realloc ( ggv.pos.nrows);
+	//  }
+	//  for (i=0; i<ggv.pos.nrows; i++) 
+	//    ggv.point_status.els[i] = EXCLUDED;
+	//  for (i=0; i<dpos.nrows_in_plot; i++) { 
+	//    n = dpos.rows_in_plot.els[i]; 
+	//    if(!dpos.hidden_now.els[n])
+	//      ggv.point_status.els[n] = INCLUDED;
+	//  }
+	
+	/*  I think this has been accounted for.
+	    for (i=0; i<ggv.pos.nrows; i++) {
+	      if (d->clusterid.length > 0 &&
+	          d->clusv[(int)GROUPID(i)].excluded == 1) 
+	      {
+	        ggv.point_status.els[i] = EXCLUDED;
+	      }
+	    }
+	*/
+	  /* anchors of either kind */  
+	// FIXME if (ggv.anchor_group.length > 0 && ggv.n_anchors > 0 &&
+	//      (ggv.anchor_ind == MDSAnchorInd.fixed || ggv.anchor_ind == MDSAnchorInd.scaled))
+	//  {
+	//    for (i=0; i<ggv.pos.nrows; i++) {
+	//      if (!IS_EXCLUDED(i) &&
+	//          ggv.anchor_group.els[ggv.dsrc.clusterid.els[i]])  /* which d? */
+	//      {
+	//        ggv.point_status.els[i] = ANCHOR;
+	//      }
+	//    }
+	//  }
+	
+	  /* dragged by mouse */
+	  if (/* TODO imode_get (gg) == MOVEPTS && gg->buttondown && dpos->nearest_point != -1 */
+			  dragged_by_mouse()) {
+	// TODO    if (gg.movepts.cluster_p) {
+	// TODO		  for (i=0; i<ggv.pos.nrows; i++) {
+	// TODO			  if (!IS_EXCLUDED(i) && SAMEGLYPH(dpos,i,dpos->nearest_point)) {
+	// TODO				  ggv.point_status.els[i] = DRAGGED;
+	// TODO			  }
+	// TODO		  }
+	// TODO	  } else {
+	// TODO		  ggv.point_status.els[dpos->nearest_point] = DRAGGED;
+	// TODO	  }
+	  }
+}
 
   private boolean IS_INCLUDED(int i) {
 	  return true;
@@ -894,23 +901,23 @@ void mds_once (boolean doit, Ggvisd ggv, Ggobid gg) {
 	  return false;
   }
   
-  public void run(Ggvisd ggv, double[][] dissimilarities) {
+  public void init(Ggvisd ggv, double[][] dissimilarities) {
 
 	  ggv.Dtarget = new array_d();
 	  ggv.Dtarget.arrayd_alloc(dissimilarities.length, dissimilarities.length);
 	  ggv.ggv_init_Dtarget(dissimilarities);  /* populate with INF */
 	  ggv.ggv_compute_Dtarget(dissimilarities);
-	  
+
 	  ggv.pos = new array_d();
 	  ggv.pos.arrayd_alloc(dissimilarities.length, dissimilarities.length);
 	  for (int a = 0; a < dissimilarities.length; a++) {
-		for (int b = 0; b < dissimilarities.length; b++) {
-			ggv.pos.vals[a][b] = (Math.random() - 0.5) * 2;
-		}
-	}
-	  
+		  for (int b = 0; b < dissimilarities.length; b++) {
+			  ggv.pos.vals[a][b] = (Math.random() - 0.5) * 2;
+		  }
+	  }
+
 	  mds_func();
-	  
+
   }
 
 private void mds_func() {
