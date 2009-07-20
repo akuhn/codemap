@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 import ch.akuhn.foreach.Each;
-import ch.akuhn.hapax.index.AssociativeListTest;
 
 public class AssociativeList<E> implements Cloneable, Iterable<E> {
 
