@@ -106,7 +106,7 @@ public class MapView extends ViewPart {
 		container = new Composite(parent, SWT.NONE);
 		container.setLayout(new FillLayout(SWT.LEFT));
 		
-		canvas = new Canvas(container, SWT.NONE);		
+		canvas = new Canvas(container, SWT.DOUBLE_BUFFERED);		
 		
 		container.layout();
 		MColor water = MColor.WATER;

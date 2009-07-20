@@ -31,8 +31,8 @@ public class MDS {
 		int row = 0;
 		int col = 0;
 
-		for (double corellation: index.documentCorrelations()) {
-			input[row][col++] = corellation;
+		for (double correlation: index.documentCorrelations()) {
+			input[row][col++] = Math.sqrt(Math.max(0, 1 - correlation));
 			if (col >= size) {
 				col = 0;
 				row++;
