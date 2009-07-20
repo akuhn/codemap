@@ -1,4 +1,4 @@
-package org.codemap.svdlib;
+package ch.akuhn.edu.mit.tedlab;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,6 +6,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import org.junit.Test;
+
+import ch.akuhn.edu.mit.tedlab.SMat;
+import ch.akuhn.edu.mit.tedlab.SVDRec;
+import ch.akuhn.edu.mit.tedlab.Svdlib;
 
 public class RegressionTest {
 

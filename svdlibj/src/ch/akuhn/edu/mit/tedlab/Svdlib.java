@@ -1,9 +1,9 @@
-package org.codemap.svdlib;
+package ch.akuhn.edu.mit.tedlab;
 
-import static org.codemap.svdlib.Svdlib.storeVals.RETRP;
-import static org.codemap.svdlib.Svdlib.storeVals.RETRQ;
-import static org.codemap.svdlib.Svdlib.storeVals.STORP;
-import static org.codemap.svdlib.Svdlib.storeVals.STORQ;
+import static ch.akuhn.edu.mit.tedlab.Svdlib.storeVals.RETRP;
+import static ch.akuhn.edu.mit.tedlab.Svdlib.storeVals.RETRQ;
+import static ch.akuhn.edu.mit.tedlab.Svdlib.storeVals.STORP;
+import static ch.akuhn.edu.mit.tedlab.Svdlib.storeVals.STORQ;
 
 import java.io.File;
 import java.io.FileNotFoundException;

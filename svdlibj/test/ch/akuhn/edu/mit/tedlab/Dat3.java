@@ -1,7 +1,11 @@
-package org.codemap.svdlib;
+package ch.akuhn.edu.mit.tedlab;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+
+import ch.akuhn.edu.mit.tedlab.SMat;
+import ch.akuhn.edu.mit.tedlab.SVDRec;
+import ch.akuhn.edu.mit.tedlab.Svdlib;
 
 
 

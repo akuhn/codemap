@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.codemap.svdlib;
+package ch.akuhn.edu.mit.tedlab;
 
 public class SVDRec {
     public int d; /* Dimensionality (rank) */
