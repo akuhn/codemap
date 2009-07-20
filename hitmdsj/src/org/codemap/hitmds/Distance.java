@@ -6,14 +6,15 @@ import static java.lang.Math.sqrt;
 
 public interface Distance {
 
-	public double dist(int dimension, double[] d1, double[] d2);
+	public double dist(double[] d1, double[] d2);
 	
     /** Euclidean distance */
 	public static class DIST implements Distance {
 
 		@Override
-		public double dist(int dimension, double[] d1, double[] d2) {
-			assert dimension == d1.length && dimension == d2.length;
+		public double dist(double[] d1, double[] d2) {
+			assert d1.length== d2.length;
+			int dimension = d1.length;
 			double sum = 0.0;
 			for(int u = 0; u < dimension; u++) {
 				double tmp = d1[u] - d2[u];
@@ -27,8 +28,9 @@ public interface Distance {
 	/** "quadratic" Euclidean yields nice separation, sometimes */
 	public static class DIST4S implements Distance {
 		
-	    public double dist(int dimension, double[] d1, double[] d2) {
-	        
+		public double dist(double[] d1, double[] d2) {
+			assert d1.length== d2.length;
+			int dimension = d1.length;
 	        double sum = 0.0;
 	        
 	        for(int u = 0; u < dimension; u++) {
@@ -52,7 +54,9 @@ public interface Distance {
 		}
 
 		/* general Minkowski metric, mexponent = 2 -> Euclidean distance */
-		public double dist(int dimension, double[] d1, double[] d2) {
+		public double dist(double[] d1, double[] d2) {
+			assert d1.length== d2.length;
+			int dimension = d1.length;
 			double sum = 0.0;
 			for(int u = 0; u < dimension; u++) {
 				double tmp = d1[u] - d2[u];
@@ -76,8 +80,10 @@ public interface Distance {
 		}
 
 		@Override
-		public double dist(int dimension, double[] d1, double[] d2) {
-
+		public double dist(double[] d1, double[] d2) {
+			assert d1.length== d2.length;
+			int dimension = d1.length;
+			
 			double mono1 = 0.0, mono2 = 0.0, mixed = 0.0, tmp,
 			md1 = Hitmds2.mean(dimension, d1),
 			md2 = Hitmds2.mean(dimension, d2);
@@ -153,7 +159,9 @@ public interface Distance {
 
 
 		/* realize symmetric measure d(x,y) = d(y,x) */
-		public double dist(int dimension, double[] d1, double[] d2) {
+		public double dist(double[] d1, double[] d2) {
+			assert d1.length== d2.length;
+			int dimension = d1.length;
 			return corr_deriv_vec(dimension, d1, d2, true);
 		}
 

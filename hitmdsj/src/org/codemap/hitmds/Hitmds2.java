@@ -280,6 +280,8 @@ public class Hitmds2 {
         /* ABC: should be moved to data_alloc */
         points = new double[pattern_length][target_dim];
 
+        // FIXME new Viz(points).open(); 
+        
         double random_matrix[] = null;
         for(int line = 0; line < pattern_length; line++) {
             for(int column = 0; column < target_dim; column++) {
@@ -306,6 +308,9 @@ public class Hitmds2 {
             }
         }
         random_matrix = null;
+        
+        //mds_postprocessMoveCenterToOrigin(ProgressMonitor.NULL);
+		//mds_postprocessScaleDataSuchThatStandardDeviationIsOne(ProgressMonitor.NULL);
 
         /* calc distmats */
         
@@ -315,8 +320,8 @@ public class Hitmds2 {
         for(i = 0; i < pattern_length-1; i++) {
             for(j = i+1; j < pattern_length; j++) { 
                 if(!matrix_input)
-					pattern_distmat.set(i,j, ((float) distance.dist(pattern_dimension, pattern[i], pattern[j])));
-                points_distmat.set(i,j, ((float) dist.dist(target_dim, points[i], points[j])));
+					pattern_distmat.set(i,j, ((float) distance.dist(pattern[i], pattern[j])));
+                points_distmat.set(i,j, ((float) dist.dist(points[i], points[j])));
             }
         }
 
@@ -424,6 +429,7 @@ public class Hitmds2 {
 
             for (int k = 0; k < target_dim; k++) {
                 double diff = diff_mixed * delta_point[k] / abs(delta_point[k]);
+                /* added by akuhn */ if (Double.isNaN(diff)) diff = 0;
                 delta_point[k] = point[k] - diff /* * (2. * frand() - .5) */;
             }
 
@@ -445,7 +451,7 @@ public class Hitmds2 {
 
 		for (int k = 0; k < pattern_length; k++) {
 		    if(k == i) continue;
-		    double dtmp = dist.dist(target_dim, delta_point, points[k]);
+		    double dtmp = dist.dist(delta_point, points[k]);
 		    diff += (diffs[k] = dtmp - points_distmat.get(i,k));
 		}
 
@@ -576,8 +582,7 @@ public class Hitmds2 {
     
     public double[][] run(double[][] data, ProgressMonitor progress) {
         if (data.length == 0) return new double[0][];
-        // run(100, 1.0, 1.0487507802749606, null, data.length, data[0].length, data, -2, null, progress);
-        run(100, 0.01, 1.0487507802749606, null, data.length, data[0].length, data, -2, null, progress);
+        run(1000, 1.0, 1.0487507802749606, null, data.length, data[0].length, data, -2, null, progress);
         return points;
     }
 
