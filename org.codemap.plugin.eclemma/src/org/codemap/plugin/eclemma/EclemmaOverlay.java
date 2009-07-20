@@ -17,7 +17,7 @@ public class EclemmaOverlay extends AbstractUIPlugin {
 	private static EclemmaOverlay plugin;
 
 	private ShowCoverageAction showCoverageAction;
-	private MeanderCoverageListener coverageListener;
+	private CoverageListener coverageListener;
 	
 	/*
 	 * (non-Javadoc)
@@ -27,7 +27,7 @@ public class EclemmaOverlay extends AbstractUIPlugin {
 		super.start(context);
 		plugin = this;
 		
-		coverageListener = new MeanderCoverageListener();
+		coverageListener = new CoverageListener();
 		CoverageTools.addJavaCoverageListener(coverageListener);
 	}
 

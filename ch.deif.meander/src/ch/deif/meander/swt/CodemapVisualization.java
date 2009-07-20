@@ -8,6 +8,7 @@ import org.eclipse.swt.events.DragDetectEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
@@ -28,6 +29,7 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 	private Canvas canvas;
 	private int frameRate = 25;
 	/*default*/ MapInstance map; // FIXME
+	private Background background;
 	
 	public CodemapVisualization(MapInstance map) {
 		this();
@@ -88,12 +90,26 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 	public CodemapVisualization add(SWTLayer layer) {
 		return (CodemapVisualization) super.add(layer);
 	}
+	
+	public CodemapVisualization add(Background bg) {
+		background = bg;
+		background.setRoot(getRoot());
+		return this;
+	}	
 
 	@Override
 	public CodemapVisualization remove(SWTLayer layer) {
 		return (CodemapVisualization) super.remove(layer);
-	}		
+	}
 	
+	
+	
+	@Override
+	public void paintMap(MapInstance map, GC gc) {
+		if (background != null) background.paintMap(map, gc);
+		super.paintMap(map, gc);
+	}
+
 	public void startAnimationLoop() {
 		animate = true;
 		animationLoop.run();
@@ -131,6 +147,11 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 	public void redraw() {
 		if (canvas == null) return;
 		canvas.redraw();
+	}
+	
+	public void redrawBackground() {
+		if (background == null) return;
+		background.redraw();
 	}
 	
 	/**

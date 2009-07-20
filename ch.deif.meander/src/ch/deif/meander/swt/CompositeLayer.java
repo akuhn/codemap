@@ -31,12 +31,6 @@ public class CompositeLayer extends SWTLayer {
 		layer.setRoot(getRoot());
 		return this;
 	}
-	
-	public CompositeLayer prepend(SWTLayer layer) {
-		children.add(0, layer);
-		layer.setRoot(getRoot());
-		return this;
-	}	
 
 	public CompositeLayer remove(SWTLayer layer) {
 		children.remove(layer);

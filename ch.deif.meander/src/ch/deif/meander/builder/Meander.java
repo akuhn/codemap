@@ -131,55 +131,72 @@ public class Meander {
 		}
 	}
 	
-	private static class NewVizBuilder implements VizBuilder {
+	private static class MyBackgroundBuilder implements BackgroundBuilder {
+
+		private MapScheme<MColor> colorScheme;
+
+		@Override
+		public BackgroundBuilder withColors(MapScheme<MColor> scheme) {
+			colorScheme = scheme;
+			return this;
+		}
+
+		@Override
+		public ch.deif.meander.swt.Background makeBackground() {
+			ch.deif.meander.swt.Background background = new ch.deif.meander.swt.Background();
+			HillshadeLayer hillshade = new HillshadeLayer();
+			if (colorScheme != null) {
+				hillshade.setScheme(colorScheme);
+			}
+			background.children.add(new WaterBackground());
+			background.children.add(new ShoreLayer());
+			background.children.add(hillshade);
+			return background;
+		}
+		
+	}
+	
+	private static class ForegroundBuilder implements LayersBuilder {
 		
 		private CompositeLayer layers;
+		private MapScheme<MColor> colorScheme;
+		private HillshadeLayer hillshade;
 
-		public NewVizBuilder() {
+		public ForegroundBuilder() {
 			layers = new CompositeLayer();
 		}
 
 		@Override
-		public VizBuilder withLabels(MapScheme<String> labelScheme) {
+		public LayersBuilder withLabels(MapScheme<String> labelScheme) {
 			layers.add(new LabelOverlay(labelScheme));
 			return this;
 		}
 
 		@Override
-		public VizBuilder withSelection(SelectionOverlay overlay, MapSelection selection) {
+		public LayersBuilder withSelection(SelectionOverlay overlay, MapSelection selection) {
 			overlay.setSelection(selection);
 			layers.add(overlay);
 			return this;
 		}
-
-		@Override
-		public VizBuilder withBackground() {
-			ch.deif.meander.swt.Background background = new ch.deif.meander.swt.Background();
-			background.children.add(new WaterBackground());
-			background.children.add(new ShoreLayer());
-			background.children.add(new HillshadeLayer());
-			layers.prepend(background);
-			return this;
-		}
 		
 		@Override
-		public VizBuilder withLayer(SWTLayer layer) {
+		public LayersBuilder withLayer(SWTLayer layer) {
 			layers.add(layer);
 			return this;
 		}
 		
 		@Override
 		public SWTLayer makeLayer() {
+			if (hillshade != null && colorScheme != null) {
+				hillshade.setScheme(colorScheme);
+			}
 			return layers;
 		}
+
 	}
 
 	public static MapBuilder builder() {
 		return new MeanderMapBuilder();
-	}
-	
-	public static VizBuilder vizBuilder() {
-		return new NewVizBuilder();
 	}
 	
 	/**
@@ -188,5 +205,13 @@ public class Meander {
 	@Deprecated
 	public static VisualizationBuilder visualization() {
 		return new MeanderVizBuilder();
+	}
+
+	public static BackgroundBuilder background() {
+		return new MyBackgroundBuilder();
+	}
+
+	public static LayersBuilder layers() {
+		return new ForegroundBuilder();
 	}
 }

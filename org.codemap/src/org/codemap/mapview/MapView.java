@@ -257,8 +257,7 @@ public class MapView extends ViewPart {
 	}
 
 	public void redrawCodemapBackground() {
-		container.redraw();
-		// FIXME redraw background
+		currentViz.redrawBackground();
 	}
 
 }

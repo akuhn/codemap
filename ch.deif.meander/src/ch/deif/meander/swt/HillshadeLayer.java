@@ -11,11 +11,17 @@ import ch.deif.meander.MapInstance;
 import ch.deif.meander.internal.ContourLineAlgorithm;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.internal.HillshadeAlgorithm;
+import ch.deif.meander.util.MColor;
+import ch.deif.meander.util.MapScheme;
 import ch.deif.meander.util.SparseTrueBooleanList;
 
 public class HillshadeLayer extends SWTLayer {
+	
+	MapScheme<MColor> colorScheme;
 
 	public void paintMap(MapInstance map, GC gc) {
+		if (colorScheme == null) colorScheme = MapScheme.with(MColor.HILLGREEN);
+		
 		float[][] DEM = map.get(DEMAlgorithm.class);
 		double[][] shade = map.get(HillshadeAlgorithm.class);
 		List<SparseTrueBooleanList> list = map.get(ContourLineAlgorithm.class);
@@ -28,13 +34,18 @@ public class HillshadeLayer extends SWTLayer {
 					double f = shade[x][y];
 					if (list.get(x).get(y)) f *= 0.5;
 					if (f < 0.0) f = 0.0;
-					Color shore = new Color(display, (int) (196 * f), (int) (236 * f), 0);
+					MColor color = colorScheme.forLocation(map.nearestNeighbor(x, y).getPoint());					
+					Color shore = new Color(display, (int) (color.getRed() * f), (int) (color.getGreen() * f), (int) (color.getBlue() * f));
 					gc.setForeground(shore);
 					gc.drawPoint(x, y);
 					shore.dispose();
 				}
 			}
 		}
+	}
+
+	public void setScheme(MapScheme<MColor> scheme) {
+		colorScheme = scheme;
 	}
 	
 	

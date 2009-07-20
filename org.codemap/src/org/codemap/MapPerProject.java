@@ -28,6 +28,7 @@ import ch.akuhn.util.Pair;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.Point;
 import ch.deif.meander.builder.Meander;
+import ch.deif.meander.swt.Background;
 import ch.deif.meander.swt.CodemapVisualization;
 import ch.deif.meander.swt.CurrSelectionOverlay;
 import ch.deif.meander.swt.OpenFilesOverlay;
@@ -56,6 +57,7 @@ public class MapPerProject {
 	
 	private CodemapVisualization visual;
 	private SWTLayer layer;
+	private Background background;
 
 	public MapPerProject(IJavaProject project) {
 		this.project = project;
@@ -122,7 +124,6 @@ public class MapPerProject {
 
 	public CodemapVisualization getVisualization() {
 		if (tdm == null) return null;
-//		if (mapViz != null && mapViz.getWidth() == mapSize) return mapViz;
 		if (visual != null && visual.getSize() == mapSize) return visual;		
 		updateMap();
 		return null;
@@ -155,8 +156,11 @@ public class MapPerProject {
 					.makeMap(reloadMapState());
 			monitor.worked(5);
 			
-			layer = Meander.vizBuilder()
-				   .withBackground()
+			background = Meander.background()
+				   .withColors(CodemapCore.getPlugin().getColorScheme())
+				   .makeBackground();
+			
+			layer = Meander.layers()
 				   .withLabels(CodemapCore.getPlugin().getLabelScheme())
 				   .withSelection(new CurrSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
 				   .withSelection(new OpenFilesOverlay(), CodemapCore.getPlugin().getOpenFilesSelection())
@@ -164,20 +168,11 @@ public class MapPerProject {
 				   .withLayer(CodemapCore.getPlugin().getSharedLayer())
 				   .makeLayer();
 			monitor.worked(5);	
-			
-//			awtLayer = Meander.visualization()
-//					.withLabels(CodemapCore.getPlugin().getLabelScheme())
-//					.withColors(CodemapCore.getPlugin().getColorScheme())
-//					.withSelection(new CurrentSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
-//					.withSelection(new OpenFilesOverlay(), CodemapCore.getPlugin().getOpenFilesSelection())
-//					.withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())
-//					.appendLayer(CodemapCore.getPlugin().getSharedLayer())
-//					.makeLayer();
 		} else {
 			monitor.worked(20);
 		}
 		visual = new CodemapVisualization(configuration.withSize(mapSize, makeHeightScheme()));
-		visual.add(layer);		
+		visual.add(layer).add(background);
 		monitor.worked(20);
 
 		notifyMapView();

@@ -122,7 +122,7 @@ public class CodemapCore extends AbstractUIPlugin {
 	
 	public void redrawCodemapBackground() {
 		getMapView().redrawCodemapBackground();
-		getMapView().redraw();
+		getMapView().redrawAsync();
 	}
 	
 	/**

@@ -21,7 +21,7 @@ import com.mountainminds.eclemma.core.analysis.IJavaCoverageListener;
 import com.mountainminds.eclemma.core.analysis.IJavaElementCoverage;
 import com.mountainminds.eclemma.core.analysis.IJavaModelCoverage;
 
-public class MeanderCoverageListener implements IJavaCoverageListener {
+public class CoverageListener implements IJavaCoverageListener {
 
 	protected final class CoverageResourceVisitor implements IResourceVisitor {
 		private final List<Pair<String, Double>> identifiers;

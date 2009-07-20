@@ -13,15 +13,22 @@ public class Background extends SWTLayer {
 
 	public List<SWTLayer> children = new LinkedList<SWTLayer>();
 	private Image buffer;
+	private boolean needsRedraw = false;
 	
 	@Override
 	public void paintMap(MapInstance map, GC gc) {
 		if (needsRepaint(map)) buffer = makeBuffer(map);
 		gc.drawImage(buffer, 0, 0);
+		needsRedraw = false;
 	}
 
 	private boolean needsRepaint(MapInstance map) {
-		return buffer == null || buffer.getBounds().width != map.getWidth();
+		return buffer == null || needsRedraw || buffer.getBounds().width != map.getWidth();
+	}
+	
+	@Override
+	public void redraw() {
+		needsRedraw  = true;
 	}
 
 	private Image makeBuffer(MapInstance map) {
