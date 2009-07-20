@@ -8,7 +8,7 @@ import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
 
 public class OpenFilesOverlay extends SelectionOverlay {
-	
+
 	protected final int SELECTION_SIZE = 12;
 	protected final int POINT_STROKE = 1;	
 

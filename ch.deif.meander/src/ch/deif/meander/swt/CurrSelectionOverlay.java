@@ -26,6 +26,8 @@ public class CurrSelectionOverlay extends SelectionOverlay {
 	private boolean isDragging = false;
 	private Point dragStart;
 	private Point dragStop;
+	
+	public CurrSelectionOverlay() {}	
 
 	@Override
 	public void paintBefore(MapInstance map, GC gc) {
@@ -43,9 +45,6 @@ public class CurrSelectionOverlay extends SelectionOverlay {
 
 	@Override
 	public void dragDetected(DragDetectEvent e) {
-		
-		System.out.println("CurrSelectionOverlay.dragDetected()");
-		
 		isDragging = true;
 		dragStop = dragStart = new Point(e.x, e.y);	
 	}

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.codemap.builder.HapaxBuilder;
 import org.codemap.builder.MapMakerBackgroundJob;
 import org.codemap.mapview.MapView;
+import org.codemap.util.Icons;
 import org.codemap.util.Log;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
@@ -20,6 +21,8 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.osgi.service.prefs.BackingStoreException;
 
 import ch.akuhn.hapax.Hapax;
@@ -31,6 +34,7 @@ import ch.deif.meander.builder.Meander;
 import ch.deif.meander.swt.Background;
 import ch.deif.meander.swt.CodemapVisualization;
 import ch.deif.meander.swt.CurrSelectionOverlay;
+import ch.deif.meander.swt.ImageOverlay;
 import ch.deif.meander.swt.OpenFilesOverlay;
 import ch.deif.meander.swt.SWTLayer;
 import ch.deif.meander.swt.YouAreHereOverlay;
@@ -163,7 +167,7 @@ public class MapPerProject {
 			layer = Meander.layers()
 				   .withLabels(CodemapCore.getPlugin().getLabelScheme())
 				   .withSelection(new CurrSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
-				   .withSelection(new OpenFilesOverlay(), CodemapCore.getPlugin().getOpenFilesSelection())
+				   .withSelection(new ImageOverlay(Icons.getImage(Icons.JAVA_FILE)), CodemapCore.getPlugin().getOpenFilesSelection())
 				   .withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())				   
 				   .withLayer(CodemapCore.getPlugin().getSharedLayer())
 				   .makeLayer();

@@ -1,6 +1,7 @@
 package ch.deif.meander.swt;
 
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
@@ -9,11 +10,24 @@ import ch.deif.meander.MapSelection;
 public abstract class SelectionOverlay extends SWTLayer {
 
 	protected MapSelection selection;
-
+	private Image image;
+	
+	protected void setImag(Image img) {
+		image = img;
+	}
+	
+	public Image getImage() {
+		return image;
+	}
+	
+	public MapSelection getSelection() {
+		return selection;
+	}
+	
 	public SelectionOverlay setSelection(MapSelection selection) {
 		this.selection = selection;
 		return this;
-	}
+	}	
 
 	@Override
 	public final void paintMap(MapInstance map, GC gc) {
@@ -33,8 +47,5 @@ public abstract class SelectionOverlay extends SWTLayer {
 	
 	public abstract void paintChild(GC gc, Location each);
 
-	public MapSelection getSelection() {
-		return selection;
-	}
 
 }
