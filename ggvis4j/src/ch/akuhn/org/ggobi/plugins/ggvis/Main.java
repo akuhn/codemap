@@ -23,15 +23,16 @@ public class Main {
 		for (int n = 0; n < dissimilarities.length; n++) {
 			for (int m = 0; m < dissimilarities.length; m++) {
 				dissimilarities[n][m] = Math.pow(Math.max(0, 1 - dissimilarities[n][m]), 0.5);
-				dissimilarities[n][m] = n == m ? 0.0 : 1.0;
+				//dissimilarities[n][m] = n == m ? 0.0 : 1.0 ;
 			}
 		}
 		
 		mds.run(ggv, dissimilarities);
-		Viz viz = new Viz(ggv.pos.vals).open();
+		
+		//Viz viz = new Viz(ggv.pos.vals).open();
 		while (true) {
 			mds.mds_once(true, ggv, gg);
-			viz.points = ggv.pos.vals;
+			//viz.points = ggv.pos.vals;
 		}
 	}
 

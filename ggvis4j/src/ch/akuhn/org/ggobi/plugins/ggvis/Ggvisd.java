@@ -106,7 +106,7 @@ public class Ggvisd {
 //	  vectorb_init_null (&this.dissim->bars_included);
 //	  vectori_init_null (&this.dissim->bins);
 
-	  this.dim = 3;
+	  this.dim = 2;
 
 	  this.stepsize = 0.02;
 	  this.dist_power = 1.0;
@@ -172,8 +172,8 @@ public class Ggvisd {
 
 	  this.pos_scl = 0.0;
 	  this.freeze_var = 0;
-	  this.Dtarget_max = Mds.G_MAXDOUBLE;
-	  this.Dtarget_min = -Mds.G_MAXDOUBLE;
+	  this.Dtarget_max = Double.MAX_VALUE;
+	  this.Dtarget_min = -Double.MAX_VALUE;
 	  this.prev_nonmetric_active_dist = 0;
 	  /* */
 
@@ -276,7 +276,7 @@ public class Ggvisd {
 
 	  this.ndistances = this.Dtarget.nrows * this.Dtarget.ncols;
 
-	  this.Dtarget_max = -Mds.G_MAXDOUBLE;  this.Dtarget_min = Mds.G_MAXDOUBLE;
+	  this.Dtarget_max = -Double.MAX_VALUE;  this.Dtarget_min = Double.MAX_VALUE;
 	  for (int i=0; i<Dtarget.nrows; i++) {
 	    for (int j=0; j<Dtarget.ncols; j++) {
 	      double dtmp = Dtarget.vals[i][j]; 
@@ -284,7 +284,7 @@ public class Ggvisd {
 	        throw new Error("negative dissimilarity: D[%d][%d] = %3.6f -> NA\n");
 	        // FIXME dtmp = Dtarget.vals[i][j] = Mds.G_MAXDOUBLE;
 	      }
-	      if(dtmp != Mds.G_MAXDOUBLE) {
+	      if(dtmp != Double.MAX_VALUE) {
 	        if (dtmp > Dtarget_max) Dtarget_max = dtmp;
 	        if (dtmp < Dtarget_min) Dtarget_min = dtmp;
 	      }

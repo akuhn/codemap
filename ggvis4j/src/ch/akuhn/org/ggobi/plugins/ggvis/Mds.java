@@ -59,11 +59,8 @@ public class Mds {
 	static final int ANCHOR   = 2;
 	static final int DRAGGED  = 4; 
 	
-	static final double G_MAXDOUBLE = Double.MAX_VALUE;
-	private static final Integer IJ = null;
 	private static final boolean ANCHOR_FIXED = false;
 	private static final boolean ANCHOR_SCALE = false;
-	private static final Integer JI = null;
 	double sig_pow (double x, double p) {
 		return((x >= 0.0 ? pow(x, p) : -pow(-x, p)));
 	}
@@ -202,8 +199,9 @@ void set_weights (Ggvisd ggv) {
     
     for (i=0; i<ggv.Dtarget.nrows; i++) {
       for (j=0; j<ggv.Dtarget.ncols; j++) {
-        if (ggv.Dtarget.vals[i][j] == G_MAXDOUBLE) {
-          ggv.weights.els[IJ] = G_MAXDOUBLE;
+    	  Integer IJ = null;
+        if (ggv.Dtarget.vals[i][j] == Double.MAX_VALUE) {
+          ggv.weights.els[IJ] = Double.MAX_VALUE;
           continue;
         }
         if (ggv.weight_power != 0.) {
@@ -270,7 +268,7 @@ void update_stress (Ggvisd ggv, Ggobid gg) {
     for (j=0; j < ggv.Dtarget.ncols; j++) {
     	int IJ = i*ggv.Dtarget.ncols+j;
       dist_trans  = ggv.trans_dist.els[IJ];
-      if (dist_trans == G_MAXDOUBLE) continue;
+      if (dist_trans == Double.MAX_VALUE) continue;
       dist_config = ggv.config_dist.els[IJ];
       if (ggv.weight_power == 0. && ggv.within_between == 1.) { 
         stress_dx += dist_trans  * dist_config;
@@ -309,13 +307,13 @@ void power_transform (Ggvisd ggv) {
     if (ggv.KruskalShepard_classic == MDSKSInd.KruskalShepard) { 
       for (i=0; i<ggv.ndistances; i++) {
         tmp = ggv.trans_dist.els[i];
-        if (tmp != G_MAXDOUBLE)
+        if (tmp != Double.MAX_VALUE)
           ggv.trans_dist.els[i] = tmp*tmp/ggv.Dtarget_max;
       }
     } else { 
       for (i=0; i<ggv.ndistances; i++) {
         tmp = ggv.trans_dist.els[i];
-        if (tmp != G_MAXDOUBLE)
+        if (tmp != Double.MAX_VALUE)
           ggv.trans_dist.els[i] = -tmp*tmp/ggv.Dtarget_max;
       }
     }
@@ -324,13 +322,13 @@ void power_transform (Ggvisd ggv) {
     if (ggv.KruskalShepard_classic == MDSKSInd.KruskalShepard) { 
       for(i=0; i<ggv.ndistances; i++) {
         tmp = ggv.trans_dist.els[i];
-        if (tmp != G_MAXDOUBLE)
+        if (tmp != Double.MAX_VALUE)
           ggv.trans_dist.els[i] = pow(tmp, ggv.Dtarget_power)/fac;
       }
     } else { 
       for(i=0; i<ggv.ndistances; i++) {
         tmp = ggv.trans_dist.els[i];
-        if(tmp != G_MAXDOUBLE)
+        if(tmp != Double.MAX_VALUE)
           ggv.trans_dist.els[i] = -pow(-tmp, ggv.Dtarget_power)/fac;
       }
     }
@@ -583,8 +581,8 @@ void mds_once (boolean doit, Ggvisd ggv, Ggobid gg) {
   for (int i = 0 ; i < ggv.Dtarget.nrows; i++) {
     for (int j = 0; j < ggv.Dtarget.ncols; j++) {
     	int IJ = i*ggv.Dtarget.ncols+j;
-      ggv.config_dist.els[IJ] = G_MAXDOUBLE;
-      ggv.trans_dist.els[IJ]  = G_MAXDOUBLE;
+      ggv.config_dist.els[IJ] = Double.MAX_VALUE;
+      ggv.trans_dist.els[IJ]  = Double.MAX_VALUE;
     } 
   }
 
@@ -672,7 +670,7 @@ void mds_once (boolean doit, Ggvisd ggv, Ggobid gg) {
         continue;
 
       /* if the target distance is missing, skip */
-      if (ggv.Dtarget.vals[i][j] == G_MAXDOUBLE) continue;
+      if (ggv.Dtarget.vals[i][j] == Double.MAX_VALUE) continue;
 
       /* if weight is zero, skip */
       if (ggv.weights.nels != 0 && ggv.weights.els[IJ] == 0.) continue;
@@ -759,7 +757,7 @@ void mds_once (boolean doit, Ggvisd ggv, Ggobid gg) {
       	int IJ = i*ggv.Dtarget.ncols+j;
     	  
         dist_trans  = ggv.trans_dist.els[IJ];
-        if (dist_trans  == G_MAXDOUBLE)
+        if (dist_trans  == Double.MAX_VALUE)
           continue;
         dist_config = ggv.config_dist.els[IJ];
         if (ggv.weight_power == 0. && ggv.within_between == 1.) {
