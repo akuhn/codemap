@@ -34,6 +34,7 @@ public class MultidimensionalScaling {
 	}
 	
 	public double[][] run() {
+		if (fdistances.length == 0) return new double[0][2];
 		Mds mds = new Mds();
 		mds.ggvis_init();
 		mds.init(fdistances);
@@ -47,9 +48,9 @@ public class MultidimensionalScaling {
 			fiterations -= 10;
 		}
 		double[][] points = mds.points();
-		mds = null;
 		assert points.length == len;
 		for (double[] each: points) assert each.length == 2;
+		mds = null;
 		return points;
 	}
 	

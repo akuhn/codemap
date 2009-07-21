@@ -54,10 +54,10 @@ public class Mds extends Ggvisd {
 		this.ggv_compute_Dtarget(dissimilarities);
 
 		this.pos = new array_d();
-		this.pos.arrayd_alloc(dissimilarities.length, dissimilarities.length);
-		this.gradient.arrayd_alloc(dissimilarities.length, dissimilarities.length);
-		for (int a = 0; a < dissimilarities.length; a++) {
-			for (int b = 0; b < dissimilarities.length; b++) {
+		this.pos.arrayd_alloc(dissimilarities.length, dim);
+		this.gradient.arrayd_alloc(dissimilarities.length, dim);
+		for (int a = 0; a < pos.vals.length; a++) {
+			for (int b = 0; b < pos.vals[a].length; b++) {
 				this.pos.vals[a][b] = (Math.random() - 0.5) * 2;
 			}
 		}
