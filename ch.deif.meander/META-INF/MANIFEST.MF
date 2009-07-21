@@ -19,6 +19,6 @@ Export-Package:
  processing.pdf
 Bundle-ClassPath: .,
  lib/core.jar,
- lib/hitmds2-r000.jar,
- lib/pdf.jar
+ lib/pdf.jar,
+ lib/ggvis4j-r643.jar
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

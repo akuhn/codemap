@@ -1,8 +1,7 @@
 package ch.deif.meander.internal;
 
-import org.codemap.hitmds.Hitmds2;
-
 import ch.akuhn.hapax.index.LatentSemanticIndex;
+import ch.akuhn.mds.MultidimensionalScaling;
 import ch.akuhn.util.As;
 import ch.deif.meander.Location;
 
@@ -22,33 +21,20 @@ public class MDS {
 
 	private MDS compute(LatentSemanticIndex index, Iterable<Location> matchingLocations) {
 		assert matchingLocations == null || index.documentCount() == As.list(matchingLocations).size();
-
 		int size = index.documentCount();
+		double[][] result = new MultidimensionalScaling()
+			.similarities(index.documentCorrelation().asArray())
+			.maxIterations(100)
+			.run();
+		assert result.length == 0 || result[0].length == 2;
 		x = new double[size];
 		y = new double[size];
-		double[][] input = new double[size][size];
-
-		int row = 0;
-		int col = 0;
-
-		for (double correlation: index.documentCorrelations()) {
-			input[row][col++] = Math.sqrt(Math.max(0, 1 - correlation));
-			if (col >= size) {
-				col = 0;
-				row++;
-			}
-		}
-
-		double[][] result = new Hitmds2().run(input);
-		assert result.length == 0 || result[0].length == 2;
-
 		int i = 0;
 		for (double[] documentPosition: result) {
 			x[i] = documentPosition[0];
 			y[i] = documentPosition[1];
 			i++;
 		}
-
 		return this;
 	}
 
