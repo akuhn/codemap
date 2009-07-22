@@ -46,11 +46,11 @@ public class Configuration {
 		}
 		double width = maxX - minX;
 		double height = maxY - minY;
-		Collect<Point> query = Collect.fromArray(points);
+		Collect<Point> query = Collect.from(points);
 		for (Each<Point> each: query) {
 			each.yield = each.value.normalize(minX, minY, width, height);
 		}
-		return new Configuration(query.resultArray());
+		return new Configuration(query.getResultArray());
 	}
 
 	public MapInstance withSize(int size, MapScheme<Double> elevation) {
