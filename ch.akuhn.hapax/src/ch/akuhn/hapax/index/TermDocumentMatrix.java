@@ -1,6 +1,6 @@
 package ch.akuhn.hapax.index;
 
-import static ch.akuhn.util.Each.withIndex;
+import static ch.akuhn.foreach.For.withIndex;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
@@ -18,7 +18,7 @@ import ch.akuhn.io.chunks.ChunkInput;
 import ch.akuhn.io.chunks.ChunkOutput;
 import ch.akuhn.io.chunks.ReadFromChunk;
 import ch.akuhn.io.chunks.WriteOnChunk;
-import ch.akuhn.util.Each;
+import ch.akuhn.foreach.Each;
 import ch.akuhn.util.Pair;
 import ch.akuhn.util.Bag.Count;
 
@@ -216,8 +216,8 @@ public class TermDocumentMatrix extends Corpus {
         TermDocumentMatrix tdm = new TermDocumentMatrix(this.terms, this.documents);
         tdm.globalWeightings = new double[terms.size()];
         for (Each<Vector> row: withIndex(matrix.rows())) {
-            double global = tdm.globalWeightings[row.index] = globalWeighting.weight(row.element);
-            for (Entry column: row.element.entries()) {
+            double global = tdm.globalWeightings[row.index] = globalWeighting.weight(row.value);
+            for (Entry column: row.value.entries()) {
                 tdm.matrix.put(row.index, column.index, localWeighting.weight(column.value) * global);
             }
         }

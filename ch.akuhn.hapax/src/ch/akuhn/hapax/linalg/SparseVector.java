@@ -1,6 +1,6 @@
 package ch.akuhn.hapax.linalg;
 
-import static ch.akuhn.util.Interval.range;
+import static ch.akuhn.foreach.For.range;
 
 import java.io.IOException;
 import java.util.Arrays;

@@ -1,6 +1,6 @@
 package ch.akuhn.hapax.cluster;
 
-import static ch.akuhn.util.Interval.range;
+import static ch.akuhn.foreach.For.range;
 import static java.lang.Math.min;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class ClusterEngine<T> implements Runnable {
     private int[] todos;
 
     public ClusterEngine(List<T> elements, Distance<T> dist) {
-        similarity = dist instanceof Similarity;
+        similarity = dist instanceof Similarity<?>;
         init_clusters(elements);
         init_rows(elements, dist);
         init_todos();

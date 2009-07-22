@@ -1,6 +1,6 @@
 package ch.akuhn.hapax.linalg;
 
-import static ch.akuhn.util.Interval.range;
+import static ch.akuhn.foreach.For.range;
 
 
 public class DenseVector extends Vector {

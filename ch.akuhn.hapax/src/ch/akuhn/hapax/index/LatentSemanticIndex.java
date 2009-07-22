@@ -1,17 +1,17 @@
 package ch.akuhn.hapax.index;
 
-import static ch.akuhn.util.Each.withIndex;
-import static ch.akuhn.util.Interval.range;
+import static ch.akuhn.foreach.For.matrix;
+import static ch.akuhn.foreach.For.range;
+import static ch.akuhn.foreach.For.withIndex;
 
-import java.util.Collections;
 import java.util.Iterator;
 
+import ch.akuhn.foreach.Each;
+import ch.akuhn.foreach.EachXY;
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.hapax.linalg.Matrix;
 import ch.akuhn.hapax.linalg.SVD;
 import ch.akuhn.hapax.linalg.SymetricMatrix;
-import ch.akuhn.util.Each;
-import ch.akuhn.util.EachXY;
 import ch.akuhn.util.Providable;
 import ch.akuhn.util.Bag.Count;
 
@@ -58,7 +58,7 @@ public class LatentSemanticIndex {
         Ranking<String> ranking = new Ranking<String>();
         int n = documents.get(d);
         for (Each<String> each: withIndex(documents)) {
-            ranking.add(each.element, svd.similarityVV(n, each.index));
+            ranking.add(each.value, svd.similarityVV(n, each.index));
         }
         return ranking.sort();
     }
@@ -67,7 +67,7 @@ public class LatentSemanticIndex {
         Ranking<String> ranking = new Ranking<String>();
         double[] pseudo = createPseudoDocument(query);
         for (Each<String> each: withIndex(documents)) {
-            ranking.add(each.element, svd.similarityV(each.index, pseudo));
+            ranking.add(each.value, svd.similarityV(each.index, pseudo));
         }
         return ranking.sort();
     }
@@ -76,7 +76,7 @@ public class LatentSemanticIndex {
         Ranking<String> ranking = new Ranking<String>();
         double[] pseudo = createPseudoDocument(query);
         for (Each<String> each: withIndex(documents)) {
-            ranking.add(each.element, svd.similarityV(each.index, pseudo));
+            ranking.add(each.value, svd.similarityV(each.index, pseudo));
         }
         return ranking.sort();
     }
@@ -87,7 +87,7 @@ public class LatentSemanticIndex {
         int n = terms.get(term);
         assert n >= 0;
         for (Each<String> each: withIndex(documents)) {
-            ranking.add(each.element, svd.similarityUV(n, each.index));
+            ranking.add(each.value, svd.similarityUV(n, each.index));
         }
         return ranking.sort();
     }
@@ -96,7 +96,7 @@ public class LatentSemanticIndex {
         Ranking<CharSequence> ranking = new Ranking<CharSequence>();
         int n = documents.get(d);
         for (Each<String> each: withIndex(terms)) {
-            ranking.add(each.element, svd.similarityUV(each.index, n));
+            ranking.add(each.value, svd.similarityUV(each.index, n));
         }
         return ranking.sort();
     }
@@ -105,7 +105,7 @@ public class LatentSemanticIndex {
         Ranking<CharSequence> ranking = new Ranking<CharSequence>();
         int n = terms.get(term);
         for (Each<String> each: withIndex(terms)) {
-            ranking.add(each.element, svd.similarityUU(n, each.index));
+            ranking.add(each.value, svd.similarityUU(n, each.index));
         }
         return ranking.sort();
     }
@@ -125,7 +125,7 @@ public class LatentSemanticIndex {
             private Iterator<EachXY> iter;
             @Override
             public void initialize() {
-                iter = new EachXY(documents.size(), documents.size()).iterator();
+                iter = matrix(documents.size(), documents.size()).iterator();
             }
             @Override
             public Double provide() {

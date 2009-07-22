@@ -1,6 +1,7 @@
 package ch.akuhn.hapax.linalg;
 
-import static ch.akuhn.util.Each.withIndex;
+import static ch.akuhn.foreach.For.withIndex;
+import static ch.akuhn.foreach.For.range;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,8 +14,8 @@ import ch.akuhn.io.chunks.ChunkInput;
 import ch.akuhn.io.chunks.ChunkOutput;
 import ch.akuhn.io.chunks.ReadFromChunk;
 import ch.akuhn.io.chunks.WriteOnChunk;
-import ch.akuhn.util.Each;
-import ch.akuhn.util.Times;
+import ch.akuhn.foreach.Each;
+import ch.akuhn.foreach.Times;
 
 
 public class SparseMatrix extends Matrix {
@@ -33,9 +34,7 @@ public class SparseMatrix extends Matrix {
     public SparseMatrix(int rows, int columns) {
         this.columns = columns;
         this.rows = new ArrayList<Vector>(rows);
-        for (@SuppressWarnings("unused")
-        int times: Times.repeat(rows))
-            addRow();
+        for (int times: range(rows)) addRow();
     }
 
     @Override
@@ -69,7 +68,7 @@ public class SparseMatrix extends Matrix {
     public double[][] asDenseDoubleDouble() {
         double[][] dense = new double[rowCount()][columnCount()];
         for (Each<Vector> row: withIndex(rows)) {
-            for (Entry column: row.element.entries()) {
+            for (Entry column: row.value.entries()) {
                 dense[row.index][column.index] = column.value;
             }
         }
