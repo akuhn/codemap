@@ -79,7 +79,7 @@ public class Out extends PrintOn {
             }
             this.append(']');
         }
-        else if (object instanceof Iterable) {
+        else if (object instanceof Iterable<?>) {
             this.append('[');
             Separator sep = new Separator();
             for (Object each: (Iterable<?>) object) {
@@ -103,7 +103,7 @@ public class Out extends PrintOn {
         if (object.getClass().isArray()) 
             for (int n = 0; n < Array.getLength(object); n++)
                 this.put(Array.get(object, n));
-        else if (object instanceof Iterable) 
+        else if (object instanceof Iterable<?>) 
             for (Object each: (Iterable<?>) object) 
                 this.put(each);
         else 

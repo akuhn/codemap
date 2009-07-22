@@ -149,7 +149,7 @@ public class Bag<T> extends AbstractCollection<T> {
 
     @Override
     public boolean addAll(Collection<? extends T> coll) {
-        if (!(coll instanceof Bag)) return super.addAll(coll);
+        if (!(coll instanceof Bag<?>)) return super.addAll(coll);
         Bag<? extends T> bag = (Bag<? extends T>) coll;
         boolean changed = false;
         for (Count<? extends T> each : bag.counts()) {
@@ -210,7 +210,7 @@ public class Bag<T> extends AbstractCollection<T> {
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof Bag) && values.equals(((Bag<?>) obj).values);
+        return (obj instanceof Bag<?>) && values.equals(((Bag<?>) obj).values);
     }
 
     @Override

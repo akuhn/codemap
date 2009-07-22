@@ -3,8 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry exported="true" kind="lib" path="lib/foreach-r24969.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jexample-r285.jar"/>
+	<classpathentry kind="con" path="ch.unibe.jexample.JEXAMPLE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

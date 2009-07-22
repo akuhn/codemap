@@ -1,6 +1,6 @@
 package ch.akuhn.foreach;
 
-public enum State {
+/*default*/ enum State {
 
 	NULL, FIRST, EACH, DONE, BROKEN, VOID, YIELD;
 	

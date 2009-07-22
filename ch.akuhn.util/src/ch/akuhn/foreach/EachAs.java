@@ -1,9 +1,9 @@
 package ch.akuhn.foreach;
 
-public class Each2<E,R> {
+public class EachAs<E,R> {
 
+	public int index;
 	public E value;
 	public R yield;
-	public int index;
-	
+
 }

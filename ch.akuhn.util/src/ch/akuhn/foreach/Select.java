@@ -11,50 +11,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-/**
- * Loops over each element of a collection, returning a new collection
- * containing the values yielded by the loop body. In the loop body, read
- * <em>each.value</em> to access the current elements, and write
- * <em>each.yield</em> to yield elements.
- *<P>
- * Example:
- * 
- * <PRE>
- * Collect&lt;String&gt; query = Collect.from(words);
- * for (Each&lt;String&gt; each : query) {
- * 	each.yield = each.value.toUppercase();
- * }
- * result = query.resultAsList();
- *</PRE>
- * 
- * Or use the short form:
- * 
- * <PRE>
- * for (Each&lt;String&gt; each : Query.collect(words)) {
- * 	each.yield = each.value.toUppercase();
- * }
- * result = Query.resultAsList();
- *</PRE>
- * 
- * 
- * @author akuhn
- * 
- * @param <E>
- */
-public class Collect<E> implements Iterable<Each<E>> {
+public final class Select<E> implements Iterable<EachB<E>> {
 
-	public static <E> Collect<E> from(E... elements) {
-		return new Collect<E>(Arrays.asList(elements), elements.getClass().getComponentType());
+	public static <E> Select<E> from(E... elements) {
+		return new Select<E>(Arrays.asList(elements), elements.getClass().getComponentType());
 	}
 
-	public static <E> Collect<E> from(Iterable<E> elements) {
-		return new Collect<E>(elements, null);
+	public static <E> Select<E> from(Iterable<E> elements) {
+		return new Select<E>(elements, null);
 	}
 
 	private Class<?> type;
 	private Iter iter;
 
-	private Collect(Iterable<E> elements, Class<?> type) {
+	private Select(Iterable<E> elements, Class<?> type) {
 		this.iter = new Iter(elements.iterator());
 		this.type = type;
 	}
@@ -69,21 +39,14 @@ public class Collect<E> implements Iterable<Each<E>> {
 		if (type == null) type = result.iterator().next().getClass();
 		return result.toArray((E[]) Array.newInstance(type, result.size()));
 	}
-
-	@SuppressWarnings("unchecked")
-	public E[] getResultArray(Class<? extends E> type) {
-		List<E> result = getResult();
-		return result.toArray((E[]) Array.newInstance(type, result.size()));
-	}
 	
-	
-	public Iterator<Each<E>> iterator() {
+	public Iterator<EachB<E>> iterator() {
 		return iter.start();
 	}
 
-	private class Iter implements Iterator<Each<E>> {
+	private class Iter implements Iterator<EachB<E>> {
 
-		private Each<E> each;
+		private EachB<E> each;
 		private Iterator<E> elements;
 		private int index = 0;
 		private List<E> result;
@@ -101,7 +64,7 @@ public class Collect<E> implements Iterable<Each<E>> {
 
 		public boolean hasNext() {
 			if (state == YIELD) {
-				result.add(each.yield);
+				if (each.yield) result.add(each.value);
 				state = VOID;
 			}
 			if (elements.hasNext()) return true;
@@ -109,9 +72,10 @@ public class Collect<E> implements Iterable<Each<E>> {
 			return false;
 		}
 
-		public Each<E> next() {
+		public EachB<E> next() {
 			if (!hasNext()) throw new NoSuchElementException();
-			each.yield = each.value = elements.next();
+			each.value = elements.next();
+			each.yield = false;
 			each.index = index++;
 			state = YIELD;
 			return each;
@@ -124,7 +88,7 @@ public class Collect<E> implements Iterable<Each<E>> {
 		private Iter start() {
 			if (state != NULL) throw new IllegalStateException("Cannot run query twice!");
 			state = VOID;
-			each = new Each<E>();
+			each = new EachB<E>();
 			result = new ArrayList<E>();
 			index = 0;
 			return this;
