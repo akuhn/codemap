@@ -21,12 +21,11 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.osgi.service.prefs.BackingStoreException;
 
 import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
+import ch.akuhn.util.Arrays;
 import ch.akuhn.util.Pair;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.Point;
@@ -35,11 +34,9 @@ import ch.deif.meander.swt.Background;
 import ch.deif.meander.swt.CodemapVisualization;
 import ch.deif.meander.swt.CurrSelectionOverlay;
 import ch.deif.meander.swt.ImageOverlay;
-import ch.deif.meander.swt.OpenFilesOverlay;
 import ch.deif.meander.swt.SWTLayer;
 import ch.deif.meander.swt.YouAreHereOverlay;
 import ch.deif.meander.util.MapScheme;
-import ch.unibe.scg.util.Extension;
 
 /**
  * Holds corpus, map and visualization of a project. Use this class to store project specific information.
@@ -112,7 +109,7 @@ public class MapPerProject {
 		}
 		ICommand newCommand = desc.newCommand();
 		newCommand.setBuilderName(HapaxBuilder.BUILDER_ID);
-		commands = Extension.$(commands).copyWith(newCommand);
+		commands = Arrays.append(commands, newCommand);
 		desc.setBuildSpec(commands);
 		getProject().setDescription(desc, null);
 	}
