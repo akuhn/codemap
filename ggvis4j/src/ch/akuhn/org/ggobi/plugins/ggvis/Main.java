@@ -24,7 +24,7 @@ public class Main {
 				.similarities(hapax.getIndex().documentCorrelation().asArray())
 				.verbose()
 				.listener(viz)
-				.maxIterations(10+0*Integer.MAX_VALUE)
+				.maxIterations(1000+0*Integer.MAX_VALUE)
 				.run();
 				
 	

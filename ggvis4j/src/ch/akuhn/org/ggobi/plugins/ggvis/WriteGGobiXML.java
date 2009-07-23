@@ -22,7 +22,6 @@ public class WriteGGobiXML {
 				.useCamelCaseScanner()
 				.addFiles(folder, ".java")
 				.build();
-		double grain = 7;
 		Matrix corr = hapax.getIndex().documentCorrelation();
 		PrintWriter f = new PrintWriter("data.xml");
 		f.println("<?xml version=\"1.0\"?>");
