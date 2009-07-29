@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Meander (software cartography)
 Bundle-SymbolicName: ch.deif.meander
-Bundle-Version: 0.7.20.qualifier
+Bundle-Version: 0.7.29.qualifier
 Bundle-Vendor: David Erni and Adrian Kuhn
 Require-Bundle: 
  org.codemap.util,
@@ -15,7 +15,5 @@ Export-Package:
  ch.deif.meander.ui,
  ch.deif.meander.util
 Bundle-ClassPath: .,
- lib/core.jar,
- lib/pdf.jar,
  lib/ggvis4j-r643.jar
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
