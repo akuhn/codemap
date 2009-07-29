@@ -3,9 +3,15 @@ package example;
 
 import ch.akuhn.hapax.Hapax;
 import ch.deif.meander.Configuration;
+import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.Point;
+import ch.deif.meander.builder.MapBuilder;
 import ch.deif.meander.builder.Meander;
+import ch.deif.meander.swt.Background;
+import ch.deif.meander.swt.CodemapVisualization;
+import ch.deif.meander.swt.CurrSelectionOverlay;
+import ch.deif.meander.swt.LabelOverlay;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.util.MapScheme;
 
@@ -22,25 +28,22 @@ public class MeanderExample {
 				.makeMap();
 
 		MapScheme<MColor> colorScheme = MapScheme.with(MColor.HILLGREEN);
-		MapSelection currentSelection = new MapSelection();
-		MapSelection openEditorSelection = new MapSelection();
-		MapSelection currentEditorSelection = new MapSelection();
 
-//		Layer layer = Meander.visualization()
-//				.withColors(colorScheme)
-//				.withLabels(filenames_only)
-//				.withColors(colorScheme)
-//				.withSelection(new CurrentSelectionOverlay(), currentSelection)
-//				//.withSelection(new OpenFilesOverlay(), openEditorSelection)
-//				//.withSelection(new YouAreHereOverlay(), currentEditorSelection)
-//				.makeLayer();
-//		
-//		MapInstance mapWithSize = map.withSize(512, MapBuilder.FILE_LENGTH_SQRT);
-//		new MapVisualization(mapWithSize, layer).openApplet();
+		Background bg = Meander.background()
+			.withColors(colorScheme)
+			.makeBackground();
+		
+		MapInstance mapWithSize = map.withSize(512, MapBuilder.FILE_LENGTH_SQRT);
+
+		CodemapVisualization visual = new CodemapVisualization(mapWithSize);
+		visual.add(bg);
+		visual.add(new LabelOverlay(FILENAMES));
+		visual.add(new CurrSelectionOverlay().setSelection(new MapSelection()));
+		visual.openAndBlock();		
 
 	}
 
-	private static final MapScheme<String> filenames_only = new MapScheme<String>() {
+	private static final MapScheme<String> FILENAMES = new MapScheme<String>() {
 		@Override
 		public String forLocation(Point location) {
 			String name = location.getDocument();
