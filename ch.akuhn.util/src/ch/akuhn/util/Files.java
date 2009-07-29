@@ -202,5 +202,32 @@ public abstract class Files {
     public static Iterable<File> find(String folder, String... extensions) {
         return find(new File(folder), extensions);
     }
+    
+    /** Matches a shell pattern. 
+     *<P> 
+     * Any character that appears in a pattern, other than the special pattern characters described below, matches itself. 
+     * The special pattern characters have the following meanings:
+	 * <ul><li><tt>*</tt> Matches any string, including the empty string.</li>
+     * <li><tt>?</tt> Matches any single character.</li></ul>
+     *
+     */
+    public static boolean match(String pattern, String name) {
+    	return match(pattern, 0, name, 0);
+    }
+    
+    private static boolean match(String pattern, int i, String name, int j) {
+    	for (; i < pattern.length(); i++, j++) {
+    		char p = pattern.charAt(i);
+    		if (p == '*') return matchStar(pattern, i + 1, name, j);
+    		if (j == name.length()) return false;
+    		if (p != '?' && p != name.charAt(j)) return false;
+    	}
+    	return j == name.length();
+    }
+    
+    private static boolean matchStar(String pattern, int i, String name, int j) {
+    	while (j <= name.length()) if (match(pattern, i, name, j++)) return true;
+    	return false;
+    }
 
 }
