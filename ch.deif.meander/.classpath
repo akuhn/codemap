@@ -5,9 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry exported="true" kind="lib" path="lib/core.jar" sourcepath="lib/core.zip"/>
-	<classpathentry exported="true" kind="lib" path="lib/itext.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/pdf.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/ggvis4j-r643.jar"/>
 	<classpathentry kind="output" path="bin"/>

@@ -39,16 +39,16 @@ import ch.deif.meander.swt.CodemapVisualization;
 import ch.deif.meander.ui.CodemapEvent;
 import ch.deif.meander.ui.CodemapListener;
 import ch.deif.meander.util.MColor;
-import ch.deif.meander.visual.CurrentSelectionOverlay;
+import ch.deif.meander.swt.CurrSelectionOverlay;
 
 public class MapView extends ViewPart {
 	
 	private CodemapListener codemapListener = new CodemapListener() {
 		@Override
 		public void handleEvent(CodemapEvent event) {
-			if (CurrentSelectionOverlay.EVT_DOUBLE_CLICKED == event.getKind()) {
+			if (CurrSelectionOverlay.EVT_DOUBLE_CLICKED == event.getKind()) {
 				doubleClicked((Location) event.getValue());					
-			} else if (CurrentSelectionOverlay.EVT_SELECTION_CHANGED == event.getKind()) {
+			} else if (CurrSelectionOverlay.EVT_SELECTION_CHANGED == event.getKind()) {
 				selectionChanged((MapSelection) event.getValue());
 			}
 		}

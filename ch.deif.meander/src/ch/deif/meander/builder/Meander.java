@@ -11,7 +11,6 @@ import ch.deif.meander.Configuration;
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.Point;
 import ch.deif.meander.internal.MDS;
-import ch.deif.meander.legacy.builder.VisualizationBuilder;
 import ch.deif.meander.swt.CompositeLayer;
 import ch.deif.meander.swt.HillshadeLayer;
 import ch.deif.meander.swt.LabelOverlay;
@@ -21,14 +20,6 @@ import ch.deif.meander.swt.ShoreLayer;
 import ch.deif.meander.swt.WaterBackground;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.util.MapScheme;
-import ch.deif.meander.visual.Background;
-import ch.deif.meander.visual.Composite;
-import ch.deif.meander.visual.HillshadeVisualization;
-import ch.deif.meander.visual.LabelsOverlay;
-import ch.deif.meander.visual.Layer;
-import ch.deif.meander.visual.MapSelectionOverlay;
-import ch.deif.meander.visual.ShoreVizualization;
-import ch.deif.meander.visual.WaterVisualization;
 
 /** Not thread-safe.
  * 
@@ -36,53 +27,6 @@ import ch.deif.meander.visual.WaterVisualization;
  *
  */
 public class Meander {
-
-	private static class MeanderVizBuilder implements VisualizationBuilder {
-		
-		private Composite<Layer> layers;
-		private HillshadeVisualization hillShade;
-
-		public MeanderVizBuilder() {
-			layers = new Composite<Layer>();
-			hillShade = new HillshadeVisualization();
-			Background bg = new Background();
-			bg.append(new WaterVisualization());
-			bg.append(new ShoreVizualization());
-			bg.append(hillShade);
-			layers.append(bg);							
-		}
-
-		@Override
-		public VisualizationBuilder withSelection(
-				MapSelectionOverlay overlay,
-				MapSelection selection) {
-			layers.append(overlay.setSelection(selection));
-			return this;
-		}
-
-		@Override
-		public VisualizationBuilder withLabels(MapScheme<String> labelScheme) {
-			layers.append(new LabelsOverlay(labelScheme));
-			return this;
-		}
-
-		@Override
-		public VisualizationBuilder withColors(MapScheme<MColor> colorScheme) {
-			hillShade.setColorScheme(colorScheme);
-			return this;
-		}
-
-		@Override
-		public Composite<Layer> makeLayer() {
-			return layers;
-		}
-
-		@Override
-		public VisualizationBuilder appendLayer(Layer anotherLayer) {
-			layers.append(anotherLayer);
-			return this;
-		}
-	}
 
 	private static final class MeanderMapBuilder implements MapBuilder {
 		
@@ -199,14 +143,6 @@ public class Meander {
 		return new MeanderMapBuilder();
 	}
 	
-	/**
-	 * @deprecated please switch to the SWT implementation and use <code>vizBuilder()</code>> 
-	 */
-	@Deprecated
-	public static VisualizationBuilder visualization() {
-		return new MeanderVizBuilder();
-	}
-
 	public static BackgroundBuilder background() {
 		return new MyBackgroundBuilder();
 	}

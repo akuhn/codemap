@@ -3,8 +3,8 @@ package ch.deif.meander.swt;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.widgets.Display;
 
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
@@ -32,34 +32,30 @@ public class LabelOverlay extends SWTLayer {
 		labelScheme = scheme;
 	}
 
-	Font font;
-	
 	@Override
 	public void paintMap(MapInstance map, GC gc) {
-		//if (true == true) return;
-		//gc.setTextAntialias(SWT.OFF);
-		
 		String fname = "Arial Narrow";
-		Display display = Display.getCurrent();
-		//if (font == null) font = new Font(display, fname, 20, SWT.NORMAL);
-		Color white = new Color(display, 255, 255, 255);
-		Color black = new Color(display, 0, 0, 0);
-		//gc.setFont(font);
-		gc.setForeground(white);
+		Font basefont = new Font(gc.getDevice(), fname, 12, SWT.NORMAL);
+		Color white = new Color(gc.getDevice(), 255, 255, 255);
+		Color black = new Color(gc.getDevice(), 0, 0, 0);
 		for (Location each: map.locations()) {
 			String name = labelScheme.forLocation(each.getPoint());
-			//Font font = new Font(display, fname, (int) (Math.sqrt(each.getElevation()) * 2), SWT.NORMAL);
-			//gc.setFont(font);
-			//gc.setAlpha(128);
-			//gc.setForeground(black);
-			//gc.drawText(name, each.px + 1, each.py + 1, SWT.DRAW_TRANSPARENT);
-			//gc.setAlpha(255);
+			FontData[] fontData = basefont.getFontData();
+			int height = (int) (Math.sqrt(each.getElevation()) * 2);
+			for (FontData fd: fontData) fd.setHeight(height);
+			Font font = new Font(gc.getDevice(), fontData);
+			gc.setFont(font);
+			gc.setAlpha(128);
+			gc.setForeground(black);
+			gc.drawText(name, each.px + 1, each.py + 1, SWT.DRAW_TRANSPARENT);
+			gc.setAlpha(255);
+			gc.setForeground(white);
 			gc.drawText(name, each.px, each.py, SWT.DRAW_TRANSPARENT);
+			font.dispose();
 		}
-		//font.dispose();
+		basefont.dispose();
 		black.dispose();
-		white.dispose();
-		
+		white.dispose();	
 	}
 
 }

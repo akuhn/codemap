@@ -10,6 +10,7 @@ import ch.deif.meander.internal.DEMAlgorithm;
 
 public class ShoreLayer extends SWTLayer {
 
+	@Override
 	public void paintMap(MapInstance map, GC gc) {
 		float[][] DEM = map.get(DEMAlgorithm.class);
 		Display display = Display.getCurrent();
