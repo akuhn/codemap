@@ -35,5 +35,16 @@
             restorable="true">
       </view>
    </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.codemap.editors.CodemapEditor"
+            default="true"
+            extensions="map"
+            icon="icons/sample.gif"
+            id="org.codemap.mapeditor"
+            name="Codemap editor">
+      </editor>
+   </extension>
 
 </plugin>
