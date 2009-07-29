@@ -52,7 +52,6 @@ public class CurrSelectionOverlay extends SelectionOverlay {
 	@Override
 	public void mouseDoubleClick(MouseEvent e) {
 		Location neighbor = getRoot().map.nearestNeighbor(e.x, e.y);
-		System.out.println("double clicked on: " + neighbor.getDocument());
 		fireEvent(EVT_DOUBLE_CLICKED, neighbor);
 	}
 

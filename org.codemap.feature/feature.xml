@@ -2,7 +2,7 @@
 <feature
       id="org.codemap.feature"
       label="Codemap (software cartography)"
-      version="0.7.29.qualifier"
+      version="0.7.30.qualifier"
       provider-name="%author">
 
    <description url="http://scg.unibe.ch/codemap">
@@ -35,7 +35,7 @@
          id="ch.deif.meander"
          download-size="0"
          install-size="0"
-         version="0.7.29.qualifier"
+         version="0.7.30.qualifier"
          unpack="false"/>
 
    <plugin
