@@ -46,5 +46,19 @@
             name="Codemap editor">
       </editor>
    </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.codemap"
+            name="Software Cartography">
+      </category>
+      <wizard
+            category="org.codemap"
+            class="org.codemap.wizards.NewCodemapCreationWizard"
+            icon="icons/sample.gif"
+            id="org.codemap.wizards.NewCodemapCreationWizard"
+            name="Codemap">
+      </wizard>
+   </extension>
 
 </plugin>
