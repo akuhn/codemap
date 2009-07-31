@@ -1,13 +1,16 @@
 package org.codemap.wizards;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.ui.filters.ClosedProjectFilter;
 import org.eclipse.jdt.internal.ui.wizards.dialogfields.DialogField;
 import org.eclipse.jdt.internal.ui.wizards.dialogfields.IDialogFieldListener;
@@ -20,6 +23,7 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
@@ -38,7 +42,7 @@ import ch.akuhn.foreach.Each;
 import ch.akuhn.foreach.For;
 
 @SuppressWarnings("restriction") // TODO
-public class NNewCodemapCreationWizardPage extends WizardPage implements IDialogFieldListener, IListAdapter {
+public class NewCodemapCreationWizardPage extends WizardPage implements IDialogFieldListener, IListAdapter {
 
 	private ListDialogField fFileExtensionsDialogField;
 
@@ -46,7 +50,7 @@ public class NNewCodemapCreationWizardPage extends WizardPage implements IDialog
 
 	private ListDialogField fProjectListDialogField;
 
-	protected NNewCodemapCreationWizardPage(ISelection selection) {
+	protected NewCodemapCreationWizardPage(ISelection selection) {
 		super("wizardPage");
 		this.setTitle("Codemap");
 		this.setDescription("Create a new codemap.");
@@ -54,21 +58,19 @@ public class NNewCodemapCreationWizardPage extends WizardPage implements IDialog
 		fMapNameDialogField = new StringDialogField();
 		fMapNameDialogField.setDialogFieldListener(this);
 		fMapNameDialogField.setLabelText("Map name:");
+		fMapNameDialogField.setText("default.map");
 		
 		fProjectListDialogField= new ListDialogField(this, new String[] { "Add...", 	null, "Remove" },
 				new WorkbenchLabelProvider());
 		fProjectListDialogField.setDialogFieldListener(this);
-		//fProjectListDialogField.setTableColumns(new ListDialogField.ColumnsDescription(1, false));
 		fProjectListDialogField.setLabelText("Projects:");
 		fProjectListDialogField.setRemoveButtonIndex(2);
 
 		fFileExtensionsDialogField= new ListDialogField(this, new String[] { "Add...", 	null, "Remove" },
-				new FileExtensionsLabelProvider());
+				new LabelProvider());
 		fFileExtensionsDialogField.setDialogFieldListener(this);
-		//fFileExtensionsDialogField.setTableColumns(new ListDialogField.ColumnsDescription(1, false));
 		fFileExtensionsDialogField.setLabelText("File extensions:");
 		fFileExtensionsDialogField.setRemoveButtonIndex(2);
-
 		initialize(selection);
 	}
 	@Override
@@ -103,32 +105,31 @@ public class NNewCodemapCreationWizardPage extends WizardPage implements IDialog
 			else if (each instanceof IAdaptable) resource = (IResource) ((IAdaptable) each).getAdapter(IResource.class);
 			if (resource != null) projects.add(resource.getProject());
 		}
+		String fileExtension = "*.txt";
+		for (Object each: projects) {
+			if (JavaCore.create((IProject) each) != null) fileExtension = "*.java";
+		}
+		fFileExtensionsDialogField.addElement(fileExtension);
 		for (Object each: projects) fProjectListDialogField.addElement(each);
 	}
 	
 	private void createFileExtensionsControls(Composite composite, int nColumns) {
 		fFileExtensionsDialogField.doFillIntoGrid(composite, nColumns);
-		final TableViewer tableViewer= fFileExtensionsDialogField.getTableViewer();
 		GridData gd= (GridData) fFileExtensionsDialogField.getListControl(null).getLayoutData();
 		gd.heightHint= convertHeightInCharsToPixels(4);
 		gd.grabExcessVerticalSpace= false;
-//		gd.widthHint= convertWidthInCharsToPixels(40);
 	}
 
 
 	private void createMapNameControls(Composite composite, int nColumns) {
 		fMapNameDialogField.doFillIntoGrid(composite, nColumns);
-		Text text= fMapNameDialogField.getTextControl(null);
-//		LayoutUtil.setWidthHint(text, convertWidthInCharsToPixels(40));
 	}
 
 	private void createProjectListControls(Composite composite, int nColumns) {
 		fProjectListDialogField.doFillIntoGrid(composite, nColumns);
-		final TableViewer tableViewer= fProjectListDialogField.getTableViewer();
 		GridData gd= (GridData) fProjectListDialogField.getListControl(null).getLayoutData();
 		gd.heightHint= convertHeightInCharsToPixels(8);
 		gd.grabExcessVerticalSpace= false;
-//		gd.widthHint= convertWidthInCharsToPixels(40);
 	}
 
 	protected void createSeparator(Composite composite, int nColumns) {
@@ -139,42 +140,31 @@ public class NNewCodemapCreationWizardPage extends WizardPage implements IDialog
 	public void customButtonPressed(ListDialogField field, int index) {
 		if (field == fProjectListDialogField && index == 0) {
 			chooseProjects();
-//			List interfaces= fSuperInterfacesDialogField.getElements();
-//			if (!interfaces.isEmpty()) {
-//				Object element= interfaces.get(interfaces.size() - 1);
-//				fSuperInterfacesDialogField.editElement(element);
-//			}
 		}
 	}
 
 	private void chooseProjects() {
-		Object[] selectArr= getNotYetRequiredProjects();
 		ListSelectionDialog dialog= new ListSelectionDialog(
 				getShell(), 
-				Arrays.asList(selectArr),
-				new ArrayContentProvider(),
+				getNotYetRequiredProjects(),
+				ArrayContentProvider.getInstance(),
 				new WorkbenchLabelProvider(),
 				"message");
 		dialog.setTitle("title");
 		dialog.setHelpAvailable(false);
-		if (dialog.open() == Window.OK) {
-//		
-//			Object[] result= dialog.getResult();
-//				CPListElement[] cpElements= new CPListElement[result.length];
-//				for (int i= 0; i < result.length; i++) {
-//					IJavaProject curr= (IJavaProject) result[i];
-//					cpElements[i]= new CPListElement(fCurrJProject, IClasspathEntry.CPE_PROJECT, curr.getPath(), curr.getResource());
-//				}
-//				return cpElements;
-		}
+		if (dialog.open() != Window.OK) return;
+		for (Object each: dialog.getResult()) fProjectListDialogField.addElement(each);
 	}
 
-	private Object[] getNotYetRequiredProjects() {
+	@SuppressWarnings("unchecked")
+	private Collection getNotYetRequiredProjects() {
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		Object[] projects = root.getProjects();
 		new WorkbenchViewerComparator().sort(null, projects);
 		projects = new ClosedProjectFilter().filter(null, (Object) null, projects);
-		return projects;
+		Collection result = new ArrayList(Arrays.asList(projects));
+		result.removeAll(fProjectListDialogField.getElements());
+		return result;
 	}
 	@Override
 	public void dialogFieldChanged(DialogField field) {
@@ -191,86 +181,6 @@ public class NNewCodemapCreationWizardPage extends WizardPage implements IDialog
 	@Override
 	public void selectionChanged(ListDialogField field) {
 		// TODO Auto-generated method stub
-
-	}
-
-	public class FileExtensionsLabelProvider implements ILabelProvider {
-
-		@Override
-		public void addListener(ILabelProviderListener listener) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void dispose() {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public Image getImage(Object element) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public String getText(Object element) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public boolean isLabelProperty(Object element, String property) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public void removeListener(ILabelProviderListener listener) {
-			// TODO Auto-generated method stub
-
-		}
-
-	}
-
-	public class ProjectListLabelProvider implements ILabelProvider {
-
-		@Override
-		public void addListener(ILabelProviderListener listener) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void dispose() {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public Image getImage(Object element) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public String getText(Object element) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public boolean isLabelProperty(Object element, String property) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-
-		@Override
-		public void removeListener(ILabelProviderListener listener) {
-			// TODO Auto-generated method stub
-
-		}
 
 	}
 

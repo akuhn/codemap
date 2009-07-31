@@ -60,5 +60,33 @@
             name="Codemap">
       </wizard>
    </extension>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            id="org.codemap.content-type1"
+            name="name"
+            priority="normal">
+         <describer
+               class="org.codemap.ContentDescriber1">
+         </describer>
+         <property
+               name="org.codemap.property1">
+         </property>
+         <property
+               name="org.codemap.property2">
+         </property>
+      </content-type>
+      <file-association
+            content-type="org.codemap.file-association1">
+      </file-association>
+      <file-association
+            content-type="org.codemap.file-association2">
+      </file-association>
+      <content-type
+            id="org.codemap.content-type2"
+            name="name"
+            priority="normal">
+      </content-type>
+   </extension>
 
 </plugin>
