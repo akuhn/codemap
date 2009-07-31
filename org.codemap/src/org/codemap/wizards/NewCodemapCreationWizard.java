@@ -14,17 +14,18 @@ import org.eclipse.core.runtime.CoreException;
 import java.io.*;
 import org.eclipse.ui.*;
 import org.eclipse.ui.ide.IDE;
+import org.eclipse.ui.internal.Workbench;
 
 
 public class NewCodemapCreationWizard extends Wizard implements INewWizard {
 
 	private NNewCodemapCreationWizardPage page;
-	private ISelection selection;
+	private IStructuredSelection fSelection;
 
 
 	@Override
 	public void addPages() {
-		page = new NNewCodemapCreationWizardPage(selection);
+		page = new NNewCodemapCreationWizardPage(fSelection);
 		addPage(page);
 	}
 
@@ -121,6 +122,6 @@ public class NewCodemapCreationWizard extends Wizard implements INewWizard {
 	 * @see IWorkbenchWizard#init(IWorkbench, IStructuredSelection)
 	 */
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		this.selection = selection;
+		this.fSelection = selection;
 	}
 }
