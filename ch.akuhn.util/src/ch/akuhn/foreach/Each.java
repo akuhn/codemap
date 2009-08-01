@@ -1,6 +1,5 @@
 package ch.akuhn.foreach;
 
-import java.util.Iterator;
 
 public class Each<E> {
 

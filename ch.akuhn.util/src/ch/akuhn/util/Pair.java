@@ -100,7 +100,7 @@ public class Pair<A,B> {
 
     @Override
     public boolean equals(Object other) {
-        return other instanceof Pair && equals(fst, ((Pair<?,?>) other).fst) && equals(snd, ((Pair<?,?>) other).snd);
+        return other instanceof Pair<?,?> && equals(fst, ((Pair<?,?>) other).fst) && equals(snd, ((Pair<?,?>) other).snd);
     }
 
     @Override
