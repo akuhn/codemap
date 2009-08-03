@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.codemap.util.EclipseUtil;
+import org.codemap.util.Adaptables;
 import org.codemap.util.Log;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -164,7 +164,7 @@ public class SelectionTracker {
 		IJavaProject javaProject = null;
 		Collection<ICompilationUnit> units = new HashSet<ICompilationUnit>();
 		for (Object each: selection.toList()) {
-			IJavaElement javaElement = EclipseUtil.adapt(each, IJavaElement.class);
+			IJavaElement javaElement = Adaptables.adapt(each, IJavaElement.class);
 			if (javaElement == null) {
 				continue;
 			}

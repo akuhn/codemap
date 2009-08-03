@@ -11,25 +11,31 @@ import org.eclipse.search.ui.ISearchQuery;
  * @author deif
  */
 public class QueryListener implements IQueryListener {
-	
-	private SearchResultController theController;
 
-	public QueryListener(SearchResultController controller) {
-		theController = controller;
-	}
+    private SearchResultController theController;
 
-	@Override
-	public void queryAdded(ISearchQuery query) {
-		theController.onQueryAdded(query);
-	}
+    public QueryListener(SearchResultController controller) {
+        theController = controller;
+    }
 
-	@Override
-	public void queryFinished(ISearchQuery query) {}
+    @Override
+    public void queryAdded(ISearchQuery query) {
+        theController.onQueryAdded(query);
+    }
 
-	@Override
-	public void queryRemoved(ISearchQuery query) {}
+    @Override
+    public void queryFinished(ISearchQuery query) {
+        // empty block
+    }
 
-	@Override
-	public void queryStarting(ISearchQuery query) {}
+    @Override
+    public void queryRemoved(ISearchQuery query) {
+        // TODO remove search results from map?
+    }
+
+    @Override
+    public void queryStarting(ISearchQuery query) {
+        // TODO does that re-start a query? in that case, remove old entries as well...
+    }
 
 }

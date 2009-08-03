@@ -43,5 +43,10 @@ public class Resources {
 	public static String asPath(IJavaElement element) {
 		return asPath(element.getResource());
 	}
+
+	public static String asPath(Object each) {
+		IResource resource = Adaptables.adapt(each, IResource.class);
+		return asPath(resource);
+	}
 	
 }
