@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Adrian's utility classes
 Bundle-SymbolicName: org.codemap.util
-Bundle-Version: 0.7.29.qualifier
+Bundle-Version: 0.7.667.qualifier
 Bundle-Vendor: Adrian Kuhn
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: package.jar,

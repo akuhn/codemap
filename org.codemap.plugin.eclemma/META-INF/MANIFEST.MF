@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Codemap Eclemma Overlay
 Bundle-SymbolicName: org.codemap.plugin.eclemma;singleton:=true
-Bundle-Version: 0.7.29.qualifier
+Bundle-Version: 0.7.667.qualifier
 Bundle-Activator: org.codemap.plugin.eclemma.EclemmaOverlay
 Require-Bundle: org.codemap.util,
  ch.akuhn.hapax,
