@@ -2,7 +2,7 @@
 <feature
       id="org.codemap.feature"
       label="Codemap (software cartography)"
-      version="0.7.667.qualifier"
+      version="0.7.668.qualifier"
       provider-name="%author">
 
    <description url="http://scg.unibe.ch/codemap">
@@ -42,14 +42,14 @@
          id="org.codemap"
          download-size="0"
          install-size="0"
-         version="0.7.667.qualifier"
+         version="0.7.668.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.codemap.plugin.search"
          download-size="0"
          install-size="0"
-         version="0.7.667.qualifier"
+         version="0.7.668.qualifier"
          unpack="false"/>
 
 </feature>
