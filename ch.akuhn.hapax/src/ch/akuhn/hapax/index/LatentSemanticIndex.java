@@ -4,6 +4,9 @@ import static ch.akuhn.foreach.For.matrix;
 import static ch.akuhn.foreach.For.range;
 import static ch.akuhn.foreach.For.withIndex;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Iterator;
 
 import ch.akuhn.foreach.Each;
@@ -15,7 +18,11 @@ import ch.akuhn.hapax.linalg.SymetricMatrix;
 import ch.akuhn.util.Providable;
 import ch.akuhn.util.Bag.Count;
 
-public class LatentSemanticIndex {
+public class LatentSemanticIndex implements Serializable {
+
+    private static final long serialVersionUID = 1337L;
+
+    private static final int VERSION_1 = 0x20080830;
 
     private AssociativeList<String> documents;
     private AssociativeList<String> terms;
@@ -23,6 +30,26 @@ public class LatentSemanticIndex {
     
     private double[] globalWeighting;
 
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream in) throws Exception {
+        int version = in.readInt();
+        if (version != VERSION_1) throw new Error();
+        terms = new AssociativeList<String>((Iterable<String>) in.readObject());
+        documents = new AssociativeList<String>((Iterable<String>) in.readObject());
+        svd = (SVD) in.readObject();
+        if (!this.invariant()) throw new Error();
+    }
+    
+    private boolean invariant() {
+        return true; // TODO Auto-generated method stub
+    }
+
+    private void writeObject(ObjectOutputStream out) throws Exception {
+        out.writeInt(VERSION_1);
+        out.writeObject(terms.asList());
+        out.writeObject(documents.asList());
+        out.writeObject(svd);
+    }
     
     public LatentSemanticIndex(AssociativeList<String> terms, AssociativeList<String> documents,
             double[] globalWeighting, SVD svd) {

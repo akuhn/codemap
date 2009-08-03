@@ -22,6 +22,12 @@ public class AssociativeList<E> implements Cloneable, Iterable<E> {
         list = new ArrayList<E>();
     }
 
+    public AssociativeList(Iterable<E> collection) {
+        this();
+        for (E each: collection) this.add(each);
+    }
+    
+    
     public AssociativeList(AssociativeList<E> index) {
         map = new HashMap<E,Integer>(index.map);
         list = new ArrayList<E>(index.list);
@@ -117,4 +123,9 @@ public class AssociativeList<E> implements Cloneable, Iterable<E> {
 	    	
     }
 
+    public List<E> asList() {
+        return new ArrayList<E>(list);
+        
+    }
+     
 }
