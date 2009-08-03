@@ -9,9 +9,6 @@ import java.util.Iterator;
 
 import org.junit.Test;
 
-import ch.akuhn.foreach.Collect;
-import ch.akuhn.foreach.Each;
-
 public class CollectAsTest {
 
 	private CollectAs<String,Integer> query;
