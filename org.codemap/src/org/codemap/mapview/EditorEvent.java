@@ -9,7 +9,7 @@ import org.eclipse.ui.PartInitException;
 
 public class EditorEvent {
 
-	private IJavaElement input;
+	private IJavaElement javaElement;
 
 	public EditorEvent(Object editorReference) {
 		if (!(editorReference instanceof IEditorReference)) return;
@@ -28,19 +28,18 @@ public class EditorEvent {
 	}
 
 	private void getInputFromEditor(IEditorInput editorInput) {
-		IJavaElement javaElement = JavaUI.getEditorInputJavaElement(editorInput);
-		if (javaElement == null) return;
-		if (!(javaElement instanceof ICompilationUnit)) return;
-
-		input = javaElement;
+		IJavaElement newJavaElement = JavaUI.getEditorInputJavaElement(editorInput);
+		if (newJavaElement == null) return;
+		if (!(newJavaElement instanceof ICompilationUnit)) return;
+		javaElement = newJavaElement;
 	}
 
 	public boolean hasInput() {
-		return input != null;
+		return javaElement != null;
 	}
 
 	public IJavaElement getInput() {
-		return input;
+		return javaElement;
 	}
 
 }

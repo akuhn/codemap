@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import ch.akuhn.hapax.CorpusBuilder;
@@ -89,8 +88,4 @@ public class MapResource implements Serializable {
 //		}
 	}
 
-	private void gatherFromContainer(IContainer each) {
-		throw null;
-	}
-	
 }

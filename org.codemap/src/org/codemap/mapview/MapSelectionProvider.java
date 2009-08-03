@@ -64,8 +64,8 @@ public class MapSelectionProvider implements ISelectionProvider {
 		forcePackageExplorerSelection(selection);
 	}
 
-	private void provideSelection(final ISelection selection) {
-		final SelectionChangedEvent e = new SelectionChangedEvent(this, selection);
+	private void provideSelection(final ISelection newSelection) {
+		final SelectionChangedEvent e = new SelectionChangedEvent(this, newSelection);
 		/*
 			TODO: listeners might need to be synchronized:
 			java.util.ConcurrentModificationException
@@ -101,7 +101,7 @@ public class MapSelectionProvider implements ISelectionProvider {
 		}
 	}
 
-	private void forcePackageExplorerSelection(final ISelection selection) {
+	private void forcePackageExplorerSelection(final ISelection newSelection) {
 		if (!forceToPackageExplorer) return;
 			
 		Display.getDefault().asyncExec(new Runnable() {
@@ -109,7 +109,7 @@ public class MapSelectionProvider implements ISelectionProvider {
 			public void run() {
 				try {
 					IViewPart showView = view.getSite().getPage().showView(PACKAGE_EXPLORER.id);
-					((ISetSelectionTarget) showView).selectReveal(selection);
+					((ISetSelectionTarget) showView).selectReveal(newSelection);
 				} catch (PartInitException e) {
 					Log.error(e);
 				}

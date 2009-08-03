@@ -15,15 +15,11 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -36,10 +32,10 @@ import org.eclipse.ui.part.ViewPart;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.swt.CodemapVisualization;
+import ch.deif.meander.swt.CurrSelectionOverlay;
 import ch.deif.meander.ui.CodemapEvent;
 import ch.deif.meander.ui.CodemapListener;
 import ch.deif.meander.util.MColor;
-import ch.deif.meander.swt.CurrSelectionOverlay;
 
 public class MapView extends ViewPart {
 	
@@ -121,27 +117,6 @@ public class MapView extends ViewPart {
 		theController.onOpenView();
 	}
 
-	private void showButton() {
-		clearContainer();
-		
-		Button button = new Button(container, SWT.PUSH);
-		button.setText("generate Map");
-		button.addSelectionListener(new SelectionAdapter() {
-			
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				MapView.this.showMap();
-			}
-		});
-		redrawAsync();
-	}
-
-	private void clearContainer() {
-		for(Control each: container.getChildren()) {
-			each.dispose();
-		}
-	}
-	
 	private void showMap() {
 //		clearContainer();
 //		bridge = new EclipseProcessingBridge(container, theApplet);

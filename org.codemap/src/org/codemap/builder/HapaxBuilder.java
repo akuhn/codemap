@@ -3,10 +3,8 @@ package org.codemap.builder;
 import java.util.Map;
 
 import org.codemap.CodemapCore;
-import org.codemap.util.Log;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -36,21 +34,21 @@ public class HapaxBuilder extends IncrementalProjectBuilder {
 	}
 
 	private IProject[] incrementalBuild(IResourceDelta delta, IProgressMonitor monitor) {
-		try {
-			// TODO actually update the TDM here
-			delta.accept(new IResourceDeltaVisitor() {
-				public boolean visit(IResourceDelta delta) throws CoreException {
-					switch (delta.getKind()) {
-
-					}
-					// System.out.println(delta.getResource());
-					return true;
-				}
-
-			});
-		} catch (CoreException e) {
-			Log.error(e);
-		}
+//		try {
+//			// TODO actually update the TDM here
+//			delta.accept(new IResourceDeltaVisitor() {
+//				public boolean visit(IResourceDelta delta) throws CoreException {
+//					switch (delta.getKind()) {
+//
+//					}
+//					// System.out.println(delta.getResource());
+//					return true;
+//				}
+//
+//			});
+//		} catch (CoreException e) {
+//			Log.error(e);
+//		}
 		return defaultReturnValue();
 	}
 

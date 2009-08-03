@@ -55,7 +55,9 @@ public class SelectionTracker {
 		 * selected tabs that are shown in the bar are not considered visible. 
 		 */
 		@Override
-		public void partVisible(IWorkbenchPartReference partRef) {}
+		public void partVisible(IWorkbenchPartReference partRef) {
+			// do nothing
+		}
 		
 		/*
 		 * (non-Javadoc)
@@ -64,13 +66,19 @@ public class SelectionTracker {
 		 * Fired whenever a *visible* part changes its visibility from visible to hidden
 		 */
 		@Override
-		public void partHidden(IWorkbenchPartReference partRef) {}
+		public void partHidden(IWorkbenchPartReference partRef) {
+			// do nothing
+		}
 
 		@Override
-		public void partDeactivated(IWorkbenchPartReference partRef) {}
+		public void partDeactivated(IWorkbenchPartReference partRef) {
+			// do nothing
+		}
 		
 		@Override
-		public void partBroughtToTop(IWorkbenchPartReference partRef) {}
+		public void partBroughtToTop(IWorkbenchPartReference partRef) {
+			// do nothing
+		}
 		
 		/*
 		 * (non-Javadoc)

@@ -11,6 +11,8 @@ import org.eclipse.ui.part.EditorPart;
 
 public class CodemapEditor extends EditorPart {
 
+	private Canvas canvas;
+
 	public CodemapEditor() {
 		// TODO Auto-generated constructor stub
 	}
@@ -48,13 +50,12 @@ public class CodemapEditor extends EditorPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		Canvas canvas = new Canvas(parent, SWT.NONE);
+		canvas = new Canvas(parent, SWT.NONE);
 	}
 
 	@Override
 	public void setFocus() {
-		// TODO Auto-generated method stub
-
+		canvas.redraw();
 	}
 
 }

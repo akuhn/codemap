@@ -114,8 +114,8 @@ public class MapPerProject {
 		getProject().setDescription(desc, null);
 	}
 
-	public void putTDM(TermDocumentMatrix tdm) {
-		this.tdm = tdm;
+	public void putTDM(TermDocumentMatrix newTDM) {
+		this.tdm = newTDM;
 		this.startBackgroundTask();
 	}
 

@@ -44,6 +44,6 @@ public abstract class DropDownAction extends Action implements IMenuCreator {
 		// maybe do stuff ...
 	}
 	
-	protected abstract void createMenu(Menu menu);    
+	protected abstract void createMenu(Menu newMenu);    
 
 }

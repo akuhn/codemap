@@ -3,7 +3,6 @@
  */
 package org.codemap.builder;
 
-import org.codemap.util.EclipseUtil;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
