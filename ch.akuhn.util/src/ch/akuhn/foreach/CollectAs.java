@@ -19,7 +19,7 @@ public class CollectAs<E,R> implements Iterable<EachAs<E,R>> {
 	}
 
 	public static <E,R> CollectAs<E,R> from(Class<R> returnType, Iterable<E> elements) {
-		return new CollectAs<E,R>(elements, null);
+		return new CollectAs<E,R>(elements, returnType);
 	}
 
 	private Class<?> type;
@@ -37,7 +37,6 @@ public class CollectAs<E,R> implements Iterable<EachAs<E,R>> {
 	@SuppressWarnings("unchecked")
 	public R[] getResultArray() {
 		List<R> result = getResult();
-		if (type == null) type = result.iterator().next().getClass();
 		return result.toArray((R[]) Array.newInstance(type, result.size()));
 	}
 	
