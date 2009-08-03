@@ -15,11 +15,13 @@ public class LayerDropDownAction extends DropDownAction {
 	
 	private SelectionTracker selectionTracker;
 	private MapSelectionProvider selectionProvider;
+	private MapController controller;
 	
-	public LayerDropDownAction(SelectionTracker tracker, MapSelectionProvider provider) {
+	public LayerDropDownAction(SelectionTracker tracker, MapSelectionProvider provider, MapController theController) {
 		super();
 		selectionTracker = tracker;
 		selectionProvider = provider;
+		controller = theController;
 	}
 	
 	@Override
@@ -32,6 +34,7 @@ public class LayerDropDownAction extends DropDownAction {
 	protected void createMenu(Menu menu) {
 		addActionToMenu(menu, new LinkWithSelectionAction(selectionTracker));
 		addActionToMenu(menu, new ForceSelectionAction(selectionProvider));
+		addActionToMenu(menu, new ShowPackageColorsAction(controller));
 	    
 	    IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CodemapCore.PLUGIN_ID, "mapview");
 	    IExtension[] extensions_arr = extensionPoint.getExtensions();

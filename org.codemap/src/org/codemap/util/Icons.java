@@ -15,7 +15,8 @@ public class Icons {
 	public static final String LINKED = DIR_PREFIX + "linked.gif";
 	public static final String LAYERS = DIR_PREFIX + "layers.gif";	
 	public static final String LABELS = DIR_PREFIX + "labels.gif";
-	public static final String PACKAGE = DIR_PREFIX + "package.gif";
+	public static final String PACKAGE_HIERARCHY = DIR_PREFIX + "package_hierarchy.gif";
+	public static final String PACKAGES = DIR_PREFIX + "packages.gif";	
 	public static final String JAVA_FILE = DIR_PREFIX + "java_file.gif";	
 
 	public static ImageDescriptor getImageDescriptor(String key) {

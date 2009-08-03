@@ -12,7 +12,7 @@ public class ForceSelectionAction extends Action {
 		super("Force Package Explorer Selection", AS_CHECK_BOX);
 		selectionProvider = provider;
 		setChecked(DEFAULT_VALUE);
-		setImageDescriptor(Icons.getImageDescriptor(Icons.PACKAGE));
+		setImageDescriptor(Icons.getImageDescriptor(Icons.PACKAGE_HIERARCHY));
 	}
 
 	@Override

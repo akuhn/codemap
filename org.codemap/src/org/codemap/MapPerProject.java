@@ -138,6 +138,10 @@ public class MapPerProject {
 	public IProject getProject() {
 		return getJavaProject().getProject();
 	}
+	
+	public Configuration getConfiguration() {
+		return configuration;
+	}
 
 	private IJavaProject getJavaProject() {
 		return project;
