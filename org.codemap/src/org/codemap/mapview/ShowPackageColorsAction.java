@@ -8,6 +8,10 @@ import org.codemap.util.CodemapColors;
 import org.codemap.util.ColorBrewer;
 import org.codemap.util.Icons;
 import org.codemap.util.Log;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageDeclaration;
@@ -54,7 +58,11 @@ public class ShowPackageColorsAction extends Action {
 		for(Point each: mapForProject.getConfiguration().points()) {
 //			System.out.println(each.getDocument());
 			
-			IJavaElement create = JavaCore.create(each.getDocument());
+			String name = each.getDocument();
+			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+			IResource resource = root.findMember(new Path(name));
+			IJavaElement create = JavaCore.create(resource);
+			
 			if (!(create instanceof ICompilationUnit)) return;
 			ICompilationUnit unit = (ICompilationUnit) create;
 			try {

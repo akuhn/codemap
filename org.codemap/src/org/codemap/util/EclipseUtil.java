@@ -10,13 +10,4 @@ public class EclipseUtil {
 		return (T) Platform.getAdapterManager().getAdapter(object, adapter);
 	}
 	
-	public static String shortenCompilationUnitName(ICompilationUnit compilationUnit) {
-		// shorten the fullname which looks like: =Fame/test<ch.akuhn.fame.test{ArrayFieldTest.java
-		String[] split = compilationUnit.getHandleIdentifier().split("\\{");
-		if (!(split.length == 2)) return compilationUnit.getHandleIdentifier();
-		String shorter = split[split.length-1];
-		shorter = shorter.replaceAll(".java", "");
-		return shorter;
-	}	
-
 }

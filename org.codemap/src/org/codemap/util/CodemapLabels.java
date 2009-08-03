@@ -1,5 +1,8 @@
 package org.codemap.util;
 
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+
 import ch.deif.meander.Point;
 import ch.deif.meander.util.MapScheme;
 
@@ -13,12 +16,9 @@ public class CodemapLabels extends MapScheme<String> {
 	LabelStrategy identifierLabel = new LabelStrategy() {
 		@Override
 		public String forLocation(Point location) {
-			// TODO can we use EclipseUtil#shortenCompilationUnitName here?
-			String name = location.getDocument();
-			int lastPathSeparator = name.lastIndexOf('{');
-			int lastDot = name.lastIndexOf('.');
-			if (lastPathSeparator < lastDot) return name.substring(lastPathSeparator + 1, lastDot);
-			return name;
+			IPath path = new Path(location.getDocument());
+			path = path.removeFileExtension();
+			return path.lastSegment();
 		}
 	};
 	

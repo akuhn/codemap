@@ -3,14 +3,11 @@
  */
 package org.codemap.builder;
 
+import org.codemap.util.Resources;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.IBuffer;
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
 
 import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
@@ -28,18 +25,16 @@ class FullBuildVisitor implements IResourceVisitor {
 	}
 
 	public boolean visit(IResource resource) throws CoreException {
-		IJavaElement javaElement = JavaCore.create(resource);
-		if (javaElement == null) return true;
-		if (javaElement.getElementType() != IJavaElement.COMPILATION_UNIT) return true;
-		ICompilationUnit compilationUnit = (ICompilationUnit) javaElement.getAdapter(ICompilationUnit.class);
-		return visit(compilationUnit);
+		if (!(resource instanceof IFile)) return true;
+		String extension = resource.getFullPath().getFileExtension();
+		if (extension == null || !extension.equals("java")) return true;
+		return addDocument((IFile) resource);
 	}
 
-	private boolean visit(ICompilationUnit compilationUnit) throws JavaModelException {
-		IBuffer buf = compilationUnit.getBuffer();
-		String contents = buf.getContents();
-		String identifier = compilationUnit.getHandleIdentifier();
-		TDM.putDocument(identifier, new Terms(contents));
+	private boolean addDocument(IFile file) throws CoreException {
+		Terms terms = new Terms(file.getContents());
+		String path = Resources.asPath(file);
+		TDM.putDocument(path, terms);
 		return false;
 	}
 	

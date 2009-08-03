@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.codemap.CodemapCore;
+import org.codemap.util.Resources;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
@@ -49,18 +51,16 @@ public class MapController {
 	public void onProjectSelected(IJavaProject javaProject) {
 		log("-- projectSelected@");
 		if (currentProject == javaProject) return;
-		
+		// TODO show 'Create map...' button of there is not default.map
 		currentProject = javaProject;
 		view.updateVisualization();
-//		view.onProjectSelectionChanged(currentProject);
-		redrawCodemap();			
 	}
 	
 	public void onSelectionChanged(Collection<ICompilationUnit> units) {
 		log("-- selectionChanged@");
 		MapSelection selection = getCurrentSelection().clear();
 		for (ICompilationUnit each: units) {
-			selection.add(each.getHandleIdentifier());
+			selection.add(Resources.asPath(each));
 		} 
 		redrawCodemap();
 	}
@@ -68,18 +68,14 @@ public class MapController {
 	public void onEditorOpened(EditorEvent editorEvent) {
 		if (! editorEvent.hasInput()) return;
 		IJavaElement javaElement = editorEvent.getInput();
-		if (!(javaElement instanceof ICompilationUnit)) return;		
-		
-		compilationUnitOpened((ICompilationUnit)javaElement);
+		compilationUnitOpened(javaElement.getResource()); // TODO FIXME make EditorEvent use resources instead of java elements
 		log("-- editorOpened(" + editorEvent.getInput().getHandleIdentifier() + ")@");
 	}
 
 	public void onEditorClosed(EditorEvent editorEvent) {
 		if (! editorEvent.hasInput()) return;
 		IJavaElement javaElement = editorEvent.getInput();
-		if (!(javaElement instanceof ICompilationUnit)) return;		
-		
-		compilationUnitClosed((ICompilationUnit)javaElement);
+		compilationUnitClosed(javaElement.getResource()); // TODO FIXME make EditorEvent use resources instead of java elements
 		log("-- editorClosed(" + editorEvent.getInput().getHandleIdentifier() + ")@");
 	}
 	
@@ -95,10 +91,8 @@ public class MapController {
 			onFirstEditorEvent();
 		}
 		IJavaElement javaElement = editorEvent.getInput();
-		if (!(javaElement instanceof ICompilationUnit)) return;
-		
 		onProjectSelected(javaElement.getJavaProject());
-		youAreHereChanged((ICompilationUnit) javaElement);
+		youAreHereChanged(javaElement.getResource()); // TODO FIXME make EditorEvent use resources instead of java elements
 		log("-- editorActivated(" + editorEvent.getInput().getHandleIdentifier() + ")@");
 	}
 	
@@ -130,25 +124,25 @@ public class MapController {
 		log("-- firstEditorEvent@");
 	}
 	
-	private void youAreHereChanged(ICompilationUnit unit) {
-		getYouAreHereSelection().clear().add(unit.getHandleIdentifier());
+	private void youAreHereChanged(IResource resource) {
+		getYouAreHereSelection().clear().add(Resources.asPath(resource));
 		redrawCodemap();
 	}	
 
 	private void compilationUnitsOpened(Set<ICompilationUnit> units) {
 		for(ICompilationUnit unit: units) {
-			compilationUnitOpened(unit);
+			compilationUnitOpened(unit.getResource());
 		}
 	}
 	
-	private void compilationUnitOpened(ICompilationUnit unit) {
-		getOpenFilesSelection().add(unit.getHandleIdentifier());
+	private void compilationUnitOpened(IResource resource) {
+		getOpenFilesSelection().add(Resources.asPath(resource));
 		redrawCodemap();
 	}
 	
-	private void compilationUnitClosed(ICompilationUnit unit) {
-		getYouAreHereSelection().remove(unit.getHandleIdentifier());
-		getOpenFilesSelection().remove(unit.getHandleIdentifier());
+	private void compilationUnitClosed(IResource resource) {
+		getYouAreHereSelection().remove(Resources.asPath(resource));
+		getOpenFilesSelection().remove(Resources.asPath(resource));
 		redrawCodemap();
 	}	
 

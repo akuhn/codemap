@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import org.codemap.CodemapCore;
 import org.codemap.util.Log;
+import org.codemap.util.Resources;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -52,7 +52,7 @@ public class MapView extends ViewPart {
 		public void selectionChanged(MapSelection mapSelection) {
 			final ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
 			for (String each: mapSelection) {
-				IJavaElement javaElement = JavaCore.create(each);
+				IJavaElement javaElement = Resources.asJavaElement(each);
 				selection.add(javaElement);
 			}
 			StructuredSelection structuredSelection = new StructuredSelection(selection);
@@ -60,9 +60,9 @@ public class MapView extends ViewPart {
 		}	
 
 		public void doubleClicked(Location location) {
-			if (location.getDocument() == null) return;
-			IJavaElement javaElement = JavaCore.create(location.getDocument());		
-			openInEditor(javaElement);
+			IResource resource = Resources.asResource(location.getDocument());
+			if (!(resource instanceof IFile)) return;
+			openInEditor((IFile) resource);
 		}
 	};
 
@@ -183,16 +183,13 @@ public class MapView extends ViewPart {
 		this.updateVisualization();
 	}
 
-	private void openInEditor(IJavaElement javaElement) {
+	private void openInEditor(final IFile file) {
 		final IWorkbenchPage page = getSite().getPage();
-		final IResource resource = javaElement.getResource();
-		if (resource == null || !resource.exists() || !(resource instanceof IFile)) return;
-
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				try {
-					IDE.openEditor(page, (IFile) resource, true);
+					IDE.openEditor(page, file, true);
 				} catch (PartInitException e) {
 					Log.error(e);
 				}
@@ -219,7 +216,8 @@ public class MapView extends ViewPart {
 	}
 
 	public void redrawAsync() {
-		Display.getDefault().asyncExec(new Runnable() {
+		// Must call #syncExec, else we get an SWT error 		
+		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
 				redraw();
@@ -229,6 +227,7 @@ public class MapView extends ViewPart {
 
 	public void redraw() {
 		container.redraw();
+		canvas.redraw(); // needs both!
 	}
 
 	public void redrawCodemapBackground() {
