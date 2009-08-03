@@ -1,5 +1,8 @@
 package ch.deif.meander;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -17,9 +20,13 @@ import ch.deif.meander.util.MapScheme;
  * @author Adrian Kuhn
  *
  */
-public class Configuration {
+public class Configuration implements Serializable {
 
-	private final Point[] points;
+	private static final long serialVersionUID = 1337;
+	private static final int VERSION_1 = 0x20090830;
+
+	
+	private Point[] points;
 	
 	private Configuration(Point... locations) {
 		this.points = locations;
@@ -28,6 +35,23 @@ public class Configuration {
 	public Configuration(Configuration map) {
 		this(Arrays.copyOf(map.points, map.points.length));
 	}
+
+    private void readObject(ObjectInputStream in) throws Exception {
+        int version = in.readInt();
+        if (version != VERSION_1) throw new Error();
+        points = (Point[]) in.readObject();
+        if (!this.invariant()) throw new Error();
+    }
+    
+    private boolean invariant() {
+        return true; // TODO Auto-generated method stub
+    }
+
+    private void writeObject(ObjectOutputStream out) throws Exception {
+        out.writeInt(VERSION_1);
+        out.writeObject(points);
+    }
+	
 	
 	public Configuration(Collection<? extends Point> locations) {
 		this(locations.toArray(new Point[locations.size()]));
