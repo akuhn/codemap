@@ -87,7 +87,6 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 		offsetX = (bounds.x - map.getWidth()) / 2;
 		offsetY = (bounds.y - map.getWidth()) / 2;
 		Transform t = new Transform(device);
-		gc.getTransform(t);
 		t.translate(offsetX, offsetY);
 		gc.setTransform(t);
 		this.paintMap(map, gc);
