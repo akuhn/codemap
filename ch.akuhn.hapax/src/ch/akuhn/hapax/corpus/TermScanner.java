@@ -45,7 +45,7 @@ public abstract class TermScanner implements Runnable {
         this.in = CharStream.fromString(string);
         return this;
     }
-    
+
     public TermScanner onString(CharSequence chars) {
         return onString(chars.toString());
     }
@@ -72,25 +72,31 @@ public abstract class TermScanner implements Runnable {
         in = CharStream.fromInputStream(stream);
         return this;
     }
-    
+
     public TermScanner newInstance() {
-    	try {
-			return this.getClass().getConstructor().newInstance();
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
+        try {
+            return this.getClass().getConstructor().newInstance();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
-	public Terms fromString(String contents) {
-		Terms terms = new Terms();
-		this.newInstance().client(terms).onString(contents).run();
-		return terms;
-	}
+    public Terms fromString(String contents) {
+        Terms terms = new Terms();
+        this.newInstance().client(terms).onString(contents).run();
+        return terms;
+    }
 
-	public Terms fromFile(File file) {
-		Terms terms = new Terms();
-		this.newInstance().client(terms).onFile(file).run();
-		return terms;
-	}
+    public Terms fromFile(File file) {
+        Terms terms = new Terms();
+        this.newInstance().client(terms).onFile(file).run();
+        return terms;
+    }
+
+    public Terms fromInpuStream(InputStream stream) {
+        Terms terms = new Terms();
+        this.newInstance().client(terms).onStream(stream).run();
+        return terms;
+    }
 
 }
