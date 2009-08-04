@@ -43,6 +43,8 @@ public class YouAreHereOverlay extends SelectionOverlay {
 				e.x / 2, e.y + ARROW_HEIGHT,
 				(e.x - ARROW_WIDTH) / 2, e.y,
 				0, e.y };
+		Transform save = new Transform(device);
+		gc.getTransform(save);
 		Transform t = new Transform(device);
 		gc.getTransform(t);
 		t.translate(each.px - e.x/2, each.py - e.y - ARROW_HEIGHT - GAP);
@@ -50,7 +52,9 @@ public class YouAreHereOverlay extends SelectionOverlay {
 		gc.fillPolygon(polygon);
 		gc.drawPolygon(polygon);
 		gc.drawText(name, PADDING_X, PADDING_Y);
+		gc.setTransform(save);
 		t.dispose();
+		save.dispose();
 		
 		// FIXME do I have to save and restore the previous transform?
 		
