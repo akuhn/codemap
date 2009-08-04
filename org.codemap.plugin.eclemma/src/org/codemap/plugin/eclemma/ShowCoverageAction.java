@@ -29,7 +29,7 @@ public class ShowCoverageAction implements ICodemapPluginAction {
 	}
 
 	private void hideCoverage() {
-		CodemapCore.getPlugin().getColorScheme().clearColors();
+		CodemapCore.getPlugin().getActiveMap().getColorScheme().clearColors();
 		CodemapCore.getPlugin().redrawCodemapBackground();
 	}
 
@@ -48,7 +48,7 @@ public class ShowCoverageAction implements ICodemapPluginAction {
 	private void showCoverage() {
 		if (lastCoverageInfo == null) return;
 		
-		CodemapColors colorScheme = CodemapCore.getPlugin().getColorScheme();
+		CodemapColors colorScheme = CodemapCore.getPlugin().getActiveMap().getColorScheme();
 		for (Pair<String, Double> pair : lastCoverageInfo) {
 			String identifier = pair.fst;
 			Double ratio = pair.snd;
