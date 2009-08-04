@@ -1,6 +1,10 @@
 package org.codemap.plugin.search;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.codemap.CodemapCore;
+import org.codemap.MapPerProject;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -16,9 +20,9 @@ public class SearchPluginCore extends AbstractUIPlugin {
     private static SearchPluginCore plugin;
 
     private QueryListener theQueryListener;
-    private SearchResultsOverlay searchResultsOverlay;
-    private MapSelection searchSelection;
     private SearchResultController theController;
+    
+	private Map<MapPerProject, MapSelection> selectionCache = new HashMap<MapPerProject, MapSelection>();
 
     @Override
     public void start(BundleContext context) throws Exception {
@@ -41,11 +45,6 @@ public class SearchPluginCore extends AbstractUIPlugin {
     private void init() {
         theController = new SearchResultController();
         theQueryListener = new QueryListener(theController);
-
-        searchSelection = new MapSelection();
-        searchResultsOverlay = new SearchResultsOverlay();
-        searchResultsOverlay.setSelection(searchSelection);
-        CodemapCore.getPlugin().addLayer(searchResultsOverlay);
     }
 
     @Override
@@ -58,13 +57,22 @@ public class SearchPluginCore extends AbstractUIPlugin {
     private void destroy() {
         plugin = null;
         theController = null;
-        CodemapCore.getPlugin().removeLayer(searchResultsOverlay);
-        searchResultsOverlay = null;
-        searchSelection = null;
     }
 
     public MapSelection getSearchSelection() {
-        return searchSelection;
+		MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
+		MapSelection mapSelection = selectionCache.get(activeMap);
+		if (mapSelection == null) {
+			mapSelection = new MapSelection();
+			SearchResultsOverlay searchOverlay = new SearchResultsOverlay();
+			searchOverlay.setSelection(mapSelection);
+			activeMap.addLayer(searchOverlay);
+			
+			selectionCache.put(activeMap, mapSelection);
+		}
+		return mapSelection;    	
+    	
+    	
     }
 
     public static SearchPluginCore getPlugin() {
