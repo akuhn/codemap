@@ -1,7 +1,6 @@
 package org.codemap.mapview;
 
 import org.codemap.util.Icons;
-import org.eclipse.swt.widgets.Menu;
 
 public class LayerDropDownAction extends ExtensionPointDropDownAction {
 	

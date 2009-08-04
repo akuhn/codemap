@@ -13,7 +13,7 @@ public class LinkWithSelectionAction extends Action {
 	public LinkWithSelectionAction(SelectionTracker tracker) {
 		super("Link with Current Selection", AS_CHECK_BOX);
 		selectionTracker = tracker;
-		setChecked(true);
+		setChecked(DEFAULT_CHECKED);
 		setImageDescriptor(Icons.getImageDescriptor(Icons.LINKED));
 	}
 

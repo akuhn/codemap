@@ -4,19 +4,19 @@
 package org.codemap.mapview;
 
 import org.codemap.CodemapCore;
-import org.codemap.MapPerProject;
 import org.eclipse.jface.action.IAction;
 
 abstract class LabelAction extends MenuAction {
-	
+
 	public LabelAction(String text) {
 		super(text, IAction.AS_RADIO_BUTTON);
+		setChecked(isDefaultChecked());
 	}
-	
+
 	protected CodemapCore getCore() {
 		return CodemapCore.getPlugin();
 	}
-	
+
 	public static class NoLabelAction extends LabelAction {
 
 		public NoLabelAction() {
@@ -25,7 +25,7 @@ abstract class LabelAction extends MenuAction {
 
 		@Override
 		public void run() {
-			super.run();			
+			super.run();
 			if (!isChecked()) return;
 			getCore().getLabelScheme().useNoLabels();
 			getCore().redrawCodemap();
@@ -36,17 +36,16 @@ abstract class LabelAction extends MenuAction {
 			return "no_labels";
 		}
 	}
-	
+
 	public static class IdentifierLabelAction extends LabelAction {
 
 		public IdentifierLabelAction() {
 			super("Class Name");
-			setChecked(true);
 		}
 
 		@Override
 		public void run() {
-			super.run();			
+			super.run();
 			if (!isChecked()) return;
 			getCore().getLabelScheme().useIdentifierLabels();
 			getCore().redrawCodemap();
@@ -61,9 +60,8 @@ abstract class LabelAction extends MenuAction {
 		protected boolean isDefaultChecked() {
 			return true;
 		}
-		
 	}
-	
+
 	public static class LogLHLabelAction extends LabelAction {
 
 		public LogLHLabelAction() {
@@ -73,7 +71,7 @@ abstract class LabelAction extends MenuAction {
 		@Override
 		public void run() {
 			super.run();
-			if (!isChecked()) return;			
+			if (!isChecked()) return;
 			System.out.println("show LogLH labels");
 		}
 
