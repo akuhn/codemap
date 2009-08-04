@@ -70,6 +70,7 @@ public class EditorPartListener implements IPartListener {
 	private IFile[] getFiles(IWorkbenchPart each) {
 		if (!(each instanceof IEditorPart)) return new IFile[] {};
 		IEditorInput input = ((IEditorPart) each).getEditorInput();
+		if (!(input instanceof IPathEditorInput)) return new IFile[] {};
 		IPathEditorInput pathInput = (IPathEditorInput) input;
 		System.out.println(pathInput.getPath());
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
