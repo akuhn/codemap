@@ -1,15 +1,26 @@
 package org.codemap.mapview;
 
-import org.eclipse.jface.action.Action;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.codemap.MapPerProject;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 
-public abstract class DropDownAction extends Action implements IMenuCreator {
+public abstract class DropDownAction extends CodemapAction implements IMenuCreator {
 	
 	private Menu menu;
+	private List<CodemapAction> actions = new ArrayList<CodemapAction>();
 	
+	@Override
+	public void configureAction(MapPerProject map) {
+		for(CodemapAction each: actions) {
+			each.configureAction(map);
+		}
+	}
+
 	public DropDownAction() {
 		setMenuCreator(this);
 		setup();
@@ -35,7 +46,8 @@ public abstract class DropDownAction extends Action implements IMenuCreator {
 		return null;
 	}
 	
-    protected void addActionToMenu(Menu parent, Action action) {
+    protected void addActionToMenu(Menu parent, CodemapAction action) {
+    	actions.add(action);
         ActionContributionItem item = new ActionContributionItem(action);
         item.fill(parent, -1);
     }

@@ -1,9 +1,9 @@
 package org.codemap.mapview;
 
+import org.codemap.MapPerProject;
 import org.codemap.util.Icons;
-import org.eclipse.jface.action.Action;
 
-public class ForceSelectionAction extends Action {
+public class ForceSelectionAction extends CodemapAction {
 	
 	public static final boolean DEFAULT_VALUE = true;
 	private MapSelectionProvider selectionProvider;
@@ -24,6 +24,12 @@ public class ForceSelectionAction extends Action {
 	@Override
 	public void run() {
 	    selectionProvider.setForceEnabled(isChecked());
+	}
+
+	@Override
+	public void configureAction(MapPerProject map) {
+		// TODO Auto-generated method stub
+		
 	}	
 
 }

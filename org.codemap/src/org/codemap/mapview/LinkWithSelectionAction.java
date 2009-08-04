@@ -1,10 +1,11 @@
 package org.codemap.mapview;
 
+import org.codemap.MapPerProject;
 import org.codemap.util.Icons;
 import org.eclipse.jface.action.Action;
 
 
-public class LinkWithSelectionAction extends Action {
+public class LinkWithSelectionAction extends CodemapAction {
 
 	public static final boolean DEFAULT_VALUE = true;
 	private SelectionTracker selectionTracker;
@@ -25,5 +26,11 @@ public class LinkWithSelectionAction extends Action {
 	@Override
 	public void run() {
 	    selectionTracker.setEnabled(isChecked());
+	}
+
+	@Override
+	public void configureAction(MapPerProject map) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -1,14 +1,17 @@
 package org.codemap.mapview;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.codemap.CodemapCore;
+import org.codemap.MapPerProject;
 import org.codemap.util.Log;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -38,6 +41,8 @@ import ch.deif.meander.ui.CodemapListener;
 import ch.deif.meander.util.MColor;
 
 public class MapView extends ViewPart {
+	
+	private List<CodemapAction> actions = new ArrayList<CodemapAction>();
 	
 	private CodemapListener codemapListener = new CodemapListener() {
 		@Override
@@ -130,9 +135,14 @@ public class MapView extends ViewPart {
 	    IToolBarManager tbm = getToolBarManager();
 	    tbm.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	    tbm.add(new Separator());
-	    tbm.add(new ColorDropDownAction(theController));
-	    tbm.add(new LayerDropDownAction(selectionTracker, selectionProvider));
-	    tbm.add(new LabelDrowDownAction());
+	    tbm.add(registerAction(new ColorDropDownAction(theController)));
+	    tbm.add(registerAction(new LayerDropDownAction(selectionTracker, selectionProvider)));
+	    tbm.add(registerAction(new LabelDrowDownAction()));
+	}
+
+	private IAction registerAction(DropDownAction action) {
+		actions.add(action);
+		return action;
 	}
 
 	public IToolBarManager getToolBarManager() {
@@ -156,12 +166,17 @@ public class MapView extends ViewPart {
 	}
 
 	public void updateVisualization() {
-		CodemapVisualization viz = CodemapCore.getPlugin()
-			.mapForProject(getCurrentProject())
-			.updateSize(getCurrentSize())
-			.getVisualization();
+		MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
+		configureActions(activeMap);
+		CodemapVisualization viz = activeMap.updateSize(getCurrentSize()).getVisualization();
 		if (viz == null) return;
 		updateMapVisualization(viz);
+	}
+
+	private void configureActions(MapPerProject activeMap) {
+		for (CodemapAction each: actions) {
+			each.configureAction(activeMap);
+		}
 	}
 
 	private int getCurrentSize() {

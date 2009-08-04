@@ -1,5 +1,6 @@
 package org.codemap.mapview;
 
+import org.codemap.MapPerProject;
 import org.codemap.util.Log;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -8,7 +9,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 
-public class LazyPluginAction extends Action {
+public class LazyPluginAction extends CodemapAction {
 	
 	private static final String ATT_TEXT = "text";
 	private static final String ATT_ICON = "icon";
@@ -60,5 +61,10 @@ public class LazyPluginAction extends Action {
 		} catch (Exception e) {
 			Log.instantiatePluginError(e, configElement, ATT_CLASS);
 		}
+	}
+
+	@Override
+	public void configureAction(MapPerProject map) {
+		// TODO Auto-generated method stub
 	}
 }

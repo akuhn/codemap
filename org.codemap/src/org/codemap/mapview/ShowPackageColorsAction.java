@@ -22,9 +22,10 @@ import org.eclipse.jface.action.Action;
 import ch.deif.meander.Point;
 import ch.deif.meander.util.MColor;
 
-public class ShowPackageColorsAction extends Action {
+public class ShowPackageColorsAction extends CodemapAction {
 	
 	private static final boolean DEFAULT_VALUE = false;
+	private static final String KEY = "show_package_colors";
 	private final MapController theController;
 
 	public ShowPackageColorsAction(MapController controller, int style) {
@@ -36,6 +37,7 @@ public class ShowPackageColorsAction extends Action {
 
 	@Override
 	public void run() {
+		CodemapCore.getPlugin().getActiveMap().setProperty(KEY, isChecked());		
 		if (isChecked()) {
 			enable();
 		} else {
@@ -50,7 +52,6 @@ public class ShowPackageColorsAction extends Action {
 
 	private CodemapColors getColorScheme() {
 		return CodemapCore.getPlugin().getColorScheme();
-		
 	}
 
 	private void enable() {
@@ -87,6 +88,11 @@ public class ShowPackageColorsAction extends Action {
 
 	private void redraw() {
 		CodemapCore.getPlugin().redrawCodemapBackground();
+	}
+
+	@Override
+	public void configureAction(MapPerProject map) {
+		setChecked(map.getPropertyOrDefault(KEY, DEFAULT_VALUE));
 	}
 	
 

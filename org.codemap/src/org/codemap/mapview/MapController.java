@@ -1,18 +1,12 @@
 package org.codemap.mapview;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.codemap.CodemapCore;
 import org.codemap.util.Resources;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.ui.IEditorReference;
 
 import ch.deif.meander.MapSelection;
 

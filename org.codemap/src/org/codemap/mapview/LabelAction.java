@@ -4,10 +4,10 @@
 package org.codemap.mapview;
 
 import org.codemap.CodemapCore;
-import org.eclipse.jface.action.Action;
+import org.codemap.MapPerProject;
 import org.eclipse.jface.action.IAction;
 
-class LabelAction extends Action {
+class LabelAction extends CodemapAction {
 	
 	public LabelAction(String text) {
 		super(text, IAction.AS_RADIO_BUTTON);
@@ -57,5 +57,11 @@ class LabelAction extends Action {
 			if (!isChecked()) return;			
 			System.out.println("show LogLH labels");
 		}
+	}
+
+	@Override
+	public void configureAction(MapPerProject map) {
+		// TODO Auto-generated method stub
+		
 	}
 }

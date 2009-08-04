@@ -37,5 +37,4 @@ public class LayerDropDownAction extends ExtensionPointDropDownAction {
 		return AS_CHECK_BOX;
 	}
 
-
 }

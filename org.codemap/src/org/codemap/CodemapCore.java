@@ -36,7 +36,6 @@ public class CodemapCore extends AbstractUIPlugin {
 	private final MapSelection youAreHereSelection;
 	private final MapSelection openFilesSelection;
 	private final MapSelection currentSelection;
-	private final CodemapLabels labelScheme;
 
 	private SharedCodemapLayer sharedLayer;
 	
@@ -58,7 +57,6 @@ public class CodemapCore extends AbstractUIPlugin {
 		youAreHereSelection = new MapSelection();
 		openFilesSelection = new MapSelection();	
 		currentSelection = new MapSelection();
-		labelScheme = new CodemapLabels();	
 		sharedLayer = new SharedCodemapLayer();
 	}
 	
@@ -107,7 +105,7 @@ public class CodemapCore extends AbstractUIPlugin {
 	}
 	
 	public CodemapLabels getLabelScheme() {
-		return labelScheme;
+		return getActiveMap().getLabelScheme();
 	}
 
 	public CodemapColors getColorScheme() {

@@ -7,6 +7,7 @@ import org.codemap.builder.HapaxBuilder;
 import org.codemap.builder.MapMakerBackgroundJob;
 import org.codemap.mapview.MapView;
 import org.codemap.util.CodemapColors;
+import org.codemap.util.CodemapLabels;
 import org.codemap.util.Icons;
 import org.codemap.util.Log;
 import org.eclipse.core.resources.ICommand;
@@ -47,6 +48,7 @@ public class MapPerProject {
 
 	private Map<String,String> properties = new HashMap<String,String>();
 	private CodemapColors colorScheme = new CodemapColors();
+	private CodemapLabels labelScheme = new CodemapLabels();
 	
 	private static final String POINT_NODE_ID = CodemapCore.PLUGIN_ID + ".points"; 
 	private static final int MINIMAL_SIZE = 300;
@@ -166,11 +168,11 @@ public class MapPerProject {
 			monitor.worked(5);
 			
 			background = Meander.background()
-				   .withColors(CodemapCore.getPlugin().getColorScheme())
+				   .withColors(colorScheme)
 				   .makeBackground();
 			
 			layer = Meander.layers()
-				   .withLabels(CodemapCore.getPlugin().getLabelScheme())
+				   .withLabels(labelScheme)
 				   .withSelection(new CurrSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
 				   .withSelection(new ImageOverlay(Icons.getImage(Icons.JAVA_FILE)), CodemapCore.getPlugin().getOpenFilesSelection())
 				   .withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())				   
@@ -250,10 +252,6 @@ public class MapPerProject {
 		IEclipsePreferences node = context.getNode(POINT_NODE_ID);
 		return node;
 	}
-
-	public String getProperty(String key) {
-		return properties.get(key);
-	}
 	
 	public String getPropertyOrDefault(String key, String defaultValue) {
 		String value = properties.get(key);
@@ -266,6 +264,19 @@ public class MapPerProject {
 
 	public CodemapColors getColorScheme() {
 		return colorScheme;
+	}
+
+	public CodemapLabels getLabelScheme() {
+		return labelScheme;
+	}
+
+	public boolean getPropertyOrDefault(String key, boolean defaultValue) {
+		String value = properties.get(key);
+		return value == null ? defaultValue : Boolean.parseBoolean(value);
+	}
+
+	public void setProperty(String key, boolean checked) {
+		properties.put(key, Boolean.toString(checked));
 	}
 	
 }
