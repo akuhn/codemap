@@ -37,7 +37,7 @@ public class CodemapCore extends AbstractUIPlugin {
 	private final MapSelection openFilesSelection;
 	private final MapSelection currentSelection;
 	private final CodemapLabels labelScheme;
-	private final CodemapColors colorScheme;
+
 	private SharedCodemapLayer sharedLayer;
 	
 
@@ -59,7 +59,6 @@ public class CodemapCore extends AbstractUIPlugin {
 		openFilesSelection = new MapSelection();	
 		currentSelection = new MapSelection();
 		labelScheme = new CodemapLabels();	
-		colorScheme = new CodemapColors();
 		sharedLayer = new SharedCodemapLayer();
 	}
 	
@@ -112,9 +111,13 @@ public class CodemapCore extends AbstractUIPlugin {
 	}
 
 	public CodemapColors getColorScheme() {
-		return colorScheme;
+		return getActiveMap().getColorScheme();
 	}
 	
+	public MapPerProject getActiveMap() {
+		return mapForProject(theView.getCurrentProject());
+	}
+
 	// TODO: the layers itself should issue the redraws
 	public void redrawCodemap() {
 		getMapView().redrawAsync();

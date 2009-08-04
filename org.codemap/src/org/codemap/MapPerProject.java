@@ -6,6 +6,7 @@ import java.util.Map;
 import org.codemap.builder.HapaxBuilder;
 import org.codemap.builder.MapMakerBackgroundJob;
 import org.codemap.mapview.MapView;
+import org.codemap.util.CodemapColors;
 import org.codemap.util.Icons;
 import org.codemap.util.Log;
 import org.eclipse.core.resources.ICommand;
@@ -44,6 +45,9 @@ import ch.deif.meander.util.MapScheme;
  */
 public class MapPerProject {
 
+	private Map<String,String> properties = new HashMap<String,String>();
+	private CodemapColors colorScheme = new CodemapColors();
+	
 	private static final String POINT_NODE_ID = CodemapCore.PLUGIN_ID + ".points"; 
 	private static final int MINIMAL_SIZE = 300;
 
@@ -247,4 +251,21 @@ public class MapPerProject {
 		return node;
 	}
 
+	public String getProperty(String key) {
+		return properties.get(key);
+	}
+	
+	public String getPropertyOrDefault(String key, String defaultValue) {
+		String value = properties.get(key);
+		return value == null ? defaultValue : value;
+	}
+	
+	public void setProperty(String key, String value) {
+		properties.put(key, value);
+	}
+
+	public CodemapColors getColorScheme() {
+		return colorScheme;
+	}
+	
 }
