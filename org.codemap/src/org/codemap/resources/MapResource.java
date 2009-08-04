@@ -5,13 +5,13 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.codemap.CodemapCore;
 import org.codemap.util.Log;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IFile;
@@ -19,7 +19,9 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.IProgressService;
 
@@ -28,7 +30,10 @@ import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.util.Files;
 import ch.deif.meander.Configuration;
+import ch.deif.meander.MapInstance;
+import ch.deif.meander.Point;
 import ch.deif.meander.builder.Meander;
+import ch.deif.meander.util.MapScheme;
 
 public class MapResource implements Serializable {
 
@@ -45,13 +50,12 @@ public class MapResource implements Serializable {
 	private Configuration mds;
 	private String name;
 
-	private AtomicReference<Is> state = new AtomicReference<Is>();
+	private AtomicReference<Is> state = new AtomicReference<Is>(Is.MISSING);
 
 	public MapResource(String name, Collection<String> projects, Collection<String> fileExtensions) {
 		this.name = name;
 		this.projects = projects;
 		this.fileExtensions = fileExtensions; 
-		this.state = new AtomicReference<Is>(null);
 	}
 
 	public Collection<String> getElements() {
@@ -100,14 +104,7 @@ public class MapResource implements Serializable {
 	private void startBackgroundComputation() {
 		if (!state.compareAndSet(Is.MISSING, Is.RUNNING)) return;
 		IProgressService progressService = PlatformUI.getWorkbench().getProgressService();
-		try {
-			// TODO use org.eclipce.core.jobs instead
-			progressService.run(true, true, new BackgroundJob());
-		} catch (InvocationTargetException ex) {
-			throw new RuntimeException(ex.getTargetException());
-		} catch (InterruptedException ex) {
-			throw new RuntimeException(ex);
-		}
+		new BackgroundJob().schedule();
 	}
 
 	private void writeObject(ObjectOutputStream out) throws IOException {
@@ -120,10 +117,14 @@ public class MapResource implements Serializable {
 		out.writeObject(elements);
 	}
 	
-	private class BackgroundJob implements IRunnableWithProgress {
+	private class BackgroundJob extends Job {
 		
+		public BackgroundJob() {
+			super("Making map configuration");
+		}
+
 		@Override
-		public void run(IProgressMonitor monitor) {
+		public IStatus run(IProgressMonitor monitor) {
 			monitor.beginTask("Creating map " + this, 5);
 			try {
 				elements = computeElements();
@@ -137,8 +138,11 @@ public class MapResource implements Serializable {
 			} catch (Throwable ex) {
 				Log.error(ex);
 				state.set(Is.MISSING);
+				return Status.CANCEL_STATUS;
 			}
 			monitor.done();
+			CodemapCore.getPlugin().getMapView().updateVisualization();
+			return Status.OK_STATUS;
 		}
 		
 		private Configuration computeMDS() {
@@ -181,6 +185,16 @@ public class MapResource implements Serializable {
 			return new ArrayList<String>(result);
 		}
 		
+	}
+
+	public MapInstance makeMapInstanceWithSize(int size) {
+		return mds.withSize(size, new MapScheme<Double>() {
+			@Override
+			public Double forLocation(Point location) {
+				return Math.sqrt(Resources.getFilesize(location.getDocument()));
+				
+			}
+		});
 	}
 
 }

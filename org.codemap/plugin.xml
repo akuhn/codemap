@@ -25,7 +25,7 @@
             class="org.codemap.mapview.MapView"
             icon="icons/sample.gif"
             id="ch.unibe.softwaremap.MapView"
-            name="Map View"
+            name="Codemap View"
             restorable="true">
       </view>
       <view

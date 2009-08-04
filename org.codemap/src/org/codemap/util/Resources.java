@@ -16,26 +16,26 @@ public class Resources {
 	public static String asPath(IResource resource) {
 		return resource.getFullPath().toString();
 	}
-	
+
 	public static IJavaElement asJavaElement(String path) {
 		IResource resource = asResource(path);
 		return JavaCore.create(resource);
 	}
-	
+
 	public static IResource asResource(String path) {
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		return root.findMember(new Path(path));
 	}
-	
+
 	public static IResource fromJavaElement(IJavaElement element) {
 		return element.getResource();
 	}
-	
+
 	public static boolean matchPattern(IResource respource, String pattern) {
 		String name = respource.getName();
 		return Files.match(pattern, name);
 	}
-	
+
 	public static IContainer getFolder(IResource resource) {
 		if (resource instanceof IContainer) return (IContainer) resource;
 		return resource.getParent();
@@ -57,5 +57,9 @@ public class Resources {
 		IResource resource = asResource(path);
 		return resource instanceof IProject ? (IProject) resource : null;
 	}
-	
+
+	public static double getFilesize(String path) {
+		return new Path(path).toFile().length();
+	}
+
 }
