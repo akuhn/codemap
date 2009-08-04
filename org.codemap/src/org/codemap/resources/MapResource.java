@@ -1,42 +1,87 @@
 package org.codemap.resources;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.concurrent.atomic.AtomicReference;
 
+import org.codemap.util.Log;
+import org.codemap.util.Resources;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.progress.IProgressService;
 
 import ch.akuhn.hapax.CorpusBuilder;
 import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
+import ch.akuhn.util.Files;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.builder.Meander;
 
 public class MapResource implements Serializable {
 
+	enum Is { MISSING, RUNNING, DONE }
+	
 	private static final long serialVersionUID = 1337L;
-
 	private static final int VERSION_1 = 0x20090830;
 	
-	private Collection<String> projects; 
+	private Collection<String> elements;
 	private Collection<String> fileExtensions;
-	private Collection<Object> elements;
-	
+	private Collection<String> projects;
+
 	private LatentSemanticIndex lsi;
 	private Configuration mds;
 	private String name;
+
+	private AtomicReference<Is> state = new AtomicReference<Is>();
+
+	public MapResource(String name, Collection<String> projects, Collection<String> fileExtensions) {
+		this.name = name;
+		this.projects = projects;
+		this.fileExtensions = fileExtensions; 
+		this.state = new AtomicReference<Is>(null);
+	}
+
+	public Collection<String> getElements() {
+		return Collections.unmodifiableCollection(elements);
+	}
 	
-	private void writeObject(ObjectOutputStream out) throws IOException {
-		out.writeInt(VERSION_1);
-		out.writeObject(name);
-		out.writeObject(mds);
-		out.writeObject(lsi);
-		out.writeObject(projects);
-		out.writeObject(fileExtensions);
-		out.writeObject(elements);
+	public Collection<String> getFileExtensions() {
+		return Collections.unmodifiableCollection(fileExtensions);
+	}
+	
+	public LatentSemanticIndex getLSI() {
+		this.startBackgroundComputation();
+		return lsi;
+	} 
+	
+	public Configuration getMDS() {
+		this.startBackgroundComputation();
+		return mds;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public Collection<String> getProjects() {
+		return Collections.unmodifiableCollection(projects);
+	}
+	
+	private boolean invariant() {
+		return true; // TODO
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -48,44 +93,94 @@ public class MapResource implements Serializable {
 		lsi = (LatentSemanticIndex) in.readObject();
 		projects = (Collection<String>) in.readObject();
 		fileExtensions = (Collection<String>) in.readObject();
-		elements = (Collection<Object>) in.readObject();
+		elements = (Collection<String>) in.readObject();
 		if (!this.invariant()) throw new Error();
 	}
 	
-	private boolean invariant() {
-		return true; // TODO
+	private void startBackgroundComputation() {
+		if (!state.compareAndSet(Is.MISSING, Is.RUNNING)) return;
+		IProgressService progressService = PlatformUI.getWorkbench().getProgressService();
+		try {
+			// TODO use org.eclipce.core.jobs instead
+			progressService.run(true, true, new BackgroundJob());
+		} catch (InvocationTargetException ex) {
+			throw new RuntimeException(ex.getTargetException());
+		} catch (InterruptedException ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
-	public MapResource(String name, Collection<String> projects, Collection<String> fileExtensions) {
-		this.name = name;
-		this.projects = projects;
-		this.fileExtensions = fileExtensions; 
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		out.writeInt(VERSION_1);
+		out.writeObject(name);
+		out.writeObject(mds);
+		out.writeObject(lsi);
+		out.writeObject(projects);
+		out.writeObject(fileExtensions);
+		out.writeObject(elements);
 	}
 	
-	public void computeElementsLatentSemanticIndexAndMultiDimensionalScaling(IProgressMonitor monitor) {
-		monitor.beginTask("Creating " + name, 7);
-		gatherElements();
-		monitor.worked(1);
-		CorpusBuilder corpus = buildCorpus();
-		monitor.worked(2);
-		Hapax hapax = corpus.build();
-		lsi = hapax.getIndex();
-		monitor.worked(2);
-		mds = Meander.builder().addCorpus(hapax).makeMap();
-		monitor.worked(2);
-	}
+	private class BackgroundJob implements IRunnableWithProgress {
+		
+		@Override
+		public void run(IProgressMonitor monitor) {
+			monitor.beginTask("Creating map " + this, 5);
+			try {
+				elements = computeElements();
+				monitor.worked(1);
+				lsi = computeLSI();
+				monitor.worked(2);
+				mds = computeMDS();
+				monitor.worked(2);
+				if (!invariant()) throw new Error();
+				state.set(Is.DONE);
+			} catch (Throwable ex) {
+				Log.error(ex);
+				state.set(Is.MISSING);
+			}
+			monitor.done();
+		}
+		
+		private Configuration computeMDS() {
+			return Meander.builder().addCorpus(lsi).makeMap();
+		}
 
-	private CorpusBuilder buildCorpus() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		private LatentSemanticIndex computeLSI() throws CoreException {
+			CorpusBuilder builder = Hapax.newCorpus()
+					.ignoreCase()
+					.useCamelCaseScanner()
+					.rejectRareTerms()
+					.rejectStopwords()
+					.latentDimensions(25)
+					.useTFIDF();
+			for (String path: elements) {
+				IResource resource = Resources.asResource(path);
+				if (resource.getType() != IResource.FILE) continue;
+				InputStream stream = ((IFile) resource).getContents();
+				builder.addDocument(path, stream);
+			}
+			return builder.makeTDM().createIndex();
+		}
 
-	private void gatherElements() {
-		elements = new ArrayList<Object>();
-//		for (IResource each: projects) {
-//			if (each instanceof IContainer) gatherFromContainer((IContainer) each);
-//			else elements.add(each);
-//		}
+		private Collection<String> computeElements() throws CoreException {
+			final Collection<String> result = new HashSet<String>();
+			for (String path: projects) {
+				IResource project = Resources.asResource(path);
+				project.accept(new IResourceVisitor() {
+					@Override
+					public boolean visit(IResource resource) throws CoreException {
+						if (resource.getType() == IResource.FILE) {
+							for (String pattern: fileExtensions) {
+								if (Files.match(pattern, resource.getName())) result.add(Resources.asPath(resource));
+							}
+						}
+						return true;
+					}
+				});
+			}
+			return new ArrayList<String>(result);
+		}
+		
 	}
 
 }

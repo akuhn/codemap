@@ -19,7 +19,7 @@ import ch.deif.meander.MapAlgorithm;
  */
 public class DEMAlgorithm extends MapAlgorithm<float[][]> {
 
-	private static final int MAGIC_VALUE = 8*320; // TODO magic number!
+	public static final int MAGIC_VALUE = 8*320; // TODO magic number!
 	private static final double THRESHOLD = 1.0;
 	private float[][] DEM;
 	private int radius;

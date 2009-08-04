@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Map;
 
 import ch.akuhn.hapax.Hapax;
+import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.util.Pair;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.Point;
@@ -23,5 +24,7 @@ public interface MapBuilder {
 	Configuration makeMap();
 
 	Configuration makeMap(Map<String, Pair<Double, Double>> map);
+
+	MapBuilder addCorpus(LatentSemanticIndex lsi);
 
 }

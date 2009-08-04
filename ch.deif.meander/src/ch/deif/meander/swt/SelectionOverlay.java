@@ -41,11 +41,11 @@ public abstract class SelectionOverlay extends SWTLayer {
 
 	private final void paintChildren(MapInstance map, GC gc) {
 		for (Location each: selection.locationsOn(map)) {
-			paintChild(gc, each);
+			paintChild(map, gc, each);
 		}
 	}	
 	
-	public abstract void paintChild(GC gc, Location each);
+	public abstract void paintChild(MapInstance map, GC gc, Location each);
 
 
 }

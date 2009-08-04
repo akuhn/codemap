@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DragDetectEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
@@ -12,6 +13,7 @@ import org.eclipse.swt.graphics.GC;
 
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
+import ch.deif.meander.internal.DEMAlgorithm;
 
 
 public class CurrSelectionOverlay extends SelectionOverlay {
@@ -28,20 +30,6 @@ public class CurrSelectionOverlay extends SelectionOverlay {
 	private Point dragStop;
 	
 	public CurrSelectionOverlay() {}	
-
-	@Override
-	public void paintBefore(MapInstance map, GC gc) {
-		Device device = gc.getDevice();
-		Color red = new Color(device, 255, 0, 0);
-		gc.setLineWidth(POINT_STROKE);
-		gc.setForeground(red);
-		if (isDragging) {
-			updateSelection();
-			int deltaX = dragStop.x - dragStart.x;
-			int deltaY = dragStop.y - dragStart.y;
-			gc.drawRectangle(dragStart.x, dragStart.y, deltaX, deltaY);
-		}
-	}
 
 	@Override
 	public void dragDetected(DragDetectEvent e) {
@@ -72,6 +60,28 @@ public class CurrSelectionOverlay extends SelectionOverlay {
 		fireEvent(EVT_SELECTION_CHANGED, selection);
 	}
 
+	@Override
+	public void paintBefore(MapInstance map, GC gc) {
+		Device device = gc.getDevice();
+		Color red = device.getSystemColor(SWT.COLOR_LIST_SELECTION);
+		gc.setForeground(red);
+		gc.setBackground(red);
+		gc.setLineWidth(POINT_STROKE);
+		if (isDragging) {
+			updateSelection();
+			int deltaX = dragStop.x - dragStart.x;
+			int deltaY = dragStop.y - dragStart.y;
+			gc.drawRectangle(dragStart.x, dragStart.y, deltaX, deltaY);
+		}
+		gc.setAlpha(128);
+	}
+
+	@Override
+	public void paintChild(MapInstance map, GC gc, Location each) {
+		int r = (int) (each.getElevation() * 2 * map.getWidth() / DEMAlgorithm.MAGIC_VALUE);
+		gc.fillOval(each.px - r, each.py - r, r * 2, r * 2);
+	}
+
 	private void updateSelection() {
 		int minX = Math.min(dragStart.x, dragStop.x);
 		int minY = Math.min(dragStart.y, dragStop.y);
@@ -84,12 +94,6 @@ public class CurrSelectionOverlay extends SelectionOverlay {
 			}
 		}
 		getSelection().replaceWith(ids);
-	}
-
-	@Override
-	public void paintChild(GC gc, Location each) {
-		gc.drawOval(each.px - SELECTION_SIZE/2, each.py - SELECTION_SIZE/2,
-				SELECTION_SIZE, SELECTION_SIZE);
 	}
 
 }

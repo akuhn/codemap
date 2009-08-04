@@ -21,7 +21,7 @@ public class OpenFilesOverlay extends SelectionOverlay {
 	}
 
 	@Override
-	public void paintChild(GC gc, Location each) {
+	public void paintChild(MapInstance map, GC gc, Location each) {
 		gc.fillOval(each.px - SELECTION_SIZE/2, each.py - SELECTION_SIZE/2,
 				SELECTION_SIZE, SELECTION_SIZE);
 		gc.drawOval(each.px - SELECTION_SIZE/2, each.py - SELECTION_SIZE/2,

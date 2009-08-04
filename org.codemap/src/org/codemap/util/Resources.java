@@ -1,6 +1,7 @@
 package org.codemap.util;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -50,6 +51,11 @@ public class Resources {
 		IJavaElement element = Adaptables.adapt(each, IJavaElement.class);
 		if (element != null) return asPath(element);
 		return null;
+	}
+
+	public static IProject asProject(String path) {
+		IResource resource = asResource(path);
+		return resource instanceof IProject ? (IProject) resource : null;
 	}
 	
 }

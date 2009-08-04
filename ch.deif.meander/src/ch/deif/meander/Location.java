@@ -19,6 +19,16 @@ public class Location {
 	public String getDocument() {
 		return point.getDocument();
 	}
+
+	/** Returns short name of location, assuming that its full name is a filename.
+	 * 
+	 */
+	public String getName() {
+		String path = getDocument();
+		int begin = path.lastIndexOf('/');
+		int end = path.indexOf('.', begin);
+		return path.substring(begin + 1, end < 0 ? path.length() : end);
+	}
 	
 	public Location(Point point, double elevation, int px, int py) {
 		this.point = point;

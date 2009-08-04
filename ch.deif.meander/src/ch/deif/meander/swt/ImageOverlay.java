@@ -5,6 +5,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 
 import ch.deif.meander.Location;
+import ch.deif.meander.MapInstance;
 
 public class ImageOverlay extends SelectionOverlay {
 	
@@ -20,7 +21,8 @@ public class ImageOverlay extends SelectionOverlay {
 	}
 
 	@Override
-	public void paintChild(GC gc, Location each) {
+	public void paintChild(MapInstance map, GC gc, Location each) {
+		gc.setAlpha(255);
 		gc.drawImage(image, each.px - offset_x, each.py - offset_y);
 	}
 

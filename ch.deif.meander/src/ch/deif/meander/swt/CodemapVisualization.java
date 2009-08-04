@@ -8,7 +8,9 @@ import org.eclipse.swt.events.DragDetectEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
@@ -26,7 +28,7 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 
 	private boolean animate;
 	private Runnable animationLoop = makeAnimationLoop();
-	private Canvas canvas;
+	Canvas canvas;
 	private int frameRate = 25;
 	/*default*/ MapInstance map; // FIXME
 	private Background background;
@@ -77,12 +79,18 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 	@Override
 	public void paintControl(PaintEvent e) {
 		if (canvas == null) return;
-		offsetX = (canvas.getSize().x - map.getWidth()) / 2;
-		offsetY = (canvas.getSize().y - map.getWidth()) / 2;
-		Transform t = new Transform(e.gc.getDevice());
+		GC gc = e.gc;
+		Device device = gc.getDevice();
+		gc.setBackground(device.getSystemColor(SWT.COLOR_BLUE));
+		gc.fillRectangle(gc.getClipping());
+		Point bounds = canvas.getSize();
+		offsetX = (bounds.x - map.getWidth()) / 2;
+		offsetY = (bounds.y - map.getWidth()) / 2;
+		Transform t = new Transform(device);
+		gc.getTransform(t);
 		t.translate(offsetX, offsetY);
-		e.gc.setTransform(t);
-		this.paintMap(map, e.gc);
+		gc.setTransform(t);
+		this.paintMap(map, gc);
 		t.dispose();
 	}
 
@@ -216,7 +224,7 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 		if (canvas == null) return;
 		this.translate(e);
 		String name = !map.containsPoint(e.x, e.y) ? null
-				: map.get(NearestNeighborAlgorithm.class).get(e.x).get(e.y).getDocument();
+				: map.get(NearestNeighborAlgorithm.class).get(e.x).get(e.y).getName();
 		canvas.setToolTipText(name);
 		super.mouseMove(e);
 	}

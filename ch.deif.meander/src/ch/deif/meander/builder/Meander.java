@@ -30,12 +30,11 @@ public class Meander {
 
 	private static final class MeanderMapBuilder implements MapBuilder {
 		
-		private Hapax hapax = null;
+		private LatentSemanticIndex lsi = null;
 
 		@Override
 		public Configuration makeMap() {
-			if (this.hapax == null) throw new IllegalStateException();
-			LatentSemanticIndex lsi = hapax.getIndex();
+			if (this.lsi == null) throw new IllegalStateException();
 			MDS mds = MDS.fromCorrelationMatrix(lsi);
 			mds.normalize();
 			Collection<Point> locations = new ArrayList<Point>();
@@ -49,20 +48,20 @@ public class Meander {
 		
 		@Override
 		public MapBuilder addCorpus(Hapax hapax) {
-			if (this.hapax != null) throw new IllegalStateException();
-			this.hapax = hapax;
+			if (this.lsi != null) throw new IllegalStateException();
+			this.lsi = hapax.getIndex();
 			return this;
 		}
 
 		@Override
 		public Configuration makeMap(Map<String, Pair<Double, Double>> cachedPoints) {
 			// we need a hapax for later recalculations.
-			if (this.hapax == null) throw new IllegalStateException();
+			if (this.lsi == null) throw new IllegalStateException();
 			// fallback when there is no cache or cache-reload failed.
 			if (cachedPoints == null) return makeMap();
 			
 			Collection<Point> locations = new ArrayList<Point>();
-			for (String each: hapax.getIndex().documents()) {
+			for (String each: lsi.documents()) {
 				Pair<Double, Double> coordinates = cachedPoints.get(each);
 				if (coordinates == null) {
 					// cached data does not match current data, so we start from scratch.
@@ -72,6 +71,13 @@ public class Meander {
 			}
 			// no normalize here, the cached data is already normalized.
 			return new Configuration(locations);
+		}
+
+		@Override
+		public MeanderMapBuilder addCorpus(LatentSemanticIndex index) {
+			if (this.lsi != null) throw new IllegalStateException();
+			this.lsi = index;
+			return this;
 		}
 	}
 	
