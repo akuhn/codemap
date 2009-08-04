@@ -2,11 +2,11 @@
 <?eclipse version="3.4"?>
 <plugin>
     <extension
-          point="org.codemap.mapview">
+          point="org.codemap.colors">
        <toolbar
              class="org.codemap.plugin.eclemma.ShowCoverageAction"
              icon="icons/eclipse/coverage.gif"
-             text="Coverage">
+             text="Color by Coverage">
        </toolbar>
     </extension>
 

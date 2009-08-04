@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.codemap.util.Resources;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -40,7 +42,8 @@ public class CoverageListener implements IJavaCoverageListener {
 		}
 
 		private boolean visit(ICompilationUnit compilationUnit) {
-			String identifier = compilationUnit.getHandleIdentifier();
+			
+			String identifier = Resources.asPath(compilationUnit);
 			IJavaElementCoverage coverageInfo = CoverageTools.getCoverageInfo(compilationUnit);
 			if (coverageInfo == null) {
 				// for interfaces where we do not have coverage information
