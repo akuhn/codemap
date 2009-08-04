@@ -19,7 +19,9 @@ public abstract class ExtensionPointDropDownAction extends DropDownAction {
 		createExtensionMenu(menu);
 	}
 	
-	protected abstract void createDefaultMenu(Menu menu);
+	protected void createDefaultMenu(Menu menu) {
+		// add stuff if needed
+	};
 	
 	protected void createExtensionMenu(Menu menu) {
 		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CodemapCore.PLUGIN_ID, getExtensionPointName());

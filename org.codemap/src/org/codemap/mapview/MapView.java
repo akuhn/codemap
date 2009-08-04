@@ -72,6 +72,8 @@ public class MapView extends ViewPart {
 	};
 
 	public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
+
+	private static final String LINK_SELECTION_GROUP = CodemapCore.PLUGIN_ID + ".linkselection";
 	
 	private final MapController theController;
 	private MapSelectionProvider selectionProvider;
@@ -134,9 +136,14 @@ public class MapView extends ViewPart {
 	private void configureToolbar() {
 	    IToolBarManager tbm = getToolBarManager();
 	    tbm.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+	    tbm.add(new Separator(LINK_SELECTION_GROUP));
+	    
+	    tbm.appendToGroup(LINK_SELECTION_GROUP, new LinkWithSelectionAction(selectionTracker));
+	    tbm.appendToGroup(LINK_SELECTION_GROUP, new ForceSelectionAction(selectionProvider));
+   
 	    tbm.add(new Separator());
 	    tbm.add(registerAction(new ColorDropDownAction(theController)));
-	    tbm.add(registerAction(new LayerDropDownAction(selectionTracker, selectionProvider)));
+	    tbm.add(registerAction(new LayerDropDownAction()));
 	    tbm.add(registerAction(new LabelDrowDownAction()));
 	}
 
