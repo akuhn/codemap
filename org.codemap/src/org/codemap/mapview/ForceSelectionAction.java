@@ -1,17 +1,17 @@
 package org.codemap.mapview;
 
-import org.codemap.MapPerProject;
 import org.codemap.util.Icons;
+import org.eclipse.jface.action.Action;
 
-public class ForceSelectionAction extends MenuAction {
+public class ForceSelectionAction extends Action {
 	
-	public static final boolean DEFAULT_VALUE = true;
+	public static final boolean DEFAULT_CHECKED = true;
 	private MapSelectionProvider selectionProvider;
 
 	public ForceSelectionAction(MapSelectionProvider provider) {
 		super("Force Package Explorer Selection", AS_CHECK_BOX);
 		selectionProvider = provider;
-		setChecked(DEFAULT_VALUE);
+		setChecked(DEFAULT_CHECKED);
 		setImageDescriptor(Icons.getImageDescriptor(Icons.PACKAGE_HIERARCHY));
 	}
 
@@ -26,22 +26,5 @@ public class ForceSelectionAction extends MenuAction {
 		super.run();
 	    selectionProvider.setForceEnabled(isChecked());
 	}
-
-	@Override
-	public void configureAction(MapPerProject map) {
-		// TODO DEIF
-		
-	}
-
-	@Override
-	protected String getKey() {
-		// FIXME damn, we do not want them saved by mapinstance ...
-		return "";
-	}
-
-	@Override
-	protected boolean isDefaultChecked() {
-		return true;
-	}	
 
 }

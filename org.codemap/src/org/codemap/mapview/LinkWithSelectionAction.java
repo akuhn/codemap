@@ -1,15 +1,19 @@
 package org.codemap.mapview;
 
 import org.codemap.util.Icons;
+import org.eclipse.jface.action.Action;
 
-public class LinkWithSelectionAction extends MenuAction {
+public class LinkWithSelectionAction extends Action {
 
 	private SelectionTracker selectionTracker;
+	
+	// TODO remember that value when closing the view (have a look at IMemento stuff)
+	private static final boolean DEFAULT_CHECKED = true;
 
 	public LinkWithSelectionAction(SelectionTracker tracker) {
 		super("Link with Current Selection", AS_CHECK_BOX);
 		selectionTracker = tracker;
-		setChecked(isDefaultChecked());
+		setChecked(true);
 		setImageDescriptor(Icons.getImageDescriptor(Icons.LINKED));
 	}
 
@@ -25,14 +29,4 @@ public class LinkWithSelectionAction extends MenuAction {
 	    selectionTracker.setEnabled(isChecked());
 	}
 
-	@Override
-	protected String getKey() {
-		// FIXME damn, we do not want them saved by mapinstance ...		
-		return "link_with_selection";
-	}
-
-	@Override
-	protected boolean isDefaultChecked() {
-		return true;
-	}
 }

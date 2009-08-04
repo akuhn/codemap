@@ -35,7 +35,7 @@ public class MapSelectionProvider implements ISelectionProvider {
 	private List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
 	private ISelection selection = StructuredSelection.EMPTY;
 	private MapView view;
-	private boolean forceToPackageExplorer = ForceSelectionAction.DEFAULT_VALUE;
+	private boolean forceToPackageExplorer = ForceSelectionAction.DEFAULT_CHECKED;
 
 	public MapSelectionProvider(MapView mapView) {
 		this.view = mapView;
