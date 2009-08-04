@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.codemap.CodemapCore;
 import org.codemap.util.Adaptables;
 import org.codemap.util.Log;
 import org.eclipse.core.runtime.CoreException;
@@ -14,12 +15,10 @@ import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchPartReference;
-
 
 public class SelectionTracker {
 	
@@ -42,87 +41,16 @@ public class SelectionTracker {
 		}
 	};
 	
-	/**
-	 * Tracks the editor-selection.
-	 */
-	private IPartListener2 partListener =  new IPartListener2() {
-		
-		/*
-		 * (non-Javadoc)
-		 * @see org.eclipse.ui.IPartListener2#partVisible(org.eclipse.ui.IWorkbenchPartReference)
-		 * 
-		 * For tab-bars being visible means that a given tab is selected. Not
-		 * selected tabs that are shown in the bar are not considered visible. 
-		 */
-		@Override
-		public void partVisible(IWorkbenchPartReference partRef) {
-			// do nothing
-		}
-		
-		/*
-		 * (non-Javadoc)
-		 * @see org.eclipse.ui.IPartListener2#partHidden(org.eclipse.ui.IWorkbenchPartReference)
-		 * 
-		 * Fired whenever a *visible* part changes its visibility from visible to hidden
-		 */
-		@Override
-		public void partHidden(IWorkbenchPartReference partRef) {
-			// do nothing
-		}
-
-		@Override
-		public void partDeactivated(IWorkbenchPartReference partRef) {
-			// do nothing
-		}
-		
-		@Override
-		public void partBroughtToTop(IWorkbenchPartReference partRef) {
-			// do nothing
-		}
-		
-		/*
-		 * (non-Javadoc)
-		 * @see org.eclipse.ui.IPartListener2#partOpened(org.eclipse.ui.IWorkbenchPartReference)
-		 * 
-		 * Fired when a new editor is opened or when an inactive editor is accessed for the
-		 * first time (e.g. tab-selection changes the first time to some element).
-		 */
-		@Override
-		public void partOpened(IWorkbenchPartReference partRef) {
-			theController.onEditorOpened(new EditorEvent(partRef));
-		}
-		
-		@Override
-		public void partClosed(IWorkbenchPartReference partRef) {
-			theController.onEditorClosed(new EditorEvent(partRef));
-		}
-		
-		@Override
-		public void partInputChanged(IWorkbenchPartReference partRef) {
-			editorSelectionChanged(partRef);
-		}
-		
-		/*
-		 * (non-Javadoc)
-		 * @see org.eclipse.ui.IPartListener2#partActivated(org.eclipse.ui.IWorkbenchPartReference)
-		 * 
-		 * Fired when a new editor is opened or when the editor-tab selection changes.
-		 */
-		@Override
-		public void partActivated(IWorkbenchPartReference partRef) {
-			editorSelectionChanged(partRef);
-		}
-		
-		private void editorSelectionChanged(IWorkbenchPartReference partRef) {
-			theController.onEditorActivated(new EditorEvent(partRef));
-		}
-	};
-	
 	private boolean enabled = LinkWithSelectionAction.DEFAULT_VALUE;
-	MapController theController;	
+	MapController theController;
+
+	private IPartListener partListener;	
 	
 	public SelectionTracker(MapController controller) {
 		theController = controller;
+		partListener = new EditorPartListener(
+				CodemapCore.getPlugin().getOpenFilesSelection(),
+				CodemapCore.getPlugin().getYouAreHereSelection()); 
 		addListeners();
 	}
 
