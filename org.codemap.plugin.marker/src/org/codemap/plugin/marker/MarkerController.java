@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.codemap.CodemapCore;
 import org.codemap.util.Log;
+import org.codemap.util.Resources;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.resources.IResource;
@@ -15,8 +16,6 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.JavaCore;
 
 import ch.deif.meander.MapSelection;
 
@@ -114,9 +113,7 @@ public class MarkerController {
 	private Collection<String> collectIdentifiers(IMarker[] markers) {
 		List<String> identifiers = new ArrayList<String>();
 		for(IMarker each: markers) {
-			IJavaElement javaElement = JavaCore.create(each.getResource());
-			if (javaElement == null) continue;
-			identifiers.add(javaElement.getHandleIdentifier());
+			identifiers.add(Resources.asPath(each.getResource()));
 		}
 		return identifiers;
 	}	
@@ -124,9 +121,7 @@ public class MarkerController {
 	private void removeMarker(IMarker marker) {
 		if (! isActive()) return;
 		
-		IJavaElement javaElement = JavaCore.create(marker.getResource());
-		if (javaElement == null) return;
-		String identifier = javaElement.getHandleIdentifier();
+		String identifier = Resources.asPath(marker.getResource());
 		getMarkerSelection().remove(identifier);
 		issueRedraw();
 	}
@@ -134,9 +129,7 @@ public class MarkerController {
 	private void addMarker(IMarker marker) {
 		if (! isActive()) return;
 		
-		IJavaElement javaElement = JavaCore.create(marker.getResource());
-		if (javaElement == null) return;
-		String identifier = javaElement.getHandleIdentifier();
+		String identifier = Resources.asPath(marker.getResource());
 		getMarkerSelection().add(identifier);
 		issueRedraw();
 	}
