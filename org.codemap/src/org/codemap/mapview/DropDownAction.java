@@ -12,16 +12,17 @@ import org.eclipse.swt.widgets.Menu;
 public abstract class DropDownAction extends CodemapAction implements IMenuCreator {
 	
 	private Menu menu;
-	private List<CodemapAction> actions = new ArrayList<CodemapAction>();
+	private List<MenuAction> actions = new ArrayList<MenuAction>();
 	
 	@Override
 	public void configureAction(MapPerProject map) {
-		for(CodemapAction each: actions) {
+		for(MenuAction each: actions) {
 			each.configureAction(map);
 		}
 	}
 
 	public DropDownAction() {
+		super("", AS_DROP_DOWN_MENU);
 		setMenuCreator(this);
 		setup();
 	}
@@ -46,7 +47,7 @@ public abstract class DropDownAction extends CodemapAction implements IMenuCreat
 		return null;
 	}
 	
-    protected void addActionToMenu(Menu parent, CodemapAction action) {
+    protected void addActionToMenu(Menu parent, MenuAction action) {
     	actions.add(action);
         ActionContributionItem item = new ActionContributionItem(action);
         item.fill(parent, -1);

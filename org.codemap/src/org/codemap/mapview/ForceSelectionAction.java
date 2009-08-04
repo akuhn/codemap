@@ -3,7 +3,7 @@ package org.codemap.mapview;
 import org.codemap.MapPerProject;
 import org.codemap.util.Icons;
 
-public class ForceSelectionAction extends CodemapAction {
+public class ForceSelectionAction extends MenuAction {
 	
 	public static final boolean DEFAULT_VALUE = true;
 	private MapSelectionProvider selectionProvider;
@@ -23,13 +23,25 @@ public class ForceSelectionAction extends CodemapAction {
 
 	@Override
 	public void run() {
+		super.run();
 	    selectionProvider.setForceEnabled(isChecked());
 	}
 
 	@Override
 	public void configureAction(MapPerProject map) {
-		// TODO Auto-generated method stub
+		// TODO DEIF
 		
+	}
+
+	@Override
+	protected String getKey() {
+		// FIXME damn, we do not want them saved by mapinstance ...
+		return "";
+	}
+
+	@Override
+	protected boolean isDefaultChecked() {
+		return true;
 	}	
 
 }

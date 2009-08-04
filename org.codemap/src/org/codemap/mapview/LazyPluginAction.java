@@ -1,15 +1,13 @@
 package org.codemap.mapview;
 
-import org.codemap.MapPerProject;
 import org.codemap.util.Log;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 
-public class LazyPluginAction extends CodemapAction {
+public class LazyPluginAction extends MenuAction {
 	
 	private static final String ATT_TEXT = "text";
 	private static final String ATT_ICON = "icon";
@@ -17,6 +15,7 @@ public class LazyPluginAction extends CodemapAction {
 
 	private IConfigurationElement configElement;
 	private ICodemapPluginAction pluginAction;
+	private String key;
 
 	public LazyPluginAction(IConfigurationElement elem, int style) {
 		super("", style); // lol, we can't set the style value some other way ...
@@ -32,8 +31,8 @@ public class LazyPluginAction extends CodemapAction {
 	private ImageDescriptor iconFromConfig() {
 		String iconPath = configElement.getAttribute(ATT_ICON);
 		IExtension extension = configElement.getDeclaringExtension();
-		String pluginId = extension.getNamespaceIdentifier();
-		return AbstractUIPlugin.imageDescriptorFromPlugin(pluginId, iconPath);
+		key = extension.getNamespaceIdentifier();
+		return AbstractUIPlugin.imageDescriptorFromPlugin(key, iconPath);
 	}
 
 	private String textFromConfig() {
@@ -42,6 +41,7 @@ public class LazyPluginAction extends CodemapAction {
 
 	@Override
 	public void run() {
+		super.run();		
 		ICodemapPluginAction action = getAction();
 		if (action == null) return;
 		
@@ -64,7 +64,12 @@ public class LazyPluginAction extends CodemapAction {
 	}
 
 	@Override
-	public void configureAction(MapPerProject map) {
-		// TODO Auto-generated method stub
+	protected String getKey() {
+		return key;
+	}
+
+	@Override
+	protected boolean isDefaultChecked() {
+		return false;
 	}
 }

@@ -24,7 +24,7 @@ public class ColorDropDownAction extends ExtensionPointDropDownAction {
 	}
 
 	@Override
-	protected String getPointName() {
+	protected String getExtensionPointName() {
 		return "colors";
 	}
 

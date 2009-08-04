@@ -42,7 +42,7 @@ import ch.deif.meander.util.MColor;
 
 public class MapView extends ViewPart {
 	
-	private List<CodemapAction> actions = new ArrayList<CodemapAction>();
+	private List<DropDownAction> actions = new ArrayList<DropDownAction>();
 	
 	private CodemapListener codemapListener = new CodemapListener() {
 		@Override
@@ -174,7 +174,7 @@ public class MapView extends ViewPart {
 	}
 
 	private void configureActions(MapPerProject activeMap) {
-		for (CodemapAction each: actions) {
+		for (DropDownAction each: actions) {
 			each.configureAction(activeMap);
 		}
 	}

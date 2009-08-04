@@ -22,7 +22,7 @@ public abstract class ExtensionPointDropDownAction extends DropDownAction {
 	protected abstract void createDefaultMenu(Menu menu);
 	
 	protected void createExtensionMenu(Menu menu) {
-		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CodemapCore.PLUGIN_ID, getPointName());
+		IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CodemapCore.PLUGIN_ID, getExtensionPointName());
 		IExtension[] extensions_arr = extensionPoint.getExtensions();
 		List<IExtension> extensions = Arrays.asList(extensions_arr);
 		for (IExtension extension: extensions) {
@@ -30,7 +30,7 @@ public abstract class ExtensionPointDropDownAction extends DropDownAction {
 		}
 	}
 
-	protected abstract String getPointName();
+	protected abstract String getExtensionPointName();
 	
 	private void parseConfig(IConfigurationElement[] configurationElements, Menu menu) {
 		List<IConfigurationElement> configelems = Arrays.asList(configurationElements);

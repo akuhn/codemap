@@ -41,7 +41,7 @@ public class SelectionTracker {
 		}
 	};
 	
-	private boolean enabled = LinkWithSelectionAction.DEFAULT_VALUE;
+	private boolean enabled;
 	MapController theController;
 
 	private IPartListener partListener;	

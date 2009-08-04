@@ -17,27 +17,25 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageDeclaration;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jface.action.Action;
 
 import ch.deif.meander.Point;
 import ch.deif.meander.util.MColor;
 
-public class ShowPackageColorsAction extends CodemapAction {
+public class ShowPackageColorsAction extends MenuAction {
 	
-	private static final boolean DEFAULT_VALUE = false;
-	private static final String KEY = "show_package_colors";
 	private final MapController theController;
 
 	public ShowPackageColorsAction(MapController controller, int style) {
 		super("Color by Package", style);
 		this.theController = controller;
-		setChecked(DEFAULT_VALUE);
+		setChecked(isDefaultChecked());
 		setImageDescriptor(Icons.getImageDescriptor(PACKAGES));
 	}
 
 	@Override
 	public void run() {
-		CodemapCore.getPlugin().getActiveMap().setProperty(KEY, isChecked());		
+		super.run();
+		
 		if (isChecked()) {
 			enable();
 		} else {
@@ -91,8 +89,13 @@ public class ShowPackageColorsAction extends CodemapAction {
 	}
 
 	@Override
-	public void configureAction(MapPerProject map) {
-		setChecked(map.getPropertyOrDefault(KEY, DEFAULT_VALUE));
+	protected String getKey() {
+		return "show_package_colors";
+	}
+
+	@Override
+	protected boolean isDefaultChecked() {
+		return false;
 	}
 	
 

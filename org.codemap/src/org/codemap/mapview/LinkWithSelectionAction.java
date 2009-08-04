@@ -1,36 +1,38 @@
 package org.codemap.mapview;
 
-import org.codemap.MapPerProject;
 import org.codemap.util.Icons;
-import org.eclipse.jface.action.Action;
 
+public class LinkWithSelectionAction extends MenuAction {
 
-public class LinkWithSelectionAction extends CodemapAction {
-
-	public static final boolean DEFAULT_VALUE = true;
 	private SelectionTracker selectionTracker;
 
 	public LinkWithSelectionAction(SelectionTracker tracker) {
 		super("Link with Current Selection", AS_CHECK_BOX);
 		selectionTracker = tracker;
-		setChecked(DEFAULT_VALUE);
+		setChecked(isDefaultChecked());
 		setImageDescriptor(Icons.getImageDescriptor(Icons.LINKED));
 	}
 
 	@Override
 	public void setChecked(boolean checked) {
-		super.setChecked(checked);
 		selectionTracker.setEnabled(checked);
+		super.setChecked(checked);
 	}
 
 	@Override
 	public void run() {
+		super.run();		
 	    selectionTracker.setEnabled(isChecked());
 	}
 
 	@Override
-	public void configureAction(MapPerProject map) {
-		// TODO Auto-generated method stub
-		
+	protected String getKey() {
+		// FIXME damn, we do not want them saved by mapinstance ...		
+		return "link_with_selection";
+	}
+
+	@Override
+	protected boolean isDefaultChecked() {
+		return true;
 	}
 }

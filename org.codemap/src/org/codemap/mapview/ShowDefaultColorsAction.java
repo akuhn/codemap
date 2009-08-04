@@ -3,13 +3,11 @@ package org.codemap.mapview;
 import static org.codemap.util.Icons.GREEN_CIRCLE;
 
 import org.codemap.CodemapCore;
-import org.codemap.MapPerProject;
 import org.codemap.util.Icons;
 
-public class ShowDefaultColorsAction extends CodemapAction {
+public class ShowDefaultColorsAction extends MenuAction {
 	
 	private static final boolean DEFAULT_VALUE = true;
-	private static final String KEY = "show_default_colors";
 
 	public ShowDefaultColorsAction(int style) {
 		super("Show default colors", style);
@@ -19,7 +17,7 @@ public class ShowDefaultColorsAction extends CodemapAction {
 	
 	@Override
 	public void run() {
-		CodemapCore.getPlugin().getActiveMap().setProperty(KEY, isChecked());
+		super.run();
 		if (!isChecked()) return;
 		enable();
 	}
@@ -31,8 +29,13 @@ public class ShowDefaultColorsAction extends CodemapAction {
 	}
 
 	@Override
-	public void configureAction(MapPerProject map) {
-		setChecked(map.getPropertyOrDefault(KEY, DEFAULT_VALUE));
+	protected String getKey() {
+		return "show_default_colors";
+	}
+
+	@Override
+	protected boolean isDefaultChecked() {
+		return true;
 	}	
 
 }

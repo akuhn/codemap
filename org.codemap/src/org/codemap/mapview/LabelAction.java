@@ -7,7 +7,7 @@ import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
 import org.eclipse.jface.action.IAction;
 
-class LabelAction extends CodemapAction {
+abstract class LabelAction extends MenuAction {
 	
 	public LabelAction(String text) {
 		super(text, IAction.AS_RADIO_BUTTON);
@@ -25,9 +25,15 @@ class LabelAction extends CodemapAction {
 
 		@Override
 		public void run() {
+			super.run();			
 			if (!isChecked()) return;
 			getCore().getLabelScheme().useNoLabels();
 			getCore().redrawCodemap();
+		}
+
+		@Override
+		protected String getKey() {
+			return "no_labels";
 		}
 	}
 	
@@ -40,10 +46,22 @@ class LabelAction extends CodemapAction {
 
 		@Override
 		public void run() {
+			super.run();			
 			if (!isChecked()) return;
 			getCore().getLabelScheme().useIdentifierLabels();
 			getCore().redrawCodemap();
 		}
+
+		@Override
+		protected String getKey() {
+			return "identifier_labels";
+		}
+
+		@Override
+		protected boolean isDefaultChecked() {
+			return true;
+		}
+		
 	}
 	
 	public static class LogLHLabelAction extends LabelAction {
@@ -54,14 +72,19 @@ class LabelAction extends CodemapAction {
 
 		@Override
 		public void run() {
+			super.run();
 			if (!isChecked()) return;			
 			System.out.println("show LogLH labels");
+		}
+
+		@Override
+		protected String getKey() {
+			return "log_lh_labels";
 		}
 	}
 
 	@Override
-	public void configureAction(MapPerProject map) {
-		// TODO Auto-generated method stub
-		
+	protected boolean isDefaultChecked() {
+		return false;
 	}
 }
