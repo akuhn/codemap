@@ -34,6 +34,7 @@ import ch.deif.meander.Point;
 import ch.deif.meander.builder.Meander;
 import ch.deif.meander.swt.Background;
 import ch.deif.meander.swt.CodemapVisualization;
+import ch.deif.meander.swt.CompositeLayer;
 import ch.deif.meander.swt.CurrSelectionOverlay;
 import ch.deif.meander.swt.ImageOverlay;
 import ch.deif.meander.swt.SWTLayer;
@@ -49,6 +50,7 @@ public class MapPerProject {
 	private Map<String,String> properties = new HashMap<String,String>();
 	private CodemapColors colorScheme = new CodemapColors();
 	private CodemapLabels labelScheme = new CodemapLabels();
+	private CompositeLayer sharedLayer = new CompositeLayer();
 	
 	private static final String POINT_NODE_ID = CodemapCore.PLUGIN_ID + ".points"; 
 	private static final int MINIMAL_SIZE = 300;
@@ -176,7 +178,7 @@ public class MapPerProject {
 				   .withSelection(new CurrSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
 				   .withSelection(new ImageOverlay(Icons.getImage(Icons.JAVA_FILE)), CodemapCore.getPlugin().getOpenFilesSelection())
 				   .withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())				   
-				   .withLayer(CodemapCore.getPlugin().getSharedLayer())
+				   .withLayer(sharedLayer)
 				   .makeLayer();
 			monitor.worked(5);	
 		} else {
@@ -278,5 +280,13 @@ public class MapPerProject {
 	public void setProperty(String key, boolean checked) {
 		properties.put(key, Boolean.toString(checked));
 	}
+	
+	public void addLayer(SWTLayer layer) {
+		sharedLayer.add(layer);
+	}
+
+	public void removeLayer(SWTLayer layer) {
+		sharedLayer.remove(layer);
+	}	
 	
 }

@@ -7,13 +7,11 @@ import java.util.Map;
 import org.codemap.mapview.MapView;
 import org.codemap.util.CodemapColors;
 import org.codemap.util.CodemapLabels;
-import org.codemap.util.SharedCodemapLayer;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import ch.deif.meander.MapSelection;
-import ch.deif.meander.swt.SWTLayer;
 
 /**
  * Single instance of the running Codemap plug-in.
@@ -37,9 +35,6 @@ public class CodemapCore extends AbstractUIPlugin {
 	private final MapSelection openFilesSelection;
 	private final MapSelection currentSelection;
 
-	private SharedCodemapLayer sharedLayer;
-	
-
 	public MapSelection getYouAreHereSelection() {
 		return youAreHereSelection;
 	}
@@ -57,7 +52,6 @@ public class CodemapCore extends AbstractUIPlugin {
 		youAreHereSelection = new MapSelection();
 		openFilesSelection = new MapSelection();	
 		currentSelection = new MapSelection();
-		sharedLayer = new SharedCodemapLayer();
 	}
 	
 	@Override
@@ -124,24 +118,6 @@ public class CodemapCore extends AbstractUIPlugin {
 	public void redrawCodemapBackground() {
 		getMapView().redrawCodemapBackground();
 		getMapView().redrawAsync();
-	}
-	
-	/**
-	 * Add a shared layer to Codmap. This layer is shared by all 
-	 * Mapinstances.
-	 * 
-	 * @param layer
-	 */
-	public void addLayer(SWTLayer layer) {
-		sharedLayer.add(layer);
-	}
-
-	public void removeLayer(SWTLayer layer) {
-		sharedLayer.remove(layer);
-	}
-
-	SWTLayer getSharedLayer() {
-		return sharedLayer;
 	}
 	
 }
