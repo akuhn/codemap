@@ -49,7 +49,7 @@ public class ShowPackageColorsAction extends MenuAction {
 	}
 
 	private CodemapColors getColorScheme() {
-		return CodemapCore.getPlugin().getColorScheme();
+		return CodemapCore.getPlugin().getActiveMap().getColorScheme();
 	}
 
 	private void enable() {

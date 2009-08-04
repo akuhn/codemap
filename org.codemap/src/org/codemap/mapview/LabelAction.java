@@ -27,7 +27,7 @@ abstract class LabelAction extends MenuAction {
 		public void run() {
 			super.run();
 			if (!isChecked()) return;
-			getCore().getLabelScheme().useNoLabels();
+			getCore().getActiveMap().getLabelScheme().useNoLabels();
 			getCore().redrawCodemap();
 		}
 
@@ -47,7 +47,7 @@ abstract class LabelAction extends MenuAction {
 		public void run() {
 			super.run();
 			if (!isChecked()) return;
-			getCore().getLabelScheme().useIdentifierLabels();
+			getCore().getActiveMap().getLabelScheme().useIdentifierLabels();
 			getCore().redrawCodemap();
 		}
 

@@ -24,7 +24,7 @@ public class ShowDefaultColorsAction extends MenuAction {
 
 	private void enable() {
 		CodemapCore core = CodemapCore.getPlugin();
-		core.getColorScheme().clearColors();
+		core.getActiveMap().getColorScheme().clearColors();
 		core.redrawCodemapBackground();
 	}
 

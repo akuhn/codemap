@@ -97,15 +97,7 @@ public class CodemapCore extends AbstractUIPlugin {
 	public MapView getMapView() {
 		return theView;
 	}
-	
-	public CodemapLabels getLabelScheme() {
-		return getActiveMap().getLabelScheme();
-	}
 
-	public CodemapColors getColorScheme() {
-		return getActiveMap().getColorScheme();
-	}
-	
 	public MapPerProject getActiveMap() {
 		return mapForProject(theView.getCurrentProject());
 	}
