@@ -16,5 +16,5 @@ public class LabelDrowDownAction extends DropDownAction {
 		addActionToMenu(menu, new LabelAction.IdentifierLabelAction());
 		addActionToMenu(menu, new LabelAction.NoLabelAction());
 	}
-
+	
 }

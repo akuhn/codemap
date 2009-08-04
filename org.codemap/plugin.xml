@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="mapview" name="mapview" schema="schema/mapview.exsd"/>
+   <extension-point id="colors" name="colors" schema="schema/colors.exsd"/>
    <extension
          id="HapaxBuilder"
          name="Hapax Builder"

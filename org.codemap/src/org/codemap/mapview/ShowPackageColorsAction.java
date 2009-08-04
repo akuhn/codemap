@@ -27,8 +27,8 @@ public class ShowPackageColorsAction extends Action {
 	private static final boolean DEFAULT_VALUE = false;
 	private final MapController theController;
 
-	public ShowPackageColorsAction(MapController controller) {
-		super("Color by Package", AS_CHECK_BOX);
+	public ShowPackageColorsAction(MapController controller, int style) {
+		super("Color by Package", style);
 		this.theController = controller;
 		setChecked(DEFAULT_VALUE);
 		setImageDescriptor(Icons.getImageDescriptor(PACKAGES));
@@ -41,11 +41,15 @@ public class ShowPackageColorsAction extends Action {
 		} else {
 			disable();
 		}
-		
 	}
 
 	private void disable() {
-		// TODO Auto-generated method stub
+		getColorScheme().clearColors();
+		redraw();
+	}
+
+	private CodemapColors getColorScheme() {
+		return CodemapCore.getPlugin().getColorScheme();
 		
 	}
 
@@ -53,14 +57,14 @@ public class ShowPackageColorsAction extends Action {
 		MapPerProject mapForProject = CodemapCore.getPlugin().mapForProject(theController.getCurrentProject());
 		
 		ColorBrewer brewer = new ColorBrewer();
-		CodemapColors colorScheme = CodemapCore.getPlugin().getColorScheme();
+		CodemapColors colorScheme = getColorScheme();
 		
 		for(Point each: mapForProject.getConfiguration().points()) {
 //			System.out.println(each.getDocument());
 			
-			String name = each.getDocument();
+			String fileName = each.getDocument();
 			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-			IResource resource = root.findMember(new Path(name));
+			IResource resource = root.findMember(new Path(fileName));
 			IJavaElement create = JavaCore.create(resource);
 			
 			if (!(create instanceof ICompilationUnit)) return;
@@ -72,12 +76,16 @@ public class ShowPackageColorsAction extends Action {
 				IPackageDeclaration pack = packageDeclarations[0];
 				String packageName = pack.getElementName();
 				MColor color = brewer.forPackage(packageName);
-				colorScheme.setColor(each.getDocument(), color);
+				colorScheme.setColor(fileName, color);
 
 			} catch (JavaModelException e) {
 				Log.error(e);
 			}
 		}
+		redraw();
+	}
+
+	private void redraw() {
 		CodemapCore.getPlugin().redrawCodemapBackground();
 	}
 	

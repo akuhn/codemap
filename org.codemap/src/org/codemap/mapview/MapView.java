@@ -130,7 +130,8 @@ public class MapView extends ViewPart {
 	    IToolBarManager tbm = getToolBarManager();
 	    tbm.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	    tbm.add(new Separator());
-	    tbm.add(new LayerDropDownAction(selectionTracker, selectionProvider, theController));
+	    tbm.add(new ColorDropDownAction(theController));
+	    tbm.add(new LayerDropDownAction(selectionTracker, selectionProvider));
 	    tbm.add(new LabelDrowDownAction());
 	}
 

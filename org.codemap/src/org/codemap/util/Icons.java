@@ -17,7 +17,9 @@ public class Icons {
 	public static final String LABELS = DIR_PREFIX + "labels.gif";
 	public static final String PACKAGE_HIERARCHY = DIR_PREFIX + "package_hierarchy.gif";
 	public static final String PACKAGES = DIR_PREFIX + "packages.gif";	
-	public static final String JAVA_FILE = DIR_PREFIX + "java_file.gif";	
+	public static final String JAVA_FILE = DIR_PREFIX + "java_file.gif";
+	public static final String PALETTE = DIR_PREFIX + "palette.gif";		
+	public static final String GREEN_CIRCLE = DIR_PREFIX + "green_circle.gif";	
 
 	public static ImageDescriptor getImageDescriptor(String key) {
 		return loadImage(key).getDescriptor(key);

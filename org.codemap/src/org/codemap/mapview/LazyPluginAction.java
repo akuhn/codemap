@@ -17,8 +17,8 @@ public class LazyPluginAction extends Action {
 	private IConfigurationElement configElement;
 	private ICodemapPluginAction pluginAction;
 
-	public LazyPluginAction(IConfigurationElement elem) {
-		super("", AS_CHECK_BOX); // lol, we can't set the style value some other way ...
+	public LazyPluginAction(IConfigurationElement elem, int style) {
+		super("", style); // lol, we can't set the style value some other way ...
 		configElement = elem;
 		initFromConfigElement();
 	}
