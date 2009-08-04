@@ -1,6 +1,10 @@
 package org.codemap.plugin.marker;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.codemap.CodemapCore;
+import org.codemap.MapPerProject;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -25,9 +29,9 @@ public class MarkerPluginCore extends AbstractUIPlugin {
 	
 	public static final String PLUGIN_ID = "org.codemap.plugin.marker";
 	private static MarkerPluginCore plugin;
-	private MapSelection markerSelection;
-	private MarkersOverlay markersOverlay;
 	private MarkerController markerController;
+	
+	private Map<MapPerProject, MapSelection> selectionCache = new HashMap<MapPerProject, MapSelection>();
 	
 	/*
 	 * (non-Javadoc)
@@ -36,11 +40,7 @@ public class MarkerPluginCore extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		markerSelection = new MapSelection();
-		markersOverlay = new MarkersOverlay();
-		markersOverlay.setSelection(markerSelection);
-		markerController = new MarkerController(markerSelection);
-		CodemapCore.getPlugin().addLayer(markersOverlay);	
+		markerController = new MarkerController();
 	}
 
 	/*
@@ -52,9 +52,7 @@ public class MarkerPluginCore extends AbstractUIPlugin {
 			markerController.destroy();
 			markerController = null;
 		}
-		CodemapCore.getPlugin().removeLayer(markersOverlay);
-		markersOverlay = null;
-		markerSelection = null;
+//		CodemapCore.getPlugin().removeLayer(markersOverlay);
 		plugin = null;
 		super.stop(context);
 	}
@@ -70,5 +68,19 @@ public class MarkerPluginCore extends AbstractUIPlugin {
 	
 	public MarkerController getController() {
 		return markerController;
+	}
+
+	public MapSelection getCurrentMarkerSelection() {
+		MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
+		MapSelection mapSelection = selectionCache.get(activeMap);
+		if (mapSelection == null) {
+			mapSelection = new MapSelection();
+			MarkersOverlay markersOverlay = new MarkersOverlay();
+			markersOverlay.setSelection(mapSelection);
+			activeMap.addLayer(markersOverlay);
+			
+			selectionCache.put(activeMap, mapSelection);
+		}
+		return mapSelection;
 	}
 }

@@ -67,11 +67,9 @@ public class MarkerController {
 		}
 	};
 	
-	private final MapSelection markerSelection;
 	private ShowMarkersAction showMarkersAction;
 	
-	public MarkerController(MapSelection selection) {
-		markerSelection = selection;
+	public MarkerController() {
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener);
 	}
 
@@ -190,7 +188,7 @@ public class MarkerController {
 	}	
 	
 	private void loadAllMarkers() {
-		 loadMarkers(ResourcesPlugin.getWorkspace().getRoot());
+		loadMarkers(CodemapCore.getPlugin().getActiveMap().getProject());
 	}
 
 	public void onLayerDeactivated() {
@@ -203,7 +201,7 @@ public class MarkerController {
 	}	
 
 	private MapSelection getMarkerSelection() {
-		return markerSelection;
+		return MarkerPluginCore.getPlugin().getCurrentMarkerSelection();
 	}
 
 	private void issueRedraw() {
