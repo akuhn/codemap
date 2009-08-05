@@ -14,6 +14,6 @@ Bundle-ClassPath: .,
  lib/snowball.jar,
  lib/svdlib-r50M.jar,
  lib/chunks-r8MP.jar
-Require-Bundle: org.codemap.util
+Require-Bundle: ch.akuhn.util;bundle-version="2.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 

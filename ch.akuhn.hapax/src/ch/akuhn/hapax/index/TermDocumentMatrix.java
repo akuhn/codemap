@@ -69,7 +69,8 @@ public class TermDocumentMatrix extends Corpus {
     }
 
     public LatentSemanticIndex createIndex(int dimensions) {
-        return new LatentSemanticIndex(terms, documents, globalWeightings, new SVD(matrix, dimensions));
+        return new LatentSemanticIndex(terms, documents, globalWeightings, 
+                new SVD(matrix, dimensions));
     }
 
     public double density() {

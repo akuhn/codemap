@@ -345,6 +345,14 @@ public class SVD {
      */
 	public SVD withoutV(int doc) {
 		return new SVD(s, U, remove(V, doc));
-	}	
+	}
+
+    public double lengthV(int index) {
+        double sum = 0;
+        for (int k = 0; k < s.length; k++) {
+            sum += V[index][k] * V[index][k] * s[k];
+        }
+        return Math.sqrt(sum);
+    }	
 	
 }
