@@ -57,14 +57,9 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 		if (canvas == newCanvas) return;
 		final Canvas oldCanvas = canvas;
 		canvas = newCanvas;	
-		Display.getDefault().asyncExec(new Runnable(){
-			@Override
-			public void run() {
-				linkInternal(newCanvas);
-				unlinkInternal(oldCanvas);
-				canvas.redraw();
-			}
-		});
+		linkInternal(newCanvas);
+		unlinkInternal(oldCanvas);
+		canvas.redraw();
 	}
 	
 	private void linkInternal(Canvas newCanvas) {
@@ -79,18 +74,23 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 	@Override
 	public void paintControl(PaintEvent e) {
 		if (canvas == null) return;
-		GC gc = e.gc;
-		Device device = gc.getDevice();
-		gc.setBackground(device.getSystemColor(SWT.COLOR_BLUE));
-		gc.fillRectangle(gc.getClipping());
-		Point bounds = canvas.getSize();
-		offsetX = (bounds.x - map.getWidth()) / 2;
-		offsetY = (bounds.y - map.getWidth()) / 2;
-		Transform t = new Transform(device);
-		t.translate(offsetX, offsetY);
-		gc.setTransform(t);
-		this.paintMap(map, gc);
-		t.dispose();
+		try {
+			GC gc = e.gc;
+			Device device = gc.getDevice();
+			gc.setBackground(device.getSystemColor(SWT.COLOR_BLUE));
+			gc.fillRectangle(gc.getClipping());
+			Point bounds = canvas.getSize();
+			offsetX = (bounds.x - map.getWidth()) / 2;
+			offsetY = (bounds.y - map.getWidth()) / 2;
+			Transform t = new Transform(device);
+			t.translate(offsetX, offsetY);
+			gc.setTransform(t);
+			this.paintMap(map, gc);
+			t.dispose();
+		}
+		catch (Throwable ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 		return (CodemapVisualization) super.add(layer);
 	}
 	
-	public CodemapVisualization add(Background bg) {
+	public CodemapVisualization addBackground(Background bg) {
 		background = bg;
 		background.setRoot(getRoot());
 		return this;
@@ -200,7 +200,6 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 				unlinkInternal(canvas);
 			}
 		});
-		canvas = null;
 	}	
 	
 	private void unlinkInternal(Canvas linkedCanvas) {
@@ -285,6 +284,10 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 
 	public int getSize() {
 		return map.getWidth();
+	}
+
+	public MapInstance getMapInstance() {
+		return map;
 	}
 	
 }

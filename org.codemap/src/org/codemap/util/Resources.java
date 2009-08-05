@@ -58,8 +58,4 @@ public class Resources {
 		return resource instanceof IProject ? (IProject) resource : null;
 	}
 
-	public static double getFilesize(String path) {
-		return new Path(path).toFile().length();
-	}
-
 }

@@ -40,7 +40,7 @@ public class MapController {
 		if (currentProject == javaProject) return;
 		// TODO show 'Create map...' button of there is not default.map
 		currentProject = javaProject;
-		view.updateVisualization();
+		view.newProjectSelected();
 	}
 	
 	public void onSelectionChanged(Collection<ICompilationUnit> units) {

@@ -5,7 +5,7 @@ Bundle-SymbolicName: ch.deif.meander
 Bundle-Version: 0.7.671.qualifier
 Bundle-Vendor: David Erni and Adrian Kuhn
 Require-Bundle: 
- org.codemap.util,
+ ch.akuhn.util;bundle-version="2.1.0",
  ch.akuhn.hapax,
  org.eclipse.swt;bundle-version="3.4.0"
 Export-Package: 

@@ -171,10 +171,12 @@ public class MapView extends ViewPart {
 		container.setFocus();
 	}
 
-	public void updateVisualization() {
+	public void newProjectSelected() {
 		MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
 		configureActions(activeMap);
-		CodemapVisualization viz = activeMap.updateSize(getCurrentSize()).getVisualization();
+		CodemapVisualization viz = activeMap
+				.updateSize(currentSize)
+				.getVisualization();
 		if (viz == null) return;
 		updateMapVisualization(viz);
 	}
@@ -185,11 +187,7 @@ public class MapView extends ViewPart {
 		}
 	}
 
-	private int getCurrentSize() {
-		return currentSize; 
-	}
-
-	public void updateMapVisualization(CodemapVisualization viz) {
+	private void updateMapVisualization(CodemapVisualization viz) {
 		if (currentViz != null) {
 			currentViz.unlink();
 			currentViz.removeListener(codemapListener);
@@ -198,11 +196,6 @@ public class MapView extends ViewPart {
 		viz.addListener(codemapListener);
 		currentViz = viz;
 		redrawAsync();
-	}
-
-	public void newProjectMapAvailable(IJavaProject project) {
-		if (!this.getCurrentProject().equals(project)) return;
-		this.updateVisualization();
 	}
 
 	private void openInEditor(final IFile file) {
@@ -228,10 +221,13 @@ public class MapView extends ViewPart {
 	}
 
 	public void updateMapdimension(int newDimension) {
-		setCurrentSize(newDimension);
+		currentSize = newDimension;
 		IJavaProject project = getCurrentProject();
 		if (project == null) return;
-		CodemapVisualization viz = CodemapCore.getPlugin().mapForProject(project).updateSize(newDimension).getVisualization();
+		CodemapVisualization viz = CodemapCore.getPlugin()
+			.mapForProject(project)
+			.updateSize(currentSize)
+			.getVisualization();
 		if (viz != null) {
 			updateMapVisualization(viz);
 		}
@@ -239,7 +235,7 @@ public class MapView extends ViewPart {
 
 	public void redrawAsync() {
 		// Must call #syncExec, else we get an SWT error 		
-		Display.getDefault().syncExec(new Runnable() {
+		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
 				redraw();

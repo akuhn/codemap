@@ -27,7 +27,7 @@ public class CodemapCore extends AbstractUIPlugin {
 
 	public static final String PLUGIN_ID = CodemapCore.class.getPackage().getName();
 	private static CodemapCore THE_PLUGIN;
-	
+
 	private Map<IJavaProject,MapPerProject> mapPerProjectCache;
 	private MapView theView;
 
@@ -38,22 +38,22 @@ public class CodemapCore extends AbstractUIPlugin {
 	public MapSelection getYouAreHereSelection() {
 		return youAreHereSelection;
 	}
-	
+
 	public MapSelection getOpenFilesSelection() {
 		return openFilesSelection;
 	}
-	
+
 	public MapSelection getCurrentSelection() {
 		return currentSelection;
 	}
-	
+
 	public CodemapCore() {
 		mapPerProjectCache = new HashMap<IJavaProject,MapPerProject>();
 		youAreHereSelection = new MapSelection();
 		openFilesSelection = new MapSelection();	
 		currentSelection = new MapSelection();
 	}
-	
+
 	@Override
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
@@ -81,7 +81,7 @@ public class CodemapCore extends AbstractUIPlugin {
 	public final static String makeID(Class<?> javaClass) {
 		return PLUGIN_ID + "." + javaClass.getSimpleName();
 	}
-	
+
 	public MapPerProject mapForProject(IJavaProject project) {
 		MapPerProject map = mapPerProjectCache.get(project);
 		if (map == null) {
@@ -89,7 +89,7 @@ public class CodemapCore extends AbstractUIPlugin {
 		}
 		return map;
 	}
-	
+
 	public void setMapView(MapView caller) {
 		theView = caller;
 	}
@@ -106,10 +106,10 @@ public class CodemapCore extends AbstractUIPlugin {
 	public void redrawCodemap() {
 		getMapView().redrawAsync();
 	}
-	
+
 	public void redrawCodemapBackground() {
 		getMapView().redrawCodemapBackground();
 		getMapView().redrawAsync();
 	}
-	
+
 }

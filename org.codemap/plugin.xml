@@ -4,17 +4,6 @@
    <extension-point id="mapview" name="mapview" schema="schema/mapview.exsd"/>
    <extension-point id="colors" name="colors" schema="schema/colors.exsd"/>
    <extension
-         id="HapaxBuilder"
-         name="Hapax Builder"
-         point="org.eclipse.core.resources.builders">
-      <builder
-            hasNature="false">
-         <run
-               class="org.codemap.builder.HapaxBuilder">
-         </run>
-      </builder>
-   </extension>
-   <extension
          point="org.eclipse.ui.views">
       <category
             id="ch.unibe.softwaremap"

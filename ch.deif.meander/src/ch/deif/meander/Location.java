@@ -13,7 +13,7 @@ package ch.deif.meander;
 public class Location {
 
 	public final int px, py;
-	protected double elevation;
+	private double elevation;
 	private Point point;
 
 	public String getDocument() {
@@ -31,6 +31,7 @@ public class Location {
 	}
 	
 	public Location(Point point, double elevation, int px, int py) {
+		if (Double.isNaN(elevation)) throw new AssertionError();
 		this.point = point;
 		this.elevation = elevation;
 		this.px = px;
@@ -42,6 +43,7 @@ public class Location {
 	}
 
 	public Location withElevation(double newElevation) {
+		if (Double.isNaN(newElevation)) throw new AssertionError();
 		Location clone = new Location(this);
 		clone.elevation = newElevation;
 		return clone;

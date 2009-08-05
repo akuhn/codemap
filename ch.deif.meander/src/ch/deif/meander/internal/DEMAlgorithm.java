@@ -80,7 +80,7 @@ public class DEMAlgorithm extends MapAlgorithm<float[][]> {
 				pie[n][m] += elevation  - THRESHOLD;
 			}
 		}
-		throw null; // should not happen.
+		throw new Error("Should not happen, nach Adam Riese.");
 	}
 
 	private void setup() {

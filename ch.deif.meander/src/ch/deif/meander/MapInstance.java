@@ -80,8 +80,9 @@ public class MapInstance {
 	private Collection<Location> makeLocationsWithSize(Configuration map, int size, MapScheme<Double> elevation) {
 		Collection<Location> result = new ArrayList<Location>();
 		for (Point each: map.points()) {
-			result.add(new Location(each, 
-					elevation.forLocation(each),
+			Double e = elevation.forLocation(each);
+			if (e == null || Double.isNaN(e.doubleValue())) throw new Error();
+			result.add(new Location(each, e,
 					(int) (each.x * size),
 					(int) (each.y * size)));
 		}
@@ -90,7 +91,7 @@ public class MapInstance {
 
 	public MapInstance normalizeElevation() {
 		double max = maxElevation();
-		if (max < 0.0) return this;
+		if (max <= 0.0) return this;
 		Collect<Location> query = Collect.from(locations);
 		for (Each<Location> each: query) {
 			each.yield = each.value.withElevation(each.value.getElevation() / max * 100);
@@ -271,5 +272,6 @@ public class MapInstance {
 	public boolean containsPoint(int x, int y) {
 		return 0 <= x && 0 <= y && x < width && y < height;
 	}
+
 	
 }

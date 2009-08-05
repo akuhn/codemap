@@ -1,37 +1,28 @@
 package org.codemap;
 
+import java.util.EventObject;
 import static org.codemap.util.Icons.FILE;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codemap.builder.HapaxBuilder;
-import org.codemap.builder.MapMakerBackgroundJob;
-import org.codemap.mapview.MapView;
+import org.codemap.resources.NewMapResource;
 import org.codemap.util.CodemapColors;
 import org.codemap.util.CodemapLabels;
 import org.codemap.util.Icons;
 import org.codemap.util.Log;
-import org.eclipse.core.resources.ICommand;
+import org.codemap.util.Resources;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
-import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ProjectScope;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.osgi.service.prefs.BackingStoreException;
 
-import ch.akuhn.hapax.Hapax;
-import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.akuhn.util.Arrays;
 import ch.akuhn.util.Pair;
+import ch.akuhn.values.ValueChangedListener;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.Point;
 import ch.deif.meander.builder.Meander;
@@ -42,7 +33,6 @@ import ch.deif.meander.swt.CurrSelectionOverlay;
 import ch.deif.meander.swt.ImageOverlay;
 import ch.deif.meander.swt.SWTLayer;
 import ch.deif.meander.swt.YouAreHereOverlay;
-import ch.deif.meander.util.MapScheme;
 
 /**
  * Holds corpus, map and visualization of a project. Use this class to store project specific information.
@@ -59,154 +49,64 @@ public class MapPerProject {
 	private static final int MINIMAL_SIZE = 300;
 
 	private final IJavaProject project;
-	private TermDocumentMatrix tdm;
-	private boolean mapBeingCalculated = false;
-	private boolean builderIsRunning = false;
-	private int mapSize = MINIMAL_SIZE;
-
-	private Hapax hapax;
-	private Configuration configuration;
-	
+	private NewMapResource mapResource;
 	private CodemapVisualization visual;
-	private SWTLayer layer;
-	private Background background;
 
+	
 	public MapPerProject(IJavaProject project) {
 		this.project = project;
 		enableBuilder();
+		
+		mapResource = new NewMapResource("default.map", 
+				Arrays.asList(Resources.asPath(project)),
+				Arrays.asList("*.java"));
+		mapResource.addMapInstanceListener(new ValueChangedListener() {
+			@Override
+			public void valueChanged(EventObject event) {
+				makeMap();
+			}
+		});
 	}
 
 	private MapPerProject enableBuilder() {
-		try {
-			addBuilderToProjectDescriptionCommands();
-			if (tdm == null) {
-				makeBuilderBackgroundJob().schedule();
-			}
-		} catch (CoreException e) {
-			Log.error(e);
-		}
 		return this;
 	}
 
-	private Job makeBuilderBackgroundJob() {
-		return new Job("Initial build of Hapax vocabulary.") {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				if (builderIsRunning) return Status.OK_STATUS;
-				try {
-					builderIsRunning = true;
-					if (getJavaProject() != null) {
-						getProject().build(IncrementalProjectBuilder.FULL_BUILD, HapaxBuilder.BUILDER_ID, null, monitor);
-					}
-				} catch (CoreException e) {
-					Log.error(e);
-				} finally {
-					builderIsRunning = false;
-				}
-				return Status.OK_STATUS;
-			}
-		};
-	}
-
-	private void addBuilderToProjectDescriptionCommands() throws CoreException {
-		if (getJavaProject() == null || !getJavaProject().isOpen()) return;
-
-		IProjectDescription desc = getProject().getDescription();
-		ICommand[] commands = desc.getBuildSpec();
-		for (ICommand command: commands) {
-			if (command.getBuilderName().equals(HapaxBuilder.BUILDER_ID)) {
-				return;
-			}
-		}
-		ICommand newCommand = desc.newCommand();
-		newCommand.setBuilderName(HapaxBuilder.BUILDER_ID);
-		commands = Arrays.append(commands, newCommand);
-		desc.setBuildSpec(commands);
-		getProject().setDescription(desc, null);
-	}
-
-	public void putTDM(TermDocumentMatrix newTDM) {
-		this.tdm = newTDM;
-		this.startBackgroundTask();
-	}
-
-	private void startBackgroundTask() {
-		new MapMakerBackgroundJob(this).schedule();
-	}
-
 	public CodemapVisualization getVisualization() {
-		if (tdm == null) return null;
-		if (visual != null && visual.getSize() == mapSize) return visual;		
-		updateMap();
-		return null;
+		return visual;		
 	}
 
-	public void updateMap() {
-		if (mapBeingCalculated) return;
-		startBackgroundTask();
-	}
-	
 	public IProject getProject() {
 		return getJavaProject().getProject();
 	}
 	
 	public Configuration getConfiguration() {
-		return configuration;
+		return mapResource.getConfiguration();
 	}
 
 	private IJavaProject getJavaProject() {
 		return project;
 	}
 
-	public IStatus makeMap(IProgressMonitor monitor) {
-		if (mapBeingCalculated) return Status.OK_STATUS;
-		mapBeingCalculated = true;
-		monitor.beginTask("Making map", 50);
-		if (hapax == null) {
-			hapax = Hapax.withCorpus(tdm)
-					.build();
-			monitor.worked(10);
-			
-			configuration = Meander.builder()
-					.addCorpus(hapax)
-					.makeMap(reloadMapState());
-			monitor.worked(5);
-			
-			background = Meander.background()
-				   .withColors(colorScheme)
-				   .makeBackground();
-			
-			layer = Meander.layers()
-				   .withLabels(labelScheme)
-				   .withSelection(new CurrSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
-				   .withSelection(new ProviderDrivenImageOverlay(Icons.getImage(FILE), new WorkbenchLabelProvider()), CodemapCore.getPlugin().getOpenFilesSelection())
-				   .withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())				   
-				   .withLayer(sharedLayer)
-				   .makeLayer();
-			monitor.worked(5);	
-		} else {
-			monitor.worked(20);
-		}
-		visual = new CodemapVisualization(configuration.withSize(mapSize, makeHeightScheme()));
-		visual.add(layer).add(background);
-		monitor.worked(20);
+	public void makeMap() {// TODO create only once per map/project
+		Background background = Meander.background()
+			.withColors(colorScheme)
+			.makeBackground();
 
-		notifyMapView();
-		monitor.done();
-		mapBeingCalculated = false;
-		return Status.OK_STATUS;
+		SWTLayer layer = Meander.layers()
+			.withLabels(labelScheme)
+			.withSelection(new CurrSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
+			.withSelection(new ProviderDrivenImageOverlay(Icons.getImage(FILE), new WorkbenchLabelProvider()), CodemapCore.getPlugin().getOpenFilesSelection())
+			.withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())				   
+			.withLayer(sharedLayer)
+			.makeLayer();
+
+		visual = new CodemapVisualization(mapResource.getMapInstance())
+			.add(layer).addBackground(background);
+
 	}
 
-	private MapScheme<Double> makeHeightScheme() {
-		return new MapScheme<Double>() {
-			@Override
-			public Double forLocation(Point each) {
-				return Math.sqrt(tdm.getDocument(each.getDocument()).size());
-			}
-		};
-	}
-
-	private Map<String, Pair<Double,Double>> reloadMapState() {
+	private Map<String, Pair<Double,Double>> reloadMapState() { // TODO
 		IEclipsePreferences node = getPointNode();
 		Map<String, Pair<Double,Double>> points = new HashMap<String,Pair<Double,Double>>();
 		try {
@@ -228,21 +128,14 @@ public class MapPerProject {
 		return null;
 	}
 
-	private void notifyMapView() {
-		MapView mapView = CodemapCore.getPlugin().getMapView();
-		if (mapView != null) {
-			mapView.newProjectMapAvailable(project);
-		}
-	}
-
 	public MapPerProject updateSize(int newMapDimension) {
-		this.mapSize = Math.max(newMapDimension, MINIMAL_SIZE);
+		mapResource.setMapSize(Math.max(newMapDimension, MINIMAL_SIZE));
 		return this;
 	}
 
 	public void saveMapState() {
 		IEclipsePreferences node = getPointNode();
-		for(Point each: configuration.points()) {
+		for(Point each: getConfiguration().points()) {
 			node.put(each.getDocument(), each.x + " # " + each.y);
 		}
 		try {
