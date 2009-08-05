@@ -66,6 +66,7 @@ public class MapPerProject {
 				makeMap();
 			}
 		});
+		mapResource.getMapInstance(); // provoke first computation
 	}
 
 	private MapPerProject enableBuilder() {
