@@ -1,11 +1,12 @@
 package org.codemap;
 
-import java.util.EventObject;
 import static org.codemap.util.Icons.FILE;
 
+import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.codemap.mapview.ProviderDrivenImageOverlay;
 import org.codemap.resources.NewMapResource;
 import org.codemap.util.CodemapColors;
 import org.codemap.util.CodemapLabels;
@@ -30,7 +31,6 @@ import ch.deif.meander.swt.Background;
 import ch.deif.meander.swt.CodemapVisualization;
 import ch.deif.meander.swt.CompositeLayer;
 import ch.deif.meander.swt.CurrSelectionOverlay;
-import ch.deif.meander.swt.ImageOverlay;
 import ch.deif.meander.swt.SWTLayer;
 import ch.deif.meander.swt.YouAreHereOverlay;
 

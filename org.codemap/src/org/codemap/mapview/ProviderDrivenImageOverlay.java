@@ -1,4 +1,4 @@
-package org.codemap;
+package org.codemap.mapview;
 
 import org.codemap.util.Resources;
 import org.eclipse.jface.viewers.ILabelProvider;

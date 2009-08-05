@@ -31,7 +31,7 @@ public class MarkerPluginCore extends AbstractUIPlugin {
 	private static MarkerPluginCore plugin;
 	private MarkerController markerController;
 	
-	private Map<MapPerProject, MapSelection> selectionCache = new HashMap<MapPerProject, MapSelection>();
+	private Map<MapPerProject, MarkerSelection> selectionCache = new HashMap<MapPerProject, MarkerSelection>();
 	
 	/*
 	 * (non-Javadoc)
@@ -70,17 +70,17 @@ public class MarkerPluginCore extends AbstractUIPlugin {
 		return markerController;
 	}
 
-	public MapSelection getCurrentMarkerSelection() {
+	public MarkerSelection getCurrentMarkerSelection() {
 		MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
-		MapSelection mapSelection = selectionCache.get(activeMap);
-		if (mapSelection == null) {
-			mapSelection = new MapSelection();
+		MarkerSelection selection = selectionCache.get(activeMap);
+		if (selection == null) {
+			selection = new MarkerSelection();
 			MarkersOverlay markersOverlay = new MarkersOverlay();
-			markersOverlay.setSelection(mapSelection);
+			markersOverlay.setMarkerSelection(selection);
 			activeMap.addLayer(markersOverlay);
 			
-			selectionCache.put(activeMap, mapSelection);
+			selectionCache.put(activeMap, selection);
 		}
-		return mapSelection;
+		return selection;
 	}
 }

@@ -55,7 +55,7 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 
 	public void link(final Canvas newCanvas) {
 		if (canvas == newCanvas) return;
-		final Canvas oldCanvas = canvas;
+		Canvas oldCanvas = canvas;
 		canvas = newCanvas;	
 		linkInternal(newCanvas);
 		unlinkInternal(oldCanvas);
@@ -63,12 +63,12 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 	}
 	
 	private void linkInternal(Canvas newCanvas) {
-		newCanvas.addPaintListener(CodemapVisualization.this);
-		newCanvas.addMouseListener(CodemapVisualization.this);
-		newCanvas.addMouseMoveListener(CodemapVisualization.this);
-		newCanvas.addMouseTrackListener(CodemapVisualization.this);
-		newCanvas.addMouseWheelListener(CodemapVisualization.this);
-		newCanvas.addDragDetectListener(CodemapVisualization.this);
+		newCanvas.addPaintListener(this);
+		newCanvas.addMouseListener(this);
+		newCanvas.addMouseMoveListener(this);
+		newCanvas.addMouseTrackListener(this);
+		newCanvas.addMouseWheelListener(this);
+		newCanvas.addDragDetectListener(this);
 	}
 
 	@Override
@@ -204,12 +204,12 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 	
 	private void unlinkInternal(Canvas linkedCanvas) {
 		if (linkedCanvas == null) return;
-		linkedCanvas.removePaintListener(CodemapVisualization.this);
-		linkedCanvas.removeMouseListener(CodemapVisualization.this);
-		linkedCanvas.removeMouseMoveListener(CodemapVisualization.this);
-		linkedCanvas.removeMouseTrackListener(CodemapVisualization.this);
-		linkedCanvas.removeMouseWheelListener(CodemapVisualization.this);
-		linkedCanvas.removeDragDetectListener(CodemapVisualization.this);
+		linkedCanvas.removePaintListener(this);
+		linkedCanvas.removeMouseListener(this);
+		linkedCanvas.removeMouseMoveListener(this);
+		linkedCanvas.removeMouseTrackListener(this);
+		linkedCanvas.removeMouseWheelListener(this);
+		linkedCanvas.removeDragDetectListener(this);
 	}
 	
 	private void translate(MouseEvent e) {

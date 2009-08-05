@@ -21,8 +21,13 @@ public class ImageOverlay extends SelectionOverlay {
 	}
 
 	@Override
-	public void paintChild(MapInstance map, GC gc, Location each) {
+	public void paintBefore(MapInstance map, GC gc) {
+		super.paintBefore(map, gc);
 		gc.setAlpha(255);
+	}
+
+	@Override
+	public void paintChild(MapInstance map, GC gc, Location each) {
 		gc.drawImage(image, each.px - offset_x, each.py - offset_y);
 	}
 

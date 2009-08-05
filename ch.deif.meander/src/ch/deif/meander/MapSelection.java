@@ -1,6 +1,5 @@
 package ch.deif.meander;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -13,21 +12,12 @@ import java.util.Iterator;
  * @author David Erni
  *
  */
-public class MapSelection implements Iterable<String> {
+public class MapSelection extends AbstractMapSelection {
 
 	private HashSet<String> identifiers;
 	
 	public MapSelection() {
 		identifiers = new HashSet<String>();		
-	}
-	
-	public Iterable<Location> locationsOn(MapInstance map) {
-		Collection<Location> result = new ArrayList<Location>();
-		for(Location each: map.locations()) {
-			if (!this.contains(each)) continue;
-			result.add(each);
-		}
-		return result;
 	}
 
 	public int size() {
@@ -50,10 +40,11 @@ public class MapSelection implements Iterable<String> {
 	public void remove(String identifier) {
 		identifiers.remove(identifier);
 	}
-
-	public void replaceWith(Collection<String> ids) {
-		identifiers = new HashSet<String>(ids);
-	}
+	
+	public void replaceWith(Collection<String> newLocations) {
+		identifiers.clear();
+		identifiers.addAll(newLocations);
+	}	
 
 	public void addAll(Collection<String> ids) {
 		identifiers.addAll(ids);

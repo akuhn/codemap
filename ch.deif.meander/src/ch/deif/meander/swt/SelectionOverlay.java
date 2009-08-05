@@ -3,13 +3,14 @@ package ch.deif.meander.swt;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 
+import ch.deif.meander.AbstractMapSelection;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapSelection;
 
 public abstract class SelectionOverlay extends SWTLayer {
 
-	protected MapSelection selection;
+	MapSelection selection;
 	private Image image;
 	
 	protected void setImag(Image img) {
@@ -20,7 +21,7 @@ public abstract class SelectionOverlay extends SWTLayer {
 		return image;
 	}
 	
-	public MapSelection getSelection() {
+	public AbstractMapSelection getSelection() {
 		return selection;
 	}
 	
@@ -40,7 +41,7 @@ public abstract class SelectionOverlay extends SWTLayer {
 	}
 
 	private final void paintChildren(MapInstance map, GC gc) {
-		for (Location each: selection.locationsOn(map)) {
+		for (Location each: getSelection().locationsOn(map)) {
 			paintChild(map, gc, each);
 		}
 	}	

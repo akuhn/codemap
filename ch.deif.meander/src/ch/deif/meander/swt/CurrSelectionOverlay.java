@@ -57,7 +57,7 @@ public class CurrSelectionOverlay extends SelectionOverlay {
 		}
 		isDragging = false;
 		redraw();
-		fireEvent(EVT_SELECTION_CHANGED, selection);
+		fireEvent(EVT_SELECTION_CHANGED, getSelection());
 	}
 
 	@Override
@@ -87,13 +87,13 @@ public class CurrSelectionOverlay extends SelectionOverlay {
 		int minY = Math.min(dragStart.y, dragStop.y);
 		int maxX = Math.max(dragStart.x, dragStop.x);
 		int maxY = Math.max(dragStart.y, dragStop.y);		
-		Collection<String> ids = new ArrayList<String>();
+		Collection<String> newLocations = new ArrayList<String>();
 		for (Location each : getRoot().map.locations()) {
 			if (each.px < maxX && each.px > minX && each.py < maxY && each.py > minY) {			
-				ids.add(each.getDocument());
+				newLocations.add(each.getDocument());
 			}
 		}
-		getSelection().replaceWith(ids);
+		selection.replaceWith(newLocations);
 	}
 
 }

@@ -19,7 +19,11 @@ public class Icons {
 	public static final String FORCE_SELECTION = DIR_PREFIX + "force_selection.gif";
 	public static final String PACKAGES = DIR_PREFIX + "packages.gif";	
 	public static final String PALETTE = DIR_PREFIX + "palette.gif";		
-	public static final String GREEN_CIRCLE = DIR_PREFIX + "green_circle.gif";	
+	public static final String GREEN_CIRCLE = DIR_PREFIX + "green_circle.gif";
+	
+	public static final String INFO = DIR_PREFIX + "info_obj.gif";
+	public static final String WARNING = DIR_PREFIX + "warning_obj.gif";
+	public static final String ERROR = DIR_PREFIX + "error_obj.gif";	
 
 	public static ImageDescriptor getImageDescriptor(String key) {
 		return loadImage(key).getDescriptor(key);

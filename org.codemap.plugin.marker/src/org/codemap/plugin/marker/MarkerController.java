@@ -1,8 +1,11 @@
 package org.codemap.plugin.marker;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import static org.eclipse.core.resources.IMarker.MARKER;
+import static org.eclipse.core.resources.IMarker.SEVERITY;
+import static org.eclipse.core.resources.IResource.DEPTH_INFINITE;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.codemap.CodemapCore;
 import org.codemap.util.Log;
@@ -17,9 +20,9 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 
-import ch.deif.meander.MapSelection;
-
 public class MarkerController {
+	
+	private static final int NO_SEVERITY = -1;
 	
 	private IResourceDeltaVisitor resourceDeltaVisitor = new IResourceDeltaVisitor() {
 
@@ -94,24 +97,26 @@ public class MarkerController {
 	 */
 	private void loadMarkers(IResource resource) {
 		try {
-			IMarker[] markers = resource.findMarkers(IMarker.MARKER, true, IResource.DEPTH_INFINITE);
+			IMarker[] markers = resource.findMarkers(MARKER, true, DEPTH_INFINITE);
 			addAllMarkers(collectIdentifiers(markers));
 		} catch (CoreException e) {
 			Log.error(e);
 		}
 	}	
 
-	private void addAllMarkers(Collection<String> markers) {
+	private void addAllMarkers(Map<String, Integer> map) {
 		if (! isActive()) return;
 		
-		getMarkerSelection().addAll(markers);
+		getMarkerSelection().addAll(map);
 		issueRedraw();	
 	}
 
-	private Collection<String> collectIdentifiers(IMarker[] markers) {
-		List<String> identifiers = new ArrayList<String>();
+	private Map<String, Integer> collectIdentifiers(IMarker[] markers) {
+		Map<String, Integer> identifiers = new HashMap<String, Integer>();
+		int severity;
 		for(IMarker each: markers) {
-			identifiers.add(Resources.asPath(each.getResource()));
+			if ((severity = each.getAttribute(SEVERITY, NO_SEVERITY)) == NO_SEVERITY) continue;
+			identifiers.put(Resources.asPath(each.getResource()), severity);
 		}
 		return identifiers;
 	}	
@@ -126,9 +131,10 @@ public class MarkerController {
 
 	private void addMarker(IMarker marker) {
 		if (! isActive()) return;
-		
+		int severity;
+		if ((severity = marker.getAttribute(SEVERITY, NO_SEVERITY)) == NO_SEVERITY) return;		
 		String identifier = Resources.asPath(marker.getResource());
-		getMarkerSelection().add(identifier);
+		getMarkerSelection().add(identifier, severity);
 		issueRedraw();
 	}
 	
@@ -200,7 +206,7 @@ public class MarkerController {
 		issueRedraw();
 	}	
 
-	private MapSelection getMarkerSelection() {
+	private MarkerSelection getMarkerSelection() {
 		return MarkerPluginCore.getPlugin().getCurrentMarkerSelection();
 	}
 
