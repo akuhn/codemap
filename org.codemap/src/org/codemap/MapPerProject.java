@@ -1,5 +1,7 @@
 package org.codemap;
 
+import static org.codemap.util.Icons.FILE;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +25,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.osgi.service.prefs.BackingStoreException;
 
 import ch.akuhn.hapax.Hapax;
@@ -176,7 +179,7 @@ public class MapPerProject {
 			layer = Meander.layers()
 				   .withLabels(labelScheme)
 				   .withSelection(new CurrSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
-				   .withSelection(new ImageOverlay(Icons.getImage(Icons.JAVA_FILE)), CodemapCore.getPlugin().getOpenFilesSelection())
+				   .withSelection(new ProviderDrivenImageOverlay(Icons.getImage(FILE), new WorkbenchLabelProvider()), CodemapCore.getPlugin().getOpenFilesSelection())
 				   .withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())				   
 				   .withLayer(sharedLayer)
 				   .makeLayer();

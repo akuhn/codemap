@@ -11,13 +11,13 @@ import org.eclipse.swt.graphics.Image;
 public class Icons {
 
 	private static final String DIR_PREFIX = "icons/eclipse/";
-	
+
+	public static final String FILE = DIR_PREFIX + "file.gif";
 	public static final String LINKED = DIR_PREFIX + "linked.gif";
 	public static final String LAYERS = DIR_PREFIX + "layers.gif";	
 	public static final String LABELS = DIR_PREFIX + "labels.gif";
 	public static final String FORCE_SELECTION = DIR_PREFIX + "force_selection.gif";
 	public static final String PACKAGES = DIR_PREFIX + "packages.gif";	
-	public static final String JAVA_FILE = DIR_PREFIX + "java_file.gif";
 	public static final String PALETTE = DIR_PREFIX + "palette.gif";		
 	public static final String GREEN_CIRCLE = DIR_PREFIX + "green_circle.gif";	
 
