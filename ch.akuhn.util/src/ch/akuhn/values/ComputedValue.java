@@ -5,12 +5,24 @@ import java.util.EventObject;
 public abstract class ComputedValue<V> extends Value<V> {
 
     private static final Object MISSING = new Object();
+
+    @SuppressWarnings("unchecked")
+    private V missingValue() {
+        return (V) MISSING;
+    }
     
     private boolean isLazy = true;
+    private Value<?>[] arguments;
     
-    @SuppressWarnings("unchecked")
     public ComputedValue() {
-        this.value = (V) MISSING;
+        this.value = missingValue();
+        this.arguments = null;
+    }
+
+    public ComputedValue(Value<?>... arguments) {
+        this.value = missingValue();
+        this.arguments = arguments;
+        for (Value<?> each: arguments) each.addDependent(this); 
     }
     
     @Override
@@ -24,14 +36,18 @@ public abstract class ComputedValue<V> extends Value<V> {
         throw new UnsupportedOperationException();
     }
 
-    @SuppressWarnings("unchecked")
     public void resetValue() {
-        value = isLazy ? (V) MISSING : computeValue();
+        value = isLazy ? missingValue() : computeValue();
         this.changed();
     }
 
     protected abstract V computeValue();
 
+    @SuppressWarnings("unchecked")
+    protected <A> A arg(int index) {
+        return (A) arguments[index].getValue();
+    }
+    
     @Override
     public void valueChanged(EventObject event) {
         this.resetValue();

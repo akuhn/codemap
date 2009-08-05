@@ -1,12 +1,13 @@
 package ch.akuhn.values;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EventObject;
 
 public class Value<V> implements ValueChangedListener {
 
     protected V value;
-    private Collection<ValueChangedListener> listeners;
+    private Collection<ValueChangedListener> listeners = new ArrayList<ValueChangedListener>();
 
     public V getValue() {
         return value;
