@@ -28,6 +28,7 @@ public class CollectionValue<V> extends Value<Collection<V>> implements Collecti
 
     @Override
     public void clear() {
+        if (value.isEmpty()) return;
         value.clear();
         changed();
     }

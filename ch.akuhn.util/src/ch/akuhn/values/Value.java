@@ -12,10 +12,15 @@ public class Value<V> implements ValueChangedListener {
     public V getValue() {
         return value;
     }
+    
+    public V awaitValue() {
+        return getValue();
+    }
 
     public void setValue(V value) {
+        V prev = this.value;
         this.value = value;
-        this.changed(); // notify listeners outside locked section
+        if (eq(prev, value)) this.changed();
     }
 
     public Value() {
@@ -26,10 +31,15 @@ public class Value<V> implements ValueChangedListener {
         this.value = value;
     }
     
+    protected boolean eq(V prev, V newValue) {
+        return prev == null ? newValue != null : prev.equals(newValue);
+    }
+    
     protected void changed() {
         EventObject event = new EventObject(this);
         for (ValueChangedListener each: listeners) each.valueChanged(event);
     }
+    
     
     public void addDependent(ValueChangedListener listener) {
         listeners.add(listener); // TODO concurrency
@@ -40,7 +50,7 @@ public class Value<V> implements ValueChangedListener {
     }
 
     public void valueChanged(EventObject event) {
-        // does nothing
+        valueChanged(event);
     }
     
 }
