@@ -2,7 +2,6 @@ package org.codemap;
 
 import static org.codemap.util.Icons.FILE;
 
-import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +10,8 @@ import org.codemap.resources.NewMapResource;
 import org.codemap.util.CodemapColors;
 import org.codemap.util.CodemapLabels;
 import org.codemap.util.Icons;
+import org.codemap.util.JobMonitor;
+import org.codemap.util.JobValue;
 import org.codemap.util.Log;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IProject;
@@ -23,8 +24,9 @@ import org.osgi.service.prefs.BackingStoreException;
 
 import ch.akuhn.util.Arrays;
 import ch.akuhn.util.Pair;
-import ch.akuhn.values.ValueChangedListener;
+import ch.akuhn.values.Value;
 import ch.deif.meander.Configuration;
+import ch.deif.meander.MapInstance;
 import ch.deif.meander.Point;
 import ch.deif.meander.builder.Meander;
 import ch.deif.meander.swt.Background;
@@ -46,11 +48,11 @@ public class MapPerProject {
 	private CompositeLayer sharedLayer = new CompositeLayer();
 	
 	private static final String POINT_NODE_ID = CodemapCore.PLUGIN_ID + ".points"; 
-	private static final int MINIMAL_SIZE = 300;
+	private static final int MINIMAL_SIZE = 256;
 
 	private final IJavaProject project;
 	private NewMapResource mapResource;
-	private CodemapVisualization visual;
+	private Value<CodemapVisualization> visual;
 
 	
 	public MapPerProject(IJavaProject project) {
@@ -60,13 +62,19 @@ public class MapPerProject {
 		mapResource = new NewMapResource("default.map", 
 				Arrays.asList(Resources.asPath(project)),
 				Arrays.asList("*.java"));
-		mapResource.addMapInstanceListener(new ValueChangedListener() {
+		visual = new JobValue<CodemapVisualization>("Codemap visualization", mapResource.mapInstance) {
 			@Override
-			public void valueChanged(EventObject event) {
-				makeMap();
+			protected CodemapVisualization computeValue(JobMonitor monitor) {
+				return computeCodemapVisualization(monitor);
 			}
-		});
-		mapResource.getMapInstance(); // provoke first computation
+		};
+		new JobValue<Void>("Redraw", mapResource.mapInstance) {
+			@Override
+			protected Void computeValue(JobMonitor monitor) {
+				CodemapCore.getPlugin().redrawCodemap();
+				return null;
+			}
+		};
 	}
 
 	private MapPerProject enableBuilder() {
@@ -74,7 +82,7 @@ public class MapPerProject {
 	}
 
 	public CodemapVisualization getVisualization() {
-		return visual;		
+		return visual.awaitValue();		
 	}
 
 	public IProject getProject() {
@@ -82,14 +90,16 @@ public class MapPerProject {
 	}
 	
 	public Configuration getConfiguration() {
-		return mapResource.getConfiguration();
+		return mapResource.configuration.awaitValue();
 	}
 
 	private IJavaProject getJavaProject() {
 		return project;
 	}
 
-	public void makeMap() {// TODO create only once per map/project
+	private CodemapVisualization computeCodemapVisualization(JobMonitor monitor) {
+		MapInstance map = monitor.nextArgument();
+		
 		Background background = Meander.background()
 			.withColors(colorScheme)
 			.makeBackground();
@@ -102,8 +112,9 @@ public class MapPerProject {
 			.withLayer(sharedLayer)
 			.makeLayer();
 
-		visual = new CodemapVisualization(mapResource.getMapInstance())
-			.add(layer).addBackground(background);
+		return new CodemapVisualization(map)
+			.add(layer)
+			.addBackground(background);
 
 	}
 
@@ -129,8 +140,10 @@ public class MapPerProject {
 		return null;
 	}
 
-	public MapPerProject updateSize(int newMapDimension) {
-		mapResource.setMapSize(Math.max(newMapDimension, MINIMAL_SIZE));
+	public MapPerProject updateSize(int size) {
+		int size0 = Math.max(size, MINIMAL_SIZE);
+		mapResource.mapSize.setValue(size0);
+		visual.getValue();
 		return this;
 	}
 

@@ -18,7 +18,6 @@ import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.util.Files;
 import ch.akuhn.values.Value;
-import ch.akuhn.values.ValueChangedListener;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.Point;
@@ -30,54 +29,50 @@ public class NewMapResource {
 
 	private String name;
 
-	private Value<Collection<String>> fProjects;
-	private Value<Collection<String>> fExtensions;
-	private Value<Integer> fMapSize;
+	private final Value<Collection<String>> projects;
+	private final Value<Collection<String>> extensions;
+	public final Value<Integer> mapSize;
 
-	private JobValue<Collection<String>> fElements;
-	private JobValue<LatentSemanticIndex> fIndex;
-	private JobValue<Configuration> fConfiguration;
-	private JobValue<MapInstance> fMapInstance;
+	public final Value<Collection<String>> elements;
+	public final Value<LatentSemanticIndex> index;
+	public final Value<Configuration> configuration;
+	public final Value<MapInstance> mapInstance;
 
-	public NewMapResource(String name, Collection<String> projects, Collection<String> extensions) {
-		this.name = name;
-		this.initializeValues();
-		this.fProjects.setValue(projects);
-		this.fExtensions.setValue(extensions);
-	}
-
-	private void initializeValues() {
-		fMapSize = new Value<Integer>(0);
-		fProjects = new Value<Collection<String>>();
-		fExtensions = new Value<Collection<String>>();
-		fElements = new JobValue<Collection<String>>("Compute elements", fProjects, fExtensions) {
+	public NewMapResource(String name, Collection<String> allProjects, Collection<String> allExtensions) {
+		this.setName(name);
+		mapSize = new Value<Integer>(0);
+		projects = new Value<Collection<String>>();
+		extensions = new Value<Collection<String>>();
+		elements = new JobValue<Collection<String>>("Compute elements", projects, extensions) {
 			@Override
 			protected Collection<String> computeValue(JobMonitor monitor) {
 				return computeElements(monitor);
 			}
 
 		};
-		fIndex = new JobValue<LatentSemanticIndex>("Compute index",fElements) {
+		index = new JobValue<LatentSemanticIndex>("Compute index",elements) {
 			@Override
 			protected LatentSemanticIndex computeValue(JobMonitor monitor) {
 				return computeIndex(monitor);
 			}
 		};
-		fConfiguration = new JobValue<Configuration>("Compute configuration",fIndex) {
+		configuration = new JobValue<Configuration>("Compute configuration",index) {
 			@Override
 			protected Configuration computeValue(JobMonitor monitor) {
 				return computeConfiguration(monitor);
 			}
 		};
-		fMapInstance = new JobValue<MapInstance>("Compute map instance", fMapSize, fIndex, fConfiguration) {
+		mapInstance = new JobValue<MapInstance>("Compute map instance", mapSize, index, configuration) {
 			@Override
 			protected MapInstance computeValue(JobMonitor monitor) {
 				return computeMapInstance(monitor);
 			}
 		};
+		this.projects.setValue(allProjects);
+		this.extensions.setValue(allExtensions);
 	}
 
-	private Collection<String> computeElements(JobMonitor monitor) {
+	private static Collection<String> computeElements(JobMonitor monitor) {
 		Collection<String> projects = monitor.nextArgument();
 		final Collection<String> extensions = monitor.nextArgument();
 		final Collection<String> result = new HashSet<String>();
@@ -102,7 +97,7 @@ public class NewMapResource {
 		return new ArrayList<String>(result);
 	}
 
-	private LatentSemanticIndex computeIndex(JobMonitor monitor) {
+	private static LatentSemanticIndex computeIndex(JobMonitor monitor) {
 		Collection<String> elements = monitor.nextArgument();
 		CorpusBuilder builder = Hapax.newCorpus()
 		.ignoreCase()
@@ -124,12 +119,12 @@ public class NewMapResource {
 		return builder.makeTDM().createIndex();
 	}
 
-	private Configuration computeConfiguration(JobMonitor monitor) {
+	private static Configuration computeConfiguration(JobMonitor monitor) {
 		LatentSemanticIndex index = monitor.nextArgument();
 		return Meander.builder().addCorpus(index).makeMap();
 	}
 
-	private MapInstance computeMapInstance(JobMonitor monitor) {
+	private static MapInstance computeMapInstance(JobMonitor monitor) {
 		int size = monitor.nextArgument();
 		final LatentSemanticIndex index = monitor.nextArgument();
 		Configuration configuration = monitor.nextArgument();
@@ -142,44 +137,13 @@ public class NewMapResource {
 		});
 	}
 
-	public int getMapSize() {
-		return fMapSize.getValue();
-	}
-
-	public void setMapSize(int mapSize) {
-		this.fMapSize.setValue(mapSize);
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public Iterable<String> getProjects() {
-		return fProjects.awaitValue();
-	}
-
-	public Iterable<String> getExtensions() {
-		return fExtensions.awaitValue();
-	}
-
-	public Iterable<String> getElements() {
-		return fElements.awaitValue();
-	}
-
-	public LatentSemanticIndex getIndex() {
-		return fIndex.awaitValue();
-	}
-
-	public Configuration getConfiguration() {
-		return fConfiguration.awaitValue();
-	}
-
-	public MapInstance getMapInstance() {
-		return fMapInstance.awaitValue();
-	}
-
-	public void addMapInstanceListener(ValueChangedListener dependent) {
-		fMapInstance.addDependent(dependent);
-	}
 
 }

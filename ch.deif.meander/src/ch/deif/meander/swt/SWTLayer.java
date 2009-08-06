@@ -8,6 +8,7 @@ import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.MouseTrackListener;
 import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.widgets.Control;
 
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.ui.CodemapEvent;
@@ -80,9 +81,9 @@ public abstract class SWTLayer implements
 	public void fireEvent(String kind, Object value) {
 		root.fireEvent(new CodemapEvent(kind, this, value));
 	}
-	
-	public void redraw() {
-		root.redraw();
+
+	protected void redraw(MouseEvent e) {
+		if (e.widget instanceof Control) ((Control) e.widget).redraw();
 	}
 	
 }

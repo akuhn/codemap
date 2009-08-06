@@ -13,10 +13,6 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.widgets.Canvas;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.Shell;
 
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.internal.NearestNeighborAlgorithm;
@@ -26,10 +22,6 @@ import ch.deif.meander.ui.CodemapListener;
 
 public final class CodemapVisualization extends CompositeLayer implements PaintListener {
 
-	private boolean animate;
-	private Runnable animationLoop = makeAnimationLoop();
-	Canvas canvas;
-	private int frameRate = 25;
 	/*default*/ MapInstance map; // FIXME
 	private Background background;
 	
@@ -42,44 +34,16 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 		setRoot(this);
 	}	
 
-	private Runnable makeAnimationLoop() {
-		return new Runnable() {
-			@Override
-			public void run() {
-				if (!animate || canvas == null || canvas.isDisposed()) return;
-				canvas.redraw();
-				if (animate) canvas.getDisplay().timerExec(1000/frameRate, this);
-			}
-		};
-	}
-
-	public void link(final Canvas newCanvas) {
-		if (canvas == newCanvas) return;
-		Canvas oldCanvas = canvas;
-		canvas = newCanvas;	
-		linkInternal(newCanvas);
-		unlinkInternal(oldCanvas);
-		canvas.redraw();
-	}
-	
-	private void linkInternal(Canvas newCanvas) {
-		newCanvas.addPaintListener(this);
-		newCanvas.addMouseListener(this);
-		newCanvas.addMouseMoveListener(this);
-		newCanvas.addMouseTrackListener(this);
-		newCanvas.addMouseWheelListener(this);
-		newCanvas.addDragDetectListener(this);
-	}
 
 	@Override
 	public void paintControl(PaintEvent e) {
-		if (canvas == null) return;
+		if (!(e.widget instanceof Canvas)) throw new Error();
 		try {
 			GC gc = e.gc;
 			Device device = gc.getDevice();
 			gc.setBackground(device.getSystemColor(SWT.COLOR_BLUE));
 			gc.fillRectangle(gc.getClipping());
-			Point bounds = canvas.getSize();
+			Point bounds = ((Canvas) e.widget).getSize();
 			offsetX = (bounds.x - map.getWidth()) / 2;
 			offsetY = (bounds.y - map.getWidth()) / 2;
 			Transform t = new Transform(device);
@@ -110,22 +74,12 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 	}
 	
 	
-	
 	@Override
 	public void paintMap(MapInstance map, GC gc) {
 		if (background != null) background.paintMap(map, gc);
 		super.paintMap(map, gc);
 	}
 
-	public void startAnimationLoop() {
-		animate = true;
-		animationLoop.run();
-	}
-	
-	public void stopAnimationLoop() {
-		animate = false;
-	}
-	
 	private Collection<CodemapListener> listeners = new HashSet<CodemapListener>();
 	private int offsetX;
 	private int offsetY;
@@ -150,15 +104,8 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 		listeners.add(listener);
 	}
 
-	@Override
-	public void redraw() {
-		if (canvas == null) return;
-		canvas.redraw();
-	}
-	
 	public void redrawBackground() {
-		if (background == null) return;
-		background.redraw();
+		background.redrawBackground();
 	}
 	
 	/**
@@ -166,52 +113,32 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 	 * For testing purposes only.
 	 */
 	public void openAndBlock() {
-		assert this.canvas == null;
-		Display display = new Display();
-		//Shell shell = new Shell(display, SWT.SHELL_TRIM & ~SWT.RESIZE);
-		Shell shell = new Shell(display, SWT.SHELL_TRIM);
-		Canvas canv = new Canvas(shell, SWT.NONE | SWT.DOUBLE_BUFFERED);
-		canv.setSize(400,300);
-		if (map != null) canv.setSize(map.width + 400, map.height);
-		this.link(canv);
-		
-		
-		Menu menu = new Menu(shell, SWT.POP_UP);
-		MenuItem item = new MenuItem(menu, SWT.PUSH);
-		item.setText("Popup");
-		canv.setMenu(menu);
-		
-		shell.setText("Codemap: " + map);
-		shell.pack();
-		shell.open();
-		//this.startAnimationLoop();
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch())
-				display.sleep();
-		}
-		display.dispose();
+//		Display display = new Display();
+//		//Shell shell = new Shell(display, SWT.SHELL_TRIM & ~SWT.RESIZE);
+//		Shell shell = new Shell(display, SWT.SHELL_TRIM);
+//		Canvas canv = new Canvas(shell, SWT.NONE | SWT.DOUBLE_BUFFERED);
+//		canv.setSize(400,300);
+//		if (map != null) canv.setSize(map.width + 400, map.height);
+//		this.link(canv);
+//		
+//		
+//		Menu menu = new Menu(shell, SWT.POP_UP);
+//		MenuItem item = new MenuItem(menu, SWT.PUSH);
+//		item.setText("Popup");
+//		canv.setMenu(menu);
+//		
+//		shell.setText("Codemap: " + map);
+//		shell.pack();
+//		shell.open();
+//		//this.startAnimationLoop();
+//		while (!shell.isDisposed()) {
+//			if (!display.readAndDispatch())
+//				display.sleep();
+//		}
+//		display.dispose();
 	}
 
 
-	public void unlink() {
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				unlinkInternal(canvas);
-			}
-		});
-	}	
-	
-	private void unlinkInternal(Canvas linkedCanvas) {
-		if (linkedCanvas == null) return;
-		linkedCanvas.removePaintListener(this);
-		linkedCanvas.removeMouseListener(this);
-		linkedCanvas.removeMouseMoveListener(this);
-		linkedCanvas.removeMouseTrackListener(this);
-		linkedCanvas.removeMouseWheelListener(this);
-		linkedCanvas.removeDragDetectListener(this);
-	}
-	
 	private void translate(MouseEvent e) {
 		e.x -= offsetX;
 		e.y -= offsetY;
@@ -219,11 +146,10 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 	
 	@Override
 	public void mouseMove(MouseEvent e) {
-		if (canvas == null) return;
 		this.translate(e);
 		String name = !map.containsPoint(e.x, e.y) ? null
 				: map.get(NearestNeighborAlgorithm.class).get(e.x).get(e.y).getName();
-		canvas.setToolTipText(name);
+		((Canvas) e.widget).setToolTipText(name);
 		super.mouseMove(e);
 	}
 

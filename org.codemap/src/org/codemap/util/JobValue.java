@@ -7,6 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
@@ -60,7 +61,7 @@ public abstract class JobValue<V> extends Value<V> {
 
     
     private static final void DEBUGF(String format, Object... args) {
-		System.out.printf(format, args);
+		if (Platform.inDevelopmentMode()) System.out.printf(format, args);
 	}
     
     private static final Object T() {
@@ -113,20 +114,23 @@ public abstract class JobValue<V> extends Value<V> {
 			job.valueChanged(event);
 			return;
 		case DONE:
+			boolean changed = false;
 			lock.lock();
 			try {
 				// XXX state transition from DONE to ZEN
-				DEBUGF("\t%s DONE -> ZEN\n", this);
 				if (state == DONE) { 
+					DEBUGF("\t%s DONE -> ZEN\n", this);
 					state = ZEN;
 					value = null;
 					error = null;
 					job = null;
+					changed = true;
 				}
 			}
 			finally {
 				lock.unlock();
 			}
+			if (changed) changed();
 		}
     }
     
@@ -138,11 +142,10 @@ public abstract class JobValue<V> extends Value<V> {
 		lock.lock();
 		try {
 			// XXX state transition from ZEN to WAITING
-			DEBUGF("\t%s ZEN -> WAITING\n", this);
 			if (state == ZEN) {
+				DEBUGF("\t%s ZEN -> WAITING\n", this);
 				state = WAITING;
-				value = null;
-				error = null;
+				// value, error are already null
 				job = new Computation();
 			}
 		}
@@ -196,8 +199,8 @@ public abstract class JobValue<V> extends Value<V> {
 			lock.lock();
 			try {
 				// XXX state transition from WAITING to RUNNING
-				DEBUGF("\t%s WAITING -> RUNNING\n", this);
 				if (state == WAITING) {
+					DEBUGF("\t%s WAITING -> RUNNING\n", this);
 					state = RUNNING;
 					// value, error, job unchanged
 					new Thread(this).start();
@@ -212,23 +215,27 @@ public abstract class JobValue<V> extends Value<V> {
 		public void run() {
 			DEBUGF("%s\trunning %s\n", T(), name);
 			V newValue = computeValue(new M());
+			if (state != RUNNING) return;
+			if (job != this) return;
+			boolean changed = false;
 			lock.lock(); 
 			try {
 				/// XXX state transition from RUNNING to DONE
-				DEBUGF("\t%s RUNNING -> DONE\n", this);
 				if (state == RUNNING) {
+					DEBUGF("\t%s RUNNING -> DONE\n", this);
 					if (job != this) return;
 					state = DONE;
 					value = newValue;
 					error = null;
 					job = null;
 					hasValue.signalAll();
+					changed = true;
 				}
 			}
 			finally {
 				lock.unlock();
 			}
-			changed();
+			if (changed) changed();
 		}
 		
 		@SuppressWarnings("unchecked")

@@ -26,8 +26,7 @@ public class Background extends SWTLayer {
 		return buffer == null || needsRedraw || buffer.getBounds().width != map.getWidth();
 	}
 	
-	@Override
-	public void redraw() {
+	public void redrawBackground() {
 		needsRedraw  = true;
 	}
 
