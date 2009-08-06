@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
    <feature 
-         url="features/org.codemap.feature_0.7.707.qualifier.jar" 
-         id="org.codemap.feature" version="0.7.707.qualifier">
+         url="features/org.codemap.feature_0.7.709.qualifier.jar" 
+         id="org.codemap.feature" version="0.7.709.qualifier">
       <category name="Codemap"/>
    </feature>
    <feature 
