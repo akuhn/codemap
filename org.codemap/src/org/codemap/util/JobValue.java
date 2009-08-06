@@ -10,9 +10,18 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
+import ch.akuhn.util.Arrays;
 import ch.akuhn.values.Value;
 
 /** This values computation runs as a background job in Eclipse.
+ *<P>
+ * This class has four states:
+ *<UL>
+ *<LI>ZEN, if its value is unknown and nobody ever requested it,</LI> 
+ *<LI>WAITING, if its value has been requested, but the value of its parts is not yet available,</LI>
+ *<LI>RUNNING, its value is being computed,</LI>
+ *<LI>DONE, if its value is available.</LI>
+ *</UL>
  *<P>
  * The concurrency issues of this class are tricky.
  *<P> 
@@ -34,190 +43,253 @@ import ch.akuhn.values.Value;
  */
 public abstract class JobValue<V> extends Value<V> {
 
+	private static final int ZEN = 0;
+	private static final int WAITING = 1;
+	private static final int RUNNING = 2;
+	private static final int DONE = 3;
+
 	private final Lock lock = new ReentrantLock();
 	private final Condition hasValue = lock.newCondition();
+
 	private final Value<?>[] arguments;
-    private final String name;
+	private final String name;
 
-    private Value<?> expectedSource;
+	private int state = ZEN;
     private Throwable error;
-    private J job;
+    private Computation job;
 
+    
     private static final void DEBUGF(String format, Object... args) {
 		System.out.printf(format, args);
 	}
     
+    private static final Object T() {
+    	return Thread.currentThread().getName();
+    }
+
     public JobValue(String name, Value<?>... arguments) {
     	this.name = name;
     	this.arguments = arguments;
         for (Value<?> each: arguments) each.addDependent(this); 
     }
     
+    /** Requests and wait for the value.
+     * @throws an exception if the computation failed.
+     */
     @Override
     public V awaitValue() {
-    	DEBUGF("await %s\n", name);
+    	DEBUGF("%s\tawait %s\n", T(), this);
+    	if (state == ZEN) this.requestValue();
     	lock.lock();
     	try {
-    		if (value == null && error == null && job == null) {
-    			job = new J();
-    			job.schedule(); 
-    		}
-    		hasValue.awaitUninterruptibly();
-    		if (error != null) throw rethrowError(); 
+    		while (state != DONE) hasValue.awaitUninterruptibly();
     		return value;
     	}
     	finally {
     		lock.unlock();
     	}
-    }
-
-    private Error rethrowError() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-    public V getValue() {
-    	DEBUGF("get %s\n", name);
-    	lock.lock();
-    	try {
-    		if (value == null && error == null && job == null) {
-    			job = new J();
-    			job.schedule(); 
-    		}
-    		return value;
-    	}
-    	finally {
-    		lock.unlock();
-    	}
-    }
-    
- 
-    public void resetValue() {
-    	DEBUGF("reset %s\n", name);
-        lock.lock();
-        try {
-        	value = null;
-        	error = null;
-        	if (job != null) {
-        		job.cancel();
-    			job = new J();
-    			job.schedule();
-        	}
-        }
-        finally {
-        	lock.unlock();
-        }
-        changed();
     }
     
     @Override
+    public V getValue() {
+    	DEBUGF("%s\tget %s\n", T(), this);
+    	if (state == ZEN) this.requestValue();
+    	return value;
+    }
+
+	@Override
     public void setValue(V value) {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+ 	@Override
 	public void valueChanged(EventObject event) {
-    	if (event.getSource() == expectedSource) return;
-    	this.resetValue();
+    	DEBUGF("%s\tupdate received %s from %s\n", T(), this, event.getSource());
+        switch (state) {
+		case ZEN:
+			return;
+		case WAITING:
+		case RUNNING:
+			job.valueChanged(event);
+			return;
+		case DONE:
+			lock.lock();
+			try {
+				// XXX state transition from DONE to ZEN
+				DEBUGF("\t%s DONE -> ZEN\n", this);
+				if (state == DONE) { 
+					state = ZEN;
+					value = null;
+					error = null;
+					job = null;
+				}
+			}
+			finally {
+				lock.unlock();
+			}
+		}
     }
     
+ 
     protected abstract V computeValue(JobMonitor monitor);
+    
+    private void requestValue() {
+    	DEBUGF("%s\trequest %s\n", T(), this);
+		lock.lock();
+		try {
+			// XXX state transition from ZEN to WAITING
+			DEBUGF("\t%s ZEN -> WAITING\n", this);
+			if (state == ZEN) {
+				state = WAITING;
+				value = null;
+				error = null;
+				job = new Computation();
+			}
+		}
+		finally {
+			lock.unlock();
+		}
+		job.start();
+	}
 
-     	
-	@SuppressWarnings("serial")
+    private Error rethrowError() {
+		throw new RuntimeException(error);
+	}
+    
+    @SuppressWarnings("serial")
 	private static class Break extends Error { /**/ }
 
-	private class J extends Job {
+     	
+	private class Computation implements Runnable {
 
-		public J() {
-			super(name);
+		private Object[] values;
+
+		public Computation() {
+			values = new Object[arguments.length];
+		}
+
+		void valueChanged(EventObject event) {
+			DEBUGF("%s\tnew value arrived %s\n", T(), this);
+			if (!isNewValue(event.getSource())) return;
+			switch (state) {
+			case ZEN: 
+				return;
+			case WAITING: 
+				this.start();
+				return;
+			case RUNNING:
+				this.stop();
+				return;
+			case DONE:
+				return;
+			}
+		}
+
+		private void stop() {
+			throw new UnsupportedOperationException();
+		}
+
+		void start() {
+			DEBUGF("%s\tstarting %s\n", T(), this);
+			for (int n = 0; n < values.length; n++) values[n] = arguments[n].getValue();
+			for (Object each: values) if (each == null) return;
+			lock.lock();
+			try {
+				// XXX state transition from WAITING to RUNNING
+				DEBUGF("\t%s WAITING -> RUNNING\n", this);
+				if (state == WAITING) {
+					state = RUNNING;
+					// value, error, job unchanged
+					new Thread(this).start();
+				}
+			}
+			finally {
+				lock.unlock();
+			}
 		}
 
 		@Override
-		protected IStatus run(final IProgressMonitor monitor) {
-			
-			class M implements JobMonitor {
-
-				int index = 0;
-				boolean userCancled = false;
-				Throwable userException = null;
-		
-				public void begin(int totalWork) {
-					monitor.beginTask(name, totalWork);
-				}
-		
-				public Error cancel() {
-					this.userCancled = true;
-					throw new Break();
-				}
-		
-				public void done() {
-					monitor.done();
-				}
-		
-				public Error error(Throwable ex) {
-					this.userException = ex;
-					throw new Break();
-				}
-		
-				@Override
-				@SuppressWarnings("unchecked")
-				public <A> A nextArgument() {
-					expectedSource = arguments[index++];
-					A argument = (A) expectedSource.awaitValue();
-					expectedSource = null;
-					if (argument == null) throw cancel();
-					return argument;
-				}
-
-				public void worked(int work) {
-					monitor.worked(work);
-				}
-	
-			}
-			
-			V newValue = null;
-			M moni = new M();
-			
+		public void run() {
+			DEBUGF("%s\trunning %s\n", T(), name);
+			V newValue = computeValue(new M());
+			lock.lock(); 
 			try {
-				DEBUGF("run %s\n", name);
-				newValue = computeValue(moni);
-			}
-			catch (Break ex) {
-				if (moni.userCancled) return Status.CANCEL_STATUS;
-				Log.error(moni.userException);
-				throw new RuntimeException(ex);
-			}
-			catch (Throwable ex) {
-				Log.error(ex);
-				throw new RuntimeException(ex);
+				/// XXX state transition from RUNNING to DONE
+				DEBUGF("\t%s RUNNING -> DONE\n", this);
+				if (state == RUNNING) {
+					if (job != this) return;
+					state = DONE;
+					value = newValue;
+					error = null;
+					job = null;
+					hasValue.signalAll();
+				}
 			}
 			finally {
-				DEBUGF("update %s with %s (error %s)\n", name, newValue, moni.userException);
-				if (!monitor.isCanceled()) {
-					lock.lock();
-					try {
-						if (job == this) {
-							value = newValue;
-							error = moni.userException;
-							job = null;
-							hasValue.signalAll();
-							lock.unlock();
-							changed();
-						}
-					}
-					finally {
-						lock.unlock();
-					}
-				}
+				lock.unlock();
+			}
+			changed();
+		}
+		
+		@SuppressWarnings("unchecked")
+		private boolean isNewValue(Object eventSource) {
+			if (!(eventSource instanceof Value<?>)) return false;
+			Value source = (Value) eventSource;
+			int index = Arrays.indexOf(arguments, source);
+			return index >= 0 && !eq(values[index], source.getValue());
+		}
+		
+		@Override
+		public String toString() {
+			String s = super.toString();
+			return "Value(" + name + ", " + s.substring(s.lastIndexOf('@') + 1) + ")";
+		}
+		
+		private class M implements JobMonitor {
+
+			int index = 0;
+			
+			@Override
+			public void begin(int totalWork) {
+				//
+			}
+
+			@Override
+			public Error cancel() {
+				throw new Break();
+			}
+
+			@Override
+			public void done() {
+				//
+			}
+
+			@Override
+			public Error error(Throwable ex) {
+				throw new Break();
+			}
+
+			@Override
+			@SuppressWarnings("unchecked")
+			public <A> A nextArgument() {
+				return (A) values[index++];
+			}
+
+			@Override
+			public void worked(int work) {
+				//
 			}
 			
-			return moni.userCancled ? Status.CANCEL_STATUS : Status.OK_STATUS;
-		
 		}
-
+		
 	}
+
+
+	@Override
+	public String toString() {
+		return "Value(" + name + ")";
+	}
+	
 	
 			
 }
