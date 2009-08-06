@@ -43,7 +43,8 @@ public class DeerExample {
     
     @Test
     @Given("#makeTermDocumentMatrix")
-    public TermDocumentMatrix rejectStopWords(TermDocumentMatrix tdm) {
+    public TermDocumentMatrix rejectStopWords(final TermDocumentMatrix matrix) {
+        TermDocumentMatrix tdm = matrix;
         tdm = tdm.toLowerCase();
         assertEquals(9, tdm.documentCount());
         assertEquals(42, tdm.termCount());

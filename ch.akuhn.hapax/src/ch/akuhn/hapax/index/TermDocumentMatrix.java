@@ -2,7 +2,6 @@ package ch.akuhn.hapax.index;
 
 import static ch.akuhn.foreach.For.withIndex;
 
-import java.io.IOException;
 import java.util.NoSuchElementException;
 
 import ch.akuhn.foreach.Each;
@@ -15,10 +14,6 @@ import ch.akuhn.hapax.linalg.SVD;
 import ch.akuhn.hapax.linalg.SparseMatrix;
 import ch.akuhn.hapax.linalg.Vector;
 import ch.akuhn.hapax.linalg.Vector.Entry;
-import ch.akuhn.io.chunks.ChunkInput;
-import ch.akuhn.io.chunks.ChunkOutput;
-import ch.akuhn.io.chunks.ReadFromChunk;
-import ch.akuhn.io.chunks.WriteOnChunk;
 import ch.akuhn.util.Pair;
 import ch.akuhn.util.Bag.Count;
 
@@ -249,26 +244,6 @@ public class TermDocumentMatrix extends Corpus {
 //        }
 //        throw new Error();
 //    }
-    
-    @WriteOnChunk("TDM")
-    public void storeOn(ChunkOutput chunk) throws IOException {
-    	chunk.write(terms.size());
-    	chunk.write(documents.size());
-    	for (String each: terms) chunk.writeUTF(each);
-    	for (String each: documents) chunk.writeUTF(each);
-    	chunk.writeChunk(matrix);
-    }
-    
-    @ReadFromChunk("TDM")
-    public TermDocumentMatrix(ChunkInput chunk) throws IOException {
-    	int termCount = chunk.readInt();
-    	int documentCount = chunk.readInt();
-    	terms = new AssociativeList<String>();
-    	for (int n = 0; n < termCount; n++) terms.add(chunk.readUTF());
-    	documents = new AssociativeList<String>();
-    	for (int i = 0; i < documentCount; i++) documents.add(chunk.readUTF());
-    	matrix = chunk.readChunk(SparseMatrix.class);
-    }
     
     public SparseMatrix matrix() {
     	return matrix;

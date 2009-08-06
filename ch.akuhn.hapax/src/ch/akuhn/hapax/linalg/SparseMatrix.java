@@ -3,7 +3,6 @@ package ch.akuhn.hapax.linalg;
 import static ch.akuhn.foreach.For.range;
 import static ch.akuhn.foreach.For.withIndex;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,10 +10,6 @@ import java.util.Scanner;
 
 import ch.akuhn.foreach.Each;
 import ch.akuhn.hapax.linalg.Vector.Entry;
-import ch.akuhn.io.chunks.ChunkInput;
-import ch.akuhn.io.chunks.ChunkOutput;
-import ch.akuhn.io.chunks.ReadFromChunk;
-import ch.akuhn.io.chunks.WriteOnChunk;
 
 
 public class SparseMatrix extends Matrix {
@@ -33,7 +28,7 @@ public class SparseMatrix extends Matrix {
     public SparseMatrix(int rows, int columns) {
         this.columns = columns;
         this.rows = new ArrayList<Vector>(rows);
-        for (int times: range(rows)) addRow();
+        for (@SuppressWarnings("unused") int times: range(rows)) addRow();
     }
 
     @Override
@@ -142,23 +137,6 @@ public class SparseMatrix extends Matrix {
         }
         assert matrix.used() == used;
         return matrix;
-    }
-    
-    @ReadFromChunk("SMAT")
-    public SparseMatrix(ChunkInput chunk) throws IOException {
-    	int rowSize = chunk.readInt();
-    	columns = chunk.readInt();
-    	rows = new ArrayList<Vector>(rowSize);
-    	for (int n = 0; n < rowSize; n++) 
-    		rows.add(chunk.readChunk(SparseVector.class));
-    }
-    
-    @WriteOnChunk("SMAT")
-    public void storeOn(ChunkOutput chunk) throws IOException {
-    	chunk.write(rows.size());
-    	chunk.write(columns);
-    	for (Vector each: rows())
-    		chunk.writeChunk(each);
     }
     
 }

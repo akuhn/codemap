@@ -37,9 +37,9 @@ public class LogLikelihood implements Comparable<LogLikelihood>{
      * @see Ted Dunning, 1993
      * 
      */
-    private double getDunning(String term) {
-        double k1 = t1.occurrences(term); 
-        double k2 = t2.occurrences(term); 
+    private double getDunning(String t) {
+        double k1 = t1.occurrences(t); 
+        double k2 = t2.occurrences(t); 
         double n1 = t1.size(); 
         double n2 = t2.size(); 
         double p1 = k1 / n1;
@@ -87,8 +87,8 @@ public class LogLikelihood implements Comparable<LogLikelihood>{
         
     }
 
-    public boolean isAboveThreshold(int logL) {
-        return logL >= 0 ? this.value() >= logL : this.value() <= logL;
+    public boolean isAboveThreshold(int threshold) {
+        return threshold >= 0 ? this.value() >= threshold : this.value() <= threshold;
     }
     
     

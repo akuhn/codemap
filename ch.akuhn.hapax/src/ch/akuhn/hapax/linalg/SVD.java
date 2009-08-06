@@ -1,13 +1,8 @@
 package ch.akuhn.hapax.linalg;
 
-import java.io.IOException;
-
 import org.codemap.svdlib.Svdlib;
 import org.codemap.svdlib.Svdlib.SMat;
 import org.codemap.svdlib.Svdlib.SVDRec;
-
-import ch.akuhn.io.chunks.ChunkInput;
-import ch.akuhn.io.chunks.ReadFromChunk;
 
 /** Singular value decomposition of matrix A.
  *<P> 
@@ -29,17 +24,6 @@ public class SVD {
     private final double[][] U; // terms
     private final double[][] V; // documents
 
-
-    @ReadFromChunk("SVD")
-    public SVD(ChunkInput chunk) throws IOException {
-    	int m = chunk.readInt();
-    	int n = chunk.readInt();
-    	int k = chunk.readInt();
-    	this.s = chunk.readDoubleArray(k);
-    	this.U = chunk.readDoubleArray(k,m);
-    	this.V = chunk.readDoubleArray(k,n);
-        assert invariant();
-    }
 
     public SVD(double[] s, double[][] U, double[][] V) {
         this.s = s;

@@ -10,8 +10,6 @@ import java.util.NoSuchElementException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import ch.akuhn.foreach.Each;
-
 /** Visits all entries in a ZIP file, including entries in nested ZIP files.
  * 
  * @author Adrian Kuhn
@@ -70,7 +68,7 @@ public class Ziperator implements Iterable<Ziperator.Entry> {
 
 	@Override
 	public Iterator<Entry> iterator() {
-		return new Iter(file).recurse(recurse);
+		return new Iter(file).setRecurse(recurse);
 	}
 
 	private static class Iter implements Iterator<Entry> {
@@ -90,7 +88,7 @@ public class Ziperator implements Iterable<Ziperator.Entry> {
 			}
 		}
 
-		public Iterator<Entry> recurse(boolean recurse) {
+		public Iterator<Entry> setRecurse(boolean recurse) {
 			this.recurse = recurse;
 			return this;
 		}
@@ -113,7 +111,7 @@ public class Ziperator implements Iterable<Ziperator.Entry> {
 				next = new Entry(parent, entry, zip);
 				if (next == null) return false;
 				if (recurse && next.isArchive()) {
-					children = new Iter(next, zip).recurse(recurse);
+					children = new Iter(next, zip).setRecurse(recurse);
 					return this.hasNext();
 				}
 				return true;
