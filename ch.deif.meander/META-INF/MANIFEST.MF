@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Meander (software cartography)
 Bundle-SymbolicName: ch.deif.meander
-Bundle-Version: 0.7.671.qualifier
+Bundle-Version: 0.7.705.qualifier
 Bundle-Vendor: David Erni and Adrian Kuhn
 Require-Bundle: 
  ch.akuhn.util;bundle-version="2.1.0",
