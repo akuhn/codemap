@@ -20,7 +20,7 @@ public class Value<V> implements ValueChangedListener {
     public void setValue(V value) {
         V prev = this.value;
         this.value = value;
-        if (eq(prev, value)) this.changed();
+        if (!eq(prev, value)) this.changed();
     }
 
     public Value() {
@@ -31,8 +31,8 @@ public class Value<V> implements ValueChangedListener {
         this.value = value;
     }
     
-    protected boolean eq(V prev, V newValue) {
-        return prev == null ? newValue != null : prev.equals(newValue);
+    protected boolean eq(Object prev, Object newValue) {
+        return prev == null ? newValue == null : prev.equals(newValue);
     }
     
     protected void changed() {
