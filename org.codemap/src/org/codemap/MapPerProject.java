@@ -24,6 +24,8 @@ import org.osgi.service.prefs.BackingStoreException;
 
 import ch.akuhn.util.Arrays;
 import ch.akuhn.util.Pair;
+import ch.akuhn.values.ActionValue;
+import ch.akuhn.values.Arguments;
 import ch.akuhn.values.Value;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.MapInstance;
@@ -46,6 +48,8 @@ public class MapPerProject {
 	private CodemapColors colorScheme = new CodemapColors();
 	private CodemapLabels labelScheme = new CodemapLabels();
 	private CompositeLayer sharedLayer = new CompositeLayer();
+
+	private static Map<IJavaProject,MapPerProject> mapPerProjectCache;
 	
 	private static final String POINT_NODE_ID = CodemapCore.PLUGIN_ID + ".points"; 
 	private static final int MINIMAL_SIZE = 256;
@@ -54,11 +58,21 @@ public class MapPerProject {
 	private NewMapResource mapResource;
 	private Value<CodemapVisualization> visual;
 
+	public static MapPerProject forProject(IJavaProject project) {
+		if (mapPerProjectCache == null) mapPerProjectCache = new HashMap<IJavaProject,MapPerProject>();
+		MapPerProject map = mapPerProjectCache.get(project);
+		if (map != null) return map;
+		mapPerProjectCache.put(project, map = new MapPerProject(project));
+		map.initialize();
+		return map;
+	}
 	
-	public MapPerProject(IJavaProject project) {
+	private MapPerProject(IJavaProject project) {
 		this.project = project;
-		enableBuilder();
-		
+		// don't initialize;
+	}
+	
+	private void initialize() {
 		mapResource = new NewMapResource("default.map", 
 				Arrays.asList(Resources.asPath(project)),
 				Arrays.asList("*.java"));
@@ -68,21 +82,17 @@ public class MapPerProject {
 				return computeCodemapVisualization(monitor);
 			}
 		};
-		new JobValue<Void>("Redraw", mapResource.mapInstance) {
+		new ActionValue<Void>(visual) {
 			@Override
-			protected Void computeValue(JobMonitor monitor) {
-				CodemapCore.getPlugin().redrawCodemap();
+			protected Void performAction(Arguments args) {
+				CodemapCore.getPlugin().getMapView().newProjectSelected();
 				return null;
 			}
 		};
 	}
 
-	private MapPerProject enableBuilder() {
-		return this;
-	}
-
-	public CodemapVisualization getVisualization() {
-		return visual.awaitValue();		
+	public CodemapVisualization getVisualizationOrNull() {
+		return visual.getValue();		
 	}
 
 	public IProject getProject() {

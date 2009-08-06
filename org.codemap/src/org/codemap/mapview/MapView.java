@@ -188,7 +188,7 @@ public class MapView extends ViewPart {
 		configureActions(activeMap);
 		CodemapVisualization viz = activeMap
 				.updateSize(currentSize)
-				.getVisualization();
+				.getVisualizationOrNull();
 		if (viz == null) return;
 		updateMapVisualization(viz);
 	}
@@ -233,7 +233,7 @@ public class MapView extends ViewPart {
 		CodemapVisualization viz = CodemapCore.getPlugin()
 			.mapForProject(project)
 			.updateSize(currentSize)
-			.getVisualization();
+			.getVisualizationOrNull();
 		if (viz != null) {
 			updateMapVisualization(viz);
 		}

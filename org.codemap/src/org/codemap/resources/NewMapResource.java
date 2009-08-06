@@ -99,6 +99,7 @@ public class NewMapResource {
 
 	private static LatentSemanticIndex computeIndex(JobMonitor monitor) {
 		Collection<String> elements = monitor.nextArgument();
+		monitor.begin(elements.size());
 		CorpusBuilder builder = Hapax.newCorpus()
 		.ignoreCase()
 		.useCamelCaseScanner()
@@ -115,7 +116,9 @@ public class NewMapResource {
 			} catch (CoreException ex) {
 				throw new RuntimeException(ex);
 			}
+			monitor.worked(1);
 		}
+		monitor.done();
 		return builder.makeTDM().createIndex();
 	}
 

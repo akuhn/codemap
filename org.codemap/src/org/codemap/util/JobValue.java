@@ -9,6 +9,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 
 import ch.akuhn.util.Arrays;
@@ -155,15 +156,11 @@ public abstract class JobValue<V> extends Value<V> {
 		job.start();
 	}
 
-    private Error rethrowError() {
-		throw new RuntimeException(error);
-	}
-    
     @SuppressWarnings("serial")
 	private static class Break extends Error { /**/ }
 
      	
-	private class Computation implements Runnable {
+	private class Computation {
 
 		private Object[] values;
 
@@ -177,11 +174,10 @@ public abstract class JobValue<V> extends Value<V> {
 			switch (state) {
 			case ZEN: 
 				return;
+			case RUNNING: // none cannonical order
+				this.stop();
 			case WAITING: 
 				this.start();
-				return;
-			case RUNNING:
-				this.stop();
 				return;
 			case DONE:
 				return;
@@ -189,7 +185,18 @@ public abstract class JobValue<V> extends Value<V> {
 		}
 
 		private void stop() {
-			throw new UnsupportedOperationException();
+			lock.lock();
+			try {
+				// XXX state transition from RUNNING to WAITING
+				if (state == RUNNING) {
+					DEBUGF("\t%s RUNNING -> WAITING\n", this);
+					state = WAITING;
+					job = null;
+				}
+			}
+			finally {
+				lock.unlock();
+			}
 		}
 
 		void start() {
@@ -203,7 +210,7 @@ public abstract class JobValue<V> extends Value<V> {
 					DEBUGF("\t%s WAITING -> RUNNING\n", this);
 					state = RUNNING;
 					// value, error, job unchanged
-					new Thread(this).start();
+					this.forkAndRunComputation();
 				}
 			}
 			finally {
@@ -211,10 +218,21 @@ public abstract class JobValue<V> extends Value<V> {
 			}
 		}
 
-		@Override
-		public void run() {
+		private void forkAndRunComputation() {
+			(new Job(name) {
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					Computation.this.run(new M(monitor));
+					return Status.OK_STATUS;
+				}
+				
+			}).schedule();
+		}
+
+		private void run(JobMonitor monitor) {
 			DEBUGF("%s\trunning %s\n", T(), name);
-			V newValue = computeValue(new M());
+			V newValue = computeValue(monitor);
+			monitor.done();
 			if (state != RUNNING) return;
 			if (job != this) return;
 			boolean changed = false;
@@ -228,8 +246,8 @@ public abstract class JobValue<V> extends Value<V> {
 					value = newValue;
 					error = null;
 					job = null;
-					hasValue.signalAll();
 					changed = true;
+					hasValue.signalAll(); // must be last, as it seems
 				}
 			}
 			finally {
@@ -255,10 +273,17 @@ public abstract class JobValue<V> extends Value<V> {
 		private class M implements JobMonitor {
 
 			int index = 0;
+			private IProgressMonitor monitor;
+			private IProgressMonitor child;
 			
+			public M(IProgressMonitor monitor) {
+				this.monitor = monitor;
+				this.monitor.beginTask(name, 10000);
+			}
+
 			@Override
 			public void begin(int totalWork) {
-				//
+				child = new SubProgressMonitor(monitor, 10000);
 			}
 
 			@Override
@@ -268,7 +293,8 @@ public abstract class JobValue<V> extends Value<V> {
 
 			@Override
 			public void done() {
-				//
+				if (child != null) child.done();
+				monitor.done();
 			}
 
 			@Override
@@ -284,7 +310,7 @@ public abstract class JobValue<V> extends Value<V> {
 
 			@Override
 			public void worked(int work) {
-				//
+				child.worked(work);
 			}
 			
 		}
