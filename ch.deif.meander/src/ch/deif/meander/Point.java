@@ -73,7 +73,7 @@ public class Point {
 	}
 
 	public static Point newRandom(String document) {
-		return new Point(Math.random() * 2 - 1, Math.random() * 2 - 1, document);
+		return new Point(Math.random() - 0.5, Math.random() - 0.5, document);
 	}
 	
 }

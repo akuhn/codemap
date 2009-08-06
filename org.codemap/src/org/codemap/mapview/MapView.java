@@ -200,7 +200,9 @@ public class MapView extends ViewPart {
     }
 
     private void updateMapVisualization(CodemapVisualization viz) {
+        if (currentViz != null) currentViz.removeListener(codemapListener);
         canvasListener.setVisualization(currentViz = viz);
+        currentViz.addListener(codemapListener);
         redrawAsync();
     }
 
