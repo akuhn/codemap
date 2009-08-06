@@ -37,7 +37,9 @@ public class Value<V> implements ValueChangedListener {
     
     protected void changed() {
         EventObject event = new EventObject(this);
-        for (ValueChangedListener each: listeners) each.valueChanged(event);
+        for (ValueChangedListener each: listeners) {
+            each.valueChanged(event);
+        }
     }
     
     
