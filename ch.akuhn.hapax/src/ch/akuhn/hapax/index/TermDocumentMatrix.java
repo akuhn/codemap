@@ -5,6 +5,7 @@ import static ch.akuhn.foreach.For.withIndex;
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
+import ch.akuhn.foreach.Each;
 import ch.akuhn.hapax.corpus.Corpus;
 import ch.akuhn.hapax.corpus.PorterStemmer;
 import ch.akuhn.hapax.corpus.Stemmer;
@@ -18,7 +19,6 @@ import ch.akuhn.io.chunks.ChunkInput;
 import ch.akuhn.io.chunks.ChunkOutput;
 import ch.akuhn.io.chunks.ReadFromChunk;
 import ch.akuhn.io.chunks.WriteOnChunk;
-import ch.akuhn.foreach.Each;
 import ch.akuhn.util.Pair;
 import ch.akuhn.util.Bag.Count;
 

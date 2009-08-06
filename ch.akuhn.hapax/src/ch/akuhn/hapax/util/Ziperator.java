@@ -10,14 +10,14 @@ import java.util.NoSuchElementException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import ch.akuhn.hapax.util.Ziperator.Each;
+import ch.akuhn.foreach.Each;
 
 /** Visits all entries in a ZIP file, including entries in nested ZIP files.
  * 
  * @author Adrian Kuhn
  *
  */
-public class Ziperator implements Iterable<Each> {
+public class Ziperator implements Iterable<Ziperator.Entry> {
 
 	private File file;
 	private boolean recurse;
@@ -41,13 +41,13 @@ public class Ziperator implements Iterable<Each> {
 		return this;
 	}
 	
-	public static class Each {
+	public static class Entry {
 
-		public Each parent;
+		public Entry parent;
 		public ZipEntry entry;
 		public InputStream in;
 
-		public Each(Each parent, ZipEntry entry, InputStream in) {
+		public Entry(Entry parent, ZipEntry entry, InputStream in) {
 			this.parent = parent;
 			this.entry = entry;
 			this.in = in;
@@ -69,16 +69,16 @@ public class Ziperator implements Iterable<Each> {
 	}
 
 	@Override
-	public Iterator<Each> iterator() {
+	public Iterator<Entry> iterator() {
 		return new Iter(file).recurse(recurse);
 	}
 
-	private static class Iter implements Iterator<Each> {
+	private static class Iter implements Iterator<Entry> {
 
-		private Each parent;
+		private Entry parent;
 		private ZipInputStream zip;
-		private Each next;
-		private Iterator<Each> children;
+		private Entry next;
+		private Iterator<Entry> children;
 		private boolean recurse;
 
 		public Iter(File file) {
@@ -90,12 +90,12 @@ public class Ziperator implements Iterable<Each> {
 			}
 		}
 
-		public Iterator<Each> recurse(boolean recurse) {
+		public Iterator<Entry> recurse(boolean recurse) {
 			this.recurse = recurse;
 			return this;
 		}
 
-		public Iter(Each parent, InputStream in) {
+		public Iter(Entry parent, InputStream in) {
 			this.parent = parent;
 			this.zip = new ZipInputStream(in);
 		}
@@ -110,7 +110,7 @@ public class Ziperator implements Iterable<Each> {
 				if (next != null) return true;
 				ZipEntry entry = zip.getNextEntry();
 				if (entry == null) return false;
-				next = new Each(parent, entry, zip);
+				next = new Entry(parent, entry, zip);
 				if (next == null) return false;
 				if (recurse && next.isArchive()) {
 					children = new Iter(next, zip).recurse(recurse);
@@ -123,10 +123,10 @@ public class Ziperator implements Iterable<Each> {
 		}
 
 		@Override
-		public Each next() {
+		public Entry next() {
 			if (!hasNext()) throw new NoSuchElementException();
 			if (next == null) return children.next();
-			Each each = next;
+			Entry each = next;
 			next = null;
 			return each;
 		}

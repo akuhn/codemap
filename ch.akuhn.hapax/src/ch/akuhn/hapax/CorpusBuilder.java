@@ -20,6 +20,7 @@ public final class CorpusBuilder {
     private GlobalWeighting global = GlobalWeighting.NULL;
     private boolean rejectStopwords = true;
     private boolean rejectRareTerms = true;
+    @SuppressWarnings("unused") // TODO
     private boolean rejectCommonTerms = true;
     boolean ignoreCase = true;
     int latentDimensions = 25;

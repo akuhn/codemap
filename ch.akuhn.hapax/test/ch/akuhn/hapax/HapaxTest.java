@@ -1,6 +1,6 @@
 package ch.akuhn.hapax;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 
@@ -12,7 +12,8 @@ import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.akuhn.hapax.linalg.Matrix;
 import ch.akuhn.io.chunks.ChunkInput;
 import ch.akuhn.io.chunks.ChunkOutput;
-import ch.unibe.jexample.*;
+import ch.unibe.jexample.Given;
+import ch.unibe.jexample.JExample;
 
 @RunWith(JExample.class)
 public class HapaxTest {

@@ -1,6 +1,5 @@
 package ch.akuhn.hapax;
 
-import ch.akuhn.hapax.index.TermDocumentMatrix;
 
 public class NewHapaxExample {
 

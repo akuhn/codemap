@@ -2,7 +2,6 @@ package ch.akuhn.hapax.index;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import ch.akuhn.hapax.corpus.Terms;
 

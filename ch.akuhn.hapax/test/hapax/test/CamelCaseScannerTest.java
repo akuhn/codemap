@@ -8,8 +8,8 @@ import java.util.List;
 import org.junit.Test;
 
 import ch.akuhn.hapax.corpus.CamelCaseScanner;
-import ch.akuhn.hapax.corpus.TermScanner;
 import ch.akuhn.hapax.corpus.ScannerClient;
+import ch.akuhn.hapax.corpus.TermScanner;
 
 public class CamelCaseScannerTest implements ScannerClient {
 

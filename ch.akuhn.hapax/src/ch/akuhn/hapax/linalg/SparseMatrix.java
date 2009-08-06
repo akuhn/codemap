@@ -1,7 +1,7 @@
 package ch.akuhn.hapax.linalg;
 
-import static ch.akuhn.foreach.For.withIndex;
 import static ch.akuhn.foreach.For.range;
+import static ch.akuhn.foreach.For.withIndex;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,13 +9,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
+import ch.akuhn.foreach.Each;
 import ch.akuhn.hapax.linalg.Vector.Entry;
 import ch.akuhn.io.chunks.ChunkInput;
 import ch.akuhn.io.chunks.ChunkOutput;
 import ch.akuhn.io.chunks.ReadFromChunk;
 import ch.akuhn.io.chunks.WriteOnChunk;
-import ch.akuhn.foreach.Each;
-import ch.akuhn.foreach.Times;
 
 
 public class SparseMatrix extends Matrix {

@@ -2,18 +2,14 @@ package hapax.test;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Scanner;
-
-import ch.unibe.jexample.Given;
-import ch.unibe.jexample.JExample;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.akuhn.hapax.corpus.Terms;
-import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.hapax.index.TermDocumentMatrix;
 import ch.akuhn.util.Get;
+import ch.unibe.jexample.Given;
+import ch.unibe.jexample.JExample;
 
 
 @RunWith(JExample.class)

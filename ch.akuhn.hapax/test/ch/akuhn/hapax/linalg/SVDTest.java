@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.akuhn.hapax.linalg.SVD;
 import ch.unibe.jexample.Given;
 import ch.unibe.jexample.JExample;
 
