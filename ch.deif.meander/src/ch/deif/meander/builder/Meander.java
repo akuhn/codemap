@@ -6,7 +6,6 @@ import java.util.Map;
 
 import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
-import ch.akuhn.util.Pair;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.Point;
@@ -54,23 +53,23 @@ public class Meander {
 		}
 
 		@Override
-		public Configuration makeMap(Map<String, Pair<Double, Double>> cachedPoints) {
+		public Configuration makeMap(Configuration initialConfiguration) {
 			// we need a hapax for later recalculations.
 			if (this.lsi == null) throw new IllegalStateException();
 			// fallback when there is no cache or cache-reload failed.
-			if (cachedPoints == null) return makeMap();
+			if (initialConfiguration == null || initialConfiguration.size() == 0) return makeMap();
+			Map<String, Point> cachedPoints = initialConfiguration.asMap();
 			
 			Collection<Point> locations = new ArrayList<Point>();
-			for (String each: lsi.documents()) {
-				Pair<Double, Double> coordinates = cachedPoints.get(each);
-				if (coordinates == null) {
-					// cached data does not match current data, so we start from scratch.
-					return makeMap();
-				}
-				locations.add(new Point(coordinates.fst, coordinates.snd, each));
+			for (String document: lsi.documents()) {
+				Point p = cachedPoints.get(document);
+				if (p == null) p = Point.newRandom(document);
+				locations.add(p);
 			}
-			// no normalize here, the cached data is already normalized.
-			return new Configuration(locations);
+			
+			// TODO woot, run MDS with this initial set!
+			
+			return new Configuration(locations).normalize();
 		}
 
 		@Override

@@ -30,6 +30,7 @@ import ch.akuhn.values.Value;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.Point;
+import ch.deif.meander.Configuration.Builder;
 import ch.deif.meander.builder.Meander;
 import ch.deif.meander.swt.Background;
 import ch.deif.meander.swt.CodemapVisualization;
@@ -44,169 +45,177 @@ import ch.deif.meander.swt.YouAreHereOverlay;
  */
 public class MapPerProject {
 
-	private Map<String,String> properties = new HashMap<String,String>();
-	private CodemapColors colorScheme = new CodemapColors();
-	private CodemapLabels labelScheme = new CodemapLabels();
-	private CompositeLayer sharedLayer = new CompositeLayer();
+    private Map<String,String> properties = new HashMap<String,String>();
+    private CodemapColors colorScheme = new CodemapColors();
+    private CodemapLabels labelScheme = new CodemapLabels();
+    private CompositeLayer sharedLayer = new CompositeLayer();
 
-	private static Map<IJavaProject,MapPerProject> mapPerProjectCache;
-	
-	private static final String POINT_NODE_ID = CodemapCore.PLUGIN_ID + ".points"; 
-	private static final int MINIMAL_SIZE = 256;
+    private static Map<IJavaProject,MapPerProject> mapPerProjectCache;
 
-	private final IJavaProject project;
-	private NewMapResource mapResource;
-	private Value<CodemapVisualization> visual;
+    private static final String POINT_NODE_ID = CodemapCore.PLUGIN_ID + ".points"; 
+    private static final int MINIMAL_SIZE = 256;
 
-	public static MapPerProject forProject(IJavaProject project) {
-		if (mapPerProjectCache == null) mapPerProjectCache = new HashMap<IJavaProject,MapPerProject>();
-		MapPerProject map = mapPerProjectCache.get(project);
-		if (map != null) return map;
-		mapPerProjectCache.put(project, map = new MapPerProject(project));
-		map.initialize();
-		return map;
-	}
-	
-	private MapPerProject(IJavaProject project) {
-		this.project = project;
-		// don't initialize;
-	}
-	
-	private void initialize() {
-		mapResource = new NewMapResource("default.map", 
-				Arrays.asList(Resources.asPath(project)),
-				Arrays.asList("*.java"));
-		visual = new JobValue<CodemapVisualization>("Codemap visualization", mapResource.mapInstance) {
-			@Override
-			protected CodemapVisualization computeValue(JobMonitor monitor) {
-				return computeCodemapVisualization(monitor);
-			}
-		};
-		new ActionValue<Void>(visual) {
-			@Override
-			protected Void performAction(Arguments args) {
-				CodemapCore.getPlugin().getMapView().newProjectSelected();
-				return null;
-			}
-		};
-	}
+    private final IJavaProject project;
+    private NewMapResource mapResource;
+    private Value<CodemapVisualization> visual;
 
-	public CodemapVisualization getVisualizationOrNull() {
-		return visual.getValue();		
-	}
+    public static MapPerProject forProject(IJavaProject project) {
+        if (mapPerProjectCache == null) mapPerProjectCache = new HashMap<IJavaProject,MapPerProject>();
+        MapPerProject map = mapPerProjectCache.get(project);
+        if (map != null) return map;
+        mapPerProjectCache.put(project, map = new MapPerProject(project));
+        map.initialize();
+        return map;
+    }
 
-	public IProject getProject() {
-		return getJavaProject().getProject();
-	}
-	
-	public Configuration getConfiguration() {
-		return mapResource.configuration.awaitValue();
-	}
+    private MapPerProject(IJavaProject project) {
+        this.project = project;
+        // don't initialize;
+    }
 
-	private IJavaProject getJavaProject() {
-		return project;
-	}
+    private void initialize() {
+        mapResource = new NewMapResource("default.map", 
+                Arrays.asList(Resources.asPath(project)),
+                Arrays.asList("*.java"),
+                readPreviousMapState());
+        visual = new JobValue<CodemapVisualization>("Codemap visualization", mapResource.mapInstance) {
+            @Override
+            protected CodemapVisualization computeValue(JobMonitor monitor) {
+                return computeCodemapVisualization(monitor);
+            }
+        };
+        new ActionValue<Void>(visual) {
+            @Override
+            protected Void performAction(Arguments args) {
+                CodemapCore.getPlugin().getMapView().newProjectSelected();
+                return null;
+            }
+        };
+    }
 
-	private CodemapVisualization computeCodemapVisualization(JobMonitor monitor) {
-		MapInstance map = monitor.nextArgument();
-		
-		Background background = Meander.background()
-			.withColors(colorScheme)
-			.makeBackground();
+    public CodemapVisualization getVisualizationOrNull() {
+        return visual.getValue();		
+    }
 
-		SWTLayer layer = Meander.layers()
-			.withLabels(labelScheme)
-			.withSelection(new CurrSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
-			.withSelection(new ProviderDrivenImageOverlay(Icons.getImage(FILE), new WorkbenchLabelProvider()), CodemapCore.getPlugin().getOpenFilesSelection())
-			.withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())				   
-			.withLayer(sharedLayer)
-			.makeLayer();
+    public IProject getProject() {
+        return getJavaProject().getProject();
+    }
 
-		return new CodemapVisualization(map)
-			.add(layer)
-			.addBackground(background);
+    public Configuration getConfiguration() {
+        return mapResource.configuration.awaitValue();
+    }
 
-	}
+    private IJavaProject getJavaProject() {
+        return project;
+    }
 
-	private Map<String, Pair<Double,Double>> reloadMapState() { // TODO
-		IEclipsePreferences node = getPointNode();
-		Map<String, Pair<Double,Double>> points = new HashMap<String,Pair<Double,Double>>();
-		try {
-			for(String key: node.keys()) {
-				String pointString = node.get(key, null);
-				String[] split = pointString.split("#");
-				if (split.length != 2 ) {
-					Log.error(new RuntimeException("Invalid format of point storage for " + getProject().getName() + ": " + pointString));
-					continue;
-				}
-				double x = Double.parseDouble(split[0]);
-				double y = Double.parseDouble(split[1]);
-				points.put(key, new Pair<Double, Double>(x, y));
-			}
-			return points;
-		} catch (BackingStoreException e) {
-			Log.error(e);
-		}
-		return null;
-	}
+    private CodemapVisualization computeCodemapVisualization(JobMonitor monitor) {
+        MapInstance map = monitor.nextArgument();
 
-	public MapPerProject updateSize(int size) {
-		int size0 = Math.max(size, MINIMAL_SIZE);
-		mapResource.mapSize.setValue(size0);
-		visual.getValue();
-		return this;
-	}
+        Background background = Meander.background()
+        .withColors(colorScheme)
+        .makeBackground();
 
-	public void saveMapState() {
-		IEclipsePreferences node = getPointNode();
-		for(Point each: getConfiguration().points()) {
-			node.put(each.getDocument(), each.x + " # " + each.y);
-		}
-		try {
-			node.flush();
-		} catch (BackingStoreException e) {
-			Log.error(e);
-		}		
-	}
+        SWTLayer layer = Meander.layers()
+        .withLabels(labelScheme)
+        .withSelection(new CurrSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
+        .withSelection(new ProviderDrivenImageOverlay(Icons.getImage(FILE), new WorkbenchLabelProvider()), CodemapCore.getPlugin().getOpenFilesSelection())
+        .withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())				   
+        .withLayer(sharedLayer)
+        .makeLayer();
 
-	private IEclipsePreferences getPointNode() {
-		IScopeContext context = new ProjectScope(getProject());
-		IEclipsePreferences node = context.getNode(POINT_NODE_ID);
-		return node;
-	}
-	
-	public String getPropertyOrDefault(String key, String defaultValue) {
-		String value = properties.get(key);
-		return value == null ? defaultValue : value;
-	}
-	
-	public void setProperty(String key, String value) {
-		properties.put(key, value);
-	}
+        return new CodemapVisualization(map)
+        .add(layer)
+        .addBackground(background);
 
-	public CodemapColors getColorScheme() {
-		return colorScheme;
-	}
+    }
 
-	public CodemapLabels getLabelScheme() {
-		return labelScheme;
-	}
+    private Configuration readPreviousMapState() {
+        IEclipsePreferences node = readPointPreferences();
+        Builder builder = Configuration.builder();
+        try {
+            for (String key: node.keys()) {
+                String pointString = node.get(key, null);
+                String[] split = pointString.split("@");
+                // cover legacy format
+                if (split.length != 2 ) split = pointString.split("#");
+                if (split.length != 2 ) {
+                    Log.error(new RuntimeException("Invalid format of point storage for " + getProject().getName() + ": " + pointString));
+                    continue;
+                }
+                double x = Double.parseDouble(split[0]);
+                double y = Double.parseDouble(split[1]);
+                builder.add(key, x, y);
+            }
+            return builder.build();
+        } catch (BackingStoreException e) {
+            Log.error(e);
+        }
+        return null;
+    }
 
-	public boolean getPropertyOrDefault(String key, boolean defaultValue) {
-		String value = properties.get(key);
-		return value == null ? defaultValue : Boolean.parseBoolean(value);
-	}
+    public MapPerProject updateSize(int size) {
+        int size0 = Math.max(size, MINIMAL_SIZE);
+        mapResource.mapSize.setValue(size0);
+        visual.getValue();
+        return this;
+    }
+    
+    public static void saveMapState() {
+        for (MapPerProject each: mapPerProjectCache.values()) each.writePointPreferences();
+    }
 
-	public void setProperty(String key, boolean checked) {
-		properties.put(key, Boolean.toString(checked));
-	}
-	
-	public void addLayer(SWTLayer layer) {
-		sharedLayer.add(layer);
-	}
 
-	public void removeLayer(SWTLayer layer) {
-		sharedLayer.remove(layer);
-	}	
-	
+    private void writePointPreferences() {
+        IEclipsePreferences node = readPointPreferences();
+        for(Point each: getConfiguration().points()) {
+            node.put(each.getDocument(), each.x + "@" + each.y);
+        }
+        try {
+            node.flush();
+        } catch (BackingStoreException e) {
+            Log.error(e);
+        }		
+    }
+
+    private IEclipsePreferences readPointPreferences() {
+        IScopeContext context = new ProjectScope(getProject());
+        IEclipsePreferences node = context.getNode(POINT_NODE_ID);
+        return node;
+    }
+
+    public String getPropertyOrDefault(String key, String defaultValue) {
+        String value = properties.get(key);
+        return value == null ? defaultValue : value;
+    }
+
+    public void setProperty(String key, String value) {
+        properties.put(key, value);
+    }
+
+    public CodemapColors getColorScheme() {
+        return colorScheme;
+    }
+
+    public CodemapLabels getLabelScheme() {
+        return labelScheme;
+    }
+
+    public boolean getPropertyOrDefault(String key, boolean defaultValue) {
+        String value = properties.get(key);
+        return value == null ? defaultValue : Boolean.parseBoolean(value);
+    }
+
+    public void setProperty(String key, boolean checked) {
+        properties.put(key, Boolean.toString(checked));
+    }
+
+    public void addLayer(SWTLayer layer) {
+        sharedLayer.add(layer);
+    }
+
+    public void removeLayer(SWTLayer layer) {
+        sharedLayer.remove(layer);
+    }	
+
 }

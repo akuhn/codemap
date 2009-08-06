@@ -55,18 +55,12 @@ public class CodemapCore extends AbstractUIPlugin {
 
     @Override
     public void stop(BundleContext context) throws Exception {
-        saveMapState();
+        MapPerProject.saveMapState();
         THE_PLUGIN = null;
         super.stop(context);
 
     }
 
-    private void saveMapState() {
-        // TODO
-        //		for (MapPerProject each: mapPerProjectCache.values()) {
-        //			each.saveMapState();
-        //		}
-    }
 
     public static CodemapCore getPlugin() {
         return THE_PLUGIN;

@@ -71,5 +71,9 @@ public class Point {
 		}
 		return nearest;
 	}
+
+	public static Point newRandom(String document) {
+		return new Point(Math.random() * 2 - 1, Math.random() * 2 - 1, document);
+	}
 	
 }

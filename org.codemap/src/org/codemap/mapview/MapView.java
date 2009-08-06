@@ -50,289 +50,289 @@ import ch.deif.meander.ui.CodemapListener;
 import ch.deif.meander.util.MColor;
 
 public class MapView extends ViewPart {
-	
-	private List<DropDownAction> actions = new ArrayList<DropDownAction>();
-	
-	private CodemapListener codemapListener = new CodemapListener() {
-		@Override
-		public void handleEvent(CodemapEvent event) {
-			if (CurrSelectionOverlay.EVT_DOUBLE_CLICKED == event.getKind()) {
-				doubleClicked((Location) event.getValue());					
-			} else if (CurrSelectionOverlay.EVT_SELECTION_CHANGED == event.getKind()) {
-				selectionChanged((MapSelection) event.getValue());
-			}
-		}
 
-		public void selectionChanged(MapSelection mapSelection) {
-			final ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
-			for (String each: mapSelection) {
-				IJavaElement javaElement = Resources.asJavaElement(each);
-				selection.add(javaElement);
-			}
-			StructuredSelection structuredSelection = new StructuredSelection(selection);
-			selectionProvider.setSelection(structuredSelection);
-		}	
+    private List<DropDownAction> actions = new ArrayList<DropDownAction>();
 
-		public void doubleClicked(Location location) {
-			IResource resource = Resources.asResource(location.getDocument());
-			if (!(resource instanceof IFile)) return;
-			openInEditor((IFile) resource);
-		}
-	};
+    private CodemapListener codemapListener = new CodemapListener() {
+        @Override
+        public void handleEvent(CodemapEvent event) {
+            if (CurrSelectionOverlay.EVT_DOUBLE_CLICKED == event.getKind()) {
+                doubleClicked((Location) event.getValue());					
+            } else if (CurrSelectionOverlay.EVT_SELECTION_CHANGED == event.getKind()) {
+                selectionChanged((MapSelection) event.getValue());
+            }
+        }
 
-	public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
+        public void selectionChanged(MapSelection mapSelection) {
+            final ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
+            for (String each: mapSelection) {
+                IJavaElement javaElement = Resources.asJavaElement(each);
+                selection.add(javaElement);
+            }
+            StructuredSelection structuredSelection = new StructuredSelection(selection);
+            selectionProvider.setSelection(structuredSelection);
+        }	
 
-	private static final String LINK_SELECTION_GROUP = CodemapCore.PLUGIN_ID + ".linkselection";
-	
-	private final MapController theController;
-	private MapSelectionProvider selectionProvider;
-	private SelectionTracker selectionTracker;
-	private int currentSize;
-	private Canvas canvas;
-	private Composite container;
+        public void doubleClicked(Location location) {
+            IResource resource = Resources.asResource(location.getDocument());
+            if (!(resource instanceof IFile)) return;
+            openInEditor((IFile) resource);
+        }
+    };
 
-	private CodemapVisualization currentViz;
+    public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
 
-	private CanvasListener canvasListener;
-	
-	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
-		
-		public String getColumnText(Object obj, int index) {
-			return getText(obj);
-		}
+    private static final String LINK_SELECTION_GROUP = CodemapCore.PLUGIN_ID + ".linkselection";
 
-		public Image getColumnImage(Object obj, int index) {
-			return getImage(obj);
-		}
+    private final MapController theController;
+    private MapSelectionProvider selectionProvider;
+    private SelectionTracker selectionTracker;
+    private int currentSize;
+    private Canvas canvas;
+    private Composite container;
 
-		@Override
-		public Image getImage(Object obj) {
-			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
-		}
-	}
+    private CodemapVisualization currentViz;
 
-	public MapView() {
-		theController = new MapController(this);
-	}
+    private CanvasListener canvasListener;
 
-	@Override
-	public void createPartControl(final Composite parent) {
-		container = new Composite(parent, SWT.NONE);
-		container.setLayout(new FillLayout(SWT.LEFT));
-		
-		canvas = new Canvas(container, SWT.DOUBLE_BUFFERED);		
-		canvasListener = new CanvasListener(canvas);
-		
-		container.layout();
-		MColor water = MColor.WATER;
-		Color swtColor = new Color(null, water.getRed(), water.getGreen(), water.getBlue());		
-		container.setBackground(swtColor);
+    class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
 
-		selectionProvider = new MapSelectionProvider(this);
-		selectionTracker = new SelectionTracker(theController);
-		configureToolbar();
-		
-		showMap();
-		theController.onOpenView();
-	}
+        public String getColumnText(Object obj, int index) {
+            return getText(obj);
+        }
 
-	private void showMap() {
-//		clearContainer();
-//		bridge = new EclipseProcessingBridge(container, theApplet);
-//		softwareMap().getApplet().addListener(makeListener());
-		CodemapCore.getPlugin().setMapView(this);
-		new ResizeListener(container, theController);
-		theController.onShowMap();
-	}
+        public Image getColumnImage(Object obj, int index) {
+            return getImage(obj);
+        }
 
-	private void configureToolbar() {
-	    IToolBarManager tbm = getToolBarManager();
-	    tbm.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-	    tbm.add(new Separator());
-	    
-	    tbm.add(registerAction(new ColorDropDownAction(theController)));
-	    tbm.add(registerAction(new LayerDropDownAction()));
-	    tbm.add(registerAction(new LabelDrowDownAction()));
-	    
-	    tbm.add(new LinkWithSelectionAction(selectionTracker));
-	    tbm.add(new ForceSelectionAction(selectionProvider));
-	}
+        @Override
+        public Image getImage(Object obj) {
+            return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
+        }
+    }
 
-	private IAction registerAction(DropDownAction action) {
-		actions.add(action);
-		return action;
-	}
+    public MapView() {
+        theController = new MapController(this);
+    }
 
-	public IToolBarManager getToolBarManager() {
-		return getViewSite().getActionBars().getToolBarManager();
-	}
+    @Override
+    public void createPartControl(final Composite parent) {
+        container = new Composite(parent, SWT.NONE);
+        container.setLayout(new FillLayout(SWT.LEFT));
 
-	/**
-	 * Sent when view is closed.
-	 * 
-	 */
-	@Override
-	public void dispose() {
-		CodemapCore.getPlugin().setMapView(null);
-		selectionTracker.dispose();
-	}
+        canvas = new Canvas(container, SWT.DOUBLE_BUFFERED);		
+        canvasListener = new CanvasListener(canvas);
 
-	@Override
-	public void setFocus() {
-//		FIXME: correct?
-		container.setFocus();
-	}
+        container.layout();
+        MColor water = MColor.WATER;
+        Color swtColor = new Color(null, water.getRed(), water.getGreen(), water.getBlue());		
+        container.setBackground(swtColor);
 
-	public void newProjectSelected() {
-		MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
-		configureActions(activeMap);
-		CodemapVisualization viz = activeMap
-				.updateSize(currentSize)
-				.getVisualizationOrNull();
-		if (viz == null) return;
-		updateMapVisualization(viz);
-	}
+        selectionProvider = new MapSelectionProvider(this);
+        selectionTracker = new SelectionTracker(theController);
+        configureToolbar();
 
-	private void configureActions(MapPerProject activeMap) {
-		for (DropDownAction each: actions) {
-			each.configureAction(activeMap);
-		}
-	}
+        showMap();
+        theController.onOpenView();
+    }
 
-	private void updateMapVisualization(CodemapVisualization viz) {
-		canvasListener.setVisualization(currentViz = viz);
-		redrawAsync();
-	}
+    private void showMap() {
+        //		clearContainer();
+        //		bridge = new EclipseProcessingBridge(container, theApplet);
+        //		softwareMap().getApplet().addListener(makeListener());
+        CodemapCore.getPlugin().setMapView(this);
+        new ResizeListener(container, theController);
+        theController.onShowMap();
+    }
 
-	private void openInEditor(final IFile file) {
-		final IWorkbenchPage page = getSite().getPage();
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					IDE.openEditor(page, file, true);
-				} catch (PartInitException e) {
-					Log.error(e);
-				}
-			}
-		});
-	}
+    private void configureToolbar() {
+        IToolBarManager tbm = getToolBarManager();
+        tbm.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+        tbm.add(new Separator());
 
-	public IJavaProject getCurrentProject() {
-		return theController.getCurrentProject();
-	}
+        tbm.add(registerAction(new ColorDropDownAction(theController)));
+        tbm.add(registerAction(new LayerDropDownAction()));
+        tbm.add(registerAction(new LabelDrowDownAction()));
 
-	public void setCurrentSize(int newDimension) {
-		currentSize = newDimension;
-	}
+        tbm.add(new LinkWithSelectionAction(selectionTracker));
+        tbm.add(new ForceSelectionAction(selectionProvider));
+    }
 
-	public void updateMapdimension(int newDimension) {
-		currentSize = newDimension;
-		IJavaProject project = getCurrentProject();
-		if (project == null) return;
-		CodemapVisualization viz = CodemapCore.getPlugin()
-			.mapForProject(project)
-			.updateSize(currentSize)
-			.getVisualizationOrNull();
-		if (viz != null) {
-			updateMapVisualization(viz);
-		}
-	}
+    private IAction registerAction(DropDownAction action) {
+        actions.add(action);
+        return action;
+    }
 
-	public void redrawAsync() {
-		// Must call #syncExec, else we get an SWT error 		
-		Display.getDefault().asyncExec(new Runnable() {
-			@Override
-			public void run() {
-				redraw();
-			}
-		});
-	}
+    public IToolBarManager getToolBarManager() {
+        return getViewSite().getActionBars().getToolBarManager();
+    }
 
-	public void redraw() {
-		container.redraw();
-		canvas.redraw(); // needs both!
-	}
+    /**
+     * Sent when view is closed.
+     * 
+     */
+    @Override
+    public void dispose() {
+        CodemapCore.getPlugin().setMapView(null);
+        selectionTracker.dispose();
+    }
 
-	public void redrawCodemapBackground() {
-		currentViz.redrawBackground();
-	}
+    @Override
+    public void setFocus() {
+        //		FIXME: correct?
+        container.setFocus();
+    }
+
+    public void newProjectSelected() {
+        MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
+        configureActions(activeMap);
+        CodemapVisualization viz = activeMap
+        .updateSize(currentSize)
+        .getVisualizationOrNull();
+        if (viz == null) return;
+        updateMapVisualization(viz);
+    }
+
+    private void configureActions(MapPerProject activeMap) {
+        for (DropDownAction each: actions) {
+            each.configureAction(activeMap);
+        }
+    }
+
+    private void updateMapVisualization(CodemapVisualization viz) {
+        canvasListener.setVisualization(currentViz = viz);
+        redrawAsync();
+    }
+
+    private void openInEditor(final IFile file) {
+        final IWorkbenchPage page = getSite().getPage();
+        Display.getDefault().asyncExec(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    IDE.openEditor(page, file, true);
+                } catch (PartInitException e) {
+                    Log.error(e);
+                }
+            }
+        });
+    }
+
+    public IJavaProject getCurrentProject() {
+        return theController.getCurrentProject();
+    }
+
+    public void setCurrentSize(int newDimension) {
+        currentSize = newDimension;
+    }
+
+    public void updateMapdimension(int newDimension) {
+        currentSize = newDimension;
+        IJavaProject project = getCurrentProject();
+        if (project == null) return;
+        CodemapVisualization viz = CodemapCore.getPlugin()
+        .mapForProject(project)
+        .updateSize(currentSize)
+        .getVisualizationOrNull();
+        if (viz != null) {
+            updateMapVisualization(viz);
+        }
+    }
+
+    public void redrawAsync() {
+        // Must call #syncExec, else we get an SWT error 		
+        Display.getDefault().asyncExec(new Runnable() {
+            @Override
+            public void run() {
+                redraw();
+            }
+        });
+    }
+
+    public void redraw() {
+        container.redraw();
+        canvas.redraw(); // needs both!
+    }
+
+    public void redrawCodemapBackground() {
+        currentViz.redrawBackground();
+    }
 
 }
 
 class CanvasListener implements PaintListener, 
-		MouseListener, MouseMoveListener, 
-		MouseTrackListener, MouseWheelListener, 
-		DragDetectListener {
-	
-	private CodemapVisualization visualization;
+MouseListener, MouseMoveListener, 
+MouseTrackListener, MouseWheelListener, 
+DragDetectListener {
 
-	public CanvasListener(Canvas newCanvas) {
-		newCanvas.addPaintListener(this);
-		newCanvas.addMouseListener(this);
-		newCanvas.addMouseMoveListener(this);
-		newCanvas.addMouseTrackListener(this);
-		newCanvas.addMouseWheelListener(this);
-		newCanvas.addDragDetectListener(this);
+    private CodemapVisualization visualization;
 
-	}
+    public CanvasListener(Canvas newCanvas) {
+        newCanvas.addPaintListener(this);
+        newCanvas.addMouseListener(this);
+        newCanvas.addMouseMoveListener(this);
+        newCanvas.addMouseTrackListener(this);
+        newCanvas.addMouseWheelListener(this);
+        newCanvas.addDragDetectListener(this);
 
-	public void setVisualization(CodemapVisualization visualization) {
-		this.visualization = visualization;
-	}
+    }
 
-	public CodemapVisualization getVisualization() {
-		return visualization;
-	}
+    public void setVisualization(CodemapVisualization visualization) {
+        this.visualization = visualization;
+    }
 
-	@Override
-	public void paintControl(PaintEvent e) {
-		if (visualization != null) visualization.paintControl(e);
-	}
+    public CodemapVisualization getVisualization() {
+        return visualization;
+    }
 
-	@Override
-	public void mouseDoubleClick(MouseEvent e) {
-		if (visualization != null) visualization.mouseDoubleClick(e);
-	}
+    @Override
+    public void paintControl(PaintEvent e) {
+        if (visualization != null) visualization.paintControl(e);
+    }
 
-	@Override
-	public void mouseDown(MouseEvent e) {
-		if (visualization != null) visualization.mouseDown(e);
-	}
+    @Override
+    public void mouseDoubleClick(MouseEvent e) {
+        if (visualization != null) visualization.mouseDoubleClick(e);
+    }
 
-	@Override
-	public void mouseUp(MouseEvent e) {
-		if (visualization != null) visualization.mouseUp(e);
-	}
+    @Override
+    public void mouseDown(MouseEvent e) {
+        if (visualization != null) visualization.mouseDown(e);
+    }
 
-	@Override
-	public void mouseMove(MouseEvent e) {
-		if (visualization != null) visualization.mouseMove(e);
-	}
+    @Override
+    public void mouseUp(MouseEvent e) {
+        if (visualization != null) visualization.mouseUp(e);
+    }
 
-	@Override
-	public void mouseEnter(MouseEvent e) {
-		if (visualization != null) visualization.mouseEnter(e);
-	}
+    @Override
+    public void mouseMove(MouseEvent e) {
+        if (visualization != null) visualization.mouseMove(e);
+    }
 
-	@Override
-	public void mouseExit(MouseEvent e) {
-		if (visualization != null) visualization.mouseExit(e);
-	}
+    @Override
+    public void mouseEnter(MouseEvent e) {
+        if (visualization != null) visualization.mouseEnter(e);
+    }
 
-	@Override
-	public void mouseHover(MouseEvent e) {
-		if (visualization != null) visualization.mouseHover(e);
-	}
+    @Override
+    public void mouseExit(MouseEvent e) {
+        if (visualization != null) visualization.mouseExit(e);
+    }
 
-	@Override
-	public void mouseScrolled(MouseEvent e) {
-		if (visualization != null) visualization.mouseScrolled(e);
-	}
+    @Override
+    public void mouseHover(MouseEvent e) {
+        if (visualization != null) visualization.mouseHover(e);
+    }
 
-	@Override
-	public void dragDetected(DragDetectEvent e) {
-		if (visualization != null) visualization.dragDetected(e);
-	}
-	
+    @Override
+    public void mouseScrolled(MouseEvent e) {
+        if (visualization != null) visualization.mouseScrolled(e);
+    }
+
+    @Override
+    public void dragDetected(DragDetectEvent e) {
+        if (visualization != null) visualization.dragDetected(e);
+    }
+
 }

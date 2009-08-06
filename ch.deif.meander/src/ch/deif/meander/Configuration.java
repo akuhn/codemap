@@ -3,8 +3,11 @@ package ch.deif.meander;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import ch.akuhn.foreach.Collect;
 import ch.akuhn.foreach.Each;
@@ -24,12 +27,15 @@ public class Configuration implements Serializable {
 
 	private static final long serialVersionUID = 1337;
 	private static final int VERSION_1 = 0x20090830;
-
 	
 	private Point[] points;
 	
 	private Configuration(Point... locations) {
 		this.points = locations;
+	}
+	
+	public Configuration() {
+		this(new Point[] {});
 	}
 	
 	public Configuration(Configuration map) {
@@ -85,8 +91,33 @@ public class Configuration implements Serializable {
 		return Arrays.asList(points);
 	}
 
-	public double size() {
+	public int size() {
 		return points.length;
+	}
+	
+	public static class Builder {
+	
+		private Collection<Point> fPoints = new ArrayList<Point>();
+		
+		public Builder add(String document, double x, double y) {
+			fPoints.add(new Point(x,y,document));
+			return this;
+		}
+		
+		public Configuration build() {
+			return new Configuration(fPoints.toArray(new Point[fPoints.size()]));
+		}
+		
+	}
+	
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	public Map<String, Point> asMap() {
+		Map<String, Point> map = new HashMap<String, Point>();
+		for (Point p: points) map.put(p.getDocument(), p);
+		return map;
 	}
 	
 }
