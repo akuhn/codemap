@@ -18,42 +18,42 @@
    </license>
 
    <plugin
-         id="org.codemap.util"
-         download-size="0"
-         install-size="0"
-         version="0.7.667.qualifier"
-         unpack="false"/>
-
-   <plugin
          id="ch.akuhn.hapax"
          download-size="0"
          install-size="0"
-         version="0.7.251.qualifier"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="ch.deif.meander"
          download-size="0"
          install-size="0"
-         version="0.7.671.qualifier"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.codemap"
          download-size="0"
          install-size="0"
-         version="0.7.669.qualifier"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.codemap.plugin.search"
          download-size="0"
          install-size="0"
-         version="0.7.669.qualifier"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.codemap.plugin.marker"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ch.akuhn.util"
          download-size="0"
          install-size="0"
          version="0.0.0"
