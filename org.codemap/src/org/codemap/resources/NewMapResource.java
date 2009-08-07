@@ -138,7 +138,7 @@ public class NewMapResource {
         return configuration.withSize(size, new MapScheme<Double>() {
             @Override
             public Double forLocation(Point location) {
-                return Math.sqrt(index.getTermCount(location.getDocument()));
+                return Math.sqrt(index.getDocumentLength(location.getDocument()));
 
             }
         });

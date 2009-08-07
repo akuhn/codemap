@@ -23,7 +23,6 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.osgi.service.prefs.BackingStoreException;
 
 import ch.akuhn.util.Arrays;
-import ch.akuhn.util.Pair;
 import ch.akuhn.values.ActionValue;
 import ch.akuhn.values.Arguments;
 import ch.akuhn.values.Value;

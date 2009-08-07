@@ -147,10 +147,14 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 	@Override
 	public void mouseMove(MouseEvent e) {
 		this.translate(e);
-		String name = !map.containsPoint(e.x, e.y) ? null
-				: map.get(NearestNeighborAlgorithm.class).get(e.x).get(e.y).getName();
-		((Canvas) e.widget).setToolTipText(name);
+		this.updateTooltip(e);
 		super.mouseMove(e);
+	}
+
+	private void updateTooltip(MouseEvent e) {
+		boolean noName = map.isEmpty() || !map.containsPoint(e.x, e.y);
+		String name = noName ? null : map.get(NearestNeighborAlgorithm.class).get(e.x).get(e.y).getName();
+		((Canvas) e.widget).setToolTipText(name);
 	}
 
 

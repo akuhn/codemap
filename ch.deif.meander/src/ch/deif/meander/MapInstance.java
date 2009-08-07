@@ -272,6 +272,9 @@ public class MapInstance {
 	public boolean containsPoint(int x, int y) {
 		return 0 <= x && 0 <= y && x < width && y < height;
 	}
+	public boolean isEmpty() {
+		return locations.isEmpty();
+	}
 
 	
 }
