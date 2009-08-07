@@ -28,6 +28,8 @@ public class LatentSemanticIndex implements Serializable {
     private AssociativeList<String> terms;
     private SVD svd; 
 
+    private int[] documentLength;
+    
     private double[] globalWeighting;
 
     @SuppressWarnings("unchecked")
@@ -54,17 +56,15 @@ public class LatentSemanticIndex implements Serializable {
     public LatentSemanticIndex(
             AssociativeList<String> terms, 
             AssociativeList<String> documents,
-            double[] globalWeighting, 
             SVD svd) {
         this.documents = documents;
         this.terms = terms;
         this.svd = svd;
-        this.globalWeighting = globalWeighting;
-        assert globalWeighting.length == terms.size();
         if (svd.getRank() == 0) return;
         if (svd.rowCount() != terms.size()) this.svd = svd.transposed();
         assert svd.rowCount() == terms.size();
         assert svd.columnCount() == documents.size();
+        this.assertInvariant();
     }
 
     public double[] createPseudoDocument(String string) {
@@ -200,6 +200,7 @@ public class LatentSemanticIndex implements Serializable {
             documents.add(doc);
             svd = svd.withAppendV(newDocument);
         }
+        this.assertInvariant();
     }
 
     public void removeDocument(String doc) {
@@ -207,16 +208,36 @@ public class LatentSemanticIndex implements Serializable {
         if (index < 0) return;
         svd = svd.withoutV(index);
         // todo adapate termCounts
+        this.assertInvariant();
     }
 
     public Iterable<String> documents() {
         return documents;
     }
 
-    public int getTermCount(String document) {
-        int index = documents.get(document);
-        if (index < 0) return 0;
-        return (int) (svd.lengthV(index) * 1000);
+    public LatentSemanticIndex initializeDocumentLength(int[] lengthArray) {
+        this.documentLength = lengthArray;
+        this.assertInvariant();
+        return this;
     }
 
+    public int getDocumentLength(String doc) {
+        int index = documents.get(doc);
+        if (index < 0) return -1;
+        return documentLength[index];
+    }
+    
+    
+    private void assertInvariant() {
+        if (documentLength != null && documentLength.length != documents.size()) throw new AssertionError();
+        if (svd.columnCount() != documents.size()) throw new AssertionError();
+        if (svd.rowCount() != terms.size()) throw new AssertionError();
+        if (globalWeighting != null && globalWeighting.length != terms.size()) throw new AssertionError();
+    }
+
+    public LatentSemanticIndex initializeGlobalWeightings(double[] globalWeightings) {
+        this.globalWeighting = globalWeightings;
+        return this;
+    }
+    
 }

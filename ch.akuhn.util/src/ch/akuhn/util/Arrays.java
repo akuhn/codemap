@@ -1,6 +1,5 @@
 package ch.akuhn.util;
 
-import ch.akuhn.values.Value;
 
 public abstract class Arrays {
 
@@ -19,6 +18,10 @@ public abstract class Arrays {
             if (array[n] == element) return n;
         }
         return -1;
+    }
+
+    public static int[] copyOf(int[] original, int newLength) {
+        return java.util.Arrays.copyOf(original, newLength);
     }
 
 

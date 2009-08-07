@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Adrian's utility classes
 Bundle-SymbolicName: ch.akuhn.util
-Bundle-Version: 2.1.258.qualifier 
+Bundle-Version: 2.1.264.qualifier 
 Bundle-Vendor: Adrian Kuhn
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .
