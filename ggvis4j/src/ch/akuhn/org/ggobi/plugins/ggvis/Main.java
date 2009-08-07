@@ -7,28 +7,28 @@ import ch.akuhn.mds.MultidimensionalScaling;
 
 public class Main {
 
-	private transient static boolean VIZ = true;
+    private transient static boolean VIZ = true;
 
-	public static void main(String[] args) throws IOException {
-		
-		Hapax hapax = Hapax.newCorpus()
-			.useTFIDF()
-			.useCamelCaseScanner()
-			.addFiles("..", ".java")
-			.build();
-		
-		System.out.println("done");
+    public static void main(String[] args) throws IOException {
 
-		Viz viz = VIZ ? new Viz().open() : null;
-		new MultidimensionalScaling()
-				.similarities(hapax.getIndex().documentCorrelation().asArray())
-				.verbose()
-				.listener(viz)
-				.maxIterations(1000+0*Integer.MAX_VALUE)
-				.run();
-				
-	
-	}
+        Hapax hapax = Hapax.newCorpus()
+        .useTFIDF()
+        .useCamelCaseScanner()
+        .addFiles("..", ".java")
+        .build();
 
-	
+        System.out.println("done");
+
+        Viz viz = VIZ ? new Viz().open() : null;
+        new MultidimensionalScaling()
+        .similarities(hapax.getIndex().documentCorrelation().asArray())
+        .verbose()
+        .listener(viz)
+        .maxIterations(1000+0*Integer.MAX_VALUE)
+        .run();
+
+
+    }
+
+
 }
