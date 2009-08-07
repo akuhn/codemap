@@ -2,9 +2,16 @@ package ch.akuhn.org.ggobi.plugins.ggvis;
 
 import java.util.Arrays;
 
+/** Symmetric matrix without diagonal.
+ * <P>
+ * This class is not thread-safe. 
+ *
+ * @author Adrian Kuhn
+ *
+ */
 public class SMat {
 
-    double[][] vals;
+    public final double[][] vals;
 
     public SMat(int size) {
         vals = new double[size][];

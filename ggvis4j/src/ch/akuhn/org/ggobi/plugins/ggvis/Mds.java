@@ -13,8 +13,8 @@ import static java.lang.Math.sqrt;
  * *  and tuned by Andreas Buja.  Now being ported to ggvis.
  * *<span/>/</PRE>
  * @author Adrian Kuhn (this in Java)
- * @author Andreas Buja (ggvis in C++)
- * @author Michael Littman (xgvis in C++)
+ * @author Andreas Buja (ggvis in C/C++)
+ * @author Michael Littman (xgvis in C/C++)
  * 
  */
 public class Mds {
@@ -28,123 +28,47 @@ public class Mds {
     static final int DRAGGED = 4;
     private static final boolean TODO_SYMMETRY = false;
     private SMat config_dist;
-    private static final int DIM = 2;
-    private double dist_power; /* was mds_distpow */
-    private double dist_power_over_lnorm;
     private SMat Dtarget; /*-- D in the documentation; dist in the xgvis code --*/
 
-    /* begin centering and sizing routines */
-
-    private double Dtarget_max, Dtarget_min;
-    private double Dtarget_power; /* was mds_power */
-    private Points gradient;
-    private MDSGroupInd group_ind;
-    /* end centering and sizing routines */
-
-    private double lnorm;
-    private double lnorm_over_dist_power;
     private Points pos;
-    private double[] pos_mean;
-    private double pos_scl;
-    private double rand_select_val;
-    private double stepsize;
     /* these belong in ggv */
-    @SuppressWarnings("unused")
     private double stress, stress_dx, stress_dd, stress_xx;
-    private double threshold_high;
-    private double threshold_low;
     private SMat trans_dist;
-    private double weight_power; /* was mds_weightpow */
-    private SMat weights;
-    private double within_between;
 
     private final double sig_pow(double x, double p) {
         return (x >= 0.0 ? pow(x, p) : -pow(-x, p));
     }
 
+    private double stepsize = 0.02;
+
+    private double dist_power = 1.0;
+    private double Dtarget_power = 1.0;
+    private double lnorm = 2.0;
+    private double weight_power = 0.0;
+
+    private double dist_power_over_lnorm = 0.5;
+    private double lnorm_over_dist_power = 2.0;
+    private double within_between = 1.0;
+    private double rand_select_val = 1.0;  /* selection probability */
+    private double threshold_high = 0.0;
+    private double threshold_low = 0.0;
+
+    private MDSGroupInd group_ind = MDSGroupInd.all_distances;
+
+    /*-- used in mds.c --*/
+    private SMat weights = new SMat(0);
+    private Points gradient = new Points(0);
+
+    private double Dtarget_max = Double.MAX_VALUE;
+    private double Dtarget_min = Double.MIN_VALUE;
+    /* */
+
+    /* weight vector */
     {
-        this.stepsize = 0.02;
-
-        this.dist_power = 1.0;
-        this.Dtarget_power = 1.0;
-        this.lnorm = 2.0;
-        this.weight_power = 0.0;
-
-        this.dist_power_over_lnorm = 0.5;
-        this.lnorm_over_dist_power = 2.0;
-        this.within_between = 1.0;
-        this.rand_select_val = 1.0;  /* selection probability */
-        this.threshold_high = 0.0;
-        this.threshold_low = 0.0;
-
-        this.group_ind = MDSGroupInd.all_distances;
-
-        /*-- used in mds.c --*/
-        this.pos_mean = new double[] {};
-        this.weights = new SMat(0);
-        this.gradient = new Points(0,0);
-
-        this.pos_scl = 0.0;
-        this.Dtarget_max = Double.MAX_VALUE;
-        this.Dtarget_min = Double.MIN_VALUE;
-        /* */
-
-        /* weight vector */
         set_weights();
 
     }
-    private double dot_prod (int i, int j ) {
-        double dsum = 0.0;
-        dsum += (this.pos.x[i] - this.pos_mean[0]) *
-        (this.pos.x[j] - this.pos_mean[0]);
-        dsum += (this.pos.y[i] - this.pos_mean[1]) *
-        (this.pos.y[j] - this.pos_mean[1]);
-        return(dsum);
-    }
-    private void get_center () {
-        this.pos_mean = new double[Mds.DIM];
 
-        int n = 0;
-
-        for (int i=0; i<this.pos.nrows; i++) {
-            if (IS_DRAGGED(i)) continue;
-            this.pos_mean[0] += this.pos.x[i];
-            this.pos_mean[1] += this.pos.y[i];
-            n++;
-        }
-        this.pos_mean[0] /= n;
-        this.pos_mean[1] /= n;
-    }
-    private void get_center_scale () {
-        int n, i, k;
-
-        get_center ();
-        n = 0;
-        this.pos_scl = 0.;
-
-        for(i=0; i<this.pos.nrows; i++) {
-            if (IS_DRAGGED(i)) continue;
-            for (k=0; k<Mds.DIM; k++) {
-                this.pos_scl += ((this.pos.x[i] - this.pos_mean[0]) *
-                        (this.pos.x[i] - this.pos_mean[0]));
-                this.pos_scl += ((this.pos.y[i] - this.pos_mean[1]) *
-                        (this.pos.y[i] - this.pos_mean[1]));
-            }
-            n++;
-        }
-        this.pos_scl = sqrt(this.pos_scl/n/Mds.DIM);
-    }
-
-    private void ggv_center_scale_pos() {
-
-        get_center_scale();
-
-        for (int i=0; i<this.pos.nrows; i++) {
-            if (IS_DRAGGED(i)) continue;
-            this.pos.x[i] = (this.pos.x[i] - this.pos_mean[0])/this.pos_scl;
-            this.pos.y[i] = (this.pos.y[i] - this.pos_mean[1])/this.pos_scl;
-        }
-    }
     public void init(double[][] dissimilarities) {
 
         this.Dtarget = new SMat(dissimilarities.length);
@@ -199,8 +123,8 @@ public class Mds {
         this.threshold_low =  this.Dtarget_min;
         this.threshold_high = this.Dtarget_max;
 
-        this.pos = new Points(dissimilarities.length, DIM);
-        this.gradient = new Points(dissimilarities.length, DIM);
+        this.pos = new Points(dissimilarities.length);
+        this.gradient = new Points(dissimilarities.length);
         for (int a = 0; a < pos.x.length; a++) {
             this.pos.x[a] = (Math.random() - 0.5) * 2;
             this.pos.y[a] = (Math.random() - 0.5) * 2;
@@ -213,14 +137,8 @@ public class Mds {
     private boolean IS_ANCHOR(int i) {
         return i % 100 == 0;
     }
-    private boolean IS_DRAGGED(int i) {
+    boolean IS_DRAGGED(int i) {
         return false;
-    }
-    private double	L2_norm (double x, double y) {
-        double dsum = 0.0;
-        dsum += (x - this.pos_mean[0])*(x - this.pos_mean[0]);
-        dsum += (y - this.pos_mean[1])*(y - this.pos_mean[1]);
-        return(dsum);
     }
     private double Lp_distance_pow (int i, int j) {
         double dsum = 0.0;
@@ -252,7 +170,7 @@ public class Mds {
     }
     private void mds_once_part2() {
         // allocate position and compute means
-        get_center();
+        pos.get_center();
         // i's are moved by j's
         for (int i = 0; i < this.Dtarget.vals.length; i++) {
             // these points are not moved by the gradient
@@ -316,7 +234,7 @@ public class Mds {
         /* --- for active dissimilarities, do the gradient push if asked for ----*/
         if (doit) {
             /* Zero out the gradient matrix. */
-            this.gradient.arrayd_zero();
+            this.gradient.clear();
             /* ------------- gradient accumulation: j's push i's ----------- */
             for (int i = 0; i < this.trans_dist.vals.length; i++) {
                 for (int j = 0; j < i; j++) {
@@ -338,7 +256,7 @@ public class Mds {
             double gfactor = mds_once_part3_normalizeGradient();
 
             /* add the gradient matrix to the position matrix and drag points */
-            for (int i=0; i<this.pos.nrows; i++) {
+            for (int i=0; i<this.pos.x.length; i++) {
                 if (!IS_DRAGGED(i)) {
                     this.pos.x[i] += (gfactor * this.gradient.x[i]);
                     this.pos.y[i] += (gfactor * this.gradient.y[i]);
@@ -365,7 +283,7 @@ public class Mds {
             /* non-Euclidean Minkowski/Lebesgue metric */
             step_mag = weight * resid *
             pow (dist_config, 1 - this.lnorm_over_dist_power);
-            for (int k = 0; k < Mds.DIM; k++) {
+            for (int k = 0; k < 2; k++) {
                 this.gradient.x[i] += step_mag * sig_pow(this.pos.x[i]-this.pos.x[j], this.lnorm-1.0);
                 this.gradient.y[i] += step_mag * sig_pow(this.pos.y[i]-this.pos.y[j], this.lnorm-1.0);
                 this.gradient.x[j] += step_mag * sig_pow(this.pos.x[j]-this.pos.x[i], this.lnorm-1.0);
@@ -396,20 +314,18 @@ public class Mds {
 		   the size of the configuration */
     private double mds_once_part3_normalizeGradient() {
         double gsum = 0, psum = 0;
-        for (int i=0; i<this.pos.nrows; i++) {
+        for (int i=0; i<this.pos.x.length; i++) {
             // if (true || (ANCHOR_SCALE && IS_ANCHOR(i)))
-            gsum += L2_norm (this.gradient.x[i],this.gradient.y[i]);
-            psum += L2_norm (this.pos.x[i],this.pos.y[i]);
+            gsum += pos.L2_norm (this.gradient.x[i], this.gradient.y[i]);
+            psum += pos.L2_norm (this.pos.x[i], this.pos.y[i]);
         }
         return (gsum < delta) ? 0.0 : this.stepsize * sqrt(psum/gsum);
     }
+    /**
+     * @deprecated Use {@link ch.akuhn.org.ggobi.plugins.ggvis.Points#points()} instead
+     */
     public double[][] points() {
-        double[][] result = new double[pos.x.length][2];
-        for (int i = 0; i < pos.x.length; i++) {
-            result[i][0] = pos.x[i];
-            result[i][1] = pos.y[i];
-        }
-        return result;
+        return pos.points();
     }
 
     /* we assume in this routine that trans_dist contains
@@ -515,6 +431,8 @@ public class Mds {
             }
         }
     } /* end set_weights() */
+
+
     private void update_stress () {
         stress_dx = stress_xx = stress_dd = 0;
         for (int i=0; i < this.trans_dist.vals.length; i++)

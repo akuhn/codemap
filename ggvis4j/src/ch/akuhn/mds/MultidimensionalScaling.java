@@ -43,7 +43,7 @@ public class MultidimensionalScaling {
 			if (flistener != null) flistener.update(mds.points());
 			long t = System.nanoTime();
 			for (int n = 0; n < 10; n++) mds.mds_once(true);
-			if (fout != null) fout.printf("%d\n", (int) (1e12 / (System.nanoTime() - t)) * 10);
+			if (fout != null) fout.printf("%d\n", (int) (1e9 * 10 / (System.nanoTime() - t)));
 			fiterations -= 10;
 		}
 		double[][] points = mds.points();

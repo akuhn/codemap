@@ -12,10 +12,10 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         Hapax hapax = Hapax.newCorpus()
-        .useTFIDF()
-        .useCamelCaseScanner()
-        .addFiles("..", ".java")
-        .build();
+                .useTFIDF()
+                .useCamelCaseScanner()
+                .addFiles("..", ".java")
+                .build();
 
         System.out.println("done");
 
@@ -24,7 +24,7 @@ public class Main {
         .similarities(hapax.getIndex().documentCorrelation().asArray())
         .verbose()
         .listener(viz)
-        .maxIterations(1000+0*Integer.MAX_VALUE)
+        .maxIterations(Integer.MAX_VALUE)
         .run();
 
 
