@@ -3,6 +3,7 @@ package ch.akuhn.org.ggobi.plugins.ggvis;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -11,7 +12,7 @@ import ch.akuhn.mds.MultidimensionalScaling.PointsListener;
 
 public class Viz implements PaintListener, PointsListener {
 
-    public double[][] points;
+    public Mds mds;
 
     public Viz open() {
         new Thread(new Runnable() {
@@ -47,11 +48,13 @@ public class Viz implements PaintListener, PointsListener {
 
     @Override
     public void paintControl(PaintEvent e) {
+        if (mds == null) return;
+        Device device = e.gc.getDevice();
         e.gc.setAntialias(SWT.ON);
         e.gc.setAlpha(128);
         int zoom = 100;
         e.gc.drawOval(256-zoom, 256-zoom, zoom*2, zoom*2);
-        final double[][] pps = points;
+        final double[][] pps = mds.points();
         if (pps == null) return;
         for (double[] p: pps) {
             int x = (int) (p[0] * zoom + 256);
@@ -65,11 +68,26 @@ public class Viz implements PaintListener, PointsListener {
             e.gc.drawLine(x - 4, y - 4, x + 4, y + 4);
             e.gc.drawLine(x - 4, y + 4, x + 4, y - 4);
         }
+        e.gc.setForeground(device.getSystemColor(SWT.COLOR_BLUE));
+        drawHistogram(e, mds.config_dist.getHistogram());
+        e.gc.setForeground(device.getSystemColor(SWT.COLOR_GREEN));
+        drawHistogram(e, mds.Dtarget.getHistogram());
+    }
+
+    private void drawHistogram(PaintEvent e, int[] histo) {
+        for (int n = 1; n < histo.length; n++) {
+            int xa = (512 * (n - 1)) / histo.length;
+            int xb = (512 * n) / histo.length;
+            int ya = 512 - histo[n-1]/10;
+            int yb = 512 - histo[n]/10 ;    
+            e.gc.drawLine(xa, ya, xb, ya);
+            e.gc.drawLine(xb, ya, xb, yb);
+        }
     }
 
     @Override
-    public void update(double[][] points) {
-        this.points = points;
+    public void update(Mds mds) {
+        this.mds = mds;
     }
 
 }

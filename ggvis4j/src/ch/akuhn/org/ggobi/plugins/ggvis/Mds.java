@@ -27,12 +27,14 @@ public class Mds {
 
     static final int DRAGGED = 4;
     private static final boolean TODO_SYMMETRY = false;
-    private SMat config_dist;
-    private SMat Dtarget; /*-- D in the documentation; dist in the xgvis code --*/
+    SMat config_dist;
+    SMat Dtarget; /*-- D in the documentation; dist in the xgvis code --*/
 
     private Points pos;
     /* these belong in ggv */
-    private double stress, stress_dx, stress_dd, stress_xx;
+    public double stress;
+
+    private double stress_dx, stress_dd, stress_xx;
     private SMat trans_dist;
 
     private final double sig_pow(double x, double p) {
@@ -56,18 +58,12 @@ public class Mds {
     private MDSGroupInd group_ind = MDSGroupInd.all_distances;
 
     /*-- used in mds.c --*/
-    private SMat weights = new SMat(0);
+    private SMat weights = null;
     private Points gradient = new Points(0);
 
     private double Dtarget_max = Double.MAX_VALUE;
     private double Dtarget_min = Double.MIN_VALUE;
     /* */
-
-    /* weight vector */
-    {
-        set_weights();
-
-    }
 
     public void init(double[][] dissimilarities) {
 
@@ -102,7 +98,7 @@ public class Mds {
         }  /* populate with INF */
         for (int a1 = 0; a1 < dissimilarities.length; a1++) {
             for (int b1 = 0; b1 < a1; b1++) {
-                this.Dtarget.vals[a1][b1] = dissimilarities[a1][b1];
+                this.Dtarget.vals[a1][b1] = f_dtarget(dissimilarities[a1][b1]);
             }
         }
 
@@ -122,6 +118,7 @@ public class Mds {
         }
         this.threshold_low =  this.Dtarget_min;
         this.threshold_high = this.Dtarget_max;
+        
 
         this.pos = new Points(dissimilarities.length);
         this.gradient = new Points(dissimilarities.length);
@@ -132,7 +129,17 @@ public class Mds {
 
         this.trans_dist.fill(Double.NaN);
         this.config_dist.fill(Double.NaN);
+        set_weights();
 
+    }
+    private double f_dtarget(double d) {
+        return d < 1 ? d : (d * 10) - 9;
+        //return d < 0.5 ? d * 2 : Math.pow(d * 2, 8);
+    }
+    private double f_config_dist(double d) {
+        return d > 0.5 ? d / 4 + 0.25 : d;
+        //return d > 1.0 ? 1.0 : Math.pow(d, 0.25);
+        //return d < 0.5 ? d * 2 : Math.pow(d * 2, 8);
     }
     private boolean IS_ANCHOR(int i) {
         return i % 100 == 0;
@@ -178,7 +185,7 @@ public class Mds {
             /* j's are moving i's */
             for (int j = 0; j < i; j++) {
                 if (mds_once_part2_continue(i, j)) continue;
-                this.config_dist.vals[i][j] = Lp_distance_pow(i, j);
+                this.config_dist.vals[i][j] = f_config_dist(Lp_distance_pow(i, j));
                 this.trans_dist.vals[i][j] = this.Dtarget.vals[i][j];
             }
         }
@@ -194,7 +201,7 @@ public class Mds {
         if (Double.isNaN(this.Dtarget.vals[i][j])) return true;
 
         /* if weight is zero, skip */
-        if (this.weights != null && this.weights.vals.length != 0 && this.weights.vals[i][j] == 0.) return true;
+        if (this.weights != null && this.weights.vals[i][j] == 0.) return true;
 
         /* using groups */
         if (this.group_ind == MDSGroupInd.within && !SAMEGLYPH(i,j)) return true;
@@ -220,7 +227,7 @@ public class Mds {
          * assume weights exist if test is positive, and
          * can now assume that weights are >0 for non-NA
          */
-        if (this.weight_power != 0. || this.within_between != 1.) {
+        if (!doesNotWeight()) {
             if (this.weights.vals[i][j] == 0.) return true;
         }
 
@@ -243,7 +250,7 @@ public class Mds {
                     if (Double.isNaN(dist_trans)) continue;
                     double dist_config = this.config_dist.vals[i][j];
                     if (abs(dist_config) < delta) dist_config = delta;
-                    if (this.weight_power == 0. && this.within_between == 1.) {
+                    if (doesNotWeight()) {
                         weight = 1.0;
                     } else {
                         weight = this.weights.vals[i][j];
@@ -379,60 +386,70 @@ public class Mds {
      */
     private void set_weights () {
 
-        int i, j;
         double this_weight;
         double local_weight_power = 0.;
         double local_within_between = 1.;
 
+        this.weights = new SMat(Dtarget.vals.length);
+        for (int i = 0; i < Dtarget.vals.length; i++) {
+            for (int j = 0; j < i; j++) {
+                this.weights.vals[i][j] = f_weight(this.Dtarget.vals[i][j]);
+            }
+        }
+        
         /* the weights will be used in metric and nonmetric scaling
          * as soon as weightpow != 0. or within_between != 1.
          * weights vector only if needed */
-        if ((this.weight_power != local_weight_power &&
-                this.weight_power != 0.) ||
-                (this.within_between != local_within_between &&
-                        this.within_between != 1.))
-        {
-            assert false; // TODO
-
-            for (i=0; i<this.Dtarget.vals.length; i++) {
-                for (j=0; j<this.Dtarget.vals.length; j++) {
-                    if (Double.isNaN(this.Dtarget.vals[i][j])) {
-                        this.weights.vals[i][j] = Double.NaN;
-                        continue;
-                    }
-                    if (this.weight_power != 0.) {
-                        if(this.Dtarget.vals[i][j] == 0.) { /* cap them */
-                            if (this.weight_power < 0.) {
-                                this.weights.vals[i][j] = 1E5;
-                                continue;
-                            }
-                            else {
-                                this.weights.vals[i][j] = 1E-5;
-                            }
-                        }
-                        this_weight = pow(this.Dtarget.vals[i][j], this.weight_power);
-                        /* cap them */
-                        if (this_weight > 1E5)  this_weight = 1E5;
-                        else if (this_weight < 1E-5) this_weight = 1E-5;
-                        /* within-between weighting */
-                        if (SAMEGLYPH(i,j))
-                            this_weight *= (2. - this.within_between);
-                        else
-                            this_weight *= this.within_between;
-                        this.weights.vals[i][j] = this_weight;
-                    } else { /* weightpow == 0. */
-                        if (SAMEGLYPH(i,j))
-                            this_weight = (2. - this.within_between);
-                        else
-                            this_weight = this.within_between;
-                        this.weights.vals[i][j] = this_weight;
-                    }
-                }
-            }
-        }
+//        if ((this.weight_power != local_weight_power &&
+//                this.weight_power != 0.) ||
+//                (this.within_between != local_within_between &&
+//                        this.within_between != 1.))
+//        {
+//            assert false; // TODO
+//
+//            for (i=0; i<this.Dtarget.vals.length; i++) {
+//                for (j=0; j<this.Dtarget.vals.length; j++) {
+//                    if (Double.isNaN(this.Dtarget.vals[i][j])) {
+//                        this.weights.vals[i][j] = Double.NaN;
+//                        continue;
+//                    }
+//                    if (this.weight_power != 0.) {
+//                        if(this.Dtarget.vals[i][j] == 0.) { /* cap them */
+//                            if (this.weight_power < 0.) {
+//                                this.weights.vals[i][j] = 1E5;
+//                                continue;
+//                            }
+//                            else {
+//                                this.weights.vals[i][j] = 1E-5;
+//                            }
+//                        }
+//                        this_weight = pow(this.Dtarget.vals[i][j], this.weight_power);
+//                        /* cap them */
+//                        if (this_weight > 1E5)  this_weight = 1E5;
+//                        else if (this_weight < 1E-5) this_weight = 1E-5;
+//                        /* within-between weighting */
+//                        if (SAMEGLYPH(i,j))
+//                            this_weight *= (2. - this.within_between);
+//                        else
+//                            this_weight *= this.within_between;
+//                        this.weights.vals[i][j] = this_weight;
+//                    } else { /* weightpow == 0. */
+//                        if (SAMEGLYPH(i,j))
+//                            this_weight = (2. - this.within_between);
+//                        else
+//                            this_weight = this.within_between;
+//                        this.weights.vals[i][j] = this_weight;
+//                    }
+//                }
+//            }
+//        }
     } /* end set_weights() */
 
 
+    private double f_weight(double d) {
+        double w = Math.abs(1 - d);
+        return w < 0 ? 0 : w > 1 ? 1 : w;
+    }
     private void update_stress () {
         stress_dx = stress_xx = stress_dd = 0;
         for (int i=0; i < this.trans_dist.vals.length; i++)
@@ -440,7 +457,7 @@ public class Mds {
                 double dist_trans  = this.trans_dist.vals[i][j] * 2; // symmetry!
                 if (Double.isNaN(dist_trans)) continue;
                 double dist_config = this.config_dist.vals[i][j] * 2; // symmetry!
-                if (this.weight_power == 0. && this.within_between == 1.) {
+                if (doesNotWeight()) {
                     stress_dx += dist_trans  * dist_config;
                     stress_xx += dist_config * dist_config;
                     stress_dd += dist_trans  * dist_trans;
@@ -461,6 +478,10 @@ public class Mds {
             throw new Error("didn't draw stress: stress_dx = %5.5g   stress_dd = %5.5g   stress_xx = %5.5g\n");
         }
     } /* end update_stress() */
+    
+    private boolean doesNotWeight() {
+        return this.weight_power == 0. && this.within_between == 1.;
+    }
 
     enum MDSAnchorInd {fixed, no_anchor, scaled};
 

@@ -40,10 +40,10 @@ public class MultidimensionalScaling {
 		int len = fdistances.length;
 		fdistances = null;
 		while (fiterations > 0) {
-			if (flistener != null) flistener.update(mds.points());
+			if (flistener != null) flistener.update(mds);
 			long t = System.nanoTime();
 			for (int n = 0; n < 10; n++) mds.mds_once(true);
-			if (fout != null) fout.printf("%d\n", (int) (1e9 * 10 / (System.nanoTime() - t)));
+			if (fout != null) fout.printf("%d (stress=%f)\n", (int) (1e9 * 10 / (System.nanoTime() - t)), mds.stress);
 			fiterations -= 10;
 		}
 		double[][] points = mds.points();
@@ -69,7 +69,7 @@ public class MultidimensionalScaling {
 	}
 	
 	public interface PointsListener extends EventListener {
-		public void update(double[][] points);
+		public void update(Mds mds);
 	}
 	
 }
