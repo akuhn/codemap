@@ -64,12 +64,7 @@ public class Points {
     }
 
     public double[][] points() {
-        double[][] result = new double[x.length][2];
-        for (int i = 0; i < x.length; i++) {
-            result[i][0] = x[i];
-            result[i][1] = y[i];
-        }
-        return result;
+        return new double[][] { x, y };
     }
 
     double dot_prod(int a, int b) {
