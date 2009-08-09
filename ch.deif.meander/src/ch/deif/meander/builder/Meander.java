@@ -50,6 +50,7 @@ public class Meander {
 				if (p == null) p = Point.newRandom(document);
 				x[n] = p.x;
 				y[n] = p.y;
+				n++;
 			}
 			MDS mds = MDS.fromCorrelationMatrix(lsi, x, y);
 			mds.normalize();

@@ -66,7 +66,7 @@ public class Mds {
     private final int len;
     /* */
     
-    public void init() {
+    public void init(boolean randomPoints) {
 
         double largest = Double.NaN;
 
@@ -87,27 +87,28 @@ public class Mds {
         this.threshold_low =  this.Dtarget_min;
         this.threshold_high = this.Dtarget_max;
         
-
-        for (int a = 0; a < pos.x.length; a++) {
-            this.pos.x[a] = (Math.random() - 0.5) * 2;
-            this.pos.y[a] = (Math.random() - 0.5) * 2;
+        if (randomPoints) {
+            for (int a = 0; a < pos.x.length; a++) {
+                this.pos.x[a] = (Math.random() - 0.5) * 2;
+                this.pos.y[a] = (Math.random() - 0.5) * 2;
+            }
         }
 
         this.config_dist.fill(Double.NaN);
         set_weights();
 
     }
-    public Mds(SMat dissimilarities, Points pos,  
+    public Mds(SMat dissimilarities, Points initial,  
             Function fConfigDist, Function fWeights, Function fDtarget) {
         len = dissimilarities.vals.length;
         Dtarget = dissimilarities;
         config_dist = new SMat(len);
-        this.pos = pos == null ? new Points(len) : pos;
+        this.pos = initial == null ? new Points(len) : initial;
         this.gradient = new Points(len);
         f_config_dist = fConfigDist;
         f_weights = fWeights;
         f_dtarget = fDtarget;
-        this.init();
+        this.init(initial == null);
     }
 
     private final Function f_config_dist;

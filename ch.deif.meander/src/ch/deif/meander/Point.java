@@ -26,7 +26,9 @@ public class Point {
 	}
 
 	public Point normalize(double minX, double minY, double width, double height) {
-		return new Point((x - minX) / width, (y - minY) / height, document);
+		return new Point(
+				0.05 + 0.9 * (x - minX) / width,
+				0.05 + 0.9 * (y - minY) / height, document);
 	}
 
 	public class Neighbor implements Comparable<Neighbor> {

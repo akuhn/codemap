@@ -64,10 +64,11 @@ public class Configuration implements Serializable {
 	}
 	
 	public Configuration normalize() {
-		double minX = 0;
-		double maxX = 0;
-		double minY = 0;
-		double maxY = 0;
+		if (points.length < 2) return this;
+		double minX = points[0].x;
+		double maxX = points[0].x;
+		double minY = points[0].y;
+		double maxY = points[0].y;
 		for (Point each: this.points()) {
 			minY = Math.min(minY, each.y);
 			maxY = Math.max(maxY, each.y);

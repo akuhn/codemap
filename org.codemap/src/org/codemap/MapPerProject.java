@@ -77,7 +77,7 @@ public class MapPerProject {
     private void initialize() {
         mapResource = new NewMapResource("default.map", 
                 Arrays.asList(Resources.asPath(project)),
-                Arrays.asList("*.java"),
+                Arrays.asList("*.java", "*.xml"),
                 readPreviousMapState());
         visual = new JobValue<CodemapVisualization>("Codemap visualization", mapResource.mapInstance) {
             @Override
@@ -101,10 +101,6 @@ public class MapPerProject {
 
     public IProject getProject() {
         return getJavaProject().getProject();
-    }
-
-    public Configuration getConfiguration() {
-        return mapResource.configuration.awaitValue();
     }
 
     private IJavaProject getJavaProject() {
@@ -169,8 +165,10 @@ public class MapPerProject {
 
 
     private void writePointPreferences() {
+        ValueOrError<Configuration> config = mapResource.configuration.getValueOrError();
+        if (config.hasError()) return;
         IEclipsePreferences node = readPointPreferences();
-        for(Point each: getConfiguration().points()) {
+        for(Point each: config.getValue().points()) {
             node.put(each.getDocument(), each.x + "@" + each.y);
         }
         try {
@@ -218,6 +216,10 @@ public class MapPerProject {
 
     public void removeLayer(SWTLayer layer) {
         sharedLayer.remove(layer);
+    }
+
+    public Configuration getConfiguration() {
+        return mapResource.configuration.getValueOrError().getValueOrNull();
     }	
 
 }

@@ -29,7 +29,7 @@ public class MDS {
 		MultidimensionalScaling mds = new MultidimensionalScaling();
 		mds.similarities(index.documentCorrelation().asArray());
 		if (x0 != null && y0 != null) mds.initialConfiguration(x0, y0);
-		mds.iterations(200);
+		mds.iterations(Math.max(200, 50000 / len));
 		double[][] result = mds.run();
 		assert result.length == 2 && result[0].length == len && result[0].length == len;
 		x = result[0];

@@ -6,6 +6,6 @@
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="ch.unibe.jexample.JEXAMPLE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/ggvis4j-r718.jar"/>
+	<classpathentry kind="lib" path="lib/ggvis4j-r718M.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
