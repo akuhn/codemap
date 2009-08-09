@@ -18,6 +18,7 @@ import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.util.Files;
 import ch.akuhn.values.Value;
+import ch.akuhn.values.ReferenceValue;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.Point;
@@ -31,22 +32,23 @@ public class NewMapResource {
 
     private final Value<Collection<String>> projects;
     private final Value<Collection<String>> extensions;
+    private final Value<Configuration> fInitialConfiguration;
+    
     public final Value<Integer> mapSize;
 
-    public final Value<Collection<String>> elements;
-    public final Value<LatentSemanticIndex> index;
-    public final Value<Configuration> configuration;
-    public final Value<MapInstance> mapInstance;
+    public final JobValue<Collection<String>> elements;
+    public final JobValue<LatentSemanticIndex> index;
+    public final JobValue<Configuration> configuration;
+    public final JobValue<MapInstance> mapInstance;
 
-    private final Value<Configuration> fInitialConfiguration;
 
     public NewMapResource(String name, Collection<String> allProjects, 
             Collection<String> allExtensions, Configuration configuration2) {
         this.setName(name);
-        mapSize = new Value<Integer>(0);
-        projects = new Value<Collection<String>>(allProjects);
-        extensions = new Value<Collection<String>>(allExtensions);
-        fInitialConfiguration = new Value<Configuration>(configuration2 == null
+        mapSize = new ReferenceValue<Integer>(0);
+        projects = new ReferenceValue<Collection<String>>(allProjects);
+        extensions = new ReferenceValue<Collection<String>>(allExtensions);
+        fInitialConfiguration = new ReferenceValue<Configuration>(configuration2 == null
                 ? new Configuration() : configuration2);
         elements = new JobValue<Collection<String>>("Compute elements", projects, extensions) {
             @Override

@@ -25,7 +25,9 @@ import org.osgi.service.prefs.BackingStoreException;
 import ch.akuhn.util.Arrays;
 import ch.akuhn.values.ActionValue;
 import ch.akuhn.values.Arguments;
+import ch.akuhn.values.ReferenceValue;
 import ch.akuhn.values.Value;
+import ch.akuhn.values.ValueOrError;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.Point;
@@ -82,6 +84,7 @@ public class MapPerProject {
             protected CodemapVisualization computeValue(JobMonitor monitor) {
                 return computeCodemapVisualization(monitor);
             }
+
         };
         new ActionValue<Void>(visual) {
             @Override
