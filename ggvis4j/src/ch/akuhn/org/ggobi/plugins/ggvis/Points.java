@@ -1,7 +1,5 @@
 package ch.akuhn.org.ggobi.plugins.ggvis;
 
-import static java.lang.Math.sqrt;
-
 import java.util.Arrays;
 
 
@@ -11,6 +9,11 @@ public class Points {
     public double[] mean = new double[2];
     public double scl;
 
+    public Points(double[] x, double[] y) {
+        this.x = x;
+        this.y = y;
+    }
+    
     public Points(int length, int ncols2) {
         this(length);
     }

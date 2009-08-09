@@ -19,6 +19,11 @@ public class SMat {
         for (int n = 0; n < vals.length; n++) vals[n] = new double[n];
     }
 
+    public SMat(double[][] matrix) {
+        vals = new double[matrix.length][];
+        for (int n = 0; n < vals.length; n++) vals[n] = Arrays.copyOf(matrix[n], n);
+    }
+
     public void fill(double value) {
         for (int n = 0; n < vals.length; n++) Arrays.fill(vals[n], value);
     }
@@ -40,5 +45,34 @@ public class SMat {
         }
         return bins;
     }
+
+    public void apply(Function f) {
+        for (int i = 0; i < vals.length; i++) {
+            for (int j = 0; j < vals[i].length; j++) {
+                vals[i][j] = f.apply(vals[i][j]);
+            }
+        }
+    }
+    
+    public double max() {
+        double max = vals[1][0];
+        for (double[] row: vals) {
+            for (double each: row) {
+                max = Math.max(max, each);
+            }
+        }
+        return max;
+    }
+    
+    public double min() {
+        double min = vals[1][0];
+        for (double[] row: vals) {
+            for (double each: row) {
+                min = Math.min(min, each);
+            }
+        }
+        return min;
+    }
+    
 
 }

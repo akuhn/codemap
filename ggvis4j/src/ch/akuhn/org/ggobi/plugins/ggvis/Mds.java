@@ -27,15 +27,14 @@ public class Mds {
 
     static final int DRAGGED = 4;
     private static final boolean TODO_SYMMETRY = false;
-    SMat config_dist;
-    SMat Dtarget; /*-- D in the documentation; dist in the xgvis code --*/
+    final SMat config_dist;
+    final SMat Dtarget; /*-- D in the documentation; dist in the xgvis code --*/
 
     private Points pos;
     /* these belong in ggv */
     public double stress;
 
     private double stress_dx, stress_dd, stress_xx;
-    private SMat trans_dist;
 
     private final double sig_pow(double x, double p) {
         return (x >= 0.0 ? pow(x, p) : -pow(-x, p));
@@ -59,88 +58,61 @@ public class Mds {
 
     /*-- used in mds.c --*/
     private SMat weights = null;
-    private Points gradient = new Points(0);
+    final private Points gradient;
 
     private double Dtarget_max = Double.MAX_VALUE;
     private double Dtarget_min = Double.MIN_VALUE;
+
+    private final int len;
     /* */
+    
+    public void init() {
 
-    public void init(double[][] dissimilarities) {
-
-        this.Dtarget = new SMat(dissimilarities.length);
-        this.trans_dist = new SMat(dissimilarities.length);
-        this.config_dist = new SMat(dissimilarities.length);
-        double infinity, largest = Double.NaN;
+        double largest = Double.NaN;
 
         /*-- initalize Dtarget --*/
-        infinity = (2 * this.Dtarget.vals.length);
-        largest = dissimilarities[0][0];
-        for (int a3 = 0; a3 < dissimilarities.length; a3++) {
-            for (int b3 = 0; b3 < dissimilarities.length; b3++) {
-                if (dissimilarities[a3][b3] > infinity) {
-                    infinity = dissimilarities[a3][b3];
-                }
-                if (dissimilarities[a3][b3] > largest) {
-                    largest = dissimilarities[a3][b3];
-                }
-
-            }
-        }
+        largest = Dtarget.max();
 
         /* Report the value of largest */
         if (largest > 100000) throw new Error("Warning: your largest weight, %.2f (index %d), is extremely large. ");
 
-        /* Continue to initialize using the value of infinity.  Is that ok? */
-        for (int a2 = 0; a2 < dissimilarities.length; a2++) {
-            for (int b2 = 0; b2 < a2; b2++) {
-                this.Dtarget.vals[a2][b2] = infinity;
-            }
-        }  /* populate with INF */
-        for (int a1 = 0; a1 < dissimilarities.length; a1++) {
-            for (int b1 = 0; b1 < a1; b1++) {
-                this.Dtarget.vals[a1][b1] = f_dtarget(dissimilarities[a1][b1]);
-            }
-        }
+        /* populate with INF */
+        this.Dtarget.apply(f_dtarget);
 
-        this.Dtarget_max = Double.MIN_VALUE;  this.Dtarget_min = Double.MAX_VALUE;
-        for (int i=0; i<this.Dtarget.vals.length; i++) {
-            for (int j=0; j<i; j++) {
-                double dtmp = this.Dtarget.vals[i][j];
-                if (dtmp < 0) {
-                    throw new Error("negative dissimilarity: D[%d][%d] = %3.6f -> NA\n");
-                    // FIXME dtmp = Dtarget.vals[i][j] = Mds.G_MAXDOUBLE;
-                }
-                if(dtmp != Double.NaN) {
-                    if (dtmp > this.Dtarget_max) this.Dtarget_max = dtmp;
-                    if (dtmp < this.Dtarget_min) this.Dtarget_min = dtmp;
-                }
-            }
-        }
+        this.Dtarget_max = Dtarget.max();  
+        this.Dtarget_min = Dtarget.min();
+
+        if (Dtarget_min < 0) throw new Error("negative dissimilarity: D[?][?] = ? -> NA\n");
+
         this.threshold_low =  this.Dtarget_min;
         this.threshold_high = this.Dtarget_max;
         
 
-        this.pos = new Points(dissimilarities.length);
-        this.gradient = new Points(dissimilarities.length);
         for (int a = 0; a < pos.x.length; a++) {
             this.pos.x[a] = (Math.random() - 0.5) * 2;
             this.pos.y[a] = (Math.random() - 0.5) * 2;
         }
 
-        this.trans_dist.fill(Double.NaN);
         this.config_dist.fill(Double.NaN);
         set_weights();
 
     }
-    private double f_dtarget(double d) {
-        return d < 1 ? d : (d * 10) - 9;
-        //return d < 0.5 ? d * 2 : Math.pow(d * 2, 8);
+    public Mds(SMat dissimilarities, Points pos,  
+            Function fConfigDist, Function fWeights, Function fDtarget) {
+        len = dissimilarities.vals.length;
+        Dtarget = dissimilarities;
+        config_dist = new SMat(len);
+        this.pos = pos == null ? new Points(len) : pos;
+        this.gradient = new Points(len);
+        f_config_dist = fConfigDist;
+        f_weights = fWeights;
+        f_dtarget = fDtarget;
+        this.init();
     }
-    private double f_config_dist(double d) {
-        return d > 0.5 ? d / 4 + 0.25 : d;
-        //return d > 1.0 ? 1.0 : Math.pow(d, 0.25);
-        //return d < 0.5 ? d * 2 : Math.pow(d * 2, 8);
-    }
+
+    private final Function f_config_dist;
+    private final Function f_weights;
+    private final Function f_dtarget;
     private boolean IS_ANCHOR(int i) {
         return i % 100 == 0;
     }
@@ -185,8 +157,8 @@ public class Mds {
             /* j's are moving i's */
             for (int j = 0; j < i; j++) {
                 if (mds_once_part2_continue(i, j)) continue;
-                this.config_dist.vals[i][j] = f_config_dist(Lp_distance_pow(i, j));
-                this.trans_dist.vals[i][j] = this.Dtarget.vals[i][j];
+                //this.config_dist.vals[i][j] = f_config_dist(Lp_distance_pow(i, j));
+                this.config_dist.vals[i][j] = f_config_dist.apply(Lp_distance_pow(i, j));
             }
         }
     }
@@ -243,10 +215,10 @@ public class Mds {
             /* Zero out the gradient matrix. */
             this.gradient.clear();
             /* ------------- gradient accumulation: j's push i's ----------- */
-            for (int i = 0; i < this.trans_dist.vals.length; i++) {
+            for (int i = 0; i < this.Dtarget.vals.length; i++) {
                 for (int j = 0; j < i; j++) {
                     double weight;
-                    double dist_trans  = this.trans_dist.vals[i][j];
+                    double dist_trans  = this.Dtarget.vals[i][j];
                     if (Double.isNaN(dist_trans)) continue;
                     double dist_config = this.config_dist.vals[i][j];
                     if (abs(dist_config) < delta) dist_config = delta;
@@ -328,9 +300,7 @@ public class Mds {
         }
         return (gsum < delta) ? 0.0 : this.stepsize * sqrt(psum/gsum);
     }
-    /**
-     * @deprecated Use {@link ch.akuhn.org.ggobi.plugins.ggvis.Points#points()} instead
-     */
+
     public double[][] points() {
         return pos.points();
     }
@@ -393,9 +363,11 @@ public class Mds {
         this.weights = new SMat(Dtarget.vals.length);
         for (int i = 0; i < Dtarget.vals.length; i++) {
             for (int j = 0; j < i; j++) {
-                this.weights.vals[i][j] = f_weight(this.Dtarget.vals[i][j]);
+                this.weights.vals[i][j] = f_weights.apply(this.Dtarget.vals[i][j]);
             }
         }
+        
+        this.weights = null;
         
         /* the weights will be used in metric and nonmetric scaling
          * as soon as weightpow != 0. or within_between != 1.
@@ -446,15 +418,11 @@ public class Mds {
     } /* end set_weights() */
 
 
-    private double f_weight(double d) {
-        double w = Math.abs(1 - d);
-        return w < 0 ? 0 : w > 1 ? 1 : w;
-    }
     private void update_stress () {
         stress_dx = stress_xx = stress_dd = 0;
-        for (int i=0; i < this.trans_dist.vals.length; i++)
+        for (int i=0; i < this.Dtarget.vals.length; i++)
             for (int j=0; j < i; j++) {
-                double dist_trans  = this.trans_dist.vals[i][j] * 2; // symmetry!
+                double dist_trans  = this.Dtarget.vals[i][j] * 2; // symmetry!
                 if (Double.isNaN(dist_trans)) continue;
                 double dist_config = this.config_dist.vals[i][j] * 2; // symmetry!
                 if (doesNotWeight()) {

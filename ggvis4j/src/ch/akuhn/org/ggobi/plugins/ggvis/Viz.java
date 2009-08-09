@@ -8,9 +8,9 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import ch.akuhn.mds.MultidimensionalScaling.PointsListener;
+import ch.akuhn.mds.MultidimensionalScaling.MultidimensionalScalingListener;
 
-public class Viz implements PaintListener, PointsListener {
+public class Viz implements PaintListener, MultidimensionalScalingListener {
 
     public Mds mds;
 
@@ -75,10 +75,10 @@ public class Viz implements PaintListener, PointsListener {
     }
 
     private void drawHistogram(PaintEvent e, int[] histo) {
-        for (int n = 1; n < histo.length; n++) {
-            int xa = (512 * (n - 1)) / histo.length;
+        for (int n = 0; n < histo.length; n++) {
+            int xa = (512 * Math.max(0, n - 1)) / histo.length;
             int xb = (512 * n) / histo.length;
-            int ya = 512 - histo[n-1]/10;
+            int ya = 512 - histo[Math.max(0, n - 1)]/10;
             int yb = 512 - histo[n]/10 ;    
             e.gc.drawLine(xa, ya, xb, ya);
             e.gc.drawLine(xb, ya, xb, yb);

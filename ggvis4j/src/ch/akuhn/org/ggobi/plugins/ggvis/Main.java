@@ -17,15 +17,15 @@ public class Main {
                 .addFiles("..", ".java")
                 .build();
 
-        System.out.println("done");
+        System.out.println(hapax.getIndex());
 
         Viz viz = VIZ ? new Viz().open() : null;
         new MultidimensionalScaling()
-        .similarities(hapax.getIndex().documentCorrelation().asArray())
-        .verbose()
-        .listener(viz)
-        .maxIterations(Integer.MAX_VALUE)
-        .run();
+                .similarities(hapax.getIndex().documentCorrelation().asArray())
+                .verbose()
+                .listener(viz)
+                .iterations(Integer.MAX_VALUE)
+                .run();
 
 
     }
