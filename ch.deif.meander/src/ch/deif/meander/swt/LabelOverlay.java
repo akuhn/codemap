@@ -155,7 +155,7 @@ public class LabelOverlay extends SWTLayer {
 
 		@Override
 		public int compareTo(Label each) {
-			return this.getArea() - each.getArea();
+			return each.getArea() - this.getArea();
 		}
 
 		private int getArea() {

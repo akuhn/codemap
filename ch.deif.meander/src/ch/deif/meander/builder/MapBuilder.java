@@ -19,8 +19,6 @@ public interface MapBuilder {
 
 	MapBuilder addCorpus(Hapax hapax);
 
-	Configuration makeMap();
-
 	Configuration makeMap(Configuration initialConfiguration);
 
 	MapBuilder addCorpus(LatentSemanticIndex lsi);

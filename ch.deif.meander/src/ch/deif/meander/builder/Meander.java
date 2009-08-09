@@ -32,20 +32,6 @@ public class Meander {
 		private LatentSemanticIndex lsi = null;
 
 		@Override
-		public Configuration makeMap() {
-			if (this.lsi == null) throw new IllegalStateException();
-			MDS mds = MDS.fromCorrelationMatrix(lsi);
-			mds.normalize();
-			Collection<Point> locations = new ArrayList<Point>();
-			int index = 0;
-			for (String each: lsi.documents()) {
-				locations.add(new Point(mds.x[index], mds.y[index], each));
-				index++;
-			}
-			return new Configuration(locations).normalize();
-		}
-		
-		@Override
 		public MapBuilder addCorpus(Hapax hapax) {
 			if (this.lsi != null) throw new IllegalStateException();
 			this.lsi = hapax.getIndex();
@@ -54,21 +40,25 @@ public class Meander {
 
 		@Override
 		public Configuration makeMap(Configuration initialConfiguration) {
-			// we need a hapax for later recalculations.
 			if (this.lsi == null) throw new IllegalStateException();
-			// fallback when there is no cache or cache-reload failed.
-			if (initialConfiguration == null || initialConfiguration.size() == 0) return makeMap();
+			double[] x = new double[lsi.documentCount()];
+			double[] y = new double[lsi.documentCount()];
 			Map<String, Point> cachedPoints = initialConfiguration.asMap();
-			
-			Collection<Point> locations = new ArrayList<Point>();
+			int n = 0;
 			for (String document: lsi.documents()) {
 				Point p = cachedPoints.get(document);
 				if (p == null) p = Point.newRandom(document);
-				locations.add(p);
+				x[n] = p.x;
+				y[n] = p.y;
 			}
-			
-			// TODO woot, run MDS with this initial set!
-			
+			MDS mds = MDS.fromCorrelationMatrix(lsi, x, y);
+			mds.normalize();
+			Collection<Point> locations = new ArrayList<Point>();
+			int index = 0;
+			for (String each: lsi.documents()) {
+				locations.add(new Point(mds.x[index], mds.y[index], each));
+				index++;
+			}
 			return new Configuration(locations).normalize();
 		}
 

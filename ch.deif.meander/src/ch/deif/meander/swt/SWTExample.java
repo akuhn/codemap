@@ -1,6 +1,7 @@
 package ch.deif.meander.swt;
 
 import ch.akuhn.hapax.Hapax;
+import ch.deif.meander.Configuration;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.builder.MapBuilder;
@@ -24,7 +25,7 @@ public class SWTExample {
 	static MapInstance makeMap() {
 		return Meander.builder()
 			.addCorpus(Hapax.newCorpus().addFiles("../ch.akuhn.hapax", ".java").build())
-			.makeMap()
+			.makeMap(new Configuration())
 			.withSize(512, MapBuilder.FILE_LENGTH_SQRT);
 	}
 

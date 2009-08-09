@@ -12,7 +12,7 @@ public class SmallDocumentCorporaTest {
 	public void corpusWithoutDocuments() {
 		Meander.builder()
 			.addCorpus(Hapax.newCorpus().addFiles(".", ".foobar").build())
-			.makeMap()
+			.makeMap(new Configuration())
 			.withSize(512, MapBuilder.FILE_LENGTH_SQRT);
 	}
 	

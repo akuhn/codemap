@@ -25,7 +25,7 @@ public class MeanderExample {
 
 		Configuration map = Meander.builder()
 				.addCorpus(hapax)
-				.makeMap();
+				.makeMap(new Configuration());
 
 		MapScheme<MColor> colorScheme = MapScheme.with(MColor.HILLGREEN);
 

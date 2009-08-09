@@ -2,8 +2,6 @@ package ch.deif.meander.internal;
 
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.mds.MultidimensionalScaling;
-import ch.akuhn.util.As;
-import ch.deif.meander.Location;
 
 public class MDS {
 
@@ -12,29 +10,25 @@ public class MDS {
 	public double r;
 
 	public static MDS fromCorrelationMatrix(LatentSemanticIndex index) {
-		return new MDS().compute(index, null);
+		return new MDS().compute(index, null, null);
 	}
 
-	public static MDS fromCorrelationMatrix(LatentSemanticIndex index, Iterable<Location> matchingLocations) {
-		return new MDS().compute(index, matchingLocations);
+	public static MDS fromCorrelationMatrix(LatentSemanticIndex index, double[] x, double[] y) {
+		return new MDS().compute(index, x, y);
 	}
 
-	private MDS compute(LatentSemanticIndex index, Iterable<Location> matchingLocations) {
-		assert matchingLocations == null || index.documentCount() == As.list(matchingLocations).size();
-		int size = index.documentCount();
-		double[][] result = new MultidimensionalScaling()
-			.similarities(index.documentCorrelation().asArray())
-			.maxIterations(100)
-			.run();
-		assert result.length == 0 || result[0].length == 2;
-		x = new double[size];
-		y = new double[size];
-		int i = 0;
-		for (double[] documentPosition: result) {
-			x[i] = documentPosition[0];
-			y[i] = documentPosition[1];
-			i++;
-		}
+	private MDS compute(LatentSemanticIndex index, double[] x0, double[] y0) {
+		int len = index.documentCount();
+		assert x0.length == len;
+		assert y0.length == len;
+		MultidimensionalScaling mds = new MultidimensionalScaling();
+		mds.similarities(index.documentCorrelation().asArray());
+		if (x0 != null && y0 != null) mds.initialConfiguration(x0, y0);
+		mds.iterations(200);
+		double[][] result = mds.run();
+		assert result.length == 2 && result[0].length == len && result[0].length == len;
+		x = result[0];
+		y = result[1];
 		return this;
 	}
 
