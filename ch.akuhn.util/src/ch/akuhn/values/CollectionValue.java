@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 
-public class CollectionValue<V> extends Value<Collection<V>> implements Collection<V> {
+public class CollectionValue<V> extends ReferenceValue<Collection<V>> implements Collection<V> {
 
     public CollectionValue() {
         this.value = new ArrayList<V>();

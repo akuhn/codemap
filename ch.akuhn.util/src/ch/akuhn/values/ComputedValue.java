@@ -2,7 +2,7 @@ package ch.akuhn.values;
 
 import java.util.EventObject;
 
-public abstract class ComputedValue<V> extends Value<V> {
+public abstract class ComputedValue<V> extends ReferenceValue<V> {
 
     private static final Object MISSING = new Object();
 

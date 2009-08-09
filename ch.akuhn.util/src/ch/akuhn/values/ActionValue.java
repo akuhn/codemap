@@ -2,7 +2,7 @@ package ch.akuhn.values;
 
 import java.util.EventObject;
 
-public abstract class ActionValue<V> extends Value<V> {
+public abstract class ActionValue<V> extends ReferenceValue<V> {
 
     private Value<?>[] arguments;
     
