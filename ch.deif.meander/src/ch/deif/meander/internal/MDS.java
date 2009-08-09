@@ -19,6 +19,11 @@ public class MDS {
 
 	private MDS compute(LatentSemanticIndex index, double[] x0, double[] y0) {
 		int len = index.documentCount();
+		if (len == 0) {
+			x = new double[] {};
+			y = new double[] {};
+			return this;
+		}
 		assert x0.length == len;
 		assert y0.length == len;
 		MultidimensionalScaling mds = new MultidimensionalScaling();

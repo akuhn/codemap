@@ -269,7 +269,7 @@ public class JobValue<V> extends AbstractValue<V> implements ValueChangedListene
                     return new Done(computeValue(monitor), null, arguments);
                 }
                 catch (Throwable ex) {
-                    return new Working(computeValue(monitor), null);
+                    return new Working(null, ex);
                 }
             }
                 
