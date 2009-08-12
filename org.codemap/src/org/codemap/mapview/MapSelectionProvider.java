@@ -103,7 +103,8 @@ public class MapSelectionProvider implements ISelectionProvider {
 
 	private void forcePackageExplorerSelection(final ISelection newSelection) {
 		if (!forceToPackageExplorer) return;
-			
+		if (newSelection == null) return;
+		
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
