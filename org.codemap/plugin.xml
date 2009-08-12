@@ -6,11 +6,11 @@
    <extension
          point="org.eclipse.ui.views">
       <category
-            id="ch.unibe.softwaremap"
+            id="org.codemap"
             name="Software Cartography">
       </category>
       <view
-            category="ch.unibe.softwaremap"
+            category="org.codemap"
             class="org.codemap.mapview.MapView"
             icon="icons/sample.gif"
             id="ch.unibe.softwaremap.MapView"
@@ -18,7 +18,7 @@
             restorable="true">
       </view>
       <view
-            category="ch.unibe.softwaremap"
+            category="org.codemap"
             class="org.codemap.util.SelectionView"
             id="ch.unibe.softwaremap.SelectionView"
             name="Selection View"
