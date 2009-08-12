@@ -26,7 +26,7 @@ public abstract class ComputedValue<V> extends ReferenceValue<V> {
     }
     
     @Override
-    public V getValue() {
+    public V value() {
         if (value == MISSING) value = computeValue();
         return this.value;
     }

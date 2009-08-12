@@ -5,11 +5,10 @@ public class Arguments {
     private int index = 0;
     private Value<?>[] values;
     
-    public Arguments(Value<?>[] values) {
+    public Arguments(Value<?>[] arguments) {
         this.index = 0;
-        this.values = values;
+        this.values = arguments;
     }
-    
     
     @SuppressWarnings("unchecked")
     public <A> A next() {

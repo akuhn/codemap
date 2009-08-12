@@ -4,7 +4,7 @@ import java.util.EventObject;
 
 public abstract class ActionValue<V> extends ReferenceValue<V> {
 
-    private Value<?>[] arguments;
+    private final Value<?>[] arguments;
     
     public ActionValue(Value<?>... arguments) {
         this.arguments = arguments;
@@ -13,11 +13,6 @@ public abstract class ActionValue<V> extends ReferenceValue<V> {
     }
     
     protected abstract V performAction(Arguments args);
-
-    @Override
-    public V getValue() {
-        return this.value;
-    }
 
     @Override
     public void setValue(V value) {
