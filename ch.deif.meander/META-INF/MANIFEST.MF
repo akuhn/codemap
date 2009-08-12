@@ -11,6 +11,7 @@ Require-Bundle:
 Export-Package: 
  ch.deif.meander,
  ch.deif.meander.builder,
+ ch.deif.meander.map,
  ch.deif.meander.swt,
  ch.deif.meander.ui,
  ch.deif.meander.util

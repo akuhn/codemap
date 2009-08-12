@@ -2,10 +2,12 @@
 package org.codemap;
 
 import org.codemap.mapview.MapView;
+import org.codemap.util.EclipseTaskFactory;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import ch.akuhn.values.TaskValue;
 import ch.deif.meander.MapSelection;
 
 /**
@@ -42,6 +44,7 @@ public class CodemapCore extends AbstractUIPlugin {
     }
 
     public CodemapCore() {
+        TaskValue.setTaskFactory(new EclipseTaskFactory());
         youAreHereSelection = new MapSelection();
         openFilesSelection = new MapSelection();	
         currentSelection = new MapSelection();

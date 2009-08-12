@@ -6,11 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.codemap.mapview.ProviderDrivenImageOverlay;
-import org.codemap.resources.MapValues;
+import org.codemap.resources.EclipseMapValues;
 import org.codemap.util.CodemapColors;
 import org.codemap.util.CodemapLabels;
 import org.codemap.util.Icons;
-import org.codemap.util.JobValue;
 import org.codemap.util.Log;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IProject;
@@ -25,6 +24,7 @@ import ch.akuhn.util.Arrays;
 import ch.akuhn.util.ProgressMonitor;
 import ch.akuhn.values.ActionValue;
 import ch.akuhn.values.Arguments;
+import ch.akuhn.values.TaskValue;
 import ch.akuhn.values.Value;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.MapInstance;
@@ -55,7 +55,7 @@ public class MapPerProject {
     private static final int MINIMAL_SIZE = 256;
 
     private final IJavaProject project;
-    private MapValues mapResource;
+    private EclipseMapValues mapResource;
     private Value<CodemapVisualization> visual;
 
     public static MapPerProject forProject(IJavaProject project) {
@@ -73,11 +73,11 @@ public class MapPerProject {
     }
 
     private void initialize() {
-        mapResource = new MapValues("default.map", 
+        mapResource = new EclipseMapValues("default.map", 
                 Arrays.asList(Resources.asPath(project)),
                 Arrays.asList("*.java", "*.xml"),
                 readPreviousMapState());
-        visual = new JobValue<CodemapVisualization>("Codemap visualization", mapResource.mapInstance) {
+        visual = new TaskValue<CodemapVisualization>("Codemap visualization", mapResource.mapInstance) {
             @Override
             protected CodemapVisualization computeValue(ProgressMonitor monitor, Arguments args) {
                 return computeCodemapVisualization(monitor, args);

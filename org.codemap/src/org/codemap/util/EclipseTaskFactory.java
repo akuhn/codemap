@@ -10,11 +10,9 @@ import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 
 import ch.akuhn.util.ProgressMonitor;
-import ch.akuhn.values.TaskValue;
-import ch.akuhn.values.Value;
+import ch.akuhn.values.TaskFactory;
 
-@SuppressWarnings("unchecked")
-public abstract class JobValue<V> extends TaskValue<V> {
+public class EclipseTaskFactory extends TaskFactory {
 
     static class M extends ProgressMonitor {
 
@@ -72,10 +70,6 @@ public abstract class JobValue<V> extends TaskValue<V> {
             return new M(newName, new SubProgressMonitor(monitor, ticks));
         }
         
-    }
-
-    public JobValue(String name, Value... parts) {
-        super(name, parts);
     }
 
     @Override

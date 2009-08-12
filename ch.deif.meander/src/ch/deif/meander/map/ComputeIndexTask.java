@@ -14,7 +14,7 @@ import ch.akuhn.values.Value;
 
 public class ComputeIndexTask extends TaskValue<LatentSemanticIndex> {
 
-    ComputeIndexTask(Value<Collection<String>> elements) {
+    public ComputeIndexTask(Value<Collection<String>> elements) {
         super("Creating latent semantic index", elements);
     }
 

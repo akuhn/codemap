@@ -16,7 +16,7 @@ import ch.deif.meander.util.MColor;
 import ch.deif.meander.util.MapScheme;
 
 
-public final class MapValues {
+public class MapValues {
 
 	public final Value<Integer> mapSize;
 	public final Value<Collection<String>> elements;
@@ -39,11 +39,11 @@ public final class MapValues {
 	
 	public MapValues(MapValueBuilder make) {
 		
-		mapSize = make.mapSize();
-		elements  = make.elements();
-		hills  = make.hills();
-		colors  = make.colors();
-		labels  = make.labels();
+		mapSize = make.mapSizeValue();
+		elements  = make.elementsValue();
+		hills  = make.hillsValue();
+		colors  = make.colorsValue();
+		labels  = make.labelsValue();
 		
 		index = make.indexValue(elements);
 		configuration = make.configurationValue(index);

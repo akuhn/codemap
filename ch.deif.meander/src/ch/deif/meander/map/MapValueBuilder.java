@@ -20,11 +20,12 @@ public class MapValueBuilder {
 
     private Configuration initialConfiguration;
 
-    public void setInitialConfiguration(Configuration initialConfiguration) {
+    public MapValueBuilder setInitialConfiguration(Configuration initialConfiguration) {
         this.initialConfiguration = initialConfiguration;
+        return this;
     }
 
-    public Value<Integer> mapSize() {
+    public Value<Integer> mapSizeValue() {
         return new ReferenceValue<Integer>(512);
     }
 
@@ -32,19 +33,19 @@ public class MapValueBuilder {
         return new ComputeBackgroundTask(elevationModel, shading, colors);
     }
 
-    public Value<Collection<String>> elements() {
+    public Value<Collection<String>> elementsValue() {
         return new ReferenceValue<Collection<String>>();
     }
 
-    public Value<MapScheme<Boolean>> hills() {
+    public Value<MapScheme<Boolean>> hillsValue() {
         return new ReferenceValue<MapScheme<Boolean>>();
     }
 
-    public Value<MapScheme<MColor>> colors() {
+    public Value<MapScheme<MColor>> colorsValue() {
         return new ReferenceValue<MapScheme<MColor>>();
     }
 
-    public Value<MapScheme<String>> labels() {
+    public Value<MapScheme<String>> labelsValue() {
         return new ReferenceValue<MapScheme<String>>();
     }
 

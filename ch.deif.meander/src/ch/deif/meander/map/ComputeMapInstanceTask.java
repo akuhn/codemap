@@ -19,7 +19,7 @@ public class ComputeMapInstanceTask extends TaskValue<MapInstance> {
     }
 
     private static String makeName(Value<Integer> size) {
-        return String.format("Creating map (%d x %d pixel)", size.getValue());
+        return String.format("Creating map (%d x %d pixel)", size.getValue(), size.getValue());
     }
 
     @Override
