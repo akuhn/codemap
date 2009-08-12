@@ -5,6 +5,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import ch.akuhn.util.Arrays;
 import ch.akuhn.util.ProgressMonitor;
+import ch.akuhn.values.TaskFactory.Callback;
+import ch.akuhn.values.TaskFactory.Task;
 
 
 @SuppressWarnings("unchecked")
@@ -64,21 +66,6 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
     }
 
 
-    public Task makeTask() {
-        return new Task() {
-
-            @Override
-            public void start(Callback callback) {
-                callback.run(ProgressMonitor.NULL);
-            }
-            
-            @Override
-            public void stop() {
-                // ignore
-            }
-
-        };
-    }
 
 
     @Override
@@ -108,21 +95,6 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
         fState.get().innerRequestValue();
     }
     
-    public interface Callback {
-
-        public String getName();
-        public Throwable run(ProgressMonitor monitor);
-
-    }
-        
-    public interface Task {
-
-        public void start(Callback callback);
-        public void stop();
-    
-    }
-
-
     interface State {
 
         public ImmutableValue innerAsImmutable();
@@ -230,6 +202,12 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
         }
 
     }
+
+    private static TaskFactory TASK_FACTORY = new TaskFactory();
+    
+    public static void setTaskFactory(TaskFactory factory) {
+        TASK_FACTORY = factory;
+    }
     
     private class Working extends Waiting implements Callback {
 
@@ -237,7 +215,7 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
 
         private Working(V value, Throwable error, ImmutableValue[] arguments) {
             super (value, error, arguments);
-            job = makeTask();
+            job = TASK_FACTORY.makeTask();
         }
 
         @Override

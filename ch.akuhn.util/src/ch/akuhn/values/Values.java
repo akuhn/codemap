@@ -7,8 +7,13 @@ public class Values {
     }
 
     public static Error throwError(Throwable error) {
-        // TODO Auto-generated method stub
-        return null;
+        if (error instanceof Error) throw (Error) error;
+        if (error instanceof RuntimeException) throw (RuntimeException) error;
+        throw new RuntimeException(error);
+    }
+    
+    public static <V> Value<V> of(V object) {
+        return new ReferenceValue<V>(object);
     }
     
 }
