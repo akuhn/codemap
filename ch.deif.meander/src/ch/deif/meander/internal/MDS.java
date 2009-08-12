@@ -6,8 +6,6 @@ import ch.akuhn.mds.MultidimensionalScaling;
 public class MDS {
 
 	public double[] x, y;
-	public double r0;
-	public double r;
 
 	public static MDS fromCorrelationMatrix(LatentSemanticIndex index) {
 		return new MDS().compute(index, null, null);
@@ -29,7 +27,7 @@ public class MDS {
 		MultidimensionalScaling mds = new MultidimensionalScaling();
 		mds.similarities(index.documentCorrelation().asArray());
 		if (x0 != null && y0 != null) mds.initialConfiguration(x0, y0);
-		mds.iterations(Math.max(200, 50000 / len));
+		mds.iterations(Math.min(50, 100000 / len));
 		double[][] result = mds.run();
 		assert result.length == 2 && result[0].length == len && result[0].length == len;
 		x = result[0];

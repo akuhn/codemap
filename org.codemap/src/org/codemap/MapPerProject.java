@@ -6,11 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.codemap.mapview.ProviderDrivenImageOverlay;
-import org.codemap.resources.NewMapResource;
+import org.codemap.resources.MapValues;
 import org.codemap.util.CodemapColors;
 import org.codemap.util.CodemapLabels;
 import org.codemap.util.Icons;
-import org.codemap.util.JobMonitor;
 import org.codemap.util.JobValue;
 import org.codemap.util.Log;
 import org.codemap.util.Resources;
@@ -23,11 +22,10 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.osgi.service.prefs.BackingStoreException;
 
 import ch.akuhn.util.Arrays;
+import ch.akuhn.util.ProgressMonitor;
 import ch.akuhn.values.ActionValue;
 import ch.akuhn.values.Arguments;
-import ch.akuhn.values.ReferenceValue;
 import ch.akuhn.values.Value;
-import ch.akuhn.values.ValueOrError;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.Point;
@@ -57,7 +55,7 @@ public class MapPerProject {
     private static final int MINIMAL_SIZE = 256;
 
     private final IJavaProject project;
-    private NewMapResource mapResource;
+    private MapValues mapResource;
     private Value<CodemapVisualization> visual;
 
     public static MapPerProject forProject(IJavaProject project) {
@@ -75,14 +73,14 @@ public class MapPerProject {
     }
 
     private void initialize() {
-        mapResource = new NewMapResource("default.map", 
+        mapResource = new MapValues("default.map", 
                 Arrays.asList(Resources.asPath(project)),
                 Arrays.asList("*.java", "*.xml"),
                 readPreviousMapState());
         visual = new JobValue<CodemapVisualization>("Codemap visualization", mapResource.mapInstance) {
             @Override
-            protected CodemapVisualization computeValue(JobMonitor monitor) {
-                return computeCodemapVisualization(monitor);
+            protected CodemapVisualization computeValue(ProgressMonitor monitor, Arguments args) {
+                return computeCodemapVisualization(monitor, args);
             }
 
         };
@@ -107,8 +105,8 @@ public class MapPerProject {
         return project;
     }
 
-    private CodemapVisualization computeCodemapVisualization(JobMonitor monitor) {
-        MapInstance map = monitor.nextArgument();
+    private CodemapVisualization computeCodemapVisualization(ProgressMonitor monitor, Arguments args) {
+        MapInstance map = args.next();
 
         Background background = Meander.background()
         .withColors(colorScheme)
@@ -165,10 +163,10 @@ public class MapPerProject {
 
 
     private void writePointPreferences() {
-        ValueOrError<Configuration> config = mapResource.configuration.getValueOrError();
-        if (config.hasError()) return;
+        if (mapResource.configuration.isError()) return;
+        Configuration config = mapResource.configuration.getValue();
         IEclipsePreferences node = readPointPreferences();
-        for(Point each: config.getValue().points()) {
+        for(Point each: config.points()) {
             node.put(each.getDocument(), each.x + "@" + each.y);
         }
         try {
@@ -219,7 +217,7 @@ public class MapPerProject {
     }
 
     public Configuration getConfiguration() {
-        return mapResource.configuration.getValueOrError().getValueOrNull();
+        return mapResource.configuration.value(); // what if it's null?
     }	
 
 }
