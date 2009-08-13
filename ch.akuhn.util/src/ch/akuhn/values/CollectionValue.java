@@ -8,8 +8,12 @@ import java.util.Iterator;
 
 public class CollectionValue<V> extends ReferenceValue<Collection<V>> implements Collection<V> {
 
+    public CollectionValue(Collection<V> collection) {
+        this.value = collection;
+    }
+
     public CollectionValue() {
-        this.value = new ArrayList<V>();
+        this(new ArrayList<V>());
     }
     
     @Override
@@ -73,7 +77,7 @@ public class CollectionValue<V> extends ReferenceValue<Collection<V>> implements
         if (changed) changed();
         return changed;
     }
-
+    
     @Override
     public int size() {
         return value.size();
@@ -89,4 +93,9 @@ public class CollectionValue<V> extends ReferenceValue<Collection<V>> implements
         return value.toArray(array);
     }
 
+    @Override
+    public Collection<V> value() {
+        return this;
+    }
+    
 }
