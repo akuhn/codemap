@@ -49,7 +49,7 @@ public class MapController {
         for (ICompilationUnit each: units) {
             newPaths.add(Resources.asPath(each));
         }
-        getCurrentSelection().removeAll(newPaths);
+        getCurrentSelection().replaceAll(newPaths);
         redrawCodemap();
     }
 

@@ -61,7 +61,7 @@ public class EditorPartListener implements IPartListener {
                 selection.add(Resources.asPath(file));
             }
 		}
-		editorSelection.replaceWith(selection);
+		editorSelection.replaceAll(selection);
 		if (selection.isEmpty()) youAreHereSelection.clear();
 		CodemapCore.getPlugin().redrawCodemap();
 	}
@@ -82,7 +82,7 @@ public class EditorPartListener implements IPartListener {
 		for (IFile file: getFiles(part)) {
 			selection.add(Resources.asPath(file));
 		}
-		youAreHereSelection.replaceWith(selection);
+		youAreHereSelection.replaceAll(selection);
 		CodemapCore.getPlugin().redrawCodemap();
 	}
 

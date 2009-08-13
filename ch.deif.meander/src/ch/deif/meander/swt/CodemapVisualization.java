@@ -64,12 +64,13 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
     private int offsetY;
     private MapValues mapValues;
 
-    @Override
-    public void fireEvent(final CodemapEvent event) {
+    protected static void fireEvent(MouseEvent e, String kind, Object value) {
+        final CodemapVisualization self = (CodemapVisualization) e.data;
+        final CodemapEvent event = new CodemapEvent(kind, self, value);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                for (CodemapListener each : listeners) {
+                for (CodemapListener each : self.listeners) {
                     each.handleEvent(event);
                 }
             }
@@ -115,15 +116,15 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
     }
 
 
-    private void translate(MouseEvent e) {
+    private void addOffsetAndThisToEvent(MouseEvent e) {
         e.x -= offsetX;
         e.y -= offsetY;
-        e.data = mapValues;
+        e.data = this;
     }
     
     @Override
     public void mouseMove(MouseEvent e) {
-        this.translate(e);
+        this.addOffsetAndThisToEvent(e);
         this.updateTooltip(e);
         super.mouseMove(e);
     }
@@ -139,60 +140,64 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 
     @Override
     public void dragDetected(DragDetectEvent e) {
-        this.translate(e);
+        this.addOffsetAndThisToEvent(e);
         super.dragDetected(e);
     }
 
     @Override
     public void mouseDoubleClick(MouseEvent e) {
-        this.translate(e);
+        this.addOffsetAndThisToEvent(e);
         super.mouseDoubleClick(e);
     }
 
 
     @Override
     public void mouseDown(MouseEvent e) {
-        this.translate(e);
+        this.addOffsetAndThisToEvent(e);
         super.mouseDown(e);
     }
 
 
     @Override
     public void mouseEnter(MouseEvent e) {
-        this.translate(e);
+        this.addOffsetAndThisToEvent(e);
         super.mouseEnter(e);
     }
 
 
     @Override
     public void mouseExit(MouseEvent e) {
-        this.translate(e);
+        this.addOffsetAndThisToEvent(e);
         super.mouseExit(e);
     }
 
 
     @Override
     public void mouseHover(MouseEvent e) {
-        this.translate(e);
+        this.addOffsetAndThisToEvent(e);
         super.mouseHover(e);
     }
 
 
     @Override
     public void mouseScrolled(MouseEvent e) {
-        this.translate(e);
+        this.addOffsetAndThisToEvent(e);
         super.mouseScrolled(e);
     }
 
 
     @Override
     public void mouseUp(MouseEvent e) {
-        this.translate(e);
+        this.addOffsetAndThisToEvent(e);
         super.mouseUp(e);
     }
 
     public int getSize() {
         return mapValues.getSize();
+    }
+
+    protected static MapValues mapValues(MouseEvent e) {
+        return ((CodemapVisualization) e.data).mapValues;
     }
 
 }

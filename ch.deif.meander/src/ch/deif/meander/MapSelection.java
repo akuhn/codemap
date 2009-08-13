@@ -17,7 +17,7 @@ public class MapSelection extends AbstractMapSelection {
         return contains(element.getDocument());
     }
 
-    public void replaceWith(Collection<String> newLocations) {
+    public void replaceAll(Collection<String> newLocations) {
         boolean retainChange = value.retainAll(newLocations);
         boolean addChange = value.addAll(newLocations);
         if (retainChange || addChange) this.changed();

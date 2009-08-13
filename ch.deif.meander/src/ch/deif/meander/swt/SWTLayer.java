@@ -11,7 +11,6 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Control;
 
 import ch.deif.meander.map.MapValues;
-import ch.deif.meander.ui.CodemapEvent;
 
 public abstract class SWTLayer implements 
         MouseListener, 
@@ -31,10 +30,6 @@ public abstract class SWTLayer implements
     }
 
     public abstract void paintMap(MapValues map, GC gc);
-
-    protected static MapValues mapValues(MouseEvent e) {
-        return (MapValues) e.data;
-    }
 
     @Override
     public void mouseDoubleClick(MouseEvent e) {
@@ -79,14 +74,6 @@ public abstract class SWTLayer implements
     @Override
     public void mouseScrolled(MouseEvent e) {
         // do nothing
-    }
-
-    public void fireEvent(CodemapEvent e) {
-        root.fireEvent(e);
-    }
-
-    public void fireEvent(String kind, Object value) {
-        root.fireEvent(new CodemapEvent(kind, this, value));
     }
 
     protected void redraw(MouseEvent e) {
