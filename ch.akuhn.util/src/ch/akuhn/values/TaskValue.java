@@ -25,11 +25,23 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
     //private final BlockingQueue<ValueOrError<V>> fValue;
     private String name;
     private Value[] parts;
-
+    private boolean requiresAllArguments;
     
+    /** Tells this value to start tasks even if not all arguments are available.
+     * This skips the waiting phase. Subclasses must deal with missing or failed
+     * arguments!
+     *<P>
+     * To be called by constructor of subclasses.
+     * 
+     */
+    protected void doesNotRequireAllArguments() {
+        this.requiresAllArguments = false;
+    }
+
     public TaskValue(String name, Value<?>... parts) {
         this.name = name;
         this.parts = parts;
+        this.requiresAllArguments = true;
         //fValue = new ArrayBlockingQueue<ValueOrError<V>>(1);
         fState = new AtomicReference<State>(new Missing());
         for (Value<?> each: parts) each.addDependent(this);
@@ -149,16 +161,23 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
         
     }    
     
+    private static Throwable MISSING = new Error() {
+      @Override
+        public synchronized Throwable fillInStackTrace() {
+            return this;
+        }  
+    };
+    
     private class Missing implements State {
         
         public ImmutableValue<V> innerAsImmutable() {
-            return new ImmutableValue<V>(null, new Error());
+            return new ImmutableValue<V>(null, MISSING);
         }
 
         public void innerRequestValue() {
             DEBUGF("%s\trequest %s\n", T(), this);
             Waiting newState = new Waiting(
-                    null, new Error(), 
+                    null, MISSING, 
                     new ImmutableValue[parts.length]);
             if (!fState.compareAndSet(this, newState)) return;
             newState.start();
@@ -183,8 +202,11 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
 
         protected void start() {
             DEBUGF("%s\tstart %s\n", T(), this);
-            for (int n = 0; n < parts.length; n++) arguments[n] = parts[n].asImmutable();
-            for (ImmutableValue each: arguments) if (each.isError()) return;
+            for (int n = 0; n < parts.length; n++) 
+                arguments[n] = parts[n].asImmutable();
+            if (requiresAllArguments)
+                for (ImmutableValue each: arguments) 
+                    if (each.isError()) return;
             Working newState = new Working(value, error, arguments);
             if (fState.compareAndSet(this, newState)) newState.start();
         }
@@ -201,6 +223,12 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
             return "Value(" + name + ", WAITING)";
         }
 
+        @Override
+        public void innerRequestValue() {
+            // this.start(); TODO figure out how to broadcast requests while waiting
+            // without ending up in an endless loop upon errors 
+        }
+        
     }
 
     private static TaskFactory TASK_FACTORY = new TaskFactory();
@@ -268,6 +296,11 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
         private void stop() {
             DEBUGF("%s\tstop %s\n", T(), this);
             job.stop();
+        }
+        
+        @Override
+        public void innerRequestValue() {
+            return;
         }
  
     }

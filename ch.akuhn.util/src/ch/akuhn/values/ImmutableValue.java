@@ -56,4 +56,18 @@ public class ImmutableValue<V> implements Value<V> {
         return isError() ? null : value;
     }
 
+    @Override
+    public int hashCode() {
+        return error != null ? error.getClass().hashCode() : value != null ? value.hashCode() : 0;
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ImmutableValue)) return false;
+        ImmutableValue other = (ImmutableValue) obj;
+        if (error != null || other.error != null) return Values.equal(error, other.error);
+        return Values.equal(value, other.value);
+    }
+    
 }

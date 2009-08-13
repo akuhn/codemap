@@ -31,8 +31,6 @@ public abstract class ProgressMonitor {
         
     static class Null extends ProgressMonitor {
 
-        private boolean cancelled = false;
-        
         @Override
         public void begin(int total) {
             // ignore
@@ -40,7 +38,6 @@ public abstract class ProgressMonitor {
 
         @Override
         public CancellationException cancel() {
-            cancelled = true;
             return new CancellationException();
         }
 
@@ -51,7 +48,7 @@ public abstract class ProgressMonitor {
 
         @Override
         public boolean isCanceled() {
-            return cancelled;
+            return false;
         }
 
         @Override

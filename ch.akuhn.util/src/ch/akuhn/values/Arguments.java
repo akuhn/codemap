@@ -15,5 +15,11 @@ public class Arguments {
         if (index >= values.length) return null;
         return (A) values[index++].getValue();
     }
+
+    @SuppressWarnings("unchecked")
+    public <A> A nextOrNull() {
+        if (index >= values.length) return null;
+        return (A) values[index++].value();
+    }
     
 }
