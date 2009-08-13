@@ -3,10 +3,16 @@ package ch.deif.meander;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 
+import ch.akuhn.values.CollectionValue;
 import ch.deif.meander.map.MapValues;
 
-public abstract class AbstractMapSelection implements Iterable<String> {
+public abstract class AbstractMapSelection extends CollectionValue<String> {
+
+    public AbstractMapSelection() {
+        super(new HashSet<String>());
+    }
 
     public Iterable<Location> locationsOn(MapValues map) {
         MapInstance mapInstance = map.mapInstance.value();

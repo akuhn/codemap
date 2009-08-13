@@ -24,9 +24,9 @@ public class MapValues {
     public final Value<MapScheme<MColor>> colors;
     public final Value<MapScheme<String>> labels;
 
-    public final Value<MapSelection> currentSelection;
-    public final Value<MapSelection> openFilesSelection;
-    public final Value<MapSelection> youAreHereSelection;
+    public final MapSelection currentSelection;
+    public final MapSelection openFilesSelection;
+    public final MapSelection youAreHereSelection;
 
     public final Value<LatentSemanticIndex> index;
     public final Value<Configuration> configuration;

@@ -7,7 +7,6 @@ import org.eclipse.swt.graphics.Image;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.values.ReferenceValue;
 import ch.akuhn.values.Value;
-import ch.akuhn.values.Values;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.DigitalElevationModel;
 import ch.deif.meander.HillShading;
@@ -76,16 +75,16 @@ public class MapValueBuilder {
         return new ComputeLabelingTask(mapInstance, labels);
     }
 
-    public Value<MapSelection> currentSelectionValue() {
-        return Values.of(new MapSelection());
+    public MapSelection currentSelectionValue() {
+        return new MapSelection();
     }
 
-    public Value<MapSelection> openFilesSelectionValue() {
-        return Values.of(new MapSelection());
+    public MapSelection openFilesSelectionValue() {
+        return new MapSelection();
     }
 
-    public Value<MapSelection> youAreHereSelection() {
-        return Values.of(new MapSelection());
+    public MapSelection youAreHereSelection() {
+        return new MapSelection();
     }
 
 }

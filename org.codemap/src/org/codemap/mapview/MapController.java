@@ -1,5 +1,6 @@
 package org.codemap.mapview;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.codemap.CodemapCore;
@@ -11,56 +12,57 @@ import org.eclipse.swt.graphics.Point;
 import ch.deif.meander.MapSelection;
 
 public class MapController {
-	
-	private MapView view;
-	private IJavaProject currentProject;
 
-	public MapController(MapView view) {
-		this.view = view;
-	}
-	
-	public MapView getView() {
-		return view;
-	}
+    private MapView view;
+    private IJavaProject currentProject;
 
-	public void onResize(Point dimension) {		
-		int size =  Math.min(dimension.x, dimension.y);
-		view.updateMapdimension(size);
-	}
-	
-	public void onOpenView() {
-		//
-	}
-	
-	public void onShowMap() {
-		//
-	}
-	
-	public void onProjectSelected(IJavaProject javaProject) {
-		if (currentProject == javaProject) return;
-		// TODO show 'Create map...' button of there is not default.map
-		currentProject = javaProject;
-		view.newProjectSelected();
-	}
-	
-	public void onSelectionChanged(Collection<ICompilationUnit> units) {
-		MapSelection selection = getCurrentSelection().clear();
-		for (ICompilationUnit each: units) {
-			selection.add(Resources.asPath(each));
-		} 
-		redrawCodemap();
-	}
-	
-	private MapSelection getCurrentSelection() {
-		return CodemapCore.getPlugin().getCurrentSelection();
-	}
+    public MapController(MapView view) {
+        this.view = view;
+    }
 
-	private void redrawCodemap() {
-		CodemapCore.getPlugin().redrawCodemap();
-	}
+    public MapView getView() {
+        return view;
+    }
 
-	public IJavaProject getCurrentProject() {
-		return currentProject;
-	}	
+    public void onResize(Point dimension) {		
+        int size =  Math.min(dimension.x, dimension.y);
+        view.updateMapdimension(size);
+    }
+
+    public void onOpenView() {
+        //
+    }
+
+    public void onShowMap() {
+        //
+    }
+
+    public void onProjectSelected(IJavaProject javaProject) {
+        if (currentProject == javaProject) return;
+        // TODO show 'Create map...' button of there is not default.map
+        currentProject = javaProject;
+        view.newProjectSelected();
+    }
+
+    public void onSelectionChanged(Collection<ICompilationUnit> units) {
+        Collection<String> newPaths = new ArrayList<String>();
+        for (ICompilationUnit each: units) {
+            newPaths.add(Resources.asPath(each));
+        }
+        getCurrentSelection().removeAll(newPaths);
+        redrawCodemap();
+    }
+
+    private MapSelection getCurrentSelection() {
+        return CodemapCore.getPlugin().getCurrentSelection();
+    }
+
+    private void redrawCodemap() {
+        CodemapCore.getPlugin().redrawCodemap();
+    }
+
+    public IJavaProject getCurrentProject() {
+        return currentProject;
+    }	
 
 }
