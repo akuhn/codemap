@@ -7,12 +7,13 @@ import org.eclipse.swt.graphics.Image;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.values.ReferenceValue;
 import ch.akuhn.values.Value;
+import ch.akuhn.values.Values;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.DigitalElevationModel;
 import ch.deif.meander.HillShading;
 import ch.deif.meander.Labeling;
 import ch.deif.meander.MapInstance;
-import ch.deif.meander.swt.CodemapVisualization;
+import ch.deif.meander.MapSelection;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.util.MapScheme;
 
@@ -29,8 +30,8 @@ public class MapValueBuilder {
         return new ReferenceValue<Integer>(512);
     }
 
-    public Value<Image> backgroundValue(Value<DigitalElevationModel> elevationModel, Value<HillShading> shading, Value<MapScheme<MColor>> colors) {
-        return new ComputeBackgroundTask(elevationModel, shading, colors);
+    public Value<Image> backgroundValue(Value<MapInstance> mapInstance, Value<DigitalElevationModel> elevationModel, Value<HillShading> shading, Value<MapScheme<MColor>> colors) {
+        return new ComputeBackgroundTask(mapInstance, elevationModel, shading, colors);
     }
 
     public Value<Collection<String>> elementsValue() {
@@ -62,20 +63,29 @@ public class MapValueBuilder {
         return new ComputeMapInstanceTask(mapSize, index, configuration);
     }
 
-    public Value<CodemapVisualization> visualizationValue(Value<MapInstance> mapInstance) {
-        return new ComputeVisualizationTask(mapInstance);
-    }
-
     public Value<DigitalElevationModel> elevationModelValue(Value<MapInstance> mapInstance, Value<MapScheme<Boolean>> hills) {
         return new ComputeElevationModelTask(mapInstance, hills);
     }
 
-    public Value<HillShading> hillShadingValue(Value<DigitalElevationModel> elevationModel) {
-        return new ComputeHillShadingTask(elevationModel);
+    public Value<HillShading> hillShadingValue(Value<MapInstance> mapInstance, 
+            Value<DigitalElevationModel> elevationModel) {
+        return new ComputeHillShadingTask(mapInstance, elevationModel);
     }
 
     public Value<Labeling> labelingValue(Value<MapInstance> mapInstance, Value<MapScheme<String>> labels) {
         return new ComputeLabelingTask(mapInstance, labels);
+    }
+
+    public Value<MapSelection> currentSelectionValue() {
+        return Values.of(new MapSelection());
+    }
+
+    public Value<MapSelection> openFilesSelectionValue() {
+        return Values.of(new MapSelection());
+    }
+
+    public Value<MapSelection> youAreHereSelection() {
+        return Values.of(new MapSelection());
     }
 
 }

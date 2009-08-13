@@ -188,7 +188,7 @@ public class MapView extends ViewPart {
         configureActions(activeMap);
         CodemapVisualization viz = activeMap
         .updateSize(currentSize)
-        .getVisualizationOrNull();
+        .getVisualization();
         if (viz == null) return;
         updateMapVisualization(viz);
     }
@@ -235,7 +235,7 @@ public class MapView extends ViewPart {
         CodemapVisualization viz = CodemapCore.getPlugin()
         .mapForProject(project)
         .updateSize(currentSize)
-        .getVisualizationOrNull();
+        .getVisualization();
         if (viz != null) {
             updateMapVisualization(viz);
         }
@@ -257,7 +257,7 @@ public class MapView extends ViewPart {
     }
 
     public void redrawCodemapBackground() {
-        currentViz.redrawBackground();
+        // currentViz.redrawBackground(); TODO what is the new way to get this done? maybe we don't need it at all?
     }
 
 }

@@ -43,7 +43,7 @@ public class MapInstance {
 		return new Pixel(x, y);
 	}
 
-	public int getWidth() {
+	public int getWidth() { // TODO rename to getSize()
 		return width;
 	}
 	

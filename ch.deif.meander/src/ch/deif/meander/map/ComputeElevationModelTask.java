@@ -6,6 +6,7 @@ import ch.akuhn.values.TaskValue;
 import ch.akuhn.values.Value;
 import ch.deif.meander.DigitalElevationModel;
 import ch.deif.meander.MapInstance;
+import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.util.MapScheme;
 
 public class ComputeElevationModelTask extends TaskValue<DigitalElevationModel> {
@@ -16,8 +17,17 @@ public class ComputeElevationModelTask extends TaskValue<DigitalElevationModel> 
 
     @Override
     protected DigitalElevationModel computeValue(ProgressMonitor monitor, Arguments arguments) {
-        // TODO Auto-generated method stub
-        return null;
+        MapInstance map = arguments.next();
+        MapScheme<Boolean> hills = arguments.next();
+        if (hills == null) hills = new MapScheme<Boolean>(true);
+        return computeValue(monitor, map, hills);
     }
 
+    private DigitalElevationModel computeValue(ProgressMonitor monitor, MapInstance map, MapScheme<Boolean> hills) {
+        DEMAlgorithm algorithm = new DEMAlgorithm();
+        algorithm.setMap(map);
+        float[][] DEM = algorithm.call();
+        return new DigitalElevationModel(DEM);
+    }
+    
 }

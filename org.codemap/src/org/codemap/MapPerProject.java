@@ -1,15 +1,12 @@
 package org.codemap;
 
-import static org.codemap.util.Icons.FILE;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codemap.mapview.ProviderDrivenImageOverlay;
 import org.codemap.resources.EclipseMapValues;
+import org.codemap.resources.EclipseMapValuesBuilder;
 import org.codemap.util.CodemapColors;
 import org.codemap.util.CodemapLabels;
-import org.codemap.util.Icons;
 import org.codemap.util.Log;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IProject;
@@ -17,26 +14,18 @@ import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.osgi.service.prefs.BackingStoreException;
 
 import ch.akuhn.util.Arrays;
-import ch.akuhn.util.ProgressMonitor;
 import ch.akuhn.values.ActionValue;
 import ch.akuhn.values.Arguments;
-import ch.akuhn.values.TaskValue;
-import ch.akuhn.values.Value;
 import ch.deif.meander.Configuration;
-import ch.deif.meander.MapInstance;
 import ch.deif.meander.Point;
 import ch.deif.meander.Configuration.Builder;
-import ch.deif.meander.builder.Meander;
-import ch.deif.meander.swt.Background;
+import ch.deif.meander.map.MapVisualization;
 import ch.deif.meander.swt.CodemapVisualization;
 import ch.deif.meander.swt.CompositeLayer;
-import ch.deif.meander.swt.CurrSelectionOverlay;
 import ch.deif.meander.swt.SWTLayer;
-import ch.deif.meander.swt.YouAreHereOverlay;
 
 /**
  * Holds corpus, map and visualization of a project. Use this class to store project specific information.
@@ -55,8 +44,8 @@ public class MapPerProject {
     private static final int MINIMAL_SIZE = 256;
 
     private final IJavaProject project;
-    private EclipseMapValues mapResource;
-    private Value<CodemapVisualization> visual;
+    private EclipseMapValues mapValues;
+    private MapVisualization mapVisualization;
 
     public static MapPerProject forProject(IJavaProject project) {
         if (mapPerProjectCache == null) mapPerProjectCache = new HashMap<IJavaProject,MapPerProject>();
@@ -73,18 +62,16 @@ public class MapPerProject {
     }
 
     private void initialize() {
-        mapResource = new EclipseMapValues("default.map", 
-                Arrays.asList(Resources.asPath(project)),
-                Arrays.asList("*.java", "*.xml"),
-                readPreviousMapState());
-        visual = new TaskValue<CodemapVisualization>("Codemap visualization", mapResource.mapInstance) {
-            @Override
-            protected CodemapVisualization computeValue(ProgressMonitor monitor, Arguments args) {
-                return computeCodemapVisualization(monitor, args);
-            }
-
-        };
-        new ActionValue<Void>(visual) {
+        EclipseMapValuesBuilder b = new EclipseMapValuesBuilder();
+        b.setName("default.map");
+        b.setProjects(Arrays.asList(Resources.asPath(project)));
+        b.setExtensions(Arrays.asList("*.java"));
+        b.setInitialConfiguration(readPreviousMapState());
+        mapValues = new EclipseMapValues(b);
+        mapVisualization = new MapVisualization(mapValues);
+        new ActionValue<Void>(
+                mapValues.mapInstance, 
+                mapValues.background) {
             @Override
             protected Void performAction(Arguments args) {
                 CodemapCore.getPlugin().getMapView().newProjectSelected();
@@ -93,8 +80,8 @@ public class MapPerProject {
         };
     }
 
-    public CodemapVisualization getVisualizationOrNull() {
-        return visual.getValue();		
+    public CodemapVisualization getVisualization() {
+        return mapVisualization.getVisualization();		
     }
 
     public IProject getProject() {
@@ -103,27 +90,6 @@ public class MapPerProject {
 
     private IJavaProject getJavaProject() {
         return project;
-    }
-
-    private CodemapVisualization computeCodemapVisualization(ProgressMonitor monitor, Arguments args) {
-        MapInstance map = args.next();
-
-        Background background = Meander.background()
-        .withColors(colorScheme)
-        .makeBackground();
-
-        SWTLayer layer = Meander.layers()
-        .withLabels(labelScheme)
-        .withSelection(new CurrSelectionOverlay(), CodemapCore.getPlugin().getCurrentSelection())
-        .withSelection(new ProviderDrivenImageOverlay(Icons.getImage(FILE), new WorkbenchLabelProvider()), CodemapCore.getPlugin().getOpenFilesSelection())
-        .withSelection(new YouAreHereOverlay(), CodemapCore.getPlugin().getYouAreHereSelection())				   
-        .withLayer(sharedLayer)
-        .makeLayer();
-
-        return new CodemapVisualization(map)
-        .add(layer)
-        .addBackground(background);
-
     }
 
     private Configuration readPreviousMapState() {
@@ -152,8 +118,8 @@ public class MapPerProject {
 
     public MapPerProject updateSize(int size) {
         int size0 = Math.max(size, MINIMAL_SIZE);
-        mapResource.mapSize.setValue(size0);
-        visual.getValue();
+        mapValues.mapSize.setValue(size0);
+        mapValues.mapInstance.value(); // trigger computation
         return this;
     }
     
@@ -163,8 +129,8 @@ public class MapPerProject {
 
 
     private void writePointPreferences() {
-        if (mapResource.configuration.isError()) return;
-        Configuration config = mapResource.configuration.getValue();
+        if (mapValues.configuration.isError()) return;
+        Configuration config = mapValues.configuration.getValue();
         IEclipsePreferences node = readPointPreferences();
         for(Point each: config.points()) {
             node.put(each.getDocument(), each.x + "@" + each.y);
@@ -217,7 +183,7 @@ public class MapPerProject {
     }
 
     public Configuration getConfiguration() {
-        return mapResource.configuration.value(); // what if it's null?
+        return mapValues.configuration.value(); // what if it's null?
     }	
 
 }

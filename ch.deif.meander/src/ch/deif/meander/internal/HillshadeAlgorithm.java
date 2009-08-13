@@ -16,26 +16,26 @@ import ch.deif.meander.MapInstance.Kernel;
  */
 public class HillshadeAlgorithm extends MapAlgorithm<double[][]> {
 
-	private static final double Z_FACTOR = 0.6e-3;
+    private static final double Z_FACTOR = 0.6e-3;
 
-	@Override
-	public double[][] call() {
-		// zenith: height of sun over horizon (90 = horizon, 0 = zenith).
-		double zenithRad = 45 * PI / 180;
-		// azimuth: direction of sun on x-y-plane
-		double azimuthRad = (315 - 180) * PI / 180;
-		double z_factor = Z_FACTOR * map.getWidth();
-		double[][] hillshade = new double[map.width][map.width];
-		for (Kernel k: map.kernels()) {
-			double dx = (k.topRight + (2 * k.right) + k.bottomRight - (k.topLeft + (2 * k.left) + k.bottomLeft)) / 8;
-			double dy = (k.bottomLeft + (2 * k.bottom) + k.bottomRight - (k.topLeft + (2 * k.top) + k.topRight)) / 8;
-			double slopeRad = atan(z_factor * sqrt(dx * dx + (dy * dy)));
-			double aspectRad = atan2(dy, -dx);
-			double shading = (cos(zenithRad) * cos(slopeRad) + (sin(zenithRad) * sin(slopeRad) * cos(azimuthRad
-					- aspectRad)));
-			hillshade[k.px][k.py] = shading;
-		}
-		return hillshade;
-	}
+    @Override
+    public double[][] call() {
+        // zenith: height of sun over horizon (90 = horizon, 0 = zenith).
+        double zenithRad = 45 * PI / 180;
+        // azimuth: direction of sun on x-y-plane
+        double azimuthRad = (315 - 180) * PI / 180;
+        double z_factor = Z_FACTOR * map.getWidth();
+        double[][] hillshade = new double[map.width][map.width];
+        for (Kernel k: map.kernels()) {
+            double dx = (k.topRight + (2 * k.right) + k.bottomRight - (k.topLeft + (2 * k.left) + k.bottomLeft)) / 8;
+            double dy = (k.bottomLeft + (2 * k.bottom) + k.bottomRight - (k.topLeft + (2 * k.top) + k.topRight)) / 8;
+            double slopeRad = atan(z_factor * sqrt(dx * dx + (dy * dy)));
+            double aspectRad = atan2(dy, -dx);
+            double shading = (cos(zenithRad) * cos(slopeRad) + (sin(zenithRad) * sin(slopeRad) * cos(azimuthRad
+                    - aspectRad)));
+            hillshade[k.px][k.py] = shading;
+        }
+        return hillshade;
+    }
 
 }

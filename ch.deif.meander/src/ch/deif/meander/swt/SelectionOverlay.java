@@ -1,52 +1,37 @@
 package ch.deif.meander.swt;
 
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
 
-import ch.deif.meander.AbstractMapSelection;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapSelection;
+import ch.deif.meander.map.MapValues;
 
 public abstract class SelectionOverlay extends SWTLayer {
 
-	MapSelection selection;
-	private Image image;
-	
-	protected void setImag(Image img) {
-		image = img;
-	}
-	
-	public Image getImage() {
-		return image;
-	}
-	
-	public AbstractMapSelection getSelection() {
-		return selection;
-	}
-	
-	public SelectionOverlay setSelection(MapSelection selection) {
-		this.selection = selection;
-		return this;
-	}	
+    public abstract MapSelection getSelection(MapValues map);
 
-	@Override
-	public final void paintMap(MapInstance map, GC gc) {
-		paintBefore(map,gc);
-		paintChildren(map, gc);
-	}
+    @Override
+    public final void paintMap(MapValues map, GC gc) {
+        if (map.mapInstance.value() == null) return;
+        paintBefore(map,gc);
+        paintChildren(map, gc);
+    }
 
-	public void paintBefore(MapInstance map, GC gc) {
-		// does nothing
-	}
+    public void paintBefore(MapValues map, GC gc) {
+        // does nothing
+    }
 
-	private final void paintChildren(MapInstance map, GC gc) {
-		for (Location each: getSelection().locationsOn(map)) {
-			paintChild(map, gc, each);
-		}
-	}	
-	
-	public abstract void paintChild(MapInstance map, GC gc, Location each);
+    private final void paintChildren(MapValues map, GC gc) {
+        MapSelection selection = this.getSelection(map);
+        MapInstance mapInstance = map.mapInstance.value();
+        if (selection == null || mapInstance == null) return;
+        for (Location each: selection.locationsOn(map)) {
+            paintChild(map, gc, each);
+        }
+    }	
+
+    public abstract void paintChild(MapValues map, GC gc, Location each);
 
 
 }

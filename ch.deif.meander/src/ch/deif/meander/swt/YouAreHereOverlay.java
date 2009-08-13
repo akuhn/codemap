@@ -7,7 +7,8 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Transform;
 
 import ch.deif.meander.Location;
-import ch.deif.meander.MapInstance;
+import ch.deif.meander.MapSelection;
+import ch.deif.meander.map.MapValues;
 
 public class YouAreHereOverlay extends SelectionOverlay {
 
@@ -19,7 +20,7 @@ public class YouAreHereOverlay extends SelectionOverlay {
 	
 	
 	@Override
-	public void paintBefore(MapInstance map, GC gc) {
+	public void paintBefore(MapValues map, GC gc) {
 		Device device = gc.getDevice();
 		gc.setForeground(device.getSystemColor(SWT.COLOR_INFO_FOREGROUND));
 		gc.setBackground(device.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
@@ -28,7 +29,7 @@ public class YouAreHereOverlay extends SelectionOverlay {
 	}
 	
 	@Override
-	public void paintChild(MapInstance map, GC gc, Location each) {
+	public void paintChild(MapValues map, GC gc, Location each) {
 		Device device = gc.getDevice();
 		gc.setFont(device.getSystemFont());
 		String name = each.getName();
@@ -61,5 +62,11 @@ public class YouAreHereOverlay extends SelectionOverlay {
 		// TODO learn from class RenameInformationPopup how to open a custom popup, dream on...
 		
 	}
+
+    @Override
+    public MapSelection getSelection(MapValues map) {
+        return map.youAreHereSelection.value();
+    }
+
 
 }
