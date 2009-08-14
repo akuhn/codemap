@@ -4,6 +4,10 @@ public class IntegerValue extends AbstractValue<Integer> {
 
     private int intValue;
 
+    public IntegerValue(int initialValue) {
+        this.intValue = initialValue;
+    }
+
     @Override
     public Throwable getError() {
         return null;
