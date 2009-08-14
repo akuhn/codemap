@@ -69,15 +69,21 @@ public class MapPerProject {
         b.setInitialConfiguration(readPreviousMapState());
         mapValues = new EclipseMapValues(b);
         mapVisualization = new MapVisualization(mapValues);
+        mapVisualization.getSharedLayer().add(makeOpenFilesLayer());
         new ActionValue<Void>(
                 mapValues.mapInstance, 
-                mapValues.background) {
+                mapValues.background,
+                mapValues.labeling) {
             @Override
             protected Void performAction(Arguments args) {
                 CodemapCore.getPlugin().getMapView().newProjectSelected();
                 return null;
             }
         };
+    }
+
+    private SWTLayer makeOpenFilesLayer() {
+        return new OpenFileIconsLayer();
     }
 
     public CodemapVisualization getVisualization() {
@@ -119,7 +125,7 @@ public class MapPerProject {
     public MapPerProject updateSize(int size) {
         int size0 = Math.max(size, MINIMAL_SIZE);
         mapValues.mapSize.setValue(size0);
-        mapValues.mapInstance.value(); // trigger computation
+        mapValues.mapInstance.getValue(); // trigger computation
         return this;
     }
     
@@ -130,7 +136,7 @@ public class MapPerProject {
 
     private void writePointPreferences() {
         if (mapValues.configuration.isError()) return;
-        Configuration config = mapValues.configuration.getValue();
+        Configuration config = mapValues.configuration.getValueOrFail();
         IEclipsePreferences node = readPointPreferences();
         for(Point each: config.points()) {
             node.put(each.getDocument(), each.x + "@" + each.y);
@@ -183,7 +189,7 @@ public class MapPerProject {
     }
 
     public Configuration getConfiguration() {
-        return mapValues.configuration.value(); // what if it's null?
+        return mapValues.configuration.getValue(); // what if it's null?
     }	
 
 }

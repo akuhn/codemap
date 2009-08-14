@@ -23,8 +23,8 @@ public class ComputeElementsTask extends TaskValue<Collection<String>> {
     
     @Override
     protected Collection<String> computeValue(ProgressMonitor monitor, Arguments args) {
-        Collection<String> projects = args.next();
-        final Collection<String> extensions = args.next();
+        Collection<String> projects = args.nextOrFail();
+        final Collection<String> extensions = args.nextOrFail();
         final Collection<String> result = new HashSet<String>();
         for (String path: projects) {
             IResource project = Resources.asResource(path);
