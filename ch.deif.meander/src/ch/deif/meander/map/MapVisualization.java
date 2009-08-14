@@ -4,6 +4,7 @@ import ch.deif.meander.swt.Background;
 import ch.deif.meander.swt.CodemapVisualization;
 import ch.deif.meander.swt.CompositeLayer;
 import ch.deif.meander.swt.CurrSelectionOverlay;
+import ch.deif.meander.swt.LabelOverlay;
 import ch.deif.meander.swt.OpenFilesOverlay;
 import ch.deif.meander.swt.YouAreHereOverlay;
 
@@ -21,7 +22,7 @@ public class MapVisualization {
     private void initializeVisualization() {
 
         CompositeLayer foreground = new CompositeLayer();
-//        foreground.add(new LabelOverlay());
+        foreground.add(new LabelOverlay());
         foreground.add(new CurrSelectionOverlay());
 //        foreground.add(new ProviderDrivenImageOverlay());
         foreground.add(new OpenFilesOverlay());

@@ -9,10 +9,10 @@ import org.eclipse.swt.graphics.Rectangle;
 
 public class Label implements  Comparable<Label> {
 
-    public int fontHeight;
-    public Rectangle bounds;
-    private int px, py;
-    String text;
+    public final int fontHeight;
+    public final Rectangle bounds;
+    private final int px, py;
+    public final String text;
 
     public Label(int px, int py, Point extent, int height, String text) {
         this.px = px;

@@ -41,6 +41,14 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
         MapScheme<MColor> colors = arguments.nextOrNull();
         if (colors == null) colors = MapScheme.with(MColor.HILLGREEN);
         if (mapInstance == null) return null;
+        
+        System.out.println("---------------");
+        System.out.println(Thread.currentThread().getName());
+        System.out.println(mapInstance);
+        System.out.println(elevationModel);
+        System.out.println(hillShading);
+        System.out.println("---------------");
+        
         return computeValue(monitor, mapInstance, elevationModel, hillShading, colors);
     }
 
@@ -65,29 +73,23 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
         }
     }
 
-    private void paintWater(ProgressMonitor monitor, GC gc) {
-        Color blue = new Color(gc.getDevice(), 0, 0, 255);
-        gc.setBackground(blue);
-        gc.fillRectangle(gc.getClipping());
-        blue.dispose();
-    }
-
-    private void paintShores(ProgressMonitor monitor, GC gc, MapInstance mapInstance, DigitalElevationModel elevationModel) {
-        int mapSize = mapInstance.getWidth();
-        float[][] DEM = elevationModel.asFloatArray();
-        Color color = new Color(gc.getDevice(), 92, 142, 255);
+    private void paintDraft(ProgressMonitor monitor, GC gc, MapInstance map) {
+        if (monitor.isCanceled()) return;
+        if (map == null) return;
+        Device device = gc.getDevice();
+        Color color = new Color(device, 92, 142, 255);
         gc.setForeground(color);
-        Rectangle rect = new Rectangle(0, 0, mapSize, mapSize);
-        rect.intersect(gc.getClipping());
-        for (int x = rect.x; x < (rect.x + rect.width); x++) {
-            for (int y = rect.y; y < (rect.y + rect.height); y++) {
-                if (DEM[x][y] > 2) gc.drawPoint(x, y);
-            }
+        gc.setLineWidth(2);
+        for (Location each: map.locations()) {
+            if (monitor.isCanceled()) break;
+            int r = (int) (each.getElevation() * 2 * map.getWidth() / DEMAlgorithm.MAGIC_VALUE);
+            gc.drawOval(each.px - r, each.py - r, r * 2, r * 2);
         }
         color.dispose();
     }
 
     private void paintHills(ProgressMonitor monitor, GC gc, MapInstance mapInstance, DigitalElevationModel elevationModel, HillShading hillShading, MapScheme<MColor> colors) {
+        if (monitor.isCanceled()) return;
         if (hillShading == null) return;
         int mapSize = mapInstance.getWidth();
         float[][] DEM = elevationModel.asFloatArray();
@@ -97,6 +99,7 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
         Rectangle rect = new Rectangle(0, 0, mapSize, mapSize);
         rect.intersect(gc.getClipping());
         for (int x = rect.x; x < (rect.x + rect.width); x++) {
+            if (monitor.isCanceled()) break;
             for (int y = rect.y; y < (rect.y + rect.height); y++) {
                 if (DEM[x][y] > 10) {
                     double f = shade[x][y];
@@ -111,18 +114,30 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
             }
         }
     }
-    
-    private void paintDraft(ProgressMonitor monitor, GC gc, MapInstance map) {
-        if (map == null) return;
-        Device device = gc.getDevice();
-        Color color = new Color(device, 92, 142, 255);
+
+    private void paintShores(ProgressMonitor monitor, GC gc, MapInstance mapInstance, DigitalElevationModel elevationModel) {
+        if (monitor.isCanceled()) return;
+        int mapSize = mapInstance.getWidth();
+        float[][] DEM = elevationModel.asFloatArray();
+        Color color = new Color(gc.getDevice(), 92, 142, 255);
         gc.setForeground(color);
-        gc.setLineWidth(2);
-        for (Location each: map.locations()) {
-            int r = (int) (each.getElevation() * 2 * map.getWidth() / DEMAlgorithm.MAGIC_VALUE);
-            gc.drawOval(each.px - r, each.py - r, r * 2, r * 2);
+        Rectangle rect = new Rectangle(0, 0, mapSize, mapSize);
+        rect.intersect(gc.getClipping());
+        for (int x = rect.x; x < (rect.x + rect.width); x++) {
+            if (monitor.isCanceled()) break;
+            for (int y = rect.y; y < (rect.y + rect.height); y++) {
+                if (DEM[x][y] > 2) gc.drawPoint(x, y);
+            }
         }
         color.dispose();
+    }
+    
+    private void paintWater(ProgressMonitor monitor, GC gc) {
+        if (monitor.isCanceled()) return;
+        Color blue = new Color(gc.getDevice(), 0, 0, 255);
+        gc.setBackground(blue);
+        gc.fillRectangle(gc.getClipping());
+        blue.dispose();
     }
 
 }

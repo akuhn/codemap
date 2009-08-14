@@ -4,9 +4,14 @@ import ch.deif.meander.swt.Label;
 
 public class Labeling {
 
+    private Iterable<Label> labels;
+
+    public Labeling(Iterable<Label> labels) {
+        this.labels = labels;
+    }
+
     public Iterable<Label> labels() {
-        // TODO Auto-generated method stub
-        return null;
+        return labels;
     }
 
 }
