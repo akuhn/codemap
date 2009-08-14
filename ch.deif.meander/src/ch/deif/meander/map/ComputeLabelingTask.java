@@ -56,12 +56,13 @@ public class ComputeLabelingTask extends TaskValue<Labeling> {
         Collection<Label> labels = new ArrayList<Label>();
         Font basefont = new Font(gc.getDevice(), LabelOverlay.ARIAL_NARROW, 12, SWT.NORMAL);
         for (Location each: map.locations()) {
+            String text = labelScheme.forLocation(each.getPoint());
+            if (text == null) continue;
             FontData[] fontData = basefont.getFontData();
             int height = (int) (Math.sqrt(each.getElevation()) * 2);
             for (FontData fd: fontData) fd.setHeight(height);
             Font font = new Font(gc.getDevice(), fontData);
             gc.setFont(font);
-            String text = labelScheme.forLocation(each.getPoint());
             Point extent = gc.stringExtent(text);
             labels.add(new Label(each.px, each.py, extent, height, text));
             font.dispose();
