@@ -152,4 +152,9 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
         blue.dispose();
     }
 
+    @Override
+    protected void maybeDisposeValue(Image previous, Image newValue) {
+        if (previous != null && !previous.equals(newValue)) previous.dispose();
+    }
+    
 }
