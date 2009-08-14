@@ -13,7 +13,7 @@ public abstract class SelectionOverlay extends SWTLayer {
 
     @Override
     public final void paintMap(MapValues map, GC gc) {
-        if (map.mapInstance.value() == null) return;
+        if (map.mapInstance.getValue() == null) return;
         paintBefore(map,gc);
         paintChildren(map, gc);
     }
@@ -24,7 +24,7 @@ public abstract class SelectionOverlay extends SWTLayer {
 
     private final void paintChildren(MapValues map, GC gc) {
         MapSelection selection = this.getSelection(map);
-        MapInstance mapInstance = map.mapInstance.value();
+        MapInstance mapInstance = map.mapInstance.getValue();
         if (selection == null || mapInstance == null) return;
         for (Location each: selection.locationsOn(map)) {
             paintChild(map, gc, each);

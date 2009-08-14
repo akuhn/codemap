@@ -22,4 +22,8 @@ public class HillShading {
         return contourLines;
     }
 
+    public int getSize() {
+        return hillShading.length;
+    }
+
 }

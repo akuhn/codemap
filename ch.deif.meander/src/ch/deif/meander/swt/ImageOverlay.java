@@ -5,7 +5,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 
 import ch.deif.meander.Location;
-import ch.deif.meander.MapSelection;
 import ch.deif.meander.map.MapValues;
 
 public abstract class ImageOverlay extends SelectionOverlay {

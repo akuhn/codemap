@@ -9,7 +9,7 @@ public class Background extends SWTLayer {
 
     @Override
     public void paintMap(MapValues map, GC gc) {
-        Image buffer = map.background.value();
+        Image buffer = map.background.getValue();
         if (buffer == null) return;
         gc.drawImage(buffer, 0, 0);
     }

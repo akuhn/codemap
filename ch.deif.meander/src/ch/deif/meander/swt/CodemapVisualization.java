@@ -130,7 +130,7 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
     }
 
     private void updateTooltip(MouseEvent e) {
-        MapInstance map = mapValues.mapInstance.value();
+        MapInstance map = mapValues.mapInstance.getValue();
         if (map == null) return;
         boolean noName = map.isEmpty() || !map.containsPoint(e.x, e.y);
         String name = noName ? null : map.get(NearestNeighborAlgorithm.class).get(e.x).get(e.y).getName();

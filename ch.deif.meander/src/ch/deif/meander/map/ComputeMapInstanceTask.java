@@ -24,9 +24,9 @@ public class ComputeMapInstanceTask extends TaskValue<MapInstance> {
 
     @Override
     protected MapInstance computeValue(ProgressMonitor monitor, Arguments args) {
-        int size = args.next();
-        final LatentSemanticIndex index = args.next();
-        Configuration configuration = args.next();
+        int size = args.nextOrFail();
+        final LatentSemanticIndex index = args.nextOrFail();
+        Configuration configuration = args.nextOrFail();
         return configuration.withSize(size, new MapScheme<Double>() {
             @Override
             public Double forLocation(Point location) {

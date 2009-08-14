@@ -20,7 +20,7 @@ public class ComputeConfigurationTask extends TaskValue<Configuration> {
 
     @Override
     protected Configuration computeValue(ProgressMonitor monitor, Arguments args) {
-        LatentSemanticIndex index = args.next();
+        LatentSemanticIndex index = args.nextOrFail();
         return previousConfiguration = Meander.builder().addCorpus(index).makeMap(previousConfiguration);
     }
 

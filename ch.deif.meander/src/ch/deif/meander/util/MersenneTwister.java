@@ -89,6 +89,7 @@ public class MersenneTwister {
 		 * System.currentTimeMillis().
 		 */
 		public Twister() {
+		    // empty block
 		}
 
 		/**

@@ -21,8 +21,8 @@ public class ComputeHillShadingTask extends TaskValue<HillShading> {
 
     @Override
     protected HillShading computeValue(ProgressMonitor monitor, Arguments arguments) {
-        MapInstance mapInstance = arguments.next();
-        DigitalElevationModel elevationModel = arguments.next();
+        MapInstance mapInstance = arguments.nextOrFail();
+        DigitalElevationModel elevationModel = arguments.nextOrFail();
         return computeValue(monitor, mapInstance, elevationModel);
     }
 

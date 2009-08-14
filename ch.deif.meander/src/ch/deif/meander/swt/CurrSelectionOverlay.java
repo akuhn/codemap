@@ -42,7 +42,7 @@ public class CurrSelectionOverlay extends SelectionOverlay {
 
     @Override
     public void mouseDoubleClick(MouseEvent e) {
-        MapInstance map = CodemapVisualization.mapValues(e).mapInstance.value();
+        MapInstance map = CodemapVisualization.mapValues(e).mapInstance.getValue();
         if (map == null) return;
         Location neighbor = map.nearestNeighbor(e.x, e.y);
         fireEvent(e, EVT_DOUBLE_CLICKED, neighbor);
@@ -81,13 +81,13 @@ public class CurrSelectionOverlay extends SelectionOverlay {
 
     @Override
     public void paintChild(MapValues map, GC gc, Location each) {
-        int mapSize = map.mapSize.value();
+        int mapSize = map.mapSize.getValue();
         int r = (int) (each.getElevation() * 2 * mapSize / DEMAlgorithm.MAGIC_VALUE);
         gc.fillOval(each.px - r, each.py - r, r * 2, r * 2);
     }
 
     private void updateSelection(MapValues map) {
-        MapInstance mapInstance = map.mapInstance.value();
+        MapInstance mapInstance = map.mapInstance.getValue();
         if (mapInstance == null) return;
         int minX = Math.min(dragStart.x, dragStop.x);
         int minY = Math.min(dragStart.y, dragStop.y);

@@ -16,7 +16,7 @@ public class LabelOverlay extends SWTLayer {
 
     @Override
     public void paintMap(MapValues map, GC gc) {
-        Labeling labeling = map.labeling.value();
+        Labeling labeling = map.labeling.getValue();
         if (labeling == null) return;
         paintLabels(labeling, gc);
     }

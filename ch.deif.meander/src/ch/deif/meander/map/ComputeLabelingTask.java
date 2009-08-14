@@ -33,8 +33,8 @@ public class ComputeLabelingTask extends TaskValue<Labeling> {
 
     @Override
     protected Labeling computeValue(ProgressMonitor monitor, Arguments arguments) {
-        MapInstance mapInstance = arguments.next();
-        MapScheme<String> labelScheme = arguments.next();
+        MapInstance mapInstance = arguments.nextOrFail();
+        MapScheme<String> labelScheme = arguments.nextOrFail();
         if (labelScheme == null) labelScheme = new DefaultLabelScheme();
         return computeValue(monitor, mapInstance, labelScheme);
     }

@@ -15,7 +15,7 @@ public abstract class AbstractMapSelection extends CollectionValue<String> {
     }
 
     public Iterable<Location> locationsOn(MapValues map) {
-        MapInstance mapInstance = map.mapInstance.value();
+        MapInstance mapInstance = map.mapInstance.getValue();
         if (mapInstance == null) return Collections.emptyList();
         return locationsOn(mapInstance);
     }

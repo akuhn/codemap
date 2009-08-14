@@ -36,19 +36,11 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
     @Override
     protected Image computeValue(ProgressMonitor monitor, Arguments arguments) {
         MapInstance mapInstance = arguments.nextOrNull();
-        DigitalElevationModel elevationModel = arguments.nextOrNull();
-        HillShading hillShading = arguments.nextOrNull();
-        MapScheme<MColor> colors = arguments.nextOrNull();
-        if (colors == null) colors = MapScheme.with(MColor.HILLGREEN);
         if (mapInstance == null) return null;
-        
-        System.out.println("---------------");
-        System.out.println(Thread.currentThread().getName());
-        System.out.println(mapInstance);
-        System.out.println(elevationModel);
-        System.out.println(hillShading);
-        System.out.println("---------------");
-        
+
+        DigitalElevationModel elevationModel = getCurrentElevationModel(arguments, mapInstance);
+        HillShading hillShading = getCurrentHillShading(arguments, mapInstance);
+        MapScheme<MColor> colors = getCurrentColorScheme(arguments);
         return computeValue(monitor, mapInstance, elevationModel, hillShading, colors);
     }
 
@@ -60,6 +52,26 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
         this.paintBackground(monitor, gc, mapInstance, elevationModel, hillShading, colors);
         gc.dispose();
         return image;
+    }
+
+    private MapScheme<MColor> getCurrentColorScheme(Arguments arguments) {
+        MapScheme<MColor> colors = arguments.nextOrNull();
+        if (colors == null) colors = MapScheme.with(MColor.HILLGREEN);
+        return colors;
+    }
+
+    private DigitalElevationModel getCurrentElevationModel(Arguments arguments, MapInstance mapInstance) {
+        DigitalElevationModel elevationModel = arguments.nextOrNull();
+        if (elevationModel != null && mapInstance.getWidth() != elevationModel.getSize()) 
+            elevationModel = null;
+        return elevationModel;
+    }
+
+    private HillShading getCurrentHillShading(Arguments arguments, MapInstance mapInstance) {
+        HillShading hillShading = arguments.nextOrNull();
+        if (hillShading != null && mapInstance.getWidth() != hillShading.getSize())
+            hillShading = null;
+        return hillShading;
     }
 
     private void paintBackground(ProgressMonitor monitor, GC gc, MapInstance mapInstance, DigitalElevationModel elevationModel, HillShading hillShading, MapScheme<MColor> colors) {

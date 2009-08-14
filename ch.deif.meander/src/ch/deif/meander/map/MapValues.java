@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.eclipse.swt.graphics.Image;
 
 import ch.akuhn.hapax.index.LatentSemanticIndex;
+import ch.akuhn.values.IntegerValue;
 import ch.akuhn.values.Value;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.DigitalElevationModel;
@@ -18,7 +19,7 @@ import ch.deif.meander.util.MapScheme;
 
 public class MapValues {
 
-    public final Value<Integer> mapSize;
+    public final IntegerValue mapSize;
     public final Value<Collection<String>> elements;
     public final Value<MapScheme<Boolean>> hills;
     public final Value<MapScheme<MColor>> colors;
@@ -62,7 +63,7 @@ public class MapValues {
      * 
      */
     public int getSize() {
-        return mapSize.value();
+        return mapSize.getValue();
     }
 
 }

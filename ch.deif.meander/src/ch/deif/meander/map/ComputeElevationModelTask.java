@@ -17,8 +17,8 @@ public class ComputeElevationModelTask extends TaskValue<DigitalElevationModel> 
 
     @Override
     protected DigitalElevationModel computeValue(ProgressMonitor monitor, Arguments arguments) {
-        MapInstance map = arguments.next();
-        MapScheme<Boolean> hills = arguments.next();
+        MapInstance map = arguments.nextOrFail();
+        MapScheme<Boolean> hills = arguments.nextOrFail();
         if (hills == null) hills = new MapScheme<Boolean>(true);
         return computeValue(monitor, map, hills);
     }

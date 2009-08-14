@@ -20,7 +20,7 @@ public class ComputeIndexTask extends TaskValue<LatentSemanticIndex> {
 
     @Override
     protected LatentSemanticIndex computeValue(ProgressMonitor monitor, Arguments args) {
-        Collection<String> elements = args.next();
+        Collection<String> elements = args.nextOrFail();
         monitor.begin(elements.size());
         CorpusBuilder builder = Hapax.newCorpus()
                 .ignoreCase()

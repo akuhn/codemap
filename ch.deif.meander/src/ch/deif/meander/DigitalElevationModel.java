@@ -12,4 +12,8 @@ public class DigitalElevationModel {
         return DEM;
     }
 
+    public int getSize() {
+        return DEM.length;
+    }
+
 }
