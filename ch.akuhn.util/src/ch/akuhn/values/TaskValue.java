@@ -308,9 +308,18 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
     
     private boolean changeState(State previousState, State newState) {
         DEBUGF("%s\tChanging state from %s to %s\n", T(), previousState, newState);
-        boolean success = fState.compareAndSet(previousState, newState);
-        if (!success) DEBUGF("%s\tFAIL, current state is %s\n", T(), fState);
-        return success;
+        if (fState.compareAndSet(previousState, newState)) {
+            maybeDisposeValue((V) previousState.value, (V) newState.value);
+            return true;
+        }
+        else {
+            DEBUGF("%s\tFAIL, current state is %s\n", T(), fState);
+            return false;
+        }
+    }
+
+    protected void maybeDisposeValue(V value, V value2) {
+        // react on changed values
     }
 
 }
