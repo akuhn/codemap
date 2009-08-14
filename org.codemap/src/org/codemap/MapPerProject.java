@@ -34,9 +34,9 @@ import ch.deif.meander.swt.SWTLayer;
 public class MapPerProject {
 
     private Map<String,String> properties = new HashMap<String,String>();
-    private CodemapColors colorScheme = new CodemapColors();
-    private CodemapLabels labelScheme = new CodemapLabels();
-    private CompositeLayer sharedLayer = new CompositeLayer();
+//    private CodemapColors colorScheme = new CodemapColors();
+//    private CodemapLabels labelScheme = new CodemapLabels();
+//    private CompositeLayer sharedLayer = new CompositeLayer();
 
     private static Map<IJavaProject,MapPerProject> mapPerProjectCache;
 
@@ -163,14 +163,6 @@ public class MapPerProject {
         properties.put(key, value);
     }
 
-    public CodemapColors getColorScheme() {
-        return colorScheme;
-    }
-
-    public CodemapLabels getLabelScheme() {
-        return labelScheme;
-    }
-
     public boolean getPropertyOrDefault(String key, boolean defaultValue) {
         String value = properties.get(key);
         return value == null ? defaultValue : Boolean.parseBoolean(value);
@@ -181,15 +173,19 @@ public class MapPerProject {
     }
 
     public void addLayer(SWTLayer layer) {
-        sharedLayer.add(layer);
+        mapVisualization.getSharedLayer().add(layer);
     }
 
     public void removeLayer(SWTLayer layer) {
-        sharedLayer.remove(layer);
+        mapVisualization.getSharedLayer().remove(layer);
     }
 
     public Configuration getConfiguration() {
         return mapValues.configuration.getValue(); // what if it's null?
+    }
+
+    public EclipseMapValues getValues() {
+        return mapValues;
     }	
 
 }

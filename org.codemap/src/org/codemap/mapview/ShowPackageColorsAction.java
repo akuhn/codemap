@@ -49,13 +49,16 @@ public class ShowPackageColorsAction extends MenuAction {
 	}
 
 	private CodemapColors getColorScheme() {
-		return CodemapCore.getPlugin().getActiveMap().getColorScheme();
+//	    FIXME
+//		return CodemapCore.getPlugin().getActiveMap().getColorScheme();
+	    return null;
 	}
 
 	private void enable() {
 		MapPerProject mapForProject = CodemapCore.getPlugin().mapForProject(theController.getCurrentProject());
 		
 		ColorBrewer brewer = new ColorBrewer();
+//		FIXME
 		CodemapColors colorScheme = getColorScheme();
 		
 		for(Point each: mapForProject.getConfiguration().points()) {

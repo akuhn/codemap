@@ -89,11 +89,16 @@ public class CodemapCore extends AbstractUIPlugin {
         return mapForProject(theView.getCurrentProject());
     }
 
-    // TODO: the layers itself should issue the redraws
+    // redraws happen automatically
+    // TODO remove calls    
+    @Deprecated
     public void redrawCodemap() {
         getMapView().redrawAsync();
     }
-
+    
+    // redraws happen automatically
+    // TODO remove calls
+    @Deprecated
     public void redrawCodemapBackground() {
         getMapView().redrawCodemapBackground();
         getMapView().redrawAsync();

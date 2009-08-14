@@ -6,6 +6,9 @@ package org.codemap.mapview;
 import org.codemap.CodemapCore;
 import org.eclipse.jface.action.IAction;
 
+import ch.deif.meander.DefaultLabelScheme;
+import ch.deif.meander.util.MapScheme;
+
 abstract class LabelAction extends MenuAction {
 
 	public LabelAction(String text) {
@@ -27,8 +30,8 @@ abstract class LabelAction extends MenuAction {
 		public void run() {
 			super.run();
 			if (!isChecked()) return;
-			getCore().getActiveMap().getLabelScheme().useNoLabels();
-			getCore().redrawCodemap();
+			getCore().getActiveMap().getValues().labelScheme.setValue(new MapScheme<String>(null));
+
 		}
 
 		@Override
@@ -47,8 +50,7 @@ abstract class LabelAction extends MenuAction {
 		public void run() {
 			super.run();
 			if (!isChecked()) return;
-			getCore().getActiveMap().getLabelScheme().useIdentifierLabels();
-			getCore().redrawCodemap();
+            getCore().getActiveMap().getValues().labelScheme.setValue(new DefaultLabelScheme());			
 		}
 
 		@Override

@@ -1,5 +1,7 @@
 package org.codemap.mapview;
 
+import static org.codemap.util.Icons.LAYERS;
+
 import org.codemap.util.Icons;
 
 public class LayerDropDownAction extends ExtensionPointDropDownAction {
@@ -10,7 +12,7 @@ public class LayerDropDownAction extends ExtensionPointDropDownAction {
 	
 	@Override
 	protected void setup() {
-		setImageDescriptor(Icons.getImageDescriptor(Icons.LAYERS));
+		setImageDescriptor(Icons.getImageDescriptor(LAYERS));
 		setText("Layers"); 
 	}
 
