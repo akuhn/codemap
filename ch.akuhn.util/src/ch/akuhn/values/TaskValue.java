@@ -50,7 +50,6 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
 
     @Override
     public ImmutableValue<V> asImmutable() {
-        DEBUGF("%s\taccess %s\n", T(), this);
         this.requestValue();
         return fState.get().innerAsImmutable();
     }
@@ -142,15 +141,18 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
         
         @Override
         public void innerValueChanged(EventObject event) {
-            DEBUGF("%s\tvalue changed %s\n", T(), this);
+            DEBUGF("%s\tupdate received %s from %s\n", T(), this, event.getSource());
             if (!newArgumentValue(event.getSource())) return;
             State newState = new Missing();
-            if (fState.compareAndSet(this, newState)) changed();
+            if (TaskValue.this.changeState(this, newState)) {
+                changed();
+            }
         }
 
         @Override
         public String toString() {
-            return "Value(" + name + ", DONE)";
+            String basic = super.toString();
+            return String.format("Value(%s, %s)", name, basic.substring(basic.lastIndexOf('$') + 1));
         }
 
         protected boolean newArgumentValue(Object source) {
@@ -179,8 +181,9 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
             Waiting newState = new Waiting(
                     null, MISSING, 
                     new ImmutableValue[parts.length]);
-            if (!fState.compareAndSet(this, newState)) return;
-            newState.start();
+            if (TaskValue.this.changeState(this, newState)) {
+                newState.start();
+            }
         }
 
         public void innerValueChanged(EventObject event) {
@@ -189,7 +192,8 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
 
         @Override
         public String toString() {
-            return "Value(" + name + ", MISSING)";
+            String basic = super.toString();
+            return String.format("Value(%s, %s)", name, basic.substring(basic.lastIndexOf('$') + 1));
         }
         
     }
@@ -208,19 +212,16 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
                 for (ImmutableValue each: arguments) 
                     if (each.isError()) return;
             Working newState = new Working(value, error, arguments);
-            if (fState.compareAndSet(this, newState)) newState.start();
+            if (TaskValue.this.changeState(this, newState)) {
+                newState.start();
+            }
         }
         
         @Override
         public void innerValueChanged(EventObject event) {
-            DEBUGF("%s\tvalue changed %s\n", T(), this);
+            DEBUGF("%s\tupdate received %s from %s\n", T(), this, event.getSource());
             if (!newArgumentValue(event.getSource())) return;
             this.start();
-        }
-
-        @Override
-        public String toString() {
-            return "Value(" + name + ", WAITING)";
         }
 
         @Override
@@ -253,10 +254,12 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
 
         @Override
         public void innerValueChanged(EventObject event) {
-            DEBUGF("%s\tvalue changed %s\n", T(), this);
+            DEBUGF("%s\tupdate received %s from %s\n", T(), this, event.getSource());
             if (!newArgumentValue(event.getSource())) return;
-            Working newState = new Working(value, error, arguments);
-            if (fState.compareAndSet(this, newState)) newState.start();
+            Waiting newState = new Waiting(value, error, arguments);
+            if (TaskValue.this.changeState(this, newState)) {
+                newState.start();
+            }
             this.stop();
         }
 
@@ -265,18 +268,12 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
             monitor.setName(name);
             Done newState = runTryCatch(monitor);
             monitor.done();
-            if (fState.compareAndSet(Working.this, newState)) {
-                changed();
+            if (TaskValue.this.changeState(this, newState)) {
+               changed();
             }
-            DEBUGF("%s\tDONE %s\n", T(), this);
             return newState.error;
         }
         
-        @Override
-        public String toString() {
-            return "Value(" + name + ", WORKING)";
-        }
-
         private Done runTryCatch(ProgressMonitor monitor) {
             try {
                 return new Done(computeValue(monitor, new Arguments(arguments)), null, arguments);
@@ -303,6 +300,13 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
             return;
         }
  
+    }
+    
+    private boolean changeState(State previousState, State newState) {
+        DEBUGF("%s\tChanging state from %s to %s\n", T(), previousState, newState);
+        boolean success = fState.compareAndSet(previousState, newState);
+        if (!success) DEBUGF("%s\tFAIL, current state is %s\n", T(), fState);
+        return success;
     }
 
 }
