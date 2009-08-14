@@ -2,9 +2,9 @@ package ch.akuhn.values;
 
 public interface Value<V> {
 
-    public V value();
+    public V getValue();
     
-    public Throwable error();
+    public Throwable getError();
     
     public ImmutableValue<V> asImmutable();
     
@@ -14,7 +14,7 @@ public interface Value<V> {
     
     public boolean isError();
     
-    public V getValue();
+    public V getValueOrFail();
     
     public void addDependent(ValueChangedListener dependent);
     

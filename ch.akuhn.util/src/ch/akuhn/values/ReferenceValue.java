@@ -22,7 +22,7 @@ public class ReferenceValue<V> extends AbstractValue<V> implements ValueChangedL
     }
     
     @Override
-    public Throwable error() {
+    public Throwable getError() {
         return null;
     }
 
@@ -32,7 +32,7 @@ public class ReferenceValue<V> extends AbstractValue<V> implements ValueChangedL
     }
 
     @Override
-    public V value() {
+    public V getValue() {
         return value;
     }
 

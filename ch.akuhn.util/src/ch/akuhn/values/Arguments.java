@@ -11,15 +11,15 @@ public class Arguments {
     }
     
     @SuppressWarnings("unchecked")
-    public <A> A next() {
+    public <A> A nextOrFail() {
         if (index >= values.length) return null;
-        return (A) values[index++].getValue();
+        return (A) values[index++].getValueOrFail();
     }
 
     @SuppressWarnings("unchecked")
     public <A> A nextOrNull() {
         if (index >= values.length) return null;
-        return (A) values[index++].value();
+        return (A) values[index++].getValue();
     }
     
 }

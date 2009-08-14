@@ -26,8 +26,8 @@ public abstract class ComputedValue<V> extends ReferenceValue<V> {
     }
     
     @Override
-    public V value() {
-        if (value == MISSING) value = computeValue();
+    public V getValue() {
+        if (value == MISSING) value = computeValue(new Arguments(arguments));
         return this.value;
     }
 
@@ -37,17 +37,12 @@ public abstract class ComputedValue<V> extends ReferenceValue<V> {
     }
 
     public void resetValue() {
-        value = isLazy ? missingValue() : computeValue();
+        value = isLazy ? missingValue() : computeValue(new Arguments(arguments));
         this.changed();
     }
 
-    protected abstract V computeValue();
+    protected abstract V computeValue(Arguments arguments);
 
-    @SuppressWarnings("unchecked")
-    protected <A> A arg(int index) {
-        return (A) arguments[index].getValue();
-    }
-    
     @Override
     public void valueChanged(EventObject event) {
         this.resetValue();

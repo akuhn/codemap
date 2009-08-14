@@ -94,7 +94,7 @@ public class CollectionValue<V> extends ReferenceValue<Collection<V>> implements
     }
 
     @Override
-    public Collection<V> value() {
+    public Collection<V> getValue() {
         return this;
     }
     

@@ -21,12 +21,12 @@ public class ImmutableValue<V> implements Value<V> {
     }
 
     @Override
-    public Throwable error() {
+    public Throwable getError() {
         return error;
     }
 
     @Override
-    public V getValue() {
+    public V getValueOrFail() {
         if (isError()) throw Values.throwError(error);
         return value;
     }
@@ -52,8 +52,8 @@ public class ImmutableValue<V> implements Value<V> {
     }
 
     @Override
-    public V value() {
-        return isError() ? null : value;
+    public V getValue() {
+        return value;
     }
 
     @Override

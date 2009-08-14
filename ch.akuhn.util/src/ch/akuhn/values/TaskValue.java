@@ -43,7 +43,7 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
         this.parts = parts;
         this.requiresAllArguments = true;
         //fValue = new ArrayBlockingQueue<ValueOrError<V>>(1);
-        fState = new AtomicReference<State>(new Missing());
+        fState = new AtomicReference<State>(new Missing(null));
         for (Value<?> each: parts) each.addDependent(this);
     }
 
@@ -61,14 +61,14 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
 
 
     @Override
-    public Throwable error() {
-        return this.asImmutable().error();
+    public Throwable getError() {
+        return this.asImmutable().getError();
     }
 
 
     @Override
-    public V getValue() {
-        return this.asImmutable().getValue();
+    public V getValueOrFail() {
+        return this.asImmutable().getValueOrFail();
     }
 
     @Override
@@ -91,8 +91,8 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
     }
     
     @Override
-    public V value() {
-        return this.asImmutable().value();
+    public V getValue() {
+        return this.asImmutable().getValue();
     }
     
     @Override
@@ -106,47 +106,14 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
         fState.get().innerRequestValue();
     }
     
-    interface State {
-
-        public ImmutableValue innerAsImmutable();
+    private class State {
         
-        public void innerRequestValue();
-        
-        public void innerValueChanged(EventObject event);
-        
-    }
-    
-    private class Done implements State {
-
-        protected final ImmutableValue[] arguments;
-        protected final V value;
+        protected final Object value;
         protected final Throwable error;
         
-        private Done(V value, Throwable error, ImmutableValue... arguments) {
-            if (arguments.length != parts.length) throw new IllegalArgumentException();
-            this.arguments = arguments;
+        private State(Object value, Throwable error) {
             this.value = value;
             this.error = error;
-        }
-
-        @Override
-        public ImmutableValue innerAsImmutable() {
-            return new ImmutableValue(value, error);
-        }
-
-        @Override
-        public void innerRequestValue() {
-            return;
-        }
-        
-        @Override
-        public void innerValueChanged(EventObject event) {
-            DEBUGF("%s\tupdate received %s from %s\n", T(), this, event.getSource());
-            if (!newArgumentValue(event.getSource())) return;
-            State newState = new Missing();
-            if (TaskValue.this.changeState(this, newState)) {
-                changed();
-            }
         }
 
         @Override
@@ -155,11 +122,49 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
             return String.format("Value(%s, %s)", name, basic.substring(basic.lastIndexOf('$') + 1));
         }
 
-        protected boolean newArgumentValue(Object source) {
+        public ImmutableValue innerAsImmutable() {
+            return new ImmutableValue(value, error);
+        }
+
+        public void innerRequestValue() {
+            return;
+        }
+
+        public void innerValueChanged(EventObject event) {
+            return;
+        }
+
+        protected boolean isNewArgumentValue(ImmutableValue[] arguments, Object source) {
+            if (arguments == null) return true;
             int index = Arrays.indexOf(parts, source);
             if (index < 0) return false;
-            return !Values.equal(arguments[index], ((Value<?>) source).asImmutable()); // safe cast
+            // The cast to Value below is safe, only values have an index >= 0
+            return !Values.equal(arguments[index], ((Value) source).asImmutable());
         }
+        
+    }
+    
+    private class Done extends State {
+
+        protected ImmutableValue[] arguments;
+        
+        private Done(V value, Throwable error, ImmutableValue... arguments) {
+            super(value, error);
+            if (arguments.length != parts.length) throw new IllegalArgumentException();
+            this.arguments = arguments;
+        }
+
+        @Override
+        public void innerValueChanged(EventObject event) {
+            DEBUGF("%s\tupdate received %s from %s\n", T(), this, event.getSource());
+            if (isNewArgumentValue(arguments, event.getSource())) {
+                State newState = new Missing(value);
+                if (TaskValue.this.changeState(this, newState)) {
+                    changed();
+                }
+            }
+        }
+
         
     }    
     
@@ -170,44 +175,36 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
         }  
     };
     
-    private class Missing implements State {
+    private class Missing extends State {
         
-        public ImmutableValue<V> innerAsImmutable() {
-            return new ImmutableValue<V>(null, MISSING);
+        public Missing(Object value) {
+            super(value, MISSING);
         }
 
+        @Override
         public void innerRequestValue() {
             DEBUGF("%s\trequest %s\n", T(), this);
-            Waiting newState = new Waiting(
-                    null, MISSING, 
-                    new ImmutableValue[parts.length]);
+            Waiting newState = new Waiting(value, MISSING);
             if (TaskValue.this.changeState(this, newState)) {
                 newState.start();
             }
         }
 
-        public void innerValueChanged(EventObject event) {
-            return;
-        }
-
-        @Override
-        public String toString() {
-            String basic = super.toString();
-            return String.format("Value(%s, %s)", name, basic.substring(basic.lastIndexOf('$') + 1));
-        }
-        
     }
 
-    private class Waiting extends Done {
+    private class Waiting extends State {
 
-        private Waiting(V value, Throwable error, ImmutableValue[] arguments) {
-            super (value, error, arguments);
+        private ImmutableValue[] arguments;
+
+        private Waiting(Object value, Throwable error) {
+            super (value, error);
         }
 
         protected void start() {
             DEBUGF("%s\tstart %s\n", T(), this);
+            arguments = new ImmutableValue[parts.length];
             for (int n = 0; n < parts.length; n++) 
-                arguments[n] = parts[n].asImmutable();
+                arguments [n] = parts[n].asImmutable();
             if (requiresAllArguments)
                 for (ImmutableValue each: arguments) 
                     if (each.isError()) return;
@@ -220,7 +217,7 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
         @Override
         public void innerValueChanged(EventObject event) {
             DEBUGF("%s\tupdate received %s from %s\n", T(), this, event.getSource());
-            if (!newArgumentValue(event.getSource())) return;
+            if (!isNewArgumentValue(arguments, event.getSource())) return;
             this.start();
         }
 
@@ -238,13 +235,15 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
         TASK_FACTORY = factory;
     }
     
-    private class Working extends Waiting implements Callback {
+    private class Working extends State implements Callback {
 
         private Task job;
+        private ImmutableValue[] arguments;
 
-        private Working(V value, Throwable error, ImmutableValue[] arguments) {
-            super (value, error, arguments);
+        private Working(Object value, Throwable error, ImmutableValue[] arguments) {
+            super(value, error);
             job = TASK_FACTORY.makeTask();
+            this.arguments = arguments;
         }
 
         @Override
@@ -255,18 +254,24 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
         @Override
         public void innerValueChanged(EventObject event) {
             DEBUGF("%s\tupdate received %s from %s\n", T(), this, event.getSource());
-            if (!newArgumentValue(event.getSource())) return;
-            Waiting newState = new Waiting(value, error, arguments);
-            if (TaskValue.this.changeState(this, newState)) {
-                newState.start();
+            if (isNewArgumentValue(arguments, event.getSource())) {
+                Waiting newState = new Waiting(value, error);
+                if (TaskValue.this.changeState(this, newState)) {
+                    newState.start();
+                }
+                else {
+                    // let the current state handle this update
+                    TaskValue.this.fState.get().innerValueChanged(event);
+                }
+                this.stop();
             }
-            this.stop();
         }
 
+        @Override // Callback
         public Throwable run(ProgressMonitor monitor) {
             DEBUGF("%s\trun %s\n", T(), this);
             monitor.setName(name);
-            Done newState = runTryCatch(monitor);
+            State newState = runTryCatch(monitor);
             monitor.done();
             if (TaskValue.this.changeState(this, newState)) {
                changed();
@@ -274,16 +279,15 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
             return newState.error;
         }
         
-        private Done runTryCatch(ProgressMonitor monitor) {
+        private State runTryCatch(ProgressMonitor monitor) {
             try {
                 return new Done(computeValue(monitor, new Arguments(arguments)), null, arguments);
             }
             catch (Throwable ex) {
-                return new Waiting(null, ex, arguments);
+                return new Waiting(value, ex);
             }
         }
 
-        @Override
         protected void start() {
             DEBUGF("%s\tstart-running %s\n", T(), this);
             if (this != fState.get()) return;

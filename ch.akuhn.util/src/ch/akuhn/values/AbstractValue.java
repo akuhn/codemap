@@ -26,19 +26,19 @@ public abstract class AbstractValue<V> implements Value<V> {
     }
 
     @Override
-    public V getValue() {
-        if (isError()) throw Values.throwError(error());
-        return value();
+    public V getValueOrFail() {
+        if (isError()) throw Values.throwError(getError());
+        return getValue();
     }
     
     @Override
     public boolean isError() {
-        return error() != null;
+        return getError() != null;
     }
     
     @Override
     public ImmutableValue<V> asImmutable() {
-        return new ImmutableValue<V>(value(), error());
+        return new ImmutableValue<V>(getValue(), getError());
     }
     
     @Override
