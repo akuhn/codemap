@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.codemap.resources.EclipseMapValues;
 import org.codemap.resources.EclipseMapValuesBuilder;
-import org.codemap.util.CodemapLabels;
 import org.codemap.util.Log;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IProject;
@@ -23,9 +22,7 @@ import ch.deif.meander.Point;
 import ch.deif.meander.Configuration.Builder;
 import ch.deif.meander.map.MapVisualization;
 import ch.deif.meander.swt.CodemapVisualization;
-import ch.deif.meander.swt.CompositeLayer;
 import ch.deif.meander.swt.SWTLayer;
-import ch.deif.meander.util.CodemapColors;
 
 /**
  * Holds corpus, map and visualization of a project. Use this class to store project specific information.
@@ -34,9 +31,6 @@ import ch.deif.meander.util.CodemapColors;
 public class MapPerProject {
 
     private Map<String,String> properties = new HashMap<String,String>();
-//    private CodemapColors colorScheme = new CodemapColors();
-//    private CodemapLabels labelScheme = new CodemapLabels();
-//    private CompositeLayer sharedLayer = new CompositeLayer();
 
     private static Map<IJavaProject,MapPerProject> mapPerProjectCache;
 

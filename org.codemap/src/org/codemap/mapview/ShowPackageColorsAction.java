@@ -44,25 +44,17 @@ public class ShowPackageColorsAction extends MenuAction {
 	}
 
 	private void disable() {
-		getColorScheme().clearColors();
-		redraw();
-	}
-
-	private CodemapColors getColorScheme() {
-//	    FIXME
-//		return CodemapCore.getPlugin().getActiveMap().getColorScheme();
-	    return null;
+	    CodemapCore core = CodemapCore.getPlugin();
+	    core.getActiveMap().getValues().colorScheme.setValue(core.getDefaultColorScheme());
 	}
 
 	private void enable() {
 		MapPerProject mapForProject = CodemapCore.getPlugin().mapForProject(theController.getCurrentProject());
 		
 		ColorBrewer brewer = new ColorBrewer();
-//		FIXME
-		CodemapColors colorScheme = getColorScheme();
+		CodemapColors colorScheme = new CodemapColors();
 		
 		for(Point each: mapForProject.getConfiguration().points()) {
-//			System.out.println(each.getDocument());
 			
 			String fileName = each.getDocument();
 			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
@@ -84,11 +76,7 @@ public class ShowPackageColorsAction extends MenuAction {
 				Log.error(e);
 			}
 		}
-		redraw();
-	}
-
-	private void redraw() {
-		CodemapCore.getPlugin().redrawCodemapBackground();
+		CodemapCore.getPlugin().getActiveMap().getValues().colorScheme.setValue(colorScheme);
 	}
 
 	@Override
@@ -100,6 +88,5 @@ public class ShowPackageColorsAction extends MenuAction {
 	protected boolean isDefaultChecked() {
 		return false;
 	}
-	
 
 }

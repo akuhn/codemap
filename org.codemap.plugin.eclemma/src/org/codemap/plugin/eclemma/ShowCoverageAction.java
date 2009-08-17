@@ -29,8 +29,9 @@ public class ShowCoverageAction implements ICodemapPluginAction {
 	}
 
 	private void hideCoverage() {
-	    Value<MapScheme<MColor>> colorScheme = CodemapCore.getPlugin().getActiveMap().getValues().colorScheme;
-	    colorScheme.setValue(CodemapCore.getPlugin().getDefaultColorScheme());
+	    CodemapCore core = CodemapCore.getPlugin();
+	    Value<MapScheme<MColor>> colorScheme = core.getActiveMap().getValues().colorScheme;
+	    colorScheme.setValue(core.getDefaultColorScheme());
 	}
 
 	public boolean isChecked() {
