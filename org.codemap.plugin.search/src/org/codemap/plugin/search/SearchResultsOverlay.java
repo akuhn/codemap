@@ -1,5 +1,6 @@
 package org.codemap.plugin.search;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
@@ -27,10 +28,8 @@ public class SearchResultsOverlay extends SelectionOverlay {
     @Override
     public void paintBefore(MapValues map, GC gc) {
         Device device = gc.getDevice();
-        Color blue = new Color(device, 0, 0, 255);
-        Color white = new Color(device, 255, 255, 255);
-        gc.setForeground(blue);
-        gc.setBackground(white);
+        gc.setForeground(device.getSystemColor(SWT.COLOR_BLUE));
+        gc.setBackground(device.getSystemColor(SWT.COLOR_WHITE));
         gc.setAlpha(255);
         gc.setLineWidth(SELECTION_STROKE);
     }

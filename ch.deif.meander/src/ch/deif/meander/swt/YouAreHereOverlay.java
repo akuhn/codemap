@@ -57,8 +57,6 @@ public class YouAreHereOverlay extends SelectionOverlay {
         t.dispose();
         save.dispose();
 
-        // FIXME do I have to save and restore the previous transform?
-
         // TODO learn from class RenameInformationPopup how to open a custom popup, dream on...
 
     }

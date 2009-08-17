@@ -47,9 +47,9 @@ public class OpenFileIconsLayer extends SelectionOverlay {
         Image image = provider.getImage(resource);
         if (image == null) image = this.image;
         Rectangle b = image.getBounds();
-        int d = (int) Math.sqrt(b.width * b.width + b.height * b.height);
+        int diameter = (int) Math.sqrt(b.width * b.width + b.height * b.height);
         gc.setAlpha(196);
-        gc.fillOval(each.px - d/2, each.py - d/2, d, d);
+        gc.fillOval(each.px - diameter/2, each.py - diameter/2, diameter, diameter);
         gc.setAlpha(255);
         gc.drawImage(image, each.px - b.width/2, each.py - b.height/2);
     }

@@ -1,6 +1,7 @@
 package ch.deif.meander.swt;
 
-import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Display;
 
@@ -15,10 +16,11 @@ public class OpenFilesOverlay extends SelectionOverlay {
 
     @Override
     public void paintBefore(MapValues map, GC gc) {
-        Display display = Display.getCurrent();
-        gc.setForeground(new Color(display, 0, 0, 0));
-        gc.setBackground(new Color(display, 255, 255, 255));
+        Device device = Display.getCurrent();
+        gc.setForeground(device.getSystemColor(SWT.COLOR_BLACK));
+        gc.setBackground(device.getSystemColor(SWT.COLOR_WHITE));
         gc.setLineWidth(POINT_STROKE);
+        gc.setAlpha(255);
     }
 
     @Override
