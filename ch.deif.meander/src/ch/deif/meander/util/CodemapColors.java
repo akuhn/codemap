@@ -1,11 +1,9 @@
-package org.codemap.util;
+package ch.deif.meander.util;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import ch.deif.meander.Point;
-import ch.deif.meander.util.MColor;
-import ch.deif.meander.util.MapScheme;
 
 // FIXME, remove me?
 
@@ -29,7 +27,9 @@ public class CodemapColors extends MapScheme<MColor> {
 	@Override
 	public MColor forLocation(Point location) {
 		String identifier = location.getDocument();
-		if (forLocation.containsKey(identifier)) return forLocation.get(identifier);
+		if (forLocation.containsKey(identifier)) {
+		    return forLocation.get(identifier);
+		}
 		return super.forLocation(location);
 	}
 	

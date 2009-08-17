@@ -22,8 +22,8 @@ public class MapValues {
     public final IntegerValue mapSize;
     public final Value<Collection<String>> elements;
     public final Value<MapScheme<Boolean>> hills;
-    public final Value<MapScheme<MColor>> colors;
-    public final Value<MapScheme<String>> labels;
+    public final Value<MapScheme<MColor>> colorScheme;
+    public final Value<MapScheme<String>> labelScheme;
 
     public final MapSelection currentSelection;
     public final MapSelection openFilesSelection;
@@ -42,8 +42,8 @@ public class MapValues {
         mapSize = make.mapSizeValue();
         elements  = make.elementsValue();
         hills  = make.hillsValue();
-        colors  = make.colorsValue();
-        labels  = make.labelsValue();
+        colorScheme  = make.colorsValue();
+        labelScheme  = make.labelsValue();
         
         currentSelection = make.currentSelectionValue();
         openFilesSelection = make.openFilesSelectionValue();
@@ -54,8 +54,8 @@ public class MapValues {
         mapInstance = make.mapInstanceValue(mapSize, index, configuration);
         elevationModel = make.elevationModelValue(mapInstance, hills);
         shading = make.hillShadingValue(mapInstance, elevationModel);
-        background = make.backgroundValue(mapInstance, elevationModel, shading, colors);
-        labeling = make.labelingValue(mapInstance, labels);
+        background = make.backgroundValue(mapInstance, elevationModel, shading, colorScheme);
+        labeling = make.labelingValue(mapInstance, labelScheme);
 
     }
     

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.codemap.resources.EclipseMapValues;
 import org.codemap.resources.EclipseMapValuesBuilder;
-import org.codemap.util.CodemapColors;
 import org.codemap.util.CodemapLabels;
 import org.codemap.util.Log;
 import org.codemap.util.Resources;
@@ -26,6 +25,7 @@ import ch.deif.meander.map.MapVisualization;
 import ch.deif.meander.swt.CodemapVisualization;
 import ch.deif.meander.swt.CompositeLayer;
 import ch.deif.meander.swt.SWTLayer;
+import ch.deif.meander.util.CodemapColors;
 
 /**
  * Holds corpus, map and visualization of a project. Use this class to store project specific information.
