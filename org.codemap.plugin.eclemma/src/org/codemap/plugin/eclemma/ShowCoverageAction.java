@@ -24,8 +24,6 @@ public class ShowCoverageAction implements ICodemapPluginAction {
 	@Override
 	public void run(Action act) {
 		action = act;
-//		CodemapCore r = CodemapCore.getPlugin();
-//		r.getMapView().updateMap(r);
 		if (isChecked()) showCoverage();
 		else hideCoverage();
 	}
@@ -60,7 +58,6 @@ public class ShowCoverageAction implements ICodemapPluginAction {
 			colorScheme.setColor(identifier, col);
 		}
 		CodemapCore.getPlugin().getActiveMap().getValues().colorScheme.setValue(colorScheme);
-//		CodemapCore.getPlugin().redrawCodemapBackground();		
 	}
 
 }
