@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.codemap.plugin.marker;singleton:=true
 Bundle-Version: 0.7.669.qualifier
 Bundle-Activator: org.codemap.plugin.marker.MarkerPluginCore
 Require-Bundle: ch.deif.meander,
+ ch.akuhn.util;bundle-version="2.1.264",
  org.codemap,
  org.eclipse.ui,
  org.eclipse.core.runtime,

@@ -1,48 +1,46 @@
 package org.codemap.plugin.marker;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
-import ch.deif.meander.AbstractMapSelection;
-import ch.deif.meander.Location;
+import ch.deif.meander.MapSelection;
 
-public class MarkerSelection extends AbstractMapSelection {
-	
-	private Map<String, Integer> identifiers;
+public class MarkerSelection {
+    
+    private MapSelection selection;
+    private HashMap<String, Integer> severityMap;
 
-	public MarkerSelection() {
-		identifiers = new HashMap<String, Integer>();
-	}
+    public MarkerSelection() {
+        selection = new MapSelection();
+        severityMap = new HashMap<String, Integer>();
+    }
 
-	@Override
-	public Iterator<String> iterator() {
-		return identifiers.keySet().iterator();
-	}
+    public int getSeverity(String document) {
+        return severityMap.get(document);
+    }
 
-	public void addAll(Map<String, Integer> map) {
-		identifiers.putAll(map);
-	}
+    public void addAll(Map<String, Integer> map) {
+        severityMap.putAll(map);
+        selection.addAll(map.keySet());
+    }
 
-	public void remove(String identifier) {
-		identifiers.remove(identifier);
-	}
+    public void remove(String identifier) {
+        severityMap.remove(identifier);
+        selection.remove(identifier);
+    }
 
-	public void clear() {
-		identifiers.clear();
-	}
+    public void add(String identifier, int severity) {
+        severityMap.put(identifier, severity);
+        selection.add(identifier);
+    }
 
-	public void add(String identifier, int severity) {
-		identifiers.put(identifier, severity);
-	}
+    public void clear() {
+        severityMap.clear();
+        selection.clear();
+    }
 
-	@Override
-	protected boolean contains(Location each) {
-		return identifiers.containsKey(each.getDocument());
-	}
+    public MapSelection getSelection() {
+        return selection;
+    }
 
-	public int getSeverity(String identifier) {
-		return identifiers.get(identifier);
-	}
-	
 }

@@ -9,6 +9,7 @@ import org.osgi.framework.BundleContext;
 
 import ch.akuhn.values.TaskValue;
 import ch.deif.meander.MapSelection;
+import ch.deif.meander.MapSelection;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.util.MapScheme;
 
