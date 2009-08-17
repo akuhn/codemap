@@ -2,7 +2,7 @@
 <feature
       id="org.codemap.plugin.eclemma.feature"
       label="Codemap Eclemma Integration"
-      version="0.7.670.qualifier"
+      version="0.7.746.qualifier"
       provider-name="David Erni">
 
    <description url="http://scg.unibe.ch/codemap">

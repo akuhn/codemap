@@ -2,6 +2,9 @@
 <project name="Upload files using scp and ssh." default="default" basedir=".">
 
     <target name="default">
+        <exec executable="ssh" dir=".">
+            <arg line="scg@haddock.unibe.ch 'cd download; cd codemap; rm -rf features plugins; mkdir features; mkdir plugins'"/>
+        </exec>
         <exec executable="scp" dir=".">
             <arg line="-p -r site.xml features plugins artifacts.jar content.jar scg@haddock.unibe.ch:download/codemap/"/>
         </exec>
