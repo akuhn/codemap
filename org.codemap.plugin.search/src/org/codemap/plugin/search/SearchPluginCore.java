@@ -65,7 +65,6 @@ public class SearchPluginCore extends AbstractUIPlugin {
 		if (mapSelection == null) {
 			mapSelection = new MapSelection();
 			SearchResultsOverlay searchOverlay = new SearchResultsOverlay();
-			searchOverlay.setSelection(mapSelection);
 			activeMap.addLayer(searchOverlay);
 			
 			selectionCache.put(activeMap, mapSelection);

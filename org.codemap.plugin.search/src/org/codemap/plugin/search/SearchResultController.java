@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.codemap.CodemapCore;
 import org.codemap.util.Resources;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.ISearchResult;
@@ -30,7 +29,6 @@ public class SearchResultController {
         addListener(queries);
         // new queries are at the first position
         loadNewestQueryResult(queries);
-        issueRedraw();
     }
 
     private boolean isActive() {
@@ -52,24 +50,17 @@ public class SearchResultController {
 
     private void clearSelection() {
         getSearchSelection().clear();
-        issueRedraw();
     }
 
     public void onElementsAdded(Collection<Object> elements) {
         if (!isActive()) return;
         getSearchSelection().addAll(extractMatches(elements));
-        issueRedraw();
     }
 
     public void onElementsRemoved(Collection<Object> elements) {
         getSearchSelection().removeAll(extractMatches(elements));
-        if (!isActive()) return;		
-        issueRedraw();
+        // FIXME might cause redraws even when not enabled?!?
     }
-
-    private void issueRedraw() {
-        CodemapCore.getPlugin().redrawCodemap();
-    }	
 
     private void loadNewestQueryResult(ISearchQuery[] queries) {
         // new queries are added at first position
