@@ -207,7 +207,7 @@ public class MarkerController {
 	}	
 
 	private MarkerSelection getMarkerSelection() {
-		return MarkerPluginCore.getPlugin().getCurrentMarkerSelection();
+		return MarkerPlugin.getPlugin().getCurrentMarkerSelection();
 	}
 
 	private void issueRedraw() {

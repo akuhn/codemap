@@ -74,7 +74,7 @@ public class CoverageListener implements IJavaCoverageListener {
 	}
 
 	private void displayCoverage(List<Pair<String, Double>> coverageInfo) {
-		ShowCoverageAction showCoverageAction = EclemmaOverlay.getPlugin().getCoverageAction();
+		ShowCoverageAction showCoverageAction = EclemmaPlugin.getPlugin().getCoverageAction();
 		showCoverageAction.newCoverageAvailable(coverageInfo);		
 	}
 

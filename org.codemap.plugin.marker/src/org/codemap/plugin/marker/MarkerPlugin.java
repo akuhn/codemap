@@ -13,7 +13,7 @@ import ch.deif.meander.MapSelection;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class MarkerPluginCore extends AbstractUIPlugin {
+public class MarkerPlugin extends AbstractUIPlugin {
 	
 	// ----------------------------------------------------------------------
 	// ----------------------------------------------------------------------
@@ -28,7 +28,7 @@ public class MarkerPluginCore extends AbstractUIPlugin {
 	// ----------------------------------------------------------------------	
 	
 	public static final String PLUGIN_ID = "org.codemap.plugin.marker";
-	private static MarkerPluginCore plugin;
+	private static MarkerPlugin plugin;
 	private MarkerController markerController;
 	
 	private Map<MapPerProject, MarkerSelection> selectionCache = new HashMap<MapPerProject, MarkerSelection>();
@@ -62,7 +62,7 @@ public class MarkerPluginCore extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static MarkerPluginCore getPlugin() {
+	public static MarkerPlugin getPlugin() {
 		return plugin;
 	}
 	

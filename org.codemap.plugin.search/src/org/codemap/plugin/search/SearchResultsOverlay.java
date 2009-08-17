@@ -31,12 +31,13 @@ public class SearchResultsOverlay extends SelectionOverlay {
         Color white = new Color(device, 255, 255, 255);
         gc.setForeground(blue);
         gc.setBackground(white);
+        gc.setAlpha(255);
         gc.setLineWidth(SELECTION_STROKE);
     }
 
     @Override
     public MapSelection getSelection(MapValues map) {
-        return SearchPluginCore.getPlugin().getSearchSelection();
+        return SearchPlugin.getPlugin().getSearchSelection();
     }
 
 

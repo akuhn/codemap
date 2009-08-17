@@ -79,7 +79,7 @@ public class SearchResultController {
     }
 
     private MapSelection getSearchSelection() {
-        return SearchPluginCore.getPlugin().getSearchSelection();
+        return SearchPlugin.getPlugin().getSearchSelection();
     }
 
     private Collection<String> extractMatches(Collection<Object> elements) {

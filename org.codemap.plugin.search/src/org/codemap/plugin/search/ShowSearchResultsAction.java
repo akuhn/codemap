@@ -9,7 +9,7 @@ public class ShowSearchResultsAction implements ICodemapPluginAction {
 	private SearchResultController controller;
 	
 	public ShowSearchResultsAction() {
-		controller = SearchPluginCore.getPlugin().getController();
+		controller = SearchPlugin.getPlugin().getController();
 		controller.registerAction(this);
 	}
 

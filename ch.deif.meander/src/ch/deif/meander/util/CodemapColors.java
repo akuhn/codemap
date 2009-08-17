@@ -8,31 +8,35 @@ import ch.deif.meander.Point;
 // FIXME, remove me?
 
 public class CodemapColors extends MapScheme<MColor> {
-	
-	private Map<String, MColor> forLocation;
 
-	public CodemapColors() {
-		super(MColor.HILLGREEN);
-		forLocation = new HashMap<String, MColor>();
-	}
-	
-	public void setColor(String identifier, MColor color) {
-		forLocation.put(identifier, color);
-	}
-	
-	public void clearColors() {
-		forLocation.clear();
-	}
+    private Map<String, MColor> forLocation;
 
-	@Override
-	public MColor forLocation(Point location) {
-		String identifier = location.getDocument();
-		if (forLocation.containsKey(identifier)) {
-		    return forLocation.get(identifier);
-		}
-		return super.forLocation(location);
-	}
-	
-	
+    public CodemapColors() {
+        this(MColor.HILLGREEN);
+    }
+
+    public CodemapColors(MColor defaultColor) {
+        super(defaultColor);
+        forLocation = new HashMap<String, MColor>();
+    }
+
+    public void setColor(String identifier, MColor color) {
+        forLocation.put(identifier, color);
+    }
+
+    public void clearColors() {
+        forLocation.clear();
+    }
+
+    @Override
+    public MColor forLocation(Point location) {
+        String identifier = location.getDocument();
+        if (forLocation.containsKey(identifier)) {
+            return forLocation.get(identifier);
+        }
+        return super.forLocation(location);
+    }
+
+
 
 }

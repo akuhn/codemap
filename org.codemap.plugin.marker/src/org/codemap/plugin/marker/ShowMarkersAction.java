@@ -9,7 +9,7 @@ public class ShowMarkersAction implements ICodemapPluginAction {
 	private MarkerController controller;
 
 	public ShowMarkersAction() {
-		controller = MarkerPluginCore.getPlugin().getController();
+		controller = MarkerPlugin.getPlugin().getController();
 		controller.register(this);
 	}
 

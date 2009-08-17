@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Codemap Search Overlay
 Bundle-SymbolicName: org.codemap.plugin.search;singleton:=true
 Bundle-Version: 0.7.669.qualifier
-Bundle-Activator: org.codemap.plugin.search.SearchPluginCore
+Bundle-Activator: org.codemap.plugin.search.SearchPlugin
 Require-Bundle: ch.deif.meander,
  ch.akuhn.util;bundle-version="2.1.264",
  org.codemap,

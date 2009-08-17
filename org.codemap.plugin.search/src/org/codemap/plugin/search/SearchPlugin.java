@@ -14,10 +14,10 @@ import ch.deif.meander.MapSelection;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class SearchPluginCore extends AbstractUIPlugin {
+public class SearchPlugin extends AbstractUIPlugin {
 
     public static final String PLUGIN_ID = "org.codemap.plugin.search";
-    private static SearchPluginCore plugin;
+    private static SearchPlugin plugin;
 
     private QueryListener theQueryListener;
     private SearchResultController theController;
@@ -74,7 +74,7 @@ public class SearchPluginCore extends AbstractUIPlugin {
     	
     }
 
-    public static SearchPluginCore getPlugin() {
+    public static SearchPlugin getPlugin() {
         return plugin;
     }
 
