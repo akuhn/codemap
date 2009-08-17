@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.codemap.CodemapCore;
 import org.codemap.mapview.ICodemapPluginAction;
-import org.codemap.util.CodemapColors;
 import org.eclipse.jface.action.Action;
 
 import ch.akuhn.util.Pair;
+import ch.akuhn.values.Value;
+import ch.deif.meander.util.CodemapColors;
 import ch.deif.meander.util.MColor;
+import ch.deif.meander.util.MapScheme;
 
 public class ShowCoverageAction implements ICodemapPluginAction {
 	
@@ -29,8 +31,8 @@ public class ShowCoverageAction implements ICodemapPluginAction {
 	}
 
 	private void hideCoverage() {
-		CodemapCore.getPlugin().getActiveMap().getColorScheme().clearColors();
-		CodemapCore.getPlugin().redrawCodemapBackground();
+	    Value<MapScheme<MColor>> colorScheme = CodemapCore.getPlugin().getActiveMap().getValues().colorScheme;
+	    colorScheme.setValue(CodemapCore.getPlugin().getDefaultColorScheme());
 	}
 
 	public boolean isChecked() {
@@ -47,8 +49,8 @@ public class ShowCoverageAction implements ICodemapPluginAction {
 
 	private void showCoverage() {
 		if (lastCoverageInfo == null) return;
-		
-		CodemapColors colorScheme = CodemapCore.getPlugin().getActiveMap().getColorScheme();
+		CodemapColors colorScheme = new CodemapColors();
+		if (colorScheme == null) return;
 		for (Pair<String, Double> pair : lastCoverageInfo) {
 			String identifier = pair.fst;
 			Double ratio = pair.snd;
@@ -57,7 +59,8 @@ public class ShowCoverageAction implements ICodemapPluginAction {
 			MColor col = new MColor(redVal, greenVal, 0);
 			colorScheme.setColor(identifier, col);
 		}
-		CodemapCore.getPlugin().redrawCodemapBackground();		
+		CodemapCore.getPlugin().getActiveMap().getValues().colorScheme.setValue(colorScheme);
+//		CodemapCore.getPlugin().redrawCodemapBackground();		
 	}
 
 }
