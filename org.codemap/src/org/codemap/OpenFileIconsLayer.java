@@ -22,6 +22,7 @@ public class OpenFileIconsLayer extends SelectionOverlay {
     private ILabelProvider provider;
     
     public OpenFileIconsLayer() {
+        // TODO: dispose image and LabelProvider when no longer needed
         this.image = Icons.getImage(Icons.FILE);
         this.provider = new WorkbenchLabelProvider();
     }

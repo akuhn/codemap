@@ -6,6 +6,7 @@ import static org.codemap.util.Icons.WARNING;
 
 import org.codemap.util.Icons;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
@@ -31,21 +32,22 @@ public class MarkersOverlay extends SelectionOverlay {
     @Override
     public void paintChild(MapValues map, GC gc, Location each) {
         int severity = markerSelection.getSeverity(each.getDocument());
-        Image image = getImage(severity);
+        Image image = getImageDescriptor(severity).createImage();
         Rectangle offset = image.getBounds();		
         int offset_x = offset.width/2;
         int offset_y = offset.height/2;		
         gc.drawImage(image, each.px - offset_x, each.py - offset_y);
+        image.dispose();
     }
 
-    private Image getImage(int severity) {
+    private ImageDescriptor getImageDescriptor(int severity) {
         switch (severity) {
         case IMarker.SEVERITY_ERROR:
-            return Icons.getImage(ERROR);
+            return Icons.getImageDescriptor(ERROR);
         case IMarker.SEVERITY_WARNING:
-            return Icons.getImage(WARNING);
+            return Icons.getImageDescriptor(WARNING);
         default:
-            return Icons.getImage(INFO);
+            return Icons.getImageDescriptor(INFO);
         }
     }
 
