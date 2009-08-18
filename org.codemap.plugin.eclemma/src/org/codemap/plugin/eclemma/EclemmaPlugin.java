@@ -1,3 +1,4 @@
+
 package org.codemap.plugin.eclemma;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
