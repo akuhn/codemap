@@ -57,13 +57,13 @@ public class EditorPartListener implements IPartListener {
 		if (!(part instanceof IEditorPart)) return;
 		Collection<String> selection = new ArrayList<String>();
 		for (IEditorReference each: part.getSite().getPage().getEditorReferences()) {
-            for (IFile file: getFiles(each.getPart(false))) {
+		    //restore the editor parts to be able to access the content.
+            for (IFile file: getFiles(each.getPart(true))) {
                 selection.add(Resources.asPath(file));
             }
 		}
 		editorSelection.replaceAll(selection);
 		if (selection.isEmpty()) youAreHereSelection.clear();
-		CodemapCore.getPlugin().redrawCodemap();
 	}
 	
 	@SuppressWarnings("deprecation")
