@@ -28,10 +28,6 @@ public class Icons {
 	public static ImageDescriptor getImageDescriptor(String key) {
 		return loadImage(key).getDescriptor(key);
 	}
-	
-	public static Image getImage(String key) {
-		return getImageDescriptor(key).createImage();
-	}
 
 	private static ImageRegistry loadImage(String path) {
 		ImageRegistry reg = getActivator().getImageRegistry();

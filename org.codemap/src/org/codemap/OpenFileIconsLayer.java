@@ -3,6 +3,7 @@ package org.codemap;
 import org.codemap.util.Icons;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Device;
@@ -18,12 +19,12 @@ import ch.deif.meander.swt.SelectionOverlay;
 
 public class OpenFileIconsLayer extends SelectionOverlay {
 
-    private Image image;
+    private ImageDescriptor imageDesc;
     private ILabelProvider provider;
     
     public OpenFileIconsLayer() {
-        // TODO: dispose image and LabelProvider when no longer needed
-        this.image = Icons.getImage(Icons.FILE);
+        this.imageDesc = Icons.getImageDescriptor(Icons.FILE);
+        // TODO: dispose the LabelProvider when no longer needed
         this.provider = new WorkbenchLabelProvider();
     }
     
@@ -46,13 +47,19 @@ public class OpenFileIconsLayer extends SelectionOverlay {
         IResource resource = Resources.asResource(each.getDocument());
         if (resource == null) return;
         Image image = provider.getImage(resource);
-        if (image == null) image = this.image;
         Rectangle b = image.getBounds();
         int diameter = (int) Math.sqrt(b.width * b.width + b.height * b.height);
         gc.setAlpha(196);
         gc.fillOval(each.px - diameter/2, each.py - diameter/2, diameter, diameter);
         gc.setAlpha(255);
-        gc.drawImage(image, each.px - b.width/2, each.py - b.height/2);
+        if (image == null) {
+            // needed to be able to destroy the image
+            image = imageDesc.createImage();
+            gc.drawImage(image, each.px - b.width/2, each.py - b.height/2);
+            image.dispose();
+        } else {
+            gc.drawImage(image, each.px - b.width/2, each.py - b.height/2);            
+        }
     }
 
 }
