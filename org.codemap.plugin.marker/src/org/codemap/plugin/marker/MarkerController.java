@@ -108,7 +108,6 @@ public class MarkerController {
 		if (! isActive()) return;
 		
 		getMarkerSelection().addAll(map);
-		issueRedraw();	
 	}
 
 	private Map<String, Integer> collectIdentifiers(IMarker[] markers) {
@@ -126,7 +125,6 @@ public class MarkerController {
 		
 		String identifier = Resources.asPath(marker.getResource());
 		getMarkerSelection().remove(identifier);
-		issueRedraw();
 	}
 
 	private void addMarker(IMarker marker) {
@@ -135,7 +133,6 @@ public class MarkerController {
 		if ((severity = marker.getAttribute(SEVERITY, NO_SEVERITY)) == NO_SEVERITY) return;		
 		String identifier = Resources.asPath(marker.getResource());
 		getMarkerSelection().add(identifier, severity);
-		issueRedraw();
 	}
 	
 	private void handleRemoveMarker(IMarker marker) {
@@ -190,7 +187,6 @@ public class MarkerController {
 
 	public void onLayerActivated() {
 		loadAllMarkers();
-		issueRedraw();
 	}	
 	
 	private void loadAllMarkers() {
@@ -203,14 +199,9 @@ public class MarkerController {
 
 	private void clearSelection() {
 		getMarkerSelection().clear();
-		issueRedraw();
 	}	
 
 	private MarkerSelection getMarkerSelection() {
 		return MarkerPlugin.getPlugin().getCurrentMarkerSelection();
-	}
-
-	private void issueRedraw() {
-		CodemapCore.getPlugin().redrawCodemap();
-	}		
+	}	
 }

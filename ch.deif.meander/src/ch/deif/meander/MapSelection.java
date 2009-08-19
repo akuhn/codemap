@@ -26,6 +26,7 @@ public class MapSelection extends CollectionValue<String> {
         boolean retainChange = value.retainAll(newLocations);
         boolean addChange = value.addAll(newLocations);
         if (retainChange || addChange) this.changed();
+//        changed();
     }
     
     public MapSelection() {

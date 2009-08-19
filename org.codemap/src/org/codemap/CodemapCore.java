@@ -89,21 +89,6 @@ public class CodemapCore extends AbstractUIPlugin {
         return mapForProject(theView.getCurrentProject());
     }
 
-    // redraws happen automatically
-    // TODO remove calls    
-    @Deprecated
-    public void redrawCodemap() {
-        getMapView().redrawAsync();
-    }
-    
-    // redraws happen automatically
-    // TODO remove calls
-    @Deprecated
-    public void redrawCodemapBackground() {
-        getMapView().redrawCodemapBackground();
-        getMapView().redrawAsync();
-    }
-
     public MapScheme<MColor> getDefaultColorScheme() {
         return new MapScheme<MColor>(MColor.HILLGREEN);
     }

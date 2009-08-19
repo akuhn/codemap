@@ -35,17 +35,20 @@ public class ColorBrewer {
 //				{ 188, 128, 189 },
 //				{ 204, 235, 197 },
 //				{ 255, 237, 111 } };
-		int[][] rgb = { { 166, 206, 227 },
-		{ 31, 120, 180 },
-		{ 178, 223, 138 },
-		{ 51, 160, 44 },
-		{ 251, 154, 153 },
-		{ 227, 26, 28 },
-		{ 253, 191, 111 },
-		{ 255, 127, 0 },
-		{ 202, 178, 214 },
-		{ 106, 61, 154 },
-		{ 255, 255, 153 }};		
+		
+		int[][] rgb = {
+		        { 106, 61, 154 },
+		        { 255, 255, 153 },
+		        { 166, 206, 227 },
+		        { 31, 120, 180 },
+		        { 178, 223, 138 },
+		        { 51, 160, 44 },
+		        { 251, 154, 153 },
+		        { 227, 26, 28 },
+		        { 253, 191, 111 },
+		        { 255, 127, 0 },
+		        { 202, 178, 214 }
+		};		
 		
 		for (int[] color: rgb) {
 			addColor(color);
@@ -56,7 +59,7 @@ public class ColorBrewer {
 		colors.add(new MColor(color[0], color[1], color[2]));
 	}
 
-	private MColor next() {
+	private MColor nextColor() {
 		if (currentPosition >= colors.size()) {
 			currentPosition = 0;
 		}
@@ -66,7 +69,7 @@ public class ColorBrewer {
 	public MColor forPackage(String packageName) {
 		MColor packageColor = forPackage.get(packageName);
 		if (packageColor == null) {
-			packageColor = next();
+			packageColor = nextColor();
 			forPackage.put(packageName, packageColor);
 		}
 		return packageColor;

@@ -8,8 +8,6 @@ import org.codemap.MapPerProject;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import ch.deif.meander.MapSelection;
-
 /**
  * The activator class controls the plug-in life cycle
  */
@@ -80,6 +78,7 @@ public class MarkerPlugin extends AbstractUIPlugin {
 			activeMap.addLayer(markersOverlay);
 			
 			selectionCache.put(activeMap, selection);
+			activeMap.redrawWhenChanges(selection.getSelection());
 		}
 		return selection;
 	}

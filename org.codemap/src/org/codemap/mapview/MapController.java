@@ -50,15 +50,10 @@ public class MapController {
             newPaths.add(Resources.asPath(each));
         }
         getCurrentSelection().replaceAll(newPaths);
-        redrawCodemap();
     }
 
     private MapSelection getCurrentSelection() {
         return CodemapCore.getPlugin().getCurrentSelection();
-    }
-
-    private void redrawCodemap() {
-        CodemapCore.getPlugin().redrawCodemap();
     }
 
     public IJavaProject getCurrentProject() {

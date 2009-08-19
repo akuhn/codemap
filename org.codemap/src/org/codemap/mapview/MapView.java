@@ -57,32 +57,33 @@ public class MapView extends ViewPart {
         @Override
         public void handleEvent(CodemapEvent event) {
             if (CurrSelectionOverlay.EVT_DOUBLE_CLICKED == event.getKind()) {
-                doubleClicked((Location) event.getValue());					
-            } else if (CurrSelectionOverlay.EVT_SELECTION_CHANGED == event.getKind()) {
+                doubleClicked((Location) event.getValue());
+            } else if (CurrSelectionOverlay.EVT_SELECTION_CHANGED == event
+                    .getKind()) {
                 selectionChanged((MapSelection) event.getValue());
             }
         }
 
         public void selectionChanged(MapSelection mapSelection) {
             final ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
-            for (String each: mapSelection) {
+            for (String each : mapSelection) {
                 IJavaElement javaElement = Resources.asJavaElement(each);
                 selection.add(javaElement);
             }
-            StructuredSelection structuredSelection = new StructuredSelection(selection);
+            StructuredSelection structuredSelection = new StructuredSelection(
+                    selection);
             selectionProvider.setSelection(structuredSelection);
-        }	
+        }
 
         public void doubleClicked(Location location) {
             IResource resource = Resources.asResource(location.getDocument());
-            if (!(resource instanceof IFile)) return;
+            if (!(resource instanceof IFile))
+                return;
             openInEditor((IFile) resource);
         }
     };
 
     public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
-
-    private static final String LINK_SELECTION_GROUP = CodemapCore.PLUGIN_ID + ".linkselection";
 
     private final MapController theController;
     private MapSelectionProvider selectionProvider;
@@ -95,7 +96,8 @@ public class MapView extends ViewPart {
 
     private CanvasListener canvasListener;
 
-    class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
+    class ViewLabelProvider extends LabelProvider implements
+            ITableLabelProvider {
 
         public String getColumnText(Object obj, int index) {
             return getText(obj);
@@ -107,7 +109,8 @@ public class MapView extends ViewPart {
 
         @Override
         public Image getImage(Object obj) {
-            return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
+            return PlatformUI.getWorkbench().getSharedImages().getImage(
+                    ISharedImages.IMG_OBJ_ELEMENT);
         }
     }
 
@@ -120,12 +123,13 @@ public class MapView extends ViewPart {
         container = new Composite(parent, SWT.NONE);
         container.setLayout(new FillLayout(SWT.LEFT));
 
-        canvas = new Canvas(container, SWT.DOUBLE_BUFFERED);		
+        canvas = new Canvas(container, SWT.DOUBLE_BUFFERED);
         canvasListener = new CanvasListener(canvas);
 
         container.layout();
         MColor water = MColor.WATER;
-        Color swtColor = new Color(null, water.getRed(), water.getGreen(), water.getBlue());		
+        Color swtColor = new Color(null, water.getRed(), water.getGreen(),
+                water.getBlue());
         container.setBackground(swtColor);
 
         selectionProvider = new MapSelectionProvider(this);
@@ -137,9 +141,7 @@ public class MapView extends ViewPart {
     }
 
     private void showMap() {
-        //		clearContainer();
-        //		bridge = new EclipseProcessingBridge(container, theApplet);
-        //		softwareMap().getApplet().addListener(makeListener());
+        // clearContainer();
         CodemapCore.getPlugin().setMapView(this);
         new ResizeListener(container, theController);
         theController.onShowMap();
@@ -179,7 +181,7 @@ public class MapView extends ViewPart {
 
     @Override
     public void setFocus() {
-        //		FIXME: correct?
+        // FIXME: correct?
         container.setFocus();
     }
 
@@ -187,20 +189,22 @@ public class MapView extends ViewPart {
         MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
         configureActions(activeMap);
         CodemapVisualization viz = activeMap
-        .updateSize(currentSize)
-        .getVisualization();
-        if (viz == null) return;
+                .updateSize(currentSize)
+                .getVisualization();
+        if (viz == null)
+            return;
         updateMapVisualization(viz);
     }
 
     private void configureActions(MapPerProject activeMap) {
-        for (DropDownAction each: actions) {
+        for (DropDownAction each : actions) {
             each.configureAction(activeMap);
         }
     }
 
     private void updateMapVisualization(CodemapVisualization viz) {
-        if (currentViz != null) currentViz.removeListener(codemapListener);
+        if (currentViz != null)
+            currentViz.removeListener(codemapListener);
         canvasListener.setVisualization(currentViz = viz);
         currentViz.addListener(codemapListener);
         redrawAsync();
@@ -231,41 +235,32 @@ public class MapView extends ViewPart {
     public void updateMapdimension(int newDimension) {
         currentSize = newDimension;
         IJavaProject project = getCurrentProject();
-        if (project == null) return;
+        if (project == null)
+            return;
         CodemapVisualization viz = CodemapCore.getPlugin()
-        .mapForProject(project)
-        .updateSize(currentSize)
-        .getVisualization();
+                .mapForProject(project)
+                .updateSize(currentSize)
+                .getVisualization();
         if (viz != null) {
             updateMapVisualization(viz);
         }
     }
 
-    public void redrawAsync() {
-        // Must call #syncExec, else we get an SWT error 		
+    private void redrawAsync() {
         Display.getDefault().asyncExec(new Runnable() {
             @Override
             public void run() {
-                redraw();
+                container.redraw();
+                canvas.redraw(); // needs both!
             }
         });
     }
-
-    public void redraw() {
-        container.redraw();
-        canvas.redraw(); // needs both!
-    }
-
-    public void redrawCodemapBackground() {
-        // currentViz.redrawBackground(); TODO what is the new way to get this done? maybe we don't need it at all?
-    }
-
+    
 }
 
-class CanvasListener implements PaintListener, 
-MouseListener, MouseMoveListener, 
-MouseTrackListener, MouseWheelListener, 
-DragDetectListener {
+class CanvasListener implements PaintListener, MouseListener,
+        MouseMoveListener, MouseTrackListener, MouseWheelListener,
+        DragDetectListener {
 
     private CodemapVisualization visualization;
 
@@ -289,52 +284,62 @@ DragDetectListener {
 
     @Override
     public void paintControl(PaintEvent e) {
-        if (visualization != null) visualization.paintControl(e);
+        if (visualization != null)
+            visualization.paintControl(e);
     }
 
     @Override
     public void mouseDoubleClick(MouseEvent e) {
-        if (visualization != null) visualization.mouseDoubleClick(e);
+        if (visualization != null)
+            visualization.mouseDoubleClick(e);
     }
 
     @Override
     public void mouseDown(MouseEvent e) {
-        if (visualization != null) visualization.mouseDown(e);
+        if (visualization != null)
+            visualization.mouseDown(e);
     }
 
     @Override
     public void mouseUp(MouseEvent e) {
-        if (visualization != null) visualization.mouseUp(e);
+        if (visualization != null)
+            visualization.mouseUp(e);
     }
 
     @Override
     public void mouseMove(MouseEvent e) {
-        if (visualization != null) visualization.mouseMove(e);
+        if (visualization != null)
+            visualization.mouseMove(e);
     }
 
     @Override
     public void mouseEnter(MouseEvent e) {
-        if (visualization != null) visualization.mouseEnter(e);
+        if (visualization != null)
+            visualization.mouseEnter(e);
     }
 
     @Override
     public void mouseExit(MouseEvent e) {
-        if (visualization != null) visualization.mouseExit(e);
+        if (visualization != null)
+            visualization.mouseExit(e);
     }
 
     @Override
     public void mouseHover(MouseEvent e) {
-        if (visualization != null) visualization.mouseHover(e);
+        if (visualization != null)
+            visualization.mouseHover(e);
     }
 
     @Override
     public void mouseScrolled(MouseEvent e) {
-        if (visualization != null) visualization.mouseScrolled(e);
+        if (visualization != null)
+            visualization.mouseScrolled(e);
     }
 
     @Override
     public void dragDetected(DragDetectEvent e) {
-        if (visualization != null) visualization.dragDetected(e);
+        if (visualization != null)
+            visualization.dragDetected(e);
     }
 
 }

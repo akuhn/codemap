@@ -3,7 +3,6 @@ package org.codemap.mapview;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.codemap.CodemapCore;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspace;
@@ -83,7 +82,6 @@ public class EditorPartListener implements IPartListener {
 			selection.add(Resources.asPath(file));
 		}
 		youAreHereSelection.replaceAll(selection);
-		CodemapCore.getPlugin().redrawCodemap();
 	}
 
 }

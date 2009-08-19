@@ -17,6 +17,7 @@ import org.osgi.service.prefs.BackingStoreException;
 import ch.akuhn.util.Arrays;
 import ch.akuhn.values.ActionValue;
 import ch.akuhn.values.Arguments;
+import ch.akuhn.values.Value;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.Point;
 import ch.deif.meander.Configuration.Builder;
@@ -41,6 +42,8 @@ public class MapPerProject {
     private EclipseMapValues mapValues;
     private MapVisualization mapVisualization;
 
+    private ActionValue<Void> redrawAction;
+
     public static MapPerProject forProject(IJavaProject project) {
         if (mapPerProjectCache == null) mapPerProjectCache = new HashMap<IJavaProject,MapPerProject>();
         MapPerProject map = mapPerProjectCache.get(project);
@@ -64,7 +67,7 @@ public class MapPerProject {
         mapValues = new EclipseMapValues(b);
         mapVisualization = new MapVisualization(mapValues);
         mapVisualization.getSharedLayer().add(makeOpenFilesLayer());
-        new ActionValue<Void>(
+        redrawAction = new ActionValue<Void>(
                 mapValues.mapInstance, 
                 mapValues.background,
                 mapValues.labeling) {
@@ -74,6 +77,7 @@ public class MapPerProject {
                 return null;
             }
         };
+        
     }
 
     private SWTLayer makeOpenFilesLayer() {
@@ -180,6 +184,9 @@ public class MapPerProject {
 
     public EclipseMapValues getValues() {
         return mapValues;
-    }	
+    }
 
+    public void redrawWhenChanges(Value<?> selection) {
+        selection.addDependent(redrawAction);
+    }
 }
