@@ -20,7 +20,6 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
         return Thread.currentThread().getName();
     }
     
-    
     private final AtomicReference<State> fState;
     //private final BlockingQueue<ValueOrError<V>> fValue;
     private String name;
@@ -75,9 +74,6 @@ public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChan
     public boolean isError() {
         return this.asImmutable().isError();
     }
-
-
-
 
     @Override
     public void setValue(V value) {
