@@ -16,5 +16,11 @@
             id="org.codemap.ecftest.views.SampleView">
       </view>
    </extension>
+   <extension
+         point="org.eclipse.ecf.start">
+      <run
+            class="org.codemap.ecftest.ECFStart">
+      </run>
+   </extension>
 
 </plugin>

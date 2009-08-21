@@ -6,6 +6,10 @@ import org.eclipse.ecf.presence.ui.menu.AbstractRosterMenuHandler;
 
 public class CodemapRosterMenuItem extends AbstractRosterMenuContributionItem {
     
+    /*
+     * @see DocShareRosterMenuContributionItem
+     * @see DocShareRosterMenuHandler
+     */
     public CodemapRosterMenuItem() {
         super();
         setTopMenuName("Share open files");
