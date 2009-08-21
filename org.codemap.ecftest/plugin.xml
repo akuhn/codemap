@@ -19,7 +19,7 @@
    <extension
          point="org.eclipse.ecf.start">
       <run
-            class="org.codemap.ecftest.ECFStart">
+            class="org.codemap.ecftest.CodemapECFStart">
       </run>
    </extension>
 

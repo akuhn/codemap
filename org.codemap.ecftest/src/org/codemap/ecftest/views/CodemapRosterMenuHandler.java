@@ -31,8 +31,11 @@ public class CodemapRosterMenuHandler extends AbstractRosterMenuHandler {
             StringShare sender = ECFTestPlugin.getDefault().getStringShare(container.getID());
             if (sender == null)
                 showErrorMessage("no sender.");
-            if (sender.isSharing())
-                showErrorMessage("sharing already started.");
+//            currently share anyway to be able do do better debugging
+//            if (sender.isSharing())
+//                showErrorMessage("sharing already started.");
+            
+            
 //            final ITextEditor textEditor = getTextEditor();
 //            if (textEditor == null)
 //                showErrorMessage(Messages.DocShareRosterMenuHandler_EXCEPTION_EDITOR_NOT_TEXT);

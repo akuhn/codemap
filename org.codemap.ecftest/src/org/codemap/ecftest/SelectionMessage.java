@@ -4,15 +4,18 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.sync.SerializationException;
 
-public class SelectionMessage {
+public class SelectionMessage implements Serializable {
 
-    private ID senderID;
-    private ID receiverID;
-    private String fromUsername;
+    private static final long serialVersionUID = 5539065281698328158L;
+    
+    public final ID senderID;
+    public final ID receiverID;
+    public final String fromUsername;
 
     public SelectionMessage(ID senderID, String fromUser, ID receiverID) {
         this.senderID = senderID;
@@ -35,7 +38,7 @@ public class SelectionMessage {
             throw new SerializationException("could not deserialize message", e);
         }
     }    
-
+    
     public byte[] serialize() throws SerializationException {
         try {
             final ByteArrayOutputStream bos = new ByteArrayOutputStream();

@@ -15,6 +15,7 @@ import org.eclipse.ecf.presence.roster.IRosterListener;
 import org.eclipse.ecf.presence.roster.IRosterManager;
 import org.eclipse.ecf.sync.IModelSynchronizationStrategy;
 import org.eclipse.ecf.sync.doc.IDocumentSynchronizationStrategyFactory;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 
@@ -72,9 +73,10 @@ public class StringShare extends AbstractShare {
     @Override
     protected void handleMessage(ID fromContainerID, byte[] data) {
         try {
-            final SelectionMessage message = SelectionMessage.deserialize(data);
+            SelectionMessage message = SelectionMessage.deserialize(data);
             Assert.isNotNull(message);
-            // XXX: _NOW update the selection here
+            System.out.println("Recieved message from: " + message.fromUsername);
+            // XXX: _NOW do stuff here
             
         } catch (final Exception e) {
             logError("could not handle message.", e);
@@ -119,9 +121,8 @@ public class StringShare extends AbstractShare {
         
     }
     
-    private void showErrorToUser(String string, String bind) {
-        // TODO Auto-generated method stub
-        
+    private void showErrorToUser(String title, String message) {
+        MessageDialog.openError(null, title, message);
     }
 
     private void logError(String string, Exception e) {
