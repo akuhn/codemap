@@ -105,7 +105,7 @@ public class StringShare extends AbstractShare {
      * Add a listener that notifies us when the files are opened/closed in an
      * editor.
      */
-    private synchronized void addEditorListener() {
+    private void addEditorListener() {
         // needs to run in an UI Thread to have access to the workbench.
         if (listener == null) {
             listener = new EditorPartListener(StringShare.this);
@@ -149,8 +149,7 @@ public class StringShare extends AbstractShare {
     }
 
     private IRosterManager getLocalRosterManager() {
-        IContainer container = (IContainer) this.adapter
-                .getAdapter(IContainer.class);
+        IContainer container = (IContainer) this.adapter.getAdapter(IContainer.class);
         if (container != null) {
             IPresenceContainerAdapter presenceContainerAdapter = (IPresenceContainerAdapter) container
                     .getAdapter(IPresenceContainerAdapter.class);
@@ -205,7 +204,7 @@ public class StringShare extends AbstractShare {
         removeEditorListener();
     }
 
-    private synchronized void removeEditorListener() {
+    private void removeEditorListener() {
         Display.getDefault().syncExec(new Runnable() {
             @Override
             public void run() {
