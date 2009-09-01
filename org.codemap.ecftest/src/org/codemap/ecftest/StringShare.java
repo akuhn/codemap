@@ -18,18 +18,13 @@ import org.eclipse.ecf.presence.roster.IRosterManager;
 import org.eclipse.ecf.sync.IModelSynchronizationStrategy;
 import org.eclipse.ecf.sync.SerializationException;
 import org.eclipse.ecf.sync.doc.IDocumentSynchronizationStrategyFactory;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 
 public class StringShare extends AbstractShare {
 
-    protected IModelSynchronizationStrategy syncStrategy;
-    private IDocumentSynchronizationStrategyFactory factory;
     private Object stateLock = new Object();
-    private IRosterManager rosterManager;
-
+    
     IRosterListener rosterListener = new IRosterListener() {
         public void handleRosterEntryAdd(IRosterEntry entry) {
             // nothing to do
@@ -64,14 +59,19 @@ public class StringShare extends AbstractShare {
             // }
         }
     };
+    
+    private IModelSynchronizationStrategy syncStrategy;
+    private IDocumentSynchronizationStrategyFactory factory;
+    private IRosterManager rosterManager;
 
     private ID ourID;
     private ID remoteID;
 
+    private EditorPartListener listener;    
+
     public StringShare(IChannelContainerAdapter adapter) throws ECFException {
         super(adapter);
-        factory = ECFTestPlugin.getDefault()
-                .getColaSynchronizationStrategyFactory();
+        factory = ECFTestPlugin.getDefault().getColaSynchronizationStrategyFactory();
     }
 
     @Override
@@ -82,11 +82,8 @@ public class StringShare extends AbstractShare {
             Assert.isNotNull(message);
             message.applyOn(this);
             // XXX: _NOW do stuff here
-            System.out.println(message);
-            // logError("could not handle message.", e);
         } catch (SerializationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Log.error(e);
         }
     }
 
@@ -115,12 +112,15 @@ public class StringShare extends AbstractShare {
      */
     private void addEditorListener() {
         // needs to run in an UI Thread to have access to the workbench.
+        if (listener == null) {
+            listener = new EditorPartListener(StringShare.this);
+        }
+        
         Display.getDefault().syncExec(new Runnable() {
-            
             @Override
             public void run() {
                 IWorkbenchPage page = ECFTestPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
-                page.addPartListener(new EditorPartListener(StringShare.this));
+                page.addPartListener(listener);
             }
         });
     }
@@ -207,6 +207,21 @@ public class StringShare extends AbstractShare {
     }
 
     public void handleRemoteStop(StopMessage stopMessage) {
-        //TODO: _NOW implement
+        synchronized (stateLock) {
+            ourID = null;
+            remoteID = null;
+            syncStrategy = null;
+        }
+        removeEditorListener();
+    }
+
+    private void removeEditorListener() {
+        Display.getDefault().syncExec(new Runnable() {
+            @Override
+            public void run() {
+                IWorkbenchPage page = ECFTestPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                page.removePartListener(listener);
+            }
+        });
     }
 }
