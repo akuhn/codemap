@@ -1,7 +1,7 @@
 package org.codemap.ecftest.views;
 
-import org.codemap.ecftest.StringShare;
 import org.codemap.ecftest.ECFTestPlugin;
+import org.codemap.ecftest.StringShare;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IStatus;

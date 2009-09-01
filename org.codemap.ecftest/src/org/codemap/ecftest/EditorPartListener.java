@@ -15,6 +15,7 @@ import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IPathEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
+import org.eclipse.ui.PlatformUI;
 
 public class EditorPartListener implements IPartListener2 {
 
@@ -24,6 +25,12 @@ public class EditorPartListener implements IPartListener2 {
     public EditorPartListener(StringShare callback) {
         this.callback = callback;
         this.currentSelection = Collections.emptySet();
+        findInitialSelection();
+    }
+
+    private void findInitialSelection() {
+        IEditorReference[] references = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences();
+        updateEditorSelection(references);
     }
 
     @Override
@@ -69,8 +76,12 @@ public class EditorPartListener implements IPartListener2 {
     private void updateEditorSelection(IWorkbenchPartReference partRef) {
         IWorkbenchPart part = partRef.getPart(true);
         if (!(part instanceof IEditorPart)) return;
+        updateEditorSelection(part.getSite().getPage().getEditorReferences());
+    }
+
+    private void updateEditorSelection(IEditorReference[] iEditorReferences) {
         Collection<String> newSelection = new HashSet<String>();
-        for (IEditorReference each: part.getSite().getPage().getEditorReferences()) {
+        for (IEditorReference each: iEditorReferences) {
             //restore the editor parts to be able to access the content.
             for (IFile file: getFiles(each.getPart(true))) {
                 newSelection.add(Resources.asPath(file));

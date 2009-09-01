@@ -5,29 +5,26 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Collection;
 
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.sync.SerializationException;
 
 /**
- * TODO, check if we should implement IModelChangeMessage, like
+ * TODO check if we should implement IModelChangeMessage, like
  * @see org.eclipse.ecf.docshare.messages.Message
  * 
  * @author deif
  */
-public class Message implements Serializable {
+public abstract class Message implements Serializable {
 
     private static final long serialVersionUID = 5539065281698328158L;
     
     public final ID senderID;
     public final ID receiverID;
-    public final Collection<String> selection;
 
-    public Message(ID senderID, ID receiverID, Collection<String> selection) {
+    public Message(ID senderID, ID receiverID) {
         this.senderID = senderID;
         this.receiverID = receiverID;
-        this.selection = selection;
     }
     
     /**
@@ -56,5 +53,12 @@ public class Message implements Serializable {
             throw new SerializationException("could not serialize message.", e);
         }
     }
+
+    @Override
+    public String toString() {
+        return "message from: " + senderID.getName() + " to: " + receiverID.getName();
+    }
+
+    public abstract void applyOn(StringShare share);
 
 }

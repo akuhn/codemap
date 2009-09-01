@@ -2,11 +2,11 @@ package org.codemap.ecftest;
 
 import java.util.Collection;
 
+import org.codemap.util.Log;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.util.ECFException;
-import org.eclipse.ecf.core.util.Trace;
 import org.eclipse.ecf.datashare.AbstractShare;
 import org.eclipse.ecf.datashare.IChannelContainerAdapter;
 import org.eclipse.ecf.presence.IPresenceContainerAdapter;
@@ -22,7 +22,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 
 public class StringShare extends AbstractShare {
 
@@ -30,7 +29,7 @@ public class StringShare extends AbstractShare {
     private IDocumentSynchronizationStrategyFactory factory;
     private Object stateLock = new Object();
     private IRosterManager rosterManager;
-    
+
     IRosterListener rosterListener = new IRosterListener() {
         public void handleRosterEntryAdd(IRosterEntry entry) {
             // nothing to do
@@ -41,72 +40,74 @@ public class StringShare extends AbstractShare {
         }
 
         public void handleRosterUpdate(IRoster roster, IRosterItem changedValue) {
-//            XXX: Implement
-//            if (changedValue instanceof IRosterEntry) {
-//                ID changedID = ((IRosterEntry) changedValue).getUser().getID();
-//                ID oID = null;
-//                ID otherID = null;
-//                Shell shell = null;
-//                synchronized (stateLock) {
-//                    oID = getOurID();
-//                    otherID = getOtherID();
-//                    IWorkbenchPartSite wps = getTextEditor().getSite();
-//                    shell = wps.getShell();
-//                }
-//                if (oID != null && changedID.equals(oID)) {
-//                    localStopShare();
-//                    showStopShareMessage(shell, Messages.DocShare_STOP_SHARED_EDITOR_US);
-//                } else if (otherID != null && changedID.equals(otherID)) {
-//                    localStopShare();
-//                    showStopShareMessage(shell, Messages.DocShare_STOP_SHARED_EDITOR_REMOTE);
-//                }
-//            }
+            // XXX: Implement
+            // if (changedValue instanceof IRosterEntry) {
+            // ID changedID = ((IRosterEntry) changedValue).getUser().getID();
+            // ID oID = null;
+            // ID otherID = null;
+            // Shell shell = null;
+            // synchronized (stateLock) {
+            // oID = getOurID();
+            // otherID = getOtherID();
+            // IWorkbenchPartSite wps = getTextEditor().getSite();
+            // shell = wps.getShell();
+            // }
+            // if (oID != null && changedID.equals(oID)) {
+            // localStopShare();
+            // showStopShareMessage(shell,
+            // Messages.DocShare_STOP_SHARED_EDITOR_US);
+            // } else if (otherID != null && changedID.equals(otherID)) {
+            // localStopShare();
+            // showStopShareMessage(shell,
+            // Messages.DocShare_STOP_SHARED_EDITOR_REMOTE);
+            // }
+            // }
         }
     };
-    
+
     private ID ourID;
     private ID remoteID;
 
     public StringShare(IChannelContainerAdapter adapter) throws ECFException {
         super(adapter);
-        factory = ECFTestPlugin.getDefault().getColaSynchronizationStrategyFactory();
+        factory = ECFTestPlugin.getDefault()
+                .getColaSynchronizationStrategyFactory();
     }
 
     @Override
     protected void handleMessage(ID fromContainerID, byte[] data) {
-            Message message;
-            try {
-                message = Message.deserialize(data);
-                Assert.isNotNull(message);
-                if (! isSharing() ) {
-                    handleRemoteStart(message);
-                }
-                // XXX: _NOW do stuff here
-                System.out.println("recieved selection update from: " + message.senderID.getName() + " with selection: " + message.selection);
-//            logError("could not handle message.", e);
-            } catch (SerializationException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+        Message message;
+        try {
+            message = Message.deserialize(data);
+            Assert.isNotNull(message);
+            message.applyOn(this);
+            // XXX: _NOW do stuff here
+            System.out.println(message);
+            // logError("could not handle message.", e);
+        } catch (SerializationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
-    
+
     /**
      * Called when we are on the remote side.
      */
-    private void handleRemoteStart(Message message) {
+    public void handleRemoteStart(Message message) {
         synchronized (stateLock) {
             remoteID = message.senderID;
             Assert.isNotNull(remoteID);
             ourID = message.receiverID;
             Assert.isNotNull(ourID);
 
-            //SYNC API. Create an instance of the synchronization strategy on the receiver
+            // SYNC API. Create an instance of the synchronization strategy on
+            // the receiver
             syncStrategy = createSynchronizationStrategy(false);
             Assert.isNotNull(syncStrategy);
         }
         addEditorListener();
     }
-    
+
     /**
      * Add a listener that notifies us when the files are opened/closed in an
      * editor.
@@ -114,7 +115,8 @@ public class StringShare extends AbstractShare {
      */
     private void addEditorListener() {
         // needs to run in an UI Thread to have access to the workbench.
-        Display.getDefault().syncExec(new Runnable(){
+        Display.getDefault().syncExec(new Runnable() {
+            
             @Override
             public void run() {
                 IWorkbenchPage page = ECFTestPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
@@ -130,43 +132,29 @@ public class StringShare extends AbstractShare {
     }
 
     public void startShare(final ID our, final ID remote) {
+        synchronized (stateLock) {
+            
         Assert.isNotNull(our);
         ourID = our;
-        
+
         Assert.isNotNull(remote);
         remoteID = remote;
+
+//        Display.getDefault().syncExec(new Runnable() {
+//                public void run() {
+        syncStrategy = createSynchronizationStrategy(true);
+        Assert.isNotNull(syncStrategy);
         
-        Display.getDefault().syncExec(new Runnable() {
-            public void run() {
-                try {
-                    // SYNC API.  Create the synchronization strategy instance
-                    syncStrategy = createSynchronizationStrategy(true);
-                    Assert.isNotNull(syncStrategy);
-
-                    // Send start message with empty selection
-                    sendMessage(remoteID, new Message(ourID, remoteID, null).serialize());
-                    // Set local sharing start
-                    localStartShare(getLocalRosterManager());
-                } catch (final Exception e) {
-                    logError("Could not initiate sharing.", e);
-                    showErrorToUser("Could not initiate sharing.", NLS.bind("Could not initiate sharing.", e.getLocalizedMessage()));
-                }
-            }
-        });
-    }
-    
-    private void showErrorToUser(String title, String message) {
-        MessageDialog.openError(null, title, message);
-    }
-
-    private void logError(String string, Exception e) {
-        System.out.println(string);
-        e.printStackTrace();
+        sendMessageToRemote(new StartMessage(ourID, remoteID));
+        localStartShare(getLocalRosterManager());
+//                }
+//        });
+        }
     }
 
     private void localStartShare(IRosterManager localRosterManager) {
-        synchronized (stateLock ) {
-//            localStopShare();
+        synchronized (stateLock) {
+            // localStopShare();
             this.rosterManager = localRosterManager;
             if (this.rosterManager != null) {
                 this.rosterManager.addRosterListener(rosterListener);
@@ -176,41 +164,49 @@ public class StringShare extends AbstractShare {
     }
 
     private IRosterManager getLocalRosterManager() {
-        IContainer container = (IContainer) this.adapter.getAdapter(IContainer.class);
+        IContainer container = (IContainer) this.adapter
+                .getAdapter(IContainer.class);
         if (container != null) {
-            IPresenceContainerAdapter presenceContainerAdapter = (IPresenceContainerAdapter) container.getAdapter(IPresenceContainerAdapter.class);
+            IPresenceContainerAdapter presenceContainerAdapter = (IPresenceContainerAdapter) container
+                    .getAdapter(IPresenceContainerAdapter.class);
             if (presenceContainerAdapter != null) {
                 return presenceContainerAdapter.getRosterManager();
             }
         }
         return null;
-    }    
+    }
 
     IModelSynchronizationStrategy createSynchronizationStrategy(boolean isInitiator) {
-        //Instantiate the service
+        // Instantiate the service
         Assert.isNotNull(factory);
         return factory.createDocumentSynchronizationStrategy(getChannel().getID(), isInitiator);
     }
 
     public void selectionChanged(Collection<String> selection) {
-        try {
-            sendMessage(remoteID, new Message(ourID, remoteID, selection).serialize());
-        } catch (SerializationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ECFException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        sendMessageToRemote(new SelectionMessage(ourID, remoteID, selection));
     }
 
     public String getRemoteName() {
-        if (remoteID == null) return "";
+        if (remoteID == null)
+            return "";
         return remoteID.getName();
     }
 
     public void stopShare() {
-        // TODO Auto-generated method stub
-        
+        sendMessageToRemote(new StopMessage(remoteID, ourID));
+    }
+
+    private void sendMessageToRemote(Message message) {
+        try {
+            sendMessage(remoteID, message.serialize());
+        } catch (SerializationException e) {
+            Log.error(e);
+        } catch (ECFException e) {
+            Log.error(e);
+        }
+    }
+
+    public void handleRemoteStop(StopMessage stopMessage) {
+        //TODO: _NOW implement
     }
 }
