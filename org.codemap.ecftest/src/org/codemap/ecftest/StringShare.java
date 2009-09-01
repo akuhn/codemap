@@ -119,6 +119,7 @@ public class StringShare extends AbstractShare {
         Display.getDefault().syncExec(new Runnable() {
             @Override
             public void run() {
+                // needs to run in an UI Thread to have access to the workbench.            	
                 IWorkbenchPage page = ECFTestPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
                 page.addPartListener(listener);
             }

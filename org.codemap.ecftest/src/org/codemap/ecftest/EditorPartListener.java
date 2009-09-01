@@ -8,6 +8,7 @@ import org.codemap.util.Resources;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorReference;
@@ -29,8 +30,13 @@ public class EditorPartListener implements IPartListener2 {
     }
 
     private void findInitialSelection() {
-        IEditorReference[] references = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences();
-        updateEditorSelection(references);
+    	Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				IEditorReference[] references = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getEditorReferences();
+				updateEditorSelection(references);
+			}
+		});
     }
 
     @Override
