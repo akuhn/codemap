@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Ecftest
 Bundle-SymbolicName: org.codemap.communication;singleton:=true
 Bundle-Version: 0.7.7.qualifier
-Bundle-Activator: org.codemap.ecftest.ECFTestPlugin
+Bundle-Activator: org.codemap.communication.ECFTestPlugin
 Bundle-Vendor: David Erni
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

@@ -12,14 +12,14 @@
             name="Sample View"
             icon="icons/sample.gif"
             category="org.codemap.ecftest"
-            class="org.codemap.ecftest.views.ECFTestView"
+            class="org.codemap.communication.views.ECFTestView"
             id="org.codemap.ecftest.views.SampleView">
       </view>
    </extension>
    <extension
          point="org.eclipse.ecf.start">
       <run
-            class="org.codemap.ecftest.CodemapECFStart">
+            class="org.codemap.communication.CodemapECFStart">
       </run>
    </extension>
 
