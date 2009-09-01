@@ -2,6 +2,10 @@ package org.codemap.ecftest;
 
 import java.util.Collection;
 
+import org.codemap.ecftest.messages.Message;
+import org.codemap.ecftest.messages.SelectionMessage;
+import org.codemap.ecftest.messages.StartMessage;
+import org.codemap.ecftest.messages.StopMessage;
 import org.codemap.util.Log;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.ecf.core.IContainer;

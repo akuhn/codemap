@@ -1,7 +1,8 @@
-package org.codemap.ecftest;
+package org.codemap.ecftest.messages;
 
 import java.util.Collection;
 
+import org.codemap.ecftest.StringShare;
 import org.eclipse.ecf.core.identity.ID;
 
 public class SelectionMessage extends Message {

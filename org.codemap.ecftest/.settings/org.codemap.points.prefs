@@ -1,12 +1,15 @@
-#Tue Sep 01 14:54:00 CEST 2009
-///org.codemap.ecftest/src/org/codemap/ecftest/CodemapECFStart.java=0.5684990256776223@0.05
+#Tue Sep 01 16:39:02 CEST 2009
+///org.codemap.ecftest/src/org/codemap/ecftest/CodemapECFStart.java=0.7953156012599824@0.25296259848949715
 ///org.codemap.ecftest/src/org/codemap/ecftest/ECFStart.java=0.9500000000000001@0.537648696938223
-///org.codemap.ecftest/src/org/codemap/ecftest/ECFTestPlugin.java=0.4571608024383645@0.29617609084991825
-///org.codemap.ecftest/src/org/codemap/ecftest/EditorPartListener.java=0.05@0.5924876777540805
-///org.codemap.ecftest/src/org/codemap/ecftest/SelectionMessage.java=0.9500000000000001@0.33941858633450567
-///org.codemap.ecftest/src/org/codemap/ecftest/StringShare.java=0.7141180308655506@0.5343385234847937
-///org.codemap.ecftest/src/org/codemap/ecftest/StringShareDebugOptions.java=0.16828984014387321@0.3726022248908207
-///org.codemap.ecftest/src/org/codemap/ecftest/views/CodemapRosterMenuHandler.java=0.8474556197332568@0.7798447781738944
-///org.codemap.ecftest/src/org/codemap/ecftest/views/CodemapRosterMenuItem.java=0.606302333648471@0.9500000000000001
-///org.codemap.ecftest/src/org/codemap/ecftest/views/ECFTestView.java=0.34758399541255136@0.8837262335307946
+///org.codemap.ecftest/src/org/codemap/ecftest/ECFTestPlugin.java=0.4636152267858954@0.5296646629512624
+///org.codemap.ecftest/src/org/codemap/ecftest/EditorPartListener.java=0.18096995410558941@0.7666841148613451
+///org.codemap.ecftest/src/org/codemap/ecftest/Message.java=0.19640166029758221@0.22115011467875506
+///org.codemap.ecftest/src/org/codemap/ecftest/SelectionMessage.java=0.9500000000000001@0.394924959035028
+///org.codemap.ecftest/src/org/codemap/ecftest/StartMessage.java=0.5665072425636527@0.05
+///org.codemap.ecftest/src/org/codemap/ecftest/StopMessage.java=0.43612927738227025@0.1443931192786801
+///org.codemap.ecftest/src/org/codemap/ecftest/StringShare.java=0.7140645988219075@0.6162936087417251
+///org.codemap.ecftest/src/org/codemap/ecftest/StringShareDebugOptions.java=0.05@0.5006682611631842
+///org.codemap.ecftest/src/org/codemap/ecftest/views/CodemapRosterMenuHandler.java=0.8423321476935205@0.8110620931377107
+///org.codemap.ecftest/src/org/codemap/ecftest/views/CodemapRosterMenuItem.java=0.6169283631536063@0.9167688212158717
+///org.codemap.ecftest/src/org/codemap/ecftest/views/ECFTestView.java=0.40458685437877734@0.9500000000000001
 eclipse.preferences.version=1

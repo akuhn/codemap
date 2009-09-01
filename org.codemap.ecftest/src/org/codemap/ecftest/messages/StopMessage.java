@@ -1,5 +1,6 @@
-package org.codemap.ecftest;
+package org.codemap.ecftest.messages;
 
+import org.codemap.ecftest.StringShare;
 import org.eclipse.ecf.core.identity.ID;
 
 public class StopMessage extends Message {
