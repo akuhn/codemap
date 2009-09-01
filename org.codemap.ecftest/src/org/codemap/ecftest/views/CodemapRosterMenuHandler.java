@@ -18,7 +18,7 @@ public class CodemapRosterMenuHandler extends AbstractRosterMenuHandler {
     public CodemapRosterMenuHandler(IRosterEntry entry) {
         super(entry);
     }
-
+    
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
         IRosterEntry rosterEntry = getRosterEntry();
@@ -43,7 +43,7 @@ public class CodemapRosterMenuHandler extends AbstractRosterMenuHandler {
 //            if (inputName == null)
 //                showErrorMessage(Messages.DocShareRosterMenuHandler_NO_FILENAME_WITH_CONTENT);
             final IUser user = roster.getUser();
-            sender.startShare(user.getID(), user.getName(), rosterEntry.getUser().getID());
+            sender.startShare(user.getID(), rosterEntry.getUser().getID());
         
         return null;
     }

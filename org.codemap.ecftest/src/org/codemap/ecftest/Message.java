@@ -10,19 +10,23 @@ import java.util.Collection;
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.sync.SerializationException;
 
-public class SelectionMessage implements Serializable {
+/**
+ * TODO, check if we should implement IModelChangeMessage, like
+ * @see org.eclipse.ecf.docshare.messages.Message
+ * 
+ * @author deif
+ */
+public class Message implements Serializable {
 
     private static final long serialVersionUID = 5539065281698328158L;
     
     public final ID senderID;
     public final ID receiverID;
-    public final String fromUsername;
     public final Collection<String> selection;
 
-    public SelectionMessage(ID senderID, String fromUser, ID receiverID, Collection<String> selection) {
+    public Message(ID senderID, ID receiverID, Collection<String> selection) {
         this.senderID = senderID;
         this.receiverID = receiverID;
-        this.fromUsername = fromUser;
         this.selection = selection;
     }
     
@@ -32,11 +36,11 @@ public class SelectionMessage implements Serializable {
      * @return SelectionMessage
      * @throws SerializationException
      */
-    public static SelectionMessage deserialize(byte[] bytes) throws SerializationException {
+    public static Message deserialize(byte[] bytes) throws SerializationException {
         try {
             final ByteArrayInputStream bins = new ByteArrayInputStream(bytes);
             final ObjectInputStream oins = new ObjectInputStream(bins);
-            return (SelectionMessage) oins.readObject();
+            return (Message) oins.readObject();
         } catch (final Exception e) {
             throw new SerializationException("could not deserialize message", e);
         }

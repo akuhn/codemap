@@ -79,7 +79,6 @@ public class EditorPartListener implements IPartListener2 {
         checkUpdate(newSelection);
     }
     
-    
     private void checkUpdate(Collection<String> newSelection) {
         if (currentSelection.size() == newSelection.size() &&
                 currentSelection.containsAll(newSelection)) return;
@@ -99,6 +98,4 @@ public class EditorPartListener implements IPartListener2 {
         IWorkspace workspace = ResourcesPlugin.getWorkspace();
         return workspace.getRoot().findFilesForLocation(pathInput.getPath());
     }    
-    
-
 }

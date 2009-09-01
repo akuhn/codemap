@@ -66,9 +66,6 @@ public class StringShare extends AbstractShare {
     
     private ID ourID;
     private ID remoteID;
-    private String remoteUsername;
-    private String ourUsername;    
-
 
     public StringShare(IChannelContainerAdapter adapter) throws ECFException {
         super(adapter);
@@ -77,15 +74,15 @@ public class StringShare extends AbstractShare {
 
     @Override
     protected void handleMessage(ID fromContainerID, byte[] data) {
-            SelectionMessage message;
+            Message message;
             try {
-                message = SelectionMessage.deserialize(data);
+                message = Message.deserialize(data);
                 Assert.isNotNull(message);
                 if (! isSharing() ) {
                     handleRemoteStart(message);
                 }
                 // XXX: _NOW do stuff here
-                System.out.println("recieved selection update from: " + message.fromUsername + " with selection: " + message.selection);
+                System.out.println("recieved selection update from: " + message.senderID.getName() + " with selection: " + message.selection);
 //            logError("could not handle message.", e);
             } catch (SerializationException e) {
                 // TODO Auto-generated catch block
@@ -96,14 +93,12 @@ public class StringShare extends AbstractShare {
     /**
      * Called when we are on the remote side.
      */
-    private void handleRemoteStart(SelectionMessage message) {
+    private void handleRemoteStart(Message message) {
         synchronized (stateLock) {
             remoteID = message.senderID;
             Assert.isNotNull(remoteID);
-            remoteUsername = message.fromUsername;
-            Assert.isNotNull(remoteUsername);
-            
             ourID = message.receiverID;
+            Assert.isNotNull(ourID);
 
             //SYNC API. Create an instance of the synchronization strategy on the receiver
             syncStrategy = createSynchronizationStrategy(false);
@@ -134,11 +129,7 @@ public class StringShare extends AbstractShare {
         }
     }
 
-    public void startShare(final ID our, String fromName, final ID remote) {
-        final String fName = (fromName == null) ? our.getName() : fromName;
-        Assert.isNotNull(fName);
-        ourUsername = fName;
-        
+    public void startShare(final ID our, final ID remote) {
         Assert.isNotNull(our);
         ourID = our;
         
@@ -153,7 +144,7 @@ public class StringShare extends AbstractShare {
                     Assert.isNotNull(syncStrategy);
 
                     // Send start message with empty selection
-                    sendMessage(remoteID, new SelectionMessage(ourID, ourUsername, remoteID, null).serialize());
+                    sendMessage(remoteID, new Message(ourID, remoteID, null).serialize());
                     // Set local sharing start
                     localStartShare(getLocalRosterManager());
                 } catch (final Exception e) {
@@ -203,7 +194,7 @@ public class StringShare extends AbstractShare {
 
     public void selectionChanged(Collection<String> selection) {
         try {
-            sendMessage(remoteID, new SelectionMessage(ourID, ourUsername, remoteID, selection).serialize());
+            sendMessage(remoteID, new Message(ourID, remoteID, selection).serialize());
         } catch (SerializationException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -211,5 +202,15 @@ public class StringShare extends AbstractShare {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    public String getRemoteName() {
+        if (remoteID == null) return "";
+        return remoteID.getName();
+    }
+
+    public void stopShare() {
+        // TODO Auto-generated method stub
+        
     }
 }
