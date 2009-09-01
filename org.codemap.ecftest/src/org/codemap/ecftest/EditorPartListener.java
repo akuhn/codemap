@@ -1,6 +1,7 @@
 package org.codemap.ecftest;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 
 import org.codemap.util.Resources;
@@ -22,6 +23,7 @@ public class EditorPartListener implements IPartListener2 {
 
     public EditorPartListener(StringShare callback) {
         this.callback = callback;
+        this.currentSelection = Collections.emptySet();
     }
 
     @Override
