@@ -32,8 +32,6 @@ public abstract class ExtensionPointDropDownAction extends DropDownAction {
 		}
 	}
 
-	protected abstract String getExtensionPointName();
-	
 	private void parseConfig(IConfigurationElement[] configurationElements, Menu menu) {
 		List<IConfigurationElement> configelems = Arrays.asList(configurationElements);
 		for (IConfigurationElement each: configelems) {
@@ -41,5 +39,7 @@ public abstract class ExtensionPointDropDownAction extends DropDownAction {
 		}
 	}
 
+	protected abstract String getExtensionPointName();
+	
 	protected abstract int getActionStyle();
 }

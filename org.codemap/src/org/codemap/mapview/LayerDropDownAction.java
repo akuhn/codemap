@@ -2,6 +2,7 @@ package org.codemap.mapview;
 
 import static org.codemap.util.Icons.LAYERS;
 
+import org.codemap.util.ExtensionPoints;
 import org.codemap.util.Icons;
 
 public class LayerDropDownAction extends ExtensionPointDropDownAction {
@@ -18,7 +19,7 @@ public class LayerDropDownAction extends ExtensionPointDropDownAction {
 
 	@Override
 	protected String getExtensionPointName() {
-		return "layers";
+		return ExtensionPoints.LAYERS;
 	}
 
 	@Override

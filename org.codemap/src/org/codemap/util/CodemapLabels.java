@@ -9,7 +9,6 @@ import ch.deif.meander.util.MapScheme;
 public class CodemapLabels extends MapScheme<String> {
 	
 	private interface LabelStrategy {
-		// TODO inherit from MapScheme
 		public String forLocation(Point location);
 	}
 	

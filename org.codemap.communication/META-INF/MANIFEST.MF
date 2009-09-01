@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Ecftest
+Bundle-Name: Communication Framework plugin for Codemap
 Bundle-SymbolicName: org.codemap.communication;singleton:=true
 Bundle-Version: 0.7.7.qualifier
 Bundle-Activator: org.codemap.communication.ECFTestPlugin

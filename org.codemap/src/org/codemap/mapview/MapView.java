@@ -1,17 +1,24 @@
 package org.codemap.mapview;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
+import org.codemap.util.ExtensionPoints;
 import org.codemap.util.Log;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
@@ -87,6 +94,8 @@ public class MapView extends ViewPart {
 
     public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
 
+    private static final String ATTR_CLASS = "class";
+
     private final MapController theController;
     private MapSelectionProvider selectionProvider;
     private SelectionTracker selectionTracker;
@@ -157,9 +166,25 @@ public class MapView extends ViewPart {
         IMenuManager viewMenu = actionBars.getMenuManager();
         viewMenu.add(new Separator());
         viewMenu.add(new SaveAsPNGAction());
-        viewMenu.add(new Separator());        
         
-        
+        IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CodemapCore.PLUGIN_ID, ExtensionPoints.ACTION_BAR);
+        IExtension[] extensions_arr = extensionPoint.getExtensions();
+        List<IExtension> extensions = Arrays.asList(extensions_arr);
+        for (IExtension extension: extensions) {
+            parseActionbarExtensionPoint(extension.getConfigurationElements(), viewMenu);
+        }        
+    }
+
+    private void parseActionbarExtensionPoint(IConfigurationElement[] configurationElements, IMenuManager viewMenu) {
+        List<IConfigurationElement> configelems = Arrays.asList(configurationElements);
+        for (IConfigurationElement each: configelems) {
+            try {
+                IContributionItem item = (IContributionItem) each.createExecutableExtension(ATTR_CLASS);
+                viewMenu.add(item);
+            } catch (Exception e) {
+                Log.instantiatePluginError(e, each, ATTR_CLASS);
+            }            
+        }
     }
 
     private void configureToolbar() {

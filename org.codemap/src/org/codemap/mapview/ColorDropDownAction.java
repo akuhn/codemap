@@ -1,5 +1,6 @@
 package org.codemap.mapview;
 
+import org.codemap.util.ExtensionPoints;
 import org.codemap.util.Icons;
 import org.eclipse.swt.widgets.Menu;
 
@@ -25,7 +26,7 @@ public class ColorDropDownAction extends ExtensionPointDropDownAction {
 
 	@Override
 	protected String getExtensionPointName() {
-		return "colors";
+		return ExtensionPoints.COLORS;
 	}
 
 	@Override

@@ -22,5 +22,10 @@
             class="org.codemap.communication.CodemapECFStart">
       </run>
    </extension>
+   <extension
+         point="org.codemap.actionbar">
+      <action class="org.codemap.communication.views.CodemapRosterMenuItem">
+      </action>
+   </extension>
 
 </plugin>
