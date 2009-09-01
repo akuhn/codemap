@@ -12,6 +12,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -33,6 +34,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPage;
@@ -134,17 +136,30 @@ public class MapView extends ViewPart {
 
         selectionProvider = new MapSelectionProvider(this);
         selectionTracker = new SelectionTracker(theController);
+        
         configureToolbar();
+        configureActionBar();
 
         showMap();
         theController.onOpenView();
     }
+
 
     private void showMap() {
         // clearContainer();
         CodemapCore.getPlugin().setMapView(this);
         new ResizeListener(container, theController);
         theController.onShowMap();
+    }
+    
+    private void configureActionBar() {
+        IActionBars actionBars = getViewSite().getActionBars();
+        IMenuManager viewMenu = actionBars.getMenuManager();
+        viewMenu.add(new Separator());
+        viewMenu.add(new SaveAsPNGAction());
+        viewMenu.add(new Separator());        
+        
+        
     }
 
     private void configureToolbar() {
@@ -255,7 +270,6 @@ public class MapView extends ViewPart {
             }
         });
     }
-    
 }
 
 class CanvasListener implements PaintListener, MouseListener,
@@ -271,7 +285,6 @@ class CanvasListener implements PaintListener, MouseListener,
         newCanvas.addMouseTrackListener(this);
         newCanvas.addMouseWheelListener(this);
         newCanvas.addDragDetectListener(this);
-
     }
 
     public void setVisualization(CodemapVisualization visualization) {

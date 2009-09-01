@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.codemap.mapview">
+         point="org.codemap.layers">
       <toolbar
             class="org.codemap.plugin.marker.ShowMarkersAction"
             icon="icons/eclipse/markers.gif"

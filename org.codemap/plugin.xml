@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="mapview" name="mapview" schema="schema/mapview.exsd"/>
+   <extension-point id="layers" name="layers" schema="schema/layers.exsd"/>
    <extension-point id="colors" name="colors" schema="schema/colors.exsd"/>
    <extension
          point="org.eclipse.ui.views">

@@ -18,8 +18,7 @@ public class LayerDropDownAction extends ExtensionPointDropDownAction {
 
 	@Override
 	protected String getExtensionPointName() {
-		// TODO: better name for this extension point ...
-		return "mapview";
+		return "layers";
 	}
 
 	@Override
