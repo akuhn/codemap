@@ -1,7 +1,7 @@
 package org.codemap.ecftest;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IFile;
@@ -18,6 +18,7 @@ import org.eclipse.ui.IWorkbenchPartReference;
 public class EditorPartListener implements IPartListener2 {
 
     private StringShare callback;
+    private Collection<String> currentSelection;
 
     public EditorPartListener(StringShare callback) {
         this.callback = callback;
@@ -25,8 +26,7 @@ public class EditorPartListener implements IPartListener2 {
 
     @Override
     public void partActivated(IWorkbenchPartReference partRef) {
-        // TODO Auto-generated method stub
-        
+        // we don't care about this event 
     }
 
     @Override
@@ -64,22 +64,29 @@ public class EditorPartListener implements IPartListener2 {
         updateEditorSelection(partRef);        
     }
 
-
     private void updateEditorSelection(IWorkbenchPartReference partRef) {
         IWorkbenchPart part = partRef.getPart(true);
         if (!(part instanceof IEditorPart)) return;
-        Collection<String> selection = new ArrayList<String>();
+        Collection<String> newSelection = new HashSet<String>();
         for (IEditorReference each: part.getSite().getPage().getEditorReferences()) {
             //restore the editor parts to be able to access the content.
             for (IFile file: getFiles(each.getPart(true))) {
-                selection.add(Resources.asPath(file));
+                newSelection.add(Resources.asPath(file));
             }
         }
-        callback.selectionChanged(selection);
-        System.out.println("selection changed" + selection);
+        checkUpdate(newSelection);
     }
     
     
+    private void checkUpdate(Collection<String> newSelection) {
+        if (currentSelection.size() == newSelection.size() &&
+                currentSelection.containsAll(newSelection)) return;
+        
+        currentSelection = newSelection;
+        callback.selectionChanged(currentSelection);
+        System.out.println("triggering update" + newSelection);
+    }
+
     @SuppressWarnings("deprecation")
     private IFile[] getFiles(IWorkbenchPart each) {
         if (!(each instanceof IEditorPart)) return new IFile[] {};

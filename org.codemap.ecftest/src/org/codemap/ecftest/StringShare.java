@@ -81,29 +81,43 @@ public class StringShare extends AbstractShare {
             try {
                 message = SelectionMessage.deserialize(data);
                 Assert.isNotNull(message);
-                System.out.println("Recieved message from: " + message.fromUsername);
                 if (! isSharing() ) {
-                    handleStart(message);
+                    handleRemoteStart(message);
                 }
                 // XXX: _NOW do stuff here
+                System.out.println("recieved selection update from: " + message.fromUsername + " with selection: " + message.selection);
 //            logError("could not handle message.", e);
             } catch (SerializationException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
     }
-
-    private void handleStart(SelectionMessage message) {
+    
+    /**
+     * Called when we are on the remote side.
+     */
+    private void handleRemoteStart(SelectionMessage message) {
         synchronized (stateLock) {
             remoteID = message.senderID;
             Assert.isNotNull(remoteID);
             remoteUsername = message.fromUsername;
             Assert.isNotNull(remoteUsername);
+            
+            ourID = message.receiverID;
 
             //SYNC API. Create an instance of the synchronization strategy on the receiver
             syncStrategy = createSynchronizationStrategy(false);
             Assert.isNotNull(syncStrategy);
         }
+        addEditorListener();
+    }
+    
+    /**
+     * Add a listener that notifies us when the files are opened/closed in an
+     * editor.
+     * 
+     */
+    private void addEditorListener() {
         // needs to run in an UI Thread to have access to the workbench.
         Display.getDefault().syncExec(new Runnable(){
             @Override
@@ -120,14 +134,17 @@ public class StringShare extends AbstractShare {
         }
     }
 
-    public void startShare(final ID our, String fromName, final ID toID) {
-        Trace.entering(ECFTestPlugin.PLUGIN_ID, StringShareDebugOptions.METHODS_ENTERING, StringShare.class, "startShare", new Object[] {our, fromName, toID}); //$NON-NLS-1$
+    public void startShare(final ID our, String fromName, final ID remote) {
+        final String fName = (fromName == null) ? our.getName() : fromName;
+        Assert.isNotNull(fName);
+        ourUsername = fName;
+        
         Assert.isNotNull(our);
         ourID = our;
-        final String fName = (fromName == null) ? our.getName() : fromName;
-        ourUsername = fName;
-        Assert.isNotNull(toID);
-        Assert.isNotNull(fName);
+        
+        Assert.isNotNull(remote);
+        remoteID = remote;
+        
         Display.getDefault().syncExec(new Runnable() {
             public void run() {
                 try {
@@ -135,22 +152,16 @@ public class StringShare extends AbstractShare {
                     syncStrategy = createSynchronizationStrategy(true);
                     Assert.isNotNull(syncStrategy);
 
-                    // Get content from local document
-//                    String content = "huhuu";
-                    
-                    // Send start message with current content
-                    sendMessage(toID, new SelectionMessage(our, fName, toID, null).serialize());
-                    // Set local sharing start (to setup doc listener)
-                    localStartShare(getLocalRosterManager(), our, our, toID);
+                    // Send start message with empty selection
+                    sendMessage(remoteID, new SelectionMessage(ourID, ourUsername, remoteID, null).serialize());
+                    // Set local sharing start
+                    localStartShare(getLocalRosterManager());
                 } catch (final Exception e) {
                     logError("Could not initiate sharing.", e);
                     showErrorToUser("Could not initiate sharing.", NLS.bind("Could not initiate sharing.", e.getLocalizedMessage()));
                 }
             }
-
         });
-        Trace.exiting(ECFTestPlugin.PLUGIN_ID, StringShareDebugOptions.METHODS_ENTERING, StringShare.class, "startShare"); //$NON-NLS-1$
-        
     }
     
     private void showErrorToUser(String title, String message) {
@@ -158,20 +169,19 @@ public class StringShare extends AbstractShare {
     }
 
     private void logError(String string, Exception e) {
-        // TODO Auto-generated method stub
-        
+        System.out.println(string);
+        e.printStackTrace();
     }
 
-    private void localStartShare(IRosterManager localRosterManager, ID our, ID initiator, ID receiver) {
+    private void localStartShare(IRosterManager localRosterManager) {
         synchronized (stateLock ) {
 //            localStopShare();
             this.rosterManager = localRosterManager;
             if (this.rosterManager != null) {
                 this.rosterManager.addRosterListener(rosterListener);
             }
-            this.ourID = our;
-            this.remoteID = receiver;
         }
+        addEditorListener();
     }
 
     private IRosterManager getLocalRosterManager() {
@@ -192,10 +202,6 @@ public class StringShare extends AbstractShare {
     }
 
     public void selectionChanged(Collection<String> selection) {
-        updateSelection(selection);
-    }
-
-    private void updateSelection(Collection<String> selection) {
         try {
             sendMessage(remoteID, new SelectionMessage(ourID, ourUsername, remoteID, selection).serialize());
         } catch (SerializationException e) {
@@ -205,6 +211,5 @@ public class StringShare extends AbstractShare {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-    }    
-
+    }
 }
