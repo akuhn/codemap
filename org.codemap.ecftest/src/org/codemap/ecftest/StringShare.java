@@ -105,7 +105,7 @@ public class StringShare extends AbstractShare {
             Assert.isNotNull(syncStrategy);
         }
         // needs to run in an UI Thread to have access to the workbench.
-        Display.getCurrent().syncExec(new Runnable(){
+        Display.getDefault().syncExec(new Runnable(){
             @Override
             public void run() {
                 IWorkbenchPage page = ECFTestPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
