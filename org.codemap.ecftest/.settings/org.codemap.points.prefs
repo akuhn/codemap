@@ -1,11 +1,12 @@
-#Mon Aug 31 18:28:55 CEST 2009
-///org.codemap.ecftest/src/org/codemap/ecftest/CodemapECFStart.java=0.49376145556490586@0.05
+#Tue Sep 01 14:54:00 CEST 2009
+///org.codemap.ecftest/src/org/codemap/ecftest/CodemapECFStart.java=0.5684990256776223@0.05
 ///org.codemap.ecftest/src/org/codemap/ecftest/ECFStart.java=0.9500000000000001@0.537648696938223
-///org.codemap.ecftest/src/org/codemap/ecftest/ECFTestPlugin.java=0.3554176801793995@0.37122085709989855
-///org.codemap.ecftest/src/org/codemap/ecftest/SelectionMessage.java=0.9500000000000002@0.3163093220674201
-///org.codemap.ecftest/src/org/codemap/ecftest/StringShare.java=0.656814018806419@0.5001779552641834
-///org.codemap.ecftest/src/org/codemap/ecftest/StringShareDebugOptions.java=0.05@0.4442770110598707
-///org.codemap.ecftest/src/org/codemap/ecftest/views/CodemapRosterMenuHandler.java=0.8268500353904649@0.7757514040368249
-///org.codemap.ecftest/src/org/codemap/ecftest/views/CodemapRosterMenuItem.java=0.5970706016773902@0.9500000000000001
-///org.codemap.ecftest/src/org/codemap/ecftest/views/ECFTestView.java=0.26653670343309643@0.8573560280775195
+///org.codemap.ecftest/src/org/codemap/ecftest/ECFTestPlugin.java=0.4571608024383645@0.29617609084991825
+///org.codemap.ecftest/src/org/codemap/ecftest/EditorPartListener.java=0.05@0.5924876777540805
+///org.codemap.ecftest/src/org/codemap/ecftest/SelectionMessage.java=0.9500000000000001@0.33941858633450567
+///org.codemap.ecftest/src/org/codemap/ecftest/StringShare.java=0.7141180308655506@0.5343385234847937
+///org.codemap.ecftest/src/org/codemap/ecftest/StringShareDebugOptions.java=0.16828984014387321@0.3726022248908207
+///org.codemap.ecftest/src/org/codemap/ecftest/views/CodemapRosterMenuHandler.java=0.8474556197332568@0.7798447781738944
+///org.codemap.ecftest/src/org/codemap/ecftest/views/CodemapRosterMenuItem.java=0.606302333648471@0.9500000000000001
+///org.codemap.ecftest/src/org/codemap/ecftest/views/ECFTestView.java=0.34758399541255136@0.8837262335307946
 eclipse.preferences.version=1

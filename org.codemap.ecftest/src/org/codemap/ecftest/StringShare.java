@@ -23,8 +23,6 @@ import org.eclipse.ui.IWorkbenchPage;
 
 public class StringShare extends AbstractShare {
 
-    private Object stateLock = new Object();
-    
     IRosterListener rosterListener = new IRosterListener() {
         public void handleRosterEntryAdd(IRosterEntry entry) {
             // nothing to do
@@ -90,27 +88,24 @@ public class StringShare extends AbstractShare {
     /**
      * Called when we are on the remote side.
      */
-    public void handleRemoteStart(Message message) {
-        synchronized (stateLock) {
-            remoteID = message.senderID;
-            Assert.isNotNull(remoteID);
-            ourID = message.receiverID;
-            Assert.isNotNull(ourID);
+    public synchronized void handleRemoteStart(Message message) {
+        remoteID = message.senderID;
+        Assert.isNotNull(remoteID);
+        ourID = message.receiverID;
+        Assert.isNotNull(ourID);
 
-            // SYNC API. Create an instance of the synchronization strategy on
-            // the receiver
-            syncStrategy = createSynchronizationStrategy(false);
-            Assert.isNotNull(syncStrategy);
-        }
+        // SYNC API. Create an instance of the synchronization strategy on
+        // the receiver
+        syncStrategy = createSynchronizationStrategy(false);
+        Assert.isNotNull(syncStrategy);
         addEditorListener();
     }
 
     /**
      * Add a listener that notifies us when the files are opened/closed in an
      * editor.
-     * 
      */
-    private void addEditorListener() {
+    private synchronized void addEditorListener() {
         // needs to run in an UI Thread to have access to the workbench.
         if (listener == null) {
             listener = new EditorPartListener(StringShare.this);
@@ -126,40 +121,29 @@ public class StringShare extends AbstractShare {
         });
     }
 
-    public boolean isSharing() {
-        synchronized (stateLock) {
-            return this.remoteID != null;
-        }
+    public synchronized boolean isSharing() {
+        return this.remoteID != null;
     }
 
-    public void startShare(final ID our, final ID remote) {
-        synchronized (stateLock) {
-            
+    public synchronized void startShare(final ID our, final ID remote) {
         Assert.isNotNull(our);
         ourID = our;
 
         Assert.isNotNull(remote);
         remoteID = remote;
 
-//        Display.getDefault().syncExec(new Runnable() {
-//                public void run() {
         syncStrategy = createSynchronizationStrategy(true);
         Assert.isNotNull(syncStrategy);
         
         sendMessageToRemote(new StartMessage(ourID, remoteID));
         localStartShare(getLocalRosterManager());
-//                }
-//        });
-        }
     }
 
-    private void localStartShare(IRosterManager localRosterManager) {
-        synchronized (stateLock) {
-            // localStopShare();
-            this.rosterManager = localRosterManager;
-            if (this.rosterManager != null) {
-                this.rosterManager.addRosterListener(rosterListener);
-            }
+    private synchronized void localStartShare(IRosterManager localRosterManager) {
+        // localStopShare();
+        this.rosterManager = localRosterManager;
+        if (this.rosterManager != null) {
+            this.rosterManager.addRosterListener(rosterListener);
         }
         addEditorListener();
     }
@@ -195,6 +179,13 @@ public class StringShare extends AbstractShare {
 
     public void stopShare() {
         sendMessageToRemote(new StopMessage(remoteID, ourID));
+        localStopShare();
+    }
+
+    private synchronized void localStopShare() {
+        ourID = null;
+        remoteID = null;
+        syncStrategy = null;        
     }
 
     private void sendMessageToRemote(Message message) {
@@ -207,16 +198,14 @@ public class StringShare extends AbstractShare {
         }
     }
 
-    public void handleRemoteStop(StopMessage stopMessage) {
-        synchronized (stateLock) {
-            ourID = null;
-            remoteID = null;
-            syncStrategy = null;
-        }
+    public synchronized void handleRemoteStop(StopMessage stopMessage) {
+        ourID = null;
+        remoteID = null;
+        syncStrategy = null;
         removeEditorListener();
     }
 
-    private void removeEditorListener() {
+    private synchronized void removeEditorListener() {
         Display.getDefault().syncExec(new Runnable() {
             @Override
             public void run() {
