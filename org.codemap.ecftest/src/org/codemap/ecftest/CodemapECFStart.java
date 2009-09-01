@@ -37,7 +37,6 @@ public class CodemapECFStart implements IECFStart {
             if (! handledConnectionEvent(event, container)) {
                 handledDisposeEvent(event, container, containerManager);
             }
-
         }
 
         private boolean handledDisposeEvent(IContainerEvent event, IContainer container, IContainerManager containerManager) {

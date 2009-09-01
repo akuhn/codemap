@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.sync.SerializationException;
@@ -16,11 +17,13 @@ public class SelectionMessage implements Serializable {
     public final ID senderID;
     public final ID receiverID;
     public final String fromUsername;
+    public final Collection<String> selection;
 
-    public SelectionMessage(ID senderID, String fromUser, ID receiverID) {
+    public SelectionMessage(ID senderID, String fromUser, ID receiverID, Collection<String> selection) {
         this.senderID = senderID;
         this.receiverID = receiverID;
         this.fromUsername = fromUser;
+        this.selection = selection;
     }
     
     /**

@@ -1,5 +1,7 @@
 package org.codemap.ecftest;
 
+import java.util.Collection;
+
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.core.identity.ID;
@@ -14,17 +16,19 @@ import org.eclipse.ecf.presence.roster.IRosterItem;
 import org.eclipse.ecf.presence.roster.IRosterListener;
 import org.eclipse.ecf.presence.roster.IRosterManager;
 import org.eclipse.ecf.sync.IModelSynchronizationStrategy;
+import org.eclipse.ecf.sync.SerializationException;
 import org.eclipse.ecf.sync.doc.IDocumentSynchronizationStrategyFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 
 public class StringShare extends AbstractShare {
 
     protected IModelSynchronizationStrategy syncStrategy;
     private IDocumentSynchronizationStrategyFactory factory;
     private Object stateLock = new Object();
-    private Object rm;
     private IRosterManager rosterManager;
     
     IRosterListener rosterListener = new IRosterListener() {
@@ -61,8 +65,9 @@ public class StringShare extends AbstractShare {
     };
     
     private ID ourID;
-    private ID initiatorID;
-    private ID receiverID;    
+    private ID remoteID;
+    private String remoteUsername;
+    private String ourUsername;    
 
 
     public StringShare(IChannelContainerAdapter adapter) throws ECFException {
@@ -72,28 +77,55 @@ public class StringShare extends AbstractShare {
 
     @Override
     protected void handleMessage(ID fromContainerID, byte[] data) {
-        try {
-            SelectionMessage message = SelectionMessage.deserialize(data);
-            Assert.isNotNull(message);
-            System.out.println("Recieved message from: " + message.fromUsername);
-            // XXX: _NOW do stuff here
-            
-        } catch (final Exception e) {
-            logError("could not handle message.", e);
-        }
+            SelectionMessage message;
+            try {
+                message = SelectionMessage.deserialize(data);
+                Assert.isNotNull(message);
+                System.out.println("Recieved message from: " + message.fromUsername);
+                if (! isSharing() ) {
+                    handleStart(message);
+                }
+                // XXX: _NOW do stuff here
+//            logError("could not handle message.", e);
+            } catch (SerializationException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+    }
 
+    private void handleStart(SelectionMessage message) {
+        synchronized (stateLock) {
+            remoteID = message.senderID;
+            Assert.isNotNull(remoteID);
+            remoteUsername = message.fromUsername;
+            Assert.isNotNull(remoteUsername);
+
+            //SYNC API. Create an instance of the synchronization strategy on the receiver
+            syncStrategy = createSynchronizationStrategy(false);
+            Assert.isNotNull(syncStrategy);
+        }
+        // needs to run in an UI Thread to have access to the workbench.
+        Display.getCurrent().syncExec(new Runnable(){
+            @Override
+            public void run() {
+                IWorkbenchPage page = ECFTestPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                page.addPartListener(new EditorPartListener(StringShare.this));
+            }
+        });
     }
 
     public boolean isSharing() {
         synchronized (stateLock) {
-            return this.receiverID != null;
+            return this.remoteID != null;
         }
     }
 
     public void startShare(final ID our, String fromName, final ID toID) {
         Trace.entering(ECFTestPlugin.PLUGIN_ID, StringShareDebugOptions.METHODS_ENTERING, StringShare.class, "startShare", new Object[] {our, fromName, toID}); //$NON-NLS-1$
         Assert.isNotNull(our);
+        ourID = our;
         final String fName = (fromName == null) ? our.getName() : fromName;
+        ourUsername = fName;
         Assert.isNotNull(toID);
         Assert.isNotNull(fName);
         Display.getDefault().syncExec(new Runnable() {
@@ -107,7 +139,7 @@ public class StringShare extends AbstractShare {
 //                    String content = "huhuu";
                     
                     // Send start message with current content
-                    sendMessage(toID, new SelectionMessage(our, fName, toID).serialize());
+                    sendMessage(toID, new SelectionMessage(our, fName, toID, null).serialize());
                     // Set local sharing start (to setup doc listener)
                     localStartShare(getLocalRosterManager(), our, our, toID);
                 } catch (final Exception e) {
@@ -138,10 +170,8 @@ public class StringShare extends AbstractShare {
                 this.rosterManager.addRosterListener(rosterListener);
             }
             this.ourID = our;
-            this.initiatorID = initiator;
-            this.receiverID = receiver;
+            this.remoteID = receiver;
         }
-        
     }
 
     private IRosterManager getLocalRosterManager() {
@@ -159,6 +189,22 @@ public class StringShare extends AbstractShare {
         //Instantiate the service
         Assert.isNotNull(factory);
         return factory.createDocumentSynchronizationStrategy(getChannel().getID(), isInitiator);
+    }
+
+    public void selectionChanged(Collection<String> selection) {
+        updateSelection(selection);
+    }
+
+    private void updateSelection(Collection<String> selection) {
+        try {
+            sendMessage(remoteID, new SelectionMessage(ourID, ourUsername, remoteID, selection).serialize());
+        } catch (SerializationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ECFException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }    
 
 }
