@@ -59,14 +59,15 @@ public class MapPerProject {
     }
 
     private void initialize() {
-        EclipseMapValuesBuilder b = new EclipseMapValuesBuilder();
-        b.setName("default.map");
-        b.setProjects(Arrays.asList(Resources.asPath(project)));
-        b.setExtensions(Arrays.asList("*.java"));
-        b.setInitialConfiguration(readPreviousMapState());
-        mapValues = new EclipseMapValues(b);
+        EclipseMapValuesBuilder builder = new EclipseMapValuesBuilder();
+        builder.setName("default.map");
+        builder.setProjects(Arrays.asList(Resources.asPath(project)));
+        builder.setExtensions(Arrays.asList("*.java"));
+        builder.setInitialConfiguration(readPreviousMapState());
+        mapValues = new EclipseMapValues(builder);
         mapVisualization = new MapVisualization(mapValues);
         mapVisualization.getSharedLayer().add(makeOpenFilesLayer());
+        mapVisualization.getSharedLayer().add(CodemapCore.getPlugin().getGlobalLayer());
         redrawAction = new ActionValue<Void>(
                 mapValues.mapInstance, 
                 mapValues.background,

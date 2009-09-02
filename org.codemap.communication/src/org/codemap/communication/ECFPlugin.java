@@ -3,6 +3,7 @@ package org.codemap.communication;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.codemap.CodemapCore;
 import org.eclipse.ecf.core.IContainerManager;
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.util.ECFException;
@@ -13,16 +14,19 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
+import ch.deif.meander.MapSelection;
+import ch.deif.meander.swt.SWTLayer;
+
 /**
  * The activator class controls the plug-in life cycle
  */
-public class ECFTestPlugin extends AbstractUIPlugin {
+public class ECFPlugin extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.codemap.ecftest";
+	public static final String PLUGIN_ID = "org.codemap.communication";
 
 	// The shared instance
-	private static ECFTestPlugin plugin;
+	private static ECFPlugin plugin;
 	
 	private Map<ID, StringShare> shares = new HashMap<ID, StringShare>();
 
@@ -30,11 +34,13 @@ public class ECFTestPlugin extends AbstractUIPlugin {
     private ServiceTracker syncStrategyFactoryServiceTracker;
     private BundleContext context;
 
+    private SWTLayer openFilesLayer;
+    private MapSelection communicationSelection;
 	
 	/**
 	 * The constructor
 	 */
-	public ECFTestPlugin() {
+	public ECFPlugin() {
 	}
 
 	/*
@@ -45,25 +51,38 @@ public class ECFTestPlugin extends AbstractUIPlugin {
 		super.start(bundleContext);
 		plugin = this;
 		context = bundleContext;
+		registerLayer();
 	}
 
-	/*
+	private void registerLayer() {
+	    communicationSelection = new MapSelection();
+	    openFilesLayer = new CommunicationOvleray(communicationSelection);
+	    CodemapCore.getPlugin().getGlobalLayer().add(openFilesLayer);
+    }
+
+    /*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext bundleContext) throws Exception {
+	    unregisterLayer();
 		plugin = null;
 		context = null;
 		//FIXME: dispose the containerManagerTracker et cetera ...
 		super.stop(context);
 	}
 
-	/**
+	private void unregisterLayer() {
+	    CodemapCore.getPlugin().getGlobalLayer().remove(openFilesLayer);
+	    openFilesLayer = null;
+    }
+
+    /**
 	 * Returns the shared instance
 	 *
 	 * @return the shared instance
 	 */
-	public static ECFTestPlugin getDefault() {
+	public static ECFPlugin getDefault() {
 		return plugin;
 	}
 	
@@ -110,5 +129,8 @@ public class ECFTestPlugin extends AbstractUIPlugin {
         }
         return (IDocumentSynchronizationStrategyFactory) syncStrategyFactoryServiceTracker.getService();
     }
-	
+
+    public MapSelection getCommunicationSelection() {
+        return communicationSelection;
+    }
 }

@@ -1,6 +1,6 @@
 package org.codemap.communication.views;
 
-import org.codemap.communication.ECFTestPlugin;
+import org.codemap.communication.ECFPlugin;
 import org.codemap.communication.StringShare;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -28,7 +28,7 @@ public class CodemapRosterMenuHandler extends AbstractRosterMenuHandler {
         IContainer container = (IContainer) roster.getPresenceContainerAdapter().getAdapter(IContainer.class);
         if (container.getConnectedID() == null)
             showErrorMessage("not connected.");
-            StringShare sender = ECFTestPlugin.getDefault().getStringShare(container.getID());
+            StringShare sender = ECFPlugin.getDefault().getStringShare(container.getID());
             if (sender == null)
                 showErrorMessage("no sender.");
 //            currently share anyway to be able do do better debugging
@@ -48,7 +48,7 @@ public class CodemapRosterMenuHandler extends AbstractRosterMenuHandler {
     
 
     private void showErrorMessage(String errorMessage) {
-        ErrorDialog.openError(null, "error", errorMessage, new Status(IStatus.ERROR, ECFTestPlugin.PLUGIN_ID, errorMessage, null));
+        ErrorDialog.openError(null, "error", errorMessage, new Status(IStatus.ERROR, ECFPlugin.PLUGIN_ID, errorMessage, null));
     }    
 
 }

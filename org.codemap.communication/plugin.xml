@@ -6,14 +6,14 @@
          point="org.eclipse.ui.views">
       <category
             name="Software Cartography ECF"
-            id="org.codemap.ecftest">
+            id="org.codemap.communication">
       </category>
       <view
             name="Sample View"
             icon="icons/sample.gif"
-            category="org.codemap.ecftest"
+            category="org.codemap.communication"
             class="org.codemap.communication.views.ECFTestView"
-            id="org.codemap.ecftest.views.SampleView">
+            id="org.codemap.communication.views.SampleView">
       </view>
    </extension>
    <extension

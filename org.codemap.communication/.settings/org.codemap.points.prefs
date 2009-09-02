@@ -1,4 +1,16 @@
-#Tue Sep 01 16:39:02 CEST 2009
+#Tue Sep 01 18:25:35 CEST 2009
+///org.codemap.communication/src/org/codemap/communication/CodemapECFStart.java=0.5265333959623675@0.3589498192439065
+///org.codemap.communication/src/org/codemap/communication/ECFTestPlugin.java=0.4469825550369308@0.9500000000000001
+///org.codemap.communication/src/org/codemap/communication/EditorPartListener.java=0.9047888919320869@0.23987744135638267
+///org.codemap.communication/src/org/codemap/communication/StringShare.java=0.69133587547206@0.5457399843469247
+///org.codemap.communication/src/org/codemap/communication/StringShareDebugOptions.java=0.08410759088215727@0.8377182112193617
+///org.codemap.communication/src/org/codemap/communication/messages/Message.java=0.5945160072766078@0.05
+///org.codemap.communication/src/org/codemap/communication/messages/SelectionMessage.java=0.2965480599221834@0.08337286319323775
+///org.codemap.communication/src/org/codemap/communication/messages/StartMessage.java=0.0899011904142776@0.285305081069297
+///org.codemap.communication/src/org/codemap/communication/messages/StopMessage.java=0.05@0.467569604198532
+///org.codemap.communication/src/org/codemap/communication/views/CodemapRosterMenuHandler.java=0.7269073179236551@0.8363195575681999
+///org.codemap.communication/src/org/codemap/communication/views/CodemapRosterMenuItem.java=0.45405874452946526@0.6993409208827462
+///org.codemap.communication/src/org/codemap/communication/views/ECFTestView.java=0.9500000000000001@0.6501326057954208
 ///org.codemap.ecftest/src/org/codemap/ecftest/CodemapECFStart.java=0.7953156012599824@0.25296259848949715
 ///org.codemap.ecftest/src/org/codemap/ecftest/ECFStart.java=0.9500000000000001@0.537648696938223
 ///org.codemap.ecftest/src/org/codemap/ecftest/ECFTestPlugin.java=0.4636152267858954@0.5296646629512624

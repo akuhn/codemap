@@ -9,6 +9,8 @@ import org.osgi.framework.BundleContext;
 
 import ch.akuhn.values.TaskValue;
 import ch.deif.meander.MapSelection;
+import ch.deif.meander.swt.CompositeLayer;
+import ch.deif.meander.swt.SWTLayer;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.util.MapScheme;
 
@@ -32,6 +34,7 @@ public class CodemapCore extends AbstractUIPlugin {
     private final MapSelection youAreHereSelection;
     private final MapSelection openFilesSelection;
     private final MapSelection currentSelection;
+    private final CompositeLayer globalLayer;
 
     public MapSelection getYouAreHereSelection() {
         return youAreHereSelection;
@@ -50,6 +53,9 @@ public class CodemapCore extends AbstractUIPlugin {
         youAreHereSelection = new MapSelection();
         openFilesSelection = new MapSelection();	
         currentSelection = new MapSelection();
+        // needed for MapSelections that to not depend on the current project
+        // e.g. open files shared over the network
+        globalLayer = new CompositeLayer();
     }
 
     @Override
@@ -91,6 +97,16 @@ public class CodemapCore extends AbstractUIPlugin {
 
     public MapScheme<MColor> getDefaultColorScheme() {
         return new MapScheme<MColor>(MColor.HILLGREEN);
+    }
+    
+    /**
+     * Get the global CompositeLayer that is shared between all maps.
+     * The Layer can be used to display overlays that depend on one global selection 
+     * and not on different selections per project and that are enabled/disabled on 
+     * a global level only.
+     */
+    public CompositeLayer getGlobalLayer() {
+        return globalLayer;
     }
 
 }

@@ -1,6 +1,6 @@
 package org.codemap.communication.views;
 
-import org.codemap.communication.ECFTestPlugin;
+import org.codemap.communication.ECFPlugin;
 import org.codemap.communication.StringShare;
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.presence.IPresenceContainerAdapter;
@@ -56,7 +56,7 @@ public class CodemapRosterMenuItem extends AbstractRosterMenuContributionItem {
         final IContainer container = (IContainer) presenceContainerAdapter.getAdapter(IContainer.class);
         if (container == null)
             return null;
-        return ECFTestPlugin.getDefault().getStringShare(container.getID());
+        return ECFPlugin.getDefault().getStringShare(container.getID());
     }        
 
     @Override

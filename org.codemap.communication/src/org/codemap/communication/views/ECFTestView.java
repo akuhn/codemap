@@ -32,7 +32,7 @@ public class ECFTestView extends ViewPart {
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "org.codemap.ecftest.views.ECFTestView";
+	public static final String ID = "org.codemap.communication.views.ECFTestView";
 	
 	
 	private static class MyDemoAction extends Action {

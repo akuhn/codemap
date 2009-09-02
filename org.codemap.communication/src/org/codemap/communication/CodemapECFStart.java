@@ -29,7 +29,7 @@ public class CodemapECFStart implements IECFStart {
          * @see org.eclipse.ecf.core.IContainerListener#handleEvent(org.eclipse.ecf.core.events.IContainerEvent)
          */
         public void handleEvent(IContainerEvent event) {
-            IContainerManager containerManager = ECFTestPlugin.getDefault().getContainerManager();
+            IContainerManager containerManager = ECFPlugin.getDefault().getContainerManager();
             if (containerManager == null) return;
             IContainer container = containerManager.getContainer(event.getLocalContainerID());
             if (container == null) return;
@@ -62,7 +62,7 @@ public class CodemapECFStart implements IECFStart {
         private boolean handledDisconnectedEvent(IContainerEvent event, ID containerID) {
             if (!(event instanceof IContainerDisconnectedEvent || event instanceof IContainerEjectedEvent)) return false;
             
-            StringShare share = ECFTestPlugin.getDefault().removeStringShare(containerID);
+            StringShare share = ECFPlugin.getDefault().removeStringShare(containerID);
             if (share != null) {
                 share.dispose();            
             }
@@ -73,9 +73,9 @@ public class CodemapECFStart implements IECFStart {
             if (!(event instanceof IContainerConnectedEvent)) return false;
             
             try {
-                ECFTestPlugin.getDefault().addStringShare(containerID, containerAdapter);
+                ECFPlugin.getDefault().addStringShare(containerID, containerAdapter);
             } catch (ECFException e) {
-                ECFTestPlugin.getDefault().getLog().log(new Status(IStatus.WARNING, ECFTestPlugin.PLUGIN_ID, IStatus.WARNING, NLS.bind("Document share not created.", container.getID()), null));
+                ECFPlugin.getDefault().getLog().log(new Status(IStatus.WARNING, ECFPlugin.PLUGIN_ID, IStatus.WARNING, NLS.bind("Document share not created.", container.getID()), null));
             }            
             return true;
         }
@@ -108,11 +108,9 @@ public class CodemapECFStart implements IECFStart {
      */
     @Override
     public IStatus run(IProgressMonitor monitor) {
-        System.out.println("starting ECF stuff for codemap ...");
-        
-        IContainerManager containerManager = ECFTestPlugin.getDefault().getContainerManager();
+        IContainerManager containerManager = ECFPlugin.getDefault().getContainerManager();
         if (containerManager == null)
-            return new Status(IStatus.WARNING, ECFTestPlugin.PLUGIN_ID, IStatus.WARNING, "no container manager available", null);
+            return new Status(IStatus.WARNING, ECFPlugin.PLUGIN_ID, IStatus.WARNING, "no container manager available", null);
         containerManager.addListener(containerManagerListener);
         return Status.OK_STATUS;        
     }

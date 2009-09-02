@@ -73,7 +73,7 @@ public class StringShare extends AbstractShare {
 
     public StringShare(IChannelContainerAdapter adapter) throws ECFException {
         super(adapter);
-        factory = ECFTestPlugin.getDefault().getColaSynchronizationStrategyFactory();
+        factory = ECFPlugin.getDefault().getColaSynchronizationStrategyFactory();
     }
 
     @Override
@@ -119,7 +119,7 @@ public class StringShare extends AbstractShare {
             @Override
             public void run() {
                 // needs to run in an UI Thread to have access to the workbench.            	
-                IWorkbenchPage page = ECFTestPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                IWorkbenchPage page = ECFPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
                 page.addPartListener(listener);
             }
         });
@@ -143,8 +143,7 @@ public class StringShare extends AbstractShare {
         localStartShare(getLocalRosterManager());
     }
 
-    private synchronized void localStartShare(IRosterManager localRosterManager) {
-        // localStopShare();
+    private void localStartShare(IRosterManager localRosterManager) {
         this.rosterManager = localRosterManager;
         if (this.rosterManager != null) {
             this.rosterManager.addRosterListener(rosterListener);
@@ -164,28 +163,28 @@ public class StringShare extends AbstractShare {
         return null;
     }
 
-    IModelSynchronizationStrategy createSynchronizationStrategy(boolean isInitiator) {
+    private IModelSynchronizationStrategy createSynchronizationStrategy(boolean isInitiator) {
         // Instantiate the service
         Assert.isNotNull(factory);
         return factory.createDocumentSynchronizationStrategy(getChannel().getID(), isInitiator);
     }
 
-    public void selectionChanged(Collection<String> selection) {
+    public synchronized void localSelectionChanged(Collection<String> selection) {
         sendMessageToRemote(new SelectionMessage(ourID, remoteID, selection));
     }
 
-    public String getRemoteName() {
+    public synchronized String getRemoteName() {
         if (remoteID == null)
             return "";
         return remoteID.getName();
     }
 
-    public void stopShare() {
+    public synchronized void stopShare() {
         sendMessageToRemote(new StopMessage(remoteID, ourID));
         localStopShare();
     }
 
-    private synchronized void localStopShare() {
+    private void localStopShare() {
         ourID = null;
         remoteID = null;
         syncStrategy = null;        
@@ -212,9 +211,13 @@ public class StringShare extends AbstractShare {
         Display.getDefault().syncExec(new Runnable() {
             @Override
             public void run() {
-                IWorkbenchPage page = ECFTestPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                IWorkbenchPage page = ECFPlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
                 page.removePartListener(listener);
             }
         });
+    }
+
+    public synchronized void handleRemoteSelection(Collection<String> selection) {
+        ECFPlugin.getDefault().getCommunicationSelection().replaceAll(selection);
     }
 }

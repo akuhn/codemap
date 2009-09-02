@@ -101,7 +101,7 @@ public class EditorPartListener implements IPartListener2 {
                 currentSelection.containsAll(newSelection)) return;
         
         currentSelection = newSelection;
-        callback.selectionChanged(currentSelection);
+        callback.localSelectionChanged(currentSelection);
         System.out.println("triggering update" + newSelection);
     }
 

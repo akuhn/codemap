@@ -2,7 +2,7 @@ package org.codemap.communication;
 
 public class StringShareDebugOptions {
     
-    public static final String DEBUG = ECFTestPlugin.PLUGIN_ID + "/debug"; //$NON-NLS-1$    
+    public static final String DEBUG = ECFPlugin.PLUGIN_ID + "/debug"; //$NON-NLS-1$    
 
     public static final String EXCEPTIONS_CATCHING = DEBUG + "/exceptions/catching"; //$NON-NLS-1$
 

@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Communication Framework plugin for Codemap
 Bundle-SymbolicName: org.codemap.communication;singleton:=true
 Bundle-Version: 0.7.7.qualifier
-Bundle-Activator: org.codemap.communication.ECFTestPlugin
+Bundle-Activator: org.codemap.communication.ECFPlugin
 Bundle-Vendor: David Erni
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -16,6 +16,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ecf.provider.xmpp;bundle-version="3.0.0",
  org.eclipse.core.resources;bundle-version="3.5.0",
  org.codemap;bundle-version="0.7.746",
- org.eclipse.jdt.core;bundle-version="3.5.0"
+ org.eclipse.jdt.core;bundle-version="3.5.0",
+ ch.deif.meander;bundle-version="0.7.746",
+ ch.akuhn.util;bundle-version="2.1.277"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy

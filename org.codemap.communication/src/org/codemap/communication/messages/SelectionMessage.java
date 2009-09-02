@@ -6,7 +6,7 @@ import org.codemap.communication.StringShare;
 import org.eclipse.ecf.core.identity.ID;
 
 public class SelectionMessage extends Message {
-    
+      
     private static final long serialVersionUID = -6238144999021023659L;
     public final Collection<String> selection;
     
@@ -23,6 +23,7 @@ public class SelectionMessage extends Message {
     @Override
     public void applyOn(StringShare share) {
         System.out.println(this);
+        share.handleRemoteSelection(selection);
     }
 
 }
