@@ -11,6 +11,7 @@ import ch.deif.meander.Configuration;
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.map.MapValueBuilder;
 
+
 public class EclipseMapValuesBuilder extends MapValueBuilder {
 
     private Value<Collection<String>> projects;

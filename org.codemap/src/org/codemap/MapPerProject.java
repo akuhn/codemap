@@ -71,7 +71,11 @@ public class MapPerProject {
         redrawAction = new ActionValue<Void>(
                 mapValues.mapInstance, 
                 mapValues.background,
-                mapValues.labeling) {
+                mapValues.labeling, 
+                mapValues.extensions,
+                // TODO check how to really use this to fire an update for plugins etc.
+                mapValues.youAreHereSelection,
+                mapValues.openFilesSelection) {
             @Override
             protected Void performAction(Arguments args) {
                 CodemapCore.getPlugin().getMapView().newProjectSelected();
