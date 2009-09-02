@@ -3,7 +3,6 @@ package org.codemap.plugin.marker;
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.akuhn.values.AbstractValue;
 import ch.deif.meander.MapSelection;
 
 public class MarkerSelection {
