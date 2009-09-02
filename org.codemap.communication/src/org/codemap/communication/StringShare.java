@@ -208,6 +208,7 @@ public class StringShare extends AbstractShare {
     }
 
     private void removeEditorListener() {
+    	if (listener == null) return;
         Display.getDefault().syncExec(new Runnable() {
             @Override
             public void run() {
