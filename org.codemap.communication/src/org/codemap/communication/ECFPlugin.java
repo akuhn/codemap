@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.codemap.CodemapCore;
+import org.codemap.MapPerProject;
 import org.eclipse.ecf.core.IContainerManager;
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.util.ECFException;
@@ -57,7 +58,6 @@ public class ECFPlugin extends AbstractUIPlugin {
 	private void registerLayer() {
 	    communicationSelection = new MapSelection();
 	    openFilesLayer = new CommunicationOvleray(communicationSelection);
-	    CodemapCore.getPlugin().getGlobalLayer().add(openFilesLayer);
     }
 
     /*
@@ -73,7 +73,6 @@ public class ECFPlugin extends AbstractUIPlugin {
 	}
 
 	private void unregisterLayer() {
-	    CodemapCore.getPlugin().getGlobalLayer().remove(openFilesLayer);
 	    openFilesLayer = null;
     }
 
@@ -131,6 +130,14 @@ public class ECFPlugin extends AbstractUIPlugin {
     }
 
     public MapSelection getCommunicationSelection() {
+        registerSelectionWithActiveMap();
         return communicationSelection;
+    }
+
+    private void registerSelectionWithActiveMap() {
+        MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
+        if (! activeMap.containsLayer(openFilesLayer)){
+            activeMap.addSelectionLayer(openFilesLayer, communicationSelection);
+        }
     }
 }

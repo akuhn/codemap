@@ -22,6 +22,7 @@ public class CommunicationOvleray extends SelectionOverlay {
 
     @Override
     public MapSelection getSelection(MapValues map) {
+        // the selection is global and does not depend on the mapvalues
         return selection;
     }
     

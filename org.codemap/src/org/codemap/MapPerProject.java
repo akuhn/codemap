@@ -19,6 +19,7 @@ import ch.akuhn.values.ActionValue;
 import ch.akuhn.values.Arguments;
 import ch.akuhn.values.Value;
 import ch.deif.meander.Configuration;
+import ch.deif.meander.MapSelection;
 import ch.deif.meander.Point;
 import ch.deif.meander.Configuration.Builder;
 import ch.deif.meander.map.MapVisualization;
@@ -62,20 +63,19 @@ public class MapPerProject {
         EclipseMapValuesBuilder builder = new EclipseMapValuesBuilder();
         builder.setName("default.map");
         builder.setProjects(Arrays.asList(Resources.asPath(project)));
-        builder.setExtensions(Arrays.asList("*.java"));
+        builder.setFileExtensions(Arrays.asList("*.java"));
         builder.setInitialConfiguration(readPreviousMapState());
         mapValues = new EclipseMapValues(builder);
         mapVisualization = new MapVisualization(mapValues);
         mapVisualization.getSharedLayer().add(makeOpenFilesLayer());
-        mapVisualization.getSharedLayer().add(CodemapCore.getPlugin().getGlobalLayer());
+        
         redrawAction = new ActionValue<Void>(
                 mapValues.mapInstance, 
                 mapValues.background,
                 mapValues.labeling, 
                 mapValues.extensions,
-                // TODO check how to really use this to fire an update for plugins etc.
-                mapValues.youAreHereSelection,
-                mapValues.openFilesSelection) {
+                mapValues.selections) {
+            
             @Override
             protected Void performAction(Arguments args) {
                 CodemapCore.getPlugin().getMapView().newProjectSelected();
@@ -178,9 +178,14 @@ public class MapPerProject {
     public void addLayer(SWTLayer layer) {
         mapVisualization.getSharedLayer().add(layer);
     }
+    
+    public void addSelectionLayer(SWTLayer layer, MapSelection selection) {
+        addLayer(layer);
+        mapValues.selections.add(selection);
+    }
 
-    public void removeLayer(SWTLayer layer) {
-        mapVisualization.getSharedLayer().remove(layer);
+    public boolean containsLayer(SWTLayer layer) {
+        return mapVisualization.getSharedLayer().contains(layer);
     }
 
     public Configuration getConfiguration() {
