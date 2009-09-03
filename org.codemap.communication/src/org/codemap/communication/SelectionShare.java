@@ -119,7 +119,7 @@ public class SelectionShare extends AbstractShare {
             listener = new EditorPartListener(SelectionShare.this);
         }
         
-        Display.getDefault().syncExec(new Runnable() {
+        Display.getDefault().asyncExec(new Runnable() {
             @Override
             public void run() {
                 // needs to run in an UI Thread to have access to the workbench.            	

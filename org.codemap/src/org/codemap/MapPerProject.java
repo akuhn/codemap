@@ -46,6 +46,7 @@ public class MapPerProject {
     private ActionValue<Void> redrawAction;
 
     public static MapPerProject forProject(IJavaProject project) {
+    	if (project == null) return null;
         if (mapPerProjectCache == null) mapPerProjectCache = new HashMap<IJavaProject,MapPerProject>();
         MapPerProject map = mapPerProjectCache.get(project);
         if (map != null) return map;
