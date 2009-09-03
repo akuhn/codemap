@@ -16,7 +16,6 @@ public abstract class AbstractValue<V> implements Value<V> {
         }
     }
     
-    
     public final void addDependent(ValueChangedListener listener) {
         listeners.add(listener); 
     }

@@ -13,7 +13,7 @@ import ch.akuhn.values.TaskFactory.Task;
 public abstract class TaskValue<V> extends AbstractValue<V> implements ValueChangedListener {
 
     private static void DEBUGF(String format, Object... args) {
-        System.out.printf(format, args);
+//        System.out.printf(format, args);
     }
     
     private static String T() {
