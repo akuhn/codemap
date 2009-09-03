@@ -77,7 +77,6 @@ public class SelectionShare extends AbstractShare {
 
         private void onRemoteAbort() {
             localStopShare();
-            
         }
 
         private void onLocalAbort() {
@@ -111,20 +110,29 @@ public class SelectionShare extends AbstractShare {
         }
     }
 
+    protected boolean openReceiverDialog(ID sender) {
+        return MessageDialog.openQuestion(null, "Share your Selection.", "Do you want to share your Codemap selection with " + sender.getName());
+    }    
+
     /**
      * Called when we are on the remote side.
      */
-    public synchronized void handleRemoteStart(Message message) {
+    public synchronized void handleStartRequest(Message message) {
         remoteID = message.senderID;
         Assert.isNotNull(remoteID);
         ourID = message.receiverID;
         Assert.isNotNull(ourID);
-
-        // SYNC API. Create an instance of the synchronization strategy on
-        // the receiver
-        syncStrategy = createSynchronizationStrategy(false);
-        Assert.isNotNull(syncStrategy);
-        addEditorListener();
+        
+        if (openReceiverDialog(message.senderID)) {
+            // SYNC API. Create an instance of the synchronization strategy on
+            // the receiver
+            syncStrategy = createSynchronizationStrategy(false);
+            Assert.isNotNull(syncStrategy);
+            addEditorListener();            
+        } else {
+            sendStopMessage();
+            localStopShare();
+        }        
     }
 
     /**
@@ -202,8 +210,12 @@ public class SelectionShare extends AbstractShare {
     }
 
     public synchronized void stopShare() {
-        sendMessageToRemote(new StopMessage(remoteID, ourID));
+        sendStopMessage();
         localStopShare();
+    }
+
+    private void sendStopMessage() {
+        sendMessageToRemote(new StopMessage(remoteID, ourID));
     }
 
     private void localStopShare() {

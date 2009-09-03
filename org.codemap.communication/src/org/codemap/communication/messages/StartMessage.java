@@ -18,7 +18,7 @@ public class StartMessage extends Message {
 
     @Override
     public void applyOn(SelectionShare share) {
-        share.handleRemoteStart(this);
+        share.handleStartRequest(this);
         System.out.println(this);
     }
     
