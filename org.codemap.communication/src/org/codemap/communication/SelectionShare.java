@@ -40,7 +40,10 @@ public class SelectionShare extends AbstractShare {
 
         public void handleRosterUpdate(IRoster roster, IRosterItem changedValue) {
             // XXX: Implement
-            // if (changedValue instanceof IRosterEntry) {
+             if (!(changedValue instanceof IRosterEntry)) return;
+             IRosterEntry rosterEntry = (IRosterEntry) changedValue;
+             System.out.println(rosterEntry);
+             
             // ID changedID = ((IRosterEntry) changedValue).getUser().getID();
             // ID oID = null;
             // ID otherID = null;
@@ -85,7 +88,6 @@ public class SelectionShare extends AbstractShare {
             message = Message.deserialize(data);
             Assert.isNotNull(message);
             message.applyOn(this);
-            // XXX: _NOW do stuff here
         } catch (SerializationException e) {
             Log.error(e);
         }

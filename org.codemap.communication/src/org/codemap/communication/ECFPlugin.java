@@ -50,31 +50,33 @@ public class ECFPlugin extends AbstractUIPlugin {
 	 */
 	public void start(BundleContext bundleContext) throws Exception {
 		super.start(bundleContext);
+		
+		communicationSelection = new MapSelection();
+		openFilesLayer = new CommunicationOvleray(communicationSelection);
 		plugin = this;
 		context = bundleContext;
-		registerLayer();
 	}
-
-	private void registerLayer() {
-	    communicationSelection = new MapSelection();
-	    openFilesLayer = new CommunicationOvleray(communicationSelection);
-    }
 
     /*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext bundleContext) throws Exception {
-	    unregisterLayer();
+	    if (syncStrategyFactoryServiceTracker != null)
+	        syncStrategyFactoryServiceTracker.close();
+	    if (containerManagerTracker != null)
+	        containerManagerTracker.close();
+	    // "free"
+	    syncStrategyFactoryServiceTracker = null;	    
+	    containerManagerTracker = null;
+	    communicationSelection = null;
+	    shares = null;
+	    openFilesLayer = null;
 		plugin = null;
 		context = null;
-		//FIXME: dispose the containerManagerTracker et cetera ...
+		
 		super.stop(context);
 	}
-
-	private void unregisterLayer() {
-	    openFilesLayer = null;
-    }
 
     /**
 	 * Returns the shared instance
