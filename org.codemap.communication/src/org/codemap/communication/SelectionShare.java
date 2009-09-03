@@ -123,20 +123,22 @@ public class SelectionShare extends AbstractShare {
         ourID = message.receiverID;
         Assert.isNotNull(ourID);
         
-        Display.getDefault().syncExec(new Runnable(){
+        Display.getDefault().asyncExec(new Runnable(){
 
             @Override
             public void run() {
-                if (openReceiverDialog(message.senderID)) {
-                    // SYNC API. Create an instance of the synchronization strategy on
-                    // the receiver
-                    syncStrategy = createSynchronizationStrategy(false);
-                    Assert.isNotNull(syncStrategy);
-                    addEditorListener();            
-                } else {
-                    sendStopMessage();
-                    localStopShare();
-                }        
+                synchronized(SelectionShare.this) {
+                    if (openReceiverDialog(message.senderID)) {
+                        // SYNC API. Create an instance of the synchronization strategy on
+                        // the receiver
+                        syncStrategy = createSynchronizationStrategy(false);
+                        Assert.isNotNull(syncStrategy);
+                        addEditorListener();            
+                    } else {
+                        sendStopMessage();
+                        localStopShare();
+                    }                    
+                }
             }
         });
     }
