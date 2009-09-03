@@ -19,13 +19,16 @@ import org.eclipse.ecf.sync.SerializationException;
 public abstract class Message implements Serializable {
 
     private static final long serialVersionUID = 5539065281698328158L;
+    private static long counter = 0;
     
     public final ID senderID;
     public final ID receiverID;
+    public final long number;
 
     public Message(ID senderID, ID receiverID) {
         this.senderID = senderID;
         this.receiverID = receiverID;
+        this.number = ++counter;
     }
     
     /**
@@ -57,7 +60,7 @@ public abstract class Message implements Serializable {
 
     @Override
     public String toString() {
-        return "message from: " + senderID.getName() + " to: " + receiverID.getName();
+        return "message(" + String.valueOf(number) + ") from: " + senderID.getName() + " to: " + receiverID.getName();
     }
 
     public abstract void applyOn(SelectionShare share);
