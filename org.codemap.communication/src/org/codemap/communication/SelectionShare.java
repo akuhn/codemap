@@ -117,22 +117,28 @@ public class SelectionShare extends AbstractShare {
     /**
      * Called when we are on the remote side.
      */
-    public synchronized void handleStartRequest(Message message) {
+    public synchronized void handleStartRequest(final Message message) {
         remoteID = message.senderID;
         Assert.isNotNull(remoteID);
         ourID = message.receiverID;
         Assert.isNotNull(ourID);
         
-        if (openReceiverDialog(message.senderID)) {
-            // SYNC API. Create an instance of the synchronization strategy on
-            // the receiver
-            syncStrategy = createSynchronizationStrategy(false);
-            Assert.isNotNull(syncStrategy);
-            addEditorListener();            
-        } else {
-            sendStopMessage();
-            localStopShare();
-        }        
+        Display.getDefault().syncExec(new Runnable(){
+
+            @Override
+            public void run() {
+                if (openReceiverDialog(message.senderID)) {
+                    // SYNC API. Create an instance of the synchronization strategy on
+                    // the receiver
+                    syncStrategy = createSynchronizationStrategy(false);
+                    Assert.isNotNull(syncStrategy);
+                    addEditorListener();            
+                } else {
+                    sendStopMessage();
+                    localStopShare();
+                }        
+            }
+        });
     }
 
     /**
