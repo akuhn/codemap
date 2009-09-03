@@ -65,13 +65,11 @@ public class SearchPlugin extends AbstractUIPlugin {
 		if (mapSelection == null) {
 			mapSelection = new MapSelection();
 			SearchResultsOverlay searchOverlay = new SearchResultsOverlay();
-			activeMap.addLayer(searchOverlay);
+			activeMap.addSelectionLayer(searchOverlay, mapSelection);
 			
 			selectionCache.put(activeMap, mapSelection);
 		}
 		return mapSelection;    	
-    	
-    	
     }
 
     public static SearchPlugin getPlugin() {

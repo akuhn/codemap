@@ -75,10 +75,9 @@ public class MarkerPlugin extends AbstractUIPlugin {
 			selection = new MarkerSelection();
 			MarkersOverlay markersOverlay = new MarkersOverlay();
 			markersOverlay.setMarkerSelection(selection);
-			activeMap.addLayer(markersOverlay);
+			activeMap.addSelectionLayer(markersOverlay, selection.getSelection());
 			
 			selectionCache.put(activeMap, selection);
-			activeMap.redrawWhenChanges(selection.getSelection());
 		}
 		return selection;
 	}
