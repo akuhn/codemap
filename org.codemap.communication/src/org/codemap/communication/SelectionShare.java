@@ -13,6 +13,7 @@ import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.util.ECFException;
 import org.eclipse.ecf.datashare.AbstractShare;
 import org.eclipse.ecf.datashare.IChannelContainerAdapter;
+import org.eclipse.ecf.datashare.events.IChannelDisconnectEvent;
 import org.eclipse.ecf.presence.IPresenceContainerAdapter;
 import org.eclipse.ecf.presence.roster.IRoster;
 import org.eclipse.ecf.presence.roster.IRosterEntry;
@@ -53,34 +54,15 @@ public class SelectionShare extends AbstractShare {
              
              synchronized (SelectionShare.this) {
                 if (changedID.equals(ourID)) {
-                    onLocalAbort();
+                    localStopShare();
                     message = "Sharing aborted locally.";
                 }
                 else if (changedID.equals(remoteID)) {
-                    onRemoteAbort();
+                    localStopShare();
                     message = "Sharing aborted remotely.";
                 }
             }
-            
             if (message != null) showStopShareMessage(message);                
-        }
-
-        private void showStopShareMessage(final String message) {
-            final Display display = Display.getDefault();
-            display.asyncExec(new Runnable() {
-                public void run() {
-                    MessageDialog.openInformation(display.getActiveShell(), "Stopped sharing.", message);
-                }
-            });               
-            
-        }
-
-        private void onRemoteAbort() {
-            localStopShare();
-        }
-
-        private void onLocalAbort() {
-            localStopShare();
         }
     };
     
@@ -109,9 +91,31 @@ public class SelectionShare extends AbstractShare {
             Log.error(e);
         }
     }
+    
+    @Override
+    protected void handleDisconnectEvent(IChannelDisconnectEvent cde) {
+        boolean weDisconnected = (ourID != null && ourID.equals(cde.getTargetID()));
+        boolean wasSharing = isSharing();
+        // Stop things and *then* notify user
+        localStopShare();
+        if (wasSharing) {
+            // TODO: use some more verbose messages (check whole file ...)
+            if (weDisconnected) showStopShareMessage("We stopped sharing.");
+            else showStopShareMessage("Remote stopped sharing.");
+        }
+    }    
 
     protected boolean openReceiverDialog(ID sender) {
-        return MessageDialog.openQuestion(null, "Share your Selection.", "Do you want to share your Codemap selection with " + sender.getName());
+        return MessageDialog.openQuestion(null, "Share your Selection.", "Do you want to share your Codemap selection with " + sender.getName() + "?");
+    }
+    
+    protected void showStopShareMessage(final String message) {
+        final Display display = Display.getDefault();
+        display.asyncExec(new Runnable() {
+            public void run() {
+                MessageDialog.openInformation(display.getActiveShell(), "Stopped sharing.", message);
+            }
+        });               
     }    
 
     /**
@@ -123,8 +127,8 @@ public class SelectionShare extends AbstractShare {
         ourID = message.receiverID;
         Assert.isNotNull(ourID);
         
+        // execute async to avoid nested monitor in callbacks
         Display.getDefault().asyncExec(new Runnable(){
-
             @Override
             public void run() {
                 synchronized(SelectionShare.this) {
@@ -231,7 +235,6 @@ public class SelectionShare extends AbstractShare {
         ourID = null;
         remoteID = null;
         syncStrategy = null;    
-        
     }
 
     private void sendMessageToRemote(Message message) {
