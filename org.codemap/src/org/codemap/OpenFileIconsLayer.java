@@ -47,19 +47,25 @@ public class OpenFileIconsLayer extends SelectionOverlay {
         IResource resource = Resources.asResource(each.getDocument());
         if (resource == null) return;
         Image image = provider.getImage(resource);
-        Rectangle b = image.getBounds();
+        if (image == null) {
+            // fallback to default image, destroy the image after use
+            image = imageDesc.createImage();
+            drawImage(gc, image, each);
+            image.dispose();
+        } else {
+            drawImage(gc, image, each);            
+        }
+    }
+
+    private void drawImage(GC gc, Image image, Location each) {
+        Rectangle b = image.getBounds();        
         int diameter = (int) Math.sqrt(b.width * b.width + b.height * b.height);
+        // draw semi-transparent background
         gc.setAlpha(196);
         gc.fillOval(each.px - diameter/2, each.py - diameter/2, diameter, diameter);
         gc.setAlpha(255);
-        if (image == null) {
-            // needed to be able to destroy the image
-            image = imageDesc.createImage();
-            gc.drawImage(image, each.px - b.width/2, each.py - b.height/2);
-            image.dispose();
-        } else {
-            gc.drawImage(image, each.px - b.width/2, each.py - b.height/2);            
-        }
+        //draw image
+        gc.drawImage(image, each.px - b.width/2, each.py - b.height/2);
     }
 
 }
