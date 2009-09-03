@@ -253,6 +253,7 @@ public class SelectionShare extends AbstractShare {
         remoteID = null;
         syncStrategy = null;
         removeEditorListener();
+        showStopShareMessage("The remote User stopped sharing.");        
     }
 
     private void removeEditorListener() {
