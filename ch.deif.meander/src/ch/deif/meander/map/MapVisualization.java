@@ -23,7 +23,7 @@ public class MapVisualization {
         CompositeLayer foreground = new CompositeLayer();
         foreground.add(new LabelOverlay());
         foreground.add(new CurrSelectionOverlay());
-        // foreground.add(new OpenFilesOverlay()); TODO add emthods to CompositeLayer to replace layers by eg an ID
+        // TODO add methods to CompositeLayer to replace layers by eg an ID
         foreground.add(shared = new CompositeLayer());
         foreground.add(new YouAreHereOverlay());
 

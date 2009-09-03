@@ -37,6 +37,10 @@ public class CompositeLayer extends SWTLayer {
         layer.setRoot(null);
         return this;
     }
+    
+    public boolean contains(SWTLayer layer) {
+        return children.contains(layer);
+    }
 
     @Override
     public void dragDetected(DragDetectEvent e) {
