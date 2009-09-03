@@ -22,13 +22,14 @@ import org.eclipse.ecf.presence.roster.IRosterManager;
 import org.eclipse.ecf.sync.IModelSynchronizationStrategy;
 import org.eclipse.ecf.sync.SerializationException;
 import org.eclipse.ecf.sync.doc.IDocumentSynchronizationStrategyFactory;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 
 import ch.deif.meander.MapSelection;
 
 public class SelectionShare extends AbstractShare {
-
+    
     IRosterListener rosterListener = new IRosterListener() {
         public void handleRosterEntryAdd(IRosterEntry entry) {
             // nothing to do
@@ -37,33 +38,50 @@ public class SelectionShare extends AbstractShare {
         public void handleRosterEntryRemove(IRosterEntry entry) {
             // nothing to do
         }
-
+        
+        /**
+         * handle changes to the roster.
+         * AFAIK: this might be a local or a remote disconnect. 
+         */
         public void handleRosterUpdate(IRoster roster, IRosterItem changedValue) {
-            // XXX: Implement
              if (!(changedValue instanceof IRosterEntry)) return;
+             
              IRosterEntry rosterEntry = (IRosterEntry) changedValue;
              System.out.println(rosterEntry);
+             ID changedID = rosterEntry.getUser().getID();
+             String message = null;
              
-            // ID changedID = ((IRosterEntry) changedValue).getUser().getID();
-            // ID oID = null;
-            // ID otherID = null;
-            // Shell shell = null;
-            // synchronized (stateLock) {
-            // oID = getOurID();
-            // otherID = getOtherID();
-            // IWorkbenchPartSite wps = getTextEditor().getSite();
-            // shell = wps.getShell();
-            // }
-            // if (oID != null && changedID.equals(oID)) {
-            // localStopShare();
-            // showStopShareMessage(shell,
-            // Messages.DocShare_STOP_SHARED_EDITOR_US);
-            // } else if (otherID != null && changedID.equals(otherID)) {
-            // localStopShare();
-            // showStopShareMessage(shell,
-            // Messages.DocShare_STOP_SHARED_EDITOR_REMOTE);
-            // }
-            // }
+             synchronized (SelectionShare.this) {
+                if (changedID.equals(ourID)) {
+                    onLocalAbort();
+                    message = "Sharing aborted locally.";
+                }
+                else if (changedID.equals(remoteID)) {
+                    onRemoteAbort();
+                    message = "Sharing aborted remotely.";
+                }
+            }
+            
+            if (message != null) showStopShareMessage(message);                
+        }
+
+        private void showStopShareMessage(final String message) {
+            final Display display = Display.getDefault();
+            display.asyncExec(new Runnable() {
+                public void run() {
+                    MessageDialog.openInformation(display.getActiveShell(), "Stopped sharing.", message);
+                }
+            });               
+            
+        }
+
+        private void onRemoteAbort() {
+            localStopShare();
+            
+        }
+
+        private void onLocalAbort() {
+            localStopShare();
         }
     };
     
