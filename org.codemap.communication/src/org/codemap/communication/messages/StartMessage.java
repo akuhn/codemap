@@ -1,6 +1,6 @@
 package org.codemap.communication.messages;
 
-import org.codemap.communication.StringShare;
+import org.codemap.communication.SelectionShare;
 import org.eclipse.ecf.core.identity.ID;
 
 public class StartMessage extends Message {
@@ -17,7 +17,7 @@ public class StartMessage extends Message {
     }
 
     @Override
-    public void applyOn(StringShare share) {
+    public void applyOn(SelectionShare share) {
         share.handleRemoteStart(this);
         System.out.println(this);
     }

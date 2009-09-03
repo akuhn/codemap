@@ -1,7 +1,7 @@
 package org.codemap.communication.views;
 
 import org.codemap.communication.ECFPlugin;
-import org.codemap.communication.StringShare;
+import org.codemap.communication.SelectionShare;
 import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.presence.IPresenceContainerAdapter;
 import org.eclipse.ecf.presence.roster.IRoster;
@@ -33,7 +33,7 @@ public class CodemapRosterMenuItem extends AbstractRosterMenuContributionItem {
             if (!(each instanceof IPresenceContainerAdapter)) continue;
             IPresenceContainerAdapter pca = (IPresenceContainerAdapter) each;
             
-            StringShare share = getStringShareForPresenceContainerAdapter(pca);
+            SelectionShare share = getStringShareForPresenceContainerAdapter(pca);
             if (share != null && share.isSharing()) {
                 return getMenuContributionForStopShare(pca.getRosterManager().getRoster(), share);
             }
@@ -41,7 +41,7 @@ public class CodemapRosterMenuItem extends AbstractRosterMenuContributionItem {
         return super.getContributionItems();
     }
 
-    protected IContributionItem[] getMenuContributionForStopShare(IRoster roster, final StringShare share) {
+    protected IContributionItem[] getMenuContributionForStopShare(IRoster roster, final SelectionShare share) {
         final IAction stopEditorShare = new Action() {
             public void run() {
                 share.stopShare();
@@ -52,7 +52,7 @@ public class CodemapRosterMenuItem extends AbstractRosterMenuContributionItem {
         return new IContributionItem[] {new Separator(), new ActionContributionItem(stopEditorShare)};
     }        
 
-    protected StringShare getStringShareForPresenceContainerAdapter(IPresenceContainerAdapter presenceContainerAdapter) {
+    protected SelectionShare getStringShareForPresenceContainerAdapter(IPresenceContainerAdapter presenceContainerAdapter) {
         final IContainer container = (IContainer) presenceContainerAdapter.getAdapter(IContainer.class);
         if (container == null)
             return null;

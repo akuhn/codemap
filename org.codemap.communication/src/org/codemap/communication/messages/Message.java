@@ -6,7 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import org.codemap.communication.StringShare;
+import org.codemap.communication.SelectionShare;
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.sync.SerializationException;
 
@@ -60,6 +60,6 @@ public abstract class Message implements Serializable {
         return "message from: " + senderID.getName() + " to: " + receiverID.getName();
     }
 
-    public abstract void applyOn(StringShare share);
+    public abstract void applyOn(SelectionShare share);
 
 }

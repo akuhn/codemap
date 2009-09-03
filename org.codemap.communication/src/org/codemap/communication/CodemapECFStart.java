@@ -62,7 +62,7 @@ public class CodemapECFStart implements IECFStart {
         private boolean handledDisconnectedEvent(IContainerEvent event, ID containerID) {
             if (!(event instanceof IContainerDisconnectedEvent || event instanceof IContainerEjectedEvent)) return false;
             
-            StringShare share = ECFPlugin.getDefault().removeStringShare(containerID);
+            SelectionShare share = ECFPlugin.getDefault().removeStringShare(containerID);
             if (share != null) {
                 share.dispose();            
             }

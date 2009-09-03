@@ -20,10 +20,10 @@ import org.eclipse.ui.PlatformUI;
 
 public class EditorPartListener implements IPartListener2 {
 
-    private StringShare callback;
+    private SelectionShare callback;
     private Collection<String> currentSelection;
 
-    public EditorPartListener(StringShare callback) {
+    public EditorPartListener(SelectionShare callback) {
         this.callback = callback;
         this.currentSelection = Collections.emptySet();
         findInitialSelection();
@@ -101,7 +101,7 @@ public class EditorPartListener implements IPartListener2 {
                 currentSelection.containsAll(newSelection)) return;
         
         currentSelection = newSelection;
-        callback.localSelectionChanged(currentSelection);
+        callback.onLocalSelectionChanged(currentSelection);
         System.out.println("triggering update" + newSelection);
     }
 

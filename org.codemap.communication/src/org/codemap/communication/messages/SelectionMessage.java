@@ -2,7 +2,7 @@ package org.codemap.communication.messages;
 
 import java.util.Collection;
 
-import org.codemap.communication.StringShare;
+import org.codemap.communication.SelectionShare;
 import org.eclipse.ecf.core.identity.ID;
 
 public class SelectionMessage extends Message {
@@ -21,7 +21,7 @@ public class SelectionMessage extends Message {
     }
 
     @Override
-    public void applyOn(StringShare share) {
+    public void applyOn(SelectionShare share) {
         System.out.println(this);
         share.handleRemoteSelection(selection);
     }

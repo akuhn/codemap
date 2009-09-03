@@ -29,7 +29,7 @@ public class ECFPlugin extends AbstractUIPlugin {
 	// The shared instance
 	private static ECFPlugin plugin;
 	
-	private Map<ID, StringShare> shares = new HashMap<ID, StringShare>();
+	private Map<ID, SelectionShare> shares = new HashMap<ID, SelectionShare>();
 
     private ServiceTracker containerManagerTracker;
     private ServiceTracker syncStrategyFactoryServiceTracker;
@@ -96,14 +96,14 @@ public class ECFPlugin extends AbstractUIPlugin {
 		return imageDescriptorFromPlugin(PLUGIN_ID, path);
 	}
 
-    public StringShare getStringShare(ID containerID) {
+    public SelectionShare getStringShare(ID containerID) {
         return shares.get(containerID);
     }
     
-    public StringShare addStringShare(ID id, IChannelContainerAdapter channelAdapter) throws ECFException {
-        StringShare share = shares.get(id);
+    public SelectionShare addStringShare(ID id, IChannelContainerAdapter channelAdapter) throws ECFException {
+        SelectionShare share = shares.get(id);
         if (share == null) {
-            share = new StringShare(channelAdapter);
+            share = new SelectionShare(channelAdapter);
             shares.put(id, share);
         }
         return share;
@@ -117,7 +117,7 @@ public class ECFPlugin extends AbstractUIPlugin {
         return (IContainerManager) containerManagerTracker.getService();
     }
 
-    public StringShare removeStringShare(ID containerID) {
+    public SelectionShare removeStringShare(ID containerID) {
         return shares.remove(containerID);
     }
 

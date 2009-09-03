@@ -25,7 +25,9 @@ import org.eclipse.ecf.sync.doc.IDocumentSynchronizationStrategyFactory;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 
-public class StringShare extends AbstractShare {
+import ch.deif.meander.MapSelection;
+
+public class SelectionShare extends AbstractShare {
 
     IRosterListener rosterListener = new IRosterListener() {
         public void handleRosterEntryAdd(IRosterEntry entry) {
@@ -71,7 +73,7 @@ public class StringShare extends AbstractShare {
 
     private EditorPartListener listener;    
 
-    public StringShare(IChannelContainerAdapter adapter) throws ECFException {
+    public SelectionShare(IChannelContainerAdapter adapter) throws ECFException {
         super(adapter);
         factory = ECFPlugin.getDefault().getColaSynchronizationStrategyFactory();
     }
@@ -112,7 +114,7 @@ public class StringShare extends AbstractShare {
     private void addEditorListener() {
         // needs to run in an UI Thread to have access to the workbench.
         if (listener == null) {
-            listener = new EditorPartListener(StringShare.this);
+            listener = new EditorPartListener(SelectionShare.this);
         }
         
         Display.getDefault().syncExec(new Runnable() {
@@ -169,7 +171,7 @@ public class StringShare extends AbstractShare {
         return factory.createDocumentSynchronizationStrategy(getChannel().getID(), isInitiator);
     }
 
-    public synchronized void localSelectionChanged(Collection<String> selection) {
+    public synchronized void onLocalSelectionChanged(Collection<String> selection) {
         sendMessageToRemote(new SelectionMessage(ourID, remoteID, selection));
     }
 
@@ -185,9 +187,11 @@ public class StringShare extends AbstractShare {
     }
 
     private void localStopShare() {
+        getSelection().clear();
         ourID = null;
         remoteID = null;
-        syncStrategy = null;        
+        syncStrategy = null;    
+        
     }
 
     private void sendMessageToRemote(Message message) {
@@ -201,6 +205,7 @@ public class StringShare extends AbstractShare {
     }
 
     public synchronized void handleRemoteStop(StopMessage stopMessage) {
+        getSelection().clear();
         ourID = null;
         remoteID = null;
         syncStrategy = null;
@@ -219,6 +224,10 @@ public class StringShare extends AbstractShare {
     }
 
     public synchronized void handleRemoteSelection(Collection<String> selection) {
-        ECFPlugin.getDefault().getCommunicationSelection().replaceAll(selection);
+        getSelection().replaceAll(selection);
+    }
+
+    private MapSelection getSelection() {
+        return ECFPlugin.getDefault().getCommunicationSelection();
     }
 }
