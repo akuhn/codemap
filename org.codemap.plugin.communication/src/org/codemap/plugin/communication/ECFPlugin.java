@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
+import org.codemap.plugin.communication.util.CommunicationOvleray;
 import org.eclipse.ecf.core.IContainerManager;
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.util.ECFException;

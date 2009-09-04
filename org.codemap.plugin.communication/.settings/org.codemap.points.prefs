@@ -1,4 +1,4 @@
-#Thu Sep 03 14:53:54 CEST 2009
+#Fri Sep 04 13:47:30 CEST 2009
 ///org.codemap.communication/src/org/codemap/communication/CodemapECFStart.java=0.7124454619094317@0.45510805618524836
 ///org.codemap.communication/src/org/codemap/communication/CommunicationOvleray.java=0.4429879835838852@0.13900955445905738
 ///org.codemap.communication/src/org/codemap/communication/ECFPlugin.java=0.1334143998352591@0.24839193836544704
@@ -26,4 +26,16 @@
 ///org.codemap.ecftest/src/org/codemap/ecftest/views/CodemapRosterMenuHandler.java=0.8423321476935205@0.8110620931377107
 ///org.codemap.ecftest/src/org/codemap/ecftest/views/CodemapRosterMenuItem.java=0.6169283631536063@0.9167688212158717
 ///org.codemap.ecftest/src/org/codemap/ecftest/views/ECFTestView.java=0.40458685437877734@0.9500000000000001
+///org.codemap.plugin.communication/src/org/codemap/plugin/communication/CodemapECFStart.java=0.6181870951568225@0.05
+///org.codemap.plugin.communication/src/org/codemap/plugin/communication/CommunicationOvleray.java=0.4307621972989077@0.9500000000000001
+///org.codemap.plugin.communication/src/org/codemap/plugin/communication/ECFPlugin.java=0.3401049431590281@0.07755791217392581
+///org.codemap.plugin.communication/src/org/codemap/plugin/communication/EditorPartListener.java=0.9500000000000001@0.6081814740475281
+///org.codemap.plugin.communication/src/org/codemap/plugin/communication/SelectionShare.java=0.48624644493399677@0.48524055983311215
+///org.codemap.plugin.communication/src/org/codemap/plugin/communication/StringShareDebugOptions.java=0.05@0.33008103825733215
+///org.codemap.plugin.communication/src/org/codemap/plugin/communication/messages/Message.java=0.7797379617834579@0.5455428026299965
+///org.codemap.plugin.communication/src/org/codemap/plugin/communication/messages/SelectionMessage.java=0.6604026960833337@0.7996960984762609
+///org.codemap.plugin.communication/src/org/codemap/plugin/communication/messages/StartMessage.java=0.1895226252775119@0.5849190526161216
+///org.codemap.plugin.communication/src/org/codemap/plugin/communication/messages/StopMessage.java=0.7746435858438501@0.2928282789130395
+///org.codemap.plugin.communication/src/org/codemap/plugin/communication/views/CodemapRosterMenuHandler.java=0.263395121574209@0.7390306761482512
+///org.codemap.plugin.communication/src/org/codemap/plugin/communication/views/CodemapRosterMenuItem.java=0.3783241756544106@0.3047544064248276
 eclipse.preferences.version=1

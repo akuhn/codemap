@@ -6,6 +6,7 @@ import org.codemap.plugin.communication.messages.Message;
 import org.codemap.plugin.communication.messages.SelectionMessage;
 import org.codemap.plugin.communication.messages.StartMessage;
 import org.codemap.plugin.communication.messages.StopMessage;
+import org.codemap.plugin.communication.util.EditorPartListener;
 import org.codemap.util.Log;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.ecf.core.IContainer;

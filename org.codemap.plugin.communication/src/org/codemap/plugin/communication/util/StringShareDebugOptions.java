@@ -1,4 +1,6 @@
-package org.codemap.plugin.communication;
+package org.codemap.plugin.communication.util;
+
+import org.codemap.plugin.communication.ECFPlugin;
 
 public class StringShareDebugOptions {
     

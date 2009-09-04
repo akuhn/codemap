@@ -1,9 +1,10 @@
-package org.codemap.plugin.communication;
+package org.codemap.plugin.communication.util;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 
+import org.codemap.plugin.communication.SelectionShare;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspace;
