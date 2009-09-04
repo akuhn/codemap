@@ -1,4 +1,4 @@
-package org.codemap.communication;
+package org.codemap.plugin.communication;
 
 import java.util.HashMap;
 import java.util.Map;

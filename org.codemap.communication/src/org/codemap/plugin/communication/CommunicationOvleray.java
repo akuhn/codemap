@@ -1,4 +1,4 @@
-package org.codemap.communication;
+package org.codemap.plugin.communication;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Device;

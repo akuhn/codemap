@@ -1,4 +1,4 @@
-package org.codemap.communication;
+package org.codemap.plugin.communication;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;

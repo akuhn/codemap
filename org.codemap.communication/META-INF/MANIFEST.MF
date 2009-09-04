@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Communication Framework plugin for Codemap
-Bundle-SymbolicName: org.codemap.communication;singleton:=true
+Bundle-SymbolicName: org.codemap.plugin.communication;singleton:=true
 Bundle-Version: 0.7.7.qualifier
-Bundle-Activator: org.codemap.communication.ECFPlugin
+Bundle-Activator: org.codemap.plugin.communication.ECFPlugin
 Bundle-Vendor: David Erni
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

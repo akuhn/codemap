@@ -1,7 +1,7 @@
-package org.codemap.communication.views;
+package org.codemap.plugin.communication.views;
 
-import org.codemap.communication.ECFPlugin;
-import org.codemap.communication.SelectionShare;
+import org.codemap.plugin.communication.ECFPlugin;
+import org.codemap.plugin.communication.SelectionShare;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IStatus;

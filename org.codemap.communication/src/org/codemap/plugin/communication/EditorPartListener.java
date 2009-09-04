@@ -1,4 +1,4 @@
-package org.codemap.communication;
+package org.codemap.plugin.communication;
 
 import java.util.Collection;
 import java.util.Collections;

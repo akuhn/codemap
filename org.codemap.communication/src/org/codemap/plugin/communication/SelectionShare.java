@@ -1,11 +1,11 @@
-package org.codemap.communication;
+package org.codemap.plugin.communication;
 
 import java.util.Collection;
 
-import org.codemap.communication.messages.Message;
-import org.codemap.communication.messages.SelectionMessage;
-import org.codemap.communication.messages.StartMessage;
-import org.codemap.communication.messages.StopMessage;
+import org.codemap.plugin.communication.messages.Message;
+import org.codemap.plugin.communication.messages.SelectionMessage;
+import org.codemap.plugin.communication.messages.StartMessage;
+import org.codemap.plugin.communication.messages.StopMessage;
 import org.codemap.util.Log;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.ecf.core.IContainer;

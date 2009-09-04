@@ -1,8 +1,8 @@
-package org.codemap.communication.messages;
+package org.codemap.plugin.communication.messages;
 
 import java.util.Collection;
 
-import org.codemap.communication.SelectionShare;
+import org.codemap.plugin.communication.SelectionShare;
 import org.eclipse.ecf.core.identity.ID;
 
 public class SelectionMessage extends Message {
