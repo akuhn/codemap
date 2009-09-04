@@ -2,7 +2,6 @@ package org.codemap.plugin.communication.util;
 
 import static org.codemap.plugin.communication.util.ECFPluginIcons.MEEPLE;
 
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
@@ -17,14 +16,12 @@ import ch.deif.meander.swt.SelectionOverlay;
 public class CommunicationOvleray extends SelectionOverlay {
     
     private MapSelection selection;
-    private ImageDescriptor imageDescriptor;
     private Image image;
     private int diameter;
     private Rectangle bounds;
 
     public CommunicationOvleray(MapSelection communicationSelection) {
         selection = communicationSelection;
-        imageDescriptor = new ECFPluginIcons().descriptor(MEEPLE);
     }
 
     @Override
@@ -34,7 +31,7 @@ public class CommunicationOvleray extends SelectionOverlay {
     
     @Override
     public void paintBefore(MapValues map, GC gc) {
-        image = imageDescriptor.createImage();
+        image = new ECFPluginIcons().descriptor(MEEPLE).createImage();
         bounds = image.getBounds();        
         diameter = (int) Math.sqrt(bounds.width * bounds.width + bounds.height * bounds.height);
         
@@ -48,6 +45,8 @@ public class CommunicationOvleray extends SelectionOverlay {
     @Override
     public void paintAfter(MapValues map, GC gc) {
         image.dispose();
+        // gc maybe ...
+        image = null;
         bounds = null;
     }
 
