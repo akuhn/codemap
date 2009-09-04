@@ -1,6 +1,8 @@
 package org.codemap.mapview;
 
-import org.codemap.util.Icons;
+import static org.codemap.util.CodemapIcons.FORCE_SELECTION;
+
+import org.codemap.util.CodemapIcons;
 import org.eclipse.jface.action.Action;
 
 public class ForceSelectionAction extends Action {
@@ -12,7 +14,7 @@ public class ForceSelectionAction extends Action {
 		super("Force Package Explorer Selection", AS_CHECK_BOX);
 		selectionProvider = provider;
 		setChecked(DEFAULT_CHECKED);
-		setImageDescriptor(Icons.getImageDescriptor(Icons.FORCE_SELECTION));
+		setImageDescriptor(new CodemapIcons().descriptor(FORCE_SELECTION));
 	}
 
 	@Override

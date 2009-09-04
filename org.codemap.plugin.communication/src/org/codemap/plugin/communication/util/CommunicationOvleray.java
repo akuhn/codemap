@@ -1,5 +1,7 @@
 package org.codemap.plugin.communication.util;
 
+import static org.codemap.plugin.communication.util.ECFPluginIcons.MEEPLE;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Device;
@@ -22,7 +24,7 @@ public class CommunicationOvleray extends SelectionOverlay {
 
     public CommunicationOvleray(MapSelection communicationSelection) {
         selection = communicationSelection;
-        imageDescriptor = Icons.getImageDescriptor(Icons.MEEPLE);
+        imageDescriptor = new ECFPluginIcons().descriptor(MEEPLE);
     }
 
     @Override

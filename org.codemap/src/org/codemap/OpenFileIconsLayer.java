@@ -1,6 +1,8 @@
 package org.codemap;
 
-import org.codemap.util.Icons;
+import static org.codemap.util.CodemapIcons.FILE;
+
+import org.codemap.util.CodemapIcons;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -23,7 +25,7 @@ public class OpenFileIconsLayer extends SelectionOverlay {
     private ILabelProvider provider;
     
     public OpenFileIconsLayer() {
-        this.imageDesc = Icons.getImageDescriptor(Icons.FILE);
+        this.imageDesc = new CodemapIcons().descriptor(FILE);
         // TODO: dispose the LabelProvider when no longer needed
         this.provider = new WorkbenchLabelProvider();
     }

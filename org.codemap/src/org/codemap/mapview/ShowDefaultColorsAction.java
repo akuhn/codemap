@@ -1,9 +1,9 @@
 package org.codemap.mapview;
 
-import static org.codemap.util.Icons.GREEN_CIRCLE;
+import static org.codemap.util.CodemapIcons.GREEN_CIRCLE;
 
 import org.codemap.CodemapCore;
-import org.codemap.util.Icons;
+import org.codemap.util.CodemapIcons;
 
 public class ShowDefaultColorsAction extends MenuAction {
 	
@@ -12,7 +12,7 @@ public class ShowDefaultColorsAction extends MenuAction {
 	public ShowDefaultColorsAction(int style) {
 		super("Show default colors", style);
 		setChecked(DEFAULT_VALUE);
-		setImageDescriptor(Icons.getImageDescriptor(GREEN_CIRCLE));
+		setImageDescriptor(new CodemapIcons().descriptor(GREEN_CIRCLE));
 	}
 	
 	@Override

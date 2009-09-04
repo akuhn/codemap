@@ -1,11 +1,12 @@
 package org.codemap.mapview;
 
-import static org.codemap.util.Icons.PACKAGES;
+import static org.codemap.util.CodemapIcons.PACKAGES;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
+import org.codemap.util.CodemapIcons;
 import org.codemap.util.ColorBrewer;
-import org.codemap.util.Icons;
+import org.codemap.util.IconFactory;
 import org.codemap.util.Log;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -29,7 +30,7 @@ public class ShowPackageColorsAction extends MenuAction {
 		super("Color by Package", style);
 		this.theController = controller;
 		setChecked(isDefaultChecked());
-		setImageDescriptor(Icons.getImageDescriptor(PACKAGES));
+		setImageDescriptor(new CodemapIcons().descriptor(PACKAGES));
 	}
 
 	@Override

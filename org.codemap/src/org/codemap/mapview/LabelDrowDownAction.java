@@ -1,6 +1,8 @@
 package org.codemap.mapview;
 
-import org.codemap.util.Icons;
+import static org.codemap.util.CodemapIcons.LABELS;
+
+import org.codemap.util.CodemapIcons;
 import org.eclipse.swt.widgets.Menu;
 
 public class LabelDrowDownAction extends DropDownAction {
@@ -8,7 +10,7 @@ public class LabelDrowDownAction extends DropDownAction {
 	@Override
 	protected void setup() {
 		setText("Labels"); 
-		setImageDescriptor(Icons.getImageDescriptor(Icons.LABELS));
+		setImageDescriptor(new CodemapIcons().descriptor(LABELS));
 	}
 
 	@Override

@@ -1,6 +1,8 @@
 package org.codemap.mapview;
 
-import org.codemap.util.Icons;
+import static org.codemap.util.CodemapIcons.LINKED;
+
+import org.codemap.util.CodemapIcons;
 import org.eclipse.jface.action.Action;
 
 public class LinkWithSelectionAction extends Action {
@@ -14,7 +16,7 @@ public class LinkWithSelectionAction extends Action {
 		super("Link with Current Selection", AS_CHECK_BOX);
 		selectionTracker = tracker;
 		setChecked(DEFAULT_CHECKED);
-		setImageDescriptor(Icons.getImageDescriptor(Icons.LINKED));
+		setImageDescriptor(new CodemapIcons().descriptor(LINKED));
 	}
 
 	@Override

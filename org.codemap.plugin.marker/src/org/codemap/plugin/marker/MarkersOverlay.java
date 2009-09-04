@@ -1,10 +1,10 @@
 package org.codemap.plugin.marker;
 
-import static org.codemap.util.Icons.ERROR;
-import static org.codemap.util.Icons.INFO;
-import static org.codemap.util.Icons.WARNING;
+import static org.codemap.util.CodemapIcons.ERROR;
+import static org.codemap.util.CodemapIcons.INFO;
+import static org.codemap.util.CodemapIcons.WARNING;
 
-import org.codemap.util.Icons;
+import org.codemap.util.CodemapIcons;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Color;
@@ -43,11 +43,11 @@ public class MarkersOverlay extends SelectionOverlay {
     private ImageDescriptor getImageDescriptor(int severity) {
         switch (severity) {
         case IMarker.SEVERITY_ERROR:
-            return Icons.getImageDescriptor(ERROR);
+            new CodemapIcons().descriptor(ERROR);
         case IMarker.SEVERITY_WARNING:
-            return Icons.getImageDescriptor(WARNING);
+            return new CodemapIcons().descriptor(WARNING);
         default:
-            return Icons.getImageDescriptor(INFO);
+            return new CodemapIcons().descriptor(INFO);
         }
     }
 

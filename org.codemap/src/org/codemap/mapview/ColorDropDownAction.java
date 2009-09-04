@@ -1,7 +1,9 @@
 package org.codemap.mapview;
 
+import static org.codemap.util.CodemapIcons.PALETTE;
+
+import org.codemap.util.CodemapIcons;
 import org.codemap.util.ExtensionPoints;
-import org.codemap.util.Icons;
 import org.eclipse.swt.widgets.Menu;
 
 public class ColorDropDownAction extends ExtensionPointDropDownAction {
@@ -15,7 +17,7 @@ public class ColorDropDownAction extends ExtensionPointDropDownAction {
 	@Override
 	protected void setup() {
 		setText("Colors"); 
-		setImageDescriptor(Icons.getImageDescriptor(Icons.PALETTE));
+		setImageDescriptor(new CodemapIcons().descriptor(PALETTE));
 	}
 
 	@Override
