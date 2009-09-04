@@ -27,7 +27,6 @@ public class CommunicationOvleray extends SelectionOverlay {
 
     @Override
     public MapSelection getSelection(MapValues map) {
-        // the selection is global and does not depend on the mapvalues
         return selection;
     }
     
@@ -58,7 +57,5 @@ public class CommunicationOvleray extends SelectionOverlay {
         gc.setAlpha(255);
         //draw image
         gc.drawImage(image, each.px - bounds.width/2, each.py - bounds.height/2);        
-        
     }
-
 }
