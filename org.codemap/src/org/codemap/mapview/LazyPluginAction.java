@@ -11,11 +11,13 @@ public class LazyPluginAction extends MenuAction {
 	
 	private static final String ATTR_TEXT = "text";
 	private static final String ATTR_ICON = "icon";
-	private static final String ATTR_CLASS = "class";		
+	private static final String ATTR_CLASS = "class";
+	private static final String ATTR_DEFAULT_CHECKED = "default_checked";
 
 	private IConfigurationElement configElement;
 	private ICodemapPluginAction pluginAction;
 	private String key;
+	private boolean isDefaultChecked = false;
 
 	public LazyPluginAction(IConfigurationElement elem, int style) {
 		super("", style); // lol, we can't set the style value some other way ...
@@ -24,11 +26,18 @@ public class LazyPluginAction extends MenuAction {
 	}
 
 	private void initFromConfigElement() {
+	    initDefaultChecked();
 		setText(textFromConfig());
 		setImageDescriptor(iconFromConfig());
 	}
 
-	private ImageDescriptor iconFromConfig() {
+	private void initDefaultChecked() {
+	    String attribute = configElement.getAttribute(ATTR_DEFAULT_CHECKED);
+        if (attribute == null) return;
+        isDefaultChecked = Boolean.parseBoolean(attribute);
+    }
+
+    private ImageDescriptor iconFromConfig() {
 		String iconPath = configElement.getAttribute(ATTR_ICON);
 		IExtension extension = configElement.getDeclaringExtension();
 		key = extension.getNamespaceIdentifier();
@@ -70,6 +79,6 @@ public class LazyPluginAction extends MenuAction {
 
 	@Override
 	protected boolean isDefaultChecked() {
-		return false;
+		return isDefaultChecked;
 	}
 }

@@ -3,12 +3,12 @@ package org.codemap;
 import org.codemap.mapview.MapView;
 import org.codemap.util.EclipseTaskFactory;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.ui.IMemento;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import ch.akuhn.values.TaskValue;
 import ch.deif.meander.MapSelection;
-import ch.deif.meander.swt.CompositeLayer;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.util.MapScheme;
 
@@ -32,6 +32,7 @@ public class CodemapCore extends AbstractUIPlugin {
     private final MapSelection youAreHereSelection;
     private final MapSelection openFilesSelection;
     private final MapSelection currentSelection;
+    private MapPerProjectCache cache;
 
     public MapSelection getYouAreHereSelection() {
         return youAreHereSelection;
@@ -50,6 +51,7 @@ public class CodemapCore extends AbstractUIPlugin {
         youAreHereSelection = new MapSelection();
         openFilesSelection = new MapSelection();	
         currentSelection = new MapSelection();
+        cache = new MapPerProjectCache();
     }
 
     @Override
@@ -60,7 +62,7 @@ public class CodemapCore extends AbstractUIPlugin {
 
     @Override
     public void stop(BundleContext context) throws Exception {
-        MapPerProject.saveMapState();
+        cache.saveMapState();
         THE_PLUGIN = null;
         super.stop(context);
     }
@@ -74,7 +76,7 @@ public class CodemapCore extends AbstractUIPlugin {
     }
 
     public MapPerProject mapForProject(IJavaProject project) {
-        return MapPerProject.forProject(project);
+        return cache.forProject(project);
     }
 
     public void setMapView(MapView caller) {
@@ -92,5 +94,4 @@ public class CodemapCore extends AbstractUIPlugin {
     public MapScheme<MColor> getDefaultColorScheme() {
         return new MapScheme<MColor>(MColor.HILLGREEN);
     }
-
 }

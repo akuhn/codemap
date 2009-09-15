@@ -26,15 +26,6 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DragDetectEvent;
-import org.eclipse.swt.events.DragDetectListener;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.events.MouseTrackListener;
-import org.eclipse.swt.events.MouseWheelListener;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
@@ -42,7 +33,9 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -106,6 +99,12 @@ public class MapView extends ViewPart {
     private CodemapVisualization currentViz;
 
     private CanvasListener canvasListener;
+
+    private LinkWithSelectionAction linkWithSelection;
+
+    private ForceSelectionAction forceSelection;
+
+    private IMemento memento;
 
     class ViewLabelProvider extends LabelProvider implements
             ITableLabelProvider {
@@ -196,8 +195,8 @@ public class MapView extends ViewPart {
         tbm.add(registerAction(new LayerDropDownAction()));
         tbm.add(registerAction(new LabelDrowDownAction()));
 
-        tbm.add(new LinkWithSelectionAction(selectionTracker));
-        tbm.add(new ForceSelectionAction(selectionProvider));
+        tbm.add(linkWithSelection = new LinkWithSelectionAction(selectionTracker, memento));
+        tbm.add(forceSelection = new ForceSelectionAction(selectionProvider, memento));
     }
 
     private IAction registerAction(DropDownAction action) {
@@ -205,7 +204,7 @@ public class MapView extends ViewPart {
         return action;
     }
 
-    public IToolBarManager getToolBarManager() {
+    protected IToolBarManager getToolBarManager() {
         return getViewSite().getActionBars().getToolBarManager();
     }
 
@@ -218,13 +217,25 @@ public class MapView extends ViewPart {
         CodemapCore.getPlugin().setMapView(null);
         selectionTracker.dispose();
     }
-
+    
     @Override
     public void setFocus() {
         // FIXME: correct?
         container.setFocus();
     }
-
+    
+    @Override
+    public void saveState(IMemento memento) {
+        linkWithSelection.saveState(memento);
+        forceSelection.saveState(memento);
+    }
+    
+    @Override
+    public void init(IViewSite site, IMemento memento) throws PartInitException {
+        super.init(site, memento);
+        this.memento = memento;
+    }
+    
     public void newProjectSelected() {
         MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
         configureActions(activeMap);
@@ -236,8 +247,8 @@ public class MapView extends ViewPart {
         updateMapVisualization(viz);
     }
 
-    private void configureActions(MapPerProject activeMap) {
-        for (DropDownAction each : actions) {
+    public void configureActions(MapPerProject activeMap) {
+        for (DropDownAction each: actions) {
             each.configureAction(activeMap);
         }
     }
@@ -295,89 +306,4 @@ public class MapView extends ViewPart {
             }
         });
     }
-}
-
-class CanvasListener implements PaintListener, MouseListener,
-        MouseMoveListener, MouseTrackListener, MouseWheelListener,
-        DragDetectListener {
-
-    private CodemapVisualization visualization;
-
-    public CanvasListener(Canvas newCanvas) {
-        newCanvas.addPaintListener(this);
-        newCanvas.addMouseListener(this);
-        newCanvas.addMouseMoveListener(this);
-        newCanvas.addMouseTrackListener(this);
-        newCanvas.addMouseWheelListener(this);
-        newCanvas.addDragDetectListener(this);
-    }
-
-    public void setVisualization(CodemapVisualization visualization) {
-        this.visualization = visualization;
-    }
-
-    public CodemapVisualization getVisualization() {
-        return visualization;
-    }
-
-    @Override
-    public void paintControl(PaintEvent e) {
-        if (visualization != null)
-            visualization.paintControl(e);
-    }
-
-    @Override
-    public void mouseDoubleClick(MouseEvent e) {
-        if (visualization != null)
-            visualization.mouseDoubleClick(e);
-    }
-
-    @Override
-    public void mouseDown(MouseEvent e) {
-        if (visualization != null)
-            visualization.mouseDown(e);
-    }
-
-    @Override
-    public void mouseUp(MouseEvent e) {
-        if (visualization != null)
-            visualization.mouseUp(e);
-    }
-
-    @Override
-    public void mouseMove(MouseEvent e) {
-        if (visualization != null)
-            visualization.mouseMove(e);
-    }
-
-    @Override
-    public void mouseEnter(MouseEvent e) {
-        if (visualization != null)
-            visualization.mouseEnter(e);
-    }
-
-    @Override
-    public void mouseExit(MouseEvent e) {
-        if (visualization != null)
-            visualization.mouseExit(e);
-    }
-
-    @Override
-    public void mouseHover(MouseEvent e) {
-        if (visualization != null)
-            visualization.mouseHover(e);
-    }
-
-    @Override
-    public void mouseScrolled(MouseEvent e) {
-        if (visualization != null)
-            visualization.mouseScrolled(e);
-    }
-
-    @Override
-    public void dragDetected(DragDetectEvent e) {
-        if (visualization != null)
-            visualization.dragDetected(e);
-    }
-
 }

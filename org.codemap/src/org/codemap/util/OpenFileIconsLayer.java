@@ -1,9 +1,7 @@
-package org.codemap;
+package org.codemap.util;
 
 import static org.codemap.util.CodemapIcons.FILE;
 
-import org.codemap.util.CodemapIcons;
-import org.codemap.util.Resources;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ILabelProvider;

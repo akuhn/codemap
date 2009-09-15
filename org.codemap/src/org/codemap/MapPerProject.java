@@ -1,17 +1,24 @@
 package org.codemap;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
+import org.codemap.mapview.MapView;
 import org.codemap.resources.EclipseMapValues;
 import org.codemap.resources.EclipseMapValuesBuilder;
 import org.codemap.util.Log;
+import org.codemap.util.OpenFileIconsLayer;
 import org.codemap.util.Resources;
+import org.codemap.util.Tag;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.ui.IMemento;
 import org.osgi.service.prefs.BackingStoreException;
 
 import ch.akuhn.util.Arrays;
@@ -34,9 +41,8 @@ public class MapPerProject {
 
     private Map<String,String> properties = new HashMap<String,String>();
 
-    private static Map<IJavaProject,MapPerProject> mapPerProjectCache;
-
     private static final String POINT_NODE_ID = CodemapCore.PLUGIN_ID + ".points"; 
+    private static final String UI_STATE_NODE_ID = CodemapCore.PLUGIN_ID + ".ui.mapview";
     private static final int MINIMAL_SIZE = 256;
 
     private final IJavaProject project;
@@ -45,22 +51,13 @@ public class MapPerProject {
 
     private ActionValue<Void> redrawAction;
 
-    public static MapPerProject forProject(IJavaProject project) {
-    	if (project == null) return null;
-        if (mapPerProjectCache == null) mapPerProjectCache = new HashMap<IJavaProject,MapPerProject>();
-        MapPerProject map = mapPerProjectCache.get(project);
-        if (map != null) return map;
-        mapPerProjectCache.put(project, map = new MapPerProject(project));
-        map.initialize();
-        return map;
-    }
-
-    private MapPerProject(IJavaProject project) {
+    /*default*/ MapPerProject(IJavaProject project) {
         this.project = project;
         // don't initialize;
     }
 
-    private void initialize() {
+    /*default*/ void initialize() {
+        
         EclipseMapValuesBuilder builder = new EclipseMapValuesBuilder();
         builder.setName("default.map");
         builder.setProjects(Arrays.asList(Resources.asPath(project)));
@@ -69,7 +66,7 @@ public class MapPerProject {
         mapValues = new EclipseMapValues(builder);
         mapVisualization = new MapVisualization(mapValues);
         mapVisualization.getSharedLayer().add(makeOpenFilesLayer());
-        
+
         redrawAction = new ActionValue<Void>(
                 mapValues.mapInstance, 
                 mapValues.background,
@@ -83,7 +80,6 @@ public class MapPerProject {
                 return null;
             }
         };
-        
     }
 
     private SWTLayer makeOpenFilesLayer() {
@@ -101,13 +97,27 @@ public class MapPerProject {
     private IJavaProject getJavaProject() {
         return project;
     }
+    
+    private void readPreviousProperties() {
+        IEclipsePreferences node = getProjectPreferences(UI_STATE_NODE_ID);
+        try {
+            for(String key: node.keys()) {
+                String value = node.get(key, null);
+                if (value==null) continue;
+                properties.put(key, value);
+            }
+        } catch (BackingStoreException e) {
+            Log.error(e);
+        }
+    }      
 
     private Configuration readPreviousMapState() {
-        IEclipsePreferences node = readPointPreferences();
+        IEclipsePreferences node = getProjectPreferences(POINT_NODE_ID);
         Builder builder = Configuration.builder();
         try {
             for (String key: node.keys()) {
                 String pointString = node.get(key, null);
+                if (pointString == null) continue;
                 String[] split = pointString.split("@");
                 // cover legacy format
                 if (split.length != 2 ) split = pointString.split("#");
@@ -132,16 +142,11 @@ public class MapPerProject {
         mapValues.mapInstance.getValue(); // trigger computation
         return this;
     }
-    
-    public static void saveMapState() {
-        for (MapPerProject each: mapPerProjectCache.values()) each.writePointPreferences();
-    }
-
 
     private void writePointPreferences() {
         if (mapValues.configuration.isError()) return;
         Configuration config = mapValues.configuration.getValueOrFail();
-        IEclipsePreferences node = readPointPreferences();
+        IEclipsePreferences node = getProjectPreferences(POINT_NODE_ID);
         for(Point each: config.points()) {
             node.put(each.getDocument(), each.x + "@" + each.y);
         }
@@ -151,10 +156,22 @@ public class MapPerProject {
             Log.error(e);
         }		
     }
+    
+    private void writeProperties() {
+        IEclipsePreferences node = getProjectPreferences(UI_STATE_NODE_ID);   
+        for (Entry<String, String> entry : properties.entrySet()) {
+            node.put(entry.getKey(), entry.getValue());
+        }
+        try {
+            node.flush();
+        } catch (BackingStoreException e) {
+            Log.error(e);
+        }           
+    }    
 
-    private IEclipsePreferences readPointPreferences() {
+    private IEclipsePreferences getProjectPreferences(String nodeId) {
         IScopeContext context = new ProjectScope(getProject());
-        IEclipsePreferences node = context.getNode(POINT_NODE_ID);
+        IEclipsePreferences node = context.getNode(nodeId);
         return node;
     }
 
@@ -199,5 +216,10 @@ public class MapPerProject {
 
     public void redrawWhenChanges(Value<?> selection) {
         selection.addDependent(redrawAction);
+    }
+
+    public void saveState() {
+        writePointPreferences();
+        writeProperties();
     }
 }

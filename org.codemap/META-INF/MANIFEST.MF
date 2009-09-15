@@ -21,3 +21,4 @@ Export-Package: org.codemap,
  org.codemap.resources,
  org.codemap.util
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: .
