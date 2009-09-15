@@ -5,6 +5,7 @@
          point="org.codemap.layers">
       <toolbar
             class="org.codemap.plugin.marker.ShowMarkersAction"
+            default_checked="false"
             icon="icons/eclipse/markers.gif"
             text="Markers">
       </toolbar>
