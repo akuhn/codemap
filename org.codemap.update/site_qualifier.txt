@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature 
-         url="features/org.codemap.feature_0.7.746.qualifier.jar" 
-         id="org.codemap.feature" version="0.7.746.qualifier">
+   <feature url="features/org.codemap.feature_0.7.746.qualifier.jar" id="org.codemap.feature" version="0.7.746.qualifier">
       <category name="Codemap"/>
    </feature>
-   <feature 
-         url="features/org.codemap.plugin.eclemma.feature_0.7.746.qualifier.jar" 
-         id="org.codemap.plugin.eclemma.feature" version="0.7.746.qualifier">
+   <feature url="features/org.codemap.plugin.eclemma.feature_0.7.746.qualifier.jar" id="org.codemap.plugin.eclemma.feature" version="0.7.746.qualifier">
+      <category name="Codemap Plugins (optional)"/>
+   </feature>
+   <feature url="features/org.codemap.plugin.communication.feature_0.7.701.qualifier.jar" id="org.codemap.plugin.communication.feature" version="0.7.701.qualifier">
       <category name="Codemap Plugins (optional)"/>
    </feature>
    <category-def name="Codemap" label="Codemap">
