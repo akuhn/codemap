@@ -3,7 +3,6 @@ package flowmap.swt.main;
 import java.awt.Shape;
 import java.awt.geom.PathIterator;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Path;
 
@@ -17,9 +16,6 @@ import edu.stanford.hci.flowmap.prefuse.render.SimpleFlowEdgeRenderer;
 
 public class SWTFlowEdgeRenderer extends SimpleFlowEdgeRenderer {
 
-    private boolean m_additiveEdges = true;
-    private boolean m_straightEdges = false;
-
     public SWTFlowEdgeRenderer(Options userOptions, QueryRecord flowRecord) {
         super(userOptions, flowRecord);
     }
@@ -31,39 +27,17 @@ public class SWTFlowEdgeRenderer extends SimpleFlowEdgeRenderer {
     private void renderHelper(GC gc, FlowEdgeItem edgeItem, FlowScale scale) {
 
         double displayWidth;
-        
-        // anti-alias the edges
-        gc.setAntialias(SWT.ON);
-        
-//        switch(Globals.currentType) {
-//        case FOOTPRINT:
-//            g2d.setColor(GoodColorChooser.goodEdgeColors[3]);
-//            break;
-//        case INTERACTIVE:
-//            g2d.setColor(Globals.currentColor);
-//            break;
-//        case EXPLORE:
-//            g2d.setColor(GoodColorChooser.goodEdgeColors[2]);
-//            break;
-//        }
-        
         FlowNodeItem n1, n2;
         n1 = (FlowNodeItem) edgeItem.getFirstNode();
         n2 = (FlowNodeItem) edgeItem.getSecondNode();
-        if (m_straightEdges || ((n1.getPrevControlPoint() == null) && (n1.getRoutingParent() == null) && 
+        if (((n1.getPrevControlPoint() == null) && (n1.getRoutingParent() == null) && 
                 (n2.getPrevControlPoint() == null) && (n2.getRoutingParent() == null))) {
             displayWidth = computeStraightEdge(edgeItem, scale);
         } else {
             displayWidth = computeEdge(edgeItem, scale);
         }
-        
-//        if(edgeItem.isHighlighted()){
-//            g2d.setColor(Color.BLUE);
-//        }
-        
         Shape shape = edgeItem.getShape();
         gc.setLineWidth((int) displayWidth);
-//        g2d.setStroke(StrokeUtilities.retrieveStroke((float) displayWidth));
         drawShape(gc, shape);
     }
     
@@ -106,5 +80,4 @@ public class SWTFlowEdgeRenderer extends SimpleFlowEdgeRenderer {
         }
         gc.drawPath(path);
     }    
-
 }

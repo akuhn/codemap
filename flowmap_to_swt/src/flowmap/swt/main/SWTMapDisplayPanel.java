@@ -61,9 +61,9 @@ public class SWTMapDisplayPanel implements PaintListener {
     private SwtMain parent;
 
     private Options options;
-    private CSVQueryRecord flowRecord;
+    private QueryRecord flowRecord;
 
-	public SWTMapDisplayPanel(SwtMain swtMain, CSVQueryRecord queryRecord) {
+	public SWTMapDisplayPanel(SwtMain swtMain, QueryRecord queryRecord) {
 		parent = swtMain;
 		flowRecord = queryRecord;
 		
@@ -93,7 +93,6 @@ public class SWTMapDisplayPanel implements PaintListener {
 		 ***********************************************************************/		
 		FlowClusterRenderer clusterRenderer = new FlowClusterRenderer();
 		
-		
 		m_registry.setRendererFactory(new DefaultRendererFactory(m_nodeRenderer,
 		        m_edgeRenderer, clusterRenderer));
         ActionList initFlowMap = new ActionList(m_registry);
@@ -110,7 +109,7 @@ public class SWTMapDisplayPanel implements PaintListener {
 	
     
     private Graph createNodes(QueryRecord flowRecord) {
-        // say that we should read the width of the splines from the field
+        // says that we should read the width of the splines from the field
         // 'Value' stored in the scheme of each node.
         options.putString(Options.CURRENT_FLOW_TYPE, flowRecord.getSourceRow().getRowSchema().getDefaultValueId());
         
@@ -125,7 +124,6 @@ public class SWTMapDisplayPanel implements PaintListener {
         QueryRow row;
         Node dest;
         Iterator i = flowRecord.getRowsIterator();
-        
         
         while (i.hasNext()) {
             row = (QueryRow)i.next();
@@ -147,6 +145,7 @@ public class SWTMapDisplayPanel implements PaintListener {
         while (items.hasNext()) {
             VisualItem vi = (VisualItem) items.next();
             Renderer renderer = vi.getRenderer();
+            // TODO: NO! NO! NO! NO!
             if (renderer instanceof SWTFlowEdgeRenderer) {
                 ((SWTFlowEdgeRenderer)renderer).renderSWT(e.gc, vi);
                 
@@ -154,49 +153,6 @@ public class SWTMapDisplayPanel implements PaintListener {
         }
         
 //        m_prefuseDisplay.paintComponent(e, e.gc);
-    }	
-
-	public void updateDisplay(Graph originalGraph, Options userOptions, QueryRecord flowRecord) {
-		
-		// create a new display component to show the data
-		
-
-		
-		/***********************************************************************
-		 * Create the actionlists that will realize the renderable flowmap
-		 * 
-		 * Following the steps done in main
-		 ***********************************************************************/
-
-
-		/***********************************************************************
-		 * Initialize the rest of the controllers
-		 ***********************************************************************/
-		ActionList repaint = new ActionList(m_registry, -1);
-		repaint.add(new RepaintAction());
-		repaint.runNow();
-		
-//		this.removeAll();
-//		this.add(m_prefuseDisplay);
-//		this.repaint();
-		//System.out.println("DisplayPanel done");
-	}
-
-	
-	private Dimension getSize() {
-	    Point size = parent.getSize();
-	    return new Dimension(size.x, size.y);
     }
-	
-	public void updateScreenSize() {
-		Dimension size = this.getSize();
-		if ((size.height == 0) && (size.width == 0))
-			return;
-		
-		//System.out.println("MapDisplayPanel: resizing to" + this.getSize());
-		
-//		if (m_prefuseDisplay != null)
-//			m_prefuseDisplay.setSize(this.getSize());	
-	}
 
 }

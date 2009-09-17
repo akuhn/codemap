@@ -19,43 +19,29 @@ package flowmap.swt.main;
  */
 
 import java.awt.Dimension;
-import java.io.File;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import edu.stanford.hci.flowmap.db.CSVQueryRecord;
+import edu.stanford.hci.flowmap.db.QueryRecord;
 import edu.stanford.hci.flowmap.main.Globals;
-import edu.stanford.hci.flowmap.main.Options;
 
 public class SwtMain extends Canvas {
     
-    private SWTMapDisplayPanel display;
-
     public SwtMain(Composite parent) {
         super(parent, SWT.NONE);
         
-        CSVQueryRecord queryRecord = new CSVQueryRecord(new File("direct.csv"));
+        QueryRecord queryRecord;
+//        queryRecord = new CSVQueryRecord(new File("direct.csv"));
+        queryRecord = new FakeQueryRecord();
         
         Dimension screenDimension = Globals.getScreenDimension();
         setSize(screenDimension.width, screenDimension.height);
-//        display = new SWTMapDisplayPanel(this);
-        
-        this.addPaintListener(display=new SWTMapDisplayPanel(this, queryRecord));
-        
-//        this.addPaintListener(new PaintListener() {
-//            public void paintControl(PaintEvent event) {
-//                Rectangle rect = SwtMain.this.getShell().getClientArea();
-//                event.gc.drawOval(0, 0, rect.width - 1, rect.height - 1);
-//            }
-//        });
+        this.addPaintListener(new SWTMapDisplayPanel(this, queryRecord));
     }
 
     public static void main(String[] args) {
