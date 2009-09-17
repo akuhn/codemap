@@ -37,7 +37,7 @@ public class SwtMain extends Canvas {
         QueryRecord queryRecord = new FakeQueryRecord();
         Dimension screenDimension = Globals.getScreenDimension();
         setSize(screenDimension.width, screenDimension.height);
-        this.addPaintListener(new SWTMapDisplayPanel(queryRecord));
+        this.addPaintListener(new GraphPainter(queryRecord));
     }
 
     public static void main(String[] args) {

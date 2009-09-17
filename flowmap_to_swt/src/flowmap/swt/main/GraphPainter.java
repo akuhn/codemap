@@ -28,14 +28,14 @@ import edu.stanford.hci.flowmap.structure.Node;
  * Please see http://graphics.stanford.edu/~dphan/code/bsd.license.html
  *
  */
-public class SWTMapDisplayPanel implements PaintListener {
+public class GraphPainter implements PaintListener {
 
 	private ItemRegistry registry;
     private Options options;
     private QueryRecord flowRecord;
     private SWTFlowEdgeRenderer edgeRenderer;
 
-	public SWTMapDisplayPanel(QueryRecord queryRecord) {
+	public GraphPainter(QueryRecord queryRecord) {
 		flowRecord = queryRecord;
 		
 		initOptions();		
@@ -96,7 +96,6 @@ public class SWTMapDisplayPanel implements PaintListener {
             if (row.getName().equals(rootNode.getName())) {
                 continue;
             }
-            
             dest = new Node(row);
             originalGraph.addNode(dest);
         }
@@ -109,9 +108,9 @@ public class SWTMapDisplayPanel implements PaintListener {
         while (items.hasNext()) {
             VisualItem vi = (VisualItem) items.next();
             Renderer renderer = vi.getRenderer();
-            // TODO: NO! NO! NO! NO!
-            if (renderer instanceof SWTFlowEdgeRenderer) {
-                ((SWTFlowEdgeRenderer)renderer).renderSWT(e.gc, vi);
+            // TODO: UHM ... NO! 
+            if (renderer instanceof SWTRenderer) {
+                ((SWTRenderer)renderer).renderSWT(e.gc, vi);
             }
         }
     }

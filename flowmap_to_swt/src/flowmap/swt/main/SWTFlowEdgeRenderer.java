@@ -13,12 +13,13 @@ import edu.stanford.hci.flowmap.prefuse.item.FlowNodeItem;
 import edu.stanford.hci.flowmap.prefuse.render.FlowScale;
 import edu.stanford.hci.flowmap.prefuse.render.SimpleFlowEdgeRenderer;
 
-public class SWTFlowEdgeRenderer extends SimpleFlowEdgeRenderer {
+public class SWTFlowEdgeRenderer extends SimpleFlowEdgeRenderer implements SWTRenderer{
 
     public SWTFlowEdgeRenderer(Options userOptions, QueryRecord flowRecord) {
         super(userOptions, flowRecord);
     }
-
+    
+    @Override
     public void renderSWT(GC gc, VisualItem vi) {
         renderHelperSWT(gc, (FlowEdgeItem) vi, getUserScaling());        
     }
