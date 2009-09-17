@@ -1,7 +1,6 @@
 package edu.stanford.hci.flowmap.structure;
 
 import java.awt.Shape;
-import java.awt.geom.CubicCurve2D;
 import java.util.Hashtable;
 
 

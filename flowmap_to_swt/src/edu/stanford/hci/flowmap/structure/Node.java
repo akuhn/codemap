@@ -1,7 +1,6 @@
 package edu.stanford.hci.flowmap.structure;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import java.util.Collection;
 import java.util.LinkedList;
 

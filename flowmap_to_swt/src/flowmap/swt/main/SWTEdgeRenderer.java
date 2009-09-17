@@ -16,10 +16,6 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Path;
 
 import edu.stanford.hci.flowmap.cluster.Vector2D;
-import edu.stanford.hci.flowmap.db.QueryRecord;
-import edu.stanford.hci.flowmap.prefuse.item.FlowEdgeItem;
-import edu.stanford.hci.flowmap.prefuse.item.FlowNodeItem;
-import edu.stanford.hci.flowmap.prefuse.render.BezierSpline;
 import edu.stanford.hci.flowmap.prefuse.render.FlowScale;
 import edu.stanford.hci.flowmap.structure.Edge;
 import edu.stanford.hci.flowmap.structure.Node;
@@ -28,19 +24,16 @@ import edu.stanford.hci.flowmap.utils.GraphicsGems;
 public class SWTEdgeRenderer {
     
     private boolean m_additiveEdges = true;
-    private boolean m_straightEdges = false;    
 
     private Options options;
-    private QueryRecord flowRecord;
     private FlowScale scale;
     
     protected Point2D grandParent, parent, child, grandChild;
     protected Point2D fourPoints[];
 
 
-    public SWTEdgeRenderer(Options options, QueryRecord flowRecord, FlowScale scale) {
+    public SWTEdgeRenderer(Options options, FlowScale scale) {
         this.options = options;
-        this.flowRecord = flowRecord;
         this.scale = scale;
         fourPoints = new Point2D[4];
     }
