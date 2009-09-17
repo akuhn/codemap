@@ -37,9 +37,9 @@ public class SWTMapDisplayPanel implements PaintListener {
 
 	public SWTMapDisplayPanel(QueryRecord queryRecord) {
 		flowRecord = queryRecord;
-		edgeRenderer = new SWTFlowEdgeRenderer(options, flowRecord);
 		
-        initOptions();		
+		initOptions();		
+		initRenderer();
 		initRegistry();
 
         ActionList initFlowMap = new ActionList(registry);
@@ -51,6 +51,10 @@ public class SWTMapDisplayPanel implements PaintListener {
         initFlowMap.add(layoutAction);
         initFlowMap.runNow();		
 	}
+
+    private void initRenderer() {
+        edgeRenderer = new SWTFlowEdgeRenderer(options, flowRecord);
+    }
 
     private void initRegistry() {
         registry = new ItemRegistry(new FlowMapStructure());
