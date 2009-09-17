@@ -1,12 +1,10 @@
 package edu.stanford.hci.flowmap.structure;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import java.util.Collection;
 import java.util.LinkedList;
 
 import edu.stanford.hci.flowmap.cluster.Cluster;
-import edu.stanford.hci.flowmap.db.QueryRow;
 
 /**
  * This software is distributed under the Berkeley Software Distribution License.

@@ -27,17 +27,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import edu.stanford.hci.flowmap.db.QueryRecord;
-
 public class SwtMain extends Canvas {
     
     public SwtMain(Composite parent) {
         super(parent, SWT.NONE);
         
-        QueryRecord queryRecord = new FakeQueryRecord();
         Dimension screenDimension = Globals.getScreenDimension();
         setSize(screenDimension.width, screenDimension.height);
-        this.addPaintListener(new GraphPainter(queryRecord));
+        this.addPaintListener(new GraphPainter());
     }
 
     public static void main(String[] args) {

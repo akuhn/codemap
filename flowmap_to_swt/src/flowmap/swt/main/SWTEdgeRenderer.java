@@ -27,15 +27,13 @@ public class SWTEdgeRenderer {
     
     private boolean m_additiveEdges = true;
 
-    private Options options;
     private FlowScale scale;
     
     protected Point2D grandParent, parent, child, grandChild;
     protected Point2D fourPoints[];
 
 
-    public SWTEdgeRenderer(Options options, FlowScale scale) {
-        this.options = options;
+    public SWTEdgeRenderer(FlowScale scale) {
         this.scale = scale;
         fourPoints = new Point2D[4];
     }
@@ -73,8 +71,7 @@ public class SWTEdgeRenderer {
     }
     
     protected double computeStraightEdge(Edge edge) {
-        double displayWidth = scale.getDisplayWidth( edge.getWeight(), 
-                options.getString(Options.CURRENT_FLOW_TYPE));
+        double displayWidth = scale.getDisplayWidth(edge.getWeight());
         Node n1 = edge.getFirstNode();
         Node n2 = edge.getSecondNode();
         Shape shape = edge.getShape();
@@ -95,12 +92,9 @@ public class SWTEdgeRenderer {
         Node n2;
         //used as temporary node storage
         
-        String currFlowType = options.getString(Options.CURRENT_FLOW_TYPE);
-        
         //      Compute the display width here
         double edgeWeight = edge.getWeight();
-        double displayWidth = scale.getDisplayWidth(edge.getWeight(), 
-                currFlowType);
+        double displayWidth = scale.getDisplayWidth(edge.getWeight());
         displayWidth = Math.round(displayWidth);
         //System.out.println("SimpleEdgeRenderer edgeWeight " +
         // edgeItem.getWeight() + " displayWidth " + displayWidth );
@@ -216,8 +210,8 @@ public class SWTEdgeRenderer {
                 shiftDir.setLocation(shiftDir.getX()*-1, shiftDir.getY()*-1);
             }
             
-            double parentWidth = scale.getDisplayWidth(parentEdgeItem.getWeight(), currFlowType);
-            double otherWidth = scale.getDisplayWidth(otherEdgeItem.getWeight(), currFlowType);
+            double parentWidth = scale.getDisplayWidth(parentEdgeItem.getWeight());
+            double otherWidth = scale.getDisplayWidth(otherEdgeItem.getWeight());
             parentWidth = Math.round(parentWidth);
             otherWidth = Math.round(otherWidth);
     /*

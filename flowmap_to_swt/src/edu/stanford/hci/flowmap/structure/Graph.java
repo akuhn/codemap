@@ -12,13 +12,59 @@ import java.util.LinkedList;
  *
  */
 public class Graph {
+    
+    /**
+     * Records the min, max, and total values for a particular column
+     * @author dphan
+     *
+     */
+    public class MinMaxTotal {
+        // the name of the schema this is storing the values for
+        private String name;
+        private double low, high, total;
+        
+        private MinMaxTotal() {
+            low = Double.MAX_VALUE;
+            high = Double.MIN_VALUE;
+            total = 0;
+        }
+        
+        public String getName() {
+            return name;
+        }
+        
+        public double getMin() {
+            return low;
+        }
+        
+        public double getMax() {
+            return high;
+        }
+        
+        public double getTotal() {
+            return total;
+        }
+        
+        public void update(double val) {
+            if (val < low) {
+                low = val;
+            } 
+            if (val > high) {
+                high = low;
+            }
+            total += val;
+        }
+    }    
+    
 	
 	private Node rootNode;
 	private LinkedList<Node> allNodes;
+    private MinMaxTotal minMaxTotal;
 	
 	public Graph() {
 		rootNode = null;
 		allNodes = new LinkedList<Node>();
+		minMaxTotal = new MinMaxTotal();
 	}
 	
 	public Node getRootNode() {
@@ -35,6 +81,7 @@ public class Graph {
 
 	public void addNode(Node n) {
 		allNodes.add(n);
+		minMaxTotal.update(n.getWeight());
 	}
 	
 	public Collection<Edge> getEdges() {
@@ -52,5 +99,13 @@ public class Graph {
 	    }
 	    return edges;
 	}
+
+    public double getTotalWeightValue() {
+        return minMaxTotal.getTotal();
+    }
+
+    public double getMinWeightValue() {
+       return minMaxTotal.getMin();
+    }
 
 }

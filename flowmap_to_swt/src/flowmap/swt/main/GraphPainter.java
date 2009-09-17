@@ -1,14 +1,9 @@
 package flowmap.swt.main;
 
-import java.awt.geom.Point2D;
-import java.util.Iterator;
-
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 
 import edu.stanford.hci.flowmap.cluster.ClusterLayout;
-import edu.stanford.hci.flowmap.db.QueryRecord;
-import edu.stanford.hci.flowmap.db.QueryRow;
 import edu.stanford.hci.flowmap.prefuse.render.FlowScale;
 import edu.stanford.hci.flowmap.structure.Edge;
 import edu.stanford.hci.flowmap.structure.Graph;
@@ -22,16 +17,16 @@ import edu.stanford.hci.flowmap.structure.Node;
  */
 public class GraphPainter implements PaintListener {
 
-    private Options options;
-    private Graph graph;
-    private SWTEdgeRenderer edgeRenderer;
-    private FlowScale scale;
+    private final Options options;
+    private final Graph graph;
+    private final SWTEdgeRenderer edgeRenderer;
 
-	public GraphPainter(QueryRecord queryRecord) {
-		initOptions();		
-		initRenderer(queryRecord);
-
-		graph = createNodes(queryRecord);
+	public GraphPainter() {
+	    graph = createGraph();
+		options = initOptions();		
+		edgeRenderer = initRenderer();
+        // says that we should read the width of the splines from the field
+        // 'Value' stored in the scheme of each node.
         prepareTheNewWay();
         
 	}
@@ -48,26 +43,21 @@ public class GraphPainter implements PaintListener {
         edgeRenderer.initializeRenderTree(graph);
     }
 
-    private void initRenderer(QueryRecord flowRecord) {
-        scale = new FlowScale.Linear(options, flowRecord);        
-        edgeRenderer = new SWTEdgeRenderer(options, scale);
+    private SWTEdgeRenderer initRenderer() {
+        return new SWTEdgeRenderer(new FlowScale.Linear(options, graph));
     }
 
-    private void initOptions() {
-        options = new Options();
-        options.putDouble(Options.MIN_DISPLAY_WIDTH, 1);
-        options.putDouble(Options.MAX_DISPLAY_WIDTH, 10);
+    private Options initOptions() {
+        Options opts = new Options();
+        opts.putDouble(Options.MIN_DISPLAY_WIDTH, 1);
+        opts.putDouble(Options.MAX_DISPLAY_WIDTH, 10);
         // make sure to have only one scale boolean set to true
-        options.putBoolean(Options.LINEAR_SCALE, true);
+        opts.putBoolean(Options.LINEAR_SCALE, true);
+        return opts;
     }
     
-    private Graph createNodes(QueryRecord flowRecord) {
-        // says that we should read the width of the splines from the field
-        // 'Value' stored in the scheme of each node.
-        options.putString(Options.CURRENT_FLOW_TYPE, flowRecord.getSourceRow().getRowSchema().getDefaultValueId());
-        
+    private Graph createGraph() {
         Graph originalGraph = new Graph();
-        // add root
         Node rootNode = new Node(200, 200, 0, "root");
         rootNode.setRootNode(true);
         
