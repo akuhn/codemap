@@ -1,5 +1,7 @@
 package edu.stanford.hci.flowmap.structure;
 
+import java.awt.Shape;
+import java.awt.geom.CubicCurve2D;
 import java.util.Hashtable;
 
 
@@ -14,6 +16,8 @@ public class Edge {
 	
 	private String defaultType;
 	private Hashtable<String, Double> types2Weights;
+
+    private Shape shape;
 	
 	public Edge(Node from, Node to, String defaultType, Hashtable<String, Double> str2Weight){
 		this(from,to);
@@ -66,5 +70,17 @@ public class Edge {
 	public String getDefaultType() {
 		return defaultType;
 	}
+
+    public boolean isIncident(Node n) {
+        return (n == node1 || n == node2);
+    }
+
+    public Shape getShape() {
+        return shape;
+    }
+
+    public void setShape(Shape shape) {
+        this.shape = shape;
+    }
 }
 

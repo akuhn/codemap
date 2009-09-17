@@ -13,9 +13,9 @@ import edu.stanford.hci.flowmap.prefuse.item.FlowNodeItem;
 import edu.stanford.hci.flowmap.prefuse.render.FlowScale;
 import edu.stanford.hci.flowmap.prefuse.render.SimpleFlowEdgeRenderer;
 
-public class SWTFlowEdgeRenderer extends SimpleFlowEdgeRenderer implements SWTRenderer{
+public class HackishSWTFlowEdgeRenderer extends SimpleFlowEdgeRenderer implements SWTRenderer{
 
-    public SWTFlowEdgeRenderer(Options userOptions, QueryRecord flowRecord) {
+    public HackishSWTFlowEdgeRenderer(Options userOptions, QueryRecord flowRecord) {
         super(userOptions, flowRecord);
     }
     
@@ -47,7 +47,6 @@ public class SWTFlowEdgeRenderer extends SimpleFlowEdgeRenderer implements SWTRe
      *
      * @param shape  the shape (<code>null</code> not permitted).
      *
-     * @return The path.
      */
     private void drawShape(GC gc, Shape shape) {
         int type;

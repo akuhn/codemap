@@ -26,8 +26,6 @@ public class FlowMapStructure extends DefaultGraph {
 		m_rootNode = null;
 	}
 	
-	
-	
 	public FlowNode getRootNode(){
 		for(Iterator nodeIter = this.getNodes(); nodeIter.hasNext();){
 			FlowNode tNode = (FlowNode)nodeIter.next();

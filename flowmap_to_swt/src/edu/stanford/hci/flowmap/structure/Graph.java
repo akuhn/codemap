@@ -1,7 +1,11 @@
 package edu.stanford.hci.flowmap.structure;
 
+import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * This software is distributed under the Berkeley Software Distribution License.
@@ -32,6 +36,22 @@ public class Graph {
 
 	public void addNode(Node n) {
 		allNodes.add(n);
+	}
+	
+	public Collection<Edge> getEdges() {
+	    HashSet<Edge> edges = new HashSet<Edge>();
+	    Deque<Node> queue = new ArrayDeque<Node>();
+	    queue.add(getRootNode());
+	    
+	    while(!queue.isEmpty()) {
+	        Node node = queue.pop();
+	        Collection<Edge> outEdges = node.getOutEdges();
+	        for(Edge each: outEdges) {
+	            queue.add(each.getSecondNode());
+	        }
+	        edges.addAll(outEdges);
+	    }
+	    return edges;
 	}
 
 }

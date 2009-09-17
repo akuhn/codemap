@@ -1,5 +1,6 @@
 package flowmap.swt.main;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 import org.eclipse.swt.events.PaintEvent;
@@ -9,16 +10,20 @@ import edu.berkeley.guir.prefuse.ItemRegistry;
 import edu.berkeley.guir.prefuse.VisualItem;
 import edu.berkeley.guir.prefuse.activity.ActionList;
 import edu.berkeley.guir.prefuse.render.Renderer;
+import edu.stanford.hci.flowmap.cluster.ClusterLayout;
 import edu.stanford.hci.flowmap.db.QueryRecord;
 import edu.stanford.hci.flowmap.db.QueryRow;
 import edu.stanford.hci.flowmap.prefuse.action.FlowMapLayoutAction;
 import edu.stanford.hci.flowmap.prefuse.item.FlowDummyNodeItem;
 import edu.stanford.hci.flowmap.prefuse.item.FlowEdgeItem;
 import edu.stanford.hci.flowmap.prefuse.item.FlowRealNodeItem;
+import edu.stanford.hci.flowmap.prefuse.render.FlowScale;
+import edu.stanford.hci.flowmap.prefuse.render.FlowScale.Linear;
 import edu.stanford.hci.flowmap.prefuse.structure.FlowDummyNode;
 import edu.stanford.hci.flowmap.prefuse.structure.FlowEdge;
 import edu.stanford.hci.flowmap.prefuse.structure.FlowMapStructure;
 import edu.stanford.hci.flowmap.prefuse.structure.FlowNode;
+import edu.stanford.hci.flowmap.structure.Edge;
 import edu.stanford.hci.flowmap.structure.Graph;
 import edu.stanford.hci.flowmap.structure.Node;
 
@@ -33,7 +38,10 @@ public class GraphPainter implements PaintListener {
 	private ItemRegistry registry;
     private Options options;
     private QueryRecord flowRecord;
-    private SWTFlowEdgeRenderer edgeRenderer;
+    private HackishSWTFlowEdgeRenderer hackishEdgeRenderer;
+    private Graph graph;
+    private SWTEdgeRenderer edgeRenderer;
+    private FlowScale scale;
 
 	public GraphPainter(QueryRecord queryRecord) {
 		flowRecord = queryRecord;
@@ -42,18 +50,33 @@ public class GraphPainter implements PaintListener {
 		initRenderer();
 		initRegistry();
 
-        ActionList initFlowMap = new ActionList(registry);
-        Graph originalGraph = createNodes(queryRecord);
+		graph = createNodes(queryRecord);
         
-        FlowMapLayoutAction layoutAction = new FlowMapLayoutAction(
-                options, originalGraph.getRootNode(), originalGraph.getAllNodes(),
-                edgeRenderer) ;
-        initFlowMap.add(layoutAction);
-        initFlowMap.runNow();		
+//        prepareTheOldWay();
+        prepareTheNewWay();
+        
 	}
 
+    private void prepareTheNewWay() {
+        Node root = graph.getRootNode();
+        ClusterLayout clusterLayout = new ClusterLayout(root, graph.getAllNodes());
+        clusterLayout.doLayout();
+        edgeRenderer.initializeRenderTree(root);
+    }
+
+    private void prepareTheOldWay() {
+        ActionList initFlowMap = new ActionList(registry);        
+        FlowMapLayoutAction layoutAction = new FlowMapLayoutAction(
+                options, graph.getRootNode(), graph.getAllNodes(),
+                hackishEdgeRenderer);
+        initFlowMap.add(layoutAction);
+        initFlowMap.runNow();
+    }
+
     private void initRenderer() {
-        edgeRenderer = new SWTFlowEdgeRenderer(options, flowRecord);
+        hackishEdgeRenderer = new HackishSWTFlowEdgeRenderer(options, flowRecord);
+        scale = new FlowScale.Linear(options, flowRecord);        
+        edgeRenderer = new SWTEdgeRenderer(options, flowRecord, scale);
     }
 
     private void initRegistry() {
@@ -61,7 +84,7 @@ public class GraphPainter implements PaintListener {
 		registry.addItemClass(FlowNode.class.getName(), FlowRealNodeItem.class);
 		registry.addItemClass(FlowDummyNode.class.getName(), FlowDummyNodeItem.class);
 		registry.addItemClass(FlowEdge.class.getName(), FlowEdgeItem.class);
-		registry.setRendererFactory(new SWTRendererFactory(edgeRenderer));
+		registry.setRendererFactory(new SWTRendererFactory(hackishEdgeRenderer));
     }
 
     private void initOptions() {
@@ -78,13 +101,15 @@ public class GraphPainter implements PaintListener {
         options.putString(Options.CURRENT_FLOW_TYPE, flowRecord.getSourceRow().getRowSchema().getDefaultValueId());
         
         Graph originalGraph = new Graph();
+        // add root
         assert(flowRecord.getSourceRow() != null);
         Node rootNode = new Node(flowRecord.getSourceRow());
         rootNode.setRootNode(true);
         
         originalGraph.addNode(rootNode);
         originalGraph.setRootNode(rootNode);
-            
+        
+        // add destinations
         QueryRow row;
         Node dest;
         Iterator i = flowRecord.getRowsIterator();
@@ -104,6 +129,17 @@ public class GraphPainter implements PaintListener {
 	
     @Override
     public void paintControl(PaintEvent e) {
+        paintTheNewWay(e);
+//        paintTheOldWay(e);
+    }
+
+    private void paintTheNewWay(PaintEvent e) {
+        for (Edge edge : graph.getEdges()) {
+            edgeRenderer.renderSWT(e.gc, edge);
+        }
+    }
+
+    private void paintTheOldWay(PaintEvent e) {
         Iterator items = registry.getItems();
         while (items.hasNext()) {
             VisualItem vi = (VisualItem) items.next();

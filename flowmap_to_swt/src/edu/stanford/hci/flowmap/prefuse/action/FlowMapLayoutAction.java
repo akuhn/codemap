@@ -52,22 +52,22 @@ public class FlowMapLayoutAction extends AbstractAction {
 	}
 	
 	public void run(ItemRegistry registry, double frac) {
-		if (Globals.useLayoutAdjustment) {
-			//System.out.println("Adjusting Node Positions");
-			NodeForceScanLayout scanLayout = new NodeForceScanLayout(allNodes);
-			scanLayout.shiftNodes();
-		}
+//		if (Globals.useLayoutAdjustment) {
+//			//System.out.println("Adjusting Node Positions");
+//			NodeForceScanLayout scanLayout = new NodeForceScanLayout(allNodes);
+//			scanLayout.shiftNodes();
+//		}
 
 		// first run clustering
 		clusterLayout = new ClusterLayout(rootNode, allNodes);
 		Node newRoot = clusterLayout.doLayout();
 		
 		
-		if (Globals.runNodeEdgeRouting) {
-			//System.out.println("Adjusting Edge Routing");
-			NodeEdgeRouting router = new NodeEdgeRouting(newRoot);
-			router.routeNodes();
-		}
+//		if (Globals.runNodeEdgeRouting) {
+//			//System.out.println("Adjusting Edge Routing");
+//			NodeEdgeRouting router = new NodeEdgeRouting(newRoot);
+//			router.routeNodes();
+//		}
 		
 		// then convert to a flow tree
 		ConvertToPrefuse converter = new ConvertToPrefuse(registry, newRoot);

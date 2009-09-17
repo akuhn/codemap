@@ -1,6 +1,7 @@
 package edu.stanford.hci.flowmap.structure;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -46,6 +47,8 @@ public class Node {
 	protected Node routingParent;
 	
 	protected boolean isRootNode;
+
+    private Point2D prevControlPoint;
 
 	/***********************************************************************
 	 * CONSTRUCTORS
@@ -189,6 +192,14 @@ public class Node {
 	public QueryRow getQueryRow() {
 		return queryRow;
 	}
+
+    public Point2D getPrevControlPoint() {
+        return prevControlPoint;
+    }
+
+    public void setPrevControlPoint(Point2D ctrlP2) {
+        prevControlPoint = ctrlP2;
+    }
 	
 
 }
