@@ -5,6 +5,5 @@
 	<classpathentry kind="lib" path="lib/j3dcore.jar"/>
 	<classpathentry kind="lib" path="lib/vecmath.jar"/>
 	<classpathentry kind="lib" path="/Applications/eclipse-galileo-macosx-cocoa-x86_64/plugins/org.eclipse.swt.cocoa.macosx.x86_64_3.5.0.v3550b.jar" sourcepath="/Applications/eclipse-galileo-macosx-cocoa-x86_64/plugins/org.eclipse.swt.cocoa.macosx.x86_64.source_3.5.0.v3550b.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/flowmap_to_swt_dep_prefuse_1_10_05"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

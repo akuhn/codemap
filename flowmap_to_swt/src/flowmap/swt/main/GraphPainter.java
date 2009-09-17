@@ -39,6 +39,14 @@ public class GraphPainter implements PaintListener {
         Node root = graph.getRootNode();
         ClusterLayout clusterLayout = new ClusterLayout(root, graph.getAllNodes());
         clusterLayout.doLayout();
+        
+//      if (Globals.runNodeEdgeRouting) {
+//      //System.out.println("Adjusting Edge Routing");
+//      NodeEdgeRouting router = new NodeEdgeRouting(newRoot);
+//      router.routeNodes();
+//  }
+            
+        
         edgeRenderer.initializeRenderTree(root);
     }
 

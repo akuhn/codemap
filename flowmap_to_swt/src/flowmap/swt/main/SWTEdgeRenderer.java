@@ -16,6 +16,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Path;
 
 import edu.stanford.hci.flowmap.cluster.Vector2D;
+import edu.stanford.hci.flowmap.prefuse.render.BezierSpline;
 import edu.stanford.hci.flowmap.prefuse.render.FlowScale;
 import edu.stanford.hci.flowmap.structure.Edge;
 import edu.stanford.hci.flowmap.structure.Node;
