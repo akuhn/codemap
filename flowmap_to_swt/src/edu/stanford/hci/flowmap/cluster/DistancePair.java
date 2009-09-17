@@ -7,9 +7,9 @@ import edu.stanford.hci.flowmap.utils.Pair;
  * Please see http://graphics.stanford.edu/~dphan/code/bsd.license.html
  *
  */
-public class DistancePair extends Pair implements Comparable {
+public class DistancePair extends Pair implements Comparable<DistancePair> {
 	
-	public double dist;
+	public final double dist;
 	
 	public DistancePair() {
 		super();
@@ -21,35 +21,30 @@ public class DistancePair extends Pair implements Comparable {
 		this.dist = dist;
 	}
 	
-	/**
-	 * 
-	 */
-	public int compareTo(Object arg0) {
-		DistancePair dp = (DistancePair)arg0;
-		if (dist != dp.dist) {
-			if (dist < dp.dist)
-				return -1;
-			else
-				return 1;
-		} else if (one != dp.one) {
-			if (one.hashCode() < dp.one.hashCode())
-				return -1;
-			else
-				return 1;
-		} else if (two != dp.two) {
-			if (two.hashCode() < dp.two.hashCode())
-				return -1;
-			else
-				return 1;
-		} else {
-			return 0;
-		}
-
-	}
-	
+    @Override
+    public int compareTo(DistancePair dp) {
+        if (dist != dp.dist) {
+            if (dist < dp.dist)
+                return -1;
+            else
+                return 1;
+        } else if (one != dp.one) {
+            if (one.hashCode() < dp.one.hashCode())
+                return -1;
+            else
+                return 1;
+        } else if (two != dp.two) {
+            if (two.hashCode() < dp.two.hashCode())
+                return -1;
+            else
+                return 1;
+        } else {
+            return 0;
+        }
+    }
+    
 	public boolean equals(Object o) {
-		DistancePair dp = (DistancePair)o;
-		return super.equals(o) && (dist == dp.dist);
+	    return (o instanceof DistancePair) && ((DistancePair)o).dist == dist;
 	}
 	
 	public String toString() {
@@ -59,6 +54,4 @@ public class DistancePair extends Pair implements Comparable {
 		sb.append(super.toString());
 		return sb.toString();
 	}
-	
-	
 }

@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.TreeSet;
 
-import edu.stanford.hci.flowmap.db.RowSchema;
 import edu.stanford.hci.flowmap.structure.Node;
 /**
  * Turns a list of structure.Node objects into structure.Node objects that are in clusters
@@ -228,7 +227,6 @@ public class HierarchicalCluster {
 	 * @return a collection of clusters that don't include the root node
 	 */
 	private Collection<Cluster> rootHierarchicalCluster(Node rootNode, Collection<Node> allNodes) {
-		RowSchema rowSchema = rootNode.getQueryRow().getRowSchema();
 		//System.out.println("HierarchicalCluster.rootHierarchicalCluster rowSchema: " + rowSchema);
 		
 		LinkedList<Cluster> clusterCollection = new LinkedList<Cluster>();
@@ -236,7 +234,7 @@ public class HierarchicalCluster {
 		LinkedList<Cluster> copyClusters = new LinkedList<Cluster>();
 		
 		// create a rootCluster and add it to the leafClusters and copyClusters
-		Cluster rootCluster = new Cluster(rootNode, rowSchema);
+		Cluster rootCluster = new Cluster(rootNode);
 		leafClusters.add(rootCluster);
 		copyClusters.add(rootCluster);
 		
@@ -244,7 +242,7 @@ public class HierarchicalCluster {
 		for(Node n : allNodes) {
 			if (n == rootNode) // don't create two clusters for the root
 				continue;
-			Cluster c = new Cluster(n, rowSchema);
+			Cluster c = new Cluster(n);
 			//System.out.println("adding new cluster: " + n.getName() + " " + n.getID());
 			leafClusters.add(c);
 			copyClusters.add(c);
@@ -276,7 +274,7 @@ public class HierarchicalCluster {
 				}
 				newClus = rootCluster;
 			} else {
-				newClus = new Cluster(oneClus, twoClus, rowSchema);
+				newClus = new Cluster(oneClus, twoClus);
 			}
 			
 			crossProd = crossDiffCluster(newClus, clusDist.getClusters());;

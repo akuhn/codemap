@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import edu.stanford.hci.flowmap.structure.Edge;
+import edu.stanford.hci.flowmap.structure.Graph;
 import edu.stanford.hci.flowmap.structure.Node;
 import edu.stanford.hci.flowmap.utils.GraphicsGems;
 
@@ -22,21 +23,16 @@ public class ClusterLayout extends FlowLayout {
 	
 	Collection<Cluster> allClusters;
 	protected HierarchicalCluster original_Cluster;
+    private Graph graph;
 	
-	protected String flowTypeStr;
-	
-	public ClusterLayout(Node source, Collection<Node> allNodes) {
-		super(source, allNodes);
-		
-		assert(source != null);
-		assert(source.getQueryRow() != null);
-		assert(source.getQueryRow().getRowSchema() != null);
-		original_Cluster = new HierarchicalCluster();
-		
-		flowTypeStr = source.getQueryRow().getRowSchema().getDefaultValueId();
-	}
-	
-	public Node doLayout(){
+	public ClusterLayout(Graph g) {
+	    super(g.getRootNode(), g.getAllNodes());
+	    assert(g.getRootNode() != null);
+	    graph = g;
+        original_Cluster = new HierarchicalCluster();	    
+    }
+
+    public Node doLayout(){
 		
 		allClusters = original_Cluster.doCluster(source, allNodes);
 		toFlowTree(source, allClusters);
@@ -112,7 +108,7 @@ public class ClusterLayout extends FlowLayout {
 		if ( clus.isNodeCluster()) { 
 			//System.out.println("SimpleNode case");
 			Node clusNode = clus.getRenderedNode();
-			Edge e = new Edge(parent, clusNode, flowTypeStr, clus.getWeightTypes());
+			Edge e = new Edge(parent, clusNode, clus.getWeight());
 			
 			parent.addOutEdge(e);
 			clusNode.addInEdge(e);
@@ -194,7 +190,7 @@ public class ClusterLayout extends FlowLayout {
 		Point2D biggerPt;
 		Cluster biggerClus, smallerClus;
 		// find the distance between the parent and the node with more weight
-		if (clus.oneCluster.getWeight(flowTypeStr) > clus.twoCluster.getWeight(flowTypeStr)) {
+		if (clus.oneCluster.getWeight() > clus.twoCluster.getWeight()) {
 			biggerPt = onePt;
 			biggerClus = clus.oneCluster;
 			smallerClus = clus.twoCluster;
@@ -206,11 +202,6 @@ public class ClusterLayout extends FlowLayout {
 		
 		double biggerDist = parentPt.distance(biggerPt);
 		
-		// create the new, intermediate node
-		Node newNode = new Node();
-		newNode.setChildCluster(clus);
-		clus.setRenderedNode(newNode);
-		
 		// if closerDist is small, bigFraction is 0, so we want
 		// the parentFraction to be big.
 		double bigFraction = closerDist/biggerDist;
@@ -220,16 +211,18 @@ public class ClusterLayout extends FlowLayout {
 		// between parentPt and biggerPt
 		double x = parentPt.getX()*parentFraction+biggerPt.getX()*bigFraction;
 		double y = parentPt.getY()*parentFraction+biggerPt.getY()*bigFraction;
-		newNode.setLocation(x, y);
+		
+        // create the new, intermediate node
+        Node newNode = new Node(x, y);
+        newNode.setChildCluster(clus);
+        clus.setRenderedNode(newNode);		
 		
 		// update the edge information
 		Edge parent2New, new2Big, new2Small;
 		
-		parent2New = new Edge(parent, newNode, flowTypeStr, clus.getWeightTypes());
-		new2Big = new Edge(newNode, biggerClus.getRenderedNode(), flowTypeStr,
-				biggerClus.getWeightTypes());
-		new2Small = new Edge(newNode, smallerClus.getRenderedNode(), flowTypeStr,
-				smallerClus.getWeightTypes());
+		parent2New = new Edge(parent, newNode, clus.getWeight());
+		new2Big = new Edge(newNode, biggerClus.getRenderedNode(), biggerClus.getWeight());
+		new2Small = new Edge(newNode, smallerClus.getRenderedNode(), smallerClus.getWeight());
 				
 		parent.addOutEdge(parent2New);
 		newNode.addInEdge(parent2New);
@@ -289,7 +282,7 @@ public class ClusterLayout extends FlowLayout {
 		Point2D biggerPt;
 		Cluster biggerClus, smallerClus;
 		// find the distance between the parent and the node with more weight
-		if (leafCluster.getWeight(flowTypeStr) > clus.getWeight(flowTypeStr)) {
+		if (leafCluster.getWeight() > clus.getWeight()) {
 			biggerPt = onePt;
 			biggerClus = leafCluster;
 			smallerClus = clus;
@@ -302,7 +295,7 @@ public class ClusterLayout extends FlowLayout {
 		double biggerDist = parentPt.distance(biggerPt);
 	  	
 		// create the new, intermediate node
-		Node newNode = new Node();
+
 		//newNode.setChildCluster(clus);
 		//clus.setRenderedNode(newNode);
 		
@@ -321,22 +314,20 @@ public class ClusterLayout extends FlowLayout {
 			// between parentPt and biggerPt
 			double x = parentPt.getX()*parentFraction+biggerPt.getX()*bigFraction;
 			double y = parentPt.getY()*parentFraction+biggerPt.getY()*bigFraction;
-			newNode.setLocation(x, y);
+	        Node newNode = new Node(x, y);			
 
 			//System.out.println("MixedCluster1: x: " + x + " y:" + y + " "+ newNode);
 			
 			
 			// update the edge information
-			Edge parent2New = new Edge(parent, newNode, flowTypeStr,
-					parentCluster.getWeightTypes());
+			Edge parent2New = new Edge(parent, newNode, parentCluster.getWeight());
 			
 	
 			//FlowEdgeItem new2Leaf = FlowEdgeItem.getNewItem(registry,parent, leafCluster.node, leafCluster.weight, null);
 	
 			
 			// dphan. this is a weird error. Shouldn't this be from newNode to Leaf? we have parent to leaf here)
-			Edge new2Leaf = new Edge(newNode, leafCluster.getRenderedNode(), flowTypeStr, 
-					leafCluster.getWeightTypes());
+			Edge new2Leaf = new Edge(newNode, leafCluster.getRenderedNode(), leafCluster.getWeight());
 		
 			//System.out.println("MixedCluster wants to add: p2n " + parent2New);
 			//System.out.println("MixedCluster wants to add: n2L " + new2Leaf);
@@ -391,7 +382,7 @@ public class ClusterLayout extends FlowLayout {
 		Point2D biggerPt;
 		Cluster biggerClus, smallerClus;
 		// find the distance between the parent and the node with more weight
-		if (oneCluster.getWeight(flowTypeStr) > twoCluster.getWeight(flowTypeStr)) {
+		if (oneCluster.getWeight() > twoCluster.getWeight()) {
 			biggerPt = onePt;
 			biggerClus = oneCluster;
 			smallerClus = twoCluster;
@@ -404,7 +395,7 @@ public class ClusterLayout extends FlowLayout {
 		double biggerDist = parentPt.distance(biggerPt);
 	  	//System.out.println("parentPt " + parentPt + " biggerPoint: " + biggerPt);
 		// create the new, intermediate node
-		Node newNode = new Node();
+
 		//newNode.setChildCluster(biggerClus);
 		//biggerClus.setRenderedNode(newNode);
 		
@@ -427,11 +418,11 @@ public class ClusterLayout extends FlowLayout {
 			// between parentPt and biggerPt
 			double x = parentPt.getX()*parentFraction+biggerPt.getX()*bigFraction;
 			double y = parentPt.getY()*parentFraction+biggerPt.getY()*bigFraction;
-			newNode.setLocation(x, y);
+		    Node newNode = new Node(x, y);
 	
 			
 			// update the edge information
-			Edge parent2New = new Edge(parent, newNode, flowTypeStr, parentCluster.getWeightTypes());
+			Edge parent2New = new Edge(parent, newNode, parentCluster.getWeight());
 		
 			//System.out.println(parent2New);
 			parent.addOutEdge(parent2New);

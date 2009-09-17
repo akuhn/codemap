@@ -19,7 +19,7 @@ public class Cluster {
 	/** records the spatial extent of this cluster */
 	public Rectangle2D bounds = null;
 	/** the center of the cluster */
-	public Point2D center = null;
+	public Point2D center = new Point2D.Double();
 	
 	/** backpointer to the enclosing cluster */
 	public Cluster parentCluster = null;
@@ -37,43 +37,26 @@ public class Cluster {
 	 */
 	private Node renderedNode = null;
 
-	/** the row schema used by this cluster */
-	public RowSchema rowSchema = null;
-	
-	/** weight of the cluster for all the types in the RowSchema */
-	private Hashtable<String, Double> type2Weight;
-	
-	private Cluster(RowSchema rowSchema) {
-		center = new Point2D.Double();
-		this.rowSchema = rowSchema;
-		type2Weight = new Hashtable<String, Double>();
-	}
+    private double weight;
 	
 	/**
 	 * Constructor for a real node item
 	 * @param n - the real node item
 	 */
-	public Cluster(Node n, RowSchema rowSchema) {
-		this(rowSchema);
+	public Cluster(Node n) {
 		center.setLocation(n.getLocation());
 		leafNode = n;
 		bounds = new Rectangle2D.Double(n.getLocation().getX()-5, n.getLocation().getY()-5, 10, 10);
-		
-		for(ColumnSchema cs : rowSchema.getNumberTypes()) {
-			//System.out.println("Cluster() "  + cs.columnName);
-			//System.out.println(" val: " +  n.getQueryRow().getValue(cs.columnName) );
-			type2Weight.put(cs.columnName, n.getQueryRow().getValue(cs.columnName));
-		}
+
+		weight = n.getWeight();
 		//System.out.println("Cluster() " + n.getQueryRow());
 		
-		renderedNode = new Node();
-		renderedNode.setLocation(n.getLocation().getX(), n.getLocation().getY());
+		renderedNode = new Node(n.getLocation());
 		//renderedNode.setName(n.getName());
 		
 	}
 	
-	public Cluster(Cluster one, Cluster two, RowSchema rowSchema) {
-		this(rowSchema);
+	public Cluster(Cluster one, Cluster two) {
 		oneCluster = one;
 		twoCluster = two;
 			
@@ -102,32 +85,15 @@ public class Cluster {
 			
 			// update the weight of the cluster
 		}
-		for(ColumnSchema cs : rowSchema.getNumberTypes()) {
-			type2Weight.put(cs.columnName, one.getWeight(cs.columnName)+two.getWeight(cs.columnName));
-		}
+		weight = one.getWeight() + two.getWeight();
 		
 		// create a new center point which is the center of the bounding box  
 		// there are other ways to do this, but this is easy and consistent
 		center.setLocation(bounds.getCenterX(), bounds.getCenterY());
 	}
 	
-	public String getDefaultType() {
-		return rowSchema.getDefaultValueId();
-	}
-	
-	public double getDefaultWeight(){
-		return type2Weight.get(rowSchema.getDefaultValueId());
-	}
-	
-	public double getWeight(String type) {
-		assert(type2Weight != null);
-		//System.out.println("Cluster.getWeight() " + type + " and node: " + leafNode + " size: " + type2Weight.size());
-		assert(type2Weight.containsKey(type));
-		return type2Weight.get(type);
-	}
-	
-	public Hashtable<String, Double> getWeightTypes() {
-		return type2Weight;
+	public double getWeight() {
+	    return weight;
 	}
 	
 	public Point2D getCenter(){

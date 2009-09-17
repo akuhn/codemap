@@ -1,5 +1,6 @@
 package flowmap.swt.main;
 
+import java.awt.geom.Point2D;
 import java.util.Iterator;
 
 import org.eclipse.swt.events.PaintEvent;
@@ -36,8 +37,7 @@ public class GraphPainter implements PaintListener {
 	}
 
     private void prepareTheNewWay() {
-        Node root = graph.getRootNode();
-        ClusterLayout clusterLayout = new ClusterLayout(root, graph.getAllNodes());
+        ClusterLayout clusterLayout = new ClusterLayout(graph);
         clusterLayout.doLayout();
         
 //      if (Globals.runNodeEdgeRouting) {
@@ -45,9 +45,7 @@ public class GraphPainter implements PaintListener {
 //      NodeEdgeRouting router = new NodeEdgeRouting(newRoot);
 //      router.routeNodes();
 //  }
-            
-        
-        edgeRenderer.initializeRenderTree(root);
+        edgeRenderer.initializeRenderTree(graph);
     }
 
     private void initRenderer(QueryRecord flowRecord) {
@@ -70,31 +68,38 @@ public class GraphPainter implements PaintListener {
         
         Graph originalGraph = new Graph();
         // add root
-        assert(flowRecord.getSourceRow() != null);
-        Node rootNode = new Node(flowRecord.getSourceRow());
+        Node rootNode = new Node(200, 200, 0, "root");
         rootNode.setRootNode(true);
         
         originalGraph.addNode(rootNode);
         originalGraph.setRootNode(rootNode);
         
-        // add destinations
-        QueryRow row;
-        Node dest;
-        Iterator i = flowRecord.getRowsIterator();
+        double values[][] = {
+                {0, 0, 1},
+                {0, 300, 1},
+                {300, 0, 1},
+                {500, 0, 10},
+                {500, 150, 10},
+                {300, 200, 5},
+                {400, 250, 25},
+                {400, 350, 25},                                
+                {550, 300, 30},
+                {600, 350, 30},                                
+                {100, 400, 20}, 
+                {200, 500, 10}, 
+                {400, 600, 40}, 
+                {550, 650, 30}, 
+                {600, 400, 40}
+            };
         
-        while (i.hasNext()) {
-            row = (QueryRow)i.next();
-            
-            // if the root node is a destination, just ignore it
-            if (row.getName().equals(rootNode.getName())) {
-                continue;
-            }
-            dest = new Node(row);
-            originalGraph.addNode(dest);
-        }
+        int index = 0;
+        for (double[] each: values) {
+            Node dest = new Node(each[0], each[1], each[2], "node" + ++index);
+            originalGraph.addNode(dest);            
+        }        
         return originalGraph;
     }	
-	
+
     @Override
     public void paintControl(PaintEvent e) {
         paintTheNewWay(e);

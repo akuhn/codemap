@@ -1,6 +1,7 @@
 package edu.stanford.hci.flowmap.structure;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -29,13 +30,9 @@ public class Node {
 	 **********************************************************************/
 	protected int m_id;
 	protected Point2D location;
-	protected QueryRow queryRow;
 	protected String name;
 	protected LinkedList<Edge> inEdges;
 	protected LinkedList<Edge> outEdges;
-	
-	/** the query id that generated the data (the queryRow) for this Node */
-	protected Integer m_defaultQueryId;
 	
 	/** the cluster that encloses this node */
 	protected Cluster parentCluster;
@@ -49,33 +46,43 @@ public class Node {
 
     private Point2D prevControlPoint;
 
+    private double weight;
+
 	/***********************************************************************
 	 * CONSTRUCTORS
+	 * @param location 
 	 **********************************************************************/
 
-	public Node(QueryRow row) {
-		this();
-		this.queryRow = row;
-		m_defaultQueryId = row.getQueryId();
-		this.setName(row.getName());
-		this.setLocation(row.getLocationClone());
-		
-		//System.out.println("Created new Node name: " + row.getName() + " uniqueName: " + m_id);
-	}
-
-	public Node() {
+	public Node(Point2D loc) {
 		m_id = Node.nodeCount++;
-		location = new Point2D.Double();
-		queryRow = null;
+		location = loc;
 		name = Node.getUniqueName(m_id);
 		inEdges = new LinkedList<Edge>();
 		outEdges = new LinkedList<Edge>();
-		m_defaultQueryId = null;
 		parentCluster = null;
 		childCluster = null;
 	}
+	
+    public Node(Point2D loc, double weight, String name) {
+        this(loc);
+        this.weight = weight;
+        this.name = name;
+    }	
 
-	/***********************************************************************
+    public Node(double x, double y) {
+        this(makeLocation(x, y));
+    }
+    
+    public Node(double x, double y, double weight, String name) {
+        this(makeLocation(x, y), weight, name);
+    }    
+
+    static Point2D makeLocation(double x, double y) {
+        return new Point2D.Double(x, y);
+    }    
+
+
+    /***********************************************************************
 	 * ACCESSORS
 	 **********************************************************************/
 /*
@@ -150,11 +157,7 @@ public class Node {
 	}
 
 	public String toString() {
-		if (queryRow == null) {
-			return "id:" + m_id;
-		} else {
-			return queryRow + " id:" + m_id;
-		}
+		return "id:" + m_id;
 	}
 
 	public boolean equals(Object o) {
@@ -172,10 +175,6 @@ public class Node {
 		return isRootNode;
 	}
 	
-	public boolean isDummyNode() {
-		return queryRow == null;
-	}
-	
 	public void setRootNode(boolean b) {
 		isRootNode = b;
 	}
@@ -187,10 +186,6 @@ public class Node {
 	public void setRoutingParent(Node n) {
 		routingParent = n;
 	}
-	
-	public QueryRow getQueryRow() {
-		return queryRow;
-	}
 
     public Point2D getPrevControlPoint() {
         return prevControlPoint;
@@ -198,6 +193,10 @@ public class Node {
 
     public void setPrevControlPoint(Point2D ctrlP2) {
         prevControlPoint = ctrlP2;
+    }
+
+    public double getWeight() {
+        return weight;
     }
 	
 

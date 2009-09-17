@@ -52,8 +52,7 @@ public class SwtMain extends Canvas {
                 display.sleep();
         }
         display.dispose();
-        // quit the bad way as i can't remember how to shut down normally
-        // TODO: how ^^ ?
+        // quit the awt thread that was started as well ...
         System.exit(0);
     }
 }

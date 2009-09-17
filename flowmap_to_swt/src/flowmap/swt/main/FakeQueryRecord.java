@@ -36,16 +36,8 @@ public class FakeQueryRecord extends QueryRecord {
         srcRow.setInfo(queryRowScheme.getDefaultValueId(), 0);
         this.setSourceRow(srcRow);        
         
-        double values[][] = {{0, 0, 1},{0, 300, 1}, {300, 0, 1}, {100, 400, 20}, {200, 500, 10}, {400, 600, 40}, {550, 650, 30}, {600, 400, 40}};
-        int index = 0;
-        for (double[] each: values) {
-            QueryRow destRow = new QueryRow(queryRowScheme, this.getId());
-            this.addFlowRow(destRow);
-            destRow.setInfo(queryRowScheme.getDefaultNameId(), "myname" + ++index);
-            destRow.setInfo(queryRowScheme.getDefaultX(), each[0]);
-            destRow.setInfo(queryRowScheme.getDefaultY(), each[1]);
-            destRow.setInfo(queryRowScheme.getDefaultValueId(), each[2]);            
-        }
+
+
         this.rowsDone();
     }
 }

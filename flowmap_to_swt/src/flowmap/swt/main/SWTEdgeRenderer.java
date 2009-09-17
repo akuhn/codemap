@@ -19,6 +19,7 @@ import edu.stanford.hci.flowmap.cluster.Vector2D;
 import edu.stanford.hci.flowmap.prefuse.render.BezierSpline;
 import edu.stanford.hci.flowmap.prefuse.render.FlowScale;
 import edu.stanford.hci.flowmap.structure.Edge;
+import edu.stanford.hci.flowmap.structure.Graph;
 import edu.stanford.hci.flowmap.structure.Node;
 import edu.stanford.hci.flowmap.utils.GraphicsGems;
 
@@ -58,9 +59,9 @@ public class SWTEdgeRenderer {
     
    
     
-    public void initializeRenderTree(Node root) {
+    public void initializeRenderTree(Graph graph) {
         LinkedList<Node> nodeQeue = new LinkedList<Node>();
-        nodeQeue.add(root);
+        nodeQeue.add(graph.getRootNode());
         
         while(nodeQeue.size() > 0) {
             Node nodeItem = nodeQeue.removeFirst();
@@ -72,8 +73,7 @@ public class SWTEdgeRenderer {
     }
     
     protected double computeStraightEdge(Edge edge) {
-        double displayWidth = scale.getDisplayWidth(
-                edge.getWeight(options.getString(Options.CURRENT_FLOW_TYPE)), 
+        double displayWidth = scale.getDisplayWidth( edge.getWeight(), 
                 options.getString(Options.CURRENT_FLOW_TYPE));
         Node n1 = edge.getFirstNode();
         Node n2 = edge.getSecondNode();
@@ -92,14 +92,14 @@ public class SWTEdgeRenderer {
     
     protected double computeEdge(Edge edge) {
         Node n1;
-        Node n2; //used as temporary node storage
-        Iterator i;
+        Node n2;
+        //used as temporary node storage
         
         String currFlowType = options.getString(Options.CURRENT_FLOW_TYPE);
         
         //      Compute the display width here
-        double edgeWeight = edge.getWeight(currFlowType);
-        double displayWidth = scale.getDisplayWidth(edge.getWeight(currFlowType), 
+        double edgeWeight = edge.getWeight();
+        double displayWidth = scale.getDisplayWidth(edge.getWeight(), 
                 currFlowType);
         displayWidth = Math.round(displayWidth);
         //System.out.println("SimpleEdgeRenderer edgeWeight " +
@@ -216,8 +216,8 @@ public class SWTEdgeRenderer {
                 shiftDir.setLocation(shiftDir.getX()*-1, shiftDir.getY()*-1);
             }
             
-            double parentWidth = scale.getDisplayWidth(parentEdgeItem.getWeight(currFlowType), currFlowType);
-            double otherWidth = scale.getDisplayWidth(otherEdgeItem.getWeight(currFlowType), currFlowType);
+            double parentWidth = scale.getDisplayWidth(parentEdgeItem.getWeight(), currFlowType);
+            double otherWidth = scale.getDisplayWidth(otherEdgeItem.getWeight(), currFlowType);
             parentWidth = Math.round(parentWidth);
             otherWidth = Math.round(otherWidth);
     /*
@@ -250,8 +250,8 @@ public class SWTEdgeRenderer {
             
             // find the heaviest child
             for(Edge gcEdge: grandChildEdges) {
-                if (gcEdge.getWeight(currFlowType) > gcWeight) {
-                    gcWeight = gcEdge.getWeight(currFlowType);
+                if (gcEdge.getWeight() > gcWeight) {
+                    gcWeight = gcEdge.getWeight();
                     gcX = gcEdge.getSecondNode().getLocation().getX();
                     gcY = gcEdge.getSecondNode().getLocation().getY();
                     //System.out.println("x: " + gcX + " y:" + gcY);

@@ -17,11 +17,12 @@ public class Edge {
 	private Hashtable<String, Double> types2Weights;
 
     private Shape shape;
+
+    private Double weight;
 	
-	public Edge(Node from, Node to, String defaultType, Hashtable<String, Double> str2Weight){
+	public Edge(Node from, Node to, Double weight){
 		this(from,to);
-		this.defaultType = defaultType;
-		this.types2Weights = str2Weight;
+		this.weight = weight;
 	}
 	
 	private Edge(Node from, Node to) {
@@ -30,17 +31,8 @@ public class Edge {
 		types2Weights = null;
 	}
 	
-	public void setWeight(String type, double weight){
-		assert (types2Weights.containsKey(type));
-		types2Weights.put(type, weight);
-	}
-	
 	public double getWeight() {
-		return types2Weights.get(defaultType);
-	}
-	
-	public double getWeight(String type){
-		return types2Weights.get(type);
+	    return weight;
 	}
 	
 	public boolean equals(Edge e) {
@@ -60,14 +52,6 @@ public class Edge {
 	
 	public Node getSecondNode() {
 		return node2;
-	}
-	
-	public Hashtable<String, Double> getTypes2Weights() {
-		return types2Weights;
-	}
-	
-	public String getDefaultType() {
-		return defaultType;
 	}
 
     public boolean isIncident(Node n) {
