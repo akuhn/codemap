@@ -34,10 +34,7 @@ public class SwtMain extends Canvas {
     public SwtMain(Composite parent) {
         super(parent, SWT.NONE);
         
-        QueryRecord queryRecord;
-//        queryRecord = new CSVQueryRecord(new File("direct.csv"));
-        queryRecord = new FakeQueryRecord();
-        
+        QueryRecord queryRecord = new FakeQueryRecord();
         Dimension screenDimension = Globals.getScreenDimension();
         setSize(screenDimension.width, screenDimension.height);
         this.addPaintListener(new SWTMapDisplayPanel(queryRecord));

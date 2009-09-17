@@ -13,7 +13,7 @@ import edu.stanford.hci.flowmap.prefuse.render.SimpleFlowEdgeRenderer;
 
 public class SWTRendererFactory implements RendererFactory {
     
-    Renderer emptyRenderer = new Renderer() {
+    private Renderer emptyRenderer = new Renderer() {
         
         @Override
         public void render(Graphics2D g, VisualItem item) {
@@ -39,9 +39,7 @@ public class SWTRendererFactory implements RendererFactory {
 
     @Override
     public Renderer getRenderer(VisualItem item) {
-        if(item instanceof EdgeItem ) {           
-            return edgeRenderer;
-        }
+        if(item instanceof EdgeItem ) return edgeRenderer;
         return emptyRenderer;
     }
 

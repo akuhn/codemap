@@ -1,6 +1,5 @@
 package flowmap.swt.main;
 
-import java.awt.image.BufferedImage;
 import java.util.Iterator;
 
 import org.eclipse.swt.events.PaintEvent;
@@ -31,60 +30,43 @@ import edu.stanford.hci.flowmap.structure.Node;
  */
 public class SWTMapDisplayPanel implements PaintListener {
 
-	// Have a rendered image object serving as an alternate buffer
-	private BufferedImage bufferImage;
-
-	private ItemRegistry m_registry;
-
-	/**************************************************************************
-	 * Class Definition
-	 ***************************************************************************/
-//	SWTDisplay m_prefuseDisplay = null;
-	
+	private ItemRegistry registry;
     private Options options;
     private QueryRecord flowRecord;
+    private SWTFlowEdgeRenderer edgeRenderer;
 
 	public SWTMapDisplayPanel(QueryRecord queryRecord) {
 		flowRecord = queryRecord;
+		edgeRenderer = new SWTFlowEdgeRenderer(options, flowRecord);
 		
-//		bufferImage = new BufferedImage(screenSize.width, screenSize.height,
-//				BufferedImage.TYPE_INT_RGB);
-		
-        options = new Options();
-        options.putDouble(Options.MIN_DISPLAY_WIDTH, 1);
-        options.putDouble(Options.MAX_DISPLAY_WIDTH, 10);
-        // make sure to have only one scale boolean set to true
-        options.putBoolean(Options.LINEAR_SCALE, true);		
-		
-		//creating the registry
-		m_registry = new ItemRegistry(new FlowMapStructure());
-		m_registry.addItemClass(FlowNode.class.getName(), FlowRealNodeItem.class);
-		m_registry.addItemClass(FlowDummyNode.class.getName(), FlowDummyNodeItem.class);
-		m_registry.addItemClass(FlowEdge.class.getName(), FlowEdgeItem.class);
-		
-//		m_prefuseDisplay = new SWTDisplay(m_registry);
-//		m_prefuseDisplay.setSize(this.getSize());
-//		m_prefuseDisplay.setBackground(Color.WHITE);
+        initOptions();		
+		initRegistry();
 
-		SWTFlowEdgeRenderer m_edgeRenderer = new SWTFlowEdgeRenderer(options, flowRecord);
-		
-		/***********************************************************************
-		 * Initialize the display
-		 ***********************************************************************/		
-		m_registry.setRendererFactory(new SWTRendererFactory(m_edgeRenderer));
-
-        ActionList initFlowMap = new ActionList(m_registry);
-        
+        ActionList initFlowMap = new ActionList(registry);
         Graph originalGraph = createNodes(queryRecord);
         
         FlowMapLayoutAction layoutAction = new FlowMapLayoutAction(
                 options, originalGraph.getRootNode(), originalGraph.getAllNodes(),
-                m_edgeRenderer) ;
+                edgeRenderer) ;
         initFlowMap.add(layoutAction);
-        
         initFlowMap.runNow();		
 	}
-	
+
+    private void initRegistry() {
+        registry = new ItemRegistry(new FlowMapStructure());
+		registry.addItemClass(FlowNode.class.getName(), FlowRealNodeItem.class);
+		registry.addItemClass(FlowDummyNode.class.getName(), FlowDummyNodeItem.class);
+		registry.addItemClass(FlowEdge.class.getName(), FlowEdgeItem.class);
+		registry.setRendererFactory(new SWTRendererFactory(edgeRenderer));
+    }
+
+    private void initOptions() {
+        options = new Options();
+        options.putDouble(Options.MIN_DISPLAY_WIDTH, 1);
+        options.putDouble(Options.MAX_DISPLAY_WIDTH, 10);
+        // make sure to have only one scale boolean set to true
+        options.putBoolean(Options.LINEAR_SCALE, true);
+    }
     
     private Graph createNodes(QueryRecord flowRecord) {
         // says that we should read the width of the splines from the field
@@ -119,18 +101,14 @@ public class SWTMapDisplayPanel implements PaintListener {
 	
     @Override
     public void paintControl(PaintEvent e) {
-        Iterator items = m_registry.getItems();
+        Iterator items = registry.getItems();
         while (items.hasNext()) {
             VisualItem vi = (VisualItem) items.next();
             Renderer renderer = vi.getRenderer();
             // TODO: NO! NO! NO! NO!
             if (renderer instanceof SWTFlowEdgeRenderer) {
                 ((SWTFlowEdgeRenderer)renderer).renderSWT(e.gc, vi);
-                
             }
         }
-        
-//        m_prefuseDisplay.paintComponent(e, e.gc);
     }
-
 }
