@@ -2,8 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="lib/j3dcore.jar"/>
-	<classpathentry kind="lib" path="lib/vecmath.jar"/>
 	<classpathentry kind="lib" path="/Applications/eclipse-galileo-macosx-cocoa-x86_64/plugins/org.eclipse.swt.cocoa.macosx.x86_64_3.5.0.v3550b.jar" sourcepath="/Applications/eclipse-galileo-macosx-cocoa-x86_64/plugins/org.eclipse.swt.cocoa.macosx.x86_64.source_3.5.0.v3550b.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
