@@ -5,11 +5,11 @@ import java.util.Collection;
 import edu.berkeley.guir.prefuse.ItemRegistry;
 import edu.berkeley.guir.prefuse.action.AbstractAction;
 import edu.stanford.hci.flowmap.cluster.ClusterLayout;
-import edu.stanford.hci.flowmap.main.Globals;
-import edu.stanford.hci.flowmap.main.Options;
 import edu.stanford.hci.flowmap.prefuse.item.FlowNodeItem;
 import edu.stanford.hci.flowmap.prefuse.render.FlowEdgeRenderer;
 import edu.stanford.hci.flowmap.structure.Node;
+import flowmap.swt.main.Globals;
+import flowmap.swt.main.Options;
 
 /**
  * This software is distributed under the Berkeley Software Distribution License.

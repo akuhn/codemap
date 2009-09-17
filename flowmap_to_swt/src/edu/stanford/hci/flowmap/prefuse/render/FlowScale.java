@@ -1,7 +1,7 @@
 package edu.stanford.hci.flowmap.prefuse.render;
 
 import edu.stanford.hci.flowmap.db.QueryRecord;
-import edu.stanford.hci.flowmap.main.Options;
+import flowmap.swt.main.Options;
 
 
 /**

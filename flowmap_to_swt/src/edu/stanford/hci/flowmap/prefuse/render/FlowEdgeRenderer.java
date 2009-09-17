@@ -10,9 +10,9 @@ import java.util.LinkedList;
 import edu.berkeley.guir.prefuse.VisualItem;
 import edu.berkeley.guir.prefuse.render.DefaultEdgeRenderer;
 import edu.stanford.hci.flowmap.db.QueryRecord;
-import edu.stanford.hci.flowmap.main.Options;
 import edu.stanford.hci.flowmap.prefuse.item.FlowEdgeItem;
 import edu.stanford.hci.flowmap.prefuse.item.FlowNodeItem;
+import flowmap.swt.main.Options;
 
 /**
  * The renderer for a FlowEdge. 

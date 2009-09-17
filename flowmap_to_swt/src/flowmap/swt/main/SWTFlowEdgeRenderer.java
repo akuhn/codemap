@@ -8,7 +8,6 @@ import org.eclipse.swt.graphics.Path;
 
 import edu.berkeley.guir.prefuse.VisualItem;
 import edu.stanford.hci.flowmap.db.QueryRecord;
-import edu.stanford.hci.flowmap.main.Options;
 import edu.stanford.hci.flowmap.prefuse.item.FlowEdgeItem;
 import edu.stanford.hci.flowmap.prefuse.item.FlowNodeItem;
 import edu.stanford.hci.flowmap.prefuse.render.FlowScale;
@@ -21,10 +20,10 @@ public class SWTFlowEdgeRenderer extends SimpleFlowEdgeRenderer {
     }
 
     public void renderSWT(GC gc, VisualItem vi) {
-        renderHelper(gc, (FlowEdgeItem) vi, getUserScaling());        
+        renderHelperSWT(gc, (FlowEdgeItem) vi, getUserScaling());        
     }
 
-    private void renderHelper(GC gc, FlowEdgeItem edgeItem, FlowScale scale) {
+    private void renderHelperSWT(GC gc, FlowEdgeItem edgeItem, FlowScale scale) {
 
         double displayWidth;
         FlowNodeItem n1, n2;

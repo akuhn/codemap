@@ -5,7 +5,6 @@ import edu.stanford.hci.flowmap.db.QueryRecord;
 import edu.stanford.hci.flowmap.db.QueryRow;
 import edu.stanford.hci.flowmap.db.RowSchema;
 import edu.stanford.hci.flowmap.layout.DirectPositionLayout;
-import edu.stanford.hci.flowmap.main.Globals;
 
 @SuppressWarnings("serial")
 public class FakeQueryRecord extends QueryRecord {

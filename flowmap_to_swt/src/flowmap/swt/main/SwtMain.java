@@ -28,7 +28,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import edu.stanford.hci.flowmap.db.QueryRecord;
-import edu.stanford.hci.flowmap.main.Globals;
 
 public class SwtMain extends Canvas {
     
@@ -41,7 +40,7 @@ public class SwtMain extends Canvas {
         
         Dimension screenDimension = Globals.getScreenDimension();
         setSize(screenDimension.width, screenDimension.height);
-        this.addPaintListener(new SWTMapDisplayPanel(this, queryRecord));
+        this.addPaintListener(new SWTMapDisplayPanel(queryRecord));
     }
 
     public static void main(String[] args) {

@@ -15,14 +15,14 @@ import javax.vecmath.Vector3d;
 import edu.berkeley.guir.prefuse.graph.Edge;
 import edu.stanford.hci.flowmap.cluster.Vector2D;
 import edu.stanford.hci.flowmap.db.QueryRecord;
-import edu.stanford.hci.flowmap.main.Globals;
-import edu.stanford.hci.flowmap.main.Options;
 import edu.stanford.hci.flowmap.prefuse.item.FlowEdgeItem;
 import edu.stanford.hci.flowmap.prefuse.item.FlowNodeItem;
 import edu.stanford.hci.flowmap.utils.GoodColorChooser;
 import edu.stanford.hci.flowmap.utils.GraphicsGems;
 import edu.stanford.hci.flowmap.utils.GraphicsUtilities;
 import edu.stanford.hci.flowmap.utils.StrokeUtilities;
+import flowmap.swt.main.Globals;
+import flowmap.swt.main.Options;
 
 
 /**

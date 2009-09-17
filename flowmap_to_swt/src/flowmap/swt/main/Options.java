@@ -1,4 +1,4 @@
-package edu.stanford.hci.flowmap.main;
+package flowmap.swt.main;
 
 import edu.stanford.hci.flowmap.utils.AttributeMap;
 

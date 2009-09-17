@@ -9,7 +9,7 @@ import java.io.IOException;
 import edu.stanford.hci.flowmap.layout.DirectPositionLayout;
 import edu.stanford.hci.flowmap.layout.GeographicPositionLayout;
 import edu.stanford.hci.flowmap.layout.PositionLayout;
-import edu.stanford.hci.flowmap.main.Globals;
+import flowmap.swt.main.Globals;
 
 /**
  * Constructs a QueryRecord from a CSV file.

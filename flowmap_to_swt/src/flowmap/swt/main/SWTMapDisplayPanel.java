@@ -1,35 +1,21 @@
 package flowmap.swt.main;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 
-import javax.swing.JPanel;
-
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.graphics.Point;
 
-import edu.berkeley.guir.prefuse.Display;
 import edu.berkeley.guir.prefuse.ItemRegistry;
 import edu.berkeley.guir.prefuse.VisualItem;
-import edu.berkeley.guir.prefuse.action.RepaintAction;
 import edu.berkeley.guir.prefuse.activity.ActionList;
-import edu.berkeley.guir.prefuse.render.DefaultRendererFactory;
 import edu.berkeley.guir.prefuse.render.Renderer;
-import edu.stanford.hci.flowmap.db.CSVQueryRecord;
 import edu.stanford.hci.flowmap.db.QueryRecord;
 import edu.stanford.hci.flowmap.db.QueryRow;
-import edu.stanford.hci.flowmap.main.Options;
 import edu.stanford.hci.flowmap.prefuse.action.FlowMapLayoutAction;
 import edu.stanford.hci.flowmap.prefuse.item.FlowDummyNodeItem;
 import edu.stanford.hci.flowmap.prefuse.item.FlowEdgeItem;
 import edu.stanford.hci.flowmap.prefuse.item.FlowRealNodeItem;
-import edu.stanford.hci.flowmap.prefuse.render.FlowClusterRenderer;
-import edu.stanford.hci.flowmap.prefuse.render.FlowNodeRenderer;
-import edu.stanford.hci.flowmap.prefuse.render.SimpleFlowEdgeRenderer;
 import edu.stanford.hci.flowmap.prefuse.structure.FlowDummyNode;
 import edu.stanford.hci.flowmap.prefuse.structure.FlowEdge;
 import edu.stanford.hci.flowmap.prefuse.structure.FlowMapStructure;
@@ -55,16 +41,10 @@ public class SWTMapDisplayPanel implements PaintListener {
 	 ***************************************************************************/
 //	SWTDisplay m_prefuseDisplay = null;
 	
-	FlowNodeRenderer m_nodeRenderer;
-	SimpleFlowEdgeRenderer m_edgeRenderer;
-
-    private SwtMain parent;
-
     private Options options;
     private QueryRecord flowRecord;
 
-	public SWTMapDisplayPanel(SwtMain swtMain, QueryRecord queryRecord) {
-		parent = swtMain;
+	public SWTMapDisplayPanel(QueryRecord queryRecord) {
 		flowRecord = queryRecord;
 		
 //		bufferImage = new BufferedImage(screenSize.width, screenSize.height,
@@ -85,16 +65,14 @@ public class SWTMapDisplayPanel implements PaintListener {
 //		m_prefuseDisplay = new SWTDisplay(m_registry);
 //		m_prefuseDisplay.setSize(this.getSize());
 //		m_prefuseDisplay.setBackground(Color.WHITE);
-		m_nodeRenderer = new FlowNodeRenderer();
-		m_edgeRenderer = new SWTFlowEdgeRenderer(options, flowRecord);
+
+		SWTFlowEdgeRenderer m_edgeRenderer = new SWTFlowEdgeRenderer(options, flowRecord);
 		
 		/***********************************************************************
 		 * Initialize the display
 		 ***********************************************************************/		
-		FlowClusterRenderer clusterRenderer = new FlowClusterRenderer();
-		
-		m_registry.setRendererFactory(new DefaultRendererFactory(m_nodeRenderer,
-		        m_edgeRenderer, clusterRenderer));
+		m_registry.setRendererFactory(new SWTRendererFactory(m_edgeRenderer));
+
         ActionList initFlowMap = new ActionList(m_registry);
         
         Graph originalGraph = createNodes(queryRecord);
