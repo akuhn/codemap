@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: edu.stanford.hci.flowmap.main.CSVMain
+Class-Path: prefuse.jar prefusex.jar j3dcore.jar epsgraphics.jar vecmath.jar
+
