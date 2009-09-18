@@ -1,0 +1,131 @@
+#Tue Sep 15 20:39:27 CEST 2009
+///ch.akuhn.hapax/src/ch/akuhn/hapax/CorpusBuilder.java=0.4302354077431571@0.2206695179364836
+///ch.akuhn.hapax/src/ch/akuhn/hapax/Hapax.java=0.7717276998880044@0.6256958766787508
+///ch.akuhn.hapax/src/ch/akuhn/hapax/NewHapaxExample.java=0.49598591620266264@0.16092775344994015
+///ch.akuhn.hapax/src/ch/akuhn/hapax/Query.java=0.13543239249299627@0.3780247437426833
+///ch.akuhn.hapax/src/ch/akuhn/hapax/cluster/ClusterEngine.java=0.8788350854969559@0.4154201159445697
+///ch.akuhn.hapax/src/ch/akuhn/hapax/cluster/Dendrogram.java=0.7158164052205275@0.25372221111474874
+///ch.akuhn.hapax/src/ch/akuhn/hapax/cluster/Distance.java=0.6693533870645866@0.4281242591464936
+///ch.akuhn.hapax/src/ch/akuhn/hapax/cluster/Similarity.java=0.6080879072627667@0.8783608571491072
+///ch.akuhn.hapax/src/ch/akuhn/hapax/corpus/CamelCaseScanner.java=0.27456084945067155@0.7277743341086386
+///ch.akuhn.hapax/src/ch/akuhn/hapax/corpus/Corpora.java=0.5123986503004683@0.4735489683408073
+///ch.akuhn.hapax/src/ch/akuhn/hapax/corpus/Corpus.java=0.12079218758778985@0.5452498441729992
+///ch.akuhn.hapax/src/ch/akuhn/hapax/corpus/CorpusBuilderHelper.java=0.8960281983292001@0.3023947407989001
+///ch.akuhn.hapax/src/ch/akuhn/hapax/corpus/LetterScanner.java=0.12575503554904482@0.7469271538195789
+///ch.akuhn.hapax/src/ch/akuhn/hapax/corpus/PorterStemmer.java=0.16265585908820934@0.21201356988562337
+///ch.akuhn.hapax/src/ch/akuhn/hapax/corpus/ScannerClient.java=0.4205571637031642@0.8024232029018946
+///ch.akuhn.hapax/src/ch/akuhn/hapax/corpus/SimpleCorpus.java=0.7403521254121661@0.09715696173530332
+///ch.akuhn.hapax/src/ch/akuhn/hapax/corpus/Stemmer.java=0.1801098843496889@0.19625154154756558
+///ch.akuhn.hapax/src/ch/akuhn/hapax/corpus/Stopwords.java=0.4656477844025756@0.9500000000000001
+///ch.akuhn.hapax/src/ch/akuhn/hapax/corpus/TermScanner.java=0.29440593069722154@0.8419806586452504
+///ch.akuhn.hapax/src/ch/akuhn/hapax/corpus/Terms.java=0.8547733141518946@0.7134514279706407
+///ch.akuhn.hapax/src/ch/akuhn/hapax/corpus/WordScanner.java=0.6751179661324926@0.8699347326279346
+///ch.akuhn.hapax/src/ch/akuhn/hapax/index/AssociativeList.java=0.12025354470432008@0.44006787904847117
+///ch.akuhn.hapax/src/ch/akuhn/hapax/index/GlobalWeighting.java=0.5770352733913781@0.4242577817397801
+///ch.akuhn.hapax/src/ch/akuhn/hapax/index/LatentSemanticIndex.java=0.3292795970039776@0.22564624786437937
+///ch.akuhn.hapax/src/ch/akuhn/hapax/index/LocalWeighting.java=0.3527916588651501@0.37072413106003044
+///ch.akuhn.hapax/src/ch/akuhn/hapax/index/LogLikelihood.java=0.4633857971508567@0.3444927657429772
+///ch.akuhn.hapax/src/ch/akuhn/hapax/index/Ranking.java=0.4368096075097478@0.5914563154081203
+///ch.akuhn.hapax/src/ch/akuhn/hapax/index/TermDocumentMatrix.java=0.5008953915514576@0.746369511902951
+///ch.akuhn.hapax/src/ch/akuhn/hapax/linalg/BufferedMatrix.java=0.6416577474324109@0.7580680970873965
+///ch.akuhn.hapax/src/ch/akuhn/hapax/linalg/DenseMatrix.java=0.8841504354446921@0.5026924783458074
+///ch.akuhn.hapax/src/ch/akuhn/hapax/linalg/DenseVector.java=0.8439820354633655@0.7522262730147221
+///ch.akuhn.hapax/src/ch/akuhn/hapax/linalg/Matrix.java=0.7508821438456126@0.7735067118448732
+///ch.akuhn.hapax/src/ch/akuhn/hapax/linalg/OfflineMatrix.java=0.7101997980954187@0.35244177269652704
+///ch.akuhn.hapax/src/ch/akuhn/hapax/linalg/SVD.java=0.5794396878282277@0.2304230171220617
+///ch.akuhn.hapax/src/ch/akuhn/hapax/linalg/SparseMatrix.java=0.29087112579214086@0.5641997163784135
+///ch.akuhn.hapax/src/ch/akuhn/hapax/linalg/SparseVector.java=0.09133585632381327@0.6027739860727186
+///ch.akuhn.hapax/src/ch/akuhn/hapax/linalg/SymetricMatrix.java=0.7884216644583767@0.13329686470572247
+///ch.akuhn.hapax/src/ch/akuhn/hapax/linalg/Vector.java=0.06417047469990131@0.33886330805857023
+///ch.akuhn.hapax/src/ch/akuhn/hapax/resources/Resource.java=0.1926437189446331@0.8090386382796549
+///ch.akuhn.hapax/src/ch/akuhn/hapax/util/BloomFilter.java=0.9262401952685331@0.5813041489453681
+///ch.akuhn.hapax/src/ch/akuhn/hapax/util/CharStream.java=0.5578311907160214@0.05
+///ch.akuhn.hapax/src/ch/akuhn/hapax/util/FileResource.java=0.8746996967471826@0.603003288959918
+///ch.akuhn.hapax/src/ch/akuhn/hapax/util/Open.java=0.7812700587827645@0.4869423693269436
+///ch.akuhn.hapax/src/ch/akuhn/hapax/util/Resource.java=0.3431523691103492@0.880365780078884
+///ch.akuhn.hapax/src/ch/akuhn/hapax/util/ResourceStream.java=0.23895326597352595@0.46198858414062494
+///ch.akuhn.hapax/src/ch/akuhn/hapax/util/RuntimeIOException.java=0.590765008557087@0.6782934407126451
+///ch.akuhn.hapax/src/ch/akuhn/hapax/util/Ziperator.java=0.08667786449081571@0.5128495042895362
+///ch.akuhn.hapax/test/ch/akuhn/hapax/HapaxTest.java=0.9483337359855493@0.43845167383849076
+///ch.akuhn.hapax/test/ch/akuhn/hapax/index/AssociativeListTest.java=0.7760962679857273@0.18455460581807587
+///ch.akuhn.hapax/test/ch/akuhn/hapax/linalg/DenseMatrixTest.java=0.6309649603676926@0.07183663208656652
+///ch.akuhn.hapax/test/ch/akuhn/hapax/linalg/SVDTest.java=0.9500000000000001@0.4653029666384493
+///ch.akuhn.hapax/test/example/ChunkExample.java=0.9695148257531171@0.5781962376057902
+///ch.akuhn.hapax/test/example/ClusterExample.java=0.8134604786970643@0.29846055807731164
+///ch.akuhn.hapax/test/example/CurrentDirJava.java=0.27740545501594066@0.15367026894857047
+///ch.akuhn.hapax/test/example/Examples.java=0.05@0.45613848058171824
+///ch.akuhn.hapax/test/example/LogLikelihoodExample.java=0.06578789109951794@0.5778191585278778
+///ch.akuhn.hapax/test/example/Sandbox.java=0.8180942094046567@0.8090603599020201
+///ch.akuhn.hapax/test/hapax/test/CamelCaseScannerTest.java=0.387705498885382@0.6692809483938842
+///ch.akuhn.hapax/test/hapax/test/DeerExample.java=0.46603450831875526@0.10530380097966094
+///ch.akuhn.hapax/test/hapax/test/InputStreamScannerTest.java=0.5189946129913101@0.8739417595192209
+///ch.akuhn.hapax/test/hapax/test/SmallDocumentsTest.java=0.16018531867909738@0.3225657976558946
+///ch.akuhn.hapax/test/hapax/test/SparseVectorTest.java=0.6287102338738422@0.1384674829635718
+///ch.akuhn.hapax/test/hapax/test/StopwordsTest.java=0.3857588527132735@0.05370502908271041
+///ch.akuhn.hapax/test/hapax/test/SymetricMatrixTest.java=0.36893484410774735@0.14881223143781253
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.cluster{ClusterEngine.java=0.7368951884365805 \# 0.30753603540292207
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.cluster{Dendrogram.java=0.791829428874144 \# 0.5024276012977938
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.cluster{Distance.java=0.5287594450119569 \# 0.326972923648255
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.cluster{Similarity.java=0.55253400479503 \# 0.42771886131005676
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.corpus{CamelCaseScanner.java=0.5337819943642832 \# 0.4171918960554685
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.corpus{Corpora.java=0.7118935977960652 \# 0.48195986155837706
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.corpus{Corpus.java=0.3549356431729394 \# 0.7643979339699785
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.corpus{CorpusBuilderHelper.java=0.6537132509429078 \# 0.27891167163525354
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.corpus{LetterScanner.java=0.6093283483389369 \# 0.5357934264469388
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.corpus{PorterStemmer.java=0.34684995417880476 \# 0.8947661172625998
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.corpus{ScannerClient.java=0.20614424967006936 \# 0.8980228734467611
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.corpus{SimpleCorpus.java=0.6051490144107247 \# 0.7156213648737388
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.corpus{Stemmer.java=0.23765774776637758 \# 0.9701993744992583
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.corpus{Stopwords.java=0.7140106544523092 \# 0.4595332742398814
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.corpus{TermScanner.java=0.7357416001412589 \# 0.5985403663019552
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.corpus{Terms.java=0.8190270844873822 \# 0.6605851969139959
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.corpus{WordScanner.java=0.7976296676808005 \# 0.2978503354288652
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.index{AssociativeList.java=0.6320495430076266 \# 0.577648686856315
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.index{GlobalWeighting.java=0.6799859551838113 \# 0.7323181344133964
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.index{LatentSemanticIndex.java=0.24040733064281491 \# 0.7892132786796737
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.index{LocalWeighting.java=0.6330739829852959 \# 0.5959670758827106
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.index{LogLikelihood.java=0.6066625122809213 \# 0.5951530104793664
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.index{Ranking.java=0.8500180060866019 \# 0.15839619889266185
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.index{TermDocumentMatrix.java=0.5734122355351242 \# 0.6354426204812854
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.linalg{BufferedMatrix.java=0.6459271368836866 \# 0.6877572977956458
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.linalg{DenseMatrix.java=0.4944688873905747 \# 0.6996223058922663
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.linalg{DenseVector.java=0.5440409272467249 \# 0.531249321488188
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.linalg{Matrix.java=0.6491986265762512 \# 0.42943152361490067
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.linalg{OfflineMatrix.java=0.918140671981902 \# 0.33291420518588266
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.linalg{SVD.java=0.674011530569322 \# 0.5902623157813516
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.linalg{SparseMatrix.java=0.5681417905531149 \# 0.49432759168807233
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.linalg{SparseVector.java=0.626719300108782 \# 0.44156388122439233
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.linalg{SymetricMatrix.java=0.5561929819729025 \# 0.3973649954265256
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.linalg{Vector.java=0.3196802516895694 \# 0.6053336914778092
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.resources{Resource.java=0.7486378053417151 \# 0.2042646778050733
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.util{BloomFilter.java=0.8157315790505754 \# 0.3105013495787207
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.util{CharStream.java=0.5942200098781553 \# 0.3762011318287284
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.util{FileResource.java=0.784006466408995 \# 0.5488511289736568
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.util{Open.java=0.9450194659743933 \# 0.1661780048566787
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.util{Resource.java=0.818816131559304 \# 0.20262545019292932
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.util{ResourceStream.java=0.814473760666822 \# 0.5536848509928739
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.util{RuntimeIOException.java=0.4434623290615011 \# 0.7007232010583018
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax.util{Ziperator.java=0.8408476983286379 \# 0.29954449245388504
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax{CorpusBuilder.java=0.8699571834534416 \# 0.27846885188417364
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax{Hapax.java=0.8872105234902595 \# 0.2689534421723537
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax{NewHapaxExample.java=0.6849572213011225 \# 0.3129167131147356
+//\=ch.akuhn.hapax/src<ch.akuhn.hapax{Query.java=0.4952703922965324 \# 0.5841515827128988
+//\=ch.akuhn.hapax/test<ch.akuhn.hapax.index{AssociativeListTest.java=0.11111111111111112 \# 1.0
+//\=ch.akuhn.hapax/test<ch.akuhn.hapax.linalg{DenseMatrixTest.java=0.9499859885471393 \# 0.1816385025495946
+//\=ch.akuhn.hapax/test<ch.akuhn.hapax.linalg{SVDTest.java=0.4456826177335137 \# 0.361769925368914
+//\=ch.akuhn.hapax/test<ch.akuhn.hapax{HapaxTest.java=0.725669593172576 \# 0.40479150605680475
+//\=ch.akuhn.hapax/test<example{ChunkExample.java=0.3907843450500453 \# 0.5042727108385673
+//\=ch.akuhn.hapax/test<example{ClusterExample.java=0.7889812566444612 \# 0.31560772278233395
+//\=ch.akuhn.hapax/test<example{CurrentDirJava.java=0.8419185099033586 \# 0.5529336619251323
+//\=ch.akuhn.hapax/test<example{Examples.java=0.33933818425736667 \# 0.7935789837201548
+//\=ch.akuhn.hapax/test<example{LogLikelihoodExample.java=0.7608468957172435 \# 0.5484295515378155
+//\=ch.akuhn.hapax/test<example{PimpMyForeach.java=0.5439280764319819 \# 0.25416387201987883
+//\=ch.akuhn.hapax/test<example{Sandbox.java=0.43729383878624534 \# 0.4844147583784264
+//\=ch.akuhn.hapax/test<hapax.test{CamelCaseScannerTest.java=0.7218902028433506 \# 0.2230042789985942
+//\=ch.akuhn.hapax/test<hapax.test{DeerExample.java=0.61530520496772 \# 0.5201723458509039
+//\=ch.akuhn.hapax/test<hapax.test{InputStreamScannerTest.java=0.4930129905683892 \# 0.7019317462834408
+//\=ch.akuhn.hapax/test<hapax.test{SmallDocumentsTest.java=0.8410126432639625 \# 0.35585007392758533
+//\=ch.akuhn.hapax/test<hapax.test{SparseVectorTest.java=1.0 \# 0.11111111111111112
+//\=ch.akuhn.hapax/test<hapax.test{StopwordsTest.java=0.7114654532564598 \# 0.4081964678636465
+//\=ch.akuhn.hapax/test<hapax.test{SymetricMatrixTest.java=0.48788067894350307 \# 0.41100504331477566
+eclipse.preferences.version=1
