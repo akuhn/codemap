@@ -1,7 +1,6 @@
 package org.codemap.resources;
 
 import java.util.Collection;
-import java.util.Collections;
 
 import org.codemap.CodemapCore;
 

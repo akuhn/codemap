@@ -28,6 +28,9 @@ public class ComputeElementsTask extends TaskValue<Collection<String>> {
         final Collection<String> result = new HashSet<String>();
         for (String path: projects) {
             IResource project = Resources.asResource(path);
+            // fix error for closed projects
+            if (!project.isAccessible()) continue;
+            
             try {
                 project.accept(new IResourceVisitor() {
                     @Override
