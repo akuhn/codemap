@@ -68,14 +68,6 @@ public class Mds {
     
     public void init(boolean randomPoints) {
 
-        double largest = Double.NaN;
-
-        /*-- initalize Dtarget --*/
-        largest = Dtarget.max();
-
-        /* Report the value of largest */
-        if (largest > 100000) throw new Error("Warning: your largest weight, %.2f (index %d), is extremely large. ");
-
         /* populate with INF */
         this.Dtarget.apply(f_dtarget);
 

@@ -55,6 +55,7 @@ public class SMat {
     }
     
     public double max() {
+        if (vals.length == 0) return Double.NaN;
         double max = vals[1][0];
         for (double[] row: vals) {
             for (double each: row) {
