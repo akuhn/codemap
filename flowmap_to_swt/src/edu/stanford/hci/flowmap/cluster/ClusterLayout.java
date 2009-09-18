@@ -23,12 +23,10 @@ public class ClusterLayout extends FlowLayout {
 	
 	Collection<Cluster> allClusters;
 	protected HierarchicalCluster original_Cluster;
-    private Graph graph;
 	
 	public ClusterLayout(Graph g) {
 	    super(g.getRootNode(), g.getAllNodes());
 	    assert(g.getRootNode() != null);
-	    graph = g;
         original_Cluster = new HierarchicalCluster();	    
     }
 
@@ -39,7 +37,7 @@ public class ClusterLayout extends FlowLayout {
 		return source;
 	}
 
-	public Collection getClusterCollection() {
+	public Collection<Cluster> getClusterCollection() {
 		return allClusters;
 	}
 	
@@ -58,14 +56,13 @@ public class ClusterLayout extends FlowLayout {
 		while(queue.size() > 0) {
 			Node n = (Node) queue.removeFirst();
 			//System.out.println("ToFlowTree got: " + n);
-			LinkedList clusterList = node2Cluster.get(n);
+			LinkedList<Cluster> clusterList = node2Cluster.get(n);
 			assert(clusterList != null && clusterList.size() > 0);
 			
 			Node newNode;
-			Cluster c1, c2;
 			//System.out.println("ToFlowTree clusterListSize " + clusterList.size());
 			if (clusterList.size() == 1) {
-				c1 = (Cluster) clusterList.removeFirst();
+			    Cluster c1 = clusterList.removeFirst();
 				newNode = processCluster(n, c1, node2Cluster);
 				if (newNode != null) {
 					//System.out.println("toFlowTree newNode: " + newNode);
@@ -74,6 +71,10 @@ public class ClusterLayout extends FlowLayout {
 					queue.add(newNode);
 				}
 			} else { // more than one cluster per node
+			    for(Cluster clus: clusterList) {
+			        
+			    }
+			    
 				Iterator i = clusterList.iterator();
 				while (i.hasNext()) {
 					Cluster clus = (Cluster) i.next();

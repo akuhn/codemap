@@ -2,8 +2,9 @@ package edu.stanford.hci.flowmap.prefuse.render;
 
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
+import java.util.List;
 
 import edu.stanford.hci.flowmap.utils.GraphicsGems;
 
@@ -17,12 +18,10 @@ public class BezierSpline {
 	
 	// given a list of points to interpolate through (catmull rom points), returns a List
 	// of CubicCurve2D objects with the curves to interpolate through
-	public static Collection computeSplines(Point2D[] points) {
-		LinkedList newCubics = new LinkedList();
+	public static Collection<CubicCurve2D> computeSplines(Point2D[] points) {
+		List<CubicCurve2D> newCubics = new ArrayList<CubicCurve2D>();
 		CubicCurve2D bezierCurve;
-		Point2D controlPt1, controlPt2;
 		int i;
-		double x1, y1, x2, y2;
 			
 		// now separate out the points. we assume that there are at least 4 points, 
 		// of which the first and last are dummy points (so there are only 2 real points)

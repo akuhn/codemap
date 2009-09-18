@@ -53,9 +53,6 @@ public class SWTEdgeRenderer {
         gc.setLineWidth((int) displayWidth);
         renderShape(gc, shape);
     }
-
-    
-   
     
     public void initializeRenderTree(Graph graph) {
         LinkedList<Node> nodeQeue = new LinkedList<Node>();
@@ -412,26 +409,6 @@ public class SWTEdgeRenderer {
      * Contributor(s):   Cedric Chabanois (cchabanois AT no-log.org);
      *                   David Gilbert (for Object Refinery Limited);
      *                   Ronnie Duan (see bug report 2583891);
-     *
-     * Changes
-     * -------
-     * 14-Jun-2006 : New class (HP);
-     * 29-Jan-2007 : Fixed the fillRect method (HP);
-     * 31-Jan-2007 : Moved the dummy JPanel to SWTUtils.java,
-     *               implemented the drawLine method (HP);
-     * 07-Apr-2007 : Dispose some of the swt ressources,
-     *               thanks to silent for pointing this out (HP);
-     * 23-May-2007 : Removed resource leaks by adding a resource pool (CC);
-     * 15-Jun-2007 : Fixed compile error for JDK 1.4 (DG);
-     * 22-Oct-2007 : Implemented clipping (HP);
-     * 22-Oct-2007 : Implemented some AlphaComposite support (HP);
-     * 23-Oct-2007 : Added mechanism for storing RenderingHints (which are
-     *               still ignored at this point) (DG);
-     * 23-Oct-2007 : Implemented drawPolygon(), drawPolyline(), drawOval(),
-     *               fillOval(), drawArc() and fillArc() (DG);
-     * 27-Nov-2007 : Implemented a couple of drawImage() methods (DG);
-     * 18-Nov-2008 : Check for GradientPaint in setPaint() method (DG);
-     * 27-Feb-2009 : Implemented fillPolygon() - see bug 2583891 (DG);
      *
      */    
     /**

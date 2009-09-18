@@ -14,38 +14,30 @@ import java.util.LinkedList;
 public class Graph {
     
     /**
-     * Records the min, max, and total values for a particular column
-     * @author dphan
-     *
+     * Records the min, max, and total values for the weight values.
      */
-    public class MinMaxTotal {
-        // the name of the schema this is storing the values for
-        private String name;
+    protected class MinMaxTotal {
         private double low, high, total;
         
-        private MinMaxTotal() {
+        protected MinMaxTotal() {
             low = Double.MAX_VALUE;
             high = Double.MIN_VALUE;
             total = 0;
         }
         
-        public String getName() {
-            return name;
-        }
-        
-        public double getMin() {
+        protected double getMin() {
             return low;
         }
         
-        public double getMax() {
+        protected double getMax() {
             return high;
         }
         
-        public double getTotal() {
+        protected double getTotal() {
             return total;
         }
         
-        public void update(double val) {
+        protected void update(double val) {
             if (val < low) {
                 low = val;
             } 

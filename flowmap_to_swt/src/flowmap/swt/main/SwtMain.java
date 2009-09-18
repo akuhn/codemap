@@ -18,8 +18,6 @@ package flowmap.swt.main;
  * http://www.eclipse.org/swt/snippets/
  */
 
-import java.awt.Dimension;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
@@ -32,12 +30,12 @@ public class SwtMain extends Canvas {
     public SwtMain(Composite parent) {
         super(parent, SWT.NONE);
         
-        Dimension screenDimension = Globals.getScreenDimension();
-        setSize(screenDimension.width, screenDimension.height);
+        setSize(Globals.getScreenDimension());
         this.addPaintListener(new GraphPainter());
     }
 
     public static void main(String[] args) {
+        System.setProperty("java.awt.headless", "true");
         Display display = new Display();
         Shell shell = new Shell(display);
         shell.setLayout(new FillLayout());
@@ -49,7 +47,5 @@ public class SwtMain extends Canvas {
                 display.sleep();
         }
         display.dispose();
-        // quit the awt thread that was started as well ...
-        System.exit(0);
     }
 }

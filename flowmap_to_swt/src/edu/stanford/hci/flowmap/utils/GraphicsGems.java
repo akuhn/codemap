@@ -4,8 +4,6 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-import javax.vecmath.Vector2d;
-
 
 /**
  * This software is distributed under the Berkeley Software Distribution License.
@@ -314,16 +312,16 @@ public class GraphicsGems {
 			// 1. compute area of rectangle
 			double boxArea = rect.getWidth() * rect.getHeight();
 			
-			Line2D heightLine, otherLine;
+			Line2D heightLine;//, otherLine;
 			// 2. pick a line that is not closest or further line, call it the heightLine,
 			//    (for the height of the trapezoid), call the remaining line the otherLine
 			// note we know that the lines have to be opposite each other, so this make it easier
 			if ((top != closestLine) && (top != furthestLine) && (bottom != closestLine) && (bottom != furthestLine)) {
 				heightLine = top;
-				otherLine = bottom;				
+//				otherLine = bottom;				
 			} else {
 				heightLine = left;
-				otherLine = right;
+//				otherLine = right;
 			}
 			
 			// 3. get adjacent point of closestLine and heightLine, to compute b1
@@ -344,7 +342,7 @@ public class GraphicsGems {
 			double trapezoidArea = .5*(b1+b2)*h;
 			//System.out.println( "boxArea :" + boxArea + " trapezoid Area: " + trapezoidArea);
 			assert(boxArea > trapezoidArea);
-			double otherArea = boxArea - trapezoidArea;
+//			double otherArea = boxArea - trapezoidArea;
 			
 			// return the point on the side of trapezoidArea
 			if (trapezoidArea > boxArea) {
@@ -376,148 +374,6 @@ public class GraphicsGems {
 			return oneP2;
 		else 
 			return null;
-		
-	}
-	
-	/**
-	 * Computes the intersection of a ray and a segment if one exists
-	 * @param origin ray starting point
-	 * @param direction ray direction
-	 * @param segment segment to intersect, which we assume is axis aligned
-	 * @return a point on the segment if an intersection exists, or null if no intersection exists
-	 */
-	public static Point2D rayAASegmentIntersect(Point2D origin, Vector2d direction, Line2D segment) {
-		Point2D intersection;
-		
-		//System.out.println("RayAAIntersect - origin: " + origin + " dir:" + direction + " lineP1" + segment.getP1() + " lineP2: " + segment.getP2() );
-		
-		// figure out which thing is axis aligned
-		// a and b are our proxy names for x, y
-		// a is the thing we know, b is the thing we are trying to solve for
-		
-		// the equation we have is originA + t*rayA = knownA, so solving for that
-		// means: t = (knownA - originA)/rayA;
-		double rayA, originA, knownA, t, computedB, rayB, originB;
-		double lowB, highB;
-		
-		Point2D seg1 = segment.getP1();
-		Point2D seg2 = segment.getP2();
-		
-		boolean xIsSame;
-		
-		// if x's are the same
-		if (seg1.getX() == seg2.getX()) {
-			xIsSame = true;
-			rayA = direction.x;
-			rayB = direction.y;
-			originA = origin.getX();
-			originB = origin.getY();
-			knownA = seg1.getX();
-			
-			if (seg1.getY() < seg2.getY()) {
-				lowB = seg1.getY();
-				highB = seg2.getY();
-			} else {
-				lowB = seg2.getY();
-				highB = seg1.getY();
-			}
-			
-		// if y's are the same
-		} else {
-			xIsSame = false;
-			rayA = direction.y;
-			rayB = direction.x;
-			originA = origin.getY();
-			originB = origin.getX();
-			knownA = seg1.getY();
-			
-			if (seg1.getX() < seg2.getX()) {
-				lowB = seg1.getX();
-				highB = seg2.getX();
-			} else {
-				lowB = seg2.getX();
-				highB = seg1.getX();
-			}
-		}
-		
-		t = (knownA - originA)/rayA;
-		computedB = rayB * t + originB;
-		//System.out.println("GraphicsGems - computedT " + t + " computedB: " + computedB  + "lowB: " + lowB + " highB: " + highB);
-		
-		// check to see if computed value falls within the line segment
-		if ((computedB <= highB) && (computedB >= lowB) && t>=0) {
-			if (xIsSame)
-				intersection = new Point2D.Double(knownA, computedB);
-			else
-				intersection = new Point2D.Double(computedB, knownA);
-		// otherwise there is no intersection
-		} else {
-			intersection = null;
-		}
-		return intersection;
-	}
-
-	/**
-	 * Computes the closest intersection between a ray and a box
-	 * @param origin origin of ray
-	 * @param direction direction of ray
-	 * @param box box to intersect
-	 * @return a Point of the interesction between the ray and the box, measured from origin, or null if no such point exists
-	 */
-	public static Point2D rayBox2DIntersect(Point2D origin, Vector2d direction, Rectangle2D box) { 
-		Point2D topLeft = new Point2D.Double(box.getX(), box.getY());
-		Point2D topRight = new Point2D.Double(box.getX()+box.getWidth(), box.getY());
-		Point2D bottomLeft = new Point2D.Double(box.getX(), box.getY()+box.getHeight());
-		Point2D bottomRight = new Point2D.Double(box.getX()+box.getWidth(),box.getY()+box.getHeight());
-		
-		Line2D top = new Line2D.Double(topLeft, topRight);
-		Line2D left = new Line2D.Double(topLeft, bottomLeft);
-		Line2D right = new Line2D.Double(topRight, bottomRight);
-		Line2D bottom = new Line2D.Double(bottomLeft, bottomRight);
-		
-		Point2D candidatePoint, closestPoint;
-		double candidateDist, closestDist;
-		closestDist = Double.POSITIVE_INFINITY;
-		
-		closestPoint = candidatePoint = null;
-		
-		candidatePoint = rayAASegmentIntersect(origin,direction, top);
-		if (candidatePoint != null) {
-			candidateDist = candidatePoint.distance(origin);
-			if (candidateDist < closestDist) {
-				closestDist = candidateDist;
-				closestPoint = candidatePoint;
-			}
-		}
-		
-		candidatePoint = rayAASegmentIntersect(origin,direction, left);
-		if (candidatePoint != null) {
-			candidateDist = candidatePoint.distance(origin);
-			if (candidateDist < closestDist) {
-				closestDist = candidateDist;
-				closestPoint = candidatePoint;
-			}
-		}
-		
-		candidatePoint = rayAASegmentIntersect(origin,direction, right);
-		if (candidatePoint != null) {
-			candidateDist = candidatePoint.distance(origin);
-			if (candidateDist < closestDist) {
-				closestDist = candidateDist;
-				closestPoint = candidatePoint;
-			}
-		}
-		
-		candidatePoint = rayAASegmentIntersect(origin,direction, bottom);
-		if (candidatePoint != null) {
-			candidateDist = candidatePoint.distance(origin);
-			if (candidateDist < closestDist) {
-				closestDist = candidateDist;
-				closestPoint = candidatePoint;
-			}
-		}
-		
-		return closestPoint;
 		
 	}
 	
