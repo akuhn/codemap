@@ -13,9 +13,6 @@ public class Edge {
 
 	private Node node1, node2;
 	
-	private String defaultType;
-	private Hashtable<String, Double> types2Weights;
-
     private Shape shape;
 
     private Double weight;
@@ -28,7 +25,6 @@ public class Edge {
 	private Edge(Node from, Node to) {
 		node1 = from;
 		node2 = to;
-		types2Weights = null;
 	}
 	
 	public double getWeight() {
