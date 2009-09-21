@@ -1,16 +1,8 @@
 package flowmap.swt.main;
 
-import java.awt.BasicStroke;
-import java.awt.Shape;
-import java.awt.geom.CubicCurve2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
-
-import javax.vecmath.Vector3d;
 
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Path;
@@ -22,6 +14,11 @@ import edu.stanford.hci.flowmap.structure.Edge;
 import edu.stanford.hci.flowmap.structure.Graph;
 import edu.stanford.hci.flowmap.structure.Node;
 import edu.stanford.hci.flowmap.utils.GraphicsGems;
+import geom.CubicCurve2D;
+import geom.Line2D;
+import geom.PathIterator;
+import geom.Point2D;
+import geom.Shape;
 
 public class SWTEdgeRenderer {
     
@@ -184,11 +181,16 @@ public class SWTEdgeRenderer {
             Vector2D otherEdgeVec = new Vector2D(item1.getLocation(), item2.getLocation());
             
             // now do the cross product of thisEdgeVec
-            Vector3d thisEdgeVector = new Vector3d(thisEdgeVec.getNormalized().getX(), -1*thisEdgeVec.getNormalized().getY(), 0);
-            Vector3d otherEdgeVector = new Vector3d(otherEdgeVec.getNormalized().getX(), -1*otherEdgeVec.getNormalized().getY(), 0);
             
-            Vector3d result = new Vector3d();
-            result.cross(thisEdgeVector, otherEdgeVector);
+//            do not use Vector3d but own implementation that gets rid of this dependency 
+//            Vector3d thisEdgeVector = new Vector3d(thisEdgeVec.getNormalized().getX(), -1*thisEdgeVec.getNormalized().getY(), 0);
+//            Vector3d otherEdgeVector = new Vector3d(otherEdgeVec.getNormalized().getX(), -1*otherEdgeVec.getNormalized().getY(), 0);
+//            
+//            Vector3d result = new Vector3d();
+//
+//            result.cross(thisEdgeVector, otherEdgeVector);
+            double[] cross = computeCrossProduct(thisEdgeVec.getNormalized().getX(), -1*thisEdgeVec.getNormalized().getY(), 
+                    otherEdgeVec.getNormalized().getX(), -1*otherEdgeVec.getNormalized().getY());
             //System.out.println("edges: " + parentEdgeItem + ", " + edgeItem + " , " + otherEdgeItem);
             //System.out.println(result);
             
@@ -198,7 +200,8 @@ public class SWTEdgeRenderer {
             Point2D shiftDir = new Point2D.Double(-grandToParent.getNormalized().getY(), 
                     -grandToParent.getNormalized().getX()); 
             
-            if (result.z < 0) {
+//            if (result.z < 0) {
+            if (cross[2] < 0 ) {
             // if z > 0 then we know that thisEdge is to the right of otherEdge
             // so we push this in the direction of shiftDir
 
@@ -292,8 +295,9 @@ public class SWTEdgeRenderer {
 
         // 8. Now that we know where all the catmull-rom objects are,
         // construct a BasicStroke object with e1's thickness
-        BasicStroke bs = new BasicStroke((float) displayWidth,
-                BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
+//      haha, it's not even read ...
+//        BasicStroke bs = new BasicStroke((float) displayWidth,
+//                BasicStroke.CAP_SQUARE, BasicStroke.JOIN_ROUND);
 
         // 9. construct a CubicCurve object with the given control points
         // by passing the four points object to the BezierSpline.computeSplines
@@ -445,6 +449,19 @@ public class SWTEdgeRenderer {
             pit.next();
         }
         gc.drawPath(path);
-    }      
+    }
+    
+    private double[] computeCrossProduct (double x1, double  y1, double x2, double y2) {
+       double v0[] = {x1, y1, 0};
+       double v1[] = {x2, y2, 0};
+        
+      double crossProduct[] = new double[3];
+      
+      crossProduct[0] = v0[1] * v1[2] - v0[2] * v1[1];
+      crossProduct[1] = v0[2] * v1[0] - v0[0] * v1[2];
+      crossProduct[2] = v0[0] * v1[1] - v0[1] * v1[0];
+
+      return crossProduct;
+    }    
     
 }

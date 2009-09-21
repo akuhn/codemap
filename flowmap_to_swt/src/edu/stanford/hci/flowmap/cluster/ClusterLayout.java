@@ -1,7 +1,5 @@
 package edu.stanford.hci.flowmap.cluster;
 
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,6 +9,8 @@ import edu.stanford.hci.flowmap.structure.Edge;
 import edu.stanford.hci.flowmap.structure.Graph;
 import edu.stanford.hci.flowmap.structure.Node;
 import edu.stanford.hci.flowmap.utils.GraphicsGems;
+import geom.Line2D;
+import geom.Point2D;
 
 /**
  * This version uses nodes in the structure package instead of

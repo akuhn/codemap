@@ -1,4 +1,4 @@
-#Tue Sep 15 22:08:32 CEST 2009
+#Fri Sep 18 20:29:57 CEST 2009
 ///flowmap_swt/src/edu/stanford/hci/flowmap/cluster/Cluster.java=0.0689254707390276@0.591714424016919
 ///flowmap_swt/src/edu/stanford/hci/flowmap/cluster/ClusterLayout.java=0.7736270364789282@0.6309759894886543
 ///flowmap_swt/src/edu/stanford/hci/flowmap/cluster/DistancePair.java=0.1270863068982092@0.7157519110056582
@@ -54,4 +54,24 @@
 ///flowmap_swt/src/edu/stanford/hci/flowmap/utils/StrokeUtilities.java=0.1971765867181327@0.5786650060694684
 ///flowmap_swt/src/edu/stanford/hci/flowmap/utils/SystemUtilities.java=0.49617404607620363@0.9286566874105345
 ///flowmap_swt/src/edu/stanford/hci/flowmap/utils/WindowUtilities.java=0.8718769341246595@0.7463422626163022
+///flowmap_to_swt/src/edu/stanford/hci/flowmap/cluster/Cluster.java=0.95@0.47501871398915235
+///flowmap_to_swt/src/edu/stanford/hci/flowmap/cluster/ClusterLayout.java=0.8014039037289136@0.5533326817668742
+///flowmap_to_swt/src/edu/stanford/hci/flowmap/cluster/DistancePair.java=0.7237951687405191@0.14712363682805746
+///flowmap_to_swt/src/edu/stanford/hci/flowmap/cluster/FlowLayout.java=0.5193141075245997@0.05
+///flowmap_to_swt/src/edu/stanford/hci/flowmap/cluster/HierarchicalCluster.java=0.7478607278809439@0.3426438763689702
+///flowmap_to_swt/src/edu/stanford/hci/flowmap/cluster/Vector2D.java=0.4256236586958838@0.3409791260823431
+///flowmap_to_swt/src/edu/stanford/hci/flowmap/prefuse/render/BezierSpline.java=0.5133914843848@0.9500000000000001
+///flowmap_to_swt/src/edu/stanford/hci/flowmap/prefuse/render/FlowScale.java=0.06899307890516156@0.6451658700709294
+///flowmap_to_swt/src/edu/stanford/hci/flowmap/structure/Edge.java=0.8752395662101171@0.7638077772571054
+///flowmap_to_swt/src/edu/stanford/hci/flowmap/structure/Graph.java=0.14975927252501442@0.7990774164774257
+///flowmap_to_swt/src/edu/stanford/hci/flowmap/structure/Node.java=0.6039693741930717@0.5890557038563431
+///flowmap_to_swt/src/edu/stanford/hci/flowmap/utils/AttributeMap.java=0.30676918402162184@0.9210697726254431
+///flowmap_to_swt/src/edu/stanford/hci/flowmap/utils/GoodColorChooser.java=0.32306678548509343@0.0656426978339028
+///flowmap_to_swt/src/edu/stanford/hci/flowmap/utils/GraphicsGems.java=0.7199284918895117@0.8847411560582371
+///flowmap_to_swt/src/edu/stanford/hci/flowmap/utils/Pair.java=0.850947785982554@0.19491447436184933
+///flowmap_to_swt/src/flowmap/swt/main/Globals.java=0.20657923256567035@0.1620315227209411
+///flowmap_to_swt/src/flowmap/swt/main/GraphPainter.java=0.05@0.4678164246448794
+///flowmap_to_swt/src/flowmap/swt/main/Options.java=0.20543889472445215@0.5484107847510131
+///flowmap_to_swt/src/flowmap/swt/main/SWTEdgeRenderer.java=0.49521124464541777@0.7268206800684246
+///flowmap_to_swt/src/flowmap/swt/main/SwtMain.java=0.07180651885032331@0.2937146635430996
 eclipse.preferences.version=1

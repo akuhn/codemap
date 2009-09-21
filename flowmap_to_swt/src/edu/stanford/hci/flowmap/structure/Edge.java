@@ -1,8 +1,8 @@
 package edu.stanford.hci.flowmap.structure;
 
-import java.awt.Shape;
 import java.util.Hashtable;
 
+import geom.Shape;
 
 /**
  * This software is distributed under the Berkeley Software Distribution License.

@@ -35,7 +35,7 @@ public class SwtMain extends Canvas {
     }
 
     public static void main(String[] args) {
-        System.setProperty("java.awt.headless", "true");
+//        System.setProperty("java.awt.headless", "true");
         Display display = new Display();
         Shell shell = new Shell(display);
         shell.setLayout(new FillLayout());

@@ -1,11 +1,11 @@
 package edu.stanford.hci.flowmap.cluster;
 
 
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 import edu.stanford.hci.flowmap.structure.Node;
+import geom.Line2D;
+import geom.Point2D;
+import geom.Rectangle2D;
 
 /**
  * This software is distributed under the Berkeley Software Distribution License.

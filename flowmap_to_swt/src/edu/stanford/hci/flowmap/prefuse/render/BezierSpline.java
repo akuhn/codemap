@@ -1,12 +1,12 @@
 package edu.stanford.hci.flowmap.prefuse.render;
 
-import java.awt.geom.CubicCurve2D;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import edu.stanford.hci.flowmap.utils.GraphicsGems;
+import geom.CubicCurve2D;
+import geom.Point2D;
 
 
 /**

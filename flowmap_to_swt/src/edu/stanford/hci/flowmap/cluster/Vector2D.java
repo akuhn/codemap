@@ -1,6 +1,6 @@
 package edu.stanford.hci.flowmap.cluster;
 
-import java.awt.geom.Point2D;
+import geom.Point2D;
 
 
 /**

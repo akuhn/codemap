@@ -1,11 +1,7 @@
 package flowmap.swt.main;
 
 
-import java.awt.Color;
-
 import org.eclipse.swt.graphics.Point;
-
-import edu.stanford.hci.flowmap.utils.GoodColorChooser;
 
 /**
  * This software is distributed under the Berkeley Software Distribution License.
@@ -30,8 +26,6 @@ public class Globals {
 	
 	public static boolean runNodeEdgeRouting = true;
 	public static boolean useLayoutAdjustment = false;
-	
-	public static Color currentColor = GoodColorChooser.rose;
 	
 	public static Point getScreenDimension() {
 		switch(Globals.currentType) {
