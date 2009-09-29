@@ -13,7 +13,9 @@ public abstract class MenuAction extends CodemapAction {
 	@Override
 	public void configureAction(MapPerProject map) {
 		setChecked(map.getPropertyOrDefault(getKey(), isDefaultChecked()));
-		run();
+//		TODO: find a way to re-run the action-enabling on startup
+//		do *not* use run() as it causes the program to loop infinitely
+//		run();
 	}
 	
 	@Override
