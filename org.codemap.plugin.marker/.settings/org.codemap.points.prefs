@@ -1,9 +1,9 @@
-#Fri Sep 04 16:57:53 CEST 2009
+#Tue Sep 29 17:14:04 CEST 2009
 ///org.codemap.plugin.marker/plugin.xml=0.05@0.44299342295349786
-///org.codemap.plugin.marker/src/org/codemap/plugin/marker/MarkerController.java=0.1714565527802296@0.4682310523983317
-///org.codemap.plugin.marker/src/org/codemap/plugin/marker/MarkerPlugin.java=0.05@0.05
+///org.codemap.plugin.marker/src/org/codemap/plugin/marker/MarkerController.java=0.05@0.47221350135127116
+///org.codemap.plugin.marker/src/org/codemap/plugin/marker/MarkerPlugin.java=0.25061934499581706@0.05
 ///org.codemap.plugin.marker/src/org/codemap/plugin/marker/MarkerPluginCore.java=0.05@0.48490262717630606
-///org.codemap.plugin.marker/src/org/codemap/plugin/marker/MarkerSelection.java=0.9500000000000002@0.15642591300282255
-///org.codemap.plugin.marker/src/org/codemap/plugin/marker/MarkersOverlay.java=0.9241346443933054@0.7719399640989195
-///org.codemap.plugin.marker/src/org/codemap/plugin/marker/ShowMarkersAction.java=0.057343091823414113@0.9500000000000001
+///org.codemap.plugin.marker/src/org/codemap/plugin/marker/MarkerSelection.java=0.9500000000000001@0.2002330924099205
+///org.codemap.plugin.marker/src/org/codemap/plugin/marker/MarkersOverlay.java=0.9186468810292279@0.7351640998409041
+///org.codemap.plugin.marker/src/org/codemap/plugin/marker/ShowMarkersAction.java=0.21475443552861512@0.9500000000000001
 eclipse.preferences.version=1

@@ -73,11 +73,10 @@ public class MarkerPlugin extends AbstractUIPlugin {
 		MarkerSelection selection = selectionCache.get(activeMap);
 		if (selection == null) {
 			selection = new MarkerSelection();
+			selectionCache.put(activeMap, selection);
 			MarkersOverlay markersOverlay = new MarkersOverlay();
 			markersOverlay.setMarkerSelection(selection);
 			activeMap.addSelectionLayer(markersOverlay, selection.getSelection());
-			
-			selectionCache.put(activeMap, selection);
 		}
 		return selection;
 	}
