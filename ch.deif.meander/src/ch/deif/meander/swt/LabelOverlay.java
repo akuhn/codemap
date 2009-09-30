@@ -21,7 +21,7 @@ public class LabelOverlay extends SWTLayer {
         paintLabels(labeling, gc);
     }
     
-    private void paintLabels(Labeling labeling, GC gc) {
+    public void paintLabels(Labeling labeling, GC gc) {
         Device device = gc.getDevice();
         String fname = ARIAL_NARROW;
         Font basefont = new Font(device, fname, 12, SWT.NORMAL);
