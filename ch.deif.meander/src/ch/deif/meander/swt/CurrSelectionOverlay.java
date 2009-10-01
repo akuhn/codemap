@@ -10,7 +10,6 @@ import java.util.Collection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DragDetectEvent;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
 
@@ -65,6 +64,8 @@ public class CurrSelectionOverlay extends SelectionOverlay {
     public void paintBefore(MapValues map, GC gc) {
         gc.setLineWidth(POINT_STROKE);
         if (isDragging) {
+            gc.setForeground(gc.getDevice().getSystemColor(SWT.COLOR_LIST_SELECTION));
+            
             updateSelection(map);
             int deltaX = dragStop.x - dragStart.x;
             int deltaY = dragStop.y - dragStart.y;
@@ -75,19 +76,15 @@ public class CurrSelectionOverlay extends SelectionOverlay {
     @Override
     public void paintChild(MapValues map, GC gc, Location each) {
         Device device = gc.getDevice();
-        Color selectionColor = device.getSystemColor(SWT.COLOR_LIST_SELECTION);
-        Color white = device.getSystemColor(SWT.COLOR_WHITE);
         int mapSize = map.mapSize.getValue();
         int magic_r = (int) (each.getElevation() * 2 * mapSize / DEMAlgorithm.MAGIC_VALUE);
         
         gc.setAlpha(128);        
-        gc.setForeground(selectionColor);
-        gc.setBackground(selectionColor);
+        gc.setBackground(device.getSystemColor(SWT.COLOR_LIST_SELECTION));
         gc.fillOval(each.px - magic_r, each.py - magic_r, magic_r * 2, magic_r * 2);
         
         gc.setAlpha(255);        
-        gc.setForeground(white);
-        gc.setBackground(white);        
+        gc.setForeground(device.getSystemColor(SWT.COLOR_WHITE));
         
         gc.drawOval(each.px-magic_r, each.py-magic_r, magic_r*2, magic_r*2);
     }
