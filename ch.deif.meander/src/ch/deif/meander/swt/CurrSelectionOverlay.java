@@ -23,9 +23,7 @@ import ch.deif.meander.map.MapValues;
 
 public class CurrSelectionOverlay extends SelectionOverlay {
 
-    protected final int SELECTION_SIZE = 12;
-    protected final int POINT_STROKE = 3;
-    protected final int BOX_STROKE = 2;
+    protected final int POINT_STROKE = 2;
 
     public static final String EVT_DOUBLE_CLICKED = "doubleClicked";
     public static final String EVT_SELECTION_CHANGED = "selectionChanged";
@@ -65,10 +63,6 @@ public class CurrSelectionOverlay extends SelectionOverlay {
 
     @Override
     public void paintBefore(MapValues map, GC gc) {
-        Device device = gc.getDevice();
-        Color red = device.getSystemColor(SWT.COLOR_LIST_SELECTION);
-        gc.setForeground(red);
-        gc.setBackground(red);
         gc.setLineWidth(POINT_STROKE);
         if (isDragging) {
             updateSelection(map);
@@ -76,16 +70,28 @@ public class CurrSelectionOverlay extends SelectionOverlay {
             int deltaY = dragStop.y - dragStart.y;
             gc.drawRectangle(dragStart.x, dragStart.y, deltaX, deltaY);
         }
-        gc.setAlpha(128);
     }
 
     @Override
     public void paintChild(MapValues map, GC gc, Location each) {
+        Device device = gc.getDevice();
+        Color selectionColor = device.getSystemColor(SWT.COLOR_LIST_SELECTION);
+        Color white = device.getSystemColor(SWT.COLOR_WHITE);
         int mapSize = map.mapSize.getValue();
-        int r = (int) (each.getElevation() * 2 * mapSize / DEMAlgorithm.MAGIC_VALUE);
-        gc.fillOval(each.px - r, each.py - r, r * 2, r * 2);
+        int magic_r = (int) (each.getElevation() * 2 * mapSize / DEMAlgorithm.MAGIC_VALUE);
+        
+        gc.setAlpha(128);        
+        gc.setForeground(selectionColor);
+        gc.setBackground(selectionColor);
+        gc.fillOval(each.px - magic_r, each.py - magic_r, magic_r * 2, magic_r * 2);
+        
+        gc.setAlpha(255);        
+        gc.setForeground(white);
+        gc.setBackground(white);        
+        
+        gc.drawOval(each.px-magic_r, each.py-magic_r, magic_r*2, magic_r*2);
     }
-
+    
     private void updateSelection(MapValues map) {
         MapInstance mapInstance = map.mapInstance.getValue();
         if (mapInstance == null) return;
