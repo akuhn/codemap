@@ -12,7 +12,6 @@ import ch.deif.meander.Configuration;
 import ch.deif.meander.DigitalElevationModel;
 import ch.deif.meander.HillShading;
 import ch.deif.meander.Labeling;
-import ch.deif.meander.MapSelection;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.util.MColor;

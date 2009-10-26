@@ -46,7 +46,7 @@ import org.eclipse.ui.part.ViewPart;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.swt.CodemapVisualization;
-import ch.deif.meander.swt.CurrSelectionOverlay;
+import ch.deif.meander.swt.CurrentSelectionOverlay;
 import ch.deif.meander.ui.CodemapEvent;
 import ch.deif.meander.ui.CodemapListener;
 import ch.deif.meander.util.MColor;
@@ -58,9 +58,9 @@ public class MapView extends ViewPart {
     private CodemapListener codemapListener = new CodemapListener() {
         @Override
         public void handleEvent(CodemapEvent event) {
-            if (CurrSelectionOverlay.EVT_DOUBLE_CLICKED == event.getKind()) {
+            if (CurrentSelectionOverlay.EVT_DOUBLE_CLICKED == event.getKind()) {
                 doubleClicked((Location) event.getValue());
-            } else if (CurrSelectionOverlay.EVT_SELECTION_CHANGED == event
+            } else if (CurrentSelectionOverlay.EVT_SELECTION_CHANGED == event
                     .getKind()) {
                 selectionChanged((MapSelection) event.getValue());
             }

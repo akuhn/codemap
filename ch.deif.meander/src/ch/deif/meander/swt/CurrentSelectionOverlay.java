@@ -22,7 +22,7 @@ import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.map.MapValues;
 
 
-public class CurrSelectionOverlay extends SelectionOverlay {
+public class CurrentSelectionOverlay extends SelectionOverlay {
 
     protected final int POINT_STROKE = 2;
 

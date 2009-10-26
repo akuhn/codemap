@@ -18,11 +18,11 @@ import ch.deif.meander.map.MapValues;
  */
 public class MapSelection extends CollectionValue<String> {
     
-    public boolean contains(Location element) {
+    public synchronized boolean contains(Location element) {
         return contains(element.getDocument());
     }
     
-    public void replaceAll(Collection<String> newLocations) {
+    public synchronized void replaceAll(Collection<String> newLocations) {
         boolean retainChange = value.retainAll(newLocations);
         boolean addChange = value.addAll(newLocations);
         if (retainChange || addChange) this.changed();
@@ -33,13 +33,13 @@ public class MapSelection extends CollectionValue<String> {
         super(new HashSet<String>());
     }
     
-    public Iterable<Location> locationsOn(MapValues map) {
+    public synchronized Iterable<Location> locationsOn(MapValues map) {
         MapInstance mapInstance = map.mapInstance.getValue();
         if (mapInstance == null) return Collections.emptyList();
         return locationsOn(mapInstance);
     }
     
-    private Iterable<Location> locationsOn(MapInstance mapInstance) {
+    private synchronized Iterable<Location> locationsOn(MapInstance mapInstance) {
         Collection<Location> result = new ArrayList<Location>();
         for(Location each: mapInstance.locations()) {
             if (!this.contains(each)) continue;
