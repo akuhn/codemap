@@ -13,8 +13,8 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
 
-import ch.akuhn.util.Assert;
 import ch.akuhn.util.List;
+import ch.akuhn.values.Value;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapSelection;
@@ -57,28 +57,29 @@ public class CurrSelectionOverlay extends SelectionOverlay {
     @Override
     public void mouseUp(MouseEvent e) {
         if (isDragging) updateSelection(mapValues(e));
-        else if (e.count == 1) handleSingleClick(e);
+        else if (e.count == 1) handleSingleClick(e);            
         isDragging = false;
         this.redraw(e);
         fireEvent(e, EVT_SELECTION_CHANGED, getSelection(mapValues(e)));
     }
 
     private void handleSingleClick(MouseEvent e) {
-        MapInstance mapInstance = mapValues(e).mapInstance.getValue();
-        if (mapInstance == null) return;
-        
-        String neighborIdentifier = mapInstance.nearestNeighbor(e.x, e.y).getDocument();
-        Assert.notNull(neighborIdentifier);
-        if (isShiftDown(e)) {
-            getSelection(mapValues(e)).add(neighborIdentifier);
+        Value<MapInstance> mapInstance = mapValues(e).mapInstance;
+        Location neighbor = mapInstance.getValueOrFail().nearestNeighbor(e.x, e.y);
+        if ((e.stateMask & SWT.SHIFT) != 0) {
+            handleMultipleSelect(neighbor, getSelection(mapValues(e)));
         }
         else {
-            getSelection(mapValues(e)).replaceAll(List.of(neighborIdentifier));            
+            handleSingleSelect(neighbor, getSelection(mapValues(e)));
         }
     }
 
-    private boolean isShiftDown(MouseEvent e) {
-        return (e.stateMask & SWT.SHIFT) != 0;
+    private void handleMultipleSelect(Location neighbor, MapSelection mapSelection) {
+        mapSelection.add(neighbor.getDocument());
+    }
+
+    private void handleSingleSelect(Location neighbor, MapSelection mapSelection) {
+        mapSelection.replaceAll(List.of(neighbor.getDocument()));
     }
 
     @Override
