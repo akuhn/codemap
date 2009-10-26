@@ -17,38 +17,38 @@ public class CollectionValue<V> extends ReferenceValue<Collection<V>> implements
     }
     
     @Override
-    public boolean add(V element) {
+    public synchronized boolean add(V element) {
         boolean changed = value.add(element);
         if (changed) changed();
         return changed;
     }
 
     @Override
-    public boolean addAll(Collection<? extends V> collection) {
+    public synchronized boolean addAll(Collection<? extends V> collection) {
         boolean changed = value.addAll(collection);
         if (changed) changed();
         return changed;
     }
 
     @Override
-    public void clear() {
+    public synchronized void clear() {
         if (value.isEmpty()) return;
         value.clear();
         changed();
     }
 
     @Override
-    public boolean contains(Object object) {
+    public synchronized boolean contains(Object object) {
         return value.contains(object);
     }
 
     @Override
-    public boolean containsAll(Collection<?> collection) {
+    public synchronized boolean containsAll(Collection<?> collection) {
         return value.containsAll(collection);
     }
 
     @Override
-    public boolean isEmpty() {
+    public synchronized boolean isEmpty() {
         return value.isEmpty();
     }
 
@@ -58,43 +58,43 @@ public class CollectionValue<V> extends ReferenceValue<Collection<V>> implements
     }
 
     @Override
-    public boolean remove(Object object) {
+    public synchronized boolean remove(Object object) {
         boolean changed = value.remove(object);
         if (changed) changed();
         return changed;
     }
 
     @Override
-    public boolean removeAll(Collection<?> collection) {
+    public synchronized boolean removeAll(Collection<?> collection) {
         boolean changed = value.removeAll(collection);
         if (changed) changed();
         return changed;
     }
 
     @Override
-    public boolean retainAll(Collection<?> collection) {
+    public synchronized boolean retainAll(Collection<?> collection) {
         boolean changed = value.retainAll(collection);
         if (changed) changed();
         return changed;
     }
     
     @Override
-    public int size() {
+    public synchronized int size() {
         return value.size();
     }
 
     @Override
-    public Object[] toArray() {
+    public synchronized Object[] toArray() {
         return value.toArray();
     }
 
     @Override
-    public <T> T[] toArray(T[] array) {
+    public synchronized <T> T[] toArray(T[] array) {
         return value.toArray(array);
     }
 
     @Override
-    public Collection<V> getValue() {
+    public synchronized Collection<V> getValue() {
         return this;
     }
     
