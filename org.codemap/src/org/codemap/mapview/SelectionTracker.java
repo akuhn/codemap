@@ -56,7 +56,7 @@ public class SelectionTracker {
 
 	private void addListeners() {
 		IWorkbenchPage page = getWorkbenchPage();
-		page.addPostSelectionListener(selectionListener);
+		page.addSelectionListener(selectionListener);
 		page.addPartListener(partListener);
 	}
 

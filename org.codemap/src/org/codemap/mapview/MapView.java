@@ -72,8 +72,7 @@ public class MapView extends ViewPart {
                 IJavaElement javaElement = Resources.asJavaElement(each);
                 selection.add(javaElement);
             }
-            StructuredSelection structuredSelection = new StructuredSelection(
-                    selection);
+            StructuredSelection structuredSelection = new StructuredSelection(selection);
             selectionProvider.setSelection(structuredSelection);
         }
 

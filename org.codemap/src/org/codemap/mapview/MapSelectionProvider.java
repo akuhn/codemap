@@ -12,8 +12,8 @@ package org.codemap.mapview;
 
 import static org.codemap.util.ID.PACKAGE_EXPLORER;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.codemap.util.Log;
 import org.eclipse.jface.viewers.ISelection;
@@ -32,7 +32,7 @@ import org.eclipse.ui.part.ISetSelectionTarget;
  */
 public class MapSelectionProvider implements ISelectionProvider {
 
-	private List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
+	private Set<ISelectionChangedListener> listeners = new HashSet<ISelectionChangedListener>();
 	private ISelection selection = StructuredSelection.EMPTY;
 	private MapView view;
 	private boolean forceToPackageExplorer = ForceSelectionAction.DEFAULT_CHECKED;
@@ -58,10 +58,10 @@ public class MapSelectionProvider implements ISelectionProvider {
 	}
 
 	@Override
-	public void setSelection(final ISelection selection) {
-		this.selection = selection;
-		provideSelection(selection);
+	public void setSelection(final ISelection sel) {
+		this.selection = sel;
 		forcePackageExplorerSelection(selection);
+		provideSelection(selection);
 	}
 
 	private void provideSelection(final ISelection newSelection) {
@@ -105,15 +105,14 @@ public class MapSelectionProvider implements ISelectionProvider {
 		if (!forceToPackageExplorer) return;
 		if (newSelection == null) return;
 		
-		Display.getDefault().asyncExec(new Runnable() {
+		// do syncExec to make sure that the selection is set before we proceed
+		Display.getDefault().syncExec(new Runnable() {
 			@Override
 			public void run() {
-				try {
-					IViewPart showView = view.getSite().getPage().showView(PACKAGE_EXPLORER.id);
-					((ISetSelectionTarget) showView).selectReveal(newSelection);
-				} catch (PartInitException e) {
-					Log.error(e);
-				}
+//					IViewPart showView = view.getSite().getPage().showView(PACKAGE_EXPLORER.id);
+				    IViewPart packageExplorer = view.getSite().getPage().findView(PACKAGE_EXPLORER.id);	
+				    if (packageExplorer == null) return;
+					((ISetSelectionTarget) packageExplorer).selectReveal(newSelection);
 			}
 		});
 	}
