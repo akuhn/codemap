@@ -1,24 +1,20 @@
 package org.codemap;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
 
-import org.codemap.mapview.MapView;
+import org.codemap.flow.FLowOverlay;
 import org.codemap.resources.EclipseMapValues;
 import org.codemap.resources.EclipseMapValuesBuilder;
 import org.codemap.util.Log;
 import org.codemap.util.OpenFileIconsLayer;
 import org.codemap.util.Resources;
-import org.codemap.util.Tag;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.ui.IMemento;
 import org.osgi.service.prefs.BackingStoreException;
 
 import ch.akuhn.util.Arrays;
@@ -205,6 +201,13 @@ public class MapPerProject {
     public boolean containsLayer(SWTLayer layer) {
         return mapVisualization.getSharedLayer().contains(layer);
     }
+    
+    public boolean containsLayer(Class<?> layerClass) {
+        for (SWTLayer each: mapVisualization.getSharedLayer()) {
+            if (each.getClass().equals(layerClass)) return true;
+        }
+        return false;
+    }
 
     public Configuration getConfiguration() {
         return mapValues.configuration.getValue(); // what if it's null?
@@ -221,5 +224,14 @@ public class MapPerProject {
     public void saveState() {
         writePointPreferences();
         writeProperties();
+    }
+
+    public void remove(Class<?> layerClass) {
+        for (SWTLayer each: mapVisualization.getSharedLayer()) {
+            if (each.getClass().equals(layerClass)) {
+                mapVisualization.getSharedLayer().remove(each);
+                return;
+            }
+        }
     }
 }

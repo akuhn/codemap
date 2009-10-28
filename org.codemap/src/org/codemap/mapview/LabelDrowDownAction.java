@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Menu;
 
 public class LabelDrowDownAction extends DropDownAction {
 	
-	@Override
+    @Override
 	protected void setup() {
 		setText("Labels"); 
 		setImageDescriptor(new CodemapIcons().descriptor(LABELS));
