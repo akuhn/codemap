@@ -95,5 +95,9 @@ public class EclipseMapValuesBuilder extends MapValueBuilder {
         }
         return value;
     }
+
+    public CollectionValue<Value> addonsValue() {
+        return new CollectionValue<Value>();
+    }
     
 }

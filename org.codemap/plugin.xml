@@ -51,5 +51,26 @@
             name="Codemap">
       </wizard>
    </extension>
+   
+<!-- ============================================================================= -->
+<!-- Eclipse Welcome                                                               -->
+<!-- ============================================================================= -->   
+   <extension point="org.eclipse.ui.intro.configExtension">
+      <configExtension
+         configId="org.eclipse.ui.intro.universalConfig"
+         content="intro/overviewExtensionContent.xml">
+      </configExtension>
+<!--      
+      <configExtension
+         configId="org.eclipse.ui.intro.universalConfig"
+         content="intro/whatsnewExtensionContent.xml">
+      </configExtension>
+      <configExtension
+         configId="org.eclipse.ui.intro.universalConfig"
+         content="intro/tutorialsExtensionContent.xml">
+      </configExtension>
+-->
+   </extension>
+   
 
 </plugin>
