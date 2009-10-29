@@ -5,7 +5,7 @@
 		<!-- 
 		url="http://org.eclipse.ui.intro/openURL?url=intro/test.htm&pluginId=/org.codemap" id="codmeapIntroLink" style-id="content-link">
 		 -->
-       		<link label="Codemap" url="http://org.eclipse.ui.intro/openURL?url=intro/test.htm&amp;pluginId=org.codemap" id="codmeapIntroLink" style-id="content-link">
+       		<link label="Codemap" url="http://org.eclipse.ui.intro/openURL?url=intro/codemapintro.html&amp;pluginId=org.codemap" id="codmeapIntroLink" style-id="content-link">
           		<text>Learn how to use Codemap</text>
        		</link>
        	</group>

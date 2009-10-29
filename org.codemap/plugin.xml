@@ -8,7 +8,7 @@
          point="org.eclipse.ui.views">
       <category
             id="org.codemap"
-            name="Software Cartography">
+            name="Codemap">
       </category>
       <view
             category="org.codemap"
