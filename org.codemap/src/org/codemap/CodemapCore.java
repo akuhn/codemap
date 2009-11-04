@@ -4,6 +4,8 @@ import org.codemap.mapview.MapView;
 import org.codemap.util.EclipseTaskFactory;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -33,6 +35,7 @@ public class CodemapCore extends AbstractUIPlugin {
     private final MapSelection openFilesSelection;
     private final MapSelection currentSelection;
     private MapPerProjectCache cache;
+    private CallHierarchyTracker callHierarchyTracker;
 
     public MapSelection getYouAreHereSelection() {
         return youAreHereSelection;
@@ -52,6 +55,7 @@ public class CodemapCore extends AbstractUIPlugin {
         openFilesSelection = new MapSelection();	
         currentSelection = new MapSelection();
         cache = new MapPerProjectCache();
+        callHierarchyTracker = new CallHierarchyTracker();
     }
 
     @Override

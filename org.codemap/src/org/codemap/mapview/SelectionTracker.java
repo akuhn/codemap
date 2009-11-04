@@ -13,6 +13,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IPackageFragment;
+import org.eclipse.jdt.internal.core.BinaryMember;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IPartListener;
@@ -93,9 +94,11 @@ public class SelectionTracker {
 		Collection<ICompilationUnit> units = new HashSet<ICompilationUnit>();
 		for (Object each: selection.toList()) {
 			IJavaElement javaElement = Adaptables.adapt(each, IJavaElement.class);
-			if (javaElement == null) {
-				continue;
-			}
+			if (javaElement == null) continue;
+			// we can't handle binaries as their project usually contains no sources and is not
+			// visible in the navigation
+			if (javaElement instanceof BinaryMember) continue;
+			
 			if (javaProject == null) {
 				javaProject = javaElement.getJavaProject();
 			}
