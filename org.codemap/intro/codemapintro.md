@@ -2,7 +2,7 @@
 
 The main feature of Codemap is the Codemap View displaying the acutal map of your code.
 
-To activate Codemap View go to "Window" → "Show View" → "Other..."  and select our view "Codemap View" in the category
+To activate Codemap View go to "Window" &rarr; "Show View" &rarr; "Other..."  and select our view "Codemap View" in the category
 "Codemap".
 
 ![open codemap](images/open_codemap.png open codemap left)
