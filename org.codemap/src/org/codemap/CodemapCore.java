@@ -1,5 +1,6 @@
 package org.codemap;
 
+import org.codemap.flow.CallHierarchyTracker;
 import org.codemap.mapview.MapView;
 import org.codemap.util.EclipseTaskFactory;
 import org.eclipse.jdt.core.IJavaProject;

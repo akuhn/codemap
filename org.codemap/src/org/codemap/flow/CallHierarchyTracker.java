@@ -1,4 +1,4 @@
-package org.codemap;
+package org.codemap.flow;
 
 import static org.codemap.util.ID.CALL_HIERARCHY_REF;
 
@@ -11,9 +11,11 @@ import org.eclipse.jdt.internal.ui.callhierarchy.CancelSearchAction;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ITreeSelection;
 import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
@@ -28,12 +30,32 @@ import ch.akuhn.util.List;
 
 public class CallHierarchyTracker {
     
+    /**
+     * When new call hierarchy data is available the selection jumps to the root node. 
+     * We use this information to fire an event whenever we think that the call-hierarchy
+     * displayed has changed.
+     * 
+     */
     private ISelectionChangedListener changeListener = new ISelectionChangedListener() {
         
         @Override
         public void selectionChanged(SelectionChangedEvent event) {
-            System.out.println("selection changed");
             ISelection selection = event.getSelection();
+            if (selection.isEmpty()) return;
+            if (!(selection instanceof ITreeSelection)) return;
+            
+            ITreeSelection treeSelection = (ITreeSelection) selection;
+            if (treeSelection.size() != 1) return;
+            // might be a new call hierarchy only if exactly one element is selected (the root)
+            TreePath path = treeSelection.getPaths()[0];
+            int segmentCount = path.getSegmentCount();
+            if (segmentCount != 1) return;
+            // we are sure that root is selected, but it might be an old one
+            Object callerMethodWrapperObject = treeSelection.toList().get(0);
+            if (! (callerMethodWrapperObject instanceof CallerMethodWrapper)) return;
+            CallerMethodWrapper rootMethod = (CallerMethodWrapper) callerMethodWrapperObject;
+            
+            onTreeRootSelected(rootMethod);
         }
     };
     
@@ -41,9 +63,8 @@ public class CallHierarchyTracker {
         
         @Override
         public void treeExpanded(TreeExpansionEvent event) {
-            System.out.println("tree expanded");
             waitForResults();
-            newCallHierarchyResultsAvailable(event);
+            onCallHierarchyResultsLoaded(event);
         }
 
         private void waitForResults() {
@@ -142,17 +163,26 @@ public class CallHierarchyTracker {
 
     private TreeViewer callTree;
     private CallHierarchyViewPart callHierarchyPart;
+
+    private FlowModel flowModel;
     
     public CallHierarchyTracker() {
+        flowModel = new FlowModel();
         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
         page.addPartListener(partListener);
     }
 
-    protected void newCallHierarchyResultsAvailable(TreeExpansionEvent event) {
+    protected void onTreeRootSelected(CallerMethodWrapper rootMethod) {
+        flowModel.setCurrentRoot(rootMethod);
+        System.out.println("root method selected");        
+    }
+
+    protected void onCallHierarchyResultsLoaded(TreeExpansionEvent event) {
         Object callerMethodWrapperObject = event.getElement();
         if (!(callerMethodWrapperObject instanceof CallerMethodWrapper)) return;
         CallerMethodWrapper source = (CallerMethodWrapper) callerMethodWrapperObject;
         List<MethodWrapper> targets = List.from(source.getCalls(null));
+        System.out.println("new call hierarchy results loaded:");        
         System.out.println(targets);
     }
 
