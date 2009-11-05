@@ -56,9 +56,13 @@ public class CurrentSelectionOverlay extends SelectionOverlay {
 
     @Override
     public void mouseUp(MouseEvent e) {
-        if (isDragging) updateSelection(mapValues(e));
-        else if (e.count == 1) handleSingleClick(e);            
-        isDragging = false;
+        if (isDragging) {
+            isDragging = false;
+            updateSelection(mapValues(e));            
+        }
+        else if (e.count == 1) {
+            handleSingleClick(e);            
+        }
         this.redraw(e);
         fireEvent(e, EVT_SELECTION_CHANGED, getSelection(mapValues(e)));
     }

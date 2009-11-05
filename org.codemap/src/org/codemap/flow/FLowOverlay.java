@@ -1,11 +1,15 @@
 package org.codemap.flow;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.codemap.flow.vizualization.EdgeRenderer;
 import org.codemap.flow.vizualization.Options;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 
+import ch.deif.meander.Location;
 import ch.deif.meander.map.MapValues;
 import ch.deif.meander.swt.SWTLayer;
 import edu.stanford.hci.flowmap.cluster.ClusterLayout;
@@ -16,19 +20,29 @@ import edu.stanford.hci.flowmap.structure.Node;
 
 public class FLowOverlay extends SWTLayer {
     
-    private final Options options;
-    private final Graph graph;
-    private final EdgeRenderer edgeRenderer;
+    private FlowModel model;
+    private Integer mapSize;
+    private Graph graph;
+    private Options options;
+    private EdgeRenderer edgeRenderer;
     
-    public FLowOverlay() {
-        graph = createGraph();
-        options = initOptions();        
-        edgeRenderer = initRenderer();
-        prepare();
+    public FLowOverlay(FlowModel flowModel) {
+        model = flowModel;
     }
 
     @Override
     public void paintMap(MapValues map, GC gc) {
+        if (map.mapSize.getValue() != mapSize || model.needsUpdate() || graph == null) {
+            mapSize = map.mapSize.getValue();
+            model.setNeedsNoUpdate();
+            
+            Iterable<Location> locations = map.mapInstance.getValue().locations();
+            graph = createGraph(locations);
+            options = initOptions();        
+            edgeRenderer = initRenderer();
+            prepare();
+        }
+        
         gc.setAlpha(255);
         Color white = gc.getDevice().getSystemColor(SWT.COLOR_WHITE);
         gc.setForeground(white);
@@ -39,14 +53,18 @@ public class FLowOverlay extends SWTLayer {
     }
     
     private void prepare() {
+        // if there is just the root node clustering will raise an
+        // assertion error, so don't cluster at all
+        if (graph.getAllNodes().size() <= 1) return;
+        
         ClusterLayout clusterLayout = new ClusterLayout(graph);
         clusterLayout.doLayout();
         
 //      if (Globals.runNodeEdgeRouting) {
-//      //System.out.println("Adjusting Edge Routing");
-//      NodeEdgeRouting router = new NodeEdgeRouting(newRoot);
-//      router.routeNodes();
-//  }
+//          //System.out.println("Adjusting Edge Routing");
+//          NodeEdgeRouting router = new NodeEdgeRouting(newRoot);
+//          router.routeNodes();
+//      }
         edgeRenderer.initializeRenderTree(graph);
     }
 
@@ -63,38 +81,15 @@ public class FLowOverlay extends SWTLayer {
         return opts;
     }
     
-    private Graph createGraph() {
-        Graph originalGraph = new Graph();
-        Node rootNode = new Node(200, 200, 0, "root");
-        rootNode.setRootNode(true);
+    private Graph createGraph(Iterable<Location> locations) {
         
-        originalGraph.addNode(rootNode);
-        originalGraph.setRootNode(rootNode);
-        
-        double values[][] = {
-                {0, 0, 1},
-                {0, 300, 1},
-                {300, 0, 1},
-                {500, 0, 10},
-                {500, 150, 10},
-                {300, 200, 5},
-                {400, 250, 25},
-                {400, 350, 25},                                
-                {550, 300, 30},
-                {600, 350, 30},                                
-                {100, 400, 20}, 
-                {200, 500, 10}, 
-                {400, 600, 40}, 
-                {550, 650, 30}, 
-                {600, 400, 40}
-            };
-        
-        int index = 0;
-        for (double[] each: values) {
-            Node dest = new Node(each[0], each[1], each[2], "node" + ++index);
-            originalGraph.addNode(dest);            
-        }        
-        return originalGraph;
+        Map<String, Location> byName = new HashMap<String, Location>();
+        for(Location each: locations) {
+            byName.put(each.getDocument(), each);
+        }
+        GraphConversionVisitor visitor = new GraphConversionVisitor(byName);
+        model.accept(visitor);
+        return visitor.createGraph();
     }   
     
 }

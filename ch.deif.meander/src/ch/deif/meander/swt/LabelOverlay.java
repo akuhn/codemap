@@ -43,4 +43,5 @@ public class LabelOverlay extends SWTLayer {
         basefont.dispose();
     }
 
+
 }

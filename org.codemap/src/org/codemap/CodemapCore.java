@@ -36,7 +36,7 @@ public class CodemapCore extends AbstractUIPlugin {
     private final MapSelection openFilesSelection;
     private final MapSelection currentSelection;
     private MapPerProjectCache cache;
-    private CallHierarchyTracker callHierarchyTracker;
+    private final CallHierarchyTracker callHierarchyTracker;
 
     public MapSelection getYouAreHereSelection() {
         return youAreHereSelection;

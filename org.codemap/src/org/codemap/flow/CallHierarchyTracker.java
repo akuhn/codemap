@@ -4,6 +4,7 @@ import static org.codemap.util.ID.CALL_HIERARCHY_REF;
 
 import java.lang.reflect.Field;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.internal.corext.callhierarchy.CallerMethodWrapper;
 import org.eclipse.jdt.internal.corext.callhierarchy.MethodWrapper;
 import org.eclipse.jdt.internal.ui.callhierarchy.CallHierarchyViewPart;
@@ -51,9 +52,9 @@ public class CallHierarchyTracker {
             int segmentCount = path.getSegmentCount();
             if (segmentCount != 1) return;
             // we are sure that root is selected, but it might be an old one
-            Object callerMethodWrapperObject = treeSelection.toList().get(0);
-            if (! (callerMethodWrapperObject instanceof CallerMethodWrapper)) return;
-            CallerMethodWrapper rootMethod = (CallerMethodWrapper) callerMethodWrapperObject;
+            Object methodWrapperObject = treeSelection.toList().get(0);
+            if (! (methodWrapperObject instanceof MethodWrapper)) return;
+            MethodWrapper rootMethod = (MethodWrapper) methodWrapperObject;
             
             onTreeRootSelected(rootMethod);
         }
@@ -64,28 +65,12 @@ public class CallHierarchyTracker {
         @Override
         public void treeExpanded(TreeExpansionEvent event) {
             waitForResults();
-            onCallHierarchyResultsLoaded(event);
+            onCallHierarchyExpanded(event);
         }
 
-        private void waitForResults() {
-            Class<? extends CallHierarchyViewPart> callHiearachyClass = callHierarchyPart.getClass();
-            try {
-                Field fCancelSearchActionField = callHiearachyClass.getDeclaredField(CANCEL_SEARCH_ACTION_ATTRIBUTE);
-                fCancelSearchActionField.setAccessible(true);
-                Object cancelSearchActionObj = fCancelSearchActionField.get(callHierarchyPart);
-                if (!(cancelSearchActionObj instanceof CancelSearchAction)) return;
-                CancelSearchAction cancelSearchAction = (CancelSearchAction) cancelSearchActionObj;
-                while(cancelSearchAction.isEnabled()) {
-                    Thread.sleep(50);                                
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        
         @Override
         public void treeCollapsed(TreeExpansionEvent event) {
-            System.out.println("tree collapsed");
+            onCallHierarchyCollapsed(event);
         }
     };
     
@@ -115,7 +100,6 @@ public class CallHierarchyTracker {
             }
             // there will be a different treeViewer once the CallHierarchy is reopened
             callTree = null;
-            System.out.println("closed call hierarchy");
         }
         
         @Override
@@ -162,9 +146,9 @@ public class CallHierarchyTracker {
     public static final String CANCEL_SEARCH_ACTION_ATTRIBUTE = "fCancelSearchAction";
 
     private TreeViewer callTree;
-    private CallHierarchyViewPart callHierarchyPart;
-
     private FlowModel flowModel;
+    private CallHierarchyViewPart callHierarchyPart;
+    private MethodWrapper currentRootMethod;
     
     public CallHierarchyTracker() {
         flowModel = new FlowModel();
@@ -172,19 +156,39 @@ public class CallHierarchyTracker {
         page.addPartListener(partListener);
     }
 
-    protected void onTreeRootSelected(CallerMethodWrapper rootMethod) {
-        flowModel.setCurrentRoot(rootMethod);
-        System.out.println("root method selected");        
+
+    protected void onTreeRootSelected(MethodWrapper rootMethod) {
+        // need an identity check here, if the roots are not identical then
+        // the call hierarchy was reloaded
+        if (currentRootMethod == rootMethod) return;
+        currentRootMethod = rootMethod;
+        flowModel.newRoot(currentRootMethod);
+        waitForResults();
+        onCallHierarchyResultsLoaded(currentRootMethod);
+    }
+    
+    protected void onCallHierarchyCollapsed(TreeExpansionEvent event) {
+        Object methodWrapperObject = event.getElement();
+        if (!(methodWrapperObject instanceof MethodWrapper)) return;
+        MethodWrapper source = (MethodWrapper) methodWrapperObject;
+        flowModel.collapse(source);
     }
 
-    protected void onCallHierarchyResultsLoaded(TreeExpansionEvent event) {
-        Object callerMethodWrapperObject = event.getElement();
-        if (!(callerMethodWrapperObject instanceof CallerMethodWrapper)) return;
-        CallerMethodWrapper source = (CallerMethodWrapper) callerMethodWrapperObject;
-        List<MethodWrapper> targets = List.from(source.getCalls(null));
-        System.out.println("new call hierarchy results loaded:");        
-        System.out.println(targets);
+    protected void onCallHierarchyExpanded(TreeExpansionEvent event) {
+        Object methodWrapperObject = event.getElement();
+        if (!(methodWrapperObject instanceof MethodWrapper)) return;
+        MethodWrapper source = (MethodWrapper) methodWrapperObject;
+        onCallHierarchyResultsLoaded(source);
     }
+    
+    protected void onCallHierarchyResultsLoaded(MethodWrapper source) {
+        List<MethodWrapper> targets = List.from(source.getCalls(new NullProgressMonitor()));
+        flowModel.expand(source, targets);
+    }
+
+    protected void waitForResults() {
+        new Impatient().waitFor(callHierarchyPart);
+    }    
 
     private boolean isInitialized() {
         return callTree != null;
@@ -195,5 +199,49 @@ public class CallHierarchyTracker {
         IWorkbenchPart part = partRef.getPart(true);
         if (!(part instanceof CallHierarchyViewPart)) return null;
         return (CallHierarchyViewPart) part;        
+    }
+}
+
+class Impatient {
+    
+    private static final int STEP = 50;
+    private static final int MAX_SLEEP_TIME = 200;
+    private int sleepTime;
+
+    public Impatient() {
+        sleepTime = 50;
+    }
+    
+    /**
+     * wait until an ongoing search for callees has finished and poll for results.
+     * @param callHierarchyPart the current CallHierarchyViewPart
+     */
+    public void waitFor(CallHierarchyViewPart callHierarchyPart) {
+        Class<? extends CallHierarchyViewPart> callHiearachyClass = callHierarchyPart.getClass();
+        try {
+            Field fCancelSearchActionField = callHiearachyClass.getDeclaredField(CallHierarchyTracker.CANCEL_SEARCH_ACTION_ATTRIBUTE);
+            fCancelSearchActionField.setAccessible(true);
+            Object cancelSearchActionObj = fCancelSearchActionField.get(callHierarchyPart);
+            if (!(cancelSearchActionObj instanceof CancelSearchAction)) return;
+            CancelSearchAction cancelSearchAction = (CancelSearchAction) cancelSearchActionObj;
+            // TODO: maybe handle InterruptedExcpetions appropriately
+            while(cancelSearchAction.isEnabled()) {
+                Thread.sleep(sleepTime());                                
+            }
+        } catch (Exception e) {
+            // TODO: handle, at least log
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * for a bit less aggressive polling increase the sleep time for every call
+     * @return the current sleep time
+     */
+    private long sleepTime() {
+        if (sleepTime < MAX_SLEEP_TIME) {
+            sleepTime += STEP;
+        }
+        return sleepTime;
     }
 }

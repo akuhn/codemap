@@ -27,7 +27,7 @@ public class ShowFlowAction extends MenuAction {
         MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
         if (activeMap.containsLayer(FLowOverlay.class)) return;
         
-        activeMap.addLayer(new FLowOverlay());
+//        activeMap.addLayer(new FLowOverlay());
 	}
 
 	private void hideFlow() {

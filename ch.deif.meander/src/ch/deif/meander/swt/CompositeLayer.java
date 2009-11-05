@@ -1,6 +1,7 @@
 package ch.deif.meander.swt;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.swt.events.DragDetectEvent;
@@ -9,7 +10,7 @@ import org.eclipse.swt.graphics.GC;
 
 import ch.deif.meander.map.MapValues;
 
-public class CompositeLayer extends SWTLayer {
+public class CompositeLayer extends SWTLayer implements Iterable<SWTLayer> {
 
     private List<SWTLayer> children = new ArrayList<SWTLayer>();
 
@@ -85,6 +86,11 @@ public class CompositeLayer extends SWTLayer {
     @Override
     public void mouseScrolled(MouseEvent e) {
         for (SWTLayer each: children ) each.mouseScrolled(e);
+    }
+
+    @Override
+    public Iterator<SWTLayer> iterator() {
+        return children.iterator();
     }
 
 }

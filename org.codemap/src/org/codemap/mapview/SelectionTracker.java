@@ -97,7 +97,10 @@ public class SelectionTracker {
 			if (javaElement == null) continue;
 			// we can't handle binaries as their project usually contains no sources and is not
 			// visible in the navigation
-			if (javaElement instanceof BinaryMember) continue;
+			if (javaElement instanceof IMember){
+			    IMember member = (IMember) javaElement;
+			    if (member.isBinary()) return;
+			} 
 			
 			if (javaProject == null) {
 				javaProject = javaElement.getJavaProject();

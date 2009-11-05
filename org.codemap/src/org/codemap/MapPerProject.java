@@ -234,4 +234,13 @@ public class MapPerProject {
             }
         }
     }
+
+    public SWTLayer getLayer(Class<FLowOverlay> layerClass) {
+        for (SWTLayer each: mapVisualization.getSharedLayer()) {
+            if (each.getClass().equals(layerClass)) {
+                return each;
+            }
+        }
+        return null;
+    }
 }
