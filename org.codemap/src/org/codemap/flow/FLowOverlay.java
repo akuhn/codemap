@@ -1,6 +1,8 @@
 package org.codemap.flow;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.codemap.flow.vizualization.EdgeRenderer;
@@ -16,15 +18,14 @@ import edu.stanford.hci.flowmap.cluster.ClusterLayout;
 import edu.stanford.hci.flowmap.prefuse.render.FlowScale;
 import edu.stanford.hci.flowmap.structure.Edge;
 import edu.stanford.hci.flowmap.structure.Graph;
-import edu.stanford.hci.flowmap.structure.Node;
 
 public class FLowOverlay extends SWTLayer {
     
     private FlowModel model;
     private Integer mapSize;
-    private Graph graph;
-    private Options options;
-    private EdgeRenderer edgeRenderer;
+    private Options options = initOptions(); 
+    private List<Graph> graphs;
+    private ArrayList<RenderHelper> renderers;
     
     public FLowOverlay(FlowModel flowModel) {
         model = flowModel;
@@ -32,44 +33,36 @@ public class FLowOverlay extends SWTLayer {
 
     @Override
     public void paintMap(MapValues map, GC gc) {
-        if (map.mapSize.getValue() != mapSize || model.needsUpdate() || graph == null) {
+        if (map.mapSize.getValue() != mapSize || model.isDirty() || !isInitialized()) {
             mapSize = map.mapSize.getValue();
-            model.setNeedsNoUpdate();
+            model.setClean();
             
             Iterable<Location> locations = map.mapInstance.getValue().locations();
-            graph = createGraph(locations);
-            options = initOptions();        
-            edgeRenderer = initRenderer();
-            prepare();
+            createGraphs(locations);
+            createRenderers();
         }
         
         gc.setAlpha(255);
         Color white = gc.getDevice().getSystemColor(SWT.COLOR_WHITE);
         gc.setForeground(white);
         gc.setBackground(white);
-        for (Edge edge : graph.getEdges()) {
-            edgeRenderer.renderEdge(gc, edge);
+        for (RenderHelper each: renderers) {
+            each.renderEdges(gc);
         }
     }
-    
-    private void prepare() {
-        // if there is just the root node clustering will raise an
-        // assertion error, so don't cluster at all
-        if (graph.getAllNodes().size() <= 1) return;
-        
-        ClusterLayout clusterLayout = new ClusterLayout(graph);
-        clusterLayout.doLayout();
-        
-//      if (Globals.runNodeEdgeRouting) {
-//          //System.out.println("Adjusting Edge Routing");
-//          NodeEdgeRouting router = new NodeEdgeRouting(newRoot);
-//          router.routeNodes();
-//      }
-        edgeRenderer.initializeRenderTree(graph);
-    }
 
-    private EdgeRenderer initRenderer() {
-        return new EdgeRenderer(new FlowScale.Linear(options, graph));
+    private boolean isInitialized() {
+        return graphs != null && renderers != null;
+    }
+    
+    private void createRenderers() {
+        renderers = new ArrayList<RenderHelper>();
+        for (Graph each: graphs) {
+            renderers.add(new RenderHelper(each, options));
+        }
+        for (RenderHelper each: renderers) {
+            each.prepare();
+        }
     }
 
     private Options initOptions() {
@@ -81,15 +74,54 @@ public class FLowOverlay extends SWTLayer {
         return opts;
     }
     
-    private Graph createGraph(Iterable<Location> locations) {
-        
+    private void createGraphs(Iterable<Location> locations) {
         Map<String, Location> byName = new HashMap<String, Location>();
         for(Location each: locations) {
             byName.put(each.getDocument(), each);
         }
         GraphConversionVisitor visitor = new GraphConversionVisitor(byName);
         model.accept(visitor);
-        return visitor.createGraph();
+        graphs = visitor.getGraphs();
     }   
+    
+}
+
+class RenderHelper {
+
+    private EdgeRenderer renderer;
+    private Graph graph;
+
+    public RenderHelper(Graph graph, Options options) {
+        this.graph = graph;
+        renderer = new EdgeRenderer(new FlowScale.Linear(options, graph));
+    }
+
+    public void renderEdges(GC gc) {
+        for (Edge edge : graph.getEdges()) {
+            renderer.renderEdge(gc, edge);
+        }
+    }
+
+    public void prepare() {
+        // if there is just the root node clustering will raise an
+        // assertion error, so don't cluster at all
+        if (graph.getAllNodes().size() <= 1) return;
+        if(graph.getAllNodes().size() == 2){
+            System.out.println();
+        }
+        try {
+            ClusterLayout clusterLayout = new ClusterLayout(graph);
+            clusterLayout.doLayout();
+        } catch (AssertionError e) {
+            System.out.println();
+        }
+        
+//      if (Globals.runNodeEdgeRouting) {
+//          //System.out.println("Adjusting Edge Routing");
+//          NodeEdgeRouting router = new NodeEdgeRouting(newRoot);
+//          router.routeNodes();
+//      }
+        renderer.initializeRenderTree(graph);
+    }
     
 }

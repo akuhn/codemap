@@ -19,7 +19,7 @@ public class FlowModel {
 
     private MethodCallNode rootNode;
     private ReferenceValue<Object> trigger = new ReferenceValue<Object>();
-    private boolean needsUpdate = true;
+    private boolean dirty = true;
     
     public void newRoot(MethodWrapper currentRootMethod) {
         rootNode = new MethodCallNode(currentRootMethod, this);
@@ -43,7 +43,7 @@ public class FlowModel {
         toCollapse.clearChildren();
     }
 
-    public void setNeedsUpdate() {
+    public void setDirty() {
         MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
         SWTLayer layer = activeMap.getLayer(FLowOverlay.class);
         if (layer == null) {
@@ -52,15 +52,15 @@ public class FlowModel {
             activeMap.redrawWhenChanges(trigger);
         }
         trigger.setValue(new Object());
-        needsUpdate = true;
+        dirty = true;
     }
 
-    public boolean needsUpdate() {
-        return needsUpdate;
+    public boolean isDirty() {
+        return dirty;
     }
 
-    public void setNeedsNoUpdate() {
-        needsUpdate = false;
+    public void setClean() {
+        dirty = false;
     }
 
     public void accept(GraphConversionVisitor visitor) {
@@ -118,7 +118,7 @@ class MethodCallNode {
     public void clearChildren() {
         if (children.isEmpty()) return;
         children.clear();
-        model.setNeedsUpdate();
+        model.setDirty();
     }
 
     public void setChildren(List<MethodWrapper> targets) {
@@ -126,7 +126,7 @@ class MethodCallNode {
         for (MethodWrapper each: targets) {
             children.add(new MethodCallNode(each, model));
         }
-        model.setNeedsUpdate();
+        model.setDirty();
     }
 
     public MethodCallNode getChild(MethodWrapper wrapper) {
@@ -142,5 +142,9 @@ class MethodCallNode {
 
     public MethodWrapper getSourceMethod() {
         return sourceMethod;
+    }
+
+    public ArrayList<MethodCallNode> getChildren() {
+        return children;
     }
 }
