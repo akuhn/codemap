@@ -1,12 +1,12 @@
-package org.codemap.flow;
+package org.codemap.callhierarchy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.codemap.flow.vizualization.EdgeRenderer;
-import org.codemap.flow.vizualization.Options;
+import org.codemap.callhierarchy.vizualization.EdgeRenderer;
+import org.codemap.callhierarchy.vizualization.Options;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;

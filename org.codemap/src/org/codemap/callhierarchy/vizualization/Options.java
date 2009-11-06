@@ -1,4 +1,4 @@
-package org.codemap.flow.vizualization;
+package org.codemap.callhierarchy.vizualization;
 
 import edu.stanford.hci.flowmap.utils.AttributeMap;
 

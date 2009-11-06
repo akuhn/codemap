@@ -2,7 +2,7 @@ package org.codemap.mapview;
 
 import static org.codemap.util.CodemapIcons.LAYERS;
 
-import org.codemap.flow.LinkWithCallHierarchyAction;
+import org.codemap.callhierarchy.LinkWithCallHierarchyAction;
 import org.codemap.util.CodemapIcons;
 import org.codemap.util.ExtensionPoints;
 import org.eclipse.swt.widgets.Menu;

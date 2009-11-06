@@ -1,4 +1,4 @@
-package org.codemap.flow;
+package org.codemap.callhierarchy;
 
 import java.util.ArrayList;
 import java.util.HashMap;

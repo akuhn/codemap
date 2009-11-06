@@ -1,4 +1,4 @@
-package org.codemap.flow;
+package org.codemap.callhierarchy;
 
 import static org.codemap.util.CodemapIcons.FLOW;
 

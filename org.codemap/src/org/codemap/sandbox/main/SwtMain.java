@@ -18,7 +18,7 @@ package org.codemap.sandbox.main;
  * http://www.eclipse.org/swt/snippets/
  */
 
-import org.codemap.flow.vizualization.Globals;
+import org.codemap.callhierarchy.vizualization.Globals;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;

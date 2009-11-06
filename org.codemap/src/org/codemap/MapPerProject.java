@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.codemap.flow.CallOverlay;
+import org.codemap.callhierarchy.CallOverlay;
 import org.codemap.resources.EclipseMapValues;
 import org.codemap.resources.EclipseMapValuesBuilder;
 import org.codemap.util.Log;

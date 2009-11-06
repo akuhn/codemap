@@ -1,6 +1,6 @@
 package edu.stanford.hci.flowmap.prefuse.render;
 
-import org.codemap.flow.vizualization.Options;
+import org.codemap.callhierarchy.vizualization.Options;
 
 import edu.stanford.hci.flowmap.structure.Graph;
 
