@@ -19,7 +19,6 @@ package org.codemap.sandbox.main;
  */
 
 import org.codemap.flow.vizualization.Globals;
-import org.codemap.flow.vizualization.GraphPainter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
@@ -33,7 +32,6 @@ public class SwtMain extends Canvas {
         super(parent, SWT.NONE);
         
         setSize(Globals.getScreenDimension());
-        this.addPaintListener(new GraphPainter());
     }
 
     public static void main(String[] args) {

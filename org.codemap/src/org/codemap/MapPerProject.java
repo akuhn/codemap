@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.codemap.flow.FLowOverlay;
+import org.codemap.flow.CallOverlay;
 import org.codemap.resources.EclipseMapValues;
 import org.codemap.resources.EclipseMapValuesBuilder;
 import org.codemap.util.Log;
@@ -235,7 +235,7 @@ public class MapPerProject {
         }
     }
 
-    public SWTLayer getLayer(Class<FLowOverlay> layerClass) {
+    public SWTLayer getLayer(Class<CallOverlay> layerClass) {
         for (SWTLayer each: mapVisualization.getSharedLayer()) {
             if (each.getClass().equals(layerClass)) {
                 return each;

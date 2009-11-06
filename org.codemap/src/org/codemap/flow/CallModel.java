@@ -15,7 +15,7 @@ import ch.akuhn.util.List;
 import ch.akuhn.values.ReferenceValue;
 import ch.deif.meander.swt.SWTLayer;
 
-public class FlowModel {
+public class CallModel {
 
     private MethodCallNode rootNode;
     private ReferenceValue<Object> trigger = new ReferenceValue<Object>();
@@ -45,9 +45,9 @@ public class FlowModel {
 
     public void setDirty() {
         MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
-        SWTLayer layer = activeMap.getLayer(FLowOverlay.class);
+        SWTLayer layer = activeMap.getLayer(CallOverlay.class);
         if (layer == null) {
-            layer = new FLowOverlay(this);
+            layer = new CallOverlay(this);
             activeMap.addLayer(layer);
             activeMap.redrawWhenChanges(trigger);
         }
@@ -100,9 +100,9 @@ class MethodCallNode {
 
     private MethodWrapper sourceMethod;
     private ArrayList<MethodCallNode> children;
-    private FlowModel model;
+    private CallModel model;
 
-    public MethodCallNode(MethodWrapper currentRootMethod, FlowModel flowModel) {
+    public MethodCallNode(MethodWrapper currentRootMethod, CallModel flowModel) {
         model = flowModel;
         sourceMethod = currentRootMethod;
         children = new ArrayList<MethodCallNode>();

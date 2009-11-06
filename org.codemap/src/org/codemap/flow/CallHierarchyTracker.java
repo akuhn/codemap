@@ -146,12 +146,12 @@ public class CallHierarchyTracker {
     public static final String CANCEL_SEARCH_ACTION_ATTRIBUTE = "fCancelSearchAction";
 
     private TreeViewer callTree;
-    private FlowModel flowModel;
+    private CallModel flowModel;
     private CallHierarchyViewPart callHierarchyPart;
     private MethodWrapper currentRootMethod;
     
     public CallHierarchyTracker() {
-        flowModel = new FlowModel();
+        flowModel = new CallModel();
         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
         page.addPartListener(partListener);
     }

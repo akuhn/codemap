@@ -8,10 +8,10 @@ import org.codemap.mapview.MenuAction;
 import org.codemap.util.CodemapIcons;
 import org.eclipse.jface.action.IAction;
 
-public class ShowFlowAction extends MenuAction {
+public class LinkWithCallHierarchyAction extends MenuAction {
 
 
-    public ShowFlowAction() {
+    public LinkWithCallHierarchyAction() {
 	    super("Show Flow", IAction.AS_CHECK_BOX);
 	    setImageDescriptor(new CodemapIcons().descriptor(FLOW));
 	}
@@ -25,14 +25,14 @@ public class ShowFlowAction extends MenuAction {
 	
 	private void showFLow() {
         MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
-        if (activeMap.containsLayer(FLowOverlay.class)) return;
+        if (activeMap.containsLayer(CallOverlay.class)) return;
         
 //        activeMap.addLayer(new FLowOverlay());
 	}
 
 	private void hideFlow() {
 	    MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
-	    activeMap.remove(FLowOverlay.class);
+	    activeMap.remove(CallOverlay.class);
 	}
 
     @Override

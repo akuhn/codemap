@@ -20,15 +20,15 @@ import edu.stanford.hci.flowmap.prefuse.render.FlowScale;
 import edu.stanford.hci.flowmap.structure.Edge;
 import edu.stanford.hci.flowmap.structure.Graph;
 
-public class FLowOverlay extends SWTLayer {
+public class CallOverlay extends SWTLayer {
     
-    private FlowModel model;
+    private CallModel model;
     private Integer mapSize;
     private Options options = initOptions(); 
     private List<Graph> graphs;
     private ArrayList<RenderHelper> renderers;
     
-    public FLowOverlay(FlowModel flowModel) {
+    public CallOverlay(CallModel flowModel) {
         model = flowModel;
     }
 
