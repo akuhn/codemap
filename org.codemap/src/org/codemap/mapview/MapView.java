@@ -27,7 +27,10 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -300,9 +303,20 @@ public class MapView extends ViewPart {
         Display.getDefault().asyncExec(new Runnable() {
             @Override
             public void run() {
+                if (container.isDisposed()) return;
                 container.redraw();
                 canvas.redraw(); // needs both!
             }
         });
+    }
+
+    public Image getCodemapImage() {
+        if (canvas == null) return null;
+        Point size = canvas.getSize();
+        Image image = new Image(Display.getDefault(), size.x, size.y);
+        GC gc = new GC(image);
+        boolean success = canvas.print(gc);
+        if (!success) return null;
+        return image;
     }
 }
