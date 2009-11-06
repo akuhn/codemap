@@ -34,6 +34,7 @@ public class CallOverlay extends SWTLayer {
 
     @Override
     public void paintMap(MapValues map, GC gc) {
+        if (! model.isEnabled()) return;
         if (map.mapSize.getValue() != mapSize || model.isDirty() || !isInitialized()) {
             mapSize = map.mapSize.getValue();
             model.setClean();

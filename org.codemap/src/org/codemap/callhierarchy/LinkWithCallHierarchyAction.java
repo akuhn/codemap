@@ -1,9 +1,8 @@
 package org.codemap.callhierarchy;
 
-import static org.codemap.util.CodemapIcons.FLOW;
+import static org.codemap.util.CodemapIcons.CALL_HIERARCHY;
 
 import org.codemap.CodemapCore;
-import org.codemap.MapPerProject;
 import org.codemap.mapview.MenuAction;
 import org.codemap.util.CodemapIcons;
 import org.eclipse.jface.action.IAction;
@@ -11,9 +10,12 @@ import org.eclipse.jface.action.IAction;
 public class LinkWithCallHierarchyAction extends MenuAction {
 
 
+    private CallHierarchyTracker callHierarchyTracker;
+
     public LinkWithCallHierarchyAction() {
-	    super("Show Flow", IAction.AS_CHECK_BOX);
-	    setImageDescriptor(new CodemapIcons().descriptor(FLOW));
+	    super("Link with Call Hierarchy", IAction.AS_CHECK_BOX);
+	    setImageDescriptor(new CodemapIcons().descriptor(CALL_HIERARCHY));
+	    callHierarchyTracker = CodemapCore.getPlugin().callHierarchyTracker;
 	}
 
     @Override
@@ -24,15 +26,11 @@ public class LinkWithCallHierarchyAction extends MenuAction {
 	}
 	
 	private void showFLow() {
-        MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
-        if (activeMap.containsLayer(CallOverlay.class)) return;
-        
-//        activeMap.addLayer(new FLowOverlay());
+	    callHierarchyTracker.enable();
 	}
 
 	private void hideFlow() {
-	    MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
-	    activeMap.remove(CallOverlay.class);
+	    callHierarchyTracker.disable();
 	}
 
     @Override

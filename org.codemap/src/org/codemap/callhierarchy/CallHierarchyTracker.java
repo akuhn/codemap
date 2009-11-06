@@ -85,8 +85,6 @@ public class CallHierarchyTracker {
         public void partOpened(IWorkbenchPartReference partRef) {
             CallHierarchyViewPart callHierarchy = getCallHierarchyPart(partRef);
             if (callHierarchy == null) return;
-            
-            System.out.println("call hierarchy opened");
         }
         
         @Override
@@ -146,12 +144,12 @@ public class CallHierarchyTracker {
     public static final String CANCEL_SEARCH_ACTION_ATTRIBUTE = "fCancelSearchAction";
 
     private TreeViewer callTree;
-    private CallModel flowModel;
+    private CallModel callModel;
     private CallHierarchyViewPart callHierarchyPart;
     private MethodWrapper currentRootMethod;
     
     public CallHierarchyTracker() {
-        flowModel = new CallModel();
+        callModel = new CallModel();
         IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
         page.addPartListener(partListener);
     }
@@ -162,7 +160,7 @@ public class CallHierarchyTracker {
         // the call hierarchy was reloaded
         if (currentRootMethod == rootMethod) return;
         currentRootMethod = rootMethod;
-        flowModel.newRoot(currentRootMethod);
+        callModel.newRoot(currentRootMethod);
         waitForResults();
         onCallHierarchyResultsLoaded(currentRootMethod);
     }
@@ -171,7 +169,7 @@ public class CallHierarchyTracker {
         Object methodWrapperObject = event.getElement();
         if (!(methodWrapperObject instanceof MethodWrapper)) return;
         MethodWrapper source = (MethodWrapper) methodWrapperObject;
-        flowModel.collapse(source);
+        callModel.collapse(source);
     }
 
     protected void onCallHierarchyExpanded(TreeExpansionEvent event) {
@@ -183,7 +181,7 @@ public class CallHierarchyTracker {
     
     protected void onCallHierarchyResultsLoaded(MethodWrapper source) {
         List<MethodWrapper> targets = List.from(source.getCalls(new NullProgressMonitor()));
-        flowModel.expand(source, targets);
+        callModel.expand(source, targets);
     }
 
     protected void waitForResults() {
@@ -199,6 +197,14 @@ public class CallHierarchyTracker {
         IWorkbenchPart part = partRef.getPart(true);
         if (!(part instanceof CallHierarchyViewPart)) return null;
         return (CallHierarchyViewPart) part;        
+    }
+
+    public void disable() {
+        callModel.disable();
+    }
+
+    public void enable() {
+        callModel.enable();
     }
 }
 

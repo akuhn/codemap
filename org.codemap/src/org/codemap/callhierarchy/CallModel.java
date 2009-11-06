@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
+import org.codemap.util.ChangeTriggerValue;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.internal.corext.callhierarchy.CallerMethodWrapper;
 import org.eclipse.jdt.internal.corext.callhierarchy.MethodCall;
@@ -18,8 +19,9 @@ import ch.deif.meander.swt.SWTLayer;
 public class CallModel {
 
     private MethodCallNode rootNode;
-    private ReferenceValue<Object> trigger = new ReferenceValue<Object>();
+    private ChangeTriggerValue changeTrigger = new ChangeTriggerValue();
     private boolean dirty = true;
+    private boolean enabled = false;
     
     public void newRoot(MethodWrapper currentRootMethod) {
         rootNode = new MethodCallNode(currentRootMethod, this);
@@ -49,9 +51,9 @@ public class CallModel {
         if (layer == null) {
             layer = new CallOverlay(this);
             activeMap.addLayer(layer);
-            activeMap.redrawWhenChanges(trigger);
+            activeMap.redrawWhenChanges(changeTrigger.value());
         }
-        trigger.setValue(new Object());
+        changeTrigger.setChanged();
         dirty = true;
     }
 
@@ -63,9 +65,24 @@ public class CallModel {
         dirty = false;
     }
 
-    public void accept(GraphConversionVisitor visitor) {
-        rootNode.accept(visitor);
+    public void enable() {
+        enabled  = true;
+        setDirty();
     }
+
+    public void disable() {
+        enabled = false;
+        setDirty();
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+    
+    public void accept(GraphConversionVisitor visitor) {
+        if (rootNode == null) return;
+        rootNode.accept(visitor);
+    }    
 }
 
 class MethodCallPath {

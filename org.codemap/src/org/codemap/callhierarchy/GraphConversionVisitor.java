@@ -35,8 +35,8 @@ public class GraphConversionVisitor {
            if (childPath == null) continue;
            
            // do not add an edge from the node to itself because
-           // * the clustering algorithm does not like it
-           // * it won't appear on the map anyway as the edge has a length of 0
+           // - the clustering algorithm does not like it
+           // - it won't appear on the map anyway as the edge would have a length of 0
            if (childPath.equals(rootPath)) continue;
            
            Location location = locations.get(childPath);
