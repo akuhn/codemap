@@ -50,6 +50,24 @@ public abstract class FlowScale {
 		}
 	}
 	
+	/**
+	 * Identity scale that leaves the weight as is
+	 *  
+	 * @author deif
+	 */
+	public static class Identity extends FlowScale {
+
+        public Identity(Options userOptions, Graph graph) {
+            super(userOptions, graph);
+        }
+
+        @Override
+        protected double f(double flowCurr) {
+            // divide away factor that the value is multiplied with later
+            return flowCurr / (displayMax - displayMin);
+        }
+	}
+	
 	public static class Log extends FlowScale {
 
 		public Log(Options userOptions, Graph graph) {

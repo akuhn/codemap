@@ -12,6 +12,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 
 import ch.deif.meander.Location;
+import ch.deif.meander.MapInstance;
 import ch.deif.meander.map.MapValues;
 import ch.deif.meander.swt.SWTLayer;
 import edu.stanford.hci.flowmap.cluster.ClusterLayout;
@@ -37,7 +38,10 @@ public class FLowOverlay extends SWTLayer {
             mapSize = map.mapSize.getValue();
             model.setClean();
             
-            Iterable<Location> locations = map.mapInstance.getValue().locations();
+            MapInstance value = map.mapInstance.getValue();
+            // map not yet available
+            if (value == null) return;
+            Iterable<Location> locations = value.locations();
             createGraphs(locations);
             createRenderers();
         }
@@ -93,7 +97,7 @@ class RenderHelper {
 
     public RenderHelper(Graph graph, Options options) {
         this.graph = graph;
-        renderer = new EdgeRenderer(new FlowScale.Linear(options, graph));
+        renderer = new EdgeRenderer(new FlowScale.Identity(options, graph));
     }
 
     public void renderEdges(GC gc) {

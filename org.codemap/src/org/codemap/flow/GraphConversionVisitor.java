@@ -40,7 +40,6 @@ public class GraphConversionVisitor {
            if (childPath.equals(rootPath)) continue;
            
            Location location = locations.get(childPath);
-           
            Integer weight = locationWeights.get(location);
            if (weight == null) {
                weight = 0;
