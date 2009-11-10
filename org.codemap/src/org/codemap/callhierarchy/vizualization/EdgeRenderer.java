@@ -9,8 +9,10 @@ import org.codemap.util.geom.Line2D;
 import org.codemap.util.geom.PathIterator;
 import org.codemap.util.geom.Point2D;
 import org.codemap.util.geom.Shape;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Path;
+import org.eclipse.swt.graphics.PathData;
 
 import edu.stanford.hci.flowmap.cluster.Vector2D;
 import edu.stanford.hci.flowmap.prefuse.render.BezierSpline;
@@ -22,6 +24,8 @@ import edu.stanford.hci.flowmap.utils.GraphicsGems;
 
 public class EdgeRenderer {
     
+    private static final float ARROW_SIZE = 8;
+
     private boolean m_additiveEdges = true;
 
     private FlowScale scale;
@@ -449,8 +453,33 @@ public class EdgeRenderer {
             pit.next();
         }
         gc.drawPath(path);
+        rederArrowHeads(gc, path.getPathData());
     }
     
+    private void rederArrowHeads(GC gc, PathData pathData) {
+        float[] points = pathData.points;
+        int length = points.length;
+        if (length < 4) return;
+        
+        float endx = points[length-2], endy = points[length-1];
+        float cx = points[length-4], cy = points[length-3];     // Control point of the curve
+
+        float adjSize = (float)(ARROW_SIZE/Math.sqrt(2));
+        float ex = endx - cx;
+        float ey = endy - cy;
+        float abs_e = (float)Math.sqrt(ex*ex + ey*ey);
+        ex /= abs_e;
+        ey /= abs_e;
+
+        // Creating arrowhead
+        Path arrowHead = new Path(gc.getDevice());
+        arrowHead.moveTo(endx, endy);        
+        arrowHead.lineTo(endx + (ey-ex)*adjSize, endy - (ex + ey)*adjSize);
+        arrowHead.moveTo(endx, endy);
+        arrowHead.lineTo(endx - (ey + ex)*adjSize, endy + (ex - ey)*adjSize);
+        gc.drawPath(arrowHead);
+    }
+
     private double[] computeCrossProduct (double x1, double  y1, double x2, double y2) {
        double v0[] = {x1, y1, 0};
        double v1[] = {x2, y2, 0};
