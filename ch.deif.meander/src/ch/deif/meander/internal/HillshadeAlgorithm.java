@@ -8,6 +8,7 @@ import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 import ch.deif.meander.MapAlgorithm;
 import ch.deif.meander.MapInstance.Kernel;
+import ch.deif.meander.util.StopWatch;
 
 /**
  * @see http://edndoc.esri.com/arcobjects/9.2/NET/shared/geoprocessing/ spatial_analyst_tools/how_hillshade_works.htm
@@ -20,6 +21,8 @@ public class HillshadeAlgorithm extends MapAlgorithm<double[][]> {
 
     @Override
     public double[][] call() {
+        StopWatch stopWatch = new StopWatch("HillShade").start();
+        
         // zenith: height of sun over horizon (90 = horizon, 0 = zenith).
         double zenithRad = 45 * PI / 180;
         // azimuth: direction of sun on x-y-plane
@@ -35,6 +38,7 @@ public class HillshadeAlgorithm extends MapAlgorithm<double[][]> {
                     - aspectRad)));
             hillshade[k.px][k.py] = shading;
         }
+        stopWatch.printStop();
         return hillshade;
     }
 

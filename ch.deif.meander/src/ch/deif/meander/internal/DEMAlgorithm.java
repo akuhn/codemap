@@ -1,7 +1,10 @@
 package ch.deif.meander.internal;
 
+import java.util.Calendar;
+
 import ch.deif.meander.Location;
 import ch.deif.meander.MapAlgorithm;
+import ch.deif.meander.util.StopWatch;
 
 /** Creates the digital elevation model of a map. A digital elevation model (DEM) is a raster of z-ordinates for each pixel. 
  *<p> 
@@ -32,10 +35,13 @@ public class DEMAlgorithm extends MapAlgorithm<float[][]> {
     }
 
     private void compute() {
+        StopWatch stopWatch = new StopWatch("DEM").start();
         // TODO a map configuration on map should return locations on map
         for (Location each: map.locations()) {
             elevateHill(each, computePie(each));
         }
+        long after = Calendar.getInstance().getTimeInMillis();
+        stopWatch.printStop();
     }
 
     private void elevateHill(Location each, float[][] pie) {

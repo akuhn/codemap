@@ -21,6 +21,7 @@ import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.util.MapScheme;
 import ch.deif.meander.util.SparseTrueBooleanList;
+import ch.deif.meander.util.StopWatch;
 
 public class ComputeBackgroundTask extends TaskValue<Image> {
 
@@ -77,11 +78,15 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
     private void paintBackground(ProgressMonitor monitor, GC gc, MapInstance mapInstance, DigitalElevationModel elevationModel, HillShading hillShading, MapScheme<MColor> colors) {
         paintWater(monitor, gc);
         if (elevationModel == null) {
+            StopWatch stopWatch = new StopWatch("Background (Draft)").start();
             paintDraft(monitor, gc, mapInstance);
+            stopWatch.printStop();
         }
         else {
+            StopWatch stopWatch = new StopWatch("Background").start();
             paintShores(monitor, gc, mapInstance, elevationModel);
             paintHills(monitor, gc, mapInstance, elevationModel, hillShading, colors);
+            stopWatch.printStop();
         }
     }
 

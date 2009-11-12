@@ -7,6 +7,7 @@ import ch.deif.meander.MapAlgorithm;
 import ch.deif.meander.MapSetting;
 import ch.deif.meander.MapInstance.Kernel;
 import ch.deif.meander.util.SparseTrueBooleanList;
+import ch.deif.meander.util.StopWatch;
 
 public class ContourLineAlgorithm extends MapAlgorithm<List<SparseTrueBooleanList>> {
 
@@ -14,6 +15,8 @@ public class ContourLineAlgorithm extends MapAlgorithm<List<SparseTrueBooleanLis
 
     @Override
     public List<SparseTrueBooleanList> call() {
+        StopWatch stopWatch = new StopWatch("ContourLineAlgorithm").start();
+        
         int step = map.get(CONTOUR_STEP);
         boolean[][] contour = new boolean[map.getWidth()][map.getWidth()];
         for (Kernel k: map.kernels()) {
@@ -28,6 +31,7 @@ public class ContourLineAlgorithm extends MapAlgorithm<List<SparseTrueBooleanLis
             // TODO use a simple List of RLE list in worst case
             result.add(new SparseTrueBooleanList(contour[row]));
         }
+        stopWatch.printStop();
         return result;
     }
 
