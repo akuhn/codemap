@@ -10,9 +10,9 @@ public class SwissRoll {
         z = new double[n];
         for (int i = 0; i < n; i++) {
             double len = Math.PI * (Math.random() * 3 + 1);
-            x[i] = Math.cos(len) * len / 4;
-            y[i] = Math.sin(len) * len / 4;
-            z[i] = Math.random() * 6 - 3;
+            x[i] = Math.cos(len) * (1 + len / 4);
+            y[i] = Math.sin(len) * (1 + len / 4);
+            z[i] = Math.random() * 4 - 2;
         }
     }
     

@@ -12,10 +12,10 @@ public class Distances {
         this.dist = dist;
     }
 
-    public int[][] kayNearestNeighbours(int k) {
-        int[][] path = new int[dist.length][dist.length];
+    public double[][] kayNearestNeighbours(int k) {
+        double[][] path = new double[dist.length][dist.length];
         for (int i = 0; i < path.length; i++) {
-            Arrays.fill(path[i], Integer.MAX_VALUE);
+            Arrays.fill(path[i], Double.POSITIVE_INFINITY);
         }
         for (int i = 0; i < dist.length; i++) {
             double[] minima = Arrays.copyOf(dist[i], k + 1);
@@ -26,9 +26,8 @@ public class Distances {
                 System.arraycopy(minima, n, minima, n+1, k-n);
                 minima[n] = dist[i][j];
             }
-            new Out().put(minima);
             for (int j = k + 1; j < dist.length; j++) {
-                path[i][j] = dist[i][j] <= minima[k] ? 1 : Integer.MAX_VALUE;
+                path[i][j] = dist[i][j] <= minima[k] ? 1 : Double.POSITIVE_INFINITY;
             }
         }
         return path;

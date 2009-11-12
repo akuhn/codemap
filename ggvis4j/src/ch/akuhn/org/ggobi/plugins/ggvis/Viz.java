@@ -56,17 +56,11 @@ public class Viz implements PaintListener, MultidimensionalScalingListener {
         e.gc.drawOval(256-zoom, 256-zoom, zoom*2, zoom*2);
         final double[][] pps = mds.points();
         if (pps == null) return;
-        for (double[] p: pps) {
-            int x = (int) (p[0] * zoom + 256);
-            int y = (int) (p[1] * zoom + 256);
+        for (int i = 0; i < pps[0].length; i++) {
+            int x = (int) (pps[0][i] * zoom + 256);
+            int y = (int) (pps[1][i] * zoom + 256);
             e.gc.drawLine(x - 2, y - 2, x + 2, y + 2);
             e.gc.drawLine(x - 2, y + 2, x + 2, y - 2);
-        }
-        for (int n = 100; n < pps.length; n+= 100) {
-            int x = (int) (pps[n][0] * zoom + 256);
-            int y = (int) (pps[n][1] * zoom + 256);
-            e.gc.drawLine(x - 4, y - 4, x + 4, y + 4);
-            e.gc.drawLine(x - 4, y + 4, x + 4, y - 4);
         }
         e.gc.setForeground(device.getSystemColor(SWT.COLOR_BLUE));
         drawHistogram(e, mds.config_dist.getHistogram());

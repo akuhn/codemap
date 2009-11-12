@@ -44,7 +44,7 @@ public class Diagram implements PaintListener {
         return this;
     }
 
-    private SwissRoll swissRoll = new SwissRoll(1000);
+    private SwissRoll swissRoll = new SwissRoll(1200);
     
     @Override
     public void paintControl(PaintEvent e) {
@@ -55,20 +55,24 @@ public class Diagram implements PaintListener {
         int zoom = 50;
         e.gc.drawOval(256-zoom, 256-zoom, zoom*2, zoom*2);
         for (int n = 0; n < swissRoll.x.length; n++) {
-            int x = (int) (swissRoll.x[n] * zoom + 256);
-            int y = (int) (swissRoll.z[n] * zoom + 256);
+            int z = (int) (swissRoll.z[n] * zoom) / 4;
+            int x = (int) (swissRoll.x[n] * zoom + 256) + z;
+            int y = (int) (swissRoll.y[n] * zoom + 256) + z;
             e.gc.drawLine(x - 2, y - 2, x + 2, y + 2);
             e.gc.drawLine(x - 2, y + 2, x + 2, y - 2);
         }
+        e.gc.setAlpha(64);
         e.gc.setForeground(device.getSystemColor(SWT.COLOR_RED));
-        int[][] path = swissRoll.asDistanceMatrix().kayNearestNeighbours(5);
+        double[][] path = new AllPaths(swissRoll.asDistanceMatrix().kayNearestNeighbours(5)).undirected().path;
         for (int i = 0; i < path.length; i++) {
             for (int j = 0; j < path.length; j++) {
                 if (path[i][j] > 1) continue;
-                int x0 = (int) (swissRoll.x[i] * zoom + 256);
-                int y0 = (int) (swissRoll.z[i] * zoom + 256);
-                int x = (int) (swissRoll.x[j] * zoom + 256);
-                int y = (int) (swissRoll.z[j] * zoom + 256);
+                int z0 = (int) (swissRoll.z[i] * zoom) / 4;
+                int x0 = (int) (swissRoll.x[i] * zoom + 256) + z0;
+                int y0 = (int) (swissRoll.y[i] * zoom + 256) + z0;
+                int z = (int) (swissRoll.z[j] * zoom) / 4;
+                int x = (int) (swissRoll.x[j] * zoom + 256) + z;
+                int y = (int) (swissRoll.y[j] * zoom + 256) + z;
                 e.gc.drawLine(x0, y0, x, y);
             }
         }

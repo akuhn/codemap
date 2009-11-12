@@ -81,6 +81,11 @@ public class MultidimensionalScaling {
         return this;
     }
 
+    public MultidimensionalScaling threshold(double t) {
+        fThreshold = t;
+        return this;
+    }
+    
     public interface MultidimensionalScalingListener extends EventListener {
         public void update(Mds mds);
     }
