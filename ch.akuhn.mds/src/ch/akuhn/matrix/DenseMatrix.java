@@ -32,4 +32,14 @@ public class DenseMatrix {
         for (double[] row: value) Arrays.fill(row, constant);
     }
     
+    public void multiplyWith(DenseMatrix other) {
+        assert value.length == other.value.length;
+        for (int i = 0; i < value.length; i++) {
+            for (int j = 0; j < value.length; j++) {
+                value[i][j] *= other.value[i][j];
+            }
+        }
+    }
+    
+    
 }

@@ -12,8 +12,7 @@ public class RunIsomapMDSOfSourceCode {
     public static void main(String[] args) {
         
         new Codemap(
-                "../ch.akuhn.hapax",
-                "../ch.akuhn.util", 
+                //"../javalanche_src")
                 "../ch.deif.meander")
             .applyIsomap()
             .visuallyRunMDS();

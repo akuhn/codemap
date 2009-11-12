@@ -16,7 +16,8 @@ public class Codemap {
 
     public Document[] documents;
     public Points locations;
-    public DenseMatrix distances;
+    public DenseMatrix distance;
+    public DenseMatrix isomapDist;
     
     public Codemap(String... foldernames) {
         CorpusBuilder builder = Hapax.newCorpus().useTFIDF().useCamelCaseScanner();
@@ -24,23 +25,29 @@ public class Codemap {
         LatentSemanticIndex lsi = builder.build().getIndex();
         documents = null;
         locations = null;
-        distances = new DenseMatrix(lsi.documentCorrelation().asArray());        
+        distance = new DenseMatrix(lsi.documentCorrelation().asArray());        
+        distance.apply(Function.COSINE_TO_DISSIMILARITY);
+        double[][] knn = new Distances(distance.value).kayNearestNeighbours(3);
+        isomapDist = new DenseMatrix(new AllPaths(knn).undirected().run().path);
     }
     
     public Codemap applyIsomap() {
-        distances.apply(Function.COSINE_TO_DISSIMILARITY);
-        double[][] knn = new Distances(distances.value).kayNearestNeighbours(12);
-        distances = new DenseMatrix(new AllPaths(knn).undirected().run().path);
+        distance = isomapDist;
         return this;
     }
     
     public void visuallyRunMDS() {
         new MultidimensionalScaling()
-            .dissimilarities(distances.value)
+            .dissimilarities(distance.value)
             .iterations(1000000000)
             .threshold(1e-15)
-            .listener(new Viz().open())
+            .listener(new Viz().setEdges(isomapDist.value).open())
             .run();
+    }
+
+    public Codemap multiplyBothMetrics() {
+        distance.multiplyWith(isomapDist);
+        return this;
     }
     
 }

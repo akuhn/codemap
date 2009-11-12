@@ -44,7 +44,7 @@ public class SymetricMatrix {
                 max = Math.max(max, each);
             }
         }
-        max = 2.5; // FIXME
+        max = 10; // FIXME
         int[] bins = new int[BIN];
         for (double[] row: value) {
             for (double each: row) {

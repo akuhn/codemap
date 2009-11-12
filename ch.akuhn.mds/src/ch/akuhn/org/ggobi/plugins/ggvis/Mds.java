@@ -139,7 +139,7 @@ public class Mds {
 
         /* experiment: normalize point cloud after using simplified gradient */
         // FIXME can we avoid this?
-        // ggv_center_scale_pos ();
+        pos.ggv_center_scale_pos();
 
     }
     private void mds_once_part2() {
