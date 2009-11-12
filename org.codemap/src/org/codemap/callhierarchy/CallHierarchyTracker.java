@@ -21,7 +21,10 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.ui.IPageListener;
 import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
@@ -30,6 +33,27 @@ import org.eclipse.ui.PlatformUI;
 import ch.akuhn.util.List;
 
 public class CallHierarchyTracker {
+    
+    /**
+     * Listen to new pages that are opened or closed and triggers adding or
+     * removal of an IPartListener to them.
+     */
+    private IPageListener pageListener = new IPageListener(){
+        @Override
+        public void pageActivated(IWorkbenchPage page) {
+            addPartListener(page);
+        }
+
+        @Override
+        public void pageClosed(IWorkbenchPage page) {
+            removePartListener(page);
+        }
+
+        @Override
+        public void pageOpened(IWorkbenchPage page) {
+            addPartListener(page);            
+        }
+    };    
     
     /**
      * When new call hierarchy data is available the selection jumps to the root node. 
@@ -150,10 +174,19 @@ public class CallHierarchyTracker {
     
     public CallHierarchyTracker() {
         callModel = new CallModel();
-        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-        page.addPartListener(partListener);
+        PlatformUI.getWorkbench().getActiveWorkbenchWindow().addPageListener(pageListener);
+        addPartListener(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage());
     }
 
+    protected void removePartListener(IWorkbenchPage page) {
+        if (page == null) return;
+        page.removePartListener(partListener);
+    }
+
+    protected void addPartListener(IWorkbenchPage page) {
+        if (page == null) return;
+        page.addPartListener(partListener);
+    }
 
     protected void onTreeRootSelected(MethodWrapper rootMethod) {
         // need an identity check here, if the roots are not identical then
