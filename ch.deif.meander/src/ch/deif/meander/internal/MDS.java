@@ -26,6 +26,7 @@ public class MDS {
 		assert y0.length == len;
 		MultidimensionalScaling mds = new MultidimensionalScaling();
 		mds.similarities(index.documentCorrelation().asArray());
+		mds.applyIsomapWithKayNearestNeighbors(3);
 		if (x0 != null && y0 != null) mds.initialConfiguration(x0, y0);
 		mds.iterations(Math.max(50, 1000000 / len));
 		double[][] result = mds.run();
