@@ -3,6 +3,10 @@ package ch.akuhn.mds;
 import java.io.PrintStream;
 import java.util.EventListener;
 
+import org.codemap.graph.AllPaths;
+import org.codemap.graph.Distances;
+
+import ch.akuhn.matrix.DenseMatrix;
 import ch.akuhn.matrix.Function;
 import ch.akuhn.matrix.SymetricMatrix;
 import ch.akuhn.org.ggobi.plugins.ggvis.Mds;
@@ -88,6 +92,11 @@ public class MultidimensionalScaling {
     
     public interface MultidimensionalScalingListener extends EventListener {
         public void update(Mds mds);
+    }
+
+    public void applyIsomapWithKayNearestNeighbors(int k) {
+        double[][] knn = new Distances(fdistances.asDenseMatrix().value).kayNearestNeighbours(3);
+        fdistances = new DenseMatrix(new AllPaths(knn).undirected().run().path).asSymetricMatrix();
     }
 
 }

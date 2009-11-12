@@ -76,6 +76,16 @@ public class SymetricMatrix {
         }
         return min;
     }
+
+    public DenseMatrix asDenseMatrix() {
+        double[][] dense = new double[value.length][value.length];
+        for (int i = 0; i < dense.length; i++) {
+            for (int j = 0; j < dense.length; j++) {
+                dense[i][j] = i == j ? 0.0 : value[Math.max(i,j)][Math.min(i,j)];
+            }
+        }
+        return new DenseMatrix(dense);
+    }
     
 
 }

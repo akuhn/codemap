@@ -40,6 +40,10 @@ public class DenseMatrix {
             }
         }
     }
+
+    public SymetricMatrix asSymetricMatrix() {
+        return new SymetricMatrix(value);
+    }
     
     
 }
