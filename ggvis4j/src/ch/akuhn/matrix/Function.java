@@ -1,4 +1,4 @@
-package ch.akuhn.org.ggobi.plugins.ggvis;
+package ch.akuhn.matrix;
 
 public abstract class Function {
 

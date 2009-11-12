@@ -3,6 +3,8 @@ package ch.akuhn.org.ggobi.plugins.ggvis;
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
+import ch.akuhn.matrix.Function;
+import ch.akuhn.matrix.SymetricMat;
 
 /** Multidimensional scaling.
  * Initially ported from ggvis and greatly rewritten in Java by Adrian Kuhn.
@@ -27,8 +29,8 @@ public class Mds {
 
     static final int DRAGGED = 4;
     private static final boolean TODO_SYMMETRY = false;
-    final SMat config_dist;
-    final SMat Dtarget; /*-- D in the documentation; dist in the xgvis code --*/
+    final SymetricMat config_dist;
+    final SymetricMat Dtarget; /*-- D in the documentation; dist in the xgvis code --*/
 
     private Points pos;
     /* these belong in ggv */
@@ -57,7 +59,7 @@ public class Mds {
     private MDSGroupInd group_ind = MDSGroupInd.all_distances;
 
     /*-- used in mds.c --*/
-    private SMat weights = null;
+    private SymetricMat weights = null;
     final private Points gradient;
 
     private double Dtarget_max = Double.MAX_VALUE;
@@ -90,11 +92,11 @@ public class Mds {
         set_weights();
 
     }
-    public Mds(SMat dissimilarities, Points initial,  
+    public Mds(SymetricMat dissimilarities, Points initial,  
             Function fConfigDist, Function fWeights, Function fDtarget) {
-        len = dissimilarities.vals.length;
+        len = dissimilarities.value.length;
         Dtarget = dissimilarities;
-        config_dist = new SMat(len);
+        config_dist = new SymetricMat(len);
         this.pos = initial == null ? new Points(len) : initial;
         this.gradient = new Points(len);
         f_config_dist = fConfigDist;
@@ -144,14 +146,14 @@ public class Mds {
         // allocate position and compute means
         pos.get_center();
         // i's are moved by j's
-        for (int i = 0; i < this.Dtarget.vals.length; i++) {
+        for (int i = 0; i < this.Dtarget.value.length; i++) {
             // these points are not moved by the gradient
             if (IS_DRAGGED(i) || (ANCHOR_FIXED && IS_ANCHOR(i))) continue;
             /* j's are moving i's */
             for (int j = 0; j < i; j++) {
                 if (mds_once_part2_continue(i, j)) continue;
                 //this.config_dist.vals[i][j] = f_config_dist(Lp_distance_pow(i, j));
-                this.config_dist.vals[i][j] = f_config_dist.apply(Lp_distance_pow(i, j));
+                this.config_dist.value[i][j] = f_config_dist.apply(Lp_distance_pow(i, j));
             }
         }
     }
@@ -163,10 +165,10 @@ public class Mds {
         if ((ANCHOR_SCALE || ANCHOR_FIXED) && !IS_ANCHOR(i) && !IS_DRAGGED(i)) return true;
 
         /* if the target distance is missing, skip */
-        if (Double.isNaN(this.Dtarget.vals[i][j])) return true;
+        if (Double.isNaN(this.Dtarget.value[i][j])) return true;
 
         /* if weight is zero, skip */
-        if (this.weights != null && this.weights.vals[i][j] == 0.) return true;
+        if (this.weights != null && this.weights.value[i][j] == 0.) return true;
 
         /* using groups */
         if (this.group_ind == MDSGroupInd.within && !SAMEGLYPH(i,j)) return true;
@@ -176,8 +178,8 @@ public class Mds {
          * if the target distance is within the thresholds
          * set using the barplot of distances, keep going.
          */
-        if (this.Dtarget.vals[i][j] < this.threshold_low ||
-                this.Dtarget.vals[i][j] > this.threshold_high) return true;
+        if (this.Dtarget.value[i][j] < this.threshold_low ||
+                this.Dtarget.value[i][j] > this.threshold_high) return true;
 
         /*
          * random selection: needs to be done symmetrically
@@ -193,7 +195,7 @@ public class Mds {
          * can now assume that weights are >0 for non-NA
          */
         if (!doesNotWeight()) {
-            if (this.weights.vals[i][j] == 0.) return true;
+            if (this.weights.value[i][j] == 0.) return true;
         }
 
         return false;
@@ -208,17 +210,17 @@ public class Mds {
             /* Zero out the gradient matrix. */
             this.gradient.clear();
             /* ------------- gradient accumulation: j's push i's ----------- */
-            for (int i = 0; i < this.Dtarget.vals.length; i++) {
+            for (int i = 0; i < this.Dtarget.value.length; i++) {
                 for (int j = 0; j < i; j++) {
                     double weight;
-                    double dist_trans  = this.Dtarget.vals[i][j];
+                    double dist_trans  = this.Dtarget.value[i][j];
                     if (Double.isNaN(dist_trans)) continue;
-                    double dist_config = this.config_dist.vals[i][j];
+                    double dist_config = this.config_dist.value[i][j];
                     if (abs(dist_config) < delta) dist_config = delta;
                     if (doesNotWeight()) {
                         weight = 1.0;
                     } else {
-                        weight = this.weights.vals[i][j];
+                        weight = this.weights.value[i][j];
                     }
                     mds_once_part3_gradient(dist_trans, dist_config, weight, i, j);
                 }
@@ -353,10 +355,10 @@ public class Mds {
         double local_weight_power = 0.;
         double local_within_between = 1.;
 
-        this.weights = new SMat(Dtarget.vals.length);
-        for (int i = 0; i < Dtarget.vals.length; i++) {
+        this.weights = new SymetricMat(Dtarget.value.length);
+        for (int i = 0; i < Dtarget.value.length; i++) {
             for (int j = 0; j < i; j++) {
-                this.weights.vals[i][j] = f_weights.apply(this.Dtarget.vals[i][j]);
+                this.weights.value[i][j] = f_weights.apply(this.Dtarget.value[i][j]);
             }
         }
         
@@ -413,17 +415,17 @@ public class Mds {
 
     private void update_stress () {
         stress_dx = stress_xx = stress_dd = 0;
-        for (int i=0; i < this.Dtarget.vals.length; i++)
+        for (int i=0; i < this.Dtarget.value.length; i++)
             for (int j=0; j < i; j++) {
-                double dist_trans  = this.Dtarget.vals[i][j] * 2; // symmetry!
+                double dist_trans  = this.Dtarget.value[i][j] * 2; // symmetry!
                 if (Double.isNaN(dist_trans)) continue;
-                double dist_config = this.config_dist.vals[i][j] * 2; // symmetry!
+                double dist_config = this.config_dist.value[i][j] * 2; // symmetry!
                 if (doesNotWeight()) {
                     stress_dx += dist_trans  * dist_config;
                     stress_xx += dist_config * dist_config;
                     stress_dd += dist_trans  * dist_trans;
                 } else {
-                    double this_weight = this.weights.vals[i][j] * 2; // symmetry!
+                    double this_weight = this.weights.value[i][j] * 2; // symmetry!
                     stress_dx += dist_trans  * dist_config * this_weight;
                     stress_xx += dist_config * dist_config * this_weight;
                     stress_dd += dist_trans  * dist_trans  * this_weight;

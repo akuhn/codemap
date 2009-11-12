@@ -3,10 +3,10 @@ package ch.akuhn.mds;
 import java.io.PrintStream;
 import java.util.EventListener;
 
-import ch.akuhn.org.ggobi.plugins.ggvis.Function;
+import ch.akuhn.matrix.Function;
+import ch.akuhn.matrix.SymetricMat;
 import ch.akuhn.org.ggobi.plugins.ggvis.Mds;
 import ch.akuhn.org.ggobi.plugins.ggvis.Points;
-import ch.akuhn.org.ggobi.plugins.ggvis.SMat;
 
 /** Multidimensional scaling, based on GGobi/GGvis.
  * 
@@ -16,7 +16,7 @@ import ch.akuhn.org.ggobi.plugins.ggvis.SMat;
 public class MultidimensionalScaling {
 
     private Points fInitialConfiguration;
-    private SMat fdistances;
+    private SymetricMat fdistances;
     private int fiterations = 100;
     private MultidimensionalScalingListener fListener;
     private PrintStream fOut;
@@ -28,7 +28,7 @@ public class MultidimensionalScaling {
     }
 
     public MultidimensionalScaling dissimilarities(double[][] matrix) {
-        fdistances = new SMat(matrix);
+        fdistances = new SymetricMat(matrix);
         return this;
     }
 
@@ -43,9 +43,9 @@ public class MultidimensionalScaling {
     }
 
     public double[][] run() {
-        if (fdistances.vals.length == 0) return new double[0][2];
+        if (fdistances.value.length == 0) return new double[0][2];
         Mds mds = new Mds(fdistances, fInitialConfiguration, Function.IDENTITY, Function.IDENTITY, Function.IDENTITY);
-        int len = fdistances.vals.length;
+        int len = fdistances.value.length;
         fdistances = null;
         fInitialConfiguration = null;
         loop: while (fiterations > 0) {
@@ -70,7 +70,7 @@ public class MultidimensionalScaling {
     }
 
     public MultidimensionalScaling similarities(double[][] matrix) {
-        SMat d = new SMat(matrix);
+        SymetricMat d = new SymetricMat(matrix);
         d.apply(Function.COSINE_TO_DISSIMILARITY);
         fdistances = d;
         return this;
