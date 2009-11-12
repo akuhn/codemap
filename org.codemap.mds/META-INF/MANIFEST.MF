@@ -1,8 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: ggvis4j
-Bundle-SymbolicName: ch.akuhn.org.ggobi.plugins.ggvis
+Bundle-Name: ch.akuhn.mds
+Bundle-SymbolicName: ch.akuhn.mds
 Bundle-Version: 0.0.0.qualifier
 Require-Bundle: org.eclipse.swt;bundle-version="3.5.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: ch.akuhn.mds
+Bundle-Vendor: Adrian Kuhn

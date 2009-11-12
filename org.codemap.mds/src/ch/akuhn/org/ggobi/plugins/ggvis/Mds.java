@@ -4,7 +4,7 @@ import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import ch.akuhn.matrix.Function;
-import ch.akuhn.matrix.SymetricMat;
+import ch.akuhn.matrix.SymetricMatrix;
 
 /** Multidimensional scaling.
  * Initially ported from ggvis and greatly rewritten in Java by Adrian Kuhn.
@@ -29,8 +29,8 @@ public class Mds {
 
     static final int DRAGGED = 4;
     private static final boolean TODO_SYMMETRY = false;
-    final SymetricMat config_dist;
-    final SymetricMat Dtarget; /*-- D in the documentation; dist in the xgvis code --*/
+    final SymetricMatrix config_dist;
+    final SymetricMatrix Dtarget; /*-- D in the documentation; dist in the xgvis code --*/
 
     private Points pos;
     /* these belong in ggv */
@@ -59,7 +59,7 @@ public class Mds {
     private MDSGroupInd group_ind = MDSGroupInd.all_distances;
 
     /*-- used in mds.c --*/
-    private SymetricMat weights = null;
+    private SymetricMatrix weights = null;
     final private Points gradient;
 
     private double Dtarget_max = Double.MAX_VALUE;
@@ -92,11 +92,11 @@ public class Mds {
         set_weights();
 
     }
-    public Mds(SymetricMat dissimilarities, Points initial,  
+    public Mds(SymetricMatrix dissimilarities, Points initial,  
             Function fConfigDist, Function fWeights, Function fDtarget) {
         len = dissimilarities.value.length;
         Dtarget = dissimilarities;
-        config_dist = new SymetricMat(len);
+        config_dist = new SymetricMatrix(len);
         this.pos = initial == null ? new Points(len) : initial;
         this.gradient = new Points(len);
         f_config_dist = fConfigDist;
@@ -355,7 +355,7 @@ public class Mds {
         double local_weight_power = 0.;
         double local_within_between = 1.;
 
-        this.weights = new SymetricMat(Dtarget.value.length);
+        this.weights = new SymetricMatrix(Dtarget.value.length);
         for (int i = 0; i < Dtarget.value.length; i++) {
             for (int j = 0; j < i; j++) {
                 this.weights.value[i][j] = f_weights.apply(this.Dtarget.value[i][j]);

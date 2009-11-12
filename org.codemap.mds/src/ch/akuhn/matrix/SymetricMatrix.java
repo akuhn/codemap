@@ -10,17 +10,17 @@ import java.util.Arrays;
  * @author Adrian Kuhn
  *
  */
-public class SymetricMat {
+public class SymetricMatrix {
 
     private static final int BIN = 100;
     public final double[][] value;
 
-    public SymetricMat(int size) {
+    public SymetricMatrix(int size) {
         value = new double[size][];
         for (int n = 0; n < value.length; n++) value[n] = new double[n];
     }
 
-    public SymetricMat(double[][] matrix) {
+    public SymetricMatrix(double[][] matrix) {
         value = new double[matrix.length][];
         for (int n = 0; n < value.length; n++) value[n] = Arrays.copyOf(matrix[n], n);
     }
