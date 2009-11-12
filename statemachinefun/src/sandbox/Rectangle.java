@@ -16,10 +16,15 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.GLU;
 
+import codemap.MapForgeryFactory;
+
 public class Rectangle implements Animation {
 
     private GLCanvas canvas;
     private int textureHandle;
+    
+    private static int RGB_BLACK = 0;
+    private static int RGB_WHITE = 255<<16|255<<8|255;
 
     @Override
     public void initGL(GLCanvas c) {
@@ -33,18 +38,18 @@ public class Rectangle implements Animation {
         glClearColor(0, 0, 0, 0);
         glShadeModel(GL_FLAT);
         glEnable(GL_DEPTH_TEST);
-        textureHandle = GLApp.makeTexture("images/eye.jpg");        
-//        makeCheckImage();
+//        textureHandle = GLApp.makeTexture("images/eye.jpg");        
+        makeCheckImage();
     }
     
     private void makeCheckImage() {
         int size = 256;
+        float[][] DEM = MapForgeryFactory.make(size);
+        
         BufferedImage img = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
         for(int i = 0; i < size; i++) {
             for(int j=0; j < size; j++) {
-                boolean black = ((i&0x8)==0)^((j&0x8)==0);
-                int rgb = black ? 0: 255;
-                img.setRGB(i, j, rgb);
+                img.setRGB(i, j, Float.floatToRawIntBits(DEM[i][j]));
             }
         }
         GLImage glImage = new GLImage();

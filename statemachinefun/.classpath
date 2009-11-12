@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="lib/lwjgl-2.1.0/jar/lwjgl.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/Users/deif/Applications/eclipse-galileo-macosx-cocoa-x86_64/plugins/org.eclipse.swt.cocoa.macosx.x86_64_3.5.1.v3555a.jar" sourcepath="/Users/deif/Applications/eclipse-galileo-macosx-cocoa-x86_64/plugins/org.eclipse.swt.cocoa.macosx.x86_64.source_3.5.1.v3555a.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ch.deif.meander"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
