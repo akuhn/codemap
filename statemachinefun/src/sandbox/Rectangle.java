@@ -38,22 +38,25 @@ public class Rectangle implements Animation {
         glClearColor(0, 0, 0, 0);
         glShadeModel(GL_FLAT);
         glEnable(GL_DEPTH_TEST);
-//        textureHandle = GLApp.makeTexture("images/eye.jpg");        
-        makeCheckImage();
+        makeTexture();
     }
     
-    private void makeCheckImage() {
+    private void makeTexture() {
         int size = 256;
         float[][] DEM = MapForgeryFactory.make(size);
         
         BufferedImage img = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
         for(int i = 0; i < size; i++) {
             for(int j=0; j < size; j++) {
-                img.setRGB(i, j, Float.floatToRawIntBits(DEM[i][j]));
+                float floatheight = DEM[i][j];
+                int intheight = Math.round(floatheight);
+                assert intheight <= 100;
+                // use blue byte to encode height info before comma
+                img.setRGB(i, j, intheight);
             }
         }
         GLImage glImage = new GLImage();
-        assert glImage.makeGLImage(img, false, false);
+        assert glImage.makeGLImage(img, true, false);
         textureHandle = GLApp.makeTexture(glImage);
     }
 
