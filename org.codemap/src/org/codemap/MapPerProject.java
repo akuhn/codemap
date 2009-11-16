@@ -72,7 +72,9 @@ public class MapPerProject {
             
             @Override
             protected Void performAction(Arguments args) {
-                CodemapCore.getPlugin().getMapView().newProjectSelected();
+                CodemapCore plugin = CodemapCore.getPlugin();
+                if (plugin == null) return null;
+                plugin.getMapView().newProjectSelected();
                 return null;
             }
         };
