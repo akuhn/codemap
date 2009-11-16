@@ -1,4 +1,22 @@
-#Mon Sep 07 20:16:50 CEST 2009
+#Fri Nov 13 17:38:25 CET 2009
+///ch.akuhn.mds/src/ch/akuhn/codemap/Codemap.java=0.6742362193878251@0.4746648163134538
+///ch.akuhn.mds/src/ch/akuhn/codemap/Document.java=0.36293465501906386@0.9500000000000001
+///ch.akuhn.mds/src/ch/akuhn/matrix/DenseMatrix.java=0.756159339048038@0.17520296485320414
+///ch.akuhn.mds/src/ch/akuhn/matrix/Function.java=0.5651085218167143@0.9064853461140441
+///ch.akuhn.mds/src/ch/akuhn/matrix/SymetricMatrix.java=0.8446063218162487@0.24436822468432273
+///ch.akuhn.mds/src/ch/akuhn/mds/MultidimensionalScaling.java=0.4821360701707915@0.597538697668064
+///ch.akuhn.mds/src/ch/akuhn/org/ggobi/plugins/ggvis/Main.java=0.9334033478803858@0.6081436978922986
+///ch.akuhn.mds/src/ch/akuhn/org/ggobi/plugins/ggvis/Mds.java=0.3906326728646228@0.15633612796943613
+///ch.akuhn.mds/src/ch/akuhn/org/ggobi/plugins/ggvis/Points.java=0.5384396687189457@0.05
+///ch.akuhn.mds/src/ch/akuhn/org/ggobi/plugins/ggvis/Viz.java=0.051755543387090715@0.4549870691163092
+///ch.akuhn.mds/src/ch/akuhn/org/ggobi/plugins/ggvis/WriteGGobiXML.java=0.9500000000000001@0.4509615770719857
+///ch.akuhn.mds/src/org/codemap/graph/AllPaths.java=0.15094639276501476@0.7818496641358916
+///ch.akuhn.mds/src/org/codemap/graph/Diagram.java=0.05@0.5309218170792547
+///ch.akuhn.mds/src/org/codemap/graph/Distances.java=0.31446201123779677@0.3276911958596845
+///ch.akuhn.mds/src/org/codemap/graph/RunIsomapMDSOfSourceCode.java=0.7605960697046613@0.6898631960850612
+///ch.akuhn.mds/src/org/codemap/graph/RunMDS.java=0.2974443751399382@0.6871914220979387
+///ch.akuhn.mds/src/org/codemap/graph/SwissRoll.java=0.18220281559453022@0.2050246535231406
+///ch.akuhn.mds/test/ch/akuhn/org/ggobi/plugins/ggvis/GGvisTest.java=0.7997286736120609@0.9030796645798681
 ///ggvis4j/ggobi-2.1.8/plugins/ggvis/plugin.xml=0.9500000000000001@0.4750888551379709
 ///ggvis4j/make.xml=0.3122848088328192@0.05
 ///ggvis4j/src/ch/akuhn/mds/MultidimensionalScaling.java=0.5608838705106753@0.6025142854907841

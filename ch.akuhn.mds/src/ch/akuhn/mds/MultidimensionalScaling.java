@@ -95,7 +95,7 @@ public class MultidimensionalScaling {
     }
 
     public void applyIsomapWithKayNearestNeighbors(int k) {
-        double[][] knn = new Distances(fdistances.asDenseMatrix().value).kayNearestNeighbours(3);
+        double[][] knn = new Distances(fdistances.asDenseMatrix().value).kayNearestNeighbours(k);
         fdistances = new DenseMatrix(new AllPaths(knn).undirected().run().path).asSymetricMatrix();
     }
 
