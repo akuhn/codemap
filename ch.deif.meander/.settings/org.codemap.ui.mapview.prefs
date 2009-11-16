@@ -1,6 +1,6 @@
-#Tue Sep 29 14:38:42 CEST 2009
+#Fri Nov 13 17:38:26 CET 2009
 eclipse.preferences.version=1
 org.codemap.plugin.eclemma=false
 org.codemap.plugin.marker=false
-show_default_colors=false
-show_package_colors=true
+show_default_colors=true
+show_package_colors=false

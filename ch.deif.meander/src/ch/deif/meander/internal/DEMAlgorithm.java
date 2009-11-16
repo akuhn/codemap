@@ -1,7 +1,5 @@
 package ch.deif.meander.internal;
 
-import java.util.Calendar;
-
 import ch.deif.meander.Location;
 import ch.deif.meander.MapAlgorithm;
 import ch.deif.meander.util.StopWatch;
@@ -40,7 +38,6 @@ public class DEMAlgorithm extends MapAlgorithm<float[][]> {
         for (Location each: map.locations()) {
             elevateHill(each, computePie(each));
         }
-        long after = Calendar.getInstance().getTimeInMillis();
         stopWatch.printStop();
     }
 

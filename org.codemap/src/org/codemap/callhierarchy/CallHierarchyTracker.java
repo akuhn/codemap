@@ -39,6 +39,7 @@ public class CallHierarchyTracker {
      * removal of an IPartListener to them.
      */
     private IPageListener pageListener = new IPageListener(){
+        
         @Override
         public void pageActivated(IWorkbenchPage page) {
             addPartListener(page);

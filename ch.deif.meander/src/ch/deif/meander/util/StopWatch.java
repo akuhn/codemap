@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 public class StopWatch {
     
-    private static boolean IS_VERBOSE = false;
+    private static boolean IS_VERBOSE = true;
 
     private String name;
     private long before;

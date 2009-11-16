@@ -113,7 +113,7 @@ public class QuickNDirtyMap {
         hsa.setMap(mapInstance);
         ContourLineAlgorithm cla = new ContourLineAlgorithm();
         cla.setMap(mapInstance);
-        double[][] call = hsa.call();
+        double[][] call = new double[0][0];//hsa.call();
         List<SparseTrueBooleanList> call2 = cla.call();
         HillShading shading = new HillShading(call, call2);
         

@@ -4,7 +4,6 @@ public final class MColor {
 
 	public static final MColor HILLGREEN = new MColor(196, 236, 0);
 	public static final MColor SHORE = new MColor(92, 142, 255);
-//	public static final Colors WATER = new Colors(0, 68, 255);
 	public static final MColor WATER = new MColor(0, 68, 255);	
 	public static final MColor GRAY_204 = new MColor(204, 204, 204);
 
@@ -36,11 +35,6 @@ public final class MColor {
 				| ((int) (red * factor) & 0xFF) << 16
 				| ((int) (green * factor) & 0xFF) << 8 
 				| ((int) (blue * factor) & 0xFF);
-	}
-	
-	public Iterable<MColor> upto(MColor end, int steps) {
-		// TODO
-		throw null;
 	}
 	
 	public int asRGB() {

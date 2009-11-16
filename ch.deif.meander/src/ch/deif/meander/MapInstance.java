@@ -10,7 +10,6 @@ import ch.akuhn.foreach.Each;
 import ch.akuhn.util.Providable;
 import ch.deif.meander.internal.ContourLineAlgorithm;
 import ch.deif.meander.internal.DEMAlgorithm;
-import ch.deif.meander.internal.HillshadeAlgorithm;
 import ch.deif.meander.internal.MapCaches;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.util.MapScheme;
@@ -204,9 +203,9 @@ public class MapInstance {
 			return get(ContourLineAlgorithm.class).get(px).get(py);
 		}
 
-		public double hillshade() {
-			return get(HillshadeAlgorithm.class)[px][py];
-		}
+//		public double hillshade() {
+//			return get(HillshadeAlgorithm.class)[px][py];
+//		}
 
 		public void increaseElevation(double elevation) {
 			if (elevation < 0) return;
@@ -275,6 +274,9 @@ public class MapInstance {
 	public boolean isEmpty() {
 		return locations.isEmpty();
 	}
-
+	
+    public float[][] getDEM() {
+        return get(DEMAlgorithm.class);
+    }
 	
 }
