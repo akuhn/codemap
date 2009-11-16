@@ -6,7 +6,6 @@ import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
-import ch.akuhn.util.Pair;
 import ch.deif.meander.MapAlgorithm;
 import ch.deif.meander.MapSetting;
 import ch.deif.meander.util.StopWatch;
@@ -16,13 +15,14 @@ import ch.deif.meander.util.StopWatch;
  * @see Burrough, P. A. and McDonell, R.A., 1998. Principles of Geographical Information Systems (Oxford University
  *      Press, New York), p. 190.
  */
-public class HillshadeAlgorithm extends MapAlgorithm<Pair<double[][], boolean[][]>> {
+public class HillshadeAlgorithm extends MapAlgorithm<double[][]> {
 
     private static final double Z_FACTOR = 0.6e-3;
+    private static final double CONTOUR_DARKEN_FACTOR = 0.5;
     public static final MapSetting<Integer> CONTOUR_STEP = MapSetting.define("CONTOUR_STEP", 10);
 
     @Override
-    public Pair<double[][], boolean[][]> call() {
+    public double[][] call() {
         StopWatch stopWatch = new StopWatch("HillShade").start();
         
         // zenith: height of sun over horizon (90 = horizon, 0 = zenith).
@@ -35,7 +35,6 @@ public class HillshadeAlgorithm extends MapAlgorithm<Pair<double[][], boolean[][
         
         double[][] hillshade = new double[map.width][map.width];
         float[][] DEM = map.getDEM();
-        boolean[][] contour = new boolean[map.getWidth()][map.getWidth()];
         float topLeft, top, topRight, left, here, right, bottomLeft, bottom, bottomRight;        
         
         for (int x = 1; x < DEM.length-2; x++) {
@@ -64,16 +63,19 @@ public class HillshadeAlgorithm extends MapAlgorithm<Pair<double[][], boolean[][
                 double shading = (cos(zenithRad) * cos(slopeRad) + (sin(zenithRad) * sin(slopeRad) * cos(azimuthRad
                         - aspectRad)));
                 hillshade[x][y] = shading;
+                
                 // calculate contourlines
                 int topHeight = (int) Math.floor(top / step);
                 int leftHeight = (int) Math.floor(left / step);
                 int hereHeight = (int) Math.floor(here / step);
                 boolean coastline = topHeight == 0 || leftHeight == 0 || hereHeight == 0;
-                contour[x][y] = ((topHeight != hereHeight || leftHeight != hereHeight) && !coastline);                
+                boolean hasContourLine = ((topHeight != hereHeight || leftHeight != hereHeight) && !coastline);
+                if (hasContourLine) {
+                    hillshade[x][y] *= CONTOUR_DARKEN_FACTOR;
+                }
             }
         }
         stopWatch.printStop();
-        return new Pair<double[][], boolean[][]>(hillshade, contour);
+        return hillshade;
     }
-
 }

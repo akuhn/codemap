@@ -2,7 +2,6 @@ package ch.deif.meander.main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
@@ -20,14 +19,12 @@ import ch.deif.meander.HillShading;
 import ch.deif.meander.Labeling;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.Point;
-import ch.deif.meander.internal.ContourLineAlgorithm;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.internal.HillshadeAlgorithm;
 import ch.deif.meander.swt.Label;
 import ch.deif.meander.swt.LabelOverlay;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.util.MapScheme;
-import ch.deif.meander.util.SparseTrueBooleanList;
 
 public class QuickNDirtyMap {
     
@@ -111,11 +108,8 @@ public class QuickNDirtyMap {
         
         HillshadeAlgorithm hsa = new HillshadeAlgorithm();
         hsa.setMap(mapInstance);
-        ContourLineAlgorithm cla = new ContourLineAlgorithm();
-        cla.setMap(mapInstance);
-        double[][] call = new double[0][0];//hsa.call();
-        List<SparseTrueBooleanList> call2 = cla.call();
-        HillShading shading = new HillShading(call, call2);
+        double[][] call = hsa.call();
+        HillShading shading = new HillShading(call);
         
         int mapSize = mapInstance.getWidth();
         Device device = Display.getCurrent();
@@ -140,7 +134,6 @@ public class QuickNDirtyMap {
         int mapSize = mapInstance.getWidth();
         float[][] DEM = elevationModel.asFloatArray();
         double[][] shade = hillShading.asDoubleArray();
-        List<SparseTrueBooleanList> list = hillShading.asSparseTrueBooleanList();
         Device device = gc.getDevice();
         Rectangle rect = new Rectangle(0, 0, mapSize, mapSize);
         rect.intersect(gc.getClipping());
@@ -148,7 +141,6 @@ public class QuickNDirtyMap {
             for (int y = rect.y; y < (rect.y + rect.height); y++) {
                 if (DEM[x][y] > 10) {
                     double f = shade[x][y];
-                    if (list.get(x).get(y)) f *= 0.5; // contour lines
                     if (f < 0.0) f = 0.0;
                     MColor mcolor = colors.forLocation(mapInstance.nearestNeighbor(x, y).getPoint());                                       
                     Color hillColor = new Color(device, (int) (mcolor.getRed() * f), (int) (mcolor.getGreen() * f), (int) (mcolor.getBlue() * f));

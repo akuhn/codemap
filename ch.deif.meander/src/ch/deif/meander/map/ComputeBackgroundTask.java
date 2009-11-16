@@ -1,7 +1,5 @@
 package ch.deif.meander.map;
 
-import java.util.List;
-
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
@@ -20,7 +18,6 @@ import ch.deif.meander.MapInstance;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.util.MapScheme;
-import ch.deif.meander.util.SparseTrueBooleanList;
 import ch.deif.meander.util.StopWatch;
 
 public class ComputeBackgroundTask extends TaskValue<Image> {
@@ -111,7 +108,6 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
         int mapSize = mapInstance.getWidth();
         float[][] DEM = elevationModel.asFloatArray();
         double[][] shade = hillShading.asDoubleArray();
-        List<SparseTrueBooleanList> list = hillShading.asSparseTrueBooleanList();
         Device device = gc.getDevice();
         Rectangle rect = new Rectangle(0, 0, mapSize, mapSize);
         rect.intersect(gc.getClipping());
@@ -120,7 +116,6 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
             for (int y = rect.y; y < (rect.y + rect.height); y++) {
                 if (DEM[x][y] > 10) {
                     double f = shade[x][y];
-                    if (list.get(x).get(y)) f *= 0.5; // contour lines
                     if (f < 0.0) f = 0.0;
                     MColor mcolor = colors.forLocation(mapInstance.nearestNeighbor(x, y).getPoint());                                       
                     Color hillColor = new Color(device, (int) (mcolor.getRed() * f), (int) (mcolor.getGreen() * f), (int) (mcolor.getBlue() * f));
