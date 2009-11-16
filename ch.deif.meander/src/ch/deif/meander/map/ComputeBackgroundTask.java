@@ -4,7 +4,8 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.widgets.Display;
 
 import ch.akuhn.util.ProgressMonitor;
@@ -73,7 +74,7 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
     }
 
     private void paintBackground(ProgressMonitor monitor, GC gc, MapInstance mapInstance, DigitalElevationModel elevationModel, HillShading hillShading, MapScheme<MColor> colors) {
-        paintWater(monitor, gc);
+//        paintWater(monitor, gc);
         if (elevationModel == null) {
             StopWatch stopWatch = new StopWatch("Background (Draft)").start();
             paintDraft(monitor, gc, mapInstance);
@@ -81,7 +82,7 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
         }
         else {
             StopWatch stopWatch = new StopWatch("Background").start();
-            paintShores(monitor, gc, mapInstance, elevationModel);
+//            paintShores(monitor, gc, mapInstance, elevationModel);
             paintHills(monitor, gc, mapInstance, elevationModel, hillShading, colors);
             stopWatch.printStop();
         }
@@ -105,51 +106,68 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
     private void paintHills(ProgressMonitor monitor, GC gc, MapInstance mapInstance, DigitalElevationModel elevationModel, HillShading hillShading, MapScheme<MColor> colors) {
         if (monitor.isCanceled()) return;
         if (hillShading == null) return;
+        
         int mapSize = mapInstance.getWidth();
         float[][] DEM = elevationModel.asFloatArray();
         double[][] shade = hillShading.asDoubleArray();
-        Device device = gc.getDevice();
-        Rectangle rect = new Rectangle(0, 0, mapSize, mapSize);
-        rect.intersect(gc.getClipping());
-        for (int x = rect.x; x < (rect.x + rect.width); x++) {
-            if (monitor.isCanceled()) break;
-            for (int y = rect.y; y < (rect.y + rect.height); y++) {
-                if (DEM[x][y] > 10) {
-                    double f = shade[x][y];
-                    if (f < 0.0) f = 0.0;
-                    MColor mcolor = colors.forLocation(mapInstance.nearestNeighbor(x, y).getPoint());                                       
-                    Color hillColor = new Color(device, (int) (mcolor.getRed() * f), (int) (mcolor.getGreen() * f), (int) (mcolor.getBlue() * f));
-                    gc.setForeground(hillColor);
-                    gc.drawPoint(x, y);
-                    hillColor.dispose();
-                }
-            }
-        }
-    }
-
-    private void paintShores(ProgressMonitor monitor, GC gc, MapInstance mapInstance, DigitalElevationModel elevationModel) {
-        if (monitor.isCanceled()) return;
-        int mapSize = mapInstance.getWidth();
-        float[][] DEM = elevationModel.asFloatArray();
-        Color color = new Color(gc.getDevice(), 92, 142, 255);
-        gc.setForeground(color);
-        Rectangle rect = new Rectangle(0, 0, mapSize, mapSize);
-        rect.intersect(gc.getClipping());
-        for (int x = rect.x; x < (rect.x + rect.width); x++) {
-            if (monitor.isCanceled()) break;
-            for (int y = rect.y; y < (rect.y + rect.height); y++) {
-                if (DEM[x][y] > 2) gc.drawPoint(x, y);
-            }
-        }
-        color.dispose();
-    }
-    
-    private void paintWater(ProgressMonitor monitor, GC gc) {
-        if (monitor.isCanceled()) return;
-        Color blue = new Color(gc.getDevice(), 0, 0, 255);
-        gc.setBackground(blue);
+        
+        byte[] imageBytes = new byte[mapSize*mapSize*3];
+        byte[] alphaBytes = new byte[mapSize*mapSize];
+        // define masks for RGB
+        PaletteData palette = new PaletteData(0xFF , 0xFF00 , 0xFF0000);        
+        new ImageData(mapSize, mapSize, 24, palette, mapSize*3, imageBytes);
+        
+        byte[] waterColor = new byte[]{(byte) 255, (byte) 0, (byte) 0};
+        byte[] shoreColor = new byte[]{(byte) -1, (byte) 142, (byte) 92};
+        
+        // getting it via SWT.COLOR_BLACK raises invalid Thread access
+        // and it don't want to fire up a runnable here ...
+        Color black = new Color(gc.getDevice(), 0, 0, 0);
+        gc.setBackground(black);
         gc.fillRectangle(gc.getClipping());
-        blue.dispose();
+        black.dispose();
+        
+        for(int i=0; i < mapSize*mapSize; i++) {
+            int x = i / mapSize;
+            int y = i % mapSize;
+            
+            if (y == 0) {
+                // check if we can stop at every new row
+                if (monitor.isCanceled()) return;                
+            }
+            
+            if (DEM[x][y] <= 2) {
+                // water color
+                System.arraycopy(waterColor, 0, imageBytes, i*3, 3);
+                alphaBytes[i] = (byte) 255;
+                continue;
+            } else if (DEM[x][y] <= 10) {
+                // shore colors
+                System.arraycopy(shoreColor, 0, imageBytes, i*3, 3);
+                alphaBytes[i] = (byte) 255;
+                continue;
+            }
+            // get color from location a.k.a. hill colors
+            double f = shade[x][y];            
+            MColor mcolor = colors.forLocation(mapInstance.nearestNeighbor(x, y).getPoint());
+            // make rgb
+            int baseIndex = i*3;
+            // -1 = 0xFF as the stuff is signed all the time. uehh.
+            imageBytes[baseIndex++] = (byte) mcolor.getBlue(); // B
+            imageBytes[baseIndex++] = (byte) mcolor.getGreen(); // G
+            imageBytes[baseIndex++] = (byte) mcolor.getRed(); // R
+            
+            //make alpha
+            // 0, fully transparent
+            // 255fully opaque
+            assert f <=1;
+            int alpha = (int) Math.max(0.0, 255*f);
+            alphaBytes[i] = (byte) alpha;
+        }        
+        ImageData imageData = new ImageData(mapSize, mapSize, 24, palette, mapSize*3, imageBytes);
+        imageData.alphaData = alphaBytes;
+        Image image = new Image(Display.getCurrent(), imageData);
+        gc.drawImage(image, 0, 0);
     }
 
     @Override

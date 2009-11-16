@@ -50,6 +50,11 @@ public class MapInstance {
 		return caches.get(key);
 	}
 	
+	/**
+	 * warning, SLOW as hell!
+	 * if you need performance get the DEM manually and use for loops.
+	 * 
+	 */
 	public Iterable<Kernel> kernels() {
 		return new Providable<Kernel>() {
 			private int x, y;

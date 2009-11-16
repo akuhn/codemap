@@ -35,25 +35,26 @@ public class HillshadeAlgorithm extends MapAlgorithm<double[][]> {
         
         double[][] hillshade = new double[map.width][map.width];
         float[][] DEM = map.getDEM();
-        float topLeft, top, topRight, left, here, right, bottomLeft, bottom, bottomRight;        
         
         for (int x = 1; x < DEM.length-2; x++) {
             for (int y = 1; y < DEM[0].length-2; y++) {
-                if ((here = DEM[x][y]) == 0.0) continue;
+                float here = DEM[x][y];
+                if (here == 0.0) continue;
+                
                 // build kernel
                 int yTop = y - 1;
                 int xLeft = x - 1;
                 int yBottom = y + 1;
                 int xRight = x + 1;
 
-                topLeft = DEM[xLeft][yTop];
-                top = DEM[x][yTop];
-                topRight = DEM[xRight][yTop];
-                left = DEM[xLeft][y];
-                right = DEM[xRight][y];
-                bottomLeft = DEM[xLeft][yBottom];
-                bottom = DEM[x][yBottom];
-                bottomRight = DEM[xRight][yBottom];
+                float topLeft = DEM[xLeft][yTop];
+                float top = DEM[x][yTop];
+                float topRight = DEM[xRight][yTop];
+                float left = DEM[xLeft][y];
+                float right = DEM[xRight][y];
+                float bottomLeft = DEM[xLeft][yBottom];
+                float bottom = DEM[x][yBottom];
+                float bottomRight = DEM[xRight][yBottom];
                 
                 // calculate hillshading
                 double dx = (topRight + (2 * right) + bottomRight - (topLeft + (2 * left) + bottomLeft)) / 8;
@@ -68,9 +69,9 @@ public class HillshadeAlgorithm extends MapAlgorithm<double[][]> {
                 int topHeight = (int) Math.floor(top / step);
                 int leftHeight = (int) Math.floor(left / step);
                 int hereHeight = (int) Math.floor(here / step);
-                boolean coastline = topHeight == 0 || leftHeight == 0 || hereHeight == 0;
-                boolean hasContourLine = ((topHeight != hereHeight || leftHeight != hereHeight) && !coastline);
-                if (hasContourLine) {
+                boolean isCoastline = topHeight == 0 || leftHeight == 0 || hereHeight == 0;
+                boolean isContourLine = (topHeight != hereHeight || leftHeight != hereHeight) && !isCoastline;
+                if (isContourLine) {
                     hillshade[x][y] *= CONTOUR_DARKEN_FACTOR;
                 }
             }
