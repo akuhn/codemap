@@ -134,15 +134,14 @@ public class MapView extends ViewPart {
     public void createPartControl(final Composite parent) {
         container = new Composite(parent, SWT.NONE);
         container.setLayout(new FillLayout(SWT.LEFT));
-
-        canvas = new Canvas(container, SWT.DOUBLE_BUFFERED);
-        canvasListener = new CanvasListener(canvas);
-
-        container.layout();
         MColor water = MColor.WATER;
         Color swtColor = new Color(null, water.getRed(), water.getGreen(),
                 water.getBlue());
         container.setBackground(swtColor);
+
+        canvas = new Canvas(container, SWT.DOUBLE_BUFFERED);
+        canvasListener = new CanvasListener(canvas);
+        container.layout();
 
         selectionProvider = new MapSelectionProvider(this);
         selectionTracker = new SelectionTracker(theController);

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.codemap.callhierarchy.CallOverlay;
+import org.codemap.mapview.MapView;
 import org.codemap.resources.EclipseMapValues;
 import org.codemap.resources.EclipseMapValuesBuilder;
 import org.codemap.util.Log;
@@ -72,9 +73,12 @@ public class MapPerProject {
             
             @Override
             protected Void performAction(Arguments args) {
+                // well ... during shutdown everything can be null. yay.
                 CodemapCore plugin = CodemapCore.getPlugin();
                 if (plugin == null) return null;
-                plugin.getMapView().newProjectSelected();
+                MapView mapView = plugin.getMapView();
+                if (mapView == null) return null;
+                mapView.newProjectSelected();
                 return null;
             }
         };
