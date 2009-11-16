@@ -3,11 +3,11 @@ package ch.deif.meander.swt;
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DragDetectEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
@@ -33,8 +33,10 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
         try {
             GC gc = e.gc;
             Device device = gc.getDevice();
-            gc.setBackground(device.getSystemColor(SWT.COLOR_BLUE));
+            Color blue = new Color(device, 0, 0, 255);
+            gc.setBackground(blue);
             gc.fillRectangle(gc.getClipping());
+            blue.dispose();
             Point bounds = ((Canvas) e.widget).getSize();
             offsetX = (bounds.x - mapValues.getSize()) / 2;
             offsetY = (bounds.y - mapValues.getSize()) / 2;
