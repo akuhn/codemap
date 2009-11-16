@@ -106,7 +106,7 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
     private void paintHills(ProgressMonitor monitor, GC gc, MapInstance mapInstance, DigitalElevationModel elevationModel, HillShading hillShading, MapScheme<MColor> colors) {
         if (monitor.isCanceled()) return;
         if (hillShading == null) return;
-        
+                
         int mapSize = mapInstance.getWidth();
         float[][] DEM = elevationModel.asFloatArray();
         double[][] shade = hillShading.asDoubleArray();
