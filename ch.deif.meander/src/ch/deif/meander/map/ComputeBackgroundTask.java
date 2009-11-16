@@ -136,8 +136,8 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
         black.dispose();    
         
         for(int i=0; i < mapSize*mapSize; i++) {
-            int x = i / mapSize;
-            int y = i % mapSize;
+            int y = i / mapSize;
+            int x = i % mapSize;
             
             if (x == 0) {
                 // check for cancellation at every new row
