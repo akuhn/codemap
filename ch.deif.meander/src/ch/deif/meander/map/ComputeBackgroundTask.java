@@ -48,6 +48,7 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
         Device device = Display.getCurrent();
         Image image = new Image(device, mapSize, mapSize);
         GC gc = new GC(image);
+        this.paintWater(monitor, gc);        
         this.paintBackground(monitor, gc, mapInstance, elevationModel, hillShading, colors);
         gc.dispose();
         return image;
@@ -76,7 +77,6 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
     private void paintBackground(ProgressMonitor monitor, GC gc, MapInstance mapInstance, DigitalElevationModel elevationModel, HillShading hillShading, MapScheme<MColor> colors) {
         if (elevationModel == null) {
             StopWatch stopWatch = new StopWatch("Background (Draft)").start();
-            paintWater(monitor, gc);
             paintDraft(monitor, gc, mapInstance);
             stopWatch.printStop();
         }
