@@ -74,9 +74,9 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
     }
 
     private void paintBackground(ProgressMonitor monitor, GC gc, MapInstance mapInstance, DigitalElevationModel elevationModel, HillShading hillShading, MapScheme<MColor> colors) {
-//        paintWater(monitor, gc);
         if (elevationModel == null) {
             StopWatch stopWatch = new StopWatch("Background (Draft)").start();
+            paintWater(monitor, gc);
             paintDraft(monitor, gc, mapInstance);
             stopWatch.printStop();
         }
@@ -88,11 +88,19 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
         }
     }
 
+    private void paintWater(ProgressMonitor monitor, GC gc) {
+            if (monitor.isCanceled()) return;
+            Color blue = new Color(gc.getDevice(), 0, 0, 255);
+            gc.setBackground(blue);
+            gc.fillRectangle(gc.getClipping());
+            blue.dispose();
+    }
+
     private void paintDraft(ProgressMonitor monitor, GC gc, MapInstance map) {
         if (monitor.isCanceled()) return;
         if (map == null) return;
-        Device device = gc.getDevice();
-        Color color = new Color(device, 92, 142, 255);
+        
+        Color color = new Color(gc.getDevice(), 92, 142, 255);
         gc.setForeground(color);
         gc.setLineWidth(2);
         for (Location each: map.locations()) {
@@ -111,28 +119,28 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
         float[][] DEM = elevationModel.asFloatArray();
         double[][] shade = hillShading.asDoubleArray();
         
+        // 1 byte per color, we fill 24bit per pixel
         byte[] imageBytes = new byte[mapSize*mapSize*3];
         byte[] alphaBytes = new byte[mapSize*mapSize];
-        // define masks for RGB
-        PaletteData palette = new PaletteData(0xFF , 0xFF00 , 0xFF0000);        
-        new ImageData(mapSize, mapSize, 24, palette, mapSize*3, imageBytes);
         
+        // colors needed later
         byte[] waterColor = new byte[]{(byte) 255, (byte) 0, (byte) 0};
         byte[] shoreColor = new byte[]{(byte) -1, (byte) 142, (byte) 92};
         
+        // set black background so that the transparency works
         // getting it via SWT.COLOR_BLACK raises invalid Thread access
         // and it don't want to fire up a runnable here ...
         Color black = new Color(gc.getDevice(), 0, 0, 0);
         gc.setBackground(black);
         gc.fillRectangle(gc.getClipping());
-        black.dispose();
+        black.dispose();    
         
         for(int i=0; i < mapSize*mapSize; i++) {
             int x = i / mapSize;
             int y = i % mapSize;
             
-            if (y == 0) {
-                // check if we can stop at every new row
+            if (x == 0) {
+                // check for cancellation at every new row
                 if (monitor.isCanceled()) return;                
             }
             
@@ -157,17 +165,20 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
             imageBytes[baseIndex++] = (byte) mcolor.getGreen(); // G
             imageBytes[baseIndex++] = (byte) mcolor.getRed(); // R
             
-            //make alpha
-            // 0, fully transparent
-            // 255fully opaque
+            // make alpha
+            // 0 for fully transparent
+            // 255 for fully opaque
             assert f <=1;
+            // alpha values got negative somehow so we fix that
             int alpha = (int) Math.max(0.0, 255*f);
             alphaBytes[i] = (byte) alpha;
-        }        
+        }
+        // define a direct palette with masks for RGB
+        PaletteData palette = new PaletteData(0xFF , 0xFF00 , 0xFF0000);   
         ImageData imageData = new ImageData(mapSize, mapSize, 24, palette, mapSize*3, imageBytes);
+        // enable alpha by setting alphabytes ... strange that i can't do that per pixel using 32bit values
         imageData.alphaData = alphaBytes;
-        Image image = new Image(Display.getCurrent(), imageData);
-        gc.drawImage(image, 0, 0);
+        gc.drawImage(new Image(gc.getDevice(), imageData), 0, 0);
     }
 
     @Override
