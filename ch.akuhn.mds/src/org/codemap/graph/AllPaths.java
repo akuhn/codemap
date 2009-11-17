@@ -1,5 +1,6 @@
 package org.codemap.graph;
 
+import ch.akuhn.util.Out;
 import ch.akuhn.util.Stopwatch;
 
 /** Uses Floyd–Warshall algorithm to compute all shortest paths.
@@ -9,17 +10,20 @@ import ch.akuhn.util.Stopwatch;
  */
 public class AllPaths {
 
-    public double[][] path;
+    public short[][] path;
     
-    public AllPaths(double[][] path) {
+    public AllPaths(short[][] path) {
         this.path = path;
     }
     
     public AllPaths undirected() {
         for (int i = 0; i < path.length; i++) {
             for (int j = 0; j < path.length; j++) {
-                path[i][j] = Math.min(path[i][j], path[j][i]);
+                path[i][j] = (short) Math.min(path[i][j], path[j][i]);
             }
+        }
+        for (int i = 0; i < path.length; i++) {
+            path[i][i] = 0;
         }
         return this;
     }
@@ -28,41 +32,34 @@ public class AllPaths {
         Stopwatch.p();
         for (int k = 0; k < path.length; k++) {
             for (int i = 0; i < path.length; i++) {
+                double path_i_k = path[i][k];
+                // if (path_i_k > k) continue; // since all edges are weighted = 1
                 for (int j = 0; j < path.length; j++) {
-                    path[i][j] = Math.min(path[i][j], path[i][k] + path[k][j]);
+                    path[i][j] = (short) Math.min(path[i][j], path_i_k + path[k][j]);
                 }
             }
         }
-        Stopwatch.p();
+        Stopwatch.p("all pairs shortest path, n = " + path.length);
         alternative();
         return this;
     }
 
     private void alternative() {
-        final int[][] p = new int[path.length][path.length];
-        for (int[] row: p) {
-            for (int i = 0; i < row.length; i++) {
-                row[i] = Integer.MAX_VALUE;
-            }
-        }
         Node[] nodes = Node.fromDistanceMatrix(path);
-        new BreadthFirst(nodes[0]) {
-            @Override
-            public void visit() {
-                int i = path[index].index;
-                for (int n = 0; n < index; n++) {
-                    int j = path[n].index;
-                    p[i][j] = Math.min(p[i][j], index - n);
-                }
-            }
-        };
-        Stopwatch.p();
-        for (int i = 0; i < path.length; i++) {
-            for (int j = 0; j < path.length; j++) {
-                if (p[i][j] != path[i][j]) throw new Error(
-                        String.format("(%d,%d) is %d and %f", i, j, p[i][j], path[i][j]));
-            }
+        short[][] p = new short[path.length][];
+        for (int i = 0; i < p.length; i++) {
+            p[i] = new Dijkstra(nodes[i]).run();
         }
+        Stopwatch.p();
+//        for (int i = 0; i < p.length; i++) {
+//            for (int j = 0; j < p.length; j++) {
+//                if (p[i][j] == path[i][j]) continue;
+//                new Out().put(p[i]);
+//                new Out().put(path[i]);
+//                assert false : i+" "+j;
+//            }
+//        }
+        path = p;
     }
 
 }

@@ -13,7 +13,7 @@ public class Node {
         this.count = count;
     }
     
-    public static Node[] fromDistanceMatrix(double[][] dist) {
+    public static Node[] fromDistanceMatrix(short[][] dist) {
         Node[] nodes = new Node[dist.length];
         for (int n = 0; n < nodes.length; n++) nodes[n] = new Node(n, nodes.length);
         for (int n = 0; n < nodes.length; n++) {

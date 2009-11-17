@@ -11,6 +11,7 @@ import ch.akuhn.matrix.Function;
 import ch.akuhn.mds.MultidimensionalScaling;
 import ch.akuhn.org.ggobi.plugins.ggvis.Points;
 import ch.akuhn.org.ggobi.plugins.ggvis.Viz;
+import ch.akuhn.util.Stopwatch;
 
 public class Codemap {
 
@@ -27,8 +28,11 @@ public class Codemap {
         locations = null;
         distance = new DenseMatrix(lsi.documentCorrelation().asArray());        
         distance.apply(Function.COSINE_TO_DISSIMILARITY);
-        double[][] knn = new Distances(distance.value).kayNearestNeighbours(3);
-        isomapDist = new DenseMatrix(new AllPaths(knn).undirected().run().path);
+        Stopwatch.p();
+        short[][] knn = new Distances(distance.value).kayNearestNeighbours(0, 0.2);
+        Stopwatch.p();
+        isomapDist = new DenseMatrix(new AllPaths(knn).undirected().run().undirected().path);
+        Stopwatch.p();
     }
     
     public Codemap applyIsomap() {

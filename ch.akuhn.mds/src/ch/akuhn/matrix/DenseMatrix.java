@@ -14,6 +14,15 @@ public class DenseMatrix {
         this.value = value;
     }
     
+    public DenseMatrix(short[][] v) {
+        final double UNCONNECTED = Short.MAX_VALUE;
+        this.value = new double [v.length][v.length];
+        for (int i = 0; i < v.length; i++) {
+            for (int j = 0; j < v.length; j++) {
+                value[i][j] = v[i][j] == Short.MAX_VALUE ? UNCONNECTED : v[i][j];
+            }
+        }
+    }
     public DenseMatrix copy() {
         double[][] copy = new double[value.length][];
         for (int n = 0; n < copy.length; n++) copy[n] = value[n].clone();
