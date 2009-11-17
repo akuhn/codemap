@@ -1,0 +1,34 @@
+
+JARPACK 0.1 Installation
+
+All you need to do to get started with JARPACK is set your CLASSPATH.
+
+The following directions are for Solaris (using csh).  Other UNIX platforms 
+should be very similar.  MS-DOS and Windows users should consult their JDK
+documentation to find out how to set the CLASSPATH.
+
+If your CLASSPATH environment variable is already set, append the following
+file to it:
+
+  $JARPACK_HOME/arpack_combined.jar
+
+where JARPACK_HOME represents the full path of the directory where you have
+JARPACK installed.
+
+Alternately, you may individually append the following jar files.  This may
+be preferable when you want to use the full BLAS/LAPACK jar files from the
+JLAPACK distribution (the ones here are subsets).
+
+  $JARPACK_HOME/f2jutil.jar
+  $JARPACK_HOME/blas.jar
+  $JARPACK_HOME/lapack.jar
+  $JARPACK_HOME/xerbla.jar
+  $JARPACK_HOME/arpack.jar
+  $JARPACK_HOME/arpack_util.jar
+
+For example, if your JARPACK directory is /users/bob/JARPACK/ the following
+command would append the appropriate files to your CLASSPATH:
+  
+  % setenv CLASSPATH $CLASSPATH":/users/bob/JARPACK/f2jutil.jar:/users/bob/JARPACK/blas.jar:/users/bob/JARPACK/lapack.jar:/users/bob/JARPACK/xerbla.jar:/users/bob/JARPACK/arpack.jar:/users/bob/JARPACK/arpack_util.jar"
+
+There are several basic test files in the $JARPACK_HOME/EXAMPLES subdirectory.
