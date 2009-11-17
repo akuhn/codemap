@@ -7,7 +7,7 @@ import ch.akuhn.values.Value;
 import ch.deif.meander.DigitalElevationModel;
 import ch.deif.meander.HillShading;
 import ch.deif.meander.MapInstance;
-import ch.deif.meander.internal.HillshadeAlgorithm;
+import ch.deif.meander.internal.ShadeAlgorithm;
 
 public class ComputeHillShadingTask extends TaskValue<HillShading> {
 
@@ -23,11 +23,8 @@ public class ComputeHillShadingTask extends TaskValue<HillShading> {
     }
 
     private HillShading computeValue(ProgressMonitor monitor, MapInstance mapInstance, DigitalElevationModel elevationModel) {
-        HillshadeAlgorithm hsa = new HillshadeAlgorithm();
+        ShadeAlgorithm hsa = new ShadeAlgorithm();
         hsa.setMap(mapInstance);
-//        ContourLineAlgorithm cla = new ContourLineAlgorithm();
-//        cla.setMap(mapInstance);
-//        List<SparseTrueBooleanList> call2 = cla.call();
         double[][] shading = hsa.call();
         
         return new HillShading(shading);

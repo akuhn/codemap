@@ -46,12 +46,8 @@ public class Configuration implements Serializable {
         int version = in.readInt();
         if (version != VERSION_1) throw new Error();
         points = (Point[]) in.readObject();
-        if (!this.invariant()) throw new Error();
     }
-    
-    private boolean invariant() {
-        return true; // TODO Auto-generated method stub
-    }
+
 
     private void writeObject(ObjectOutputStream out) throws Exception {
         out.writeInt(VERSION_1);

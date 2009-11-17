@@ -15,7 +15,6 @@ import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.widgets.Canvas;
 
 import ch.deif.meander.MapInstance;
-import ch.deif.meander.internal.NearestNeighborAlgorithm;
 import ch.deif.meander.map.MapValues;
 import ch.deif.meander.ui.CodemapEvent;
 import ch.deif.meander.ui.CodemapListener;
@@ -135,7 +134,7 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
         MapInstance map = mapValues.mapInstance.getValue();
         if (map == null) return;
         boolean noName = map.isEmpty() || !map.containsPoint(e.x, e.y);
-        String name = noName ? null : map.get(NearestNeighborAlgorithm.class).get(e.x).get(e.y).getName();
+        String name = noName ? null : map.nearestNeighbor(e.x, e.y).getName();
         ((Canvas) e.widget).setToolTipText(name);
     }
 

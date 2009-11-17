@@ -5,8 +5,6 @@ import java.util.Map;
 
 import ch.deif.meander.Point;
 
-// FIXME, remove me?
-
 public class CodemapColors extends MapScheme<MColor> {
 
     private Map<String, MColor> forLocation;

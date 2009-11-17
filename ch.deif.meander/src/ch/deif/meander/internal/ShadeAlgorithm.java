@@ -15,7 +15,7 @@ import ch.deif.meander.util.StopWatch;
  * @see Burrough, P. A. and McDonell, R.A., 1998. Principles of Geographical Information Systems (Oxford University
  *      Press, New York), p. 190.
  */
-public class HillshadeAlgorithm extends MapAlgorithm<double[][]> {
+public class ShadeAlgorithm extends MapAlgorithm<double[][]> {
 
     private static final double Z_FACTOR = 0.6e-3;
     private static final double CONTOUR_DARKEN_FACTOR = 0.5;

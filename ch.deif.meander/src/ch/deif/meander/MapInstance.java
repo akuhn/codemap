@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentMap;
 import ch.akuhn.foreach.Collect;
 import ch.akuhn.foreach.Each;
 import ch.akuhn.util.Providable;
-import ch.deif.meander.internal.ContourLineAlgorithm;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.internal.MapCaches;
 import ch.deif.meander.util.KdTree;
@@ -204,14 +203,6 @@ public class MapInstance {
         public double elevation() {
             return DEM0[px][py];
         }
-
-        public boolean hasContourLine() {
-            return get(ContourLineAlgorithm.class).get(px).get(py);
-        }
-
-        //		public double hillshade() {
-        //			return get(HillshadeAlgorithm.class)[px][py];
-        //		}
 
         public void increaseElevation(double elevation) {
             if (elevation < 0) return;

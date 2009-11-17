@@ -1,7 +1,5 @@
 package ch.deif.meander.main;
 
-import static ch.deif.meander.map.ComputeBackgroundTask.FastBackgroundRenderer;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,19 +9,16 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import ch.deif.meander.Configuration;
-import ch.deif.meander.DigitalElevationModel;
-import ch.deif.meander.HillShading;
 import ch.deif.meander.Labeling;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.Point;
 import ch.deif.meander.internal.DEMAlgorithm;
-import ch.deif.meander.internal.HillshadeAlgorithm;
-import ch.deif.meander.map.ComputeBackgroundTask;
+import ch.deif.meander.internal.ShadeAlgorithm;
+import ch.deif.meander.map.ComputeBackgroundTask.FastBackgroundRenderer;
 import ch.deif.meander.swt.Label;
 import ch.deif.meander.swt.LabelOverlay;
 import ch.deif.meander.util.CodemapColors;
@@ -108,9 +103,8 @@ public class QuickNDirtyMap {
         DEMAlgorithm algorithm = new DEMAlgorithm();
         algorithm.setMap(mapInstance);
         float[][] DEM = algorithm.call();
-        DigitalElevationModel elevationModel = new DigitalElevationModel(DEM);
         
-        HillshadeAlgorithm hsa = new HillshadeAlgorithm();
+        ShadeAlgorithm hsa = new ShadeAlgorithm();
         hsa.setMap(mapInstance);
         double[][] shading = hsa.call();
         
