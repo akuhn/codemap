@@ -1,4 +1,4 @@
-package org.codemap.mapview;
+package org.codemap.mapview.action;
 
 import static org.codemap.util.CodemapIcons.GREEN_CIRCLE;
 

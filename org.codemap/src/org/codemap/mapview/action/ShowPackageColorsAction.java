@@ -1,9 +1,10 @@
-package org.codemap.mapview;
+package org.codemap.mapview.action;
 
 import static org.codemap.util.CodemapIcons.PACKAGES;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
+import org.codemap.mapview.MapController;
 import org.codemap.util.CodemapIcons;
 import org.codemap.util.ColorBrewer;
 import org.codemap.util.IconFactory;

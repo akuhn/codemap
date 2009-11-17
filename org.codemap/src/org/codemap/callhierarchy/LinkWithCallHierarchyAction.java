@@ -3,7 +3,7 @@ package org.codemap.callhierarchy;
 import static org.codemap.util.CodemapIcons.CALL_HIERARCHY;
 
 import org.codemap.CodemapCore;
-import org.codemap.mapview.MenuAction;
+import org.codemap.mapview.action.MenuAction;
 import org.codemap.util.CodemapIcons;
 import org.eclipse.jface.action.IAction;
 

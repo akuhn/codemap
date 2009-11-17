@@ -3,6 +3,7 @@ package org.codemap;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaProject;
 
 /*default*/ class MapPerProjectCache {
@@ -13,7 +14,7 @@ import org.eclipse.jdt.core.IJavaProject;
         if (project == null) return null;
         MapPerProject map = mapPerProjectCache.get(project);
         if (map != null) return map;
-        mapPerProjectCache.put(project, map = new MapPerProject(project));
+        mapPerProjectCache.put(project, map = new MapPerProject(project, this));
         map.initialize();
         return map;
     }
@@ -22,5 +23,11 @@ import org.eclipse.jdt.core.IJavaProject;
         for (MapPerProject each: mapPerProjectCache.values()) {
             each.saveState();
         }
+    }
+
+    /*default*/ void reload(MapPerProject mapPerProject) {
+        IJavaProject project = mapPerProject.getJavaProject();
+        mapPerProjectCache.remove(project);
+        forProject(project);
     }
 }

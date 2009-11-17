@@ -45,12 +45,14 @@ public class MapPerProject {
     private final IJavaProject project;
     private EclipseMapValues mapValues;
     private MapVisualization mapVisualization;
+    private MapPerProjectCache cache;
 
     private ActionValue<Void> redrawAction;
 
-    /*default*/ MapPerProject(IJavaProject project) {
+
+    /*default*/ MapPerProject(IJavaProject project, MapPerProjectCache mapPerProjectCache) {
         this.project = project;
-        // don't initialize;
+        this.cache = mapPerProjectCache;
     }
 
     /*default*/ void initialize() {
@@ -96,7 +98,7 @@ public class MapPerProject {
         return getJavaProject().getProject();
     }
 
-    private IJavaProject getJavaProject() {
+    /*default*/ IJavaProject getJavaProject() {
         return project;
     }
     
@@ -248,5 +250,9 @@ public class MapPerProject {
             }
         }
         return null;
+    }
+
+    public void reloadFromScratch() {
+        cache.reload(this);
     }
 }

@@ -1,4 +1,4 @@
-package org.codemap.mapview;
+package org.codemap.mapview.action;
 
 import org.eclipse.jface.action.Action;
 

@@ -1,4 +1,4 @@
-package org.codemap.mapview;
+package org.codemap.mapview.action;
 
 import java.util.ArrayList;
 import java.util.List;

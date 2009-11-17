@@ -15,6 +15,7 @@ import static org.codemap.util.ID.PACKAGE_EXPLORER;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.codemap.mapview.action.ForceSelectionAction;
 import org.codemap.util.Log;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;

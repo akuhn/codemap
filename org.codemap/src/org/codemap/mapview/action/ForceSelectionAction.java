@@ -1,7 +1,8 @@
-package org.codemap.mapview;
+package org.codemap.mapview.action;
 
 import static org.codemap.util.CodemapIcons.FORCE_SELECTION;
 
+import org.codemap.mapview.MapSelectionProvider;
 import org.codemap.util.CodemapIcons;
 import org.codemap.util.Tag;
 import org.eclipse.jface.action.Action;

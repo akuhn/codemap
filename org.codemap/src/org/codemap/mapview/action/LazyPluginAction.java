@@ -1,4 +1,4 @@
-package org.codemap.mapview;
+package org.codemap.mapview.action;
 
 import org.codemap.util.Log;
 import org.eclipse.core.runtime.IConfigurationElement;

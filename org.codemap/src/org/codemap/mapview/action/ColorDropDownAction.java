@@ -1,7 +1,8 @@
-package org.codemap.mapview;
+package org.codemap.mapview.action;
 
 import static org.codemap.util.CodemapIcons.PALETTE;
 
+import org.codemap.mapview.MapController;
 import org.codemap.util.CodemapIcons;
 import org.codemap.util.ExtensionPoints;
 import org.eclipse.swt.widgets.Menu;

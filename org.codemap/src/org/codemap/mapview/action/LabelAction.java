@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.codemap.mapview;
+package org.codemap.mapview.action;
 
 import org.codemap.CodemapCore;
 import org.eclipse.jface.action.IAction;
