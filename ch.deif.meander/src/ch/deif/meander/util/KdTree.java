@@ -3,6 +3,7 @@ package ch.deif.meander.util;
 import static java.lang.Math.pow;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -128,7 +129,7 @@ public class KdTree {
       KdTreeNode bestNeighbor = current;
       int traceindex = trace.size()-1;
       // 3)
-      while(traceindex > 0) {
+      while(traceindex >= 0) {
           KdTreeNode traced = trace.get(traceindex);
           traceindex -= 1;
           // 3.1)

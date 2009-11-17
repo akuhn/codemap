@@ -82,7 +82,6 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
         }
         else {
             StopWatch stopWatch = new StopWatch("Background").start();
-//            paintShores(monitor, gc, mapInstance, elevationModel);
             paintHills(monitor, gc, mapInstance, elevationModel, hillShading, colors);
             stopWatch.printStop();
         }
@@ -115,17 +114,8 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
         if (monitor.isCanceled()) return;
         if (hillShading == null) return;
                 
-        int mapSize = mapInstance.getWidth();
         float[][] DEM = elevationModel.asFloatArray();
         double[][] shade = hillShading.asDoubleArray();
-        
-        // 1 byte per color, we fill 24bit per pixel
-        byte[] imageBytes = new byte[mapSize*mapSize*3];
-        byte[] alphaBytes = new byte[mapSize*mapSize];
-        
-        // colors needed later
-        byte[] waterColor = new byte[]{(byte) 255, (byte) 0, (byte) 0};
-        byte[] shoreColor = new byte[]{(byte) -1, (byte) 142, (byte) 92};
         
         // set black background so that the transparency works
         // getting it via SWT.COLOR_BLACK raises invalid Thread access
@@ -133,60 +123,91 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
         Color black = new Color(gc.getDevice(), 0, 0, 0);
         gc.setBackground(black);
         gc.fillRectangle(gc.getClipping());
-        black.dispose();    
-        StopWatch nn = new StopWatch("nearest neighbor (total)");
-        for(int i=0; i < mapSize*mapSize; i++) {
-            int y = i / mapSize;
-            int x = i % mapSize;
-            
-            if (x == 0) {
-                // check for cancellation at every new row
-                if (monitor.isCanceled()) return;                
-            }
-            
-            if (DEM[x][y] <= 2) {
-                // water color
-                System.arraycopy(waterColor, 0, imageBytes, i*3, 3);
-                alphaBytes[i] = (byte) 255;
-                continue;
-            } else if (DEM[x][y] <= 10) {
-                // shore colors
-                System.arraycopy(shoreColor, 0, imageBytes, i*3, 3);
-                alphaBytes[i] = (byte) 255;
-                continue;
-            }
-            // get color from location a.k.a. hill colors
-            double f = shade[x][y];
-            nn.start();
-            MColor mcolor = colors.forLocation(mapInstance.nearestNeighbor(x, y).getPoint());
-            nn.stop();
-            // make rgb
-            int baseIndex = i*3;
-            // -1 = 0xFF as the stuff is signed all the time. uehh.
-            imageBytes[baseIndex++] = (byte) mcolor.getBlue(); // B
-            imageBytes[baseIndex++] = (byte) mcolor.getGreen(); // G
-            imageBytes[baseIndex++] = (byte) mcolor.getRed(); // R
-            
-            // make alpha
-            // 0 for fully transparent
-            // 255 for fully opaque
-            assert f <=1;
-            // alpha values got negative somehow so we fix that
-            int alpha = (int) Math.max(0.0, 255*f);
-            alphaBytes[i] = (byte) alpha;
-        }
-        nn.print();
-        // define a direct palette with masks for RGB
-        PaletteData palette = new PaletteData(0xFF , 0xFF00 , 0xFF0000);   
-        ImageData imageData = new ImageData(mapSize, mapSize, 24, palette, mapSize*3, imageBytes);
-        // enable alpha by setting alphabytes ... strange that i can't do that per pixel using 32bit values
-        imageData.alphaData = alphaBytes;
-        gc.drawImage(new Image(gc.getDevice(), imageData), 0, 0);
+        black.dispose();
+        
+        Image background = new FastBackgroundRenderer(DEM, shade, mapInstance, colors, gc.getDevice()).render();
+        
+
+        gc.drawImage(background, 0, 0);
     }
 
     @Override
     protected void maybeDisposeValue(Image previous, Image newValue) {
         if (previous != null && !previous.equals(newValue)) previous.dispose();
+    }
+    
+    public static class FastBackgroundRenderer {
+
+        private Device device;
+        private int mapSize;
+        private double[][] shade;
+        private float[][] DEM;
+        private MapInstance mapInstance;
+        private MapScheme<MColor> colors;
+
+        public FastBackgroundRenderer(float[][] DEM, double[][] shade, MapInstance mapInstance, MapScheme<MColor> colors, Device device) {
+            this.DEM = DEM;
+            this.shade = shade;
+            this.mapInstance = mapInstance;
+            this.mapSize = mapInstance.getWidth();            
+            this.device = device;
+            this.colors = colors;
+        }
+
+        public Image render() {
+            // 1 byte per color, we fill 24bit per pixel
+            byte[] imageBytes = new byte[mapSize*mapSize*3];
+            byte[] alphaBytes = new byte[mapSize*mapSize];
+            
+            // colors needed later
+            byte[] waterColor = new byte[]{(byte) 255, (byte) 0, (byte) 0};
+            byte[] shoreColor = new byte[]{(byte) 255, (byte) 142, (byte) 92};
+            
+            StopWatch nn = new StopWatch("nearest neighbor (total)");
+            for(int i=0; i < mapSize*mapSize; i++) {
+                int y = i / mapSize;
+                int x = i % mapSize;
+                
+                if (DEM[x][y] <= 2) {
+                    // water color
+                    System.arraycopy(waterColor, 0, imageBytes, i*3, 3);
+                    alphaBytes[i] = (byte) 255;
+                    continue;
+                } else if (DEM[x][y] <= 10) {
+                    // shore colors
+                    System.arraycopy(shoreColor, 0, imageBytes, i*3, 3);
+                    alphaBytes[i] = (byte) 255;
+                    continue;
+                }
+                // get color from location a.k.a. hill colors
+                double f = shade[x][y];
+                nn.start();
+                MColor mcolor = colors.forLocation(mapInstance.nearestNeighbor(x, y).getPoint());
+                nn.stop();
+                // make rgb
+                int baseIndex = i*3;
+                // -1 = 0xFF as the stuff is signed all the time. uehh.
+                imageBytes[baseIndex++] = (byte) mcolor.getBlue(); // B
+                imageBytes[baseIndex++] = (byte) mcolor.getGreen(); // G
+                imageBytes[baseIndex++] = (byte) mcolor.getRed(); // R
+                
+                // make alpha
+                // 0 for fully transparent
+                // 255 for fully opaque
+                assert f <=1;
+                // alpha values got negative somehow so we fix that
+                int alpha = (int) Math.max(0.0, 255*f);
+                alphaBytes[i] = (byte) alpha;
+            }
+            nn.print();
+            // define a direct palette with masks for RGB
+            PaletteData palette = new PaletteData(0xFF , 0xFF00 , 0xFF0000);   
+            ImageData imageData = new ImageData(mapSize, mapSize, 24, palette, mapSize*3, imageBytes);
+            // enable alpha by setting alphabytes ... strange that i can't do that per pixel using 32bit values
+            imageData.alphaData = alphaBytes;
+            return new Image(device, imageData);            
+        }
+        
     }
     
 }

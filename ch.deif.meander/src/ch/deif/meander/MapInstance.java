@@ -11,6 +11,7 @@ import ch.akuhn.util.Providable;
 import ch.deif.meander.internal.ContourLineAlgorithm;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.internal.MapCaches;
+import ch.deif.meander.util.KdTree;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.util.MapScheme;
 
@@ -20,24 +21,24 @@ public class MapInstance {
     private ConcurrentMap<MapSetting<?>, Object> settings = new ConcurrentHashMap<MapSetting<?>, Object>();
     private Collection<Location> locations;
     public final int width, height;
+    private KdTree kdTree;
 
-    private MapInstance(Collection<Location> locations, int size) {
+    private MapInstance(Collection<Location> locations, int size, KdTree tree) {
+        kdTree = tree;
         this.locations = locations;
         this.width = this.height = size;
     }
     public MapInstance(Configuration map, int size, MapScheme<Double> elevation) {
         locations = makeLocationsWithSize(map, size, elevation);
+        kdTree = makeKdTree();
         this.width = this.height = size;
     }
 
-    public MapInstance(MapInstance map) {
-        this.locations = new ArrayList<Location>(map.locations);
-        this.settings = new ConcurrentHashMap<MapSetting<?>, Object>(settings);
-        this.caches = map.caches;
-        this.width = map.width;
-        this.height = map.height;
+    private KdTree makeKdTree() {
+        ArrayList<Location> list = new ArrayList<Location>();
+        list.addAll(locations);        
+        return new KdTree(list);
     }
-
     public Pixel get(int x, int y) {
         return new Pixel(x, y);
     }
@@ -100,7 +101,7 @@ public class MapInstance {
         for (Each<Location> each: query) {
             each.yield = each.value.withElevation(each.value.getElevation() / max * 100);
         }
-        MapInstance result = new MapInstance(query.getResult(), width);
+        MapInstance result = new MapInstance(query.getResult(), width, kdTree);
         result.settings = new ConcurrentHashMap<MapSetting<?>, Object>(this.settings);
         return result;
     }
@@ -252,6 +253,7 @@ public class MapInstance {
     }
 
     public Location nearestNeighbor(int px, int py) {
+//        return kdTree.getNearestNeighbor(new int[]{px, py});
         int nearestDist2 = Integer.MAX_VALUE;
         Location nearestLocation = null;
         for (Location each : locations()) {

@@ -1,5 +1,7 @@
 package ch.deif.meander.main;
 
+import static ch.deif.meander.map.ComputeBackgroundTask.FastBackgroundRenderer;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -21,8 +23,10 @@ import ch.deif.meander.MapInstance;
 import ch.deif.meander.Point;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.internal.HillshadeAlgorithm;
+import ch.deif.meander.map.ComputeBackgroundTask;
 import ch.deif.meander.swt.Label;
 import ch.deif.meander.swt.LabelOverlay;
+import ch.deif.meander.util.CodemapColors;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.util.MapScheme;
 
@@ -108,70 +112,26 @@ public class QuickNDirtyMap {
         
         HillshadeAlgorithm hsa = new HillshadeAlgorithm();
         hsa.setMap(mapInstance);
-        double[][] call = hsa.call();
-        HillShading shading = new HillShading(call);
+        double[][] shading = hsa.call();
         
         int mapSize = mapInstance.getWidth();
         Device device = Display.getCurrent();
         background = new Image(device, mapSize, mapSize);
         GC gc = new GC(background);
         
-        MapScheme<MColor> colors = MapScheme.with(MColor.HILLGREEN);
-        paintWater(gc);        
-        paintShores(gc, mapInstance, elevationModel);
-        paintHills(gc, mapInstance, elevationModel, shading, colors);        
+        CodemapColors colors = new CodemapColors();
+        colors.setColor("OLED", new MColor(255, 0, 0));
         
+        Color black = new Color(gc.getDevice(), 0, 0, 0);
+        gc.setBackground(black);
+        gc.fillRectangle(gc.getClipping());
+        black.dispose();        
+        Image image = new FastBackgroundRenderer(DEM, shading, mapInstance, colors, device).render();        
+        gc.drawImage(image, 0, 0);
         gc.dispose();
-        
     }
     
     private static int toMapCoords(double x) {
         return (int)(mapSize * x);
     }
-
-    private static void paintHills(GC gc, MapInstance mapInstance, DigitalElevationModel elevationModel, HillShading hillShading, MapScheme<MColor> colors) {
-        if (hillShading == null) return;
-        int mapSize = mapInstance.getWidth();
-        float[][] DEM = elevationModel.asFloatArray();
-        double[][] shade = hillShading.asDoubleArray();
-        Device device = gc.getDevice();
-        Rectangle rect = new Rectangle(0, 0, mapSize, mapSize);
-        rect.intersect(gc.getClipping());
-        for (int x = rect.x; x < (rect.x + rect.width); x++) {
-            for (int y = rect.y; y < (rect.y + rect.height); y++) {
-                if (DEM[x][y] > 10) {
-                    double f = shade[x][y];
-                    if (f < 0.0) f = 0.0;
-                    MColor mcolor = colors.forLocation(mapInstance.nearestNeighbor(x, y).getPoint());                                       
-                    Color hillColor = new Color(device, (int) (mcolor.getRed() * f), (int) (mcolor.getGreen() * f), (int) (mcolor.getBlue() * f));
-                    gc.setForeground(hillColor);
-                    gc.drawPoint(x, y);
-                    hillColor.dispose();
-                }
-            }
-        }
-    }
-
-    private static void paintShores(GC gc, MapInstance mapInstance, DigitalElevationModel elevationModel) {
-        int mapSize = mapInstance.getWidth();
-        float[][] DEM = elevationModel.asFloatArray();
-        Color color = new Color(gc.getDevice(), 92, 142, 255);
-        gc.setForeground(color);
-        Rectangle rect = new Rectangle(0, 0, mapSize, mapSize);
-        rect.intersect(gc.getClipping());
-        for (int x = rect.x; x < (rect.x + rect.width); x++) {
-            for (int y = rect.y; y < (rect.y + rect.height); y++) {
-                if (DEM[x][y] > 2) gc.drawPoint(x, y);
-            }
-        }
-        color.dispose();
-    }
-    
-    private static void paintWater(GC gc) {
-        Color blue = new Color(gc.getDevice(), 0, 0, 255);
-        gc.setBackground(blue);
-        gc.fillRectangle(gc.getClipping());
-        blue.dispose();
-    }    
-
 }
