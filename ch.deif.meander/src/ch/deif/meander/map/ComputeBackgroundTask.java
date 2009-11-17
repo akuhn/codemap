@@ -134,7 +134,7 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
         gc.setBackground(black);
         gc.fillRectangle(gc.getClipping());
         black.dispose();    
-        
+        StopWatch nn = new StopWatch("nearest neighbor (total)");
         for(int i=0; i < mapSize*mapSize; i++) {
             int y = i / mapSize;
             int x = i % mapSize;
@@ -156,8 +156,10 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
                 continue;
             }
             // get color from location a.k.a. hill colors
-            double f = shade[x][y];            
+            double f = shade[x][y];
+            nn.start();
             MColor mcolor = colors.forLocation(mapInstance.nearestNeighbor(x, y).getPoint());
+            nn.stop();
             // make rgb
             int baseIndex = i*3;
             // -1 = 0xFF as the stuff is signed all the time. uehh.
@@ -173,6 +175,7 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
             int alpha = (int) Math.max(0.0, 255*f);
             alphaBytes[i] = (byte) alpha;
         }
+        nn.print();
         // define a direct palette with masks for RGB
         PaletteData palette = new PaletteData(0xFF , 0xFF00 , 0xFF0000);   
         ImageData imageData = new ImageData(mapSize, mapSize, 24, palette, mapSize*3, imageBytes);
