@@ -14,7 +14,7 @@ public class DenseMatrix {
         this.value = value;
     }
     
-    public DenseMatrix(short[][] v) {
+    public DenseMatrix(int[][] v) {
         final double UNCONNECTED = Short.MAX_VALUE;
         this.value = new double [v.length][v.length];
         for (int i = 0; i < v.length; i++) {

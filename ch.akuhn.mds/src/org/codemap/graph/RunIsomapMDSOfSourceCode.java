@@ -12,14 +12,15 @@ public class RunIsomapMDSOfSourceCode {
     public static void main(String[] args) {
         
         new Codemap(
-                "../ch.akuhn.util",
-                "../ch.akuhn.mds",
-                "../ch.akuhn.hapax",
-                "../maven-artifact",
-                "../javalanche_src",
-                "../org.codemap",
+                //"../ch.akuhn.util",
+                //"../ch.akuhn.mds",
+                //"../ch.akuhn.hapax",
+                //"../maven-artifact",
+                //"../javalanche_src",
+                //"../org.codemap",
                 "../ch.deif.meander")
             .applyIsomap()
+            //.applyEuclidianDistance()
             //.multiplyBothMetrics()
             .visuallyRunMDS();
         

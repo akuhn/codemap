@@ -1,4 +1,4 @@
-package org.codemap.graph;
+package gosh.from.scratch;
 
 public class SwissRoll {
 
@@ -16,14 +16,14 @@ public class SwissRoll {
         }
     }
     
-    public Distances asDistanceMatrix() {
+    public DoubleMatrix asDistanceMatrix() {
         double[][] dist = new double[x.length][x.length];
         for (int i = 0; i < x.length; i++) {
             for (int j = 0; j < x.length; j++) {
                 dist[i][j] = dist(i,j);
             }
         }
-        return new Distances(dist);
+        return new DoubleMatrix(dist);
     }
 
     private double dist(int i, int j) {

@@ -1,24 +1,26 @@
 package org.codemap.graph;
 
+import gosh.from.scratch.DoubleMatrix;
+import gosh.from.scratch.SwissRoll;
 import ch.akuhn.mds.MultidimensionalScaling;
 import ch.akuhn.org.ggobi.plugins.ggvis.Viz;
-import ch.akuhn.util.Out;
+import ch.akuhn.util.Stopwatch;
 
 public class RunMDS {
 
     public static void main(String[] args) {
-        Out.puts("1");
-        double[][] knn = new SwissRoll(2000).asDistanceMatrix().kayNearestNeighbours(5);
-        Out.puts("2");
-        double[][] path = new AllPaths(knn).undirected().run().path;
-        Out.puts("3");
+        Stopwatch.p();
+        DoubleMatrix knn = new SwissRoll(2000).asDistanceMatrix().kayNearestNeighbours(5, 0.0);
+        Stopwatch.p("KNN");
+        DoubleMatrix path = knn.clone().undirected().applyAllPairsShortestPath();
+        Stopwatch.p("APSP");
         double[][] points = new MultidimensionalScaling()
-            .dissimilarities(path)
+            .dissimilarities(path.data)
             .iterations(1000000000)
             .threshold(1e-12)
-            .listener(new Viz().open())
+            .listener(new Viz().setEdges(knn.data).open())
             .run();
-        Out.puts("4");
+        Stopwatch.p();
     }
     
 }

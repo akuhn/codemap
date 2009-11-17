@@ -3,9 +3,6 @@ package ch.akuhn.mds;
 import java.io.PrintStream;
 import java.util.EventListener;
 
-import org.codemap.graph.AllPaths;
-import org.codemap.graph.Distances;
-
 import ch.akuhn.matrix.DenseMatrix;
 import ch.akuhn.matrix.Function;
 import ch.akuhn.matrix.SymetricMatrix;

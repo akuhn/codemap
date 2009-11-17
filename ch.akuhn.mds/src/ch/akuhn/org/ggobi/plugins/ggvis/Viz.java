@@ -78,7 +78,7 @@ public class Viz implements PaintListener, MultidimensionalScalingListener {
         if (pps == null) return;
         for (int i = 0; i < edges.length; i++) {
             for (int j = 0; j < edges.length; j++) {
-                if (edges[i][j] > 1) continue;
+                if (Double.isInfinite(edges[i][j])) continue;
                 int x0 = (int) (pps[0][i] * zoom + 256);
                 int y0 = (int) (pps[1][i] * zoom + 256);
                 int x = (int) (pps[0][j] * zoom + 256);
