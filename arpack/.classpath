@@ -5,6 +5,7 @@
 	<classpathentry kind="lib" path="netlib-java-0.9.1/netlib-java-0.9.1.jar" sourcepath="netlib-java-0.9.1/src"/>
 	<classpathentry kind="lib" path="mtj-0.9.12/mtj-0.9.12.jar" sourcepath="mtj-0.9.12/src"/>
 	<classpathentry kind="lib" path="jarpack-0.1/EXAMPLES/SIMPLE/Dssimp.jar" sourcepath="jarpack-0.1/EXAMPLES/SIMPLE"/>
-	<classpathentry kind="lib" path="jarpack-0.1/arpack_combined.jar"/>
+	<classpathentry kind="lib" path="netlib-java-0.9.1/lib/f2j/arpack-combo-0.1.jar" sourcepath="jarpack-0.1/arpack_combined.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ch.akuhn.util"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

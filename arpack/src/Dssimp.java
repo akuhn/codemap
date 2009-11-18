@@ -216,7 +216,7 @@ public class Dssimp {
         // c     | The following sets dimensions for this problem. |
         // c     %-------------------------------------------------%
         // c
-        nx = 10;
+        nx = 16;
         n = (nx*nx);
         // c
         // c     %-----------------------------------------------%

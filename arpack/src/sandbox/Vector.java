@@ -10,6 +10,10 @@ public class Vector {
         this.val = new double[length];
     }
     
+    public Vector(double[] values) {
+        this.val = values;
+    }
+
     public Vector fill(double value) {
         Arrays.fill(val, value);
         return this;
@@ -34,6 +38,27 @@ public class Vector {
 
     public static Vector size(int n) {
         return new Vector(n);
+    }
+
+    public static Vector from(double[] values) {
+        return new Vector(values.clone());
+    }
+
+    @Override
+    public Vector clone() {
+        return new Vector(val.clone());
+    }
+    
+    public Vector sorted() {
+        Vector clone = this.clone();
+        Arrays.sort(clone.val);
+        return clone;
+    }
+
+    public Vector reversed() {
+        double[] clone = new double[val.length];
+        for (int i = 0; i < val.length; i++) clone[val.length - 1 - i] = val[i];
+        return new Vector(clone);
     }
     
 }
