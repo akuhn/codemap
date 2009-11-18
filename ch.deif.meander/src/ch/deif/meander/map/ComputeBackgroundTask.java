@@ -16,12 +16,17 @@ import ch.deif.meander.DigitalElevationModel;
 import ch.deif.meander.HillShading;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
+import ch.deif.meander.MapSetting;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.util.MapScheme;
 import ch.deif.meander.util.StopWatch;
 
 public class ComputeBackgroundTask extends TaskValue<Image> {
+    
+    public static final MapSetting<Integer> SHORELINE_HEIGHT = MapSetting.define("SHORELINE_HEIGHT", 2);
+    public static final MapSetting<Integer> HILLLINE_HEIGHT = MapSetting.define("HILLLINE_HEIGHT", 10);    
+
 
     public ComputeBackgroundTask(
             Value<MapInstance> mapInstance, 
@@ -142,13 +147,13 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
         private int mapSize;
         private double[][] shade;
         private float[][] DEM;
-        private MapInstance mapInstance;
+        private MapInstance map;
         private MapScheme<MColor> colors;
 
         public FastBackgroundRenderer(float[][] DEM, double[][] shade, MapInstance mapInstance, MapScheme<MColor> colors, Device device) {
             this.DEM = DEM;
             this.shade = shade;
-            this.mapInstance = mapInstance;
+            this.map = mapInstance;
             this.mapSize = mapInstance.getWidth();            
             this.device = device;
             this.colors = colors;
@@ -163,30 +168,31 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
             byte[] waterColor = new byte[]{(byte) 255, (byte) 0, (byte) 0};
             byte[] shoreColor = new byte[]{(byte) 255, (byte) 142, (byte) 92};
             
-            StopWatch nn = new StopWatch("nearest neighbor (total)");
+            int shorelineHeight = map.get(SHORELINE_HEIGHT);
+            int hillineHeight = map.get(HILLLINE_HEIGHT);
+            
+            StopWatch nnStopWatch = new StopWatch("nearest neighbor (total)");
             for(int i=0; i < mapSize*mapSize; i++) {
                 int y = i / mapSize;
                 int x = i % mapSize;
                 
-                if (DEM[x][y] <= 2) {
+                if (DEM[x][y] <= shorelineHeight) {
                     // water color
                     System.arraycopy(waterColor, 0, imageBytes, i*3, 3);
                     alphaBytes[i] = (byte) 255;
                     continue;
-                } else if (DEM[x][y] <= 10) {
+                } else if (DEM[x][y] <= hillineHeight) {
                     // shore colors
                     System.arraycopy(shoreColor, 0, imageBytes, i*3, 3);
                     alphaBytes[i] = (byte) 255;
                     continue;
                 }
                 // get color from location a.k.a. hill colors
-                double f = shade[x][y];
-                nn.start();
-                MColor mcolor = colors.forLocation(mapInstance.nearestNeighbor(x, y).getPoint());
-                nn.stop();
+                nnStopWatch.start();
+                MColor mcolor = colors.forLocation(map.nearestNeighbor(x, y).getPoint());
+                nnStopWatch.stop();
                 // make rgb
                 int baseIndex = i*3;
-                // -1 = 0xFF as the stuff is signed all the time. uehh.
                 imageBytes[baseIndex++] = (byte) mcolor.getBlue(); // B
                 imageBytes[baseIndex++] = (byte) mcolor.getGreen(); // G
                 imageBytes[baseIndex++] = (byte) mcolor.getRed(); // R
@@ -194,12 +200,13 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
                 // make alpha
                 // 0 for fully transparent
                 // 255 for fully opaque
+                double f = shade[x][y];
                 assert f <=1;
-                // alpha values got negative somehow so we fix that
+                // alpha values can get negative somehow so we fix that
                 int alpha = (int) Math.max(0.0, 255*f);
                 alphaBytes[i] = (byte) alpha;
             }
-            nn.print();
+            nnStopWatch.print();
             // define a direct palette with masks for RGB
             PaletteData palette = new PaletteData(0xFF , 0xFF00 , 0xFF0000);   
             ImageData imageData = new ImageData(mapSize, mapSize, 24, palette, mapSize*3, imageBytes);
