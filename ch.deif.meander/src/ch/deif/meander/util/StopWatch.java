@@ -3,7 +3,7 @@ package ch.deif.meander.util;
 
 public class StopWatch {
     
-    private static boolean IS_VERBOSE = true;
+    private static boolean IS_VERBOSE = false;
 
     private String name;
     private long before;

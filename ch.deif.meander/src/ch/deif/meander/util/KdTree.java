@@ -3,7 +3,6 @@ package ch.deif.meander.util;
 import static java.lang.Math.pow;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -139,8 +138,9 @@ public class KdTree {
               bestNeighbor = traced;
           }
           // 3.2)
-          // 3.2.1)          
-          if ( bestDistance > pow(traced.getPosition()[traced.axis] - xy[traced.axis], 2)) {
+          // 3.2.1)
+          if (true) {
+//          if ( bestDistance > .75 * pow(traced.getPosition()[traced.axis] - xy[traced.axis], 2)) {
               KdTreeNode otherChild = traced.getOtherChild(trace.get(traceindex+1));
               if (otherChild != null){
                   KdTreeNode leafNeighbor = getNearestNeighbor(xy, otherChild);
@@ -165,10 +165,19 @@ public class KdTree {
     }
 }
 
+/**
+ * compares two locations on their x or y coordinate depending on the
+ * current axis. 
+ * 
+ * @author deif
+ */
 class LocationComparator implements Comparator<Location> {
     
         private int axis;
-
+        
+        /**
+         * @param axis the axis to compare on. 0 means x axis, 1 means y axis.
+         */
         public LocationComparator(int axis) {
             this.axis = axis;
         }

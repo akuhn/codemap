@@ -244,19 +244,19 @@ public class MapInstance {
     }
 
     public Location nearestNeighbor(int px, int py) {
-//        return kdTree.getNearestNeighbor(new int[]{px, py});
-        int nearestDist2 = Integer.MAX_VALUE;
-        Location nearestLocation = null;
-        for (Location each : locations()) {
-            int dx = each.px - px;
-            int dy = each.py - py;
-            int dist2 = dx * dx + dy * dy;
-            if (dist2 < nearestDist2) {
-                nearestDist2 = dist2;
-                nearestLocation = each;
-            }
-        }
-        return nearestLocation;
+        return kdTree.getNearestNeighbor(new int[]{px, py});
+//        int nearestDist2 = Integer.MAX_VALUE;
+//        Location nearestLocation = null;
+//        for (Location each : locations()) {
+//            int dx = each.px - px;
+//            int dy = each.py - py;
+//            int dist2 = dx * dx + dy * dy;
+//            if (dist2 < nearestDist2) {
+//                nearestDist2 = dist2;
+//                nearestLocation = each;
+//            }
+//        }
+//        return nearestLocation;
     }
 
     public double maxElevation() {
