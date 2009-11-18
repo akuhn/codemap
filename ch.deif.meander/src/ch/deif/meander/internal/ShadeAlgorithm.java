@@ -36,16 +36,17 @@ public class ShadeAlgorithm extends MapAlgorithm<double[][]> {
         double[][] hillshade = new double[map.width][map.width];
         float[][] DEM = map.getDEM();
         
-        for (int x = 1; x < DEM.length-2; x++) {
-            for (int y = 1; y < DEM[0].length-2; y++) {
+        int width = map.width;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < width; y++) {
                 float here = DEM[x][y];
                 if (here == 0.0) continue;
                 
                 // build kernel
-                int yTop = y - 1;
-                int xLeft = x - 1;
-                int yBottom = y + 1;
-                int xRight = x + 1;
+                int yTop = (y == 0 ? 0 : y - 1);
+                int xLeft = (x == 0 ? 0 : x - 1);
+                int yBottom = (y == (width -1) ? (width - 1) : y + 1);
+                int xRight = (x == (width - 1) ? (width - 1) : x + 1);                
 
                 float topLeft = DEM[xLeft][yTop];
                 float top = DEM[x][yTop];

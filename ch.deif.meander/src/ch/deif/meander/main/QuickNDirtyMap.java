@@ -79,6 +79,12 @@ public class QuickNDirtyMap {
         points.put(new Point(.6, .4*f, ""), 50);
         points.put(new Point(.65, .35*f, ""), 60);
         
+        // debugging off by one shading error
+        points.put(new Point(.95, .7*f, ""), 200);
+        points.put(new Point(.05, .7*f, ""), 200);
+        points.put(new Point(.5, .05, ""), 200);
+        points.put(new Point(.5, .95, ""), 200);        
+        
         Configuration configuration = new Configuration(points.keySet());
         
         ArrayList<Label> labels = new ArrayList<Label>();
