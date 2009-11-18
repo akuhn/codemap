@@ -7,6 +7,7 @@ import java.util.List;
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
 import org.codemap.mapview.action.ColorDropDownAction;
+import org.codemap.mapview.action.DebugLocationsAction;
 import org.codemap.mapview.action.DropDownAction;
 import org.codemap.mapview.action.ForceSelectionAction;
 import org.codemap.mapview.action.LabelDrowDownAction;
@@ -177,6 +178,7 @@ public class MapView extends ViewPart {
         viewMenu.add(new SaveAsPNGAction());
         viewMenu.add(new ReloadMapAction());     
         viewMenu.add(new ShowTestsAction());
+//        viewMenu.add(new DebugLocationsAction());
         
         IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CodemapCore.PLUGIN_ID, ExtensionPoints.ACTION_BAR);
         IExtension[] extensions_arr = extensionPoint.getExtensions();
