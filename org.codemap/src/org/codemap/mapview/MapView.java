@@ -14,6 +14,7 @@ import org.codemap.mapview.action.LayerDropDownAction;
 import org.codemap.mapview.action.LinkWithSelectionAction;
 import org.codemap.mapview.action.ReloadMapAction;
 import org.codemap.mapview.action.SaveAsPNGAction;
+import org.codemap.mapview.action.ShowTestsAction;
 import org.codemap.util.ExtensionPoints;
 import org.codemap.util.Log;
 import org.codemap.util.Resources;
@@ -174,7 +175,8 @@ public class MapView extends ViewPart {
         IMenuManager viewMenu = actionBars.getMenuManager();
         viewMenu.add(new Separator());
         viewMenu.add(new SaveAsPNGAction());
-        viewMenu.add(new ReloadMapAction());        
+        viewMenu.add(new ReloadMapAction());     
+        viewMenu.add(new ShowTestsAction());
         
         IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CodemapCore.PLUGIN_ID, ExtensionPoints.ACTION_BAR);
         IExtension[] extensions_arr = extensionPoint.getExtensions();

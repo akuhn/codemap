@@ -4,9 +4,6 @@ import org.codemap.callhierarchy.CallHierarchyTracker;
 import org.codemap.mapview.MapView;
 import org.codemap.util.EclipseTaskFactory;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.ui.IMemento;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 

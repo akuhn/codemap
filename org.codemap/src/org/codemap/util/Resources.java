@@ -21,6 +21,10 @@ public class Resources {
 		IResource resource = asResource(path);
 		return JavaCore.create(resource);
 	}
+	
+    public static IJavaElement asJavaElement(IResource resource) {
+        return asJavaElement(asPath(resource));
+    }	
 
 	public static IResource asResource(String path) {
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();

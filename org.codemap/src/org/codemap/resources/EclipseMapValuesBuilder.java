@@ -5,12 +5,14 @@ import java.util.Collection;
 import org.codemap.CodemapCore;
 
 import ch.akuhn.hapax.index.LatentSemanticIndex;
+import ch.akuhn.values.BooleanValue;
 import ch.akuhn.values.CollectionValue;
 import ch.akuhn.values.Value;
 import ch.akuhn.values.Values;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.map.MapValueBuilder;
+import ch.deif.meander.map.MapValues;
 
 
 public class EclipseMapValuesBuilder extends MapValueBuilder {
@@ -18,6 +20,7 @@ public class EclipseMapValuesBuilder extends MapValueBuilder {
     private Value<Collection<String>> projects;
     private Value<Collection<String>> fileExtensions;
     private String name;
+    private BooleanValue showTestsValue;
 
     public Value<Collection<String>> projectsValue() {
         if (projects == null) projects = Values.of(null);
@@ -34,7 +37,7 @@ public class EclipseMapValuesBuilder extends MapValueBuilder {
 
     @Override
     public Value<Collection<String>> elementsValue() {
-        return new ComputeElementsTask(projectsValue(), extensionsValue());
+        return new ComputeElementsTask(projectsValue(), extensionsValue(), showTestsValue());
     }
     
     @Override
@@ -98,6 +101,13 @@ public class EclipseMapValuesBuilder extends MapValueBuilder {
 
     public CollectionValue<Value> addonsValue() {
         return new CollectionValue<Value>();
+    }
+
+    public Value<Boolean> showTestsValue() {
+        if (showTestsValue == null) {
+            showTestsValue = new BooleanValue(true);
+        }
+        return showTestsValue;
     }
     
 }
