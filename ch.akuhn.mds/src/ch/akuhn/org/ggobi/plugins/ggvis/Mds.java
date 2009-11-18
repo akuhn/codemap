@@ -438,10 +438,11 @@ public class Mds {
             // FIXME add_stress_value (stress, ggv);
             // draw_stress (ggv, gg);
         } else {
-            throw new Error("didn't draw stress: stress_dx = " + stress_dx + " stress_dd = " + stress_dd + " stress_xx = " + stress_xx);
+//            FIXME do we need to throw an error? this results in an error for very small projects
+//            throw new Error("didn't draw stress: stress_dx = " + stress_dx + " stress_dd = " + stress_dd + " stress_xx = " + stress_xx);
         }
     } /* end update_stress() */
-    
+
     private boolean doesNotWeight() {
         return this.weight_power == 0. && this.within_between == 1.;
     }
