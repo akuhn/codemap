@@ -438,7 +438,7 @@ public class Mds {
             // FIXME add_stress_value (stress, ggv);
             // draw_stress (ggv, gg);
         } else {
-            throw new Error("didn't draw stress: stress_dx = %5.5g   stress_dd = %5.5g   stress_xx = %5.5g\n");
+            throw new Error("didn't draw stress: stress_dx = " + stress_dx + " stress_dd = " + stress_dd + " stress_xx = " + stress_xx);
         }
     } /* end update_stress() */
     
