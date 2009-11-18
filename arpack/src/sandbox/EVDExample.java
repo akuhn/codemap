@@ -16,7 +16,7 @@ public class EVDExample {
 
     public static void main(String[] args) throws NotConvergedException {
         
-        DenseMatrix m = new DenseMatrix(800,800);
+        DenseMatrix m = new DenseMatrix(80,80);
         for (int i = 0; i < 40; i++) {
             for (int j = 0; j < 40; j++) {
                 if (Math.random() > 0.7) continue;
@@ -30,7 +30,17 @@ public class EVDExample {
         EVD evd = EVD.factorize(m);
         Stopwatch.p("with LAPACK");
         
-        sandbox.Vector.from(evd.getRealEigenvalues()).sorted().reversed().p();
+        double max = sandbox.Vector.from(evd.getRealEigenvalues()).sorted().reversed().p().val[0];
+        
+        DenseMatrix mm = evd.getRightEigenvectors();
+        for (int i = 0; i < mm.numColumns(); i++) {
+            System.out.print(evd.getRealEigenvalues()[i]);
+            System.out.print("\t");
+            for (int j = 0; j < mm.numRows(); j++) {
+                System.out.print(mm.get(j, i)+", ");
+            }
+            System.out.println();
+        }
         
         // ------------
         
@@ -42,7 +52,7 @@ public class EVDExample {
         String bmat = "I"; 
         int n = m.numColumns();
         String which = "LM";
-        int nev = 4;
+        int nev = 2;
         doubleW tol = new doubleW(0); // uses machine precision
         double[] resid = new double[n];
         int ncv = nev * 3; // rule of thumb
@@ -150,9 +160,12 @@ public class EVDExample {
         Stopwatch.p("with ARPACK");
         System.out.println(ierr.val);
 
-        for (int i = 0; i < nev * 2; i++) {
+        for (int i = 0; i < nev; i++) {
             System.out.println(d[i]);
         }
+        
+        sandbox.Vector.copyFrom(v, 0, n).p();
+        sandbox.Vector.copyFrom(v, n, n).p();
         
         System.out.println("done");
         

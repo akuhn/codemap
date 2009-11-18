@@ -61,4 +61,10 @@ public class Vector {
         return new Vector(clone);
     }
     
+    public static Vector copyFrom(double[] array, int begin, int length) {
+        double[] val = new double[length];
+        System.arraycopy(array, begin, val, 0, length);
+        return new Vector(val);
+    }
+    
 }
