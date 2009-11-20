@@ -18,6 +18,7 @@ import ch.deif.meander.MapInstance;
 import ch.deif.meander.map.MapValues;
 import ch.deif.meander.ui.CodemapEvent;
 import ch.deif.meander.ui.CodemapListener;
+import ch.deif.meander.util.MColor;
 
 
 public final class CodemapVisualization extends CompositeLayer implements PaintListener {
@@ -32,18 +33,21 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
         try {
             GC gc = e.gc;
             Device device = gc.getDevice();
-            Color blue = new Color(device, 0, 0, 255);
-            gc.setBackground(blue);
+            Color waterColor = MColor.WATER.asSWTColor(device);
+            gc.setBackground(waterColor);
             gc.fillRectangle(gc.getClipping());
-            blue.dispose();
+            
             Point bounds = ((Canvas) e.widget).getSize();
             offsetX = (bounds.x - mapValues.getSize()) / 2;
             offsetY = (bounds.y - mapValues.getSize()) / 2;
             Transform t = new Transform(device);
             t.translate(offsetX, offsetY);
             gc.setTransform(t);
+            
             this.paintMap(mapValues, gc);
+            
             t.dispose();
+            waterColor.dispose();
         }
         catch (Throwable ex) {
             ex.printStackTrace();

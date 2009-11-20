@@ -94,7 +94,7 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
 
     private void paintWater(ProgressMonitor monitor, GC gc) {
             if (monitor.isCanceled()) return;
-            Color blue = new Color(gc.getDevice(), 0, 0, 255);
+            Color blue = MColor.WATER.asSWTColor(gc.getDevice());
             gc.setBackground(blue);
             gc.fillRectangle(gc.getClipping());
             blue.dispose();
@@ -104,15 +104,15 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
         if (monitor.isCanceled()) return;
         if (map == null) return;
         
-        Color color = new Color(gc.getDevice(), 92, 142, 255);
-        gc.setForeground(color);
+        Color shore = MColor.SHORE.asSWTColor(gc.getDevice());
+        gc.setForeground(shore);
         gc.setLineWidth(2);
         for (Location each: map.locations()) {
             if (monitor.isCanceled()) break;
             int r = (int) (each.getElevation() * 2 * map.getWidth() / DEMAlgorithm.MAGIC_VALUE);
             gc.drawOval(each.px - r, each.py - r, r * 2, r * 2);
         }
-        color.dispose();
+        shore.dispose();
     }
 
     private void paintHills(ProgressMonitor monitor, GC gc, MapInstance mapInstance, DigitalElevationModel elevationModel, HillShading hillShading, MapScheme<MColor> colors) {
@@ -165,8 +165,8 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
             byte[] alphaBytes = new byte[mapSize*mapSize];
             
             // colors needed later
-            byte[] waterColor = new byte[]{(byte) 255, (byte) 0, (byte) 0};
-            byte[] shoreColor = new byte[]{(byte) 255, (byte) 142, (byte) 92};
+            byte[] waterColor = MColor.WATER.asByte();
+            byte[] shoreColor = MColor.SHORE.asByte();
             
             int shorelineHeight = map.get(SHORELINE_HEIGHT);
             int hillineHeight = map.get(HILLLINE_HEIGHT);
@@ -193,9 +193,9 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
                 nnStopWatch.stop();
                 // make rgb
                 int baseIndex = i*3;
-                imageBytes[baseIndex++] = (byte) mcolor.getBlue(); // B
-                imageBytes[baseIndex++] = (byte) mcolor.getGreen(); // G
                 imageBytes[baseIndex++] = (byte) mcolor.getRed(); // R
+                imageBytes[baseIndex++] = (byte) mcolor.getGreen(); // G
+                imageBytes[baseIndex++] = (byte) mcolor.getBlue(); // B
                 
                 // make alpha
                 // 0 for fully transparent
@@ -208,7 +208,7 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
             }
             nnStopWatch.print();
             // define a direct palette with masks for RGB
-            PaletteData palette = new PaletteData(0xFF , 0xFF00 , 0xFF0000);   
+            PaletteData palette = new PaletteData(0xFF0000 , 0xFF00 , 0xFF);   
             ImageData imageData = new ImageData(mapSize, mapSize, 24, palette, mapSize*3, imageBytes);
             // enable alpha by setting alphabytes ... strange that i can't do that per pixel using 32bit values
             imageData.alphaData = alphaBytes;

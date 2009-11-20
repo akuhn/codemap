@@ -1,10 +1,15 @@
 package ch.deif.meander.util;
 
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Device;
+
 public final class MColor {
 
 	public static final MColor HILLGREEN = new MColor(196, 236, 0);
-	public static final MColor SHORE = new MColor(92, 142, 255);
-	public static final MColor WATER = new MColor(0, 68, 255);	
+//	public static final MColor SHORE = new MColor(92, 142, 255);
+	public static final MColor SHORE = new MColor(116, 169, 207);	
+//	public static final MColor WATER = new MColor(0, 68, 255);
+        public static final MColor WATER = new MColor(5, 112, 176);      	
 	public static final MColor GRAY_204 = new MColor(204, 204, 204);
 
 	private final int red, green, blue, rgb;
@@ -40,5 +45,13 @@ public final class MColor {
 	public int asRGB() {
 		return rgb;
 	}
+
+    public Color asSWTColor(Device device) {
+        return new Color(device, red, green, blue);
+    }
+
+    public byte[] asByte() {
+        return new byte[]{(byte) red, (byte) green, (byte) blue};
+    }
 	
 }

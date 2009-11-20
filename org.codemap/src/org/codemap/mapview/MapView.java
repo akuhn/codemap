@@ -7,7 +7,6 @@ import java.util.List;
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
 import org.codemap.mapview.action.ColorDropDownAction;
-import org.codemap.mapview.action.DebugLocationsAction;
 import org.codemap.mapview.action.DropDownAction;
 import org.codemap.mapview.action.ForceSelectionAction;
 import org.codemap.mapview.action.LabelDrowDownAction;
@@ -40,7 +39,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -144,9 +142,8 @@ public class MapView extends ViewPart {
     public void createPartControl(final Composite parent) {
         container = new Composite(parent, SWT.NONE);
         container.setLayout(new FillLayout(SWT.LEFT));
-        MColor water = MColor.WATER;
-        Color swtColor = new Color(null, water.getRed(), water.getGreen(),
-                water.getBlue());
+
+        Color swtColor = MColor.WATER.asSWTColor(parent.getDisplay());
         container.setBackground(swtColor);
 
         canvas = new Canvas(container, SWT.DOUBLE_BUFFERED);
@@ -268,8 +265,9 @@ public class MapView extends ViewPart {
     }
 
     private void updateMapVisualization(CodemapVisualization viz) {
-        if (currentViz != null)
+        if (currentViz != null) {
             currentViz.removeListener(codemapListener);
+        }
         canvasListener.setVisualization(currentViz = viz);
         currentViz.addListener(codemapListener);
         redrawAsync();
@@ -300,8 +298,7 @@ public class MapView extends ViewPart {
     public void updateMapdimension(int newDimension) {
         currentSize = newDimension;
         IJavaProject project = getCurrentProject();
-        if (project == null)
-            return;
+        if (project == null) return;
         CodemapVisualization viz = CodemapCore.getPlugin()
                 .mapForProject(project)
                 .updateSize(currentSize)
