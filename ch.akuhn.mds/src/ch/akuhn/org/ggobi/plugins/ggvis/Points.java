@@ -83,8 +83,8 @@ public class Points {
         return(dsum);
     }
 
-    public void openVisualization() {
-        new PointsDatavis(this).open();
+    public void openVisualization(boolean[][] edges) {
+        new PointsDatavis(this).withEdges(edges).open();
     }
 
     public void applyCentering() {

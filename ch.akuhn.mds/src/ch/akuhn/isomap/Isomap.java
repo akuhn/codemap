@@ -103,6 +103,17 @@ public abstract class Isomap {
         }
     }
     
+    public boolean[][] getEdges() {
+        boolean[][] edges = new boolean[graph.values.length][];
+        for (int i = 0; i < edges.length; i++) edges[i] = new boolean[i];
+        for (int i = 0; i < edges.length; i++) {
+            for (int j = 0; j < i; j++) {
+                edges[i][j] = !Double.isInfinite(graph.values[i][j]);
+            }
+        }
+        return edges;
+    }
+    
     /** Step 3: Construct d-dimensional embedding. Let λ_p be the p-th eigenvalue
      * (in decreasing order) of the matrix tau(D_G), and v^i_p be the i-th component
      * of the p-th eigenvector. Then set the p-th component of the d-dimensional
@@ -142,8 +153,8 @@ public abstract class Isomap {
         double[] columnMean = graph.columwiseMean();
         int N = graph.columnCount();
         for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                graph.add(i, j, mean - columnMean[i] - columnMean[j]);
+            for (int j = 0; j < i; j++) {
+                graph.values[i][j] += mean - columnMean[i] - columnMean[j];
             }
         }
         graph.applyMultiplication(-0.5);

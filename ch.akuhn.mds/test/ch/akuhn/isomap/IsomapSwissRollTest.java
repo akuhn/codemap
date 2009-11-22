@@ -9,7 +9,7 @@ public class IsomapSwissRollTest {
 
     @Test
     public void shouldEmbedSwissroll() {
-        Isomap isomap = new Isomap(1000) {
+        Isomap isomap = new Isomap(200) {
             { k = 6; }
             SwissRoll swiss = new SwissRoll(n);
             @Override
@@ -17,11 +17,14 @@ public class IsomapSwissRollTest {
                 return swiss.dist(i,j);
             }
         };
-        isomap.run();
+        isomap.constructNeighborhoodGraph();
+        boolean[][] edges = isomap.getEdges();
+        isomap.computeShortestPath();
+        isomap.constructDeeDimensionalEmbedding();
         new Out().put(isomap.getPoints().x);
         new Out().put(isomap.getPoints().y);
         isomap.getPoints().applyCentering();
-        isomap.getPoints().openVisualization();
+        isomap.getPoints().openVisualization(edges);
     }
     
     public static void main(String[] args) {
