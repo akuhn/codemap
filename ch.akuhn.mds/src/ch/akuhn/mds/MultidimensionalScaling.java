@@ -44,9 +44,9 @@ public class MultidimensionalScaling {
     }
 
     public double[][] run() {
-        if (fdistances.value.length == 0) return new double[0][2];
+        if (fdistances.values.length == 0) return new double[0][2];
         Mds mds = new Mds(fdistances, fInitialConfiguration, Function.IDENTITY, Function.IDENTITY, Function.IDENTITY);
-        int len = fdistances.value.length;
+        int len = fdistances.values.length;
         fdistances = null;
         fInitialConfiguration = null;
         loop: while (fiterations > 0) {

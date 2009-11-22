@@ -10,6 +10,15 @@ public abstract class Function {
         }
         
     };
+    
+    public static final Function SQUARE = new Function() {
+
+        @Override
+        public double apply(double d) {
+            return d * d;
+        }
+        
+    };;
 
     public abstract double apply(double d);
 

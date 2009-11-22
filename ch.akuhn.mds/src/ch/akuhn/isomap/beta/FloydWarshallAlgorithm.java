@@ -1,4 +1,4 @@
-package gosh.from.scratch;
+package ch.akuhn.isomap.beta;
 
 public class FloydWarshallAlgorithm {
 

@@ -1,4 +1,4 @@
-package gosh.from.scratch;
+package ch.akuhn.isomap.beta;
 
 public class SwissRoll {
 
@@ -26,7 +26,7 @@ public class SwissRoll {
         return new DoubleMatrix(dist);
     }
 
-    private double dist(int i, int j) {
+    public double dist(int i, int j) {
         return Math.sqrt(
                 (x[i] - x[j]) * (x[i] - x[j]) +
                 (y[i] - y[j]) * (y[i] - y[j]) +

@@ -1,4 +1,4 @@
-package gosh.from.scratch;
+package ch.akuhn.isomap.beta;
 
 import java.util.ArrayList;
 import java.util.List;

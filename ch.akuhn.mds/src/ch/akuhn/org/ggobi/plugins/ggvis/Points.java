@@ -2,6 +2,8 @@ package ch.akuhn.org.ggobi.plugins.ggvis;
 
 import java.util.Arrays;
 
+import ch.akuhn.matrix.Vector;
+
 
 public class Points {
 
@@ -79,6 +81,15 @@ public class Points {
         dsum += (x0 - mean[0]) * (x0 - mean[0]);
         dsum += (y0 - mean[1]) * (y0 - mean[1]);
         return(dsum);
+    }
+
+    public void openVisualization() {
+        new PointsDatavis(this).open();
+    }
+
+    public void applyCentering() {
+        new Vector(x).applyCentering();
+        new Vector(y).applyCentering();
     }
 
 }

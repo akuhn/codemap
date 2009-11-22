@@ -1,4 +1,4 @@
-package gosh.from.scratch;
+package ch.akuhn.isomap.beta;
 
 /** Node in an unweighted, undirected graph.
  *
