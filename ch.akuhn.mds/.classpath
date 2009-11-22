@@ -6,7 +6,9 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ch.akuhn.util"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ch.akuhn.hapax"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/linalg"/>
 	<classpathentry kind="con" path="ch.unibe.jexample.JEXAMPLE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/arpack-combo-0.1.jar"/>
+	<classpathentry kind="lib" path="lib/mtj-0.9.12.jar"/>
+	<classpathentry kind="lib" path="lib/netlib-java-0.9.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
