@@ -3,6 +3,8 @@ package ch.akuhn.isomap.beta;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.akuhn.matrix.SymetricMatrix;
+
 /** Unweighted, undirected graph.
  * 
  * @author Adrian Kuhn
@@ -29,5 +31,20 @@ public class Graph {
             nodes[n].edges = list.toArray(new Node[list.size()]);
         }
     }
+    
+    public Graph(SymetricMatrix dist) {
+        this(dist.columnCount());
+        for (int n = 0; n < nodes.length; n++) {
+            List<Node> list = new ArrayList<Node>();
+            for (int m = 0; m < nodes.length; m++) {
+                double d = dist.get(n,m);
+                if (Double.isInfinite(d)) continue;
+                if (Double.isNaN(d)) continue;
+                list.add(nodes[m]);
+            }
+            nodes[n].edges = list.toArray(new Node[list.size()]);
+        }
+    }
+    
     
 }

@@ -42,7 +42,7 @@ public class Eigenvalues {
         String which = "LA";
         doubleW tol = new doubleW(0); // uses machine precision
         double[] resid = new double[n];
-        int ncv = nev * 10; // rule of thumb would be nev * 2
+        int ncv = nev * 2; // rule of thumb would be nev * 2
         double[] v = new double[n * ncv];
         int[] iparam = new int[11];
         {

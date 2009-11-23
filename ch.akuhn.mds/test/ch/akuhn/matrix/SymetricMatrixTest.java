@@ -8,7 +8,7 @@ public class SymetricMatrixTest {
 
     @Test
     public void shouldMultiplyMatrixWithVector() {
-        SymetricMatrix m = new SymetricMatrix(new double[][] {{},{1},{2,3},{4,5,6}});
+        SymetricMatrix m = SymetricMatrix.fromJagged(new double[][] {{},{1},{2,3},{4,5,6}});
         double[] v = new double[] { 10, 20, 30, 40 };
         double[] w = m.mult(v);
         assertEquals(w[0], 0*10+1*20+2*30+4*40,Double.MIN_VALUE);

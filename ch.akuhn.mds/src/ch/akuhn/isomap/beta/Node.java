@@ -12,5 +12,10 @@ public class Node {
     public Node(int index) {
         this.index = index;
     }
+
+    @Override
+    public String toString() {
+        return "#"+index;
+    }
     
 }

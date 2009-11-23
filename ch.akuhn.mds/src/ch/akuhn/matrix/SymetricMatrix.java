@@ -20,14 +20,14 @@ public class SymetricMatrix {
         for (int n = 0; n < values.length; n++) values[n] = new double[n];
     }
 
-    public SymetricMatrix(double[][] matrix) {
-        values = new double[matrix.length][];
-        for (int n = 0; n < values.length; n++) {
-            assert matrix[n].length == n;
-            values[n] = Arrays.copyOf(matrix[n], n);
-        }
+    private SymetricMatrix(double[][] values) {
+        this.values = values;
     }
 
+    public static SymetricMatrix fromJagged(double[][] jagged) {
+        return new SymetricMatrix(jagged).clone();
+    }
+    
     public void apply(Function f) {
         for (double[] row: values) {
             for (int n = 0; n < row.length; n++) {
@@ -158,6 +158,16 @@ public class SymetricMatrix {
             }
         }
         return mult;
+    }
+    
+    @Override
+    public SymetricMatrix clone() {
+        double[][] clone = new double[values.length][];
+        for (int i = 0; i < clone.length; i++) {
+            assert values[i].length == i;
+            clone[i] = values[i].clone();
+        }
+        return new SymetricMatrix(clone);
     }
     
 }

@@ -2,10 +2,13 @@ package ch.akuhn.isomap;
 
 import java.util.Arrays;
 
+import ch.akuhn.isomap.beta.DijkstraAlgorithm2;
+import ch.akuhn.isomap.beta.Graph;
 import ch.akuhn.matrix.SymetricMatrix;
 import ch.akuhn.matrix.Function;
 import ch.akuhn.org.ggobi.plugins.ggvis.Points;
 import ch.akuhn.org.netlib.arpack.Eigenvalues;
+import ch.akuhn.util.Stopwatch;
 
 /** Maps n-dimensional data to 2 dimensions.
  *<P> 
@@ -93,6 +96,11 @@ public abstract class Isomap {
      *
      */
     public void computeShortestPath() {
+        
+        SymetricMatrix dist = graph.clone();
+        
+        Stopwatch.p();
+        
         for (int k = 0; k < n; k++) {
             for (int i = 0; i < n; i++) {
                 double path_i_k = graph.get(i,k);
@@ -101,6 +109,21 @@ public abstract class Isomap {
                 }
             }
         }
+
+        Stopwatch.p("Floyd-Warschal");
+        
+        Graph g = new Graph(dist);
+        DijkstraAlgorithm2 dijsktra = new DijkstraAlgorithm2();
+        for (int i = 0; i < n; i++) {
+            double[] cost = dijsktra.apply(g, g.nodes[i], dist);
+            for (int j = 0; j < n; j++) {
+                assert (Double.isInfinite(graph.get(i,j)) && Double.isInfinite(cost[j])) ||
+                    (graph.get(i,j) - cost[j]) < 1e-6 : i + "," + j + " : " + graph.get(i,j) +" vs "+ cost[j];
+            }
+        }
+ 
+        Stopwatch.p("Dijkstra with queue");
+        
     }
     
     public boolean[][] getEdges() {

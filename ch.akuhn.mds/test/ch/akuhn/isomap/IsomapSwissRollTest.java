@@ -4,12 +4,16 @@ import org.junit.Test;
 
 import ch.akuhn.isomap.beta.SwissRoll;
 import ch.akuhn.util.Out;
+import ch.akuhn.util.Stopwatch;
 
 public class IsomapSwissRollTest {
 
     @Test
-    public void shouldEmbedSwissroll() {
-        Isomap isomap = new Isomap(200) {
+    public void shouldEmbedSwissroll() throws InterruptedException {
+        Stopwatch.p();
+        Thread.sleep(500);
+        Stopwatch.p();
+        Isomap isomap = new Isomap(1500) {
             { k = 6; }
             SwissRoll swiss = new SwissRoll(n);
             @Override
@@ -21,13 +25,13 @@ public class IsomapSwissRollTest {
         boolean[][] edges = isomap.getEdges();
         isomap.computeShortestPath();
         isomap.constructDeeDimensionalEmbedding();
-        new Out().put(isomap.getPoints().x);
-        new Out().put(isomap.getPoints().y);
+        //new Out().put(isomap.getPoints().x);
+        //new Out().put(isomap.getPoints().y);
         isomap.getPoints().applyCentering();
         isomap.getPoints().openVisualization(edges);
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         new IsomapSwissRollTest().shouldEmbedSwissroll();
     }
     
