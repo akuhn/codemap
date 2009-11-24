@@ -4,12 +4,15 @@ import static org.junit.Assert.*;
 import static ch.deif.meander.util.KdTree.squareDist;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 
 import ch.deif.meander.Location;
 import ch.deif.meander.Point;
+import ch.deif.meander.main.QuickNDirtyMap;
 import ch.deif.meander.util.KdTree.KdTreeNode;
 
 public class KdTreeTest {
@@ -24,15 +27,8 @@ public class KdTreeTest {
     
     @Test
     public void testAdvancedTree() {
-        KdTree kdTree = makeTree(new int[][]{{100,100}, {100,300}, {200,200}, {210, 210}, {400,150}, {450,300}});
-        
-        Location nn = kdTree.getNearestNeighbor(new int[]{190, 210});        
-        assertEquals(200, nn.px);
-        assertEquals(200, nn.py);
-        
-        nn = kdTree.getNearestNeighbor(new int[]{190, 190});        
-        assertEquals(200, nn.px);
-        assertEquals(200, nn.py);        
+        final HashMap<Point, Integer> points = new HashMap<Point, Integer>();
+        QuickNDirtyMap.addDebugPoints(points);
     }
     
     @Test
@@ -40,8 +36,8 @@ public class KdTreeTest {
         KdTree kdTree = makeTree(new int[][]{{2,3}, {5,4}, {9,6}, {4,7}, {8,1}, {7,2}});
         KdTreeNode root = kdTree.getRoot();
         assertArrayEquals(new int[]{7, 2}, root.getPosition());
-        assertArrayEquals(new int[]{5, 4}, root.getLeft().getPosition());
-        assertArrayEquals(new int[]{9, 6}, root.getRight().getPosition());
+        assertArrayEquals(new int[]{5, 4}, root.getLower().getPosition());
+        assertArrayEquals(new int[]{9, 6}, root.getHigher().getPosition());
         
         Location nn = kdTree.getNearestNeighbor(new int[]{2, 2});
         assertEquals(2, nn.px);

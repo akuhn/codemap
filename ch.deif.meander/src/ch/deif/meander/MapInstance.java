@@ -276,5 +276,9 @@ public class MapInstance {
     public float[][] getDEM() {
         return get(DEMAlgorithm.class);
     }
+    
+    public KdTree getKdTree() {
+        return kdTree;
+    }
 
 }
