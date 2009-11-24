@@ -174,7 +174,7 @@ public class MapView extends ViewPart {
         viewMenu.add(new Separator());
         viewMenu.add(new SaveAsPNGAction());
         viewMenu.add(new ReloadMapAction());     
-        viewMenu.add(new ShowTestsAction());
+//        viewMenu.add(new ShowTestsAction());
 //        viewMenu.add(new DebugLocationsAction());
         
         IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CodemapCore.PLUGIN_ID, ExtensionPoints.ACTION_BAR);
