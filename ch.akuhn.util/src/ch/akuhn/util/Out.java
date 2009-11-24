@@ -67,7 +67,10 @@ public class Out extends PrintOn {
     }
 
     private Out internalPrint(Object object) {
-        if (hasToString(object)) {
+        if (object == null) {
+            this.append("null");
+        }
+        else if (hasToString(object)) {
             this.print(object);
         }
         else if (object.getClass().isArray()) {
