@@ -3,7 +3,7 @@ package ch.akuhn.mds;
 import java.io.PrintStream;
 import java.util.EventListener;
 
-import ch.akuhn.matrix.DenseMatrix;
+import ch.akuhn.isomap.Isomap;
 import ch.akuhn.matrix.Function;
 import ch.akuhn.matrix.SymetricMatrix;
 import ch.akuhn.org.ggobi.plugins.ggvis.Mds;
@@ -29,7 +29,7 @@ public class MultidimensionalScaling {
     }
 
     public MultidimensionalScaling dissimilarities(double[][] matrix) {
-        fdistances = new SymetricMatrix(matrix);
+        fdistances = SymetricMatrix.fromJagged(matrix);
         return this;
     }
 
@@ -71,7 +71,7 @@ public class MultidimensionalScaling {
     }
 
     public MultidimensionalScaling similarities(double[][] matrix) {
-        SymetricMatrix d = new SymetricMatrix(matrix);
+        SymetricMatrix d = SymetricMatrix.fromJagged(matrix);
         d.apply(Function.COSINE_TO_DISSIMILARITY);
         fdistances = d;
         return this;
@@ -91,9 +91,9 @@ public class MultidimensionalScaling {
         public void update(Mds mds);
     }
 
+    @Deprecated
     public void applyIsomapWithKayNearestNeighbors(int k) {
-        double[][] knn = new Distances(fdistances.asDenseMatrix().value).kayNearestNeighbours(k);
-        fdistances = new DenseMatrix(new AllPaths(knn).undirected().run().path).asSymetricMatrix();
+        throw new Error("should use new " + Isomap.class);
     }
 
 }

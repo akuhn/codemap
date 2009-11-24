@@ -1,8 +1,5 @@
 package ch.akuhn.codemap;
 
-import org.codemap.graph.AllPaths;
-import org.codemap.graph.Distances;
-
 import ch.akuhn.hapax.CorpusBuilder;
 import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
@@ -31,11 +28,12 @@ public class Codemap {
         distance = new DenseMatrix(lsi.documentCorrelation().asArray());
         //euclid = new DenseMatrix(lsi.euclidianDistance().asArray());
         distance.apply(Function.COSINE_TO_DISSIMILARITY);
-        Stopwatch.p();
-        knn = new Distances(distance.value).kayNearestNeighbours(3, 0.0);
-        Stopwatch.p();
-        isomapDist = new DenseMatrix(new AllPaths(knn).undirected().run().undirected().path);
-        Stopwatch.p();
+//        Stopwatch.p();
+//        knn = new Distances(distance.value).kayNearestNeighbours(3, 0.0);
+//        Stopwatch.p();
+//        isomapDist = new DenseMatrix(new AllPaths(knn).undirected().run().undirected().path);
+//        Stopwatch.p();
+        throw new Error("should fix this script");
     }
     
     public Codemap applyEuclidianDistance() {
