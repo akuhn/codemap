@@ -101,7 +101,7 @@ public class KdTree {
             return null;
         }
         
-        public KdTreeNode getOtherChild() {
+        public KdTreeNode getSibling() {
             if (parent == null) return null;
             return parent.getOtherChild(this);
         }        
@@ -113,10 +113,10 @@ public class KdTree {
     }
 
     public Location getNearestNeighbor(int[] xy) {
-        return getNearestNeighbor(xy, root, true).getLocation();
+        return getNearestNeighbor(xy, root, null).getLocation();
     }
 
-    private KdTreeNode getNearestNeighbor(int[] xy, KdTreeNode searchRoot, boolean checkSibling) {
+    private KdTreeNode getNearestNeighbor(int[] xy, KdTreeNode searchRoot, KdTreeNode rootSibling) {
         //      @see http://en.wikipedia.org/wiki/Kd-tree
         //        
         //      1. Starting with the root node, the algorithm moves down the tree recursively, in the same way that it would if the search point were being inserted (i.e. it goes right or left depending on whether the point is greater or less than the current node in the split dimension).
@@ -172,11 +172,11 @@ public class KdTree {
             //          if (true) {
             double splitDistance = pow(traced.axis.get(traced.getPosition()) - traced.axis.get(xy), 2);
             log.print("splitdistance: ", splitDistance);
-            if ( bestDistance >= splitDistance && checkSibling) {
+            if ( bestDistance >= splitDistance) {
                 log.print("\ndescending into other tree\n", "***********************************");
-                KdTreeNode otherChild = traced.getOtherChild();
-                if (otherChild != null){
-                    KdTreeNode leafNeighbor = getNearestNeighbor(xy, otherChild, false);
+                KdTreeNode sibling = traced.getSibling();
+                if (sibling != null && (rootSibling == null || !rootSibling.equals(sibling))){
+                    KdTreeNode leafNeighbor = getNearestNeighbor(xy, sibling, traced);
                     double leafDistance = squareDist(xy, leafNeighbor.location);
                     if (leafDistance < bestDistance) {
                         bestDistance = leafDistance;
