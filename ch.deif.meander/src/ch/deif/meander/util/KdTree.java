@@ -116,7 +116,7 @@ public class KdTree {
         return getNearestNeighbor(xy, root, null).getLocation();
     }
 
-    private KdTreeNode getNearestNeighbor(int[] xy, KdTreeNode searchRoot, KdTreeNode rootSibling) {
+    private KdTreeNode getNearestNeighbor(int[] xy, KdTreeNode searchRoot, KdTreeNode forSibling) {
         //      @see http://en.wikipedia.org/wiki/Kd-tree
         //        
         //      1. Starting with the root node, the algorithm moves down the tree recursively, in the same way that it would if the search point were being inserted (i.e. it goes right or left depending on whether the point is greater or less than the current node in the split dimension).
@@ -175,7 +175,7 @@ public class KdTree {
             if ( bestDistance >= splitDistance) {
                 log.print("\ndescending into other tree\n", "***********************************");
                 KdTreeNode sibling = traced.getSibling();
-                if (sibling != null && (rootSibling == null || !rootSibling.equals(sibling))){
+                if (sibling != null && (forSibling == null || !forSibling.equals(sibling))){
                     KdTreeNode leafNeighbor = getNearestNeighbor(xy, sibling, traced);
                     double leafDistance = squareDist(xy, leafNeighbor.location);
                     if (leafDistance < bestDistance) {
