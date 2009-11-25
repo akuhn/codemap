@@ -13,7 +13,7 @@ public class IsomapSwissRollTest {
         Stopwatch.p();
         Thread.sleep(500);
         Stopwatch.p();
-        Isomap isomap = new Isomap(1500) {
+        Isomap isomap = new Isomap(244) {
             { k = 6; }
             SwissRoll swiss = new SwissRoll(n);
             @Override

@@ -29,7 +29,7 @@ public class MultidimensionalScaling {
     }
 
     public MultidimensionalScaling dissimilarities(double[][] matrix) {
-        fdistances = SymetricMatrix.fromJagged(matrix);
+        fdistances = SymetricMatrix.fromSquare(matrix);
         return this;
     }
 
@@ -71,7 +71,7 @@ public class MultidimensionalScaling {
     }
 
     public MultidimensionalScaling similarities(double[][] matrix) {
-        SymetricMatrix d = SymetricMatrix.fromJagged(matrix);
+        SymetricMatrix d = SymetricMatrix.fromSquare(matrix);
         d.apply(Function.COSINE_TO_DISSIMILARITY);
         fdistances = d;
         return this;

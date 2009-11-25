@@ -51,7 +51,7 @@ public class DenseMatrix {
     }
 
     public SymetricMatrix asSymetricMatrix() {
-        return SymetricMatrix.fromJagged(value);
+        return SymetricMatrix.fromSquare(value);
     }
     
     

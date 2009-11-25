@@ -169,5 +169,15 @@ public class SymetricMatrix {
         }
         return new SymetricMatrix(clone);
     }
+
+    public static SymetricMatrix fromSquare(double[][] values) {
+        // drops upper triangle!
+        double[][] clone = new double[values.length][];
+        for (int i = 0; i < clone.length; i++) {
+            assert values[i].length == values.length;
+            clone[i] = values[i].clone();
+        }
+        return new SymetricMatrix(clone);
+    }
     
 }
