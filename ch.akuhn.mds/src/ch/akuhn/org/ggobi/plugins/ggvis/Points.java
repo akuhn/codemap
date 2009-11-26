@@ -92,4 +92,8 @@ public class Points {
         new Vector(y).applyCentering();
     }
 
+	public int size() {
+		return x.length;
+	}
+
 }

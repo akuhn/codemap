@@ -177,9 +177,15 @@ public abstract class Isomap {
     }
 
     public void run() {
-        this.constructNeighborhoodGraph();
-        this.computeShortestPathWithDijkstra();
-        this.constructDeeDimensionalEmbedding();
+    	if (n > 1) {
+    		this.constructNeighborhoodGraph();
+    		this.computeShortestPathWithDijkstra();
+    		this.constructDeeDimensionalEmbedding();
+    	}
+    	else {
+    		points = new Points(n);
+    	}
+    	graph = null;
     }
     
 }
