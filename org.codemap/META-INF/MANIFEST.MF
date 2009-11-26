@@ -19,6 +19,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Adrian Kuhn and David Erni
 Export-Package: org.codemap,
  org.codemap.mapview,
+ org.codemap.mapview.action,
  org.codemap.resources,
  org.codemap.util
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
