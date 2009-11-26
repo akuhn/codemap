@@ -2,4 +2,5 @@
 
 Please find more information in the `/Readme` folder.
 
--- akuhn and deif, Nov 26, 2009macduffee:Desktop akuhn$ 
+-- akuhn and deif, Nov 26, 2009
+
