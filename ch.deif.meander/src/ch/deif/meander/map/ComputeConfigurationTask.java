@@ -14,7 +14,7 @@ public class ComputeConfigurationTask extends TaskValue<Configuration> {
     public Configuration previousConfiguration;
     
     public ComputeConfigurationTask(Value<LatentSemanticIndex> index) {
-        super("Multidimensional scaling...", index);
+        super("Computing map layout...", index);
         this.previousConfiguration = new Configuration();
     }
 
