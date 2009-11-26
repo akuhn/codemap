@@ -9,3 +9,7 @@ Export-Package: ch.akuhn.isomap,
  ch.akuhn.mds,
  ch.akuhn.org.ggobi.plugins.ggvis
 Bundle-Vendor: Adrian Kuhn
+Bundle-ClassPath: lib/arpack-combo-0.1.jar,
+ lib/mtj-0.9.12.jar,
+ lib/netlib-java-0.9.1.jar,
+ .
