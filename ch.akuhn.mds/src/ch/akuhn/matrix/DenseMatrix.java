@@ -53,6 +53,4 @@ public class DenseMatrix {
     public SymetricMatrix asSymetricMatrix() {
         return SymetricMatrix.fromSquare(value);
     }
-    
-    
 }
