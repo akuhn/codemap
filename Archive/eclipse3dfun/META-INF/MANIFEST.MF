@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: 3dfuneclipse
+Bundle-SymbolicName: eclipse3dfun; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: eclipse3dfun.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.lwjgl;bundle-version="2.1.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
