@@ -3,8 +3,10 @@ package ch.deif.meander.internal;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
+import ch.akuhn.hapax.linalg.Matrix;
 import ch.akuhn.isomap.Isomap;
 import ch.akuhn.mds.MultidimensionalScaling;
+import ch.akuhn.org.ggobi.plugins.ggvis.Points;
 
 public class LayoutAlgorithm {
 
@@ -18,7 +20,7 @@ public class LayoutAlgorithm {
         return new LayoutAlgorithm().compute(index, x, y);
     }
 
-    private LayoutAlgorithm compute(LatentSemanticIndex index, double[] x0, double[] y0) {
+    private LayoutAlgorithm compute(final LatentSemanticIndex index, double[] x0, double[] y0) {
         int len = index.documentCount();
         if (len == 0) {
             x = new double[] {};
@@ -28,15 +30,22 @@ public class LayoutAlgorithm {
         assert x0.length == len;
         assert y0.length == len;
         
-        MultidimensionalScaling mds = new MultidimensionalScaling();
-        mds.similarities(index.documentCorrelation().asArray());
-        // mds.applyIsomapWithKayNearestNeighbors(3);
-        if (x0 != null && y0 != null) mds.initialConfiguration(x0, y0);
-        mds.iterations(max(50, 1000000 / len));
-        double[][] result = mds.run();
-        assert result.length == 2 && result[0].length == len && result[0].length == len;
-        x = result[0];
-        y = result[1];
+        Isomap isomap = new Isomap(len) {
+            Matrix corr = index.documentCorrelation();
+            {
+                // number of neighbors
+                k=3;
+            }
+            
+            @Override
+            protected double dist(int i, int j) {
+                return corr.get(i, j);
+            }
+        };
+        isomap.run();
+        Points points = isomap.getPoints();
+        x = points.x;
+        y = points.y;
         return this;
     }
 
