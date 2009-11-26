@@ -151,13 +151,11 @@ public class KdTree {
         // 2)
         double bestDistance = squareDist(xy, current.location);
         KdTreeNode bestNeighbor = current;
-        int traceindex = trace.size()-1;
         // 3)
-        while(traceindex >= 0) {
-            KdTreeNode traced = trace.get(traceindex);
+        Collections.reverse(trace);
+        for(KdTreeNode traced: trace) {
             log.print();
             log.print("node from stack: ", traced);
-            traceindex -= 1;
             // 3.1)
             double currentDistance = squareDist(xy, traced.location);
             if (currentDistance < bestDistance) {
@@ -170,9 +168,9 @@ public class KdTree {
             // 3.2)
             // 3.2.1)
             //          if (true) {
-            double splitDistance = pow(traced.axis.get(traced.getPosition()) - traced.axis.get(xy), 2);
-            log.print("splitdistance: ", splitDistance);
-            if ( bestDistance >= splitDistance) {
+            double borderDistance = pow(traced.axis.get(traced.getPosition()) - traced.axis.get(xy), 2);
+            log.print("splitdistance: ", borderDistance);
+            if (bestDistance >= borderDistance) {
                 log.print("\ndescending into other tree\n", "***********************************");
                 KdTreeNode sibling = traced.getSibling();
                 if (sibling != null && (forSibling == null || !forSibling.equals(sibling))){

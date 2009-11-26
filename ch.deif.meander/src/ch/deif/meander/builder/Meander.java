@@ -8,7 +8,7 @@ import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.Point;
-import ch.deif.meander.internal.MDS;
+import ch.deif.meander.internal.LayoutAlgorithm;
 
 /** Not thread-safe.
  * 
@@ -42,7 +42,7 @@ public class Meander {
                 y[n] = p.y;
                 n++;
             }
-            MDS mds = MDS.fromCorrelationMatrix(lsi, x, y);
+            LayoutAlgorithm mds = LayoutAlgorithm.fromCorrelationMatrix(lsi, x, y);
             mds.normalize();
             Collection<Point> locations = new ArrayList<Point>();
             int index = 0;

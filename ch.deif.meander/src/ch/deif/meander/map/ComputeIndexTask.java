@@ -23,12 +23,12 @@ public class ComputeIndexTask extends TaskValue<LatentSemanticIndex> {
         Collection<String> elements = args.nextOrFail();
         monitor.begin(elements.size());
         CorpusBuilder builder = Hapax.newCorpus()
-                .ignoreCase()
-                .useCamelCaseScanner()
-                .rejectRareTerms()
-                .rejectStopwords()
-                .latentDimensions(25)
-                .useTFIDF();
+            .ignoreCase()
+            .useCamelCaseScanner()
+            .rejectRareTerms()
+            .rejectStopwords()
+            .latentDimensions(25)
+            .useTFIDF();
         for (String path: elements) {
             parseElement(builder, path);
             monitor.worked(1);
@@ -36,12 +36,11 @@ public class ComputeIndexTask extends TaskValue<LatentSemanticIndex> {
         return builder.makeTDM().createIndex();
     }
 
-	protected void parseElement(CorpusBuilder builder, String path) {
-		try {
-			builder.addDocument(path, new FileInputStream(path));
-		} catch (FileNotFoundException ex) {
-			ex.printStackTrace();
-		}
-	}
-    
+    protected void parseElement(CorpusBuilder builder, String path) {
+        try {
+            builder.addDocument(path, new FileInputStream(path));
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
 }
