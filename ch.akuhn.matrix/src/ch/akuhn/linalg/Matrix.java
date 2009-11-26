@@ -1,4 +1,4 @@
-package ch.akuhn.hapax.linalg;
+package ch.akuhn.linalg;
 
 import java.io.DataOutput;
 import java.io.DataOutputStream;
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import ch.akuhn.hapax.linalg.Vector.Entry;
+import ch.akuhn.linalg.Vector.Entry;
 import ch.akuhn.util.Files;
 import ch.akuhn.util.PrintOn;
 import ch.akuhn.util.Throw;

@@ -1,8 +1,8 @@
-package ch.akuhn.hapax.linalg;
+package ch.akuhn.linalg;
 
-import org.codemap.svdlib.Svdlib;
-import org.codemap.svdlib.Svdlib.SMat;
-import org.codemap.svdlib.Svdlib.SVDRec;
+import ch.akuhn.edu.mit.tedlab.Svdlib;
+import ch.akuhn.edu.mit.tedlab.SMat;
+import ch.akuhn.edu.mit.tedlab.SVDRec;
 
 /** Singular value decomposition of matrix A.
  *<P> 
@@ -148,7 +148,7 @@ public class SVD {
     }
 
     /*default*/ static final SMat makeSMat(SparseMatrix matrix) {
-        SMat S = new Svdlib().new SMat(matrix.rowCount(), matrix.columnCount(), matrix.used());
+        SMat S = new SMat(matrix.rowCount(), matrix.columnCount(), matrix.used());
         for (int j = 0, n = 0; j < matrix.columnCount(); j++) {
             S.pointr[j] = n;
             for (int i = 0; i < matrix.rowCount(); i++)

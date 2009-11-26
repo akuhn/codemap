@@ -1,4 +1,4 @@
-package ch.akuhn.hapax.linalg;
+package ch.akuhn.linalg;
 
 import static ch.akuhn.foreach.For.range;
 import static ch.akuhn.foreach.For.withIndex;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import ch.akuhn.foreach.Each;
-import ch.akuhn.hapax.linalg.Vector.Entry;
+import ch.akuhn.linalg.Vector.Entry;
 
 
 public class SparseMatrix extends Matrix {

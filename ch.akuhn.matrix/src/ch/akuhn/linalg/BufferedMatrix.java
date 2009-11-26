@@ -1,4 +1,4 @@
-package ch.akuhn.hapax.linalg;
+package ch.akuhn.linalg;
 
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -1,6 +1,6 @@
-package ch.akuhn.hapax.linalg;
+package ch.akuhn.linalg;
 
-import ch.akuhn.hapax.linalg.Vector.Entry;
+import ch.akuhn.linalg.Vector.Entry;
 import ch.akuhn.hapax.util.Resource;
 import ch.akuhn.hapax.util.ResourceStream;
 import ch.akuhn.hapax.util.RuntimeIOException;

@@ -1,4 +1,4 @@
-package ch.akuhn.hapax.linalg;
+package ch.akuhn.linalg;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
