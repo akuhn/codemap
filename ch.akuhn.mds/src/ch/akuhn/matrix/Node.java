@@ -1,4 +1,4 @@
-package ch.akuhn.isomap.beta;
+package ch.akuhn.matrix;
 
 /** Node in an unweighted, undirected graph.
  *

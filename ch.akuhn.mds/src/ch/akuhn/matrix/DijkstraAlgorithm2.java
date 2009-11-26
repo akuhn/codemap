@@ -1,8 +1,7 @@
-package ch.akuhn.isomap.beta;
+package ch.akuhn.matrix;
 
 import java.util.Arrays;
 
-import ch.akuhn.matrix.SymetricMatrix;
 import ch.akuhn.util.Out;
 
 public class DijkstraAlgorithm2 {

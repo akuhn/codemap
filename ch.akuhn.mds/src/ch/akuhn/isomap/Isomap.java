@@ -2,15 +2,14 @@ package ch.akuhn.isomap;
 
 import java.util.Arrays;
 
-import ch.akuhn.isomap.beta.DijkstraAlgorithm2;
-import ch.akuhn.isomap.beta.Graph;
+import ch.akuhn.matrix.DijkstraAlgorithm2;
+import ch.akuhn.matrix.Graph;
 import ch.akuhn.matrix.SymetricMatrix;
 import ch.akuhn.matrix.Function;
 import ch.akuhn.org.ggobi.plugins.ggvis.Points;
 import ch.akuhn.org.netlib.arpack.Eigenvalues;
-import ch.akuhn.util.Stopwatch;
 
-/** Maps n-dimensional data to 2 dimensions.
+/** Embeds n-dimensional data in two dimensions.
  *<P> 
  * The Isomap algorithm takes as input the distances d_x(i,j) between all
  * pairs i, j from N data points in the high-dimensional input space X,
@@ -18,8 +17,9 @@ import ch.akuhn.util.Stopwatch;
  * metric. The algorithm outputs coordinate vectors y_i in a d-dimensional
  * Euclidean space Y that best represent the intrinsic geometry of the data.
  * The only free parameter (e or k) appears in Step 1.
- *<P>
- *<P> 
+ *
+ * @see http://waldron.stanford.edu/~isomap/
+ * @see http://www.sciencemag.org/cgi/content/full/290/5500/2319
  *  
  */
 public abstract class Isomap {
@@ -95,12 +95,7 @@ public abstract class Isomap {
      * contain the shortest path distances between all pairs of points in G.
      *
      */
-    public void computeShortestPath() {
-        
-        SymetricMatrix dist = graph.clone();
-        
-        Stopwatch.p();
-        
+    public void computeShortestPathWithBruteForce() {
         for (int k = 0; k < n; k++) {
             for (int i = 0; i < n; i++) {
                 double path_i_k = graph.get(i,k);
@@ -109,21 +104,19 @@ public abstract class Isomap {
                 }
             }
         }
-
-        Stopwatch.p("Floyd-Warschal");
-        
-        Graph g = new Graph(dist);
+    }
+    
+    public void computeShortestPathWithDijkstra() {
+        Graph g = new Graph(graph);
         DijkstraAlgorithm2 dijsktra = new DijkstraAlgorithm2();
         for (int i = 0; i < n; i++) {
-            double[] cost = dijsktra.apply(g, g.nodes[i], dist);
-            for (int j = 0; j < n; j++) {
-                assert (Double.isInfinite(graph.get(i,j)) && Double.isInfinite(cost[j])) ||
-                    (graph.get(i,j) - cost[j]) < 1e-6 : i + "," + j + " : " + graph.get(i,j) +" vs "+ cost[j];
-            }
+            /* NB: it is safe to update graph and use it for distances
+             * in the same time since we only lookup the distances of
+             * directly connected nodes, which are not updated.
+             */
+            double[] cost = dijsktra.apply(g, g.nodes[i], graph);
+            for (int j = 0; j < n; j++) graph.put(i,j, cost[j]);
         }
- 
-        Stopwatch.p("Dijkstra with queue");
-        
     }
     
     public boolean[][] getEdges() {
@@ -185,7 +178,7 @@ public abstract class Isomap {
 
     public void run() {
         this.constructNeighborhoodGraph();
-        this.computeShortestPath();
+        this.computeShortestPathWithDijkstra();
         this.constructDeeDimensionalEmbedding();
     }
     

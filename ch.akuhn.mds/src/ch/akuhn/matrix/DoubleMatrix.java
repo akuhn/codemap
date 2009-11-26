@@ -1,4 +1,4 @@
-package ch.akuhn.isomap.beta;
+package ch.akuhn.matrix;
 import java.util.Arrays;
 
 public class DoubleMatrix {

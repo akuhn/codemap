@@ -1,9 +1,8 @@
-package ch.akuhn.isomap.beta;
+package ch.akuhn.matrix;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.akuhn.matrix.SymetricMatrix;
 
 /** Unweighted, undirected graph.
  * 

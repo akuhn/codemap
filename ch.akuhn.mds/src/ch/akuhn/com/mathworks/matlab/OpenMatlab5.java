@@ -8,7 +8,8 @@ import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 
-/**
+/** <b>Partial implementation!</b>
+ * <P>
  * In MATLAB Version 5, a MAT-file is made up of a 128-byte header followed by
  * one or more data elements. Each data element is composed of an 8-byte tag
  * followed by the data in the element. The tag specifies the number of bytes in

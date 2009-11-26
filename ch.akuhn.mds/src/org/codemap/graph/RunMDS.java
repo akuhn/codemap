@@ -1,7 +1,7 @@
 package org.codemap.graph;
 
-import ch.akuhn.isomap.beta.DoubleMatrix;
-import ch.akuhn.isomap.beta.SwissRoll;
+import ch.akuhn.isomap.SwissRoll;
+import ch.akuhn.matrix.DoubleMatrix;
 import ch.akuhn.mds.MultidimensionalScaling;
 import ch.akuhn.org.ggobi.plugins.ggvis.Viz;
 import ch.akuhn.util.Stopwatch;

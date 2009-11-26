@@ -2,7 +2,6 @@ package ch.akuhn.isomap;
 
 import org.junit.Test;
 
-import ch.akuhn.isomap.beta.SwissRoll;
 import ch.akuhn.util.Out;
 import ch.akuhn.util.Stopwatch;
 
@@ -10,10 +9,10 @@ public class IsomapSwissRollTest {
 
     @Test
     public void shouldEmbedSwissroll() throws InterruptedException {
+        //Stopwatch.p();
+        //Thread.sleep(500);
         Stopwatch.p();
-        Thread.sleep(500);
-        Stopwatch.p();
-        Isomap isomap = new Isomap(244) {
+        Isomap isomap = new Isomap(500) {
             { k = 6; }
             SwissRoll swiss = new SwissRoll(n);
             @Override
@@ -23,7 +22,7 @@ public class IsomapSwissRollTest {
         };
         isomap.constructNeighborhoodGraph();
         boolean[][] edges = isomap.getEdges();
-        isomap.computeShortestPath();
+        isomap.computeShortestPathWithDijkstra();
         isomap.constructDeeDimensionalEmbedding();
         //new Out().put(isomap.getPoints().x);
         //new Out().put(isomap.getPoints().y);

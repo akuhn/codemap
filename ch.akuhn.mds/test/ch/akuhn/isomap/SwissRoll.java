@@ -1,4 +1,6 @@
-package ch.akuhn.isomap.beta;
+package ch.akuhn.isomap;
+
+import ch.akuhn.matrix.DoubleMatrix;
 
 public class SwissRoll {
 
