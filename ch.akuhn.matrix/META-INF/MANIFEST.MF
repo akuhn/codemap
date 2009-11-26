@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ch.akuhn.mds
-Bundle-SymbolicName: ch.akuhn.mds
+Bundle-SymbolicName: ch.akuhn.matrix
 Bundle-Version: 0.7.894.qualifier
 Require-Bundle: org.eclipse.swt;bundle-version="3.5.0",
  ch.akuhn.util;bundle-version="2.1.277"
