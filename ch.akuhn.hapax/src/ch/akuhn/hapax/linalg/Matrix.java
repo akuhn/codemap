@@ -64,7 +64,7 @@ public abstract class Matrix {
     public int size() {
     	return rowCount() * columnCount();
     }
-
+    
     public abstract double get(int row, int column);
 
     public abstract double put(int row, int column, double value);

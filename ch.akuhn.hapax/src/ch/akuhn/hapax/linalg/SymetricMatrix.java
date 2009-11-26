@@ -2,9 +2,11 @@ package ch.akuhn.hapax.linalg;
 
 import static ch.akuhn.foreach.For.range;
 
+import java.util.Arrays;
+
 public class SymetricMatrix extends Matrix {
 
-    protected double[][] values;
+    public double[][] values;
 
     public SymetricMatrix(int size) {
         values = new double[size][];
@@ -35,6 +37,10 @@ public class SymetricMatrix extends Matrix {
     @Override
     public int used() {
         throw new UnsupportedOperationException();
+    }
+
+    public void fill(double constant) {
+        for (double[] row: values) Arrays.fill(row, constant);
     }
 
 }

@@ -150,6 +150,16 @@ public class LatentSemanticIndex implements Serializable {
         }
         return correlation;
     }
+    
+    public Matrix euclidianDistance() {
+        Matrix dist = new SymetricMatrix(documents.size());
+        for (int row: range(documents.size())) {
+            for (int column: range(documents.size())) {
+                dist.put(row, column, svd.euclidianVV(row, column));
+            }
+        }
+        return dist;
+    }
 
     public Iterable<Double> documentCorrelations() {
         return new Providable<Double>() {

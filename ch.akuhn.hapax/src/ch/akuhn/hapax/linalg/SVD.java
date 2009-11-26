@@ -244,6 +244,18 @@ public class SVD {
         return similarity(V[a], V[b]);
     }
 
+    public double euclidianVV(int a, int b) {
+        if (s.length == 0) return Double.NaN;
+        double[] aa = V[a];
+        double[] bb = V[b];
+        double sum = 0;
+        for (int k = 0; k < bb.length; k++) {
+            sum += (aa[k] - bb[k]) * (aa[k] - bb[k]);
+        }
+        return Math.sqrt(sum);
+    }
+    
+    
     /*default*/ static final double[][] transpose(double[][] array) {
         if (array.length == 0) return new double[][] {{}};
         int width = array[0].length, height = array.length;
