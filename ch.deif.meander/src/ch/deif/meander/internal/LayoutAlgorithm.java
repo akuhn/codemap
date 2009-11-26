@@ -3,6 +3,7 @@ package ch.deif.meander.internal;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
+import ch.akuhn.isomap.Isomap;
 import ch.akuhn.mds.MultidimensionalScaling;
 
 public class LayoutAlgorithm {
@@ -26,6 +27,7 @@ public class LayoutAlgorithm {
         }
         assert x0.length == len;
         assert y0.length == len;
+        
         MultidimensionalScaling mds = new MultidimensionalScaling();
         mds.similarities(index.documentCorrelation().asArray());
         // mds.applyIsomapWithKayNearestNeighbors(3);
