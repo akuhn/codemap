@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.codemap.plugin.communication.feature"
+      label="Codemap ECF (Eclipse Communication Framework) Integration"
+      version="0.7.701.qualifier"
+      provider-name="David Erni">
+
+   <description url="http://scg.unibe.ch/codemap">
+      Shows open remote editors on the Codemap view.
+   </description>
+
+   <copyright>
+      Copyright (c) 2009, David Erni.
+   </copyright>
+
+   <license url="http://www.gnu.org/licenses/agpl.txt">
+      %license
+   </license>
+
+   <plugin
+         id="org.codemap.plugin.communication"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+         
+</feature>
