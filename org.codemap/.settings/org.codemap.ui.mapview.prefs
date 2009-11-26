@@ -1,6 +1,7 @@
-#Thu Oct 29 17:00:05 CET 2009
+#Tue Nov 24 18:05:49 CET 2009
 eclipse.preferences.version=1
 identifier_labels=true
 no_labels=false
 org.codemap.plugin.marker=false
-show_default_colors=true
+show_default_colors=false
+show_package_colors=true

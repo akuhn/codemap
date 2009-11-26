@@ -3,7 +3,7 @@ package org.codemap.plugin.eclemma;
 import java.util.List;
 
 import org.codemap.CodemapCore;
-import org.codemap.mapview.ICodemapPluginAction;
+import org.codemap.mapview.action.ICodemapPluginAction;
 import org.eclipse.jface.action.Action;
 
 import ch.akuhn.util.Pair;

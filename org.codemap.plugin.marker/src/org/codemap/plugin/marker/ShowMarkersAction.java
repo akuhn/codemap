@@ -1,6 +1,6 @@
 package org.codemap.plugin.marker;
 
-import org.codemap.mapview.ICodemapPluginAction;
+import org.codemap.mapview.action.ICodemapPluginAction;
 import org.eclipse.jface.action.Action;
 
 public class ShowMarkersAction implements ICodemapPluginAction {
