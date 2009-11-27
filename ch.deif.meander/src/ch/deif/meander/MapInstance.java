@@ -2,6 +2,8 @@ package ch.deif.meander;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -10,7 +12,9 @@ import ch.akuhn.foreach.Each;
 import ch.akuhn.util.Providable;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.internal.MapCaches;
-import ch.deif.meander.util.KdTree;
+import ch.deif.meander.kdtree.KDException;
+import ch.deif.meander.kdtree.KDTree;
+import ch.deif.meander.kdtree.KeySizeException;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.util.MapScheme;
 
@@ -20,9 +24,9 @@ public class MapInstance {
     private ConcurrentMap<MapSetting<?>, Object> settings = new ConcurrentHashMap<MapSetting<?>, Object>();
     private Collection<Location> locations;
     public final int width, height;
-    private KdTree kdTree;
+    private KDTree<Location> kdTree;
 
-    private MapInstance(Collection<Location> locations, int size, KdTree tree) {
+    private MapInstance(Collection<Location> locations, int size, KDTree<Location> tree) {
         kdTree = tree;
         this.locations = locations;
         this.width = this.height = size;
@@ -33,10 +37,19 @@ public class MapInstance {
         this.width = this.height = size;
     }
 
-    private KdTree makeKdTree() {
-        ArrayList<Location> list = new ArrayList<Location>();
-        list.addAll(locations);        
-        return new KdTree(list);
+    private KDTree<Location> makeKdTree() {
+        Set<Location> locs = new TreeSet<Location>();
+        locs.addAll(locations);
+        if (locs.isEmpty()) return null;
+        KDTree<Location> tree = new KDTree<Location>(2);
+        try {
+            for(Location each: locs) {
+                tree.insert(new double[]{each.px, each.py}, each);
+            }
+            return tree;            
+        } catch(KDException e) {
+            throw new RuntimeException(e);
+        }
     }
     public Pixel get(int x, int y) {
         return new Pixel(x, y);
@@ -244,7 +257,13 @@ public class MapInstance {
     }
 
     public Location nearestNeighbor(int px, int py) {
-        return kdTree.getNearestNeighbor(new int[]{px, py});
+        try {
+            return kdTree.nearest(new double[]{px, py});
+        } catch (KeySizeException e) {
+            throw new RuntimeException(e);
+        }
+//        return kdTree.getNearestNeighbor();
+        
 //        int nearestDist2 = Integer.MAX_VALUE;
 //        Location nearestLocation = null;
 //        for (Location each : locations()) {
@@ -277,7 +296,7 @@ public class MapInstance {
         return get(DEMAlgorithm.class);
     }
     
-    public KdTree getKdTree() {
+    public KDTree<Location> getKdTree() {
         return kdTree;
     }
 

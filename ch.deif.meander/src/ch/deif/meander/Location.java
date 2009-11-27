@@ -10,7 +10,7 @@ package ch.deif.meander;
  * @author Adrian Kuhn
  *
  */
-public class Location {
+public class Location implements Comparable<Location> { 
 
 	public final int px, py;
 	private double elevation;
@@ -66,5 +66,10 @@ public class Location {
 	public String toString() {
 	    return "Location (" + px + "@" +  py + ") " + getDocument();
 	}
+
+    @Override
+    public int compareTo(Location o) {
+        return getDocument().compareTo(o.getDocument());
+    }
 
 }
