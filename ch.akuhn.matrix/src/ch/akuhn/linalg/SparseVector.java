@@ -8,49 +8,19 @@ import java.util.NoSuchElementException;
 
 public class SparseVector extends Vector {
 
-	private final class Iter implements Iterable<Entry>, Iterator<Entry> {
-
-		private int spot = 0;
-		private Entry each = new Entry();
-
-		@Override
-		public boolean hasNext() {
-			return spot < used;
-		}
-
-		@Override
-		public Iterator<Entry> iterator() {
-			return this;
-		}
-
-		@Override
-		public Entry next() {
-			if (!hasNext()) throw new NoSuchElementException();
-			each.value = values[spot];
-			each.index = keys[spot++];
-			return each;
-		}
-
-		@Override
-		public void remove() {
-			throw new UnsupportedOperationException();
-		}
-
-	}
-
 	private int[] keys;
 	private int size, used;
 
-	private float[] values;
+	private double[] values;
 
-	public SparseVector(double[] values) {
+	protected SparseVector(double[] values) {
 		this(values.length);
 		for (int n: range(values.length)) {
 			if (values[n] != 0) put(n, values[n]);
 		}
 	}
 
-	public SparseVector(int size) {
+	protected SparseVector(int size) {
 		this(size, 10);
 	}
 
@@ -59,7 +29,7 @@ public class SparseVector extends Vector {
 		assert capacity >= 0;
 		this.size = size;
 		this.keys = new int[capacity];
-		this.values = new float[capacity];
+		this.values = new double[capacity];
 	}
 
 	@Override
@@ -72,7 +42,33 @@ public class SparseVector extends Vector {
 
 	@Override
 	public Iterable<Entry> entries() {
-		return new Iter();
+		return new Iterable<Entry>() {
+
+			@Override
+			public Iterator<Entry> iterator() {
+				return new Iterator<Entry>() {
+
+					private int spot = 0;
+
+					@Override
+					public boolean hasNext() {
+						return spot < used;
+					}
+
+					@Override
+					public Entry next() {
+						if (!hasNext()) throw new NoSuchElementException();
+						return new Entry(keys[spot], values[spot++]);
+					}
+
+					@Override
+					public void remove() {
+						throw new UnsupportedOperationException();
+					}
+
+				};
+			}
+		};
 	}
 
 	@Override
@@ -81,7 +77,10 @@ public class SparseVector extends Vector {
 	}
 
 	public boolean equals(SparseVector v) {
-		return size == v.size && used == v.used && Arrays.equals(keys, v.keys) && Arrays.equals(values, values);
+		return size == v.size &&
+				used == v.used && 
+				Arrays.equals(keys, v.keys) &&
+				Arrays.equals(values, values);
 	}
 
 	@Override
@@ -93,8 +92,7 @@ public class SparseVector extends Vector {
 
 	@Override
 	public int hashCode() {
-		// TODO Auto-generated method stub
-		return super.hashCode();
+		return size ^ Arrays.hashCode(keys) ^ Arrays.hashCode(values);
 	}
 
 	public boolean isUsed(int key) {

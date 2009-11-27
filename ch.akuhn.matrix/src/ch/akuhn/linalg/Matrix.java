@@ -4,6 +4,7 @@ import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -12,6 +13,11 @@ import ch.akuhn.util.Files;
 import ch.akuhn.util.PrintOn;
 import ch.akuhn.util.Throw;
 
+/** Two-dimensional table of floating point numbers.
+ * 
+ * @author Adrian Kuhn
+ *
+ */
 public abstract class Matrix {
 
     public double add(int row, int column, double value) {
@@ -177,4 +183,31 @@ public abstract class Matrix {
 		return min;
 	};
 
+	/** Returns <code>y = Ax</code>.
+	 * 
+	 */
+	public Vector mult(Vector x) {
+		assert x.size() == this.columnCount();
+		Vector y = Vector.dense(this.rowCount());
+		for (Vector row: rows()) {
+			int value = 0;
+			for (Entry each: row.entries()) {
+				value += each.value * x.get(each.index);
+			}
+			y.put(indexOf(row), value);
+		}
+		return y;
+	}
+
+	public static Matrix from(int n, int m, double... values) {
+		assert n * m == values.length;
+		double[][] data = new double[n][];
+		for (int i = 0; i < n; i++) data[i] = Arrays.copyOfRange(values, i*m, (i+1)*m);
+		return new DenseMatrix(data);
+	}
+
+	public static Matrix dense(int n, int m) {
+		return new DenseMatrix(n, m);
+	}
+	
 }

@@ -10,45 +10,12 @@ import java.util.NoSuchElementException;
  */
 public abstract class Vector {
 
-	public final class Entry {
-		public int index;
-		public double value;
-	}
-
 	public double add(int index, double value) {
 		return put(index, get(index) + value);
 	}
 
 	public double density() {
 		return ((double) used()) / size();
-	}
-
-	public abstract double get(int index);
-
-	public abstract double put(int index, double value);
-
-	public abstract int size();
-
-	public double sum() {
-		double sum = 0;
-		for (Entry each: entries()) sum += each.value;
-		return sum;
-	}
-
-	public double length() {
-		double sum = 0;
-		for (Entry each: entries()) sum += each.value * each.value;
-		return Math.sqrt(sum);
-	}
-
-	/** Returns number of non-zero-valued entries.
-	 * 
-	 * @return a positive integer.
-	 */
-	public int used() {
-		int count = 0;
-		for (Entry each: entries()) if (each.value != 0) count++;
-		return count;
 	}
 
 	/** Iterates over all entries. Some vectors omit zero-valued entries.
@@ -61,7 +28,6 @@ public abstract class Vector {
 			public Iterator<Entry> iterator() {
 				return new Iterator<Entry>() {
 			    	
-			    	private Entry each = new Entry();
 			        private int index = 0;
 
 			        @Override
@@ -72,9 +38,7 @@ public abstract class Vector {
 			        @Override
 			        public Entry next() {
 			        	if (!hasNext()) throw new NoSuchElementException();
-			            each.value = get(index);
-			            each.index = index++;
-			            return each;
+			            return new Entry(index, get(index++));
 			        }
 
 			        @Override
@@ -86,5 +50,58 @@ public abstract class Vector {
 			}
 		};
     }
+
+	public abstract double get(int index);
+
+	public double norm() {
+		double sum = 0;
+		for (Entry each: entries()) sum += each.value * each.value;
+		return Math.sqrt(sum);
+	}
+
+	public abstract double put(int index, double value);
+
+	public abstract int size();
+
+	public double sum() {
+		double sum = 0;
+		for (Entry each: entries()) sum += each.value;
+		return sum;
+	}
+
+	/** Returns number of non-zero-valued entries.
+	 * 
+	 * @return a positive integer.
+	 */
+	public int used() {
+		int count = 0;
+		for (Entry each: entries()) if (each.value != 0) count++;
+		return count;
+	}
+
+	public final class Entry {
+		public final int index;
+		public final double value;
+		public Entry(int index, double value) {
+			this.index = index;
+			this.value = value;
+		}
+	}
+
+	public static Vector from(double... values) {
+		return new DenseVector(values.clone());
+	}
+	
+	public static Vector wrap(double... values) {
+		return new DenseVector(values);
+	}
+	
+	public static Vector dense(int size) {
+		return new DenseVector(size);
+	}
+
+	public static Vector sparse(int size) {
+		return new SparseVector(size);
+	}
 	
 }
