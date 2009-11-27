@@ -21,8 +21,7 @@ public class SparseMatrix extends Matrix {
     public SparseMatrix(double[][] values) {
         this.columns = values[0].length;
         this.rows = new ArrayList<Vector>(values.length);
-        for (double[] each: values)
-            addRow(each);
+        for (double[] each: values) addRow(each);
     }
 
     public SparseMatrix(int rows, int columns) {

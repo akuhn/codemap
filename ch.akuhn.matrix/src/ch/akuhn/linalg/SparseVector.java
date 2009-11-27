@@ -144,4 +144,18 @@ public class SparseVector extends Vector {
 		values = Arrays.copyOf(values, used);
 	}
 
+	@Override
+	public double dot(Vector x) {
+		double product = 0;
+		for (int k = 0; k < keys.length; k++) product += x.get(keys[k]) * values[k];
+		return product;
+	}
+
+	@Override
+	public void scaleAndAddTo(double a, Vector y) {
+		for (int k = 0; k < keys.length; k++) y.add(keys[k], a * values[k]);
+	}
+	
+	
+
 }

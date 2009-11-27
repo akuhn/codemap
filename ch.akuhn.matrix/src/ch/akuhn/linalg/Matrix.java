@@ -189,14 +189,27 @@ public abstract class Matrix {
 	public Vector mult(Vector x) {
 		assert x.size() == this.columnCount();
 		Vector y = Vector.dense(this.rowCount());
-		for (Vector row: rows()) {
-			int value = 0;
-			for (Entry each: row.entries()) {
-				value += each.value * x.get(each.index);
-			}
-			y.put(indexOf(row), value);
-		}
+		int i = 0; for (Vector row: rows()) y.put(i++, row.dot(x));
 		return y;
+	}
+	
+	/** Returns <code>y = (A^T)x</code>.
+	 * 
+	 */
+	public Vector transposeMultiply(Vector x) {
+		assert x.size() == this.rowCount();
+		Vector y = Vector.dense(this.columnCount());
+		int i = 0; for (Vector row: rows()) row.scaleAndAddTo(x.get(i++), y);
+		return y;
+	}
+	
+	/** Returns <code>y = (A^T)Ax</code>.
+	 *<P> 
+	 * Useful for doing singular decomposition using ARPACK's dsaupd routine.
+	 * 
+	 */
+	public Vector transposeNonTransposeMultiply(Vector x) {
+		return this.transposeMultiply(this.mult(x));
 	}
 
 	public static Matrix from(int n, int m, double... values) {

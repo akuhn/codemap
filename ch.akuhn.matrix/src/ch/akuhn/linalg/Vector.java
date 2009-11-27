@@ -103,5 +103,21 @@ public abstract class Vector {
 	public static Vector sparse(int size) {
 		return new SparseVector(size);
 	}
+
+	/** Returns the dot/scalar product.
+	 * 
+	 */
+	public double dot(Vector x) {
+		double product = 0;
+		for (Entry each: entries()) product += each.value * x.get(each.index);
+		return product;
+	}
+
+	/** y = y + a*<code>this</code>. 
+	 * 
+	 */
+	public void scaleAndAddTo(double a, Vector y) {
+		for (Entry each: entries()) y.add(each.index, a * each.value);
+	}
 	
 }
