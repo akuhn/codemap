@@ -2,6 +2,8 @@ package ch.akuhn.util;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.lang.reflect.Method;
 
 public class PrintOn implements Appendable, Closeable {
 
@@ -55,8 +57,33 @@ public class PrintOn implements Appendable, Closeable {
     }
 
     public final PrintOn print(Object object) {
-        return append(String.valueOf(object));
+        if (object == null) {
+            append("null");
+        }
+        // Custom #toString precedes.
+        else if (overridesToString(object)) {
+        	append(object.toString());
+        }    	
+        // Print arrays as [elem, elem, elem, ...]
+        else if (object.getClass().isArray()) {
+    		printEach(As.iterable(object));
+    	}
+        // Print arrays as [elem, elem, elem, ...]
+        else if (object instanceof Iterable<?>) {
+    		printEach(object);
+        }
+        else {
+        	append(object.toString());
+        }
+        return this;
     }
+
+	private void printEach(Object object) {
+		PrintOn out = new PrintOn(this);
+		out.append('[');
+		for (Object each: (Iterable<?>) object) out.separatedBy(", ").print(each);
+		out.append(']');
+	}
 
     public final PrintOn space() {
         return append(' ');
@@ -81,4 +108,25 @@ public class PrintOn implements Appendable, Closeable {
         }
     }
 
+    boolean separate = false;
+    
+	public final PrintOn separatedBy(String string) {
+		if (separate) this.append(string);
+		separate = true;
+		return this;
+	}
+
+    private boolean overridesToString(Object object) {
+        try {
+            Class<?> type = object.getClass();
+            Method toString = type.getMethod("toString");
+            return toString.getDeclaringClass() != Object.class;
+        } catch (SecurityException ex) {
+            throw Throw.exception(ex);
+        } catch (NoSuchMethodException ex) {
+            throw Throw.exception(ex);
+        }
+    }
+	
+	
 }

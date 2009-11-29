@@ -3,8 +3,11 @@ package ch.akuhn.util;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 public class As {
@@ -63,4 +66,33 @@ public class As {
     	return result;
     }
 
+    @SuppressWarnings("unchecked")
+	public static <T> Iterable<T> iterable(final Object b) {
+    	if (b == null) return Collections.emptySet();
+    	if (b instanceof Iterable<?>) return (Iterable<T>) b;
+    	if (b.getClass().isArray()) return new Iterable<T>() {
+			@Override
+			public Iterator<T> iterator() {
+				return new Iterator<T>() {
+					private int index = 0;
+					private Object array = b;
+					@Override
+					public boolean hasNext() {
+						return index < Array.getLength(array);
+					}
+					@Override
+					public T next() {
+						if (!hasNext()) throw new NoSuchElementException();
+						return (T) Array.get(array, index++);
+					}
+					@Override
+					public void remove() {
+						throw new UnsupportedOperationException();
+					}
+				};
+			}
+    	};
+    	return Collections.singleton((T) b);
+    }
+    
 }
