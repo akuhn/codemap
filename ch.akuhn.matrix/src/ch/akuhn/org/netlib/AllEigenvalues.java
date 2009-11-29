@@ -1,11 +1,14 @@
-package ch.akuhn.org.netlib.lapack;
+package ch.akuhn.org.netlib;
 
+import java.util.Arrays;
+
+import org.eclipse.swt.internal.win32.OFNOTIFY;
 import org.netlib.lapack.LAPACK;
 import org.netlib.util.intW;
 
 import ch.akuhn.linalg.Matrix;
 import ch.akuhn.linalg.Vector;
-import ch.akuhn.util.Out;
+
 
 /**
  * Finds all eigenvalues of a matrix.
@@ -21,26 +24,22 @@ import ch.akuhn.util.Out;
  * @see http://www.netlib.org/lapack/double/dgeev.f
  * 
  */
-public class Eigenvalues {
+public class AllEigenvalues extends Eigenvalues {
 
 	private LAPACK lapack = LAPACK.getInstance();
 	
-	private int n;
 	private boolean l = true;
 	private boolean r = false;
 
-	private Eigenvalues(Matrix A) {
+	public AllEigenvalues(Matrix A) {
+		super(A.columnCount());
 		assert A.isSquare();
-		this.n = A.columnCount();
 		this.A = A;
 	}
-
+	
 	private Matrix A;
 
-	public double[] value;
-	public Vector[] vector;
-	
-	public void run() {
+	public Eigenvalues run() {
 		double[] wr = new double[n];
 		double[] wi = new double[n];
 		intW info = new intW(0);
@@ -64,9 +63,39 @@ public class Eigenvalues {
 				work.length,
 				info );
 		if (info.val != 0) throw new Error("dgeev ERRNO=" + info.val);
-		value = wr;
-		vector = new Vector[n];
-		for (int i = 0; i < n; i++) vector[i] = Vector.copy(vl, i*n, n);
+		postprocess(wr, vl);
+		return this;
+	}
+
+	/** <PRE>[wr,vl.enum_cons(n)]
+	 *  .transpose
+	 *  .sort_by(&:first)
+	 *  .tranpose
+	 *  .revert</PRE>
+	 * 
+	 */
+	private void postprocess(double[] wr, double[] vl) {
+		class Eigen implements Comparable<Eigen> {
+			double value;
+			Vector vector;
+			@Override
+			public int compareTo(Eigen eigen) {
+				return Double.compare(value, eigen.value) * -1;
+			}
+		}
+		Eigen[] eigen = new Eigen[n];
+		for (int i = 0; i < n; i++) {
+			eigen[i] = new Eigen();
+			eigen[i].value = wr[i];
+			eigen[i].vector = Vector.copy(vl, i*n, n);
+		}
+		Arrays.sort(eigen);
+		value = new double[nev];
+		vector = new Vector[nev];
+		for (int i = 0; i < nev; i++) {
+			value[i] = eigen[n-i-1].value;
+			vector[i] = eigen[n-i-1].vector;
+		}
 	}
 
 	private String jobv(boolean canHasVectors) {
@@ -99,10 +128,6 @@ public class Eigenvalues {
 				info );
         if (info.val == 0) lwork = (int) query[0];
         return new double[lwork];
-	}
-
-	public static Eigenvalues of(Matrix A) {
-		return new Eigenvalues(A);
 	}
 	
 }

@@ -7,7 +7,7 @@ import ch.akuhn.matrix.Graph;
 import ch.akuhn.matrix.SymetricMatrix;
 import ch.akuhn.matrix.Function;
 import ch.akuhn.org.ggobi.plugins.ggvis.Points;
-import ch.akuhn.org.netlib.arpack.Eigenvalues;
+import ch.akuhn.org.netlib.FewEigenvalues;
 
 /** Embeds n-dimensional data in two dimensions.
  *<P> 
@@ -138,7 +138,7 @@ public abstract class Isomap {
      */
     public void constructDeeDimensionalEmbedding() {
         this.applyTauOperator();
-        Eigenvalues eigen = Eigenvalues.of(graph).largest(2);
+        FewEigenvalues eigen = FewEigenvalues.of(graph).largest(2);
         eigen.run();
         points = new Points(n);
         for (int i = 0; i < n; i++) {

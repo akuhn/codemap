@@ -1,19 +1,22 @@
-package ch.akuhn.org.netlib.arpack;
+package ch.akuhn.org.netlib;
+
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.akuhn.linalg.Matrix;
+import ch.akuhn.org.netlib.FewEigenvalues;
 import ch.unibe.jexample.Given;
 import ch.unibe.jexample.Injection;
 import ch.unibe.jexample.InjectionPolicy;
 import ch.unibe.jexample.JExample;
 
 @RunWith(JExample.class)
-@Injection(InjectionPolicy.NONE) // there aint not side-effects
-public class EigenvaluesTest {
+@Injection(InjectionPolicy.NONE) // there are no side-effects
+public class FewEigenvaluesTest {
 
-	private Eigenvalues eigen;
+	private FewEigenvalues eigen;
 	private Matrix A;
 
 	private Matrix randomSymetricMatrix(int n) {
@@ -29,9 +32,9 @@ public class EigenvaluesTest {
 	}
 	
 	@Test
-	public Eigenvalues shouldDecomposeRandomArray() {
+	public FewEigenvalues shouldDecomposeRandomArray() {
 		A = randomSymetricMatrix(100);
-		eigen = Eigenvalues.of(A).largest(40);
+		eigen = FewEigenvalues.of(A).largest(40);
 		eigen.run();
 		assert eigen.value.length == 40;
 		assert eigen.vector.length == 40;
@@ -59,6 +62,22 @@ public class EigenvaluesTest {
 			assert eigen.vector[i].times(eigen.value[i]).equals(
 					A.mult(eigen.vector[i]), 1e-6);
 		}		
+	}
+	
+	@Test
+	public void shouldDecomposeSmallMatrix() {
+		Matrix A = Matrix.from(3, 3,
+				0, 1, -1,
+				1, 1, 0,
+				-1, 0, 1);
+		FewEigenvalues eigen = FewEigenvalues.of(A).largest(2);
+		eigen.run();
+		
+		assertEquals(1, eigen.value[0], 1e-6);
+		assertEquals(2, eigen.value[1], 1e-6);
+		
+		assert A.mult(eigen.vector[0]).equals(eigen.vector[0].times(eigen.value[0]), 1e-6);
+		assert A.mult(eigen.vector[1]).equals(eigen.vector[1].times(eigen.value[1]), 1e-6);
 	}
 	
 }

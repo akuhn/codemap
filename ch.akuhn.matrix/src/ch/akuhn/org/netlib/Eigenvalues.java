@@ -1,0 +1,45 @@
+package ch.akuhn.org.netlib;
+
+import ch.akuhn.linalg.Matrix;
+import ch.akuhn.linalg.Vector;
+
+public class Eigenvalues {
+
+	public double[] value;
+	public Vector[] vector;
+	
+	protected int n;
+	protected int nev;
+	
+	public Eigenvalues(int n) {
+		this.n = n;
+		this.nev = n;
+	}
+
+	public static Eigenvalues of(Matrix A) {
+		if (A.size() == 0) {
+			Eigenvalues eigen = new Eigenvalues(0);
+			eigen.value = new double[0];
+			eigen.vector = new Vector[0];
+			return eigen;
+		}
+		if (A.size() == 1) {
+			Eigenvalues eigen = new Eigenvalues(0);
+			eigen.value = new double[] { A.get(0, 0) };
+			eigen.vector = new Vector[] { Vector.from(1.0) };
+			return eigen;
+		}
+		if (A.size() < 10) return AllEigenvalues.of(A);
+		return FewEigenvalues.of(A);
+	}
+
+	public Eigenvalues largest(int nev) {
+		this.nev = nev;
+		return this;
+	}
+	
+	public Eigenvalues run() {
+		return this;
+	}
+	
+}

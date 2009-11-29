@@ -1,4 +1,4 @@
-package ch.akuhn.org.netlib.arpack;
+package ch.akuhn.org.netlib;
 
 import java.util.Arrays;
 
@@ -9,7 +9,7 @@ import org.netlib.util.intW;
 import ch.akuhn.linalg.Matrix;
 import ch.akuhn.linalg.Vector;
 
-/** Finds the largest eigenvalues of a matrix. 
+/** Finds a few eigenvalues of a matrix. 
  *<P> 
  * This class use ARPACK to find a few eigenvalues (&lambda;) and corresponding
  * eigenvectors (<b>x</b>) for the standard eigenvalue problem:
@@ -35,25 +35,15 @@ import ch.akuhn.linalg.Vector;
  * @author Richard Lehoucq, Danny Sorensen, Chao Yang (Fortran)
  *
  */
-public abstract class Eigenvalues implements Runnable {
+public abstract class FewEigenvalues extends Eigenvalues {
 
 	private enum Which { LA, SA, LM, SM, BE };
 	
-	/** Problem size. */
-	private int n;
-	
-	/** The number of eigenvalues requested. */
-	private int nev = 4;
-	
-	/** The kind of eigenvalues requests. */
-    private Which which = Which.LM;
+    private Which which;
     
-    public double[] value;
-    public Vector[] vector;
-
-    public static Eigenvalues of(final Matrix matrix) {
+    public static FewEigenvalues of(final Matrix matrix) {
     	assert matrix.isSquare();
-    	return new Eigenvalues(matrix.columnCount()) {
+    	return new FewEigenvalues(matrix.columnCount()) {
 			@Override
 			protected Vector callback(Vector vector) {
 				return matrix.mult(vector);
@@ -61,33 +51,34 @@ public abstract class Eigenvalues implements Runnable {
     	};
     }
     
-    public Eigenvalues(int n) {
-        this.n = n;
+    public FewEigenvalues(int n) {
+    	super(n);
+    	this.greatest(20);
     }
     
-    private Eigenvalues which(Which which, int nev) {
+    private FewEigenvalues which(Which which, int nev) {
     	this.which = which;
-    	this.nev = nev;
+    	this.nev = nev < n ? nev : n - 1;
     	return this;
     }
 
     /** Compute the largest algebraic eigenvalues. */
-    public Eigenvalues largest(int nev) {
+    public FewEigenvalues largest(int nev) {
     	return which(Which.LA, nev);
     }
     
 	/** Compute the smallest algebraic eigenvalues. */
-    public Eigenvalues smallest(int nev) {
+    public FewEigenvalues smallest(int nev) {
     	return which(Which.SA, nev);
     }
 
 	/** Compute the largest eigenvalues in magnitude. */
-    public Eigenvalues greatest(int nev) {
+    public FewEigenvalues greatest(int nev) {
     	return which(Which.LM, nev);
     }
 
 	/** Compute the smallest eigenvalues in magnitude. */
-    public Eigenvalues lowest(int nev) {
+    public FewEigenvalues lowest(int nev) {
     	return which(Which.SM, nev);
     }
 
@@ -95,7 +86,7 @@ public abstract class Eigenvalues implements Runnable {
 	 * When the <CODE>nev</CODE> is odd, compute one more from the
 	 * high end than from the low end.
 	 */
-    public Eigenvalues fromBothEnds(int nev) {
+    public FewEigenvalues fromBothEnds(int nev) {
     	return which(Which.BE, nev);
     }
 
@@ -104,7 +95,7 @@ public abstract class Eigenvalues implements Runnable {
      * Please refer to the ARPACK guide for more information.
      * 
      */
-    public void run() {
+    public Eigenvalues run() {
     	ARPACK arpack = ARPACK.getInstance();
     	/*
     	 * Setting up parameters for DSAUPD call.
@@ -120,7 +111,7 @@ public abstract class Eigenvalues implements Runnable {
          * be used in the Implicitly Restarted Arnoldi Process.
          * Work per major iteration is proportional to N*NCV*NCV.  
          */
-        int ncv = nev * 2; // rule of thumb use twice nev
+        int ncv = Math.min(nev * 2, n); // rule of thumb use twice nev
         double[] v = new double[n * ncv]; 
         double[] workd = new double[3*n];
         double[] workl = new double[ncv*(ncv+8)];
@@ -256,6 +247,7 @@ public abstract class Eigenvalues implements Runnable {
         for (int i = 0; i < value.length; i++) {
         	vector[i] = Vector.copy(v, i*n, n);
         }
+        return this;
     }
     
     protected abstract Vector callback(Vector vector);

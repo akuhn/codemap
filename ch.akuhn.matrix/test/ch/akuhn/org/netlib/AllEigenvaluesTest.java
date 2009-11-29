@@ -5,9 +5,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import ch.akuhn.linalg.Matrix;
-import ch.akuhn.org.netlib.lapack.Eigenvalues;
 
-public class EigenvaluesTest {
+public class AllEigenvaluesTest {
 
 	@Test
 	public void shouldFindEigenvalues() {
@@ -15,12 +14,11 @@ public class EigenvaluesTest {
 				0, 1, -1,
 				1, 1, 0,
 				-1, 0, 1);
-		Eigenvalues eigen = Eigenvalues.of(A);
-		eigen.run();
+		Eigenvalues eigen = new AllEigenvalues(A).run();
 		
 		assertEquals(-1, eigen.value[0], 1e-6);
-		assertEquals(2, eigen.value[1], 1e-6);
-		assertEquals(1, eigen.value[2], 1e-6);
+		assertEquals(1, eigen.value[1], 1e-6);
+		assertEquals(2, eigen.value[2], 1e-6);
 
 		assert A.mult(eigen.vector[0]).equals(eigen.vector[0].times(eigen.value[0]), 1e-6);
 		assert A.mult(eigen.vector[1]).equals(eigen.vector[1].times(eigen.value[1]), 1e-6);
