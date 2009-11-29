@@ -249,5 +249,9 @@ public abstract class Matrix {
 		}
 		return data;
 	}
+
+	public static SparseMatrix sparse(int n, int m) {
+		return new SparseMatrix(n, m);
+	}
 	
 }

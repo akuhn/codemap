@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 
 import ch.akuhn.linalg.Matrix;
 import ch.akuhn.matrix.eigenvalues.FewEigenvalues;
+import ch.akuhn.util.Out;
 import ch.unibe.jexample.Given;
 import ch.unibe.jexample.Injection;
 import ch.unibe.jexample.InjectionPolicy;
@@ -45,6 +46,7 @@ public class FewEigenvaluesTest {
 	public void shouldReturnSortedEigenvalues() {
 		for (int i = 1; i < 40; i++) {
 			assert eigen.value[i-1] <= eigen.value[i];
+			assert eigen.value[i] > 0; // should be likely :)
 		}
 	}
 		

@@ -20,9 +20,9 @@ import ch.akuhn.edu.mit.tedlab.SVDRec;
  */
 public class SVD {
 
-    private final double[] s;
-    private final double[][] U; // terms
-    private final double[][] V; // documents
+    public final double[] s;
+    public final double[][] U; // terms
+    public final double[][] V; // documents
 
 
     public SVD(double[] s, double[][] U, double[][] V) {
