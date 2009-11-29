@@ -2,6 +2,8 @@ package ch.akuhn.matrix;
 
 import java.util.Arrays;
 
+import ch.akuhn.linalg.Matrix;
+
 
 /** Symmetric matrix without diagonal.
  * <P>
@@ -10,7 +12,7 @@ import java.util.Arrays;
  * @author Adrian Kuhn
  *
  */
-public class SymetricMatrix {
+public class SymetricMatrix extends Matrix {
 
     private static final int BIN = 100;
     public final double[][] values;
@@ -179,5 +181,11 @@ public class SymetricMatrix {
         }
         return new SymetricMatrix(clone);
     }
+
+	@Override
+	public int used() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
     
 }

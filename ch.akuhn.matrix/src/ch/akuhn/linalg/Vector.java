@@ -1,7 +1,10 @@
 package ch.akuhn.linalg;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
+import ch.akuhn.util.PrintOn;
 
 /** An ordered list of floating point numbers.
  * 
@@ -92,6 +95,10 @@ public abstract class Vector {
 		return new DenseVector(values.clone());
 	}
 	
+	public static Vector copy(double[] values, int start, int length) {
+		return new DenseVector(Arrays.copyOfRange(values, start, start + length));
+	}
+	
 	public static Vector wrap(double... values) {
 		return new DenseVector(values);
 	}
@@ -119,5 +126,24 @@ public abstract class Vector {
 	public void scaleAndAddTo(double a, Vector y) {
 		for (Entry each: entries()) y.add(each.index, a * each.value);
 	}
+	
+	public void storeOn(double[] array, int start) {
+		assert start + size() <= array.length;
+		Arrays.fill(array, start, start + size(), 0);
+		for (Entry each: entries()) array[start + each.index] = each.value; 		
+	}
+
+	@Override
+	public String toString() {
+		PrintOn out = new PrintOn();
+		out.append("(");
+		for (Entry each: entries()) out.separatedBy(", ").print(each.value);
+		out.append(")");
+		return out.toString();
+	}
+
+	public abstract Vector times(double scalar);
+	
+	public abstract boolean equals(Vector v, double epsilon);
 	
 }

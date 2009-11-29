@@ -155,6 +155,20 @@ public class SparseVector extends Vector {
 	public void scaleAndAddTo(double a, Vector y) {
 		for (int k = 0; k < keys.length; k++) y.add(keys[k], a * values[k]);
 	}
+
+	@Override
+	public boolean equals(Vector v, double epsilon) {
+		throw new Error("not yet implemented");
+	}
+
+	@Override
+	public Vector times(double scalar) {
+		SparseVector y = new SparseVector(size);
+		y.keys = Arrays.copyOf(keys, size);
+		y.values = Arrays.copyOf(values, size);
+		for (int i = 0; i < values.length; i++) values[i] *= scalar;
+		return y;
+	}
 	
 	
 

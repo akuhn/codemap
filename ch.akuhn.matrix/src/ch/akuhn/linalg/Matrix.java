@@ -172,6 +172,16 @@ public abstract class Matrix {
 			return isRow ? Matrix.this.get(this.index0, index)
 					: Matrix.this.get(index, this.index0);
 		}
+
+		@Override
+		public boolean equals(Vector v, double epsilon) {
+			throw new Error("Not yet implemented");
+		}
+
+		@Override
+		public Vector times(double scalar) {
+			throw new Error("Not yet implemented");
+		}
 		
     }
 
@@ -221,6 +231,23 @@ public abstract class Matrix {
 
 	public static Matrix dense(int n, int m) {
 		return new DenseMatrix(n, m);
+	}
+
+	public boolean isSquare() {
+		return columnCount() == rowCount();
+	}
+
+	public double[] asColumnMajorArray() {
+		double[] data = new double[columnCount() * rowCount()];
+		int n = columnCount();
+		int i = 0; 
+		for (Vector row: rows()) {
+			for (Entry each: row.entries()) {
+				data[i + each.index * n] = each.value;
+			}
+			i++;
+		}
+		return data;
 	}
 	
 }

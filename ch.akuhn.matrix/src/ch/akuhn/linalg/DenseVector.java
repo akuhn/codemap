@@ -50,11 +50,23 @@ public class DenseVector extends Vector {
         return values.length;
     }
 
-    public Vector times(double scalar) {
+	@Override
+	public Vector times(double scalar) {
         double[] times = new double[values.length];
         for (int n: range(values.length))
             times[n] = values[n] * scalar;
         return new DenseVector(times);
-    }
+	}
+	
+	@Override
+	public boolean equals(Vector v, double epsilon) {
+		if (size() != v.size()) return false;
+		assert v instanceof DenseVector;
+		DenseVector d = (DenseVector) v;
+		for (int i = 0; i < values.length; i++) {
+			if ((values[i] - d.values[i]) > epsilon) return false;
+		}
+		return true;
+	}
 
 }

@@ -138,17 +138,12 @@ public abstract class Isomap {
      */
     public void constructDeeDimensionalEmbedding() {
         this.applyTauOperator();
-        Eigenvalues eigen = new Eigenvalues(n, 2) {
-            @Override
-            protected double[] callback(double[] vector) {
-                return graph.mult(vector);
-            }
-        };
+        Eigenvalues eigen = Eigenvalues.of(graph).largest(2);
         eigen.run();
         points = new Points(n);
         for (int i = 0; i < n; i++) {
-            points.x[i] = Math.sqrt(eigen.value[0]) * eigen.vector[0][i];
-            points.y[i] = Math.sqrt(eigen.value[1]) * eigen.vector[1][i];
+            points.x[i] = Math.sqrt(eigen.value[0]) * eigen.vector[0].get(i);
+            points.y[i] = Math.sqrt(eigen.value[1]) * eigen.vector[1].get(i);
         }
     }
     

@@ -1,5 +1,10 @@
 package ch.akuhn.linalg;
 
+/** 
+ * 
+ * @author akuhn
+ *
+ */
 public class DenseMatrix extends Matrix {
 
     private double[][] values;
