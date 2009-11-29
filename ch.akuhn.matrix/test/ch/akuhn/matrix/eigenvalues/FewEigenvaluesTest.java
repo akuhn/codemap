@@ -1,4 +1,4 @@
-package ch.akuhn.org.netlib;
+package ch.akuhn.matrix.eigenvalues;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.akuhn.linalg.Matrix;
-import ch.akuhn.org.netlib.FewEigenvalues;
+import ch.akuhn.matrix.eigenvalues.FewEigenvalues;
 import ch.unibe.jexample.Given;
 import ch.unibe.jexample.Injection;
 import ch.unibe.jexample.InjectionPolicy;

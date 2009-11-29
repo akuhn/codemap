@@ -6,8 +6,8 @@ import ch.akuhn.matrix.DijkstraAlgorithm2;
 import ch.akuhn.matrix.Graph;
 import ch.akuhn.matrix.SymetricMatrix;
 import ch.akuhn.matrix.Function;
+import ch.akuhn.matrix.eigenvalues.FewEigenvalues;
 import ch.akuhn.org.ggobi.plugins.ggvis.Points;
-import ch.akuhn.org.netlib.FewEigenvalues;
 
 /** Embeds n-dimensional data in two dimensions.
  *<P> 

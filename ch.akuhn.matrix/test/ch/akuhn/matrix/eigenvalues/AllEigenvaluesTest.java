@@ -1,10 +1,12 @@
-package ch.akuhn.org.netlib;
+package ch.akuhn.matrix.eigenvalues;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 import ch.akuhn.linalg.Matrix;
+import ch.akuhn.matrix.eigenvalues.AllEigenvalues;
+import ch.akuhn.matrix.eigenvalues.Eigenvalues;
 
 public class AllEigenvaluesTest {
 

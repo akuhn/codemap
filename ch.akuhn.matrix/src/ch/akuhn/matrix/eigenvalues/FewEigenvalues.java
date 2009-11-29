@@ -1,4 +1,4 @@
-package ch.akuhn.org.netlib;
+package ch.akuhn.matrix.eigenvalues;
 
 import java.util.Arrays;
 

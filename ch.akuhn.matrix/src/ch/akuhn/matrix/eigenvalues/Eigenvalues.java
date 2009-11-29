@@ -1,4 +1,4 @@
-package ch.akuhn.org.netlib;
+package ch.akuhn.matrix.eigenvalues;
 
 import ch.akuhn.linalg.Matrix;
 import ch.akuhn.linalg.Vector;
