@@ -1,5 +1,7 @@
 package ch.akuhn.matrix.eigenvalues;
 
+import java.util.Random;
+
 import ch.akuhn.linalg.Matrix;
 import ch.akuhn.linalg.SVD;
 import ch.akuhn.linalg.SparseMatrix;
@@ -43,22 +45,21 @@ public class SingularValues {
 	}
 	
 	public static void main(String... args) {
-		Stopwatch.p();
+		Stopwatch.anyKey();
 		SparseMatrix A = Matrix.sparse(400,5000);
+		Random rand = new Random(1);
 		for (int i = 0; i < A.rowCount(); i++) {
 			for (int j = 0; j < A.columnCount(); j++) {
-				if (Math.random() > 0.2) continue;
-				A.put(i, j, Math.random() * 23);
+				if (rand.nextDouble() > 0.2) continue;
+				A.put(i, j, rand.nextDouble() * 23);
 			}
 		} 
 		Stopwatch.p();
 		SingularValues singular = new SingularValues(A, 10).decompose();
 		Stopwatch.p("ARPACK");
-		Out.puts(singular.value);
 		Stopwatch.p();
 		SVD svd = new SVD(A, 10);
 		Stopwatch.p("SVDLIBC");
-		Out.puts(svd.s);
 	}
 	
 }

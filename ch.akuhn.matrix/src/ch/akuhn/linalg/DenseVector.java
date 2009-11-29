@@ -6,7 +6,7 @@ import static ch.akuhn.foreach.For.range;
 public class DenseVector extends Vector {
 
     private double unit = 0;
-    private double[] values;
+    /*default*/ double[] values;
     
     protected DenseVector(double[] values) {
         this.values = values;

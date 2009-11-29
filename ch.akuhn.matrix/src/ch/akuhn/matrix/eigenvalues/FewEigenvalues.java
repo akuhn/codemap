@@ -119,7 +119,7 @@ public abstract class FewEigenvalues extends Eigenvalues {
 		 * Work per major iteration is proportional to N*NCV*NCV.  
 		 * 
 		 */
-		int ncv = Math.min(nev * 2, n); // rule of thumb use twice nev
+		int ncv = Math.min(nev * 2, n); // rule of thumb use twice nev // TODO
 		double[] v = new double[n * ncv]; 
 		double[] workd = new double[3*n];
 		double[] workl = new double[ncv*(ncv+8)];
@@ -196,7 +196,7 @@ public abstract class FewEigenvalues extends Eigenvalues {
 		 * Either we have convergence or there is an error.
 		 *   
 		 */
-		if (info.val < 0) throw new Error("dsaupd ERRNO = "+info.val);
+		if (info.val != 0) throw new Error("dsaupd ERRNO = "+info.val);
 		/*
 		 * Post-Process using DSEUPD.
 		 * 

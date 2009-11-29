@@ -138,4 +138,34 @@ public class SparseMatrix extends Matrix {
         return matrix;
     }
     
+    @Override
+	public Vector mult(Vector dense) {
+		assert dense.size() == this.columnCount();
+		double[] y = new double[this.rowCount()];
+		double[] x = ((DenseVector) dense).values;
+		for (int i = 0; i < y.length; i++) {
+			SparseVector row = (SparseVector) rows.get(i);
+			double sum = 0;
+			for (int k = 0; k < row.used; k++) {
+				sum += x[row.keys[k]] * row.values[k];
+			}
+			y[i] = sum;
+		}
+		return Vector.wrap(y);
+	}
+
+	@Override
+    public Vector transposeMultiply(Vector dense) {
+		assert dense.size() == this.rowCount();
+		double[] y = new double[this.columnCount()];
+		double[] x = ((DenseVector) dense).values;
+		for (int i = 0; i < x.length; i++) {
+			SparseVector row = (SparseVector) rows.get(i);
+			for (int k = 0; k < row.used; k++) {
+				y[row.keys[k]] += x[i] * row.values[k];
+			}
+		}
+		return Vector.wrap(y);
+    }
+    
 }

@@ -8,10 +8,9 @@ import java.util.NoSuchElementException;
 
 public class SparseVector extends Vector {
 
-	private int[] keys;
-	private int size, used;
-
-	private double[] values;
+	/*default*/ int[] keys;
+	/*default*/ int size, used;
+	/*default*/ double[] values;
 
 	protected SparseVector(double[] values) {
 		this(values.length);
@@ -147,13 +146,13 @@ public class SparseVector extends Vector {
 	@Override
 	public double dot(Vector x) {
 		double product = 0;
-		for (int k = 0; k < keys.length; k++) product += x.get(keys[k]) * values[k];
+		for (int k = 0; k < used; k++) product += x.get(keys[k]) * values[k];
 		return product;
 	}
 
 	@Override
 	public void scaleAndAddTo(double a, Vector y) {
-		for (int k = 0; k < keys.length; k++) y.add(keys[k], a * values[k]);
+		for (int k = 0; k < used; k++) y.add(keys[k], a * values[k]);
 	}
 
 	@Override
