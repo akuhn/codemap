@@ -1,0 +1,5 @@
+Problems when switching from \begin{thebibliography} to \bibliography:
+
+  - bib is removed from toc, manual \addcontents links to wrong page number
+  - some bib items are not shown
+  - formatting in bib items is not always correct
