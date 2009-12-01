@@ -126,6 +126,19 @@ public class QuickNDirtyMap {
         Image image = new FastBackgroundRenderer(DEM, shading, mapInstance, colors, device).render();        
         gc.drawImage(image, 0, 0);
         
+        
+        gc.setForeground(new Color(gc.getDevice(), 255, 0, 0));
+        for(int x = 0; x < mapInstance.width; x++) {
+            for (int y = 0; y < mapInstance.height; y++) {
+                Location kdTreeNearest = mapInstance.kdTreeNearest(x, y);
+                Location naiveNearest = mapInstance.naiveNearest(x, y);
+                if (naiveNearest.equals(kdTreeNearest)) continue;
+                
+                gc.drawPoint(x, y);
+//                assertEquals(naiveNearest, kdTreeNearest);
+            }
+        }        
+        
 //        gc.setForeground(new Color(gc.getDevice(), 123, 0, 0));
 //        ImageData id = image.getImageData();
 //        for(int x = 0; x < id.width; x++) {

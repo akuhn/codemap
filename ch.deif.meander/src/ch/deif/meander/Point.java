@@ -77,5 +77,9 @@ public class Point {
 	public static Point newRandom(String document) {
 		return new Point(Math.random() - 0.5, Math.random() - 0.5, document);
 	}
+
+    public double[] asDoubleArray() {
+        return new double[]{x, y};
+    }
 	
 }

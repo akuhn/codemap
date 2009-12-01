@@ -15,6 +15,7 @@ import ch.deif.meander.internal.MapCaches;
 import ch.deif.meander.kdtree.KDException;
 import ch.deif.meander.kdtree.KDTree;
 import ch.deif.meander.kdtree.KeySizeException;
+import ch.deif.meander.main.Log;
 import ch.deif.meander.util.MColor;
 import ch.deif.meander.util.MapScheme;
 
@@ -42,12 +43,21 @@ public class MapInstance {
         locs.addAll(locations);
         if (locs.isEmpty()) return null;
         KDTree<Location> tree = new KDTree<Location>(2);
-        try {
-            for(Location each: locs) {
-                tree.insert(new double[]{each.px, each.py}, each);
+        for(Location each: locs) {
+            try {
+                tree.insert(each.getPoint().asDoubleArray(), each);
+            } catch(KDException e) {
+                Location found = searchLocation(tree, each.getPoint().asDoubleArray());
+                System.out.println("duplicate locaiton, toinsert: " + each + "\nfound: " + found);
+                //                throw new RuntimeException(e);
             }
-            return tree;            
-        } catch(KDException e) {
+        }
+        return tree;            
+    }
+    private Location searchLocation(KDTree<Location> tree, double[] ds) {
+        try {
+            return tree.search(ds);
+        } catch (KeySizeException e) {
             throw new RuntimeException(e);
         }
     }
@@ -257,25 +267,27 @@ public class MapInstance {
     }
 
     public Location nearestNeighbor(int px, int py) {
-        try {
-            return kdTree.nearest(new double[]{px, py});
-        } catch (KeySizeException e) {
-            throw new RuntimeException(e);
+        return kdTreeNearest(px, py);
+
+    }
+
+    public Location kdTreeNearest(int px, int py) {
+        return new KdTreeLookup(kdTree, width).getResult(px, py);
+    }
+
+    public Location naiveNearest(int px, int py) {
+        int nearestDist2 = Integer.MAX_VALUE;
+        Location nearestLocation = null;
+        for (Location each : locations()) {
+            int dx = each.px - px;
+            int dy = each.py - py;
+            int dist2 = dx * dx + dy * dy;
+            if (dist2 < nearestDist2) {
+                nearestDist2 = dist2;
+                nearestLocation = each;
+            }
         }
-//        return kdTree.getNearestNeighbor();
-        
-//        int nearestDist2 = Integer.MAX_VALUE;
-//        Location nearestLocation = null;
-//        for (Location each : locations()) {
-//            int dx = each.px - px;
-//            int dy = each.py - py;
-//            int dist2 = dx * dx + dy * dy;
-//            if (dist2 < nearestDist2) {
-//                nearestDist2 = dist2;
-//                nearestLocation = each;
-//            }
-//        }
-//        return nearestLocation;
+        return nearestLocation;        
     }
 
     public double maxElevation() {
@@ -295,7 +307,7 @@ public class MapInstance {
     public float[][] getDEM() {
         return get(DEMAlgorithm.class);
     }
-    
+
     public KDTree<Location> getKdTree() {
         return kdTree;
     }
