@@ -45,7 +45,7 @@ public class SingularValues {
 	}
 	
 	public static void main(String... args) {
-		Stopwatch.anyKey();
+		Stopwatch.enter();
 		SparseMatrix A = Matrix.sparse(400,5000);
 		Random rand = new Random(1);
 		for (int i = 0; i < A.rowCount(); i++) {
