@@ -56,11 +56,6 @@ public class Location implements Comparable<Location> {
         return elevation;
     }
 
-    @Deprecated
-    public String getIdentifier() {
-        return getDocument();
-    }
-
     public Point getPoint() {
         return point;
     }

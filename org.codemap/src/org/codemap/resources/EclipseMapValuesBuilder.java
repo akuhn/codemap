@@ -10,9 +10,13 @@ import ch.akuhn.values.CollectionValue;
 import ch.akuhn.values.Value;
 import ch.akuhn.values.Values;
 import ch.deif.meander.Configuration;
+import ch.deif.meander.DigitalElevationModel;
+import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapSelection;
+import ch.deif.meander.map.ComputeElevationModelTask;
 import ch.deif.meander.map.MapValueBuilder;
 import ch.deif.meander.map.MapValues;
+import ch.deif.meander.util.MapScheme;
 
 
 public class EclipseMapValuesBuilder extends MapValueBuilder {
@@ -37,12 +41,17 @@ public class EclipseMapValuesBuilder extends MapValueBuilder {
 
     @Override
     public Value<Collection<String>> elementsValue() {
-        return new ComputeElementsTask(projectsValue(), extensionsValue(), showTestsValue());
+        return new ComputeElementsTask(projectsValue(), extensionsValue());
     }
     
     @Override
     public Value<LatentSemanticIndex> indexValue(Value<Collection<String>> elements) {
         return new ComputeEclipseIndexTask(elements);
+    }
+    
+    @Override
+    public Value<DigitalElevationModel> elevationModelValue(Value<MapInstance> mapInstance, Value<MapScheme<Boolean>> hills) {
+        return new ComputeFilteredElevationTask(mapInstance, hills, showTestsValue());
     }
 
     public EclipseMapValuesBuilder setName(String string) {

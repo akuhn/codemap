@@ -17,56 +17,57 @@ import ch.deif.meander.MapAlgorithm;
 import ch.deif.meander.MapInstance;
 
 public class MapCaches {
-	
-	private static Executor executor = Executors.newCachedThreadPool();
 
-	private Map<Class<? extends MapAlgorithm<?>>,RunnableFuture<?>> cache;
-	private MapInstance map;
+    private static Executor executor = Executors.newCachedThreadPool();
 
-	public MapCaches(MapInstance map) {
-		this.cache = new HashMap<Class<? extends MapAlgorithm<?>>, RunnableFuture<?>>();
-		this.map = map;
-	}
+    private Map<Class<? extends MapAlgorithm<?>>,RunnableFuture<?>> cache;
+    private MapInstance map;
 
-	private <V> RunnableFuture<?> makeIfAbsent(Class<? extends MapAlgorithm<V>> key) {
-		synchronized (key) {
-			RunnableFuture<?> future = cache.get(key);
-			if (future == null) {
-				Callable<V> callable;
-				try {
-					callable = key.newInstance().setMap(map);
-				} catch (InstantiationException e) {
-					throw new RuntimeException(e);
-				} catch (IllegalAccessException e) {
-					throw new RuntimeException(e);
-				}
-				future = new FutureTask<V>(callable);
-				cache.put(key, future);
-				executor.execute(future);
-			}
-			return future;
-		}
-	}
-	
-	public boolean isDone(Class<? extends MapAlgorithm<?>> key) {
-		Future<?> future = cache.get(key);
-		return future != null && future.isDone();
-	}
-	
-	public <V> void run(Class<? extends MapAlgorithm<V>> key) {
-		this.makeIfAbsent(key);
-	}
-	
-	@SuppressWarnings("unchecked")
-	public <V> V get(Class<? extends MapAlgorithm<V>> key) {
-		try {
-			return (V) this.makeIfAbsent(key).get();
-		} catch (InterruptedException ex) {
-			Thread.currentThread().interrupt();
-			throw new RuntimeException(ex);
-		} catch (ExecutionException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-	
+    public MapCaches(MapInstance map) {
+        this.cache = new HashMap<Class<? extends MapAlgorithm<?>>, RunnableFuture<?>>();
+        this.map = map;
+    }
+
+    private <V> RunnableFuture<?> makeIfAbsent(Class<? extends MapAlgorithm<V>> key) {
+        synchronized (key) {
+            RunnableFuture<?> future = cache.get(key);
+            if (future == null) {
+                Callable<V> callable;
+                try {
+                    callable = key.newInstance().setMap(map);
+                } catch (InstantiationException e) {
+                    System.out.println(e);
+                    throw new RuntimeException(e);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+                future = new FutureTask<V>(callable);
+                cache.put(key, future);
+                executor.execute(future);
+            }
+            return future;
+        }
+    }
+
+    public boolean isDone(Class<? extends MapAlgorithm<?>> key) {
+        Future<?> future = cache.get(key);
+        return future != null && future.isDone();
+    }
+
+    public <V> void run(Class<? extends MapAlgorithm<V>> key) {
+        this.makeIfAbsent(key);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <V> V get(Class<? extends MapAlgorithm<V>> key) {
+        try {
+            return (V) this.makeIfAbsent(key).get();
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(ex);
+        } catch (ExecutionException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
 }

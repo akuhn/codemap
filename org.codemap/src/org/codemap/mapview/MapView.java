@@ -6,7 +6,9 @@ import java.util.List;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
+import org.codemap.mapview.action.CodemapAction;
 import org.codemap.mapview.action.ColorDropDownAction;
+import org.codemap.mapview.action.DebugLocationsAction;
 import org.codemap.mapview.action.DropDownAction;
 import org.codemap.mapview.action.ForceSelectionAction;
 import org.codemap.mapview.action.LabelDrowDownAction;
@@ -65,7 +67,7 @@ import ch.deif.meander.util.MColor;
 
 public class MapView extends ViewPart {
 
-    private List<DropDownAction> actions = new ArrayList<DropDownAction>();
+    private List<CodemapAction> actions = new ArrayList<CodemapAction>();
 
     private CodemapListener codemapListener = new CodemapListener() {
         @Override
@@ -174,9 +176,9 @@ public class MapView extends ViewPart {
         IMenuManager viewMenu = actionBars.getMenuManager();
         viewMenu.add(new Separator());
         viewMenu.add(new SaveAsPNGAction());
-        viewMenu.add(new ReloadMapAction());     
-        viewMenu.add(new SaveHapaxDataAction());
-//        viewMenu.add(new ShowTestsAction());
+        viewMenu.add(new ReloadMapAction());
+        viewMenu.add(new SaveHapaxDataAction());        
+        viewMenu.add(registerAction(new ShowTestsAction()));
 //        viewMenu.add(new DebugLocationsAction());
         
         IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CodemapCore.PLUGIN_ID, ExtensionPoints.ACTION_BAR);
@@ -212,7 +214,7 @@ public class MapView extends ViewPart {
         tbm.add(forceSelection = new ForceSelectionAction(selectionProvider, memento));
     }
 
-    private IAction registerAction(DropDownAction action) {
+    private IAction registerAction(CodemapAction action) {
         actions.add(action);
         return action;
     }
@@ -261,7 +263,7 @@ public class MapView extends ViewPart {
     }
 
     public void configureActions(MapPerProject activeMap) {
-        for (DropDownAction each: actions) {
+        for (CodemapAction each: actions) {
             each.configureAction(activeMap);
         }
     }

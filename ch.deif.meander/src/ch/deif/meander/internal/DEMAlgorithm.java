@@ -35,7 +35,7 @@ public class DEMAlgorithm extends MapAlgorithm<float[][]> {
     private void compute() {
         StopWatch stopWatch = new StopWatch("DEM").start();
         // TODO a map configuration on map should return locations on map
-        for (Location each: map.locations()) {
+        for (Location each: map.getDEMLocations()) {
             elevateHill(each, computePie(each));
         }
         stopWatch.printStop();

@@ -2,6 +2,7 @@ package ch.deif.meander;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,6 +27,7 @@ public class MapInstance {
     private Collection<Location> locations;
     public final int width, height;
     private KDTree<Location> kdTree;
+    private List<Location> DEMLocations;
 
     private MapInstance(Collection<Location> locations, int size, KDTree<Location> tree) {
         kdTree = tree;
@@ -158,5 +160,13 @@ public class MapInstance {
 
     public KDTree<Location> getKdTree() {
         return kdTree;
+    }
+    
+    public Collection<Location> getDEMLocations() {
+        return DEMLocations != null ? DEMLocations : locations;
+    }
+    
+    public void setDEMLoccations(List<Location> result) {
+        this.DEMLocations = result;
     }
 }
