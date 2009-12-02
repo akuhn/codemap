@@ -172,7 +172,7 @@ public class SparseVector extends Vector {
 	}
 	
 	public void storeOn(PrintOn out) {
-		out.append("{\"length\":").print(used).append(",\"keys\":[").beginLoop();
+		out.append("{\"length\":").print(size).append(",\"keys\":[").beginLoop();
 		for (int i = 0; i < used; i++) out.separatedBy(",").print(keys[i]);
 		out.append("],\"values\":[").beginLoop();
 		for (int i = 0; i < used; i++) out.separatedBy(",").print(values[i]);
