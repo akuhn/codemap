@@ -1,21 +1,14 @@
 package org.codemap.mapview.action;
 
 import org.codemap.CodemapCore;
-import org.codemap.util.IFileNameCallback;
-import org.codemap.util.SafeSaveDialog;
+import org.codemap.util.EclipseUtil;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
-import org.eclipse.swt.widgets.Display;
 
-public class SaveAsPNGAction extends Action implements IFileNameCallback {
-    
-//    TODO: implement the save as PNG action.
-    
-    private static final String PNG_SUFFIX = ".png";
-    private static final String DEFAULT_FILENAME = "codemap" + PNG_SUFFIX;
+public class SaveAsPNGAction extends Action {
     
     public SaveAsPNGAction() {
         super();
@@ -24,38 +17,17 @@ public class SaveAsPNGAction extends Action implements IFileNameCallback {
 
     @Override
     public void run() {
-        SafeSaveDialog dialog = new SafeSaveDialog(Display.getDefault().getActiveShell(), this);
-        
-        dialog.setFileName(DEFAULT_FILENAME);
-        String[] filterExt = { "*" + PNG_SUFFIX };
-        dialog.setFilterExtensions(filterExt);
-        String userHome = System.getProperty("user.home");
-        if (userHome != null) {
-            dialog.setFilterPath(userHome);
-        }
-        
-        String path = dialog.open();
-        if (path == null) return;
-
-        saveTo(path);
+        String fname = EclipseUtil.filenameFromUser("Codemap of "+CodemapCore.activeProjectName().replace('.', '-'), ".png");
+        if (fname == null) return;
+        saveTo(fname);
     }
 
     private void saveTo(String path) {
         Image image = CodemapCore.getPlugin().getMapView().getCodemapImage();
-
         ImageLoader loader = new ImageLoader();
         loader.data = new ImageData[] {image.getImageData()};
         loader.save(path, SWT.IMAGE_PNG);
-        // disposing sometimes crashes eclipse so maybe we should not ... 
-        // image.dispose();
-    }
-
-    @Override
-    public String checkFileName(String path) {
-        if (!path.endsWith(PNG_SUFFIX)) {
-            path += PNG_SUFFIX;
-        }
-        return path;
+        image.dispose(); // of course we MUST dispose the image!
     }
     
 }

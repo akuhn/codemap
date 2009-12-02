@@ -97,4 +97,9 @@ public class CodemapCore extends AbstractUIPlugin {
     public MapScheme<MColor> getDefaultColorScheme() {
         return new MapScheme<MColor>(MColor.HILLGREEN);
     }
+    
+    public static String activeProjectName() {
+    	return getPlugin().getActiveMap().getProject().getName();
+    }
+    
 }

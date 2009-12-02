@@ -14,6 +14,7 @@ import org.codemap.mapview.action.LayerDropDownAction;
 import org.codemap.mapview.action.LinkWithSelectionAction;
 import org.codemap.mapview.action.ReloadMapAction;
 import org.codemap.mapview.action.SaveAsPNGAction;
+import org.codemap.mapview.action.SaveHapaxDataAction;
 import org.codemap.mapview.action.ShowTestsAction;
 import org.codemap.util.ExtensionPoints;
 import org.codemap.util.Log;
@@ -174,6 +175,7 @@ public class MapView extends ViewPart {
         viewMenu.add(new Separator());
         viewMenu.add(new SaveAsPNGAction());
         viewMenu.add(new ReloadMapAction());     
+        viewMenu.add(new SaveHapaxDataAction());
 //        viewMenu.add(new ShowTestsAction());
 //        viewMenu.add(new DebugLocationsAction());
         
