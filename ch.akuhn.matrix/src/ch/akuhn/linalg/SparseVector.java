@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import ch.akuhn.util.PrintOn;
+
 public class SparseVector extends Vector {
 
 	/*default*/ int[] keys;
@@ -169,6 +171,12 @@ public class SparseVector extends Vector {
 		return y;
 	}
 	
+	public void storeOn(PrintOn out) {
+		out.append("{\"length\":").print(used).append(",\"keys\":[").beginLoop();
+		for (int i = 0; i < used; i++) out.separatedBy(",").print(keys[i]);
+		out.append("],\"values\":[").beginLoop();
+		for (int i = 0; i < used; i++) out.separatedBy(",").print(values[i]);
+		out.append("]}");
+	}
 	
-
 }

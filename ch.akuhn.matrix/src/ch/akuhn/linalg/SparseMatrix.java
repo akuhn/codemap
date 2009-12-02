@@ -6,10 +6,12 @@ import static ch.akuhn.foreach.For.withIndex;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 import ch.akuhn.foreach.Each;
 import ch.akuhn.linalg.Vector.Entry;
+import ch.akuhn.util.PrintOn;
 
 
 public class SparseMatrix extends Matrix {
@@ -138,6 +140,18 @@ public class SparseMatrix extends Matrix {
         return matrix;
     }
     
+    public static SparseMatrix random(int n, int m, double density) {
+    	Random random = new Random();
+    	SparseMatrix A = new SparseMatrix(n, m);
+    	for (int i = 0; i < n; i++) {
+    		for (int j = 0; j < m; j++) {
+				if (random.nextDouble() > density) continue;
+				A.put(i, j, random.nextDouble());
+    		}
+		}
+    	return A;
+    }
+    
     @Override
 	public Vector mult(Vector dense) {
 		assert dense.size() == this.columnCount();
@@ -168,4 +182,19 @@ public class SparseMatrix extends Matrix {
 		return Vector.wrap(y);
     }
     
+	public void storeOn(PrintOn out) {
+		out.append("{\"n\":").print(rowCount()).append(",");
+		out.append("\"m\":").print(columnCount()).append(",");
+		out.append("\"rows\":[");
+		for (Vector row: rows) {
+			((SparseVector) row).storeOn(out);
+			out.separatedBy(",");
+		}
+		out.append("]}");
+	}
+	
+	public static void main(String[] args) {
+		SparseMatrix.random(20,30,0.2).storeOn(new PrintOn(System.out));
+	}
+	
 }
