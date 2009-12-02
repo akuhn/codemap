@@ -2,7 +2,6 @@ package ch.akuhn.matrix.eigenvalues;
 
 import java.util.Arrays;
 
-import org.eclipse.swt.internal.win32.OFNOTIFY;
 import org.netlib.lapack.LAPACK;
 import org.netlib.util.intW;
 
