@@ -10,6 +10,9 @@
 \usepackage{xspace}
 \usepackage[bottom]{footmisc}
 \usepackage{tocloft}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+
 % Colors
 \usepackage[usenames]{color}
 \definecolor{red}{rgb}{0.8,0,0}
@@ -73,24 +76,10 @@
 \usepackage{fmtcount}
 \usepackage[nodayofweek]{datetime}
 
-% Page headers
-%\newcommand{\mypagestyle}{
-%  \fancyhf{}
-%  \fancyhead[R]{{\small\thepage}}
-%  \fancyhead[L]{\nouppercase{\textit{\small\rightmark}}}
-%  \renewcommand{\headrulewidth}{0pt}
-%  \renewcommand{\footrulewidth}{0pt}
-%}
-\usepackage{fancyhdr}
-%\pagestyle{fancy}
-%\mypagestyle
-% \fancypagestyle{plain}{\mypagestyle}
-
 % Graphics
 \usepackage{graphicx}
 \graphicspath{{images/}}
 \DeclareGraphicsExtensions{{.pdf}}
-
 
 % Constants for pdf and front page
 \newcommand{\thesistitle}{Codemap}
@@ -99,7 +88,8 @@
 
 
 % Hyperlinks
-\usepackage{hyperref}
+\usepackage[pdftex,colorlinks=true,pdfstartview=FitV,
+ linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
 \hypersetup{
   a4paper,
   colorlinks,
@@ -120,6 +110,16 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Markup macros for proof-reading
+\usepackage[normalem]{ulem} % for \sout
+\usepackage{xcolor}
+\newcommand{\ra}{$\rightarrow$}
+\newcommand{\ugh}[1]{\textcolor{red}{\uwave{#1}}} % please rephrase
+\newcommand{\ins}[1]{\textcolor{blue}{\uline{#1}}} % please insert
+\newcommand{\del}[1]{\textcolor{red}{\sout{#1}}} % please delete
+\newcommand{\chg}[2]{\textcolor{red}{\sout{#1}}{\ra}\textcolor{blue}{\uline{#2}}} % please change
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Put edit comments in a really ugly standout display
 \usepackage{ifthen}
 \usepackage{amssymb}
@@ -138,12 +138,20 @@
   {\newcommand{\marking}[3]{}
    \newcommand{\version}{}
   }
-
 \newcommand{\note}[2]{\marking{#1}{#2}{yellow}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% easier referencing
+\newcommand{\secref}[1]{\autoref{sec:#1}}
+\newcommand{\figref}[1]{\autoref{fig:#1}}
+\newcommand{\tabref}[1]{\autoref{tab:#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% use these to annotate your document
 \newcommand{\chk}[1]{\marking{check}{#1}{lightgreen}}
 \newcommand{\todo}[1]{\note{todo}{#1}}
-%\newcommand{\done}[1]{\note{done}{#1}}
-\newcommand{\done}[1]{}
+\newcommand{\done}[1]{\note{done}{#1}}
+%\newcommand{\done}[1]{}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % abbreviations
@@ -157,24 +165,11 @@
 % names
 \newcommand{\VOC}{vocabulary\xspace}
 \newcommand{\VOCs}{vocabularies\xspace}
-\newcommand{\diff}{\texttt{diff}\xspace}
-\newcommand{\rlog}{\texttt{log}\xspace}
-\newcommand{\TAM}{term-author-matrix\xspace}
-\newcommand{\TAMS}{term-author-matrices\xspace}
-\newcommand{\BR}{bug report\xspace}
-\newcommand{\BRs}{bug reports\xspace}
-\newcommand{\GN}{Gnome\xspace}
-\newcommand{\EC}{Eclipse\xspace}
-\newcommand{\VCS}{version control system\xspace}
-\newcommand{\VCSs}{version control systems\xspace}
-\newcommand{\TOOL}{\textsc{Develect}\xspace}
-\newcommand{\trainingset}{training set\xspace}
-\newcommand{\validationset}{validation set\xspace}
-\newcommand{\Svnlogin}{SVN login\xspace}
-\newcommand{\Svnlogins}{SVN logins\xspace}
-
 \newcommand{\cmap}{Codemap\xspace}
-
+\newcommand{\MDS}{Multidimensional Scaling\xspace}
+\newcommand{\LSI}{Latent Semantic Indexing\xspace}
+\newcommand{\TOOL}{\textsc{SoftwareCartographer}\xspace}
+\newcommand{\SOCA}{Software Cartography\xspace}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % MAIN
@@ -196,7 +191,12 @@
 %========================================
 \mainmatter
 
-\include{parts/main/main}
+\include{parts/main/intro}
+\include{parts/main/relatedwork}
+\include{parts/main/soca}
+\include{parts/main/codemap}
+\include{parts/main/casestudy}
+\include{parts/main/discussion}
 
 %========================================
 \appendix
