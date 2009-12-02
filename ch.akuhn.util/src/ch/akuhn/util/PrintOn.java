@@ -127,6 +127,10 @@ public class PrintOn implements Appendable, Closeable {
             throw Throw.exception(ex);
         }
     }
+
+	public void beginLoop() {
+		separate = false;
+	}
 	
 	
 }
