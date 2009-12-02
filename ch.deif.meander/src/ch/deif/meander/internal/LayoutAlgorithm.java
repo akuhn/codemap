@@ -44,8 +44,12 @@ public class LayoutAlgorithm {
         };
         isomap.run();
         Points points = isomap.getPoints();
-        x = points.x;
-        y = points.y;
+        double[][] ps = new MultidimensionalScaling()
+            .similarities(index.documentCorrelation().asArray())
+            .initialConfiguration(points.x, points.y)
+            .run();
+        x = ps[0];
+        y = ps[1];
         return this;
     }
 
