@@ -44,6 +44,7 @@ public class CurrentSelectionOverlay extends SelectionOverlay {
         MapInstance map = CodemapVisualization.mapValues(e).mapInstance.getValue();
         if (map == null) return;
         Location neighbor = map.nearestNeighbor(e.x, e.y);
+        if (neighbor == null) return;
         fireEvent(e, EVT_DOUBLE_CLICKED, neighbor);
     }
 
@@ -70,6 +71,7 @@ public class CurrentSelectionOverlay extends SelectionOverlay {
     private void handleSingleClick(MouseEvent e) {
         Value<MapInstance> mapInstance = mapValues(e).mapInstance;
         Location neighbor = mapInstance.getValueOrFail().nearestNeighbor(e.x, e.y);
+        if (neighbor == null) return;
         if ((e.stateMask & SWT.SHIFT) != 0) {
             handleMultipleSelect(neighbor, getSelection(mapValues(e)));
         }

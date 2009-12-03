@@ -14,6 +14,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.widgets.Canvas;
 
+import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.map.MapValues;
 import ch.deif.meander.ui.CodemapEvent;
@@ -137,8 +138,10 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
     private void updateTooltip(MouseEvent e) {
         MapInstance map = mapValues.mapInstance.getValue();
         if (map == null) return;
-        boolean noName = map.isEmpty() || !map.containsPoint(e.x, e.y);
-        String name = noName ? null : map.nearestNeighbor(e.x, e.y).getName();
+        Location nearestNeighbor = map.nearestNeighbor(e.x, e.y);
+        
+        boolean noName = map.isEmpty() || !map.containsPoint(e.x, e.y) || nearestNeighbor == null;
+        String name = noName ? null : nearestNeighbor.getName();
         ((Canvas) e.widget).setToolTipText(name);
     }
 

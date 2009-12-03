@@ -189,6 +189,7 @@ public class KDTree<T> {
     public T nearest(double [] key) throws KeySizeException {
 	
 	List<T> nbrs = nearest(key, 1, null);
+	if (nbrs.isEmpty()) return null;
 	return nbrs.get(0);
     }
     

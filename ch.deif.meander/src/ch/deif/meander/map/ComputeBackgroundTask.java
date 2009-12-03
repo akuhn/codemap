@@ -189,7 +189,13 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
                 }
                 // get color from location a.k.a. hill colors
                 nnStopWatch.start();
-                MColor mcolor = colors.forLocation(map.nearestNeighbor(x, y).getPoint());
+                Location nearestNeighbor = map.nearestNeighbor(x, y);
+                MColor mcolor;
+                if (nearestNeighbor == null) {
+                    mcolor = MColor.HILLGREEN;
+                } else {
+                    mcolor = colors.forLocation(nearestNeighbor.getPoint());                    
+                }
                 nnStopWatch.stop();
                 // make rgb
                 int baseIndex = i*3;
