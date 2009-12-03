@@ -4,7 +4,9 @@
     <target name="default">
         <delete dir="features"/>
     	<delete dir="plugins"/>
+        <delete dir="logs"/>    	
         <delete file="artifacts.jar"/>
+        <delete file="logs.zip"/>    	
         <delete file="content.jar"/>
     	<delete file="site.xml"/>
     	<copy file="site_qualifier.txt" tofile="site.xml"/>
