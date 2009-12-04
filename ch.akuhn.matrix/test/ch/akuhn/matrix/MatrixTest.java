@@ -90,5 +90,21 @@ public class MatrixTest {
 	public void shouldFailWhenSizeDoesNotConform() {
 		Matrix.dense(3,2).mult(Vector.dense(3));
 	}
+
+	@Test
+	public void whenEmptyshouldNotHaveMaximum() {
+		assertEquals(Double.NaN, Matrix.dense(0,0).max(), epsilon);
+	}
+
+	@Test
+	public void whenEmptyshouldNotHaveMinimum() {
+		assertEquals(Double.NaN, Matrix.dense(0,0).min(), epsilon);
+	}
+
+	@Test
+	public void whenEmptyshouldNotHaveMean() {
+		assertEquals(Double.NaN, Matrix.dense(0,0).mean(), epsilon);
+	}
+	
 	
 }

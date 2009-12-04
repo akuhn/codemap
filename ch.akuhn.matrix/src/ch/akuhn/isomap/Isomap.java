@@ -4,9 +4,9 @@ import java.util.Arrays;
 
 import ch.akuhn.graph.DijkstraAlgorithm2;
 import ch.akuhn.graph.Graph;
-import ch.akuhn.matrix.SymetricMatrix;
 import ch.akuhn.matrix.Function;
-import ch.akuhn.matrix.eigenvalues.FewEigenvalues;
+import ch.akuhn.matrix.SymetricMatrix;
+import ch.akuhn.matrix.eigenvalues.Eigenvalues;
 import ch.akuhn.org.ggobi.plugins.ggvis.Points;
 
 /** Embeds n-dimensional data in two dimensions.
@@ -138,7 +138,7 @@ public abstract class Isomap {
      */
     public void constructDeeDimensionalEmbedding() {
         this.applyTauOperator();
-        FewEigenvalues eigen = FewEigenvalues.of(graph).largest(2);
+        Eigenvalues eigen = Eigenvalues.of(graph).largest(2);
         eigen.run();
         points = new Points(n);
         for (int i = 0; i < n; i++) {

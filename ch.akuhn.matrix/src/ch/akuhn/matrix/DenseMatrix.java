@@ -74,5 +74,10 @@ public class DenseMatrix extends Matrix {
         }
         return new DenseMatrix(path);
     }	
+    
+    @Override
+    public double[][] unwrap() {
+    	return values;
+    }
 	
 }
