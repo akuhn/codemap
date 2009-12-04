@@ -2,10 +2,10 @@ package ch.akuhn.matrix.eigenvalues;
 
 import java.util.Random;
 
-import ch.akuhn.linalg.Matrix;
 import ch.akuhn.linalg.SVD;
-import ch.akuhn.linalg.SparseMatrix;
-import ch.akuhn.linalg.Vector;
+import ch.akuhn.matrix.Matrix;
+import ch.akuhn.matrix.SparseMatrix;
+import ch.akuhn.matrix.Vector;
 import ch.akuhn.util.Out;
 import ch.akuhn.util.Stopwatch;
 

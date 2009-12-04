@@ -1,4 +1,4 @@
-package ch.akuhn.linalg;
+package ch.akuhn.matrix;
 
 import static ch.akuhn.foreach.For.range;
 import static ch.akuhn.foreach.For.withIndex;
@@ -10,7 +10,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 import ch.akuhn.foreach.Each;
-import ch.akuhn.linalg.Vector.Entry;
+import ch.akuhn.matrix.Vector.Entry;
 import ch.akuhn.util.Jason;
 
 
@@ -193,6 +193,12 @@ public class SparseMatrix extends Matrix {
 	
 	public static void main(String[] args) {
 		SparseMatrix.random(20,30,0.2).toJason(new Jason(System.out));
+	}
+
+	@Override
+	public void apply(Function f) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

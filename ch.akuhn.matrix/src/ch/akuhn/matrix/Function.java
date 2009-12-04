@@ -29,6 +29,18 @@ public abstract class Function {
         }
     };
 
+    public final void apply(double[] ds, int length) {
+    	for (int n = 0; n < length; n++) ds[n] = apply(ds[n]);
+    }
+    
+    public final void apply(double[] ds) {
+    	for (int n = 0; n < ds.length; n++) ds[n] = apply(ds[n]);
+    }
+    
+    public final void apply(double[][] dss) {
+    	for (double[] ds: dss) for (int n = 0; n < ds.length; n++) ds[n] = apply(ds[n]);
+    }
+    
     
     //return d < 1 ? d : (d * 10) - 9;
     //return d < 0.5 ? d * 2 : Math.pow(d * 2, 8);

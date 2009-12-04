@@ -1,7 +1,9 @@
-package ch.akuhn.matrix;
+package ch.akuhn.graph;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ch.akuhn.matrix.Matrix;
 
 
 /** Unweighted, undirected graph.
@@ -31,7 +33,7 @@ public class Graph {
         }
     }
     
-    public Graph(SymetricMatrix dist) {
+    public Graph(Matrix dist) {
         this(dist.columnCount());
         for (int n = 0; n < nodes.length; n++) {
             List<Node> list = new ArrayList<Node>();

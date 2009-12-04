@@ -88,8 +88,8 @@ public class Points {
     }
 
     public void applyCentering() {
-        new Vector(x).applyCentering();
-        new Vector(y).applyCentering();
+        Vector.wrap(x).applyCentering();
+        Vector.wrap(y).applyCentering();
     }
 
 	public int size() {

@@ -1,4 +1,4 @@
-package ch.akuhn.matrix;
+package ch.akuhn.graph;
 
 /** Node in an unweighted, undirected graph.
  *

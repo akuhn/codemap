@@ -3,6 +3,7 @@ package ch.akuhn.linalg;
 import ch.akuhn.edu.mit.tedlab.Svdlib;
 import ch.akuhn.edu.mit.tedlab.SMat;
 import ch.akuhn.edu.mit.tedlab.SVDRec;
+import ch.akuhn.matrix.SparseMatrix;
 
 /** Singular value decomposition of matrix A.
  *<P> 

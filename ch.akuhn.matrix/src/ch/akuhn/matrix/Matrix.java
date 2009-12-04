@@ -1,20 +1,15 @@
-package ch.akuhn.linalg;
+package ch.akuhn.matrix;
 
-import java.io.DataOutput;
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import ch.akuhn.linalg.Vector.Entry;
+import ch.akuhn.matrix.Vector.Entry;
 import ch.akuhn.util.Files;
 import ch.akuhn.util.PrintOn;
-import ch.akuhn.util.Throw;
 
 /** Two-dimensional table of floating point numbers.
- * 
+ *<P>
  * @author Adrian Kuhn
  *
  */
@@ -78,29 +73,6 @@ public abstract class Matrix {
     public abstract int rowCount();
 
     public abstract int used();
-
-    public void storeBinaryOn(DataOutput out) throws IOException {
-        out.writeInt(this.rowCount());
-        out.writeInt(this.columnCount());
-        out.writeInt(this.used());
-        for (Vector row: rows()) {
-            out.writeInt(row.used());
-            for (Entry each: row.entries()) {
-                out.writeInt(each.index);
-                out.writeFloat((float) each.value);
-            }
-        }
-        Files.close(out);
-    }
-
-    public void storeBinaryOn(String fname) {
-        try {
-            DataOutputStream out = new DataOutputStream(new FileOutputStream(fname));
-            storeBinaryOn(out);
-        } catch (Exception ex) {
-            throw Throw.exception(ex);
-        }
-    }
 
     /** @see http://tedlab.mit.edu/~dr/svdlibc/SVD_F_ST.html */
     public void storeSparseOn(Appendable appendable) {
@@ -182,16 +154,13 @@ public abstract class Matrix {
 		public Vector times(double scalar) {
 			throw new Error("Not yet implemented");
 		}
+
+		@Override
+		public void apply(Function f) {
+			throw new Error("Not yet implemented");
+		}
 		
     }
-
-	public double minValue() {
-		double min = Double.MAX_VALUE;
-		for (Vector row: rows()) 
-			for (Entry each: row.entries()) 
-				if (each.value < min) min = each.value;
-		return min;
-	};
 
 	/** Returns <code>y = Ax</code>.
 	 * 
@@ -252,6 +221,38 @@ public abstract class Matrix {
 
 	public static SparseMatrix sparse(int n, int m) {
 		return new SparseMatrix(n, m);
+	}
+	
+	public void apply(Function f) {
+		f.apply(this.unwrap());
+	}
+	
+	public double max() {
+		return Util.max(this.unwrap(), Double.NaN);
+	}
+	
+	public double min() {
+		return Util.min(this.unwrap(), Double.NaN);
+	}
+	
+	public double mean() {
+		double[][] values = unwrap();
+		return Util.sum(values) / Util.count(values);
+	}
+	
+	public double[][] unwrap() {
+		throw new IllegalStateException("cannot unwrap instance of " + this.getClass().getSimpleName());
+	}
+
+	public double[] rowwiseMean() {
+		double[] mean = new double[rowCount()];
+		int i = 0;
+		for (Vector row: rows()) mean[i++] = row.mean();
+		return mean;
+	}
+
+	public int[] getHistogram() {
+		return Util.getHistogram(this.unwrap(), 100);
 	}
 	
 }

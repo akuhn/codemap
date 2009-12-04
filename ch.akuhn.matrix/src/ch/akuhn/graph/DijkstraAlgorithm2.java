@@ -1,7 +1,8 @@
-package ch.akuhn.matrix;
+package ch.akuhn.graph;
 
 import java.util.Arrays;
 
+import ch.akuhn.matrix.Matrix;
 import ch.akuhn.util.Out;
 
 public class DijkstraAlgorithm2 {
@@ -9,7 +10,7 @@ public class DijkstraAlgorithm2 {
     private static final int DONE = -1;
     private static final int TODO = 0; // default of qindex!
 
-    public double[] apply(Graph g, Node source, SymetricMatrix dist) {
+    public double[] apply(Graph g, Node source, Matrix dist) {
         int N = g.nodes.length;
         double[] costs = new double[N];
         Arrays.fill(costs, Double.POSITIVE_INFINITY);

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import ch.akuhn.linalg.Matrix;
+import ch.akuhn.matrix.Matrix;
 import ch.akuhn.matrix.eigenvalues.AllEigenvalues;
 import ch.akuhn.matrix.eigenvalues.Eigenvalues;
 

@@ -1,7 +1,7 @@
 package ch.akuhn.matrix.eigenvalues;
 
-import ch.akuhn.linalg.Matrix;
-import ch.akuhn.linalg.Vector;
+import ch.akuhn.matrix.Matrix;
+import ch.akuhn.matrix.Vector;
 
 public class Eigenvalues {
 

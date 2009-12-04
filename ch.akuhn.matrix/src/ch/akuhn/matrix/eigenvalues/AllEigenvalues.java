@@ -5,8 +5,8 @@ import java.util.Arrays;
 import org.netlib.lapack.LAPACK;
 import org.netlib.util.intW;
 
-import ch.akuhn.linalg.Matrix;
-import ch.akuhn.linalg.Vector;
+import ch.akuhn.matrix.Matrix;
+import ch.akuhn.matrix.Vector;
 
 
 /**

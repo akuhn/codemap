@@ -1,4 +1,4 @@
-package ch.akuhn.linalg;
+package ch.akuhn.matrix;
 
 import static ch.akuhn.foreach.For.range;
 
@@ -178,6 +178,11 @@ public class SparseVector extends Vector {
 			.put("keys", keys, used)
 			.put("values", values, used)
 			.end();
+	}
+	
+	public void apply(Function f) {
+		assert f.apply(0) == 0; // assume zero is fixpoint
+		for (int n = 0; n < used; n++) values[n] = f.apply(values[n]);
 	}
 	
 }

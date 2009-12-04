@@ -1,4 +1,4 @@
-package ch.akuhn.linalg;
+package ch.akuhn.matrix;
 
 import static ch.akuhn.foreach.For.range;
 
@@ -67,6 +67,16 @@ public class DenseVector extends Vector {
 			if ((values[i] - d.values[i]) > epsilon) return false;
 		}
 		return true;
+	}
+
+	@Override
+	public void apply(Function f) {
+		for (int n = 0; n < values.length; n++) values[n] = f.apply(values[n]);
+	}
+
+	@Override
+	public double[] unwrap() {
+		return values;
 	}
 
 }

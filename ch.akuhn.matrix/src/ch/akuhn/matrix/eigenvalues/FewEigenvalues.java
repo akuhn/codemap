@@ -6,8 +6,8 @@ import org.netlib.arpack.ARPACK;
 import org.netlib.util.doubleW;
 import org.netlib.util.intW;
 
-import ch.akuhn.linalg.Matrix;
-import ch.akuhn.linalg.Vector;
+import ch.akuhn.matrix.Matrix;
+import ch.akuhn.matrix.Vector;
 
 /** Finds a few eigenvalues of a matrix. 
  *<P> 

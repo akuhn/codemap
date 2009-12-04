@@ -1,6 +1,7 @@
 package ch.akuhn.isomap;
 
-import ch.akuhn.matrix.DoubleMatrix;
+import ch.akuhn.matrix.DenseMatrix;
+import ch.akuhn.matrix.Matrix;
 
 public class SwissRoll {
 
@@ -18,14 +19,14 @@ public class SwissRoll {
         }
     }
     
-    public DoubleMatrix asDistanceMatrix() {
+    public Matrix asDistanceMatrix() {
         double[][] dist = new double[x.length][x.length];
         for (int i = 0; i < x.length; i++) {
             for (int j = 0; j < x.length; j++) {
                 dist[i][j] = dist(i,j);
             }
         }
-        return new DoubleMatrix(dist);
+        return new DenseMatrix(dist);
     }
 
     public double dist(int i, int j) {

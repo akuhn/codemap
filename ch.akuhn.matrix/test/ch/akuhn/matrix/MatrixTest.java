@@ -1,8 +1,12 @@
-package ch.akuhn.linalg;
+package ch.akuhn.matrix;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+
+import ch.akuhn.matrix.Matrix;
+import ch.akuhn.matrix.SparseMatrix;
+import ch.akuhn.matrix.Vector;
 
 public class MatrixTest {
 

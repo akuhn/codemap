@@ -2,8 +2,8 @@ package ch.akuhn.isomap;
 
 import java.util.Arrays;
 
-import ch.akuhn.matrix.DijkstraAlgorithm2;
-import ch.akuhn.matrix.Graph;
+import ch.akuhn.graph.DijkstraAlgorithm2;
+import ch.akuhn.graph.Graph;
 import ch.akuhn.matrix.SymetricMatrix;
 import ch.akuhn.matrix.Function;
 import ch.akuhn.matrix.eigenvalues.FewEigenvalues;
@@ -120,11 +120,11 @@ public abstract class Isomap {
     }
     
     public boolean[][] getEdges() {
-        boolean[][] edges = new boolean[graph.values.length][];
+        boolean[][] edges = new boolean[graph.rowCount()][];
         for (int i = 0; i < edges.length; i++) edges[i] = new boolean[i];
         for (int i = 0; i < edges.length; i++) {
             for (int j = 0; j < i; j++) {
-                edges[i][j] = !Double.isInfinite(graph.values[i][j]);
+                edges[i][j] = !Double.isInfinite(graph.get(i,j));
             }
         }
         return edges;
@@ -161,11 +161,11 @@ public abstract class Isomap {
     private void applyTauOperator() {
         graph.apply(Function.SQUARE);
         double mean = graph.mean();
-        double[] columnMean = graph.columwiseMean();
+        double[] columnMean = graph.rowwiseMean();
         int N = graph.columnCount();
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < i; j++) {
-                graph.values[i][j] += mean - columnMean[i] - columnMean[j];
+                graph.add(i,j,mean - columnMean[i] - columnMean[j]);
             }
         }
         graph.applyMultiplication(-0.5);
