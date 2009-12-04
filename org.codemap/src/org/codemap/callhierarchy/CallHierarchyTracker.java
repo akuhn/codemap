@@ -4,6 +4,7 @@ import static org.codemap.util.ID.CALL_HIERARCHY_REF;
 
 import java.lang.reflect.Field;
 
+import org.codemap.util.Log;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.internal.corext.callhierarchy.CallerMethodWrapper;
 import org.eclipse.jdt.internal.corext.callhierarchy.MethodWrapper;
@@ -28,6 +29,7 @@ import org.eclipse.ui.IWorkbenchListener;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import ch.akuhn.util.List;
@@ -144,7 +146,7 @@ public class CallHierarchyTracker {
                 callTree.addSelectionChangedListener(changeListener);
                 
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.error(e);
             }
         }
         
@@ -175,8 +177,9 @@ public class CallHierarchyTracker {
     
     public CallHierarchyTracker() {
         callModel = new CallModel();
-        PlatformUI.getWorkbench().getActiveWorkbenchWindow().addPageListener(pageListener);
-        addPartListener(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage());
+        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+        addPageListener(window);
+        addPartListener(window.getActivePage());
     }
 
     protected void removePartListener(IWorkbenchPage page) {
@@ -188,6 +191,14 @@ public class CallHierarchyTracker {
         if (page == null) return;
         page.addPartListener(partListener);
     }
+    
+    protected void removePageListener(IWorkbenchWindow window) {
+        window.removePageListener(pageListener);
+    }
+    
+    protected void addPageListener(IWorkbenchWindow window) {
+        window.addPageListener(pageListener);
+    }        
 
     protected void onTreeRootSelected(MethodWrapper rootMethod) {
         // need an identity check here, if the roots are not identical then
@@ -240,6 +251,16 @@ public class CallHierarchyTracker {
     public void enable() {
         callModel.enable();
     }
+    
+    /**
+     * Unregister the active IPartListener and IPageListener. Call on plug-in shutdown to enable
+     * clean deregistration of all the active listeners.
+     */
+    public void dispose() {
+        IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+        removePageListener(window);
+        removePartListener(window.getActivePage());
+    }
 }
 
 class Impatient {
@@ -269,8 +290,7 @@ class Impatient {
                 Thread.sleep(sleepTime());                                
             }
         } catch (Exception e) {
-            // TODO: handle, at least log
-            e.printStackTrace();
+            Log.error(e);
         }
     }
     

@@ -17,6 +17,26 @@
       %license
    </license>
 
+   <requires>
+      <import plugin="ch.akuhn.util" version="2.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.swt" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.runtime" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jdt.core" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface.text" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jdt.ui" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.ide" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="ch.akuhn.util" version="2.1.5" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jdt.junit" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="ch.akuhn.util" version="2.1.264" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.search" version="3.5.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="ch.akuhn.util" version="2.1.277" match="greaterOrEqual"/>
+      <import plugin="ch.akuhn.hapax" version="0.7.264" match="greaterOrEqual"/>
+   </requires>
+
    <plugin
          id="ch.akuhn.hapax"
          download-size="0"

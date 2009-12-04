@@ -33,7 +33,6 @@ public class CodemapCore extends AbstractUIPlugin {
     public final MapSelection openFilesSelection;
     public final MapSelection currentSelection;
     private final MapPerProjectCache cache;
-    public CallHierarchyTracker callHierarchyTracker;
 
     public MapSelection getYouAreHereSelection() {
         return youAreHereSelection;
@@ -50,7 +49,7 @@ public class CodemapCore extends AbstractUIPlugin {
     public CodemapCore() {
         TaskValue.setTaskFactory(new EclipseTaskFactory());
         youAreHereSelection = new MapSelection();
-        openFilesSelection = new MapSelection();	
+        openFilesSelection = new MapSelection();
         currentSelection = new MapSelection();
         cache = new MapPerProjectCache();
     }
@@ -59,7 +58,6 @@ public class CodemapCore extends AbstractUIPlugin {
     public void start(BundleContext context) throws Exception {
         super.start(context);
         THE_PLUGIN = this;
-        callHierarchyTracker = new CallHierarchyTracker();
     }
 
     @Override
@@ -67,7 +65,6 @@ public class CodemapCore extends AbstractUIPlugin {
         cache.saveMapState();
         THE_PLUGIN = null;
         super.stop(context);
-        callHierarchyTracker = null;
     }
 
     public static CodemapCore getPlugin() {
@@ -91,6 +88,7 @@ public class CodemapCore extends AbstractUIPlugin {
     }
 
     public MapPerProject getActiveMap() {
+        if (theView == null) return null;
         return mapForProject(theView.getCurrentProject());
     }
 

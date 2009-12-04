@@ -12,10 +12,10 @@ public class LinkWithCallHierarchyAction extends MenuAction {
 
     private CallHierarchyTracker callHierarchyTracker;
 
-    public LinkWithCallHierarchyAction() {
+    public LinkWithCallHierarchyAction(CallHierarchyTracker tracker) {
 	    super("Link with Call Hierarchy", IAction.AS_CHECK_BOX);
 	    setImageDescriptor(new CodemapIcons().descriptor(CALL_HIERARCHY));
-	    callHierarchyTracker = CodemapCore.getPlugin().callHierarchyTracker;
+	    callHierarchyTracker = tracker;
 	}
 
     @Override

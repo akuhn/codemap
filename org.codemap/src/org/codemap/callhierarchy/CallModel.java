@@ -46,7 +46,12 @@ public class CallModel {
     }
 
     public void setDirty() {
-        MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
+        CodemapCore plugin = CodemapCore.getPlugin();
+        if (plugin == null) return;
+        
+        MapPerProject activeMap = plugin.getActiveMap();
+        if (activeMap == null) return;
+        
         SWTLayer layer = activeMap.getLayer(CallOverlay.class);
         if (layer == null) {
             layer = new CallOverlay(this);

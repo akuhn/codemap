@@ -23,7 +23,7 @@ public class SaveAsPNGAction extends Action {
     }
 
     private void saveTo(String path) {
-        Image image = CodemapCore.getPlugin().getMapView().getCodemapImage();
+        Image image = CodemapCore.getPlugin().getMapView().newCodemapImage();
         ImageLoader loader = new ImageLoader();
         loader.data = new ImageData[] {image.getImageData()};
         loader.save(path, SWT.IMAGE_PNG);

@@ -2,6 +2,7 @@ package org.codemap.mapview.action;
 
 import static org.codemap.util.CodemapIcons.LAYERS;
 
+import org.codemap.callhierarchy.CallHierarchyTracker;
 import org.codemap.callhierarchy.LinkWithCallHierarchyAction;
 import org.codemap.util.CodemapIcons;
 import org.codemap.util.ExtensionPoints;
@@ -9,10 +10,16 @@ import org.eclipse.swt.widgets.Menu;
 
 public class LayerDropDownAction extends ExtensionPointDropDownAction {
     
-	@Override
+	private CallHierarchyTracker callHierarchyTracker;
+
+    public LayerDropDownAction(CallHierarchyTracker callHierarchyTracker) {
+	    this.callHierarchyTracker = callHierarchyTracker;
+    }
+
+    @Override
     protected void createMenu(Menu menu) {
         super.createMenu(menu);
-        addActionToMenu(menu, new LinkWithCallHierarchyAction());
+        addActionToMenu(menu, new LinkWithCallHierarchyAction(callHierarchyTracker));
     }
 
     @Override

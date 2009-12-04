@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
+import org.codemap.callhierarchy.CallHierarchyTracker;
 import org.codemap.mapview.action.CodemapAction;
 import org.codemap.mapview.action.ColorDropDownAction;
 import org.codemap.mapview.action.DebugLocationsAction;
@@ -99,9 +100,9 @@ public class MapView extends ViewPart {
     };
 
     public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
-
     private static final String ATTR_CLASS = "class";
 
+    private CallHierarchyTracker callHierarchyTracker;
     private final MapController theController;
     private MapSelectionProvider selectionProvider;
     private SelectionTracker selectionTracker;
@@ -139,6 +140,7 @@ public class MapView extends ViewPart {
 
     public MapView() {
         theController = new MapController(this);
+        callHierarchyTracker = new CallHierarchyTracker();
     }
 
     @Override
@@ -207,7 +209,7 @@ public class MapView extends ViewPart {
         tbm.add(new Separator());
 
         tbm.add(registerAction(new ColorDropDownAction(theController)));
-        tbm.add(registerAction(new LayerDropDownAction()));
+        tbm.add(registerAction(new LayerDropDownAction(callHierarchyTracker)));
         tbm.add(registerAction(new LabelDrowDownAction()));
 
         tbm.add(linkWithSelection = new LinkWithSelectionAction(selectionTracker, memento));
@@ -230,6 +232,7 @@ public class MapView extends ViewPart {
     @Override
     public void dispose() {
         CodemapCore.getPlugin().setMapView(null);
+        callHierarchyTracker.dispose();        
         selectionTracker.dispose();
     }
     
@@ -322,8 +325,15 @@ public class MapView extends ViewPart {
             }
         });
     }
-
-    public Image getCodemapImage() {
+    
+    /**
+     * Might return null if the image could not be rendered.
+     * Please make sure to dispose the image once you do not need
+     * it any longer.
+     * 
+     * @return a new Image instance representing the current Codemap.
+     */
+    public Image newCodemapImage() {
         if (canvas == null) return null;
         Point size = canvas.getSize();
         Image image = new Image(Display.getDefault(), size.x, size.y);

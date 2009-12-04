@@ -47,7 +47,7 @@ public abstract class DropDownAction extends CodemapAction implements IMenuCreat
 		return null;
 	}
 	
-    protected void addActionToMenu(Menu parent, MenuAction action) {
+    public void addActionToMenu(Menu parent, MenuAction action) {
     	actions.add(action);
         ActionContributionItem item = new ActionContributionItem(action);
         item.fill(parent, -1);
