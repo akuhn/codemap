@@ -40,8 +40,11 @@ public class SearchResultsOverlay extends SelectionOverlay {
         gc.getTransform(save);
         Transform t = new Transform(device);
         gc.getTransform(t);
-        t.translate(each.px, each.py + GAP_Y);
+        
+        // push stack, first translate is applied last
+        t.translate(each.px, each.py);
         t.rotate(27);
+        t.translate(0, GAP_Y);
         gc.setTransform(t);
         
         gc.fillPath(path);
@@ -51,11 +54,6 @@ public class SearchResultsOverlay extends SelectionOverlay {
         gc.setTransform(save);
         t.dispose();
         save.dispose();
-//        gc.fillOval(each.px - SELECTION_SIZE/2, each.py - SELECTION_SIZE/2,
-//                SELECTION_SIZE, SELECTION_SIZE);
-//        // draw stroke
-//        gc.drawOval(each.px - SELECTION_SIZE/2, each.py - SELECTION_SIZE/2,
-//                SELECTION_SIZE, SELECTION_SIZE);		
     }
 
     @Override
