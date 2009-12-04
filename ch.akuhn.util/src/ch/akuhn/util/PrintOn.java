@@ -131,6 +131,23 @@ public class PrintOn implements Appendable, Closeable {
 	public void beginLoop() {
 		separate = false;
 	}
+
+	public PrintOn p(String string) {
+		return this.append(string);
+	}
 	
+	public PrintOn p(int n) {
+		return this.append(Integer.toString(n));
+	}
+
+	public PrintOn p(double d) {
+		return this.append(Double.toString(d));
+	}
+
+	public PrintOn comma() {
+		if (separate) this.append(',');
+		separate = true;
+		return this;
+	}
 	
 }

@@ -175,6 +175,18 @@ public abstract class Matrix {
 			for (Entry each: row.entries()) 
 				if (each.value < min) min = each.value;
 		return min;
+	}
+
+	public void storeOn(Appendable appendable) {
+		PrintOn p = new PrintOn(appendable);
+		p.p("{\"n\":").p(rowCount()).p(",\"m\":").p(columnCount()).p(",\"data\":[");
+		for (Vector row: rows()) {
+			p.separatedBy(",").p("[");
+			PrintOn pp = new PrintOn(p);
+			for (Entry each: row.entries()) pp.separatedBy(",").p(each.value);
+			p.p("]");
+		}
+		p.p("]}");
 	};
 
 }

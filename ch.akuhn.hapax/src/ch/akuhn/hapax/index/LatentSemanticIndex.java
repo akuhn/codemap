@@ -15,6 +15,8 @@ import ch.akuhn.hapax.corpus.Terms;
 import ch.akuhn.hapax.linalg.Matrix;
 import ch.akuhn.hapax.linalg.SVD;
 import ch.akuhn.hapax.linalg.SymetricMatrix;
+import ch.akuhn.util.Files;
+import ch.akuhn.util.PrintOn;
 import ch.akuhn.util.Providable;
 import ch.akuhn.util.Bag.Count;
 
@@ -148,6 +150,9 @@ public class LatentSemanticIndex implements Serializable {
                 correlation.put(row, column, svd.similarityVV(row, column));
             }
         }
+        //Appendable file = Files.openWrite("document-correlation.json");
+        //correlation.storeOn(file);
+        //Files.close(file);
         return correlation;
     }
     
@@ -176,21 +181,6 @@ public class LatentSemanticIndex implements Serializable {
             }      
         };
     }
-
-    //    public LatentSemanticIndex select(String version) {
-    //    	AssociativeList<String> selection = new AssociativeList<Document>();
-    //        for (String each: documents) {
-    //            if (each.version().equals(version)) selection.add(each);
-    //        }
-    //        int[] indices = new int[selection.size()];
-    //        for (int n = 0; n < indices.length; n++) {
-    //            indices[documents.get(selection.get(n))] = n;
-    //        }
-    //        return new LatentSemanticIndex(
-    //                terms, selection,
-    //                new double[selection.size()], // TODO copy global weighting
-    //                svd.withSelectV(indices));
-    //    }
 
     public int documentCount() {
         return documents.size();

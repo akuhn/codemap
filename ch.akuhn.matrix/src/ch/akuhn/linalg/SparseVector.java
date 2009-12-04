@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import ch.akuhn.util.PrintOn;
+import ch.akuhn.util.Jason;
 
 public class SparseVector extends Vector {
 
@@ -171,12 +171,13 @@ public class SparseVector extends Vector {
 		return y;
 	}
 	
-	public void storeOn(PrintOn out) {
-		out.append("{\"length\":").print(size).append(",\"keys\":[").beginLoop();
-		for (int i = 0; i < used; i++) out.separatedBy(",").print(keys[i]);
-		out.append("],\"values\":[").beginLoop();
-		for (int i = 0; i < used; i++) out.separatedBy(",").print(values[i]);
-		out.append("]}");
+	public void toJason(Jason j) {
+		j.begin(Vector.class)
+			.put("length", size)
+			.put("sparse", true)
+			.put("keys", keys, used)
+			.put("values", values, used)
+			.end();
 	}
 	
 }

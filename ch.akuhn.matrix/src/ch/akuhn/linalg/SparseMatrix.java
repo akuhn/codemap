@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 import ch.akuhn.foreach.Each;
 import ch.akuhn.linalg.Vector.Entry;
-import ch.akuhn.util.PrintOn;
+import ch.akuhn.util.Jason;
 
 
 public class SparseMatrix extends Matrix {
@@ -182,19 +182,17 @@ public class SparseMatrix extends Matrix {
 		return Vector.wrap(y);
     }
     
-	public void storeOn(PrintOn out) {
-		out.append("{\"n\":").print(rowCount()).append(",");
-		out.append("\"m\":").print(columnCount()).append(",");
-		out.append("\"rows\":[");
-		for (Vector row: rows) {
-			((SparseVector) row).storeOn(out);
-			out.separatedBy(",");
-		}
-		out.append("]}");
+	public void toJason(Jason j) {
+		j.begin(Matrix.class)
+			.put("n", rowCount())
+			.put("m", columnCount())
+			.put("sparse", true)
+			.put("rows", rows)
+			.end();
 	}
 	
 	public static void main(String[] args) {
-		SparseMatrix.random(20,30,0.2).storeOn(new PrintOn(System.out));
+		SparseMatrix.random(20,30,0.2).toJason(new Jason(System.out));
 	}
 	
 }
