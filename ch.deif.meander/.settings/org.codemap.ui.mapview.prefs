@@ -1,9 +1,0 @@
-#Mon Nov 30 16:45:29 CET 2009
-eclipse.preferences.version=1
-identifier_labels=true
-no_labels=false
-org.codemap.plugin.eclemma=false
-org.codemap.plugin.marker=false
-show_default_colors=false
-show_flow=true
-show_package_colors=true
