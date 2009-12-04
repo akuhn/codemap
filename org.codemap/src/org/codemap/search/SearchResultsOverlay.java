@@ -43,7 +43,7 @@ public class SearchResultsOverlay extends SelectionOverlay {
         
         // push stack, first translate is applied last
         t.translate(each.px, each.py);
-        t.rotate(27);
+        t.rotate(140);
         t.translate(0, GAP_Y);
         gc.setTransform(t);
         
