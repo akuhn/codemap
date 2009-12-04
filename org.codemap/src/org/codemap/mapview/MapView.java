@@ -19,6 +19,7 @@ import org.codemap.mapview.action.ReloadMapAction;
 import org.codemap.mapview.action.SaveAsPNGAction;
 import org.codemap.mapview.action.SaveHapaxDataAction;
 import org.codemap.mapview.action.ShowTestsAction;
+import org.codemap.search.SearchResultController;
 import org.codemap.util.ExtensionPoints;
 import org.codemap.util.Log;
 import org.codemap.util.Resources;
@@ -120,6 +121,8 @@ public class MapView extends ViewPart {
 
     private IMemento memento;
 
+    private SearchResultController searchResultController;
+
     class ViewLabelProvider extends LabelProvider implements
             ITableLabelProvider {
 
@@ -141,6 +144,7 @@ public class MapView extends ViewPart {
     public MapView() {
         theController = new MapController(this);
         callHierarchyTracker = new CallHierarchyTracker();
+        searchResultController = new SearchResultController();
     }
 
     @Override
@@ -209,7 +213,7 @@ public class MapView extends ViewPart {
         tbm.add(new Separator());
 
         tbm.add(registerAction(new ColorDropDownAction(theController)));
-        tbm.add(registerAction(new LayerDropDownAction(callHierarchyTracker)));
+        tbm.add(registerAction(new LayerDropDownAction(callHierarchyTracker, searchResultController)));
         tbm.add(registerAction(new LabelDrowDownAction()));
 
         tbm.add(linkWithSelection = new LinkWithSelectionAction(selectionTracker, memento));
@@ -234,6 +238,7 @@ public class MapView extends ViewPart {
         CodemapCore.getPlugin().setMapView(null);
         callHierarchyTracker.dispose();        
         selectionTracker.dispose();
+        searchResultController.dispose();
     }
     
     @Override

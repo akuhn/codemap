@@ -40,7 +40,7 @@ public class LinkWithCallHierarchyAction extends MenuAction {
 
     @Override
     protected boolean isDefaultChecked() {
-        return false;
+        return true;
     }
 
 }
