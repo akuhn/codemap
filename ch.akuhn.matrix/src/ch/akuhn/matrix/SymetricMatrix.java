@@ -57,16 +57,20 @@ public class SymetricMatrix extends Matrix {
 		}
 	}
 
-	public static Matrix fromSquare(double[][] matrix) {
-		// TODO Auto-generated method stub
-		return null;
+	public static SymetricMatrix fromSquare(double[][] square) {
+		double[][] jagged = new double[square.length][];
+		for (int i = 0; i < jagged.length; i++) {
+			assert square[i].length == square.length;
+			jagged[i] = Arrays.copyOf(square[i], i);
+		}
+		return new SymetricMatrix(jagged);
 	}
 
 	public void applyMultiplication(double d) {
-		// TODO Auto-generated method stub
+		Util.times(values, d);
 	}
 
-	public static Matrix fromJagged(double[][] values) {
+	public static SymetricMatrix fromJagged(double[][] values) {
 		return new SymetricMatrix(values);
 	}
 

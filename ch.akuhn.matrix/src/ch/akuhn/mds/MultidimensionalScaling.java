@@ -18,7 +18,7 @@ import ch.akuhn.org.ggobi.plugins.ggvis.Points;
 public class MultidimensionalScaling {
 
     private Points fInitialConfiguration;
-    private Matrix fdistances;
+    private SymetricMatrix fdistances;
     private int fiterations = 100;
     private MultidimensionalScalingListener fListener;
     private PrintStream fOut;
@@ -72,7 +72,7 @@ public class MultidimensionalScaling {
     }
 
     public MultidimensionalScaling similarities(double[][] matrix) {
-        Matrix d = SymetricMatrix.fromSquare(matrix);
+    	SymetricMatrix d = SymetricMatrix.fromSquare(matrix);
         d.apply(Function.COSINE_TO_DISSIMILARITY);
         fdistances = d;
         return this;

@@ -57,5 +57,9 @@ public class Util {
         }
         return bins;
     }
+
+	public static void times(double[][] dss, double d) {
+		for (double[] ds: dss) for (int i = 0; i < ds.length; i++) ds[i] *= d;
+	}
 	
 }

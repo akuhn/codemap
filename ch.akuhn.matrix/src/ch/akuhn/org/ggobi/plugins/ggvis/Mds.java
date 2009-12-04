@@ -31,7 +31,7 @@ public class Mds {
     static final int DRAGGED = 4;
     private static final boolean TODO_SYMMETRY = false;
     final SymetricMatrix config_dist;
-    final Matrix Dtarget; /*-- D in the documentation; dist in the xgvis code --*/
+    final SymetricMatrix Dtarget; /*-- D in the documentation; dist in the xgvis code --*/
 
     private Points pos;
     /* these belong in ggv */
@@ -60,7 +60,7 @@ public class Mds {
     private MDSGroupInd group_ind = MDSGroupInd.all_distances;
 
     /*-- used in mds.c --*/
-    private Matrix weights = null;
+    private SymetricMatrix weights = null;
     final private Points gradient;
 
     private double Dtarget_max = Double.MAX_VALUE;
@@ -93,7 +93,7 @@ public class Mds {
         set_weights();
 
     }
-    public Mds(Matrix dissimilarities, Points initial,  
+    public Mds(SymetricMatrix dissimilarities, Points initial,  
             Function fConfigDist, Function fWeights, Function fDtarget) {
         len = dissimilarities.rowCount();
         Dtarget = dissimilarities;
@@ -147,14 +147,13 @@ public class Mds {
         // allocate position and compute means
         pos.get_center();
         // i's are moved by j's
-        double[][] values = this.Dtarget.unwrap();
-        for (int i = 0; i < values.length; i++) {
+        for (int i = 0; i < this.Dtarget.rowCount(); i++) {
             // these points are not moved by the gradient
             if (IS_DRAGGED(i) || (ANCHOR_FIXED && IS_ANCHOR(i))) continue;
             /* j's are moving i's */
             for (int j = 0; j < i; j++) {
                 if (mds_once_part2_continue(i, j)) continue;
-                values[i][j] = f_config_dist.apply(Lp_distance_pow(i, j));
+                this.config_dist.put(i,j,f_config_dist.apply(Lp_distance_pow(i, j)));
             }
         }
     }
