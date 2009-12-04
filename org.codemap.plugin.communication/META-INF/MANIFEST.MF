@@ -17,7 +17,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources;bundle-version="3.5.0",
  org.codemap;bundle-version="0.7.746",
  org.eclipse.jdt.core;bundle-version="3.5.0",
- ch.deif.meander;bundle-version="0.7.746",
  ch.akuhn.util;bundle-version="2.1.277"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
