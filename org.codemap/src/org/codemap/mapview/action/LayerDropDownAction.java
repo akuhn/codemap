@@ -4,6 +4,8 @@ import static org.codemap.util.CodemapIcons.LAYERS;
 
 import org.codemap.callhierarchy.CallHierarchyTracker;
 import org.codemap.callhierarchy.LinkWithCallHierarchyAction;
+import org.codemap.marker.MarkerController;
+import org.codemap.marker.ShowMarkersAction;
 import org.codemap.search.SearchResultController;
 import org.codemap.search.ShowSearchResultsAction;
 import org.codemap.util.CodemapIcons;
@@ -14,10 +16,12 @@ public class LayerDropDownAction extends ExtensionPointDropDownAction {
     
 	private CallHierarchyTracker callHierarchyTracker;
     private SearchResultController searchResultController;
+    private MarkerController markerController;
 
-    public LayerDropDownAction(CallHierarchyTracker callHierarchyTracker, SearchResultController searchResultController) {
+    public LayerDropDownAction(CallHierarchyTracker callHierarchyTracker, SearchResultController searchResultController, MarkerController markerController) {
 	    this.callHierarchyTracker = callHierarchyTracker;
 	    this.searchResultController = searchResultController;
+	    this.markerController = markerController;
     }
 
     @Override
@@ -25,11 +29,12 @@ public class LayerDropDownAction extends ExtensionPointDropDownAction {
         super.createMenu(menu);
         addActionToMenu(menu, new ShowSearchResultsAction(searchResultController));
         addActionToMenu(menu, new LinkWithCallHierarchyAction(callHierarchyTracker));
+        addActionToMenu(menu, new ShowMarkersAction(markerController));
     }
 
     @Override
 	protected void setup() {
-	    setImageDescriptor(new CodemapIcons().descriptor(LAYERS));
+	    setImageDescriptor(CodemapIcons.descriptor(LAYERS));
 		setText("Layers"); 
 	}
 

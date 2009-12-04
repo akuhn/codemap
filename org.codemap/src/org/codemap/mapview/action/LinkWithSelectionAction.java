@@ -19,7 +19,7 @@ public class LinkWithSelectionAction extends Action {
 		super("Link with Current Selection", AS_CHECK_BOX);
 		selectionTracker = tracker;
 		setChecked(DEFAULT_CHECKED);
-		setImageDescriptor(new CodemapIcons().descriptor(LINKED));
+		setImageDescriptor(CodemapIcons.descriptor(LINKED));
 		init(memento);
 	}
 

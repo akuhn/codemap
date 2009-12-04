@@ -1,6 +1,7 @@
 package org.codemap.util;
 
 import org.codemap.CodemapCore;
+import org.eclipse.jface.resource.ImageDescriptor;
 
 public class CodemapIcons extends IconFactory {
     
@@ -8,6 +9,10 @@ public class CodemapIcons extends IconFactory {
     
     private static String makeIdentifier(String suffix) {
         return DIR_PREFIX + suffix;
+    }
+    
+    public static ImageDescriptor descriptor(String key) {
+        return new CodemapIcons().getImageDescriptor(key);
     }
 
     public static final String FILE = makeIdentifier("file.gif");
@@ -20,7 +25,8 @@ public class CodemapIcons extends IconFactory {
     public static final String GREEN_CIRCLE = makeIdentifier("green_circle.gif");
     public static final String FLOW = makeIdentifier("flow.gif");
     public static final String CALL_HIERARCHY = makeIdentifier("call_hierarchy.gif");
-    public static final String SEARCH = makeIdentifier("search.gif");    
+    public static final String SEARCH = makeIdentifier("search.gif");
+    public static final String MARKER = makeIdentifier("markers.gif");        
     
     public static final String INFO = makeIdentifier("info_obj.gif");
     public static final String WARNING = makeIdentifier("warning_obj.gif");

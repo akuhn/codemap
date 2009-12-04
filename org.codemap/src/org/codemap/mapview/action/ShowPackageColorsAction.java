@@ -31,7 +31,7 @@ public class ShowPackageColorsAction extends MenuAction {
 		super("Color by Package", style);
 		this.theController = controller;
 		setChecked(isDefaultChecked());
-		setImageDescriptor(new CodemapIcons().descriptor(PACKAGES));
+		setImageDescriptor(CodemapIcons.descriptor(PACKAGES));
 	}
 
 	@Override

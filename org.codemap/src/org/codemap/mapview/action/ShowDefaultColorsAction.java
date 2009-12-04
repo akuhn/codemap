@@ -12,7 +12,7 @@ public class ShowDefaultColorsAction extends MenuAction {
 	public ShowDefaultColorsAction(int style) {
 		super("Show default colors", style);
 		setChecked(DEFAULT_VALUE);
-		setImageDescriptor(new CodemapIcons().descriptor(GREEN_CIRCLE));
+		setImageDescriptor(CodemapIcons.descriptor(GREEN_CIRCLE));
 	}
 	
 	@Override

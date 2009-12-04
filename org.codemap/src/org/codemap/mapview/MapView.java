@@ -19,6 +19,7 @@ import org.codemap.mapview.action.ReloadMapAction;
 import org.codemap.mapview.action.SaveAsPNGAction;
 import org.codemap.mapview.action.SaveHapaxDataAction;
 import org.codemap.mapview.action.ShowTestsAction;
+import org.codemap.marker.MarkerController;
 import org.codemap.search.SearchResultController;
 import org.codemap.util.ExtensionPoints;
 import org.codemap.util.Log;
@@ -123,6 +124,8 @@ public class MapView extends ViewPart {
 
     private SearchResultController searchResultController;
 
+    private MarkerController markerController;
+
     class ViewLabelProvider extends LabelProvider implements
             ITableLabelProvider {
 
@@ -145,6 +148,7 @@ public class MapView extends ViewPart {
         theController = new MapController(this);
         callHierarchyTracker = new CallHierarchyTracker();
         searchResultController = new SearchResultController();
+        markerController = new MarkerController();
     }
 
     @Override
@@ -213,7 +217,7 @@ public class MapView extends ViewPart {
         tbm.add(new Separator());
 
         tbm.add(registerAction(new ColorDropDownAction(theController)));
-        tbm.add(registerAction(new LayerDropDownAction(callHierarchyTracker, searchResultController)));
+        tbm.add(registerAction(new LayerDropDownAction(callHierarchyTracker, searchResultController, markerController)));
         tbm.add(registerAction(new LabelDrowDownAction()));
 
         tbm.add(linkWithSelection = new LinkWithSelectionAction(selectionTracker, memento));
@@ -239,6 +243,7 @@ public class MapView extends ViewPart {
         callHierarchyTracker.dispose();        
         selectionTracker.dispose();
         searchResultController.dispose();
+        markerController.dispose();
     }
     
     @Override

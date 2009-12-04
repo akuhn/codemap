@@ -17,7 +17,7 @@ public class ForceSelectionAction extends Action {
 		super("Force Package Explorer Selection", AS_CHECK_BOX);
 		selectionProvider = provider;
 		setChecked(DEFAULT_CHECKED);
-		setImageDescriptor(new CodemapIcons().descriptor(FORCE_SELECTION));
+		setImageDescriptor(CodemapIcons.descriptor(FORCE_SELECTION));
 		init(memento);
 	}
 

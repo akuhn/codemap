@@ -9,11 +9,11 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 public abstract class IconFactory {
 
-	public ImageDescriptor descriptor(String key) {
+	protected ImageDescriptor getImageDescriptor(String key) {
 		return loadImage(key).getDescriptor(key);
 	}
 
-	private ImageRegistry loadImage(String path) {
+	protected ImageRegistry loadImage(String path) {
 		ImageRegistry reg = getActivator().getImageRegistry();
 		if (reg.getDescriptor(path) == null) {
 			URL url = getActivator().getBundle().getEntry(path);

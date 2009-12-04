@@ -10,7 +10,7 @@ public class LabelDrowDownAction extends DropDownAction {
     @Override
 	protected void setup() {
 		setText("Labels"); 
-		setImageDescriptor(new CodemapIcons().descriptor(LABELS));
+		setImageDescriptor(CodemapIcons.descriptor(LABELS));
 	}
 
 	@Override

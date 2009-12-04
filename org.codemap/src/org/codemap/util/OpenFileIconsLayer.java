@@ -23,7 +23,7 @@ public class OpenFileIconsLayer extends SelectionOverlay {
     private ILabelProvider provider;
     
     public OpenFileIconsLayer() {
-        this.imageDesc = new CodemapIcons().descriptor(FILE);
+        this.imageDesc = CodemapIcons.descriptor(FILE);
         // TODO: dispose the LabelProvider when no longer needed
         this.provider = new WorkbenchLabelProvider();
     }

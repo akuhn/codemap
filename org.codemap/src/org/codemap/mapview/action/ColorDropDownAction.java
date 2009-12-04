@@ -18,7 +18,7 @@ public class ColorDropDownAction extends ExtensionPointDropDownAction {
 	@Override
 	protected void setup() {
 		setText("Colors"); 
-		setImageDescriptor(new CodemapIcons().descriptor(PALETTE));
+		setImageDescriptor(CodemapIcons.descriptor(PALETTE));
 	}
 
 	@Override

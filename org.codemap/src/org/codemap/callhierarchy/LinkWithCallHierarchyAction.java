@@ -14,7 +14,7 @@ public class LinkWithCallHierarchyAction extends MenuAction {
 
     public LinkWithCallHierarchyAction(CallHierarchyTracker tracker) {
 	    super("Link with Call Hierarchy", IAction.AS_CHECK_BOX);
-	    setImageDescriptor(new CodemapIcons().descriptor(CALL_HIERARCHY));
+	    setImageDescriptor(CodemapIcons.descriptor(CALL_HIERARCHY));
 	    callHierarchyTracker = tracker;
 	}
 

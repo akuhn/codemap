@@ -31,7 +31,7 @@ public class CommunicationOvleray extends SelectionOverlay {
     
     @Override
     public void paintBefore(MapValues map, GC gc) {
-        image = new ECFPluginIcons().descriptor(MEEPLE).createImage();
+        image = ECFPluginIcons.descriptor(MEEPLE).createImage();
         bounds = image.getBounds();        
         diameter = (int) Math.sqrt(bounds.width * bounds.width + bounds.height * bounds.height);
         

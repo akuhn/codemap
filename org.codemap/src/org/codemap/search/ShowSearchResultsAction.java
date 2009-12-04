@@ -10,7 +10,7 @@ public class ShowSearchResultsAction extends MenuAction {
 
     public ShowSearchResultsAction(SearchResultController searchResultController) {
         super("Search Results", IAction.AS_CHECK_BOX);
-        setImageDescriptor(new CodemapIcons().descriptor(SEARCH));
+        setImageDescriptor(CodemapIcons.descriptor(SEARCH));
         controller = searchResultController;
         controller.registerAction(this);
     }
