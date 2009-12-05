@@ -2,6 +2,7 @@ package org.codemap.plugin.communication.util;
 
 import static org.codemap.plugin.communication.util.ECFPluginIcons.MEEPLE;
 
+import org.codemap.resources.MapValues;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
@@ -10,7 +11,6 @@ import org.eclipse.swt.graphics.Rectangle;
 
 import ch.deif.meander.Location;
 import ch.deif.meander.MapSelection;
-import ch.deif.meander.map.MapValues;
 import ch.deif.meander.swt.SelectionOverlay;
 
 public class CommunicationOvleray extends SelectionOverlay {

@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.codemap.CodemapCore;
 import org.codemap.mapview.action.ICodemapPluginAction;
+import org.codemap.util.CodemapColors;
+import org.codemap.util.MColor;
+import org.codemap.util.MapScheme;
 import org.eclipse.jface.action.Action;
 
 import ch.akuhn.util.Pair;
 import ch.akuhn.values.Value;
-import ch.deif.meander.util.CodemapColors;
-import ch.deif.meander.util.MColor;
-import ch.deif.meander.util.MapScheme;
 
 public class ShowCoverageAction implements ICodemapPluginAction {
 
