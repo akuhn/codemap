@@ -9,7 +9,6 @@ import org.codemap.callhierarchy.CallOverlay;
 import org.codemap.layers.CodemapVisualization;
 import org.codemap.layers.Layer;
 import org.codemap.mapview.MapController;
-import org.codemap.mapview.MapView;
 import org.codemap.resources.MapValueBuilder;
 import org.codemap.resources.MapValues;
 import org.codemap.util.Log;
@@ -20,7 +19,6 @@ import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.internal.corext.refactoring.typeconstraints.types.VoidType;
 import org.osgi.service.prefs.BackingStoreException;
 
 import ch.akuhn.util.Arrays;

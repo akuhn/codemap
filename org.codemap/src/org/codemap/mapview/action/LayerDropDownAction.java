@@ -2,12 +2,9 @@ package org.codemap.mapview.action;
 
 import static org.codemap.util.CodemapIcons.LAYERS;
 
-import org.codemap.callhierarchy.CallHierarchyTracker;
 import org.codemap.callhierarchy.LinkWithCallHierarchyAction;
 import org.codemap.mapview.MapController;
-import org.codemap.marker.MarkerController;
 import org.codemap.marker.ShowMarkersAction;
-import org.codemap.search.SearchResultController;
 import org.codemap.search.ShowSearchResultsAction;
 import org.codemap.util.CodemapIcons;
 import org.codemap.util.ExtensionPoints;

@@ -1,7 +1,6 @@
 package org.codemap;
 
 import org.codemap.mapview.MapController;
-import org.codemap.mapview.MapView;
 import org.codemap.util.EclipseTaskFactory;
 import org.codemap.util.MColor;
 import org.codemap.util.MapScheme;
