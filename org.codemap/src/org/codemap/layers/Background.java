@@ -1,11 +1,11 @@
-package ch.deif.meander.swt;
+package org.codemap.layers;
 
 import org.codemap.resources.MapValues;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 
 
-public class Background extends SWTLayer {
+public class Background extends Layer {
 
     @Override
     public void paintMap(MapValues map, GC gc) {

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.deif.meander.swt;
+package org.codemap.layers;
 
 import org.codemap.util.MapScheme;
 

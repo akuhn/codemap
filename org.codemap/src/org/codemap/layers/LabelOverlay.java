@@ -1,4 +1,4 @@
-package ch.deif.meander.swt;
+package org.codemap.layers;
 
 import org.codemap.resources.MapValues;
 import org.eclipse.swt.SWT;
@@ -10,7 +10,7 @@ import org.eclipse.swt.graphics.GC;
 
 import ch.deif.meander.Labeling;
 
-public class LabelOverlay extends SWTLayer {
+public class LabelOverlay extends Layer {
 
     public static final String ARIAL_NARROW = "Arial Narrow";
 

@@ -1,4 +1,4 @@
-package ch.deif.meander.swt;
+package org.codemap.layers;
 
 import org.codemap.resources.MapValues;
 import org.codemap.util.MColor;
@@ -51,12 +51,12 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
     }
 
     @Override
-    public CodemapVisualization add(SWTLayer layer) {
+    public CodemapVisualization add(Layer layer) {
         return (CodemapVisualization) super.add(layer);
     }
 
     @Override
-    public CodemapVisualization remove(SWTLayer layer) {
+    public CodemapVisualization remove(Layer layer) {
         return (CodemapVisualization) super.remove(layer);
     }
 
@@ -140,10 +140,6 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
     public void mouseUp(MouseEvent e) {
         this.addOffsetAndThisToEvent(e);
         super.mouseUp(e);
-    }
-
-    public int getSize() {
-        return mapValues.getSize();
     }
 
     protected static MapValues mapValues(MouseEvent e) {

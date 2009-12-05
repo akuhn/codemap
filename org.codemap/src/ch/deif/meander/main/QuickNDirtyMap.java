@@ -3,6 +3,8 @@ package ch.deif.meander.main;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.codemap.layers.Label;
+import org.codemap.layers.LabelOverlay;
 import org.codemap.util.CodemapColors;
 import org.codemap.util.MColor;
 import org.codemap.util.MapScheme;
@@ -25,8 +27,6 @@ import ch.deif.meander.Point;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.internal.ShadeAlgorithm;
 import ch.deif.meander.map.ComputeBackgroundTask.FastBackgroundRenderer;
-import ch.deif.meander.swt.Label;
-import ch.deif.meander.swt.LabelOverlay;
 
 public class QuickNDirtyMap {
     

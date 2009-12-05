@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.codemap.callhierarchy.vizualization.EdgeRenderer;
 import org.codemap.callhierarchy.vizualization.Options;
+import org.codemap.layers.Layer;
 import org.codemap.resources.MapValues;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -14,13 +15,12 @@ import org.eclipse.swt.graphics.GC;
 
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
-import ch.deif.meander.swt.SWTLayer;
 import edu.stanford.hci.flowmap.cluster.ClusterLayout;
 import edu.stanford.hci.flowmap.prefuse.render.FlowScale;
 import edu.stanford.hci.flowmap.structure.Edge;
 import edu.stanford.hci.flowmap.structure.Graph;
 
-public class CallOverlay extends SWTLayer {
+public class CallOverlay extends Layer {
     
     private CallModel model;
     private Integer mapSize;

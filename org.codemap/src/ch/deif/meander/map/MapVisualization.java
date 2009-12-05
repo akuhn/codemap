@@ -1,13 +1,13 @@
 package ch.deif.meander.map;
 
+import org.codemap.layers.Background;
+import org.codemap.layers.CodemapVisualization;
+import org.codemap.layers.CompositeLayer;
+import org.codemap.layers.CurrentSelectionOverlay;
+import org.codemap.layers.LabelOverlay;
+import org.codemap.layers.YouAreHereOverlay;
 import org.codemap.resources.MapValues;
 
-import ch.deif.meander.swt.Background;
-import ch.deif.meander.swt.CodemapVisualization;
-import ch.deif.meander.swt.CompositeLayer;
-import ch.deif.meander.swt.CurrentSelectionOverlay;
-import ch.deif.meander.swt.LabelOverlay;
-import ch.deif.meander.swt.YouAreHereOverlay;
 
 public class MapVisualization {
 

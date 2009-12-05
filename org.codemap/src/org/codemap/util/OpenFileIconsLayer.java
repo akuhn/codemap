@@ -2,6 +2,7 @@ package org.codemap.util;
 
 import static org.codemap.util.CodemapIcons.FILE;
 
+import org.codemap.layers.SelectionOverlay;
 import org.codemap.resources.MapValues;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -15,7 +16,6 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 
 import ch.deif.meander.Location;
 import ch.deif.meander.MapSelection;
-import ch.deif.meander.swt.SelectionOverlay;
 
 public class OpenFileIconsLayer extends SelectionOverlay {
 

@@ -7,6 +7,7 @@ import java.util.List;
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
 import org.codemap.callhierarchy.CallHierarchyTracker;
+import org.codemap.layers.CodemapVisualization;
 import org.codemap.mapview.action.CodemapAction;
 import org.codemap.mapview.action.ColorDropDownAction;
 import org.codemap.mapview.action.ForceSelectionAction;
@@ -52,7 +53,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
-import ch.deif.meander.swt.CodemapVisualization;
 
 public class MapView extends ViewPart {
 

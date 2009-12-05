@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.codemap.callhierarchy.CallOverlay;
+import org.codemap.layers.CodemapVisualization;
+import org.codemap.layers.Layer;
 import org.codemap.mapview.MapView;
 import org.codemap.resources.MapValueBuilder;
 import org.codemap.resources.MapValues;
@@ -27,8 +29,6 @@ import ch.deif.meander.MapSelection;
 import ch.deif.meander.Point;
 import ch.deif.meander.Configuration.Builder;
 import ch.deif.meander.map.MapVisualization;
-import ch.deif.meander.swt.CodemapVisualization;
-import ch.deif.meander.swt.SWTLayer;
 
 /**
  * Holds corpus, map and visualization of a project. Use this class to store project specific information.
@@ -86,7 +86,7 @@ public class MapPerProject {
         };
     }
 
-    private SWTLayer makeOpenFilesLayer() {
+    private Layer makeOpenFilesLayer() {
         return new OpenFileIconsLayer();
     }
 
@@ -197,21 +197,21 @@ public class MapPerProject {
         properties.put(key, Boolean.toString(checked));
     }
 
-    public void addLayer(SWTLayer layer) {
+    public void addLayer(Layer layer) {
         mapVisualization.getSharedLayer().add(layer);
     }
     
-    public void addSelectionLayer(SWTLayer layer, MapSelection selection) {
+    public void addSelectionLayer(Layer layer, MapSelection selection) {
         addLayer(layer);
         mapValues.selections.add(selection);
     }
 
-    public boolean containsLayer(SWTLayer layer) {
+    public boolean containsLayer(Layer layer) {
         return mapVisualization.getSharedLayer().contains(layer);
     }
     
     public boolean containsLayer(Class<?> layerClass) {
-        for (SWTLayer each: mapVisualization.getSharedLayer()) {
+        for (Layer each: mapVisualization.getSharedLayer()) {
             if (each.getClass().equals(layerClass)) return true;
         }
         return false;
@@ -235,7 +235,7 @@ public class MapPerProject {
     }
 
     public void remove(Class<?> layerClass) {
-        for (SWTLayer each: mapVisualization.getSharedLayer()) {
+        for (Layer each: mapVisualization.getSharedLayer()) {
             if (each.getClass().equals(layerClass)) {
                 mapVisualization.getSharedLayer().remove(each);
                 return;
@@ -243,8 +243,8 @@ public class MapPerProject {
         }
     }
 
-    public SWTLayer getLayer(Class<CallOverlay> layerClass) {
-        for (SWTLayer each: mapVisualization.getSharedLayer()) {
+    public Layer getLayer(Class<CallOverlay> layerClass) {
+        for (Layer each: mapVisualization.getSharedLayer()) {
             if (each.getClass().equals(layerClass)) {
                 return each;
             }

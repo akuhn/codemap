@@ -1,4 +1,4 @@
-package ch.deif.meander.swt;
+package org.codemap.layers;
 
 import org.codemap.resources.MapValues;
 import org.eclipse.swt.SWT;

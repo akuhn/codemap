@@ -1,4 +1,4 @@
-package ch.deif.meander.swt;
+package org.codemap.layers;
 
 import org.codemap.resources.MapValues;
 import org.eclipse.swt.events.DragDetectEvent;
@@ -12,7 +12,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Control;
 
 
-public abstract class SWTLayer implements 
+public abstract class Layer implements 
         MouseListener, 
         MouseMoveListener, 
         MouseTrackListener, 

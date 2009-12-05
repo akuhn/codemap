@@ -3,6 +3,8 @@ package ch.deif.meander.map;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.codemap.layers.Label;
+import org.codemap.layers.LabelOverlay;
 import org.codemap.util.MapScheme;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Device;
@@ -22,8 +24,6 @@ import ch.deif.meander.DefaultLabelScheme;
 import ch.deif.meander.Labeling;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
-import ch.deif.meander.swt.Label;
-import ch.deif.meander.swt.LabelOverlay;
 
 public class ComputeLabelingTask extends TaskValue<Labeling> {
 

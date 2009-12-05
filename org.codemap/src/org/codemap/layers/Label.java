@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.deif.meander.swt;
+package org.codemap.layers;
 
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;

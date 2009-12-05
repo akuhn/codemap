@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
+import org.codemap.layers.Layer;
 import org.codemap.util.ChangeTriggerValue;
 import org.eclipse.jdt.internal.corext.callhierarchy.MethodWrapper;
 
 import ch.akuhn.util.List;
-import ch.deif.meander.swt.SWTLayer;
 
 public class CallModel {
 
@@ -46,7 +46,7 @@ public class CallModel {
         MapPerProject activeMap = plugin.getActiveMap();
         if (activeMap == null) return;
         
-        SWTLayer layer = activeMap.getLayer(CallOverlay.class);
+        Layer layer = activeMap.getLayer(CallOverlay.class);
         if (layer == null) {
             layer = new CallOverlay(this);
             activeMap.addLayer(layer);

@@ -1,6 +1,6 @@
-package ch.deif.meander.swt;
+package org.codemap.layers;
 
-import static ch.deif.meander.swt.CodemapVisualization.mapValues;
+import static org.codemap.layers.CodemapVisualization.mapValues;
 
 import java.awt.Point;
 import java.util.ArrayList;

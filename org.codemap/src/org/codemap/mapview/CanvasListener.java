@@ -1,5 +1,6 @@
 package org.codemap.mapview;
 
+import org.codemap.layers.CodemapVisualization;
 import org.eclipse.swt.events.DragDetectEvent;
 import org.eclipse.swt.events.DragDetectListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -11,7 +12,6 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.widgets.Canvas;
 
-import ch.deif.meander.swt.CodemapVisualization;
 
 public class CanvasListener implements PaintListener, MouseListener,
         MouseMoveListener, MouseTrackListener, MouseWheelListener,

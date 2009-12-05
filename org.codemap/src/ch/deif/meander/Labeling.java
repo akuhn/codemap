@@ -1,6 +1,6 @@
 package ch.deif.meander;
 
-import ch.deif.meander.swt.Label;
+import org.codemap.layers.Label;
 
 public class Labeling {
 
