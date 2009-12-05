@@ -1,5 +1,6 @@
 package org.codemap;
 
+import org.codemap.mapview.MapController;
 import org.codemap.mapview.MapView;
 import org.codemap.util.EclipseTaskFactory;
 import org.codemap.util.MColor;
@@ -25,7 +26,7 @@ public class CodemapCore extends AbstractUIPlugin {
     public static final String PLUGIN_ID = CodemapCore.class.getPackage().getName();
     private static CodemapCore THE_PLUGIN;
 
-    private MapView theView;
+    private MapController theController;
 
     public final MapSelection youAreHereSelection;
     public final MapSelection openFilesSelection;
@@ -77,17 +78,9 @@ public class CodemapCore extends AbstractUIPlugin {
         return cache.forProject(project);
     }
 
-    public void setMapView(MapView caller) {
-        theView = caller;
-    }
-
-    public MapView getMapView() {
-        return theView;
-    }
-
     public MapPerProject getActiveMap() {
-        if (theView == null) return null;
-        return mapForProject(theView.getCurrentProject());
+        if (theController == null) return null;
+        return mapForProject(theController.getCurrentProject());
     }
 
     public MapScheme<MColor> getDefaultColorScheme() {
@@ -97,5 +90,21 @@ public class CodemapCore extends AbstractUIPlugin {
     public static String activeProjectName() {
     	return getPlugin().getActiveMap().getProject().getName();
     }
+
+    public void register(MapController mapController) {
+        setMapController(mapController);
+    }
+
+    public void unregister(MapController mapController) {
+        setMapController(null);
+    }
+
+    private void setMapController(MapController mapController) {
+        theController = mapController;
+    }
+
+    public MapController getController() {
+        return theController;
+    }    
     
 }

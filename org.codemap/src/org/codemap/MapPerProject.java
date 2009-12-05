@@ -8,6 +8,7 @@ import org.codemap.Configuration.Builder;
 import org.codemap.callhierarchy.CallOverlay;
 import org.codemap.layers.CodemapVisualization;
 import org.codemap.layers.Layer;
+import org.codemap.mapview.MapController;
 import org.codemap.mapview.MapView;
 import org.codemap.resources.MapValueBuilder;
 import org.codemap.resources.MapValues;
@@ -75,9 +76,9 @@ public class MapPerProject {
                 // well ... during shutdown everything can be null. yay.
                 CodemapCore plugin = CodemapCore.getPlugin();
                 if (plugin == null) return null;
-                MapView mapView = plugin.getMapView();
-                if (mapView == null) return null;
-                mapView.newProjectSelected();
+                MapController controller = plugin.getController();
+                if (controller == null) return null;
+                controller.onNewProjectSelected();
                 return null;
             }
         };

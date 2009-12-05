@@ -2,6 +2,7 @@ package org.codemap.mapview.action;
 
 import static org.codemap.util.CodemapIcons.LINKED;
 
+import org.codemap.mapview.MapController;
 import org.codemap.mapview.SelectionTracker;
 import org.codemap.util.CodemapIcons;
 import org.codemap.util.Tag;
@@ -15,9 +16,9 @@ public class LinkWithSelectionAction extends Action {
 	// TODO remember that value when closing the view (have a look at IMemento stuff)
 	private static final boolean DEFAULT_CHECKED = true;
 
-	public LinkWithSelectionAction(SelectionTracker tracker, IMemento memento) {
+	public LinkWithSelectionAction(MapController theController, IMemento memento) {
 		super("Link with Current Selection", AS_CHECK_BOX);
-		selectionTracker = tracker;
+		selectionTracker = theController.getSelectionTracker();
 		setChecked(DEFAULT_CHECKED);
 		setImageDescriptor(CodemapIcons.descriptor(LINKED));
 		init(memento);

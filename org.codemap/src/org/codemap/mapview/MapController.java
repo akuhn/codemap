@@ -11,6 +11,7 @@ import org.codemap.search.SearchResultController;
 import org.codemap.util.Resources;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 
 
@@ -21,13 +22,15 @@ public class MapController {
     private CallHierarchyTracker callHierarchyTracker;
     private SearchResultController searchResultController;
     private MarkerController markerController;
-        
+    private SelectionTracker selectionTracker;
 
     public MapController(MapView view) {
+        CodemapCore.getPlugin().register(this);        
         this.view = view;
         callHierarchyTracker = new CallHierarchyTracker();
         searchResultController = new SearchResultController();
         markerController = new MarkerController();
+        selectionTracker = new SelectionTracker(this);
     }
 
     public MapView getView() {
@@ -70,6 +73,8 @@ public class MapController {
     }
 
     public void dispose() {
+        CodemapCore.getPlugin().unregister(this);        
+        selectionTracker.dispose();
         callHierarchyTracker.dispose();
         searchResultController.dispose();
         markerController.dispose();        
@@ -85,6 +90,30 @@ public class MapController {
 
     public MarkerController getMarkerController() {
         return markerController;
+    }
+
+    public SelectionTracker getSelectionTracker() {
+        return selectionTracker;
+    }
+
+    public MapSelectionProvider getSelectionProvider() {
+        return view.getSelectionProvider();
+    }
+
+    public void onNewProjectSelected() {
+        view.newProjectSelected();
+    }
+    
+    /**
+     * Might return null if the image could not be rendered.
+     * Please make sure to dispose the image once you do not need
+     * it any longer.
+     * 
+     * @return a new Image instance looking exactly like the image 
+     *         currently displayed as `Codemap`.
+     */
+    public Image copyCurrentCodemapImage() {
+        return view.newCodemapImage();
     }	
 
 }

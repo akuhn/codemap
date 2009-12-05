@@ -86,7 +86,7 @@ public class CurrentSelectionOverlay extends SelectionOverlay {
             selection.add(javaElement);
         }
         StructuredSelection structuredSelection = new StructuredSelection(selection);
-        MapSelectionProvider selectionProvider = CodemapCore.getPlugin().getMapView().getSelectionProvider();
+        MapSelectionProvider selectionProvider = CodemapCore.getPlugin().getController().getSelectionProvider();
         selectionProvider.setSelection(structuredSelection);
     }    
 

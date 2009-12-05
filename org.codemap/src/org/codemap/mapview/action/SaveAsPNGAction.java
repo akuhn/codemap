@@ -1,6 +1,7 @@
 package org.codemap.mapview.action;
 
 import org.codemap.CodemapCore;
+import org.codemap.mapview.MapController;
 import org.codemap.util.EclipseUtil;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
@@ -10,9 +11,12 @@ import org.eclipse.swt.graphics.ImageLoader;
 
 public class SaveAsPNGAction extends Action {
     
-    public SaveAsPNGAction() {
+    private MapController controller;
+
+    public SaveAsPNGAction(MapController theController) {
         super();
         setText("Save as PNG");
+        controller = theController;
     }
 
     @Override
@@ -23,7 +27,7 @@ public class SaveAsPNGAction extends Action {
     }
 
     private void saveTo(String path) {
-        Image image = CodemapCore.getPlugin().getMapView().newCodemapImage();
+        Image image =controller.copyCurrentCodemapImage();
         ImageLoader loader = new ImageLoader();
         loader.data = new ImageData[] {image.getImageData()};
         loader.save(path, SWT.IMAGE_PNG);

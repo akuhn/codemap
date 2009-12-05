@@ -58,9 +58,8 @@ public class MapView extends ViewPart {
     public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
     private static final String ATTR_CLASS = "class";
 
-    private final MapController theController;
+    private MapController theController;
     private MapSelectionProvider selectionProvider;
-    private SelectionTracker selectionTracker;
     private int currentSize;
     private Canvas canvas;
     private Composite container;
@@ -68,7 +67,6 @@ public class MapView extends ViewPart {
     private CanvasListener canvasListener;
 
     private LinkWithSelectionAction linkWithSelection;
-
     private ForceSelectionAction forceSelection;
 
     private IMemento memento;
@@ -91,12 +89,10 @@ public class MapView extends ViewPart {
         }
     }
 
-    public MapView() {
-        theController = new MapController(this);
-    }
-
     @Override
     public void createPartControl(final Composite parent) {
+        theController = new MapController(this);     
+        
         container = new Composite(parent, SWT.NONE);
         container.setLayout(new FillLayout(SWT.LEFT));
 
@@ -108,7 +104,6 @@ public class MapView extends ViewPart {
         container.layout();
 
         selectionProvider = new MapSelectionProvider(this);
-        selectionTracker = new SelectionTracker(theController);
         
         configureToolbar();
         configureActionBar();
@@ -119,8 +114,6 @@ public class MapView extends ViewPart {
 
 
     private void showMap() {
-        // clearContainer();
-        CodemapCore.getPlugin().setMapView(this);
         new ResizeListener(container, theController);
         theController.onShowMap();
     }
@@ -129,7 +122,7 @@ public class MapView extends ViewPart {
         IActionBars actionBars = getViewSite().getActionBars();
         IMenuManager viewMenu = actionBars.getMenuManager();
         viewMenu.add(new Separator());
-        viewMenu.add(new SaveAsPNGAction());
+        viewMenu.add(new SaveAsPNGAction(theController));
         viewMenu.add(new ReloadMapAction());
         viewMenu.add(new SaveHapaxDataAction());        
         viewMenu.add(registerAction(new ShowTestsAction()));
@@ -164,7 +157,7 @@ public class MapView extends ViewPart {
         tbm.add(registerAction(new LayerDropDownAction(theController)));
         tbm.add(registerAction(new LabelDrowDownAction()));
 
-        tbm.add(linkWithSelection = new LinkWithSelectionAction(selectionTracker, memento));
+        tbm.add(linkWithSelection = new LinkWithSelectionAction(theController, memento));
         tbm.add(forceSelection = new ForceSelectionAction(selectionProvider, memento));
     }
 
@@ -183,9 +176,7 @@ public class MapView extends ViewPart {
      */
     @Override
     public void dispose() {
-        CodemapCore.getPlugin().setMapView(null);
         theController.dispose();        
-        selectionTracker.dispose();
     }
     
     @Override
@@ -206,7 +197,7 @@ public class MapView extends ViewPart {
         this.memento = memento;
     }
     
-    public void newProjectSelected() {
+    protected void newProjectSelected() {
         MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
         configureActions(activeMap);
         CodemapVisualization viz = activeMap
@@ -217,7 +208,7 @@ public class MapView extends ViewPart {
         updateMapVisualization(viz);
     }
 
-    public void configureActions(MapPerProject activeMap) {
+    protected void configureActions(MapPerProject activeMap) {
         for (CodemapAction each: actions) {
             each.configureAction(activeMap);
         }
@@ -228,17 +219,13 @@ public class MapView extends ViewPart {
         redrawAsync();
     }
 
-    public IJavaProject getCurrentProject() {
-        return theController.getCurrentProject();
-    }
-
-    public void setCurrentSize(int newDimension) {
+    protected void setCurrentSize(int newDimension) {
         currentSize = newDimension;
     }
 
-    public void updateMapdimension(int newDimension) {
+    protected void updateMapdimension(int newDimension) {
         currentSize = newDimension;
-        IJavaProject project = getCurrentProject();
+        IJavaProject project = theController.getCurrentProject();
         if (project == null) return;
         CodemapVisualization viz = CodemapCore.getPlugin()
                 .mapForProject(project)
@@ -260,14 +247,8 @@ public class MapView extends ViewPart {
         });
     }
     
-    /**
-     * Might return null if the image could not be rendered.
-     * Please make sure to dispose the image once you do not need
-     * it any longer.
-     * 
-     * @return a new Image instance representing the current Codemap.
-     */
-    public Image newCodemapImage() {
+
+    protected Image newCodemapImage() {
         if (canvas == null) return null;
         Point size = canvas.getSize();
         Image image = new Image(Display.getDefault(), size.x, size.y);
@@ -277,7 +258,7 @@ public class MapView extends ViewPart {
         return image;
     }
 
-    public MapSelectionProvider getSelectionProvider() {
+    protected MapSelectionProvider getSelectionProvider() {
         return selectionProvider;
     }
 }
