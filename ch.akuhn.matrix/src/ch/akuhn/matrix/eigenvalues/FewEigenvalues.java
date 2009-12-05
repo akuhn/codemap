@@ -121,7 +121,7 @@ public abstract class FewEigenvalues extends Eigenvalues {
 		 * Work per major iteration is proportional to N*NCV*NCV.  
 		 * 
 		 */
-		int ncv = Math.min(nev * 2, n); // rule of thumb use twice nev // TODO
+		int ncv = Math.min(nev * 4, n); // rule of thumb use twice nev
 		double[] v = new double[n * ncv]; 
 		double[] workd = new double[3*n];
 		double[] workl = new double[ncv*(ncv+8)];

@@ -1,13 +1,12 @@
 package ch.akuhn.isomap;
 
-import java.util.Arrays;
-
 import ch.akuhn.graph.DijkstraAlgorithm2;
 import ch.akuhn.graph.Graph;
 import ch.akuhn.matrix.Function;
 import ch.akuhn.matrix.SymetricMatrix;
 import ch.akuhn.matrix.eigenvalues.Eigenvalues;
 import ch.akuhn.org.ggobi.plugins.ggvis.Points;
+
 
 /** Embeds n-dimensional data in two dimensions.
  *<P> 
@@ -49,7 +48,7 @@ public abstract class Isomap {
      */
     public void constructNeighborhoodGraph() {
         if (useKNN) {
-            constructKayNearestNeighbeorhoodGraph();
+            constructKayNearestNeighborhoodGraph();
         } else {
             constructCloserThanEpsilonNeighborhoodGraph();
         }
@@ -65,28 +64,49 @@ public abstract class Isomap {
         }
     }
     
-    private void constructKayNearestNeighbeorhoodGraph() {
+    private void constructKayNearestNeighborhoodGraph() {
         graph = new SymetricMatrix(n);
         graph.fill(Double.POSITIVE_INFINITY);
         for (int i = 0; i < n; i++) {
             double[] data = new double[n];
-            for (int j = 0; j < n; j++) {
-                data[j] = dist(i,j);
-            }
-            double[] minima = Arrays.copyOf(data, k + 1);
-            Arrays.sort(minima);
-            for (int j = k + 1; j < data.length; j++) {
-                if (data[j] >= minima[k]) continue;
-                int n0 = -1-Arrays.binarySearch(minima, data[j]);
-                System.arraycopy(minima, n0, minima, n0+1, k-n0);
-                minima[n0] = data[j];
-            }
-            double min = minima[k];
-            for (int j = k + 1; j < data.length; j++) {
-                if (data[j] <= min) graph.put(i,j,data[j]);
+            for (int j = 0; j < n; j++) data[j] = dist(i,j);
+            int[] index = indicesOfMinima(data, k+1);
+            for (int k = 0; k < index.length; k++) {
+				graph.put(i,index[k],dist(i,index[k]));
             }
         }
     }
+    
+    static int[] indicesOfMinima(double[] ds, int k) {
+    	if (ds.length <= k) return range(ds.length);
+    	int[] index = new int[k];
+    	for (int n = 0; n < index.length; n++) {
+			int i = indexOfMinimum(ds);
+			index[n] = i;
+			ds[i] = Double.POSITIVE_INFINITY;
+		}
+    	return index;
+    }
+    
+    private static int[] range(int k) {
+		int[] range = new int[k];
+		for (int n = 0; n < range.length; n++) range[n] = n;
+		return range;
+	}
+
+	static int indexOfMinimum(double[] ds) {
+    	assert ds.length > 0;
+    	int index = 0;
+    	double min = ds[0];
+    	for (int n = 0; n < ds.length; n++) {
+			if (ds[n] < min) {
+				index = n;
+				min = ds[n];
+			}
+		}
+    	return index;
+    }
+    
     
     /** Step 2: Compute shortest path. Initialize d_G(i,j) = d_X(i,j) if i, j are
      * linked by an edge; d_G(i,j) = infinity otherwise. Then for each value of
