@@ -1,4 +1,4 @@
-package ch.deif.meander.main;
+package org.codemap.sandbox.main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +7,7 @@ import org.codemap.layers.Label;
 import org.codemap.layers.LabelOverlay;
 import org.codemap.tasks.ComputeBackgroundTask.FastBackgroundRenderer;
 import org.codemap.util.CodemapColors;
+import org.codemap.util.ColorBrewer;
 import org.codemap.util.MColor;
 import org.codemap.util.MapScheme;
 import org.eclipse.swt.events.MouseEvent;

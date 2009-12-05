@@ -1,4 +1,4 @@
-package ch.deif.meander.main;
+package org.codemap.sandbox.main;
 
 public class DebugLog implements Log {
 

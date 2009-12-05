@@ -2,10 +2,10 @@ package ch.deif.meander;
 
 import java.util.HashMap;
 
+import org.codemap.sandbox.main.QuickNDirtyMap;
 import org.codemap.util.MapScheme;
 import org.junit.Test;
 
-import ch.deif.meander.main.QuickNDirtyMap;
 
 public class RegressionTestNN {
     
