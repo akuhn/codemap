@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
+import org.codemap.MapSelection;
+import org.codemap.layers.Layer;
 import org.codemap.plugin.communication.util.CommunicationOvleray;
 import org.eclipse.ecf.core.IContainerManager;
 import org.eclipse.ecf.core.identity.ID;
@@ -16,8 +18,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
-import ch.deif.meander.MapSelection;
-import ch.deif.meander.swt.SWTLayer;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -36,7 +36,7 @@ public class ECFPlugin extends AbstractUIPlugin {
     private ServiceTracker syncStrategyFactoryServiceTracker;
     private BundleContext context;
 
-    private SWTLayer openFilesLayer;
+    private Layer openFilesLayer;
     private MapSelection communicationSelection;
 	
 	/**

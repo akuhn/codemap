@@ -2,6 +2,7 @@ package org.codemap.plugin.communication;
 
 import java.util.Collection;
 
+import org.codemap.MapSelection;
 import org.codemap.plugin.communication.messages.Message;
 import org.codemap.plugin.communication.messages.SelectionMessage;
 import org.codemap.plugin.communication.messages.StartMessage;
@@ -28,7 +29,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 
-import ch.deif.meander.MapSelection;
 
 public class SelectionShare extends AbstractShare {
     
