@@ -6,8 +6,8 @@ import java.util.Map.Entry;
 
 import org.codemap.callhierarchy.CallOverlay;
 import org.codemap.mapview.MapView;
-import org.codemap.resources.EclipseMapValues;
 import org.codemap.resources.MapValueBuilder;
+import org.codemap.resources.MapValues;
 import org.codemap.util.Log;
 import org.codemap.util.OpenFileIconsLayer;
 import org.codemap.util.Resources;
@@ -43,7 +43,7 @@ public class MapPerProject {
     private static final int MINIMAL_SIZE = 256;
 
     private final IJavaProject project;
-    private EclipseMapValues mapValues;
+    private MapValues mapValues;
     private MapVisualization mapVisualization;
     private MapPerProjectCache cache;
 
@@ -62,7 +62,7 @@ public class MapPerProject {
         builder.setProjects(Arrays.asList(Resources.asPath(project)));
         builder.setFileExtensions(Arrays.asList("*.java"));
         builder.setInitialConfiguration(readPreviousMapState());
-        mapValues = new EclipseMapValues(builder);
+        mapValues = new MapValues(builder);
         mapVisualization = new MapVisualization(mapValues);
         mapVisualization.getSharedLayer().add(makeOpenFilesLayer());
 
@@ -221,7 +221,7 @@ public class MapPerProject {
         return mapValues.configuration.getValue(); // what if it's null?
     }
 
-    public EclipseMapValues getValues() {
+    public MapValues getValues() {
         return mapValues;
     }
 

@@ -5,8 +5,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 
+import org.codemap.resources.MapValues;
+
 import ch.akuhn.values.CollectionValue;
-import ch.deif.meander.map.MapValues;
 
 /** A set of identifier handles.
  * External classes can use the collection interface to add and remove handles. 

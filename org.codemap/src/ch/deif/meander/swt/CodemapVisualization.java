@@ -3,6 +3,7 @@ package ch.deif.meander.swt;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.codemap.resources.MapValues;
 import org.codemap.util.MColor;
 import org.eclipse.swt.events.DragDetectEvent;
 import org.eclipse.swt.events.MouseEvent;
@@ -17,7 +18,6 @@ import org.eclipse.swt.widgets.Canvas;
 
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
-import ch.deif.meander.map.MapValues;
 import ch.deif.meander.ui.CodemapEvent;
 import ch.deif.meander.ui.CodemapListener;
 

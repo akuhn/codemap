@@ -1,5 +1,7 @@
 package ch.deif.meander.map;
 
+import org.codemap.resources.MapValues;
+
 import ch.deif.meander.swt.Background;
 import ch.deif.meander.swt.CodemapVisualization;
 import ch.deif.meander.swt.CompositeLayer;

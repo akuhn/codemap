@@ -1,11 +1,11 @@
 package ch.deif.meander.swt;
 
+import org.codemap.resources.MapValues;
 import org.eclipse.swt.graphics.GC;
 
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapSelection;
-import ch.deif.meander.map.MapValues;
 
 public abstract class SelectionOverlay extends SWTLayer {
 

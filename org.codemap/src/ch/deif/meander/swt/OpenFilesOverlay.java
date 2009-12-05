@@ -1,5 +1,6 @@
 package ch.deif.meander.swt;
 
+import org.codemap.resources.MapValues;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
@@ -7,7 +8,6 @@ import org.eclipse.swt.widgets.Display;
 
 import ch.deif.meander.Location;
 import ch.deif.meander.MapSelection;
-import ch.deif.meander.map.MapValues;
 
 public class OpenFilesOverlay extends SelectionOverlay {
 

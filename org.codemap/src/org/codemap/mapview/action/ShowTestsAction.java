@@ -1,8 +1,9 @@
 package org.codemap.mapview.action;
 
 import org.codemap.CodemapCore;
-import org.codemap.resources.EclipseMapValues;
+import org.codemap.resources.MapValues;
 import org.eclipse.jface.action.IAction;
+
 
 public class ShowTestsAction extends MenuAction {
     
@@ -12,7 +13,7 @@ public class ShowTestsAction extends MenuAction {
     
     @Override
     public void run() {
-        EclipseMapValues values = CodemapCore.getPlugin().getActiveMap().getValues();
+        MapValues values = CodemapCore.getPlugin().getActiveMap().getValues();
         values.showTests.setValue(isChecked());
         System.out.println(values.showTests.getValue());
         super.run();

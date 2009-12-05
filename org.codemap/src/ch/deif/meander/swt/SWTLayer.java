@@ -1,5 +1,6 @@
 package ch.deif.meander.swt;
 
+import org.codemap.resources.MapValues;
 import org.eclipse.swt.events.DragDetectEvent;
 import org.eclipse.swt.events.DragDetectListener;
 import org.eclipse.swt.events.MouseEvent;
@@ -10,7 +11,6 @@ import org.eclipse.swt.events.MouseWheelListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Control;
 
-import ch.deif.meander.map.MapValues;
 
 public abstract class SWTLayer implements 
         MouseListener, 

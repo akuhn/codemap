@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.codemap.resources.MapValues;
 import org.eclipse.swt.events.DragDetectEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.GC;
 
-import ch.deif.meander.map.MapValues;
 
 public class CompositeLayer extends SWTLayer implements Iterable<SWTLayer> {
 

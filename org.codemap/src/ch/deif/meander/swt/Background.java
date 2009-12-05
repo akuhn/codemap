@@ -1,9 +1,9 @@
 package ch.deif.meander.swt;
 
+import org.codemap.resources.MapValues;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 
-import ch.deif.meander.map.MapValues;
 
 public class Background extends SWTLayer {
 

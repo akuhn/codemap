@@ -1,5 +1,6 @@
 package ch.deif.meander.swt;
 
+import org.codemap.resources.MapValues;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
@@ -8,7 +9,6 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 
 import ch.deif.meander.Labeling;
-import ch.deif.meander.map.MapValues;
 
 public class LabelOverlay extends SWTLayer {
 

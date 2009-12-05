@@ -1,8 +1,7 @@
-package ch.deif.meander.map;
+package org.codemap.resources;
 
 import java.util.Collection;
 
-import org.codemap.resources.MapValueBuilder;
 import org.codemap.util.MColor;
 import org.codemap.util.MapScheme;
 import org.eclipse.swt.graphics.Image;
