@@ -9,8 +9,6 @@ import org.codemap.MapPerProject;
 import org.codemap.callhierarchy.CallHierarchyTracker;
 import org.codemap.mapview.action.CodemapAction;
 import org.codemap.mapview.action.ColorDropDownAction;
-import org.codemap.mapview.action.DebugLocationsAction;
-import org.codemap.mapview.action.DropDownAction;
 import org.codemap.mapview.action.ForceSelectionAction;
 import org.codemap.mapview.action.LabelDrowDownAction;
 import org.codemap.mapview.action.LayerDropDownAction;

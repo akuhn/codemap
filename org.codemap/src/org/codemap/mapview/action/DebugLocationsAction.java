@@ -1,13 +1,10 @@
 package org.codemap.mapview.action;
 
 import org.codemap.CodemapCore;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
 
 import ch.deif.meander.Location;
-import ch.deif.meander.MapInstance;
-import ch.deif.meander.Point;
 
 public class DebugLocationsAction extends Action {
     

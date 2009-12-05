@@ -8,18 +8,15 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.codemap.util.MColor;
 import org.codemap.util.MapScheme;
 
 import ch.akuhn.foreach.Collect;
 import ch.akuhn.foreach.Each;
-import ch.akuhn.util.Providable;
 import ch.deif.meander.internal.DEMAlgorithm;
 import ch.deif.meander.internal.MapCaches;
 import ch.deif.meander.kdtree.KDException;
 import ch.deif.meander.kdtree.KDTree;
 import ch.deif.meander.kdtree.KeySizeException;
-import ch.deif.meander.main.Log;
 
 public class MapInstance {
 

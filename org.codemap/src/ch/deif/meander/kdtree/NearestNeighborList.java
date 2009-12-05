@@ -1,6 +1,5 @@
 package ch.deif.meander.kdtree;
 
-import java.util.*;
 
 // Bjoern Heckel's solution to the KD-Tree n-nearest-neighbor problem
 

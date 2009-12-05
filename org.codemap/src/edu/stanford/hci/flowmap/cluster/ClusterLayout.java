@@ -2,7 +2,6 @@ package edu.stanford.hci.flowmap.cluster;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.codemap.util.geom.Line2D;

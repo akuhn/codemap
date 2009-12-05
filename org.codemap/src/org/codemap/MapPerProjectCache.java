@@ -3,7 +3,6 @@ package org.codemap;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaProject;
 
 /*default*/ class MapPerProjectCache {

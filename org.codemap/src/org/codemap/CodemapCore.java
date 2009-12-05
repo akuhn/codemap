@@ -1,6 +1,5 @@
 package org.codemap;
 
-import org.codemap.callhierarchy.CallHierarchyTracker;
 import org.codemap.mapview.MapView;
 import org.codemap.util.EclipseTaskFactory;
 import org.codemap.util.MColor;

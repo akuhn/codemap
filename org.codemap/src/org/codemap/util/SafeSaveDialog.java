@@ -6,6 +6,7 @@ package org.codemap.util;
 //Robert Harris (rbrt_harris@yahoo.com)
 
 import java.io.File;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.MessageBox;

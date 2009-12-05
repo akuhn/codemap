@@ -1,7 +1,5 @@
 package edu.stanford.hci.flowmap.structure;
 
-import java.util.Hashtable;
-
 import org.codemap.util.geom.Shape;
 
 

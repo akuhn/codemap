@@ -9,7 +9,6 @@ import org.codemap.util.geom.Line2D;
 import org.codemap.util.geom.PathIterator;
 import org.codemap.util.geom.Point2D;
 import org.codemap.util.geom.Shape;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Path;
 import org.eclipse.swt.graphics.PathData;

@@ -8,7 +8,6 @@ import org.codemap.mapview.MapController;
 import org.codemap.util.CodemapColors;
 import org.codemap.util.CodemapIcons;
 import org.codemap.util.ColorBrewer;
-import org.codemap.util.IconFactory;
 import org.codemap.util.Log;
 import org.codemap.util.MColor;
 import org.eclipse.core.resources.IResource;

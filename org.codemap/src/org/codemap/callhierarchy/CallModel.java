@@ -1,19 +1,13 @@
 package org.codemap.callhierarchy;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
 import org.codemap.util.ChangeTriggerValue;
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.internal.corext.callhierarchy.CallerMethodWrapper;
-import org.eclipse.jdt.internal.corext.callhierarchy.MethodCall;
 import org.eclipse.jdt.internal.corext.callhierarchy.MethodWrapper;
 
 import ch.akuhn.util.List;
-import ch.akuhn.values.ReferenceValue;
 import ch.deif.meander.swt.SWTLayer;
 
 public class CallModel {
