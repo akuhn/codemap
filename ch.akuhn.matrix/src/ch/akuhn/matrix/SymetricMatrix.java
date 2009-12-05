@@ -57,7 +57,7 @@ public class SymetricMatrix extends DenseMatrix {
 		double[][] jagged = new double[square.length][];
 		for (int i = 0; i < jagged.length; i++) {
 			assert square[i].length == square.length;
-			jagged[i] = Arrays.copyOf(square[i], i);
+			jagged[i] = Arrays.copyOf(square[i], i+1);
 		}
 		return new SymetricMatrix(jagged);
 	}
