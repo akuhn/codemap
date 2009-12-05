@@ -4,6 +4,7 @@ import org.codemap.Location;
 import org.codemap.MapSelection;
 import org.codemap.resources.MapValues;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
@@ -22,8 +23,10 @@ public class YouAreHereOverlay extends SelectionOverlay {
     @Override
     public void paintBefore(MapValues map, GC gc) {
         Device device = gc.getDevice();
-        gc.setForeground(device.getSystemColor(SWT.COLOR_INFO_FOREGROUND));
-        gc.setBackground(device.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
+        Color anthrazite = new Color(device, 61, 61, 61);
+        gc.setForeground(anthrazite);
+        anthrazite.dispose();
+        gc.setBackground(device.getSystemColor(SWT.COLOR_WHITE));
         gc.setAlpha(255);
         gc.setLineWidth(1);
     }
@@ -36,22 +39,25 @@ public class YouAreHereOverlay extends SelectionOverlay {
         Point e = gc.stringExtent(name);
         e.x += PADDING_X * 2;
         e.y += PADDING_Y * 2;
-        int[] polygon = new int[] { 
-                0, 0,
-                e.x, 0,
-                e.x, e.y,
-                (e.x + ARROW_WIDTH) / 2, e.y,
+        int[] triangle = new int[] { 
+                (e.x + 3*ARROW_WIDTH) / 2, e.y,
                 e.x / 2, e.y + ARROW_HEIGHT,
-                (e.x - ARROW_WIDTH) / 2, e.y,
-                0, e.y };
+                (e.x + ARROW_WIDTH) / 2, e.y
+                };
+        
         Transform save = new Transform(device);
         gc.getTransform(save);
         Transform t = new Transform(device);
         gc.getTransform(t);
         t.translate(each.px - e.x/2, each.py - e.y - ARROW_HEIGHT - GAP);
         gc.setTransform(t);
-        gc.fillPolygon(polygon);
-        gc.drawPolygon(polygon);
+        
+        gc.fillRoundRectangle(0, 0, e.x, e.y, 8, 8);
+        gc.drawRoundRectangle(0, 0, e.x, e.y, 8, 8);
+        
+        gc.drawPolygon(triangle);
+        gc.fillPolygon(triangle);
+        
         gc.drawText(name, PADDING_X, PADDING_Y);
         gc.setTransform(save);
         t.dispose();
