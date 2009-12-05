@@ -19,15 +19,15 @@ public class FewEigenvaluesTest {
 	private Matrix A;
 
 	private Matrix randomSymetricMatrix(int n) {
-		Matrix A = Matrix.dense(n, n);
+		Matrix S = Matrix.dense(n, n);
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < i; j++) {
 				double value = Math.random() * 23;
-				A.put(i, j, value);
-				A.put(j, i, value);
+				S.put(i, j, value);
+				S.put(j, i, value);
 			}
 		}
-		return A;
+		return S;
 	}
 	
 	@Test
@@ -66,11 +66,11 @@ public class FewEigenvaluesTest {
 	
 	@Test
 	public void shouldDecomposeSmallMatrix() {
-		Matrix A = Matrix.from(3, 3,
+		A = Matrix.from(3, 3,
 				0, 1, -1,
 				1, 1, 0,
 				-1, 0, 1);
-		FewEigenvalues eigen = FewEigenvalues.of(A).largest(2);
+		eigen = FewEigenvalues.of(A).largest(2);
 		eigen.run();
 		
 		assertEquals(1, eigen.value[0], 1e-6);

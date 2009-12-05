@@ -350,9 +350,9 @@ public class Mds {
      */
     private void set_weights () {
 
-        double this_weight;
-        double local_weight_power = 0.;
-        double local_within_between = 1.;
+        //double this_weight;
+        //double local_weight_power = 0.;
+        //double local_within_between = 1.;
 
         this.weights = new SymetricMatrix(Dtarget.rowCount());
         for (int i = 0; i < Dtarget.rowCount(); i++) {

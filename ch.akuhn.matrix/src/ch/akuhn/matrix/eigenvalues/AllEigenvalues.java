@@ -38,6 +38,7 @@ public class AllEigenvalues extends Eigenvalues {
 	
 	private Matrix A;
 
+	@Override
 	public AllEigenvalues run() {
 		double[] wr = new double[n];
 		double[] wi = new double[n];
@@ -75,25 +76,25 @@ public class AllEigenvalues extends Eigenvalues {
 	 */
 	private void postprocess(double[] wr, double[] vl) {
 		class Eigen implements Comparable<Eigen> {
-			double value;
-			Vector vector;
+			double value0;
+			Vector vector0;
 			@Override
 			public int compareTo(Eigen eigen) {
-				return Double.compare(value, eigen.value);
+				return Double.compare(value0, eigen.value0);
 			}
 		}
 		Eigen[] eigen = new Eigen[n];
 		for (int i = 0; i < n; i++) {
 			eigen[i] = new Eigen();
-			eigen[i].value = wr[i];
-			eigen[i].vector = Vector.copy(vl, i*n, n); 
+			eigen[i].value0 = wr[i];
+			eigen[i].vector0 = Vector.copy(vl, i*n, n); 
 		}
 		Arrays.sort(eigen);
 		value = new double[nev];
 		vector = new Vector[nev];
 		for (int i = 0; i < nev; i++) {
-			value[i] = eigen[n-nev+i].value;
-			vector[i] = eigen[n-nev+i].vector;
+			value[i] = eigen[n-nev+i].value0;
+			vector[i] = eigen[n-nev+i].vector0;
 		}
 	}
 

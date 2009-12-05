@@ -120,10 +120,10 @@ public abstract class Matrix {
 
 	private class Vec extends Vector {
 		
-		private int index0;
+		int index0;
     	private boolean isRow;
     	
-    	private Vec(int n, boolean isRow) {
+    	Vec(int n, boolean isRow) {
     		this.isRow = isRow;
     		this.index0 = n;
     	}

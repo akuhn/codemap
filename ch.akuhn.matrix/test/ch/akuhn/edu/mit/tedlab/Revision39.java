@@ -821,7 +821,7 @@ LAS2         ritvec, lanso
 	SVDRec svdLAS2(SMat A, int dimensions, int iterations, double[] end, 
 			double kappa) {
 		boolean transpose = false;
-		long ibeta, it, irnd, machep, negep, nsig;
+		//long ibeta, it, irnd, machep, negep, nsig;
 		int n, m, i, steps;
 		double[][] wptr = new double[10][];
 		double[] ritz;
@@ -856,12 +856,12 @@ LAS2         ritvec, lanso
 		n = A.cols;
 
 		/* BEGIN Compute machine precision */ 
-		long[] machar_result = machar(/* &ibeta, &it, &irnd, &machep, &negep */);
-		ibeta = machar_result[0];
-		it = machar_result[1];
-		irnd = machar_result[2];
-		machep = machar_result[3];
-		negep = machar_result[4];
+		/*long[] machar_result =*/ machar(/* &ibeta, &it, &irnd, &machep, &negep */);
+		//ibeta = machar_result[0];
+		//it = machar_result[1];
+		//irnd = machar_result[2];
+		//machep = machar_result[3];
+		//negep = machar_result[4];
 		/* END Compute machine precision */
 
 		eps1 = eps * Math.sqrt((double) n);
@@ -921,7 +921,7 @@ LAS2         ritvec, lanso
 		R.S  = svd_doubleArray(R.d, true, "las2: R->s");
 		R.Vt = new DMat(R.d, A.cols);
 
-		nsig = ritvec(n, A, R, kappa, ritz, bnd, wptr[6], wptr[9], wptr[5], steps, 
+		/*nsig =*/ ritvec(n, A, R, kappa, ritz, bnd, wptr[6], wptr[9], wptr[5], steps, 
 				neig);
 
 		if (SVDVerbosity > 1) {

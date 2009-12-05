@@ -92,7 +92,8 @@ public class SymetricMatrix extends Matrix {
 		return mean;
 	}
 	
-    public Vector mult(Vector v) {
+    @Override
+	public Vector mult(Vector v) {
         assert v.size() == values.length;
         double[] mult = new double[v.size()];
         for (int i = 0; i < values.length; i++) {

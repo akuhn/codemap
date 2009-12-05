@@ -29,7 +29,7 @@ public class Eigenvalues {
 			eigen.vector = new Vector[] { Vector.from(1.0) };
 			return eigen;
 		}
-		if (A.size() < 10) return AllEigenvalues.of(A);
+		if (A.size() < 10) return new AllEigenvalues(A);
 		return FewEigenvalues.of(A);
 	}
 

@@ -77,9 +77,9 @@ public abstract class Isomap {
             Arrays.sort(minima);
             for (int j = k + 1; j < data.length; j++) {
                 if (data[j] >= minima[k]) continue;
-                int n = -1-Arrays.binarySearch(minima, data[j]);
-                System.arraycopy(minima, n, minima, n+1, k-n);
-                minima[n] = data[j];
+                int n0 = -1-Arrays.binarySearch(minima, data[j]);
+                System.arraycopy(minima, n0, minima, n0+1, k-n0);
+                minima[n0] = data[j];
             }
             double min = minima[k];
             for (int j = k + 1; j < data.length; j++) {
@@ -96,11 +96,11 @@ public abstract class Isomap {
      *
      */
     public void computeShortestPathWithBruteForce() {
-        for (int k = 0; k < n; k++) {
+        for (int k0 = 0; k0 < n; k0++) {
             for (int i = 0; i < n; i++) {
-                double path_i_k = graph.get(i,k);
+                double path_i_k = graph.get(i,k0);
                 for (int j = 0; j < n; j++) {
-                    graph.put(i,j, Math.min(graph.get(i,j), path_i_k + graph.get(k,j)));
+                    graph.put(i,j, Math.min(graph.get(i,j), path_i_k + graph.get(k0,j)));
                 }
             }
         }

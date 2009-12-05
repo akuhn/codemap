@@ -70,31 +70,32 @@ public abstract class FewEigenvalues extends Eigenvalues {
 	}
 
 	/** Compute the largest algebraic eigenvalues. */
-	public FewEigenvalues largest(int nev) {
-		return which(Which.LA, nev);
+	@Override
+	public FewEigenvalues largest(int nev0) {
+		return which(Which.LA, nev0);
 	}
 
 	/** Compute the smallest algebraic eigenvalues. */
-	public FewEigenvalues smallest(int nev) {
-		return which(Which.SA, nev);
+	public FewEigenvalues smallest(int nev0) {
+		return which(Which.SA, nev0);
 	}
 
 	/** Compute the largest eigenvalues in magnitude. */
-	public FewEigenvalues greatest(int nev) {
-		return which(Which.LM, nev);
+	public FewEigenvalues greatest(int nev0) {
+		return which(Which.LM, nev0);
 	}
 
 	/** Compute the smallest eigenvalues in magnitude. */
-	public FewEigenvalues lowest(int nev) {
-		return which(Which.SM, nev);
+	public FewEigenvalues lowest(int nev0) {
+		return which(Which.SM, nev0);
 	}
 
 	/** Compute eigenvalues from both end of the spectrum.
 	 * When the <CODE>nev</CODE> is odd, compute one more from the
 	 * high end than from the low end.
 	 */
-	public FewEigenvalues fromBothEnds(int nev) {
-		return which(Which.BE, nev);
+	public FewEigenvalues fromBothEnds(int nev0) {
+		return which(Which.BE, nev0);
 	}
 
 	/** Runs the eigenvalue decomposition,
@@ -102,6 +103,7 @@ public abstract class FewEigenvalues extends Eigenvalues {
 	 * Please refer to the ARPACK guide for more information.
 	 * 
 	 */
+	@Override
 	public Eigenvalues run() {
 		ARPACK arpack = ARPACK.getInstance();
 		/*

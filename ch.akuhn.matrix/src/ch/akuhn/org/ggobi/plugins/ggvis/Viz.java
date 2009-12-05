@@ -101,8 +101,8 @@ public class Viz implements PaintListener, MultidimensionalScalingListener {
     }
 
     @Override
-    public void update(Mds mds) {
-        this.mds = mds;
+    public void update(Mds mds0) {
+        this.mds = mds0;
     }
 
     public Viz setEdges(double[][] distances) {

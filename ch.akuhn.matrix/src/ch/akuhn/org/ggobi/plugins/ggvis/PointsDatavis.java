@@ -83,8 +83,8 @@ public class PointsDatavis implements PaintListener {
         }
     }
 
-    public PointsDatavis withEdges(boolean[][] edges) {
-        this.edges = edges;
+    public PointsDatavis withEdges(boolean[][] edges0) {
+        this.edges = edges0;
         return this;
     }
 

@@ -59,7 +59,8 @@ public class DeerwesterTest {
     public void makeSMat() {
         DMat D = new DMat(12, 9);
         D.value = A;
-        input = new Svdlib().svdConvertDtoS(D);
+        new Svdlib();
+		input = Svdlib.svdConvertDtoS(D);
     }    
 
     @Before

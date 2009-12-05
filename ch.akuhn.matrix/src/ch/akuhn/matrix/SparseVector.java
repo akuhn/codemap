@@ -180,6 +180,7 @@ public class SparseVector extends Vector {
 			.end();
 	}
 	
+	@Override
 	public void apply(Function f) {
 		assert f.apply(0) == 0; // assume zero is fixpoint
 		for (int n = 0; n < used; n++) values[n] = f.apply(values[n]);

@@ -6,6 +6,7 @@ import ch.akuhn.linalg.SVD;
 import ch.akuhn.matrix.Matrix;
 import ch.akuhn.matrix.SparseMatrix;
 import ch.akuhn.matrix.Vector;
+import ch.akuhn.util.Out;
 import ch.akuhn.util.Stopwatch;
 
 public class SingularValues {
@@ -14,7 +15,7 @@ public class SingularValues {
 	public Vector[] vectorLeft;
 	public Vector[] vectorRight;
 	
-	private Matrix A;
+	Matrix A;
 	private int nev;
 	
 	public SingularValues(Matrix A, int nev) {
@@ -55,9 +56,11 @@ public class SingularValues {
 		} 
 		Stopwatch.p();
 		SingularValues singular = new SingularValues(A, 10).decompose();
+		Out.puts(singular.value);
 		Stopwatch.p("ARPACK");
 		Stopwatch.p();
 		SVD svd = new SVD(A, 10);
+		Out.puts(svd.s);
 		Stopwatch.p("SVDLIBC");
 	}
 	

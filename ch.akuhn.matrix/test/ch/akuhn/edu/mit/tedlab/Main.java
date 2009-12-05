@@ -35,7 +35,7 @@ public class Main {
         D.value[9] = new double[] { 0, 0, 0, 0, 0, 1, 1, 1, 0 };
         D.value[10] = new double[] { 0, 0, 0, 0, 0, 0, 1, 1, 1 };
         D.value[11] = new double[] { 0, 0, 0, 0, 0, 0, 0, 1, 1 };
-        return new Svdlib().svdConvertDtoS(D);
+		return Svdlib.svdConvertDtoS(D);
     }
 
 }
