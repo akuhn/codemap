@@ -19,7 +19,6 @@ Require-Bundle: ch.akuhn.hapax,
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Adrian Kuhn and David Erni
 Export-Package: ch.deif.meander,
- ch.deif.meander.builder,
  ch.deif.meander.internal,
  ch.deif.meander.map,
  ch.deif.meander.swt,

@@ -6,7 +6,6 @@ import ch.akuhn.values.Arguments;
 import ch.akuhn.values.TaskValue;
 import ch.akuhn.values.Value;
 import ch.deif.meander.Configuration;
-import ch.deif.meander.builder.Meander;
 
 
 public class ComputeConfigurationTask extends TaskValue<Configuration> {
@@ -21,7 +20,7 @@ public class ComputeConfigurationTask extends TaskValue<Configuration> {
     @Override
     protected Configuration computeValue(ProgressMonitor monitor, Arguments args) {
         LatentSemanticIndex index = args.nextOrFail();
-        return previousConfiguration = Meander.builder().addCorpus(index).makeMap(previousConfiguration);
+        return previousConfiguration = new MapBuilder().addCorpus(index).makeMap(previousConfiguration);
     }
 
     public ComputeConfigurationTask initialConfiguration(Configuration configuration) {
