@@ -22,14 +22,10 @@ import org.codemap.search.SearchResultController;
 import org.codemap.util.ExtensionPoints;
 import org.codemap.util.Log;
 import org.codemap.util.MColor;
-import org.codemap.util.Resources;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
@@ -38,7 +34,6 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
@@ -53,51 +48,15 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.ViewPart;
 
-import ch.deif.meander.Location;
-import ch.deif.meander.MapSelection;
 import ch.deif.meander.swt.CodemapVisualization;
-import ch.deif.meander.swt.CurrentSelectionOverlay;
-import ch.deif.meander.ui.CodemapEvent;
-import ch.deif.meander.ui.CodemapListener;
 
 public class MapView extends ViewPart {
 
     private List<CodemapAction> actions = new ArrayList<CodemapAction>();
-
-    private CodemapListener codemapListener = new CodemapListener() {
-        @Override
-        public void handleEvent(CodemapEvent event) {
-            if (CurrentSelectionOverlay.EVT_DOUBLE_CLICKED == event.getKind()) {
-                doubleClicked((Location) event.getValue());
-            } else if (CurrentSelectionOverlay.EVT_SELECTION_CHANGED == event
-                    .getKind()) {
-                selectionChanged((MapSelection) event.getValue());
-            }
-        }
-
-        public void selectionChanged(MapSelection mapSelection) {
-            final ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
-            for (String each : mapSelection) {
-                IJavaElement javaElement = Resources.asJavaElement(each);
-                selection.add(javaElement);
-            }
-            StructuredSelection structuredSelection = new StructuredSelection(selection);
-            selectionProvider.setSelection(structuredSelection);
-        }
-
-        public void doubleClicked(Location location) {
-            IResource resource = Resources.asResource(location.getDocument());
-            if (!(resource instanceof IFile))
-                return;
-            openInEditor((IFile) resource);
-        }
-    };
 
     public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
     private static final String ATTR_CLASS = "class";
@@ -280,26 +239,8 @@ public class MapView extends ViewPart {
     }
 
     private void updateMapVisualization(CodemapVisualization viz) {
-        if (currentViz != null) {
-            currentViz.removeListener(codemapListener);
-        }
         canvasListener.setVisualization(currentViz = viz);
-        currentViz.addListener(codemapListener);
         redrawAsync();
-    }
-
-    private void openInEditor(final IFile file) {
-        final IWorkbenchPage page = getSite().getPage();
-        Display.getDefault().asyncExec(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    IDE.openEditor(page, file, true);
-                } catch (PartInitException e) {
-                    Log.error(e);
-                }
-            }
-        });
     }
 
     public IJavaProject getCurrentProject() {
@@ -349,5 +290,9 @@ public class MapView extends ViewPart {
         boolean success = canvas.print(gc);
         if (!success) return null;
         return image;
+    }
+
+    public MapSelectionProvider getSelectionProvider() {
+        return selectionProvider;
     }
 }

@@ -1,8 +1,5 @@
 package ch.deif.meander.swt;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 import org.codemap.resources.MapValues;
 import org.codemap.util.MColor;
 import org.eclipse.swt.events.DragDetectEvent;
@@ -18,8 +15,6 @@ import org.eclipse.swt.widgets.Canvas;
 
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
-import ch.deif.meander.ui.CodemapEvent;
-import ch.deif.meander.ui.CodemapListener;
 
 
 public final class CodemapVisualization extends CompositeLayer implements PaintListener {
@@ -65,62 +60,9 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
         return (CodemapVisualization) super.remove(layer);
     }
 
-    private Collection<CodemapListener> listeners = new HashSet<CodemapListener>();
     private int offsetX;
     private int offsetY;
     private MapValues mapValues;
-
-    protected static void fireEvent(MouseEvent e, String kind, Object value) {
-        final CodemapVisualization self = (CodemapVisualization) e.data;
-        final CodemapEvent event = new CodemapEvent(kind, self, value);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                for (CodemapListener each : self.listeners) {
-                    each.handleEvent(event);
-                }
-            }
-        }).start();
-    }
-
-    public void removeListener(CodemapListener listener) {
-        listeners.remove(listener);
-    }
-
-    public void addListener(CodemapListener listener) {
-        listeners.add(listener);
-    }
-
-    /**
-     * Open an new Shell and display the CodemapVisalization.
-     * For testing purposes only.
-     */
-    public void openAndBlock() {
-        //		Display display = new Display();
-        //		//Shell shell = new Shell(display, SWT.SHELL_TRIM & ~SWT.RESIZE);
-        //		Shell shell = new Shell(display, SWT.SHELL_TRIM);
-        //		Canvas canv = new Canvas(shell, SWT.NONE | SWT.DOUBLE_BUFFERED);
-        //		canv.setSize(400,300);
-        //		if (map != null) canv.setSize(map.width + 400, map.height);
-        //		this.link(canv);
-        //		
-        //		
-        //		Menu menu = new Menu(shell, SWT.POP_UP);
-        //		MenuItem item = new MenuItem(menu, SWT.PUSH);
-        //		item.setText("Popup");
-        //		canv.setMenu(menu);
-        //		
-        //		shell.setText("Codemap: " + map);
-        //		shell.pack();
-        //		shell.open();
-        //		//this.startAnimationLoop();
-        //		while (!shell.isDisposed()) {
-        //			if (!display.readAndDispatch())
-        //				display.sleep();
-        //		}
-        //		display.dispose();
-    }
-
 
     private void addOffsetAndThisToEvent(MouseEvent e) {
         e.x -= offsetX;

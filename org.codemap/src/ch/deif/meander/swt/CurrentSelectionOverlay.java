@@ -1,13 +1,20 @@
 package ch.deif.meander.swt;
 
-import static ch.deif.meander.swt.CodemapVisualization.fireEvent;
 import static ch.deif.meander.swt.CodemapVisualization.mapValues;
 
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.codemap.CodemapCore;
+import org.codemap.mapview.MapSelectionProvider;
 import org.codemap.resources.MapValues;
+import org.codemap.util.EclipseUtil;
+import org.codemap.util.Resources;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DragDetectEvent;
 import org.eclipse.swt.events.MouseEvent;
@@ -45,7 +52,11 @@ public class CurrentSelectionOverlay extends SelectionOverlay {
         if (map == null) return;
         Location neighbor = map.nearestNeighbor(e.x, e.y);
         if (neighbor == null) return;
-        fireEvent(e, EVT_DOUBLE_CLICKED, neighbor);
+        
+        IResource resource = Resources.asResource(neighbor.getDocument());
+        if (!(resource instanceof IFile))
+            return;
+        EclipseUtil.openInEditor((IFile) resource);        
     }
 
     @Override
@@ -65,8 +76,19 @@ public class CurrentSelectionOverlay extends SelectionOverlay {
             handleSingleClick(e);            
         }
         this.redraw(e);
-        fireEvent(e, EVT_SELECTION_CHANGED, getSelection(mapValues(e)));
+        selectionChanged(getSelection(mapValues(e)));
     }
+    
+    public void selectionChanged(MapSelection mapSelection) {
+        final ArrayList<IJavaElement> selection = new ArrayList<IJavaElement>();
+        for (String each : mapSelection) {
+            IJavaElement javaElement = Resources.asJavaElement(each);
+            selection.add(javaElement);
+        }
+        StructuredSelection structuredSelection = new StructuredSelection(selection);
+        MapSelectionProvider selectionProvider = CodemapCore.getPlugin().getMapView().getSelectionProvider();
+        selectionProvider.setSelection(structuredSelection);
+    }    
 
     private void handleSingleClick(MouseEvent e) {
         Value<MapInstance> mapInstance = mapValues(e).mapInstance;
