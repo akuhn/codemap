@@ -50,7 +50,7 @@ public class ShowPackageColorsAction extends MenuAction {
 	}
 
 	private void enable() {
-		MapPerProject mapForProject = CodemapCore.getPlugin().mapForProject(theController.getCurrentProject());
+		MapPerProject mapForProject = theController.getActiveMap();
 		
 		ColorBrewer brewer = new ColorBrewer();
 		CodemapColors colorScheme = new CodemapColors();
@@ -77,7 +77,7 @@ public class ShowPackageColorsAction extends MenuAction {
 				Log.error(e);
 			}
 		}
-		CodemapCore.getPlugin().getActiveMap().getValues().colorScheme.setValue(colorScheme);
+		theController.getActiveMap().getValues().colorScheme.setValue(colorScheme);
 	}
 
 	@Override

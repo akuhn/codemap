@@ -1,19 +1,21 @@
 package org.codemap.mapview.action;
 
-import org.codemap.CodemapCore;
+import org.codemap.mapview.MapController;
 import org.eclipse.jface.action.Action;
 
 public class ReloadMapAction extends Action {
     
-    public ReloadMapAction() {
+    private MapController controller;
+
+    public ReloadMapAction(MapController theController) {
         super();
         setText("Generate new Codemap");
+        controller = theController;
     }
     
     @Override
     public void run() {
-        CodemapCore core = CodemapCore.getPlugin();
-        core.getActiveMap().reloadFromScratch();
+        controller.getActiveMap().reloadFromScratch();
     }
 
 }

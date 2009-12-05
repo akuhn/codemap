@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.eclipse.jdt.core.IJavaProject;
 
-/*default*/ class MapPerProjectCache {
+public class MapPerProjectCache {
 
     private Map<IJavaProject,MapPerProject> mapPerProjectCache = new HashMap<IJavaProject,MapPerProject>();
 

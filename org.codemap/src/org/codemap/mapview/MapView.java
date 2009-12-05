@@ -123,7 +123,7 @@ public class MapView extends ViewPart {
         IMenuManager viewMenu = actionBars.getMenuManager();
         viewMenu.add(new Separator());
         viewMenu.add(new SaveAsPNGAction(theController));
-        viewMenu.add(new ReloadMapAction());
+        viewMenu.add(new ReloadMapAction(theController));
         viewMenu.add(new SaveHapaxDataAction());        
         viewMenu.add(registerAction(new ShowTestsAction()));
 //        viewMenu.add(new DebugLocationsAction());
@@ -227,8 +227,7 @@ public class MapView extends ViewPart {
         currentSize = newDimension;
         IJavaProject project = theController.getCurrentProject();
         if (project == null) return;
-        CodemapVisualization viz = CodemapCore.getPlugin()
-                .mapForProject(project)
+        CodemapVisualization viz = theController.mapForProject(project)
                 .updateSize(currentSize)
                 .getVisualization();
         if (viz != null) {

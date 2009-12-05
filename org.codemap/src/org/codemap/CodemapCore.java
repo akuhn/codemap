@@ -30,7 +30,6 @@ public class CodemapCore extends AbstractUIPlugin {
     public final MapSelection youAreHereSelection;
     public final MapSelection openFilesSelection;
     public final MapSelection currentSelection;
-    private final MapPerProjectCache cache;
 
     public MapSelection getYouAreHereSelection() {
         return youAreHereSelection;
@@ -49,7 +48,6 @@ public class CodemapCore extends AbstractUIPlugin {
         youAreHereSelection = new MapSelection();
         openFilesSelection = new MapSelection();
         currentSelection = new MapSelection();
-        cache = new MapPerProjectCache();
     }
 
     @Override
@@ -60,7 +58,7 @@ public class CodemapCore extends AbstractUIPlugin {
 
     @Override
     public void stop(BundleContext context) throws Exception {
-        cache.saveMapState();
+        theController.onStop();
         THE_PLUGIN = null;
         super.stop(context);
     }
@@ -72,14 +70,11 @@ public class CodemapCore extends AbstractUIPlugin {
     public final static String makeID(Class<?> javaClass) {
         return PLUGIN_ID + "." + javaClass.getSimpleName();
     }
-
-    public MapPerProject mapForProject(IJavaProject project) {
-        return cache.forProject(project);
-    }
-
+    
+    // TODO: might be removed
     public MapPerProject getActiveMap() {
         if (theController == null) return null;
-        return mapForProject(theController.getCurrentProject());
+        return theController.getActiveMap();
     }
 
     public MapScheme<MColor> getDefaultColorScheme() {

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.codemap.CodemapCore;
+import org.codemap.MapPerProject;
+import org.codemap.MapPerProjectCache;
 import org.codemap.MapSelection;
 import org.codemap.callhierarchy.CallHierarchyTracker;
 import org.codemap.marker.MarkerController;
@@ -23,10 +25,12 @@ public class MapController {
     private SearchResultController searchResultController;
     private MarkerController markerController;
     private SelectionTracker selectionTracker;
+    private MapPerProjectCache cache;
 
     public MapController(MapView view) {
         CodemapCore.getPlugin().register(this);        
         this.view = view;
+        cache = new MapPerProjectCache();
         callHierarchyTracker = new CallHierarchyTracker();
         searchResultController = new SearchResultController();
         markerController = new MarkerController();
@@ -114,6 +118,19 @@ public class MapController {
      */
     public Image copyCurrentCodemapImage() {
         return view.newCodemapImage();
-    }	
+    }
+
+    public MapPerProject getActiveMap() {
+        return mapForProject(getCurrentProject());
+    }
+    
+
+    public MapPerProject mapForProject(IJavaProject project) {
+        return cache.forProject(project);
+    }
+
+    public void onStop() {
+        cache.saveMapState();
+    }    
 
 }
