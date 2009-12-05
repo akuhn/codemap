@@ -83,7 +83,7 @@ public class QuickNDirtyMap {
             int y = toMapCoords(each.y);
             org.eclipse.swt.graphics.Point extent = new org.eclipse.swt.graphics.Point(x, y);
             int fontsize = (points.get(each))/3;
-            labels.add(new Label(x-20, y-60, extent, fontsize, each.getDocument()));
+            labels.add(new Label(x-20, y-60, extent, fontsize, each.getDocument(), new Location(each, 0, x, y)));
         }
         labeling = new Labeling(labels);
         

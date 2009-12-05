@@ -22,10 +22,12 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 
     private int offsetX;
     private int offsetY;
-    private MapValues mapValues;    
+    private MapValues mapValues;
+    private LabelFocus focus;
 
     public CodemapVisualization(MapValues values) {
         this.mapValues = values;
+        focus = new LabelFocus();
     }
 
     @Override
@@ -85,7 +87,9 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
         
         boolean noName = map.isEmpty() || !map.containsPoint(e.x, e.y) || nearestNeighbor == null;
         String name = noName ? null : nearestNeighbor.getName();
+        focus.setLabel(nearestNeighbor.getLabel());
         ((Canvas) e.widget).setToolTipText(name);
+        redraw(e);
     }
 
     @Override

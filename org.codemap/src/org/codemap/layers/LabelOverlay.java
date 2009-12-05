@@ -25,21 +25,13 @@ public class LabelOverlay extends Layer {
         Device device = gc.getDevice();
         String fname = ARIAL_NARROW;
         Font basefont = new Font(device, fname, 12, SWT.NORMAL);
-            Color white = device.getSystemColor(SWT.COLOR_WHITE);
-            Color black = device.getSystemColor(SWT.COLOR_BLACK);
-            for (Label each: labeling.labels()) {
-                FontData[] fontData = basefont.getFontData();
-                for (FontData fd: fontData) fd.setHeight(each.fontHeight);
-                Font font = new Font(gc.getDevice(), fontData);
-                gc.setFont(font);
-                gc.setAlpha(128);
-                gc.setForeground(black);
-                gc.drawText(each.text, each.bounds.x + 1, each.bounds.y + 1, SWT.DRAW_TRANSPARENT);
-                gc.setAlpha(255);
-                gc.setForeground(white);
-                gc.drawText(each.text, each.bounds.x, each.bounds.y, SWT.DRAW_TRANSPARENT);
-                font.dispose();
-            }
+        
+        for (Label each: labeling.labels()) {
+            FontData[] fontData = basefont.getFontData();
+            
+            each.render(gc, fontData);
+        }
+        
         basefont.dispose();
     }
 

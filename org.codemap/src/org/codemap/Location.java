@@ -1,5 +1,7 @@
 package org.codemap;
 
+import org.codemap.layers.Label;
+
 /**
  * Location of a document on a map instance. Coordinates are in pixels. When
  * normalized, elevation is between 0 and 100.
@@ -14,9 +16,10 @@ public class Location implements Comparable<Location> {
     public final int px, py;
     private double elevation;
     private Point point;
+    private Label label;
     
     public Location(Location loc) {
-        this(loc.point, loc.elevation, loc.px, loc.py);
+        this(loc.point, loc.elevation, loc.px, loc.py, loc.label);
     } 
 
     public String getDocument() {
@@ -35,21 +38,26 @@ public class Location implements Comparable<Location> {
         return path.substring(begin + 1, end < 0 ? path.length() : end);
     }
 
-    public Location(Point point, double elevation, int px, int py) {
+    public Location(Point point, double elevation, int px, int py, Label label) {
         if (Double.isNaN(elevation))
             throw new AssertionError();
         this.point = point;
         this.elevation = elevation;
         this.px = px;
         this.py = py;
+        this.label = label;
+    }
+
+    public Location(Point point, double elevation, int px, int py) {
+        this(point, elevation, px, py, null);
     }
 
     public Location withElevation(double newElevation) {
         if (Double.isNaN(newElevation))
             throw new AssertionError();
-        Location clone = new Location(this);
-        clone.elevation = newElevation;
-        return clone;
+//        Location clone = new Location(this);
+        this.elevation = newElevation;
+        return this;
     }
 
     public double getElevation() {
@@ -77,6 +85,14 @@ public class Location implements Comparable<Location> {
 
     protected boolean equalsLocation(Location o) {
         return (o != null) && o.getDocument().equals(this.getDocument());
+    }
+
+    public void setLabel(Label label) {
+        this.label = label;
+    }
+    
+    public Label getLabel() {
+        return label;
     }
 
 }

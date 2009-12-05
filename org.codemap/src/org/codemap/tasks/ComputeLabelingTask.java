@@ -64,7 +64,7 @@ public class ComputeLabelingTask extends TaskValue<Labeling> {
             Font font = new Font(gc.getDevice(), fontData);
             gc.setFont(font);
             Point extent = gc.stringExtent(text);
-            labels.add(new Label(each.px, each.py, extent, height, text));
+            labels.add(new Label(each.px, each.py, extent, height, text, each));
             font.dispose();
         }
         basefont.dispose();
