@@ -6,9 +6,11 @@ import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
+
+import org.codemap.util.StopWatch;
+
 import ch.deif.meander.MapAlgorithm;
 import ch.deif.meander.MapSetting;
-import ch.deif.meander.util.StopWatch;
 
 /**
  * @see http://edndoc.esri.com/arcobjects/9.2/NET/shared/geoprocessing/ spatial_analyst_tools/how_hillshade_works.htm

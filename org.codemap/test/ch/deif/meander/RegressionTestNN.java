@@ -4,13 +4,13 @@ import static org.junit.Assert.*;
 
 import java.util.HashMap;
 
+import org.codemap.util.MapScheme;
 import org.junit.Test;
 
 import ch.deif.meander.Configuration;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.Point;
 import ch.deif.meander.main.QuickNDirtyMap;
-import ch.deif.meander.util.MapScheme;
 
 public class RegressionTestNN {
     

@@ -1,5 +1,8 @@
 package ch.deif.meander.map;
 
+import org.codemap.util.MColor;
+import org.codemap.util.MapScheme;
+import org.codemap.util.StopWatch;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
@@ -18,9 +21,6 @@ import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapSetting;
 import ch.deif.meander.internal.DEMAlgorithm;
-import ch.deif.meander.util.MColor;
-import ch.deif.meander.util.MapScheme;
-import ch.deif.meander.util.StopWatch;
 
 public class ComputeBackgroundTask extends TaskValue<Image> {
     

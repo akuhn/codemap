@@ -1,4 +1,4 @@
-package ch.deif.meander.util;
+package org.codemap.util;
 
 import ch.akuhn.util.Assert;
 

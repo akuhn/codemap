@@ -1,5 +1,7 @@
 package ch.deif.meander.map;
 
+import org.codemap.util.MapScheme;
+
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.util.ProgressMonitor;
 import ch.akuhn.values.Arguments;
@@ -8,7 +10,6 @@ import ch.akuhn.values.Value;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.Point;
-import ch.deif.meander.util.MapScheme;
 
 public class ComputeMapInstanceTask extends TaskValue<MapInstance> {
 

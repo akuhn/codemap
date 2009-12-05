@@ -1,5 +1,7 @@
 package ch.deif.meander.map;
 
+import org.codemap.util.MapScheme;
+
 import ch.akuhn.util.ProgressMonitor;
 import ch.akuhn.values.Arguments;
 import ch.akuhn.values.TaskValue;
@@ -8,7 +10,6 @@ import ch.deif.meander.DigitalElevationModel;
 import ch.deif.meander.Location;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.internal.DEMAlgorithm;
-import ch.deif.meander.util.MapScheme;
 
 public class ComputeElevationModelTask extends TaskValue<DigitalElevationModel> {
 

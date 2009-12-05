@@ -23,6 +23,7 @@ import org.codemap.marker.MarkerController;
 import org.codemap.search.SearchResultController;
 import org.codemap.util.ExtensionPoints;
 import org.codemap.util.Log;
+import org.codemap.util.MColor;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -66,7 +67,6 @@ import ch.deif.meander.swt.CodemapVisualization;
 import ch.deif.meander.swt.CurrentSelectionOverlay;
 import ch.deif.meander.ui.CodemapEvent;
 import ch.deif.meander.ui.CodemapListener;
-import ch.deif.meander.util.MColor;
 
 public class MapView extends ViewPart {
 

@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import org.codemap.callhierarchy.CallOverlay;
 import org.codemap.mapview.MapView;
 import org.codemap.resources.EclipseMapValues;
-import org.codemap.resources.EclipseMapValuesBuilder;
+import org.codemap.resources.MapValueBuilder;
 import org.codemap.util.Log;
 import org.codemap.util.OpenFileIconsLayer;
 import org.codemap.util.Resources;
@@ -57,7 +57,7 @@ public class MapPerProject {
 
     /*default*/ void initialize() {
         
-        EclipseMapValuesBuilder builder = new EclipseMapValuesBuilder();
+        MapValueBuilder builder = new MapValueBuilder();
         builder.setName("default.map");
         builder.setProjects(Arrays.asList(Resources.asPath(project)));
         builder.setFileExtensions(Arrays.asList("*.java"));

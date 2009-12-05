@@ -1,4 +1,4 @@
-package ch.deif.meander.util;
+package org.codemap.util;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;

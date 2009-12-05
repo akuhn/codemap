@@ -3,6 +3,9 @@ package ch.deif.meander.main;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.codemap.util.CodemapColors;
+import org.codemap.util.MColor;
+import org.codemap.util.MapScheme;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.PaintEvent;
@@ -24,9 +27,6 @@ import ch.deif.meander.internal.ShadeAlgorithm;
 import ch.deif.meander.map.ComputeBackgroundTask.FastBackgroundRenderer;
 import ch.deif.meander.swt.Label;
 import ch.deif.meander.swt.LabelOverlay;
-import ch.deif.meander.util.CodemapColors;
-import ch.deif.meander.util.MColor;
-import ch.deif.meander.util.MapScheme;
 
 public class QuickNDirtyMap {
     

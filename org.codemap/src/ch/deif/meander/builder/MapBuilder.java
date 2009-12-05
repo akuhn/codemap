@@ -2,11 +2,12 @@ package ch.deif.meander.builder;
 
 import java.io.File;
 
+import org.codemap.util.MapScheme;
+
 import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.deif.meander.Configuration;
 import ch.deif.meander.Point;
-import ch.deif.meander.util.MapScheme;
 
 public interface MapBuilder {
 

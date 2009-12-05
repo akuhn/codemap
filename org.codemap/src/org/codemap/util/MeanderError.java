@@ -1,4 +1,4 @@
-package ch.deif.meander.util;
+package org.codemap.util;
 
 public class MeanderError extends Exception {
 

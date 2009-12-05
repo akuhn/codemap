@@ -2,6 +2,7 @@ package ch.deif.meander.util;
 
 import static org.junit.Assert.assertEquals;
 
+import org.codemap.util.SparseTrueBooleanList;
 import org.junit.Test;
 
 public class SparseTrueBooleanListTest {

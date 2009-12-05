@@ -15,7 +15,7 @@ public class EclipseMapValues extends MapValues {
     public final CollectionValue<MapSelection> selections;
     public final Value<Boolean> showTests;
     
-    public EclipseMapValues(EclipseMapValuesBuilder make) {
+    public EclipseMapValues(MapValueBuilder make) {
         super(make);
         
         showTests = make.showTestsValue();

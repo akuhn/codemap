@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.awt.Color;
 
+import org.codemap.util.MColor;
 import org.junit.Test;
 
 

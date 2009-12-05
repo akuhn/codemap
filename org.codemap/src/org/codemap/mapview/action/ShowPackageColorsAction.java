@@ -5,10 +5,12 @@ import static org.codemap.util.CodemapIcons.PACKAGES;
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
 import org.codemap.mapview.MapController;
+import org.codemap.util.CodemapColors;
 import org.codemap.util.CodemapIcons;
 import org.codemap.util.ColorBrewer;
 import org.codemap.util.IconFactory;
 import org.codemap.util.Log;
+import org.codemap.util.MColor;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -20,8 +22,6 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
 import ch.deif.meander.Point;
-import ch.deif.meander.util.CodemapColors;
-import ch.deif.meander.util.MColor;
 
 public class ShowPackageColorsAction extends MenuAction {
 	

@@ -9,9 +9,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.codemap.util.MapScheme;
+
 import ch.akuhn.foreach.Collect;
 import ch.akuhn.foreach.Each;
-import ch.deif.meander.util.MapScheme;
 
 /** A set of documents on the visualization pane.
  * Each document is placed at a logical coordinate.

@@ -1,8 +1,9 @@
 package ch.deif.meander.internal;
 
+import org.codemap.util.StopWatch;
+
 import ch.deif.meander.Location;
 import ch.deif.meander.MapAlgorithm;
-import ch.deif.meander.util.StopWatch;
 
 /** Creates the digital elevation model of a map. A digital elevation model (DEM) is a raster of z-ordinates for each pixel. 
  *<p> 

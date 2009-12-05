@@ -4,7 +4,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
 import ch.deif.meander.Point;
-import ch.deif.meander.util.MapScheme;
 
 public class CodemapLabels extends MapScheme<String> {
 	

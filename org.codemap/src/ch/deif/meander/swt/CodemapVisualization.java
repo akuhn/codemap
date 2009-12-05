@@ -3,6 +3,7 @@ package ch.deif.meander.swt;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.codemap.util.MColor;
 import org.eclipse.swt.events.DragDetectEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.PaintEvent;
@@ -19,7 +20,6 @@ import ch.deif.meander.MapInstance;
 import ch.deif.meander.map.MapValues;
 import ch.deif.meander.ui.CodemapEvent;
 import ch.deif.meander.ui.CodemapListener;
-import ch.deif.meander.util.MColor;
 
 
 public final class CodemapVisualization extends CompositeLayer implements PaintListener {

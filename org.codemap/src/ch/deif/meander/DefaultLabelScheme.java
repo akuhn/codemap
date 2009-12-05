@@ -1,6 +1,6 @@
 package ch.deif.meander;
 
-import ch.deif.meander.util.MapScheme;
+import org.codemap.util.MapScheme;
 
 
 public class DefaultLabelScheme extends MapScheme<String> {

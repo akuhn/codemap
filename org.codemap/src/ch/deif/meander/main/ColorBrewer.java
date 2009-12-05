@@ -3,7 +3,8 @@ package ch.deif.meander.main;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
-import ch.deif.meander.util.MColor;
+import org.codemap.util.MColor;
+
 
 public class ColorBrewer {
 

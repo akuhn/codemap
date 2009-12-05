@@ -3,14 +3,14 @@ package org.codemap;
 import org.codemap.callhierarchy.CallHierarchyTracker;
 import org.codemap.mapview.MapView;
 import org.codemap.util.EclipseTaskFactory;
+import org.codemap.util.MColor;
+import org.codemap.util.MapScheme;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import ch.akuhn.values.TaskValue;
 import ch.deif.meander.MapSelection;
-import ch.deif.meander.util.MColor;
-import ch.deif.meander.util.MapScheme;
 
 /**
  * Single instance of the running Codemap plug-in.

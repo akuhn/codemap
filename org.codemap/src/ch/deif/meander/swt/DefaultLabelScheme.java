@@ -3,7 +3,7 @@
  */
 package ch.deif.meander.swt;
 
-import ch.deif.meander.util.MapScheme;
+import org.codemap.util.MapScheme;
 
 final class DefaultLabelScheme extends MapScheme<String> {
     @Override
