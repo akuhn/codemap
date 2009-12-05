@@ -15,7 +15,17 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.swt.graphics.Point;
 
-
+/**
+ * Single instance of the MapController for the Codemap plug-in.
+ * <p>
+ * Keeps a cache of MapPerProject instances, a pointer to the open MapView (if
+ * any) and listens to Eclipse search queries. Contains all sub-controllers 
+ * needed to track/control the different funcionality.
+ * Do not use this class to store any other information. Either use the view 
+ * (for UI related state) or the map instances (for project specific state).
+ * </p>
+ *   
+ */
 public class MapController {
 
     private MapView view;

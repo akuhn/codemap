@@ -2,6 +2,12 @@ package org.codemap.mapview;
 
 import org.eclipse.swt.graphics.Image;
 
+/**
+ * Contains a collection of utility functions that come in handy like
+ * abbreviations for common accessors and so on ...
+ * 
+ * @author deif
+ */
 public class ControllerUtils {
     
     private MapController theController;
@@ -22,6 +28,9 @@ public class ControllerUtils {
         return theController.getView().newCodemapImage();
     }   
     
+    /**
+     * @return the name for the currently active project
+     */
     public String activeProjectName() {
         return theController.getActiveMap().getProject().getName();
     }    
