@@ -4,10 +4,10 @@
 package org.codemap.mapview.action;
 
 import org.codemap.CodemapCore;
+import org.codemap.DefaultLabelScheme;
 import org.codemap.util.MapScheme;
 import org.eclipse.jface.action.IAction;
 
-import ch.deif.meander.DefaultLabelScheme;
 
 abstract class LabelAction extends MenuAction {
 

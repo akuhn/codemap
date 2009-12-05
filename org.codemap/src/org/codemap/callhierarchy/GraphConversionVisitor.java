@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.codemap.Location;
 import org.codemap.util.Resources;
 import org.eclipse.jdt.core.ICompilationUnit;
 
-import ch.deif.meander.Location;
 import edu.stanford.hci.flowmap.structure.Graph;
 import edu.stanford.hci.flowmap.structure.Node;
 

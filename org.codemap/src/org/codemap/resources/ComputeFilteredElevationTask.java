@@ -3,6 +3,8 @@ package org.codemap.resources;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codemap.Location;
+import org.codemap.MapInstance;
 import org.codemap.tasks.ComputeElevationModelTask;
 import org.codemap.util.MapScheme;
 import org.codemap.util.Resources;
@@ -13,8 +15,6 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.junit.JUnitCore;
 
 import ch.akuhn.values.Value;
-import ch.deif.meander.Location;
-import ch.deif.meander.MapInstance;
 
 public class ComputeFilteredElevationTask extends ComputeElevationModelTask {
 

@@ -1,9 +1,9 @@
 package org.codemap.util;
 
+import org.codemap.Point;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
-import ch.deif.meander.Point;
 
 public class CodemapLabels extends MapScheme<String> {
 	

@@ -3,6 +3,10 @@ package org.codemap.tasks;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.codemap.DefaultLabelScheme;
+import org.codemap.Labeling;
+import org.codemap.Location;
+import org.codemap.MapInstance;
 import org.codemap.layers.Label;
 import org.codemap.layers.LabelOverlay;
 import org.codemap.util.MapScheme;
@@ -20,10 +24,6 @@ import ch.akuhn.util.ProgressMonitor;
 import ch.akuhn.values.Arguments;
 import ch.akuhn.values.TaskValue;
 import ch.akuhn.values.Value;
-import ch.deif.meander.DefaultLabelScheme;
-import ch.deif.meander.Labeling;
-import ch.deif.meander.Location;
-import ch.deif.meander.MapInstance;
 
 public class ComputeLabelingTask extends TaskValue<Labeling> {
 

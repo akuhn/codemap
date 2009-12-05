@@ -1,6 +1,6 @@
 package org.codemap.util;
 
-import ch.deif.meander.Point;
+import org.codemap.Point;
 
 /** Maps handles to values.
  * 

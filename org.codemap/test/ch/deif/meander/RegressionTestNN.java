@@ -2,6 +2,10 @@ package ch.deif.meander;
 
 import java.util.HashMap;
 
+import org.codemap.Configuration;
+import org.codemap.Location;
+import org.codemap.MapInstance;
+import org.codemap.Point;
 import org.codemap.sandbox.main.QuickNDirtyMap;
 import org.codemap.util.MapScheme;
 import org.junit.Test;

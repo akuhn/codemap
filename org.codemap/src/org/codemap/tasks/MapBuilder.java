@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import org.codemap.Configuration;
+import org.codemap.Point;
+import org.codemap.internal.LayoutAlgorithm;
 import org.codemap.util.MapScheme;
 
 import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
-import ch.deif.meander.Configuration;
-import ch.deif.meander.Point;
-import ch.deif.meander.internal.LayoutAlgorithm;
 
 /** Not thread-safe.
  * 

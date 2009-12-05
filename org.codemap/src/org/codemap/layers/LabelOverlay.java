@@ -1,5 +1,6 @@
 package org.codemap.layers;
 
+import org.codemap.Labeling;
 import org.codemap.resources.MapValues;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -8,7 +9,6 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 
-import ch.deif.meander.Labeling;
 
 public class LabelOverlay extends Layer {
 

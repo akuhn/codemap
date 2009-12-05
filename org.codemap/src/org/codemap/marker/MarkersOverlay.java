@@ -4,6 +4,8 @@ import static org.codemap.util.CodemapIcons.ERROR;
 import static org.codemap.util.CodemapIcons.INFO;
 import static org.codemap.util.CodemapIcons.WARNING;
 
+import org.codemap.Location;
+import org.codemap.MapSelection;
 import org.codemap.layers.SelectionOverlay;
 import org.codemap.resources.MapValues;
 import org.codemap.util.CodemapIcons;
@@ -15,8 +17,6 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 
-import ch.deif.meander.Location;
-import ch.deif.meander.MapSelection;
 
 public class MarkersOverlay extends SelectionOverlay {
 

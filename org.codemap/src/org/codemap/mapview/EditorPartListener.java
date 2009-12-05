@@ -3,6 +3,7 @@ package org.codemap.mapview;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.codemap.MapSelection;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspace;
@@ -14,7 +15,6 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPathEditorInput;
 import org.eclipse.ui.IWorkbenchPart;
 
-import ch.deif.meander.MapSelection;
 
 public class EditorPartListener implements IPartListener {
 

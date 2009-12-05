@@ -3,7 +3,8 @@ package org.codemap.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.deif.meander.Point;
+import org.codemap.Point;
+
 
 public class CodemapColors extends MapScheme<MColor> {
 

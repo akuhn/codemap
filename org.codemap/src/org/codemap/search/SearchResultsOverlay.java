@@ -1,5 +1,7 @@
 package org.codemap.search;
 
+import org.codemap.Location;
+import org.codemap.MapSelection;
 import org.codemap.layers.SelectionOverlay;
 import org.codemap.resources.MapValues;
 import org.eclipse.swt.SWT;
@@ -9,8 +11,6 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Path;
 import org.eclipse.swt.graphics.Transform;
 
-import ch.deif.meander.Location;
-import ch.deif.meander.MapSelection;
 
 public class SearchResultsOverlay extends SelectionOverlay {
     

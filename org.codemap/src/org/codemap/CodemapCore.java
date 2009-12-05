@@ -9,7 +9,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import ch.akuhn.values.TaskValue;
-import ch.deif.meander.MapSelection;
 
 /**
  * Single instance of the running Codemap plug-in.

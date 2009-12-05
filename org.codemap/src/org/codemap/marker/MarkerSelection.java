@@ -3,7 +3,8 @@ package org.codemap.marker;
 import java.util.HashMap;
 import java.util.Map;
 
-import ch.deif.meander.MapSelection;
+import org.codemap.MapSelection;
+
 
 public class MarkerSelection {
     

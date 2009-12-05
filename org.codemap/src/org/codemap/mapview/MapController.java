@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.codemap.CodemapCore;
+import org.codemap.MapSelection;
 import org.codemap.util.Resources;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.swt.graphics.Point;
 
-import ch.deif.meander.MapSelection;
 
 public class MapController {
 

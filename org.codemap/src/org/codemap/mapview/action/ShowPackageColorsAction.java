@@ -4,6 +4,7 @@ import static org.codemap.util.CodemapIcons.PACKAGES;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
+import org.codemap.Point;
 import org.codemap.mapview.MapController;
 import org.codemap.util.CodemapColors;
 import org.codemap.util.CodemapIcons;
@@ -20,7 +21,6 @@ import org.eclipse.jdt.core.IPackageDeclaration;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
-import ch.deif.meander.Point;
 
 public class ShowPackageColorsAction extends MenuAction {
 	

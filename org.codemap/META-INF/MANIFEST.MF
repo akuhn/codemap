@@ -19,9 +19,9 @@ Require-Bundle: ch.akuhn.hapax,
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Adrian Kuhn and David Erni
 Export-Package: ch.deif.meander,
- ch.deif.meander.internal,
  ch.deif.meander.util,
  org.codemap,
+ org.codemap.internal,
  org.codemap.layers,
  org.codemap.mapview,
  org.codemap.mapview.action,

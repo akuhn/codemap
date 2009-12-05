@@ -1,5 +1,7 @@
 package org.codemap.layers;
 
+import org.codemap.Location;
+import org.codemap.MapInstance;
 import org.codemap.resources.MapValues;
 import org.codemap.util.MColor;
 import org.eclipse.swt.events.DragDetectEvent;
@@ -13,8 +15,6 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.widgets.Canvas;
 
-import ch.deif.meander.Location;
-import ch.deif.meander.MapInstance;
 
 
 public final class CodemapVisualization extends CompositeLayer implements PaintListener {

@@ -4,6 +4,12 @@ import java.util.Collection;
 import java.util.List;
 
 import org.codemap.CodemapCore;
+import org.codemap.Configuration;
+import org.codemap.DigitalElevationModel;
+import org.codemap.HillShading;
+import org.codemap.Labeling;
+import org.codemap.MapInstance;
+import org.codemap.MapSelection;
 import org.codemap.tasks.ComputeBackgroundTask;
 import org.codemap.tasks.ComputeConfigurationTask;
 import org.codemap.tasks.ComputeHillShadingTask;
@@ -20,12 +26,6 @@ import ch.akuhn.values.IntegerValue;
 import ch.akuhn.values.ReferenceValue;
 import ch.akuhn.values.Value;
 import ch.akuhn.values.Values;
-import ch.deif.meander.Configuration;
-import ch.deif.meander.DigitalElevationModel;
-import ch.deif.meander.HillShading;
-import ch.deif.meander.Labeling;
-import ch.deif.meander.MapInstance;
-import ch.deif.meander.MapSelection;
 
 public class MapValueBuilder {
 

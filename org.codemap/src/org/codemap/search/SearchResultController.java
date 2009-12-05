@@ -6,13 +6,13 @@ import java.util.HashSet;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
+import org.codemap.MapSelection;
 import org.codemap.util.Resources;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.ISearchResult;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.search.ui.text.AbstractTextSearchResult;
 
-import ch.deif.meander.MapSelection;
 
 public class SearchResultController {
 

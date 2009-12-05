@@ -3,6 +3,13 @@ package org.codemap.sandbox.main;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.codemap.Configuration;
+import org.codemap.Labeling;
+import org.codemap.Location;
+import org.codemap.MapInstance;
+import org.codemap.Point;
+import org.codemap.internal.DEMAlgorithm;
+import org.codemap.internal.ShadeAlgorithm;
 import org.codemap.layers.Label;
 import org.codemap.layers.LabelOverlay;
 import org.codemap.tasks.ComputeBackgroundTask.FastBackgroundRenderer;
@@ -21,13 +28,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import ch.deif.meander.Configuration;
-import ch.deif.meander.Labeling;
-import ch.deif.meander.Location;
-import ch.deif.meander.MapInstance;
-import ch.deif.meander.Point;
-import ch.deif.meander.internal.DEMAlgorithm;
-import ch.deif.meander.internal.ShadeAlgorithm;
 
 public class QuickNDirtyMap {
     

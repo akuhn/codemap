@@ -2,6 +2,12 @@ package org.codemap.resources;
 
 import java.util.Collection;
 
+import org.codemap.Configuration;
+import org.codemap.DigitalElevationModel;
+import org.codemap.HillShading;
+import org.codemap.Labeling;
+import org.codemap.MapInstance;
+import org.codemap.MapSelection;
 import org.codemap.util.MColor;
 import org.codemap.util.MapScheme;
 import org.eclipse.swt.graphics.Image;
@@ -10,12 +16,6 @@ import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.values.CollectionValue;
 import ch.akuhn.values.IntegerValue;
 import ch.akuhn.values.Value;
-import ch.deif.meander.Configuration;
-import ch.deif.meander.DigitalElevationModel;
-import ch.deif.meander.HillShading;
-import ch.deif.meander.Labeling;
-import ch.deif.meander.MapInstance;
-import ch.deif.meander.MapSelection;
 
 
 public class MapValues {

@@ -1,13 +1,13 @@
 package org.codemap.layers;
 
+import org.codemap.Location;
+import org.codemap.MapSelection;
 import org.codemap.resources.MapValues;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Display;
 
-import ch.deif.meander.Location;
-import ch.deif.meander.MapSelection;
 
 public class OpenFilesOverlay extends SelectionOverlay {
 

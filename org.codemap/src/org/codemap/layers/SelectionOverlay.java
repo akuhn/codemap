@@ -1,11 +1,11 @@
 package org.codemap.layers;
 
+import org.codemap.Location;
+import org.codemap.MapInstance;
+import org.codemap.MapSelection;
 import org.codemap.resources.MapValues;
 import org.eclipse.swt.graphics.GC;
 
-import ch.deif.meander.Location;
-import ch.deif.meander.MapInstance;
-import ch.deif.meander.MapSelection;
 
 public abstract class SelectionOverlay extends Layer {
 

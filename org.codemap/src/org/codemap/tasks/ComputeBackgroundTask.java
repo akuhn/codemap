@@ -1,5 +1,11 @@
 package org.codemap.tasks;
 
+import org.codemap.DigitalElevationModel;
+import org.codemap.HillShading;
+import org.codemap.Location;
+import org.codemap.MapInstance;
+import org.codemap.MapSetting;
+import org.codemap.internal.DEMAlgorithm;
 import org.codemap.util.MColor;
 import org.codemap.util.MapScheme;
 import org.codemap.util.StopWatch;
@@ -15,12 +21,6 @@ import ch.akuhn.util.ProgressMonitor;
 import ch.akuhn.values.Arguments;
 import ch.akuhn.values.TaskValue;
 import ch.akuhn.values.Value;
-import ch.deif.meander.DigitalElevationModel;
-import ch.deif.meander.HillShading;
-import ch.deif.meander.Location;
-import ch.deif.meander.MapInstance;
-import ch.deif.meander.MapSetting;
-import ch.deif.meander.internal.DEMAlgorithm;
 
 public class ComputeBackgroundTask extends TaskValue<Image> {
     

@@ -1,13 +1,14 @@
 package org.codemap.tasks;
 
+import org.codemap.DigitalElevationModel;
+import org.codemap.HillShading;
+import org.codemap.MapInstance;
+import org.codemap.internal.ShadeAlgorithm;
+
 import ch.akuhn.util.ProgressMonitor;
 import ch.akuhn.values.Arguments;
 import ch.akuhn.values.TaskValue;
 import ch.akuhn.values.Value;
-import ch.deif.meander.DigitalElevationModel;
-import ch.deif.meander.HillShading;
-import ch.deif.meander.MapInstance;
-import ch.deif.meander.internal.ShadeAlgorithm;
 
 public class ComputeHillShadingTask extends TaskValue<HillShading> {
 

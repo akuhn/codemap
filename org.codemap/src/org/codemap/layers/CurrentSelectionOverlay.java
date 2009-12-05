@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.codemap.CodemapCore;
+import org.codemap.Location;
+import org.codemap.MapInstance;
+import org.codemap.MapSelection;
+import org.codemap.internal.DEMAlgorithm;
 import org.codemap.mapview.MapSelectionProvider;
 import org.codemap.resources.MapValues;
 import org.codemap.util.EclipseUtil;
@@ -23,10 +27,6 @@ import org.eclipse.swt.graphics.GC;
 
 import ch.akuhn.util.List;
 import ch.akuhn.values.Value;
-import ch.deif.meander.Location;
-import ch.deif.meander.MapInstance;
-import ch.deif.meander.MapSelection;
-import ch.deif.meander.internal.DEMAlgorithm;
 
 
 public class CurrentSelectionOverlay extends SelectionOverlay {

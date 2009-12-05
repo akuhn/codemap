@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codemap.Location;
+import org.codemap.MapInstance;
 import org.codemap.callhierarchy.vizualization.EdgeRenderer;
 import org.codemap.callhierarchy.vizualization.Options;
 import org.codemap.layers.Layer;
@@ -13,8 +15,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 
-import ch.deif.meander.Location;
-import ch.deif.meander.MapInstance;
 import edu.stanford.hci.flowmap.cluster.ClusterLayout;
 import edu.stanford.hci.flowmap.prefuse.render.FlowScale;
 import edu.stanford.hci.flowmap.structure.Edge;

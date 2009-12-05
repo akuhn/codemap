@@ -1,5 +1,8 @@
 package org.codemap.tasks;
 
+import org.codemap.Configuration;
+import org.codemap.MapInstance;
+import org.codemap.Point;
 import org.codemap.util.MapScheme;
 
 import ch.akuhn.hapax.index.LatentSemanticIndex;
@@ -7,9 +10,6 @@ import ch.akuhn.util.ProgressMonitor;
 import ch.akuhn.values.Arguments;
 import ch.akuhn.values.TaskValue;
 import ch.akuhn.values.Value;
-import ch.deif.meander.Configuration;
-import ch.deif.meander.MapInstance;
-import ch.deif.meander.Point;
 
 public class ComputeMapInstanceTask extends TaskValue<MapInstance> {
 

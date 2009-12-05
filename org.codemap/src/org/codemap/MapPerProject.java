@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.codemap.Configuration.Builder;
 import org.codemap.callhierarchy.CallOverlay;
 import org.codemap.layers.CodemapVisualization;
 import org.codemap.layers.Layer;
@@ -24,10 +25,6 @@ import ch.akuhn.util.Arrays;
 import ch.akuhn.values.ActionValue;
 import ch.akuhn.values.Arguments;
 import ch.akuhn.values.Value;
-import ch.deif.meander.Configuration;
-import ch.deif.meander.MapSelection;
-import ch.deif.meander.Point;
-import ch.deif.meander.Configuration.Builder;
 
 /**
  * Holds corpus, map and visualization of a project. Use this class to store project specific information.

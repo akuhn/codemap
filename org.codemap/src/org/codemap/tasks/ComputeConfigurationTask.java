@@ -1,11 +1,12 @@
 package org.codemap.tasks;
 
+import org.codemap.Configuration;
+
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.util.ProgressMonitor;
 import ch.akuhn.values.Arguments;
 import ch.akuhn.values.TaskValue;
 import ch.akuhn.values.Value;
-import ch.deif.meander.Configuration;
 
 
 public class ComputeConfigurationTask extends TaskValue<Configuration> {

@@ -3,8 +3,9 @@ package org.codemap.resources;
 import java.util.Collection;
 import java.util.EventObject;
 
+import org.codemap.MapSelection;
+
 import ch.akuhn.values.CollectionValue;
-import ch.deif.meander.MapSelection;
 
 public class MapSelectionsValue extends CollectionValue<MapSelection> {
     
