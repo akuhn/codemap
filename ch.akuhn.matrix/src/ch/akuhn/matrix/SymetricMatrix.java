@@ -1,25 +1,39 @@
 package ch.akuhn.matrix;
 
-import static ch.akuhn.foreach.For.range;
-
 import java.util.Arrays;
 
-public class SymetricMatrix extends Matrix {
+/** Matrix where
+ *<CODE>a<SUB>ij</SUB> = a<SUB>ji</SUB></CODE> for all elements.
+ *<P> 
+ * @author Adrian Kuhn
+ *
+ */
+public class SymetricMatrix extends DenseMatrix {
 
-	double[][] values;
-	
     public SymetricMatrix(int size) {
-        values = new double[size][];
-        for (int n: range(values.length))
-            values[n] = new double[n + 1];
+    	super(size,size);
     }
     
-    private SymetricMatrix(double[][] jagged) {
-    	for (int n = 0; n < jagged.length; n++) assert jagged[n].length == n;
-    	this.values = jagged;
+    public SymetricMatrix(double[][] values) {
+    	super(values);
+    }
+    
+    @Override
+	protected void assertInvariant() throws IllegalArgumentException {
+    	for (int n = 0; n < values.length; n++) {
+			if (values[n].length != (n + 1)) throw new IllegalArgumentException();
+		}
     }
 
-    @Override
+	@Override
+	protected double[][] makeValues(int rows, int columns) {
+		assert rows == columns;
+		double[][] values = new double[rows][];
+		for (int n = 0; n < values.length; n++) values[n] = new double[n + 1];
+		return values;
+	}
+
+	@Override
     public int columnCount() {
         return rowCount();
     }
@@ -39,25 +53,7 @@ public class SymetricMatrix extends Matrix {
         return values.length;
     }
 
-    @Override
-    public int used() {
-        throw new UnsupportedOperationException();
-    }
-
-    public void fill(double constant) {
-        for (double[] row: values) Arrays.fill(row, constant);
-    }
-
-	@Override
-	public void apply(Function f) {
-		for (double[] row: values) {
-			for (int n = 0; n < row.length; n++) {
-				row[n] = f.apply(row[n]);
-			}
-		}
-	}
-
-	public static SymetricMatrix fromSquare(double[][] square) {
+	public static DenseMatrix fromSquare(double[][] square) {
 		double[][] jagged = new double[square.length][];
 		for (int i = 0; i < jagged.length; i++) {
 			assert square[i].length == square.length;
@@ -66,11 +62,7 @@ public class SymetricMatrix extends Matrix {
 		return new SymetricMatrix(jagged);
 	}
 
-	public void applyMultiplication(double d) {
-		Util.times(values, d);
-	}
-
-	public static SymetricMatrix fromJagged(double[][] values) {
+	public static DenseMatrix fromJagged(double[][] values) {
 		return new SymetricMatrix(values);
 	}
 

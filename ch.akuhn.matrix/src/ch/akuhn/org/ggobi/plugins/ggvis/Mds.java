@@ -3,6 +3,7 @@ package ch.akuhn.org.ggobi.plugins.ggvis;
 import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
+import ch.akuhn.matrix.DenseMatrix;
 import ch.akuhn.matrix.Function;
 import ch.akuhn.matrix.SymetricMatrix;
 
@@ -29,8 +30,8 @@ public class Mds {
 
     static final int DRAGGED = 4;
     private static final boolean TODO_SYMMETRY = false;
-    final SymetricMatrix config_dist;
-    final SymetricMatrix Dtarget; /*-- D in the documentation; dist in the xgvis code --*/
+    final DenseMatrix config_dist;
+    final DenseMatrix Dtarget; /*-- D in the documentation; dist in the xgvis code --*/
 
     private Points pos;
     /* these belong in ggv */
@@ -59,7 +60,7 @@ public class Mds {
     private MDSGroupInd group_ind = MDSGroupInd.all_distances;
 
     /*-- used in mds.c --*/
-    private SymetricMatrix weights = null;
+    private DenseMatrix weights = null;
     final private Points gradient;
 
     private double Dtarget_max = Double.MAX_VALUE;
@@ -92,7 +93,7 @@ public class Mds {
         set_weights();
 
     }
-    public Mds(SymetricMatrix dissimilarities, Points initial,  
+    public Mds(DenseMatrix dissimilarities, Points initial,  
             Function fConfigDist, Function fWeights, Function fDtarget) {
         len = dissimilarities.rowCount();
         Dtarget = dissimilarities;

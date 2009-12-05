@@ -2,6 +2,7 @@ package ch.akuhn.isomap;
 
 import ch.akuhn.graph.DijkstraAlgorithm2;
 import ch.akuhn.graph.Graph;
+import ch.akuhn.matrix.DenseMatrix;
 import ch.akuhn.matrix.Function;
 import ch.akuhn.matrix.SymetricMatrix;
 import ch.akuhn.matrix.eigenvalues.Eigenvalues;
@@ -27,7 +28,7 @@ public abstract class Isomap {
     public int k = 3;
     public boolean useKNN = true;
     public final int n;
-    private SymetricMatrix graph;
+    private DenseMatrix graph;
     private Points points;
     
     public Isomap(int size) {
@@ -72,6 +73,7 @@ public abstract class Isomap {
             for (int j = 0; j < n; j++) data[j] = dist(i,j);
             int[] index = indicesOfMinima(data, k+1);
             for (int k = 0; k < index.length; k++) {
+            	if (i == index[k]) continue;
 				graph.put(i,index[k],dist(i,index[k]));
             }
         }

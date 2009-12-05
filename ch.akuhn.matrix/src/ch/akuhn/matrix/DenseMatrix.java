@@ -2,24 +2,38 @@ package ch.akuhn.matrix;
 
 import java.util.Arrays;
 
-/** 
+/** Dense matrix.
  * 
- * @author akuhn
+ * @author Adrian Kuhn
  *
  */
 public class DenseMatrix extends Matrix {
 
-    private double[][] values;
+    protected double[][] values;
 
     public DenseMatrix(double[][] values) {
         this.values = values;
+        this.assertInvariant();
+    }
+    
+    protected void assertInvariant() throws IllegalArgumentException {
+    	if (values.length == 0) return;
+    	int m = values[0].length;
+		for (int n = 0; n < values.length; n++) {
+			if (values[n].length != m) throw new IllegalArgumentException();
+		}
+	}
+
+	public DenseMatrix(int rows, int columns) {
+    	this.values = makeValues(rows,columns);
+        this.assertInvariant();
     }
 
-    public DenseMatrix(int rows, int columns) {
-        values = new double[rows][columns];
-    }
+	protected double[][] makeValues(int rows, int columns) {
+		return new double[rows][columns];
+	}
 
-    @Override
+	@Override
     public double add(int row, int column, double value) {
         return values[row][column] += value;
     }
@@ -55,29 +69,19 @@ public class DenseMatrix extends Matrix {
 		f.apply(values);
 	}
 
-    public Matrix kayNearestNeighbours(int k, double threshold) {
-    	double[][] path = new double[values.length][values.length];
-        for (int i = 0; i < path.length; i++) Arrays.fill(path[i], Double.POSITIVE_INFINITY);
-        for (int i = 0; i < values.length; i++) {
-            double[] minima = Arrays.copyOf(values[i], k + 1);
-            Arrays.sort(minima);
-            for (int j = k + 1; j < values.length; j++) {
-                if (values[i][j] >= minima[k]) continue;
-                int n = -Arrays.binarySearch(minima, values[i][j])-1;
-                System.arraycopy(minima, n, minima, n+1, k-n);
-                minima[n] = values[i][j];
-            }
-            double min = Math.max(minima[k], threshold);
-            for (int j = k + 1; j < values.length; j++) {
-                path[i][j] = (values[i][j] <= min) ? values[i][j] : Double.POSITIVE_INFINITY;
-            }
-        }
-        return new DenseMatrix(path);
-    }	
-    
     @Override
     public double[][] unwrap() {
     	return values;
     }
+
+	public void fill(double constant) {
+	    for (double[] row: values) Arrays.fill(row, constant);
+	}
+
+	public void applyMultiplication(double d) {
+		Util.times(values, d);
+	}
+    
+    
 	
 }
