@@ -7,6 +7,7 @@ import org.netlib.util.intW;
 
 import ch.akuhn.matrix.Matrix;
 import ch.akuhn.matrix.Vector;
+import ch.akuhn.util.Out;
 
 
 /**
@@ -38,7 +39,7 @@ public class AllEigenvalues extends Eigenvalues {
 	
 	private Matrix A;
 
-	public Eigenvalues run() {
+	public AllEigenvalues run() {
 		double[] wr = new double[n];
 		double[] wi = new double[n];
 		intW info = new intW(0);
@@ -79,14 +80,14 @@ public class AllEigenvalues extends Eigenvalues {
 			Vector vector;
 			@Override
 			public int compareTo(Eigen eigen) {
-				return Double.compare(value, eigen.value) * -1;
+				return Double.compare(value, eigen.value);
 			}
 		}
 		Eigen[] eigen = new Eigen[n];
 		for (int i = 0; i < n; i++) {
 			eigen[i] = new Eigen();
 			eigen[i].value = wr[i];
-			eigen[i].vector = Vector.copy(vl, i*n, n);
+			eigen[i].vector = Vector.copy(vl, i*n, n); 
 		}
 		Arrays.sort(eigen);
 		value = new double[nev];

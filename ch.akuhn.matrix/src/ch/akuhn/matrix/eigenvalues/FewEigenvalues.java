@@ -196,7 +196,8 @@ public abstract class FewEigenvalues extends Eigenvalues {
 		 * Either we have convergence or there is an error.
 		 *   
 		 */
-		if (info.val != 0) throw new Error("dsaupd ERRNO = "+info.val);
+		if (info.val != 0) throw new Error("dsaupd ERRNO = "+info.val
+				+", see http://www.caam.rice.edu/software/ARPACK/UG/node136.html");
 		/*
 		 * Post-Process using DSEUPD.
 		 * 
@@ -237,7 +238,8 @@ public abstract class FewEigenvalues extends Eigenvalues {
 				workl,
 				workl.length,
 				ierr );
-		if (ierr.val < 0) throw new Error("dseupd ERRNO = "+info.val);
+		if (ierr.val < 0) throw new Error("dseupd ERRNO = "+info.val
+				+", see http://www.caam.rice.edu/software/ARPACK/UG/node136.html");
 		/* 
 		 * Eigenvalues are returned in the first column
 		 * of the two dimensional array D and the
