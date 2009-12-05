@@ -124,7 +124,7 @@ public class MapView extends ViewPart {
         viewMenu.add(new Separator());
         viewMenu.add(new SaveAsPNGAction(theController));
         viewMenu.add(new ReloadMapAction(theController));
-        viewMenu.add(new SaveHapaxDataAction());        
+        viewMenu.add(new SaveHapaxDataAction(theController));        
         viewMenu.add(registerAction(new ShowTestsAction()));
 //        viewMenu.add(new DebugLocationsAction());
         

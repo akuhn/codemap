@@ -13,7 +13,6 @@ import org.codemap.search.SearchResultController;
 import org.codemap.util.Resources;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 
 
@@ -26,6 +25,7 @@ public class MapController {
     private MarkerController markerController;
     private SelectionTracker selectionTracker;
     private MapPerProjectCache cache;
+    private ControllerUtils utils;
 
     public MapController(MapView view) {
         CodemapCore.getPlugin().register(this);        
@@ -35,6 +35,7 @@ public class MapController {
         searchResultController = new SearchResultController();
         markerController = new MarkerController();
         selectionTracker = new SelectionTracker(this);
+        utils = new ControllerUtils(this);
     }
 
     public MapView getView() {
@@ -108,18 +109,6 @@ public class MapController {
         view.newProjectSelected();
     }
     
-    /**
-     * Might return null if the image could not be rendered.
-     * Please make sure to dispose the image once you do not need
-     * it any longer.
-     * 
-     * @return a new Image instance looking exactly like the image 
-     *         currently displayed as `Codemap`.
-     */
-    public Image copyCurrentCodemapImage() {
-        return view.newCodemapImage();
-    }
-
     public MapPerProject getActiveMap() {
         return mapForProject(getCurrentProject());
     }
@@ -131,6 +120,10 @@ public class MapController {
 
     public void onStop() {
         cache.saveMapState();
+    }
+
+    public ControllerUtils utils() {
+        return utils;
     }    
 
 }

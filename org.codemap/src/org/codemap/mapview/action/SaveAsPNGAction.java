@@ -1,6 +1,5 @@
 package org.codemap.mapview.action;
 
-import org.codemap.CodemapCore;
 import org.codemap.mapview.MapController;
 import org.codemap.util.EclipseUtil;
 import org.eclipse.jface.action.Action;
@@ -21,13 +20,13 @@ public class SaveAsPNGAction extends Action {
 
     @Override
     public void run() {
-        String fname = EclipseUtil.filenameFromUser("Codemap of "+CodemapCore.activeProjectName().replace('.', '-'), ".png");
+        String fname = EclipseUtil.filenameFromUser("Codemap of "+controller.utils().activeProjectName().replace('.', '-'), ".png");
         if (fname == null) return;
         saveTo(fname);
     }
 
     private void saveTo(String path) {
-        Image image =controller.copyCurrentCodemapImage();
+        Image image = controller.utils().copyCurrentCodemapImage();
         ImageLoader loader = new ImageLoader();
         loader.data = new ImageData[] {image.getImageData()};
         loader.save(path, SWT.IMAGE_PNG);

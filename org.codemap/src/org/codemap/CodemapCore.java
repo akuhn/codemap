@@ -71,7 +71,6 @@ public class CodemapCore extends AbstractUIPlugin {
         return PLUGIN_ID + "." + javaClass.getSimpleName();
     }
     
-    // TODO: might be removed
     public MapPerProject getActiveMap() {
         if (theController == null) return null;
         return theController.getActiveMap();
@@ -79,10 +78,6 @@ public class CodemapCore extends AbstractUIPlugin {
 
     public MapScheme<MColor> getDefaultColorScheme() {
         return new MapScheme<MColor>(MColor.HILLGREEN);
-    }
-    
-    public static String activeProjectName() {
-    	return getPlugin().getActiveMap().getProject().getName();
     }
 
     public void register(MapController mapController) {
