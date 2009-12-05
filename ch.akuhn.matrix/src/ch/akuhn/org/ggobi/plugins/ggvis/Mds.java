@@ -5,7 +5,7 @@ import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import ch.akuhn.matrix.DenseMatrix;
 import ch.akuhn.matrix.Function;
-import ch.akuhn.matrix.SymetricMatrix;
+import ch.akuhn.matrix.SymmetricMatrix;
 
 /** Multidimensional scaling.
  * Initially ported from ggvis and greatly rewritten in Java by Adrian Kuhn.
@@ -97,7 +97,7 @@ public class Mds {
             Function fConfigDist, Function fWeights, Function fDtarget) {
         len = dissimilarities.rowCount();
         Dtarget = dissimilarities;
-        config_dist = new SymetricMatrix(len);
+        config_dist = new SymmetricMatrix(len);
         this.pos = initial == null ? new Points(len) : initial;
         this.gradient = new Points(len);
         f_config_dist = fConfigDist;
@@ -355,7 +355,7 @@ public class Mds {
         //double local_weight_power = 0.;
         //double local_within_between = 1.;
 
-        this.weights = new SymetricMatrix(Dtarget.rowCount());
+        this.weights = new SymmetricMatrix(Dtarget.rowCount());
         for (int i = 0; i < Dtarget.rowCount(); i++) {
             for (int j = 0; j < i; j++) {
                 this.weights.put(i,j, f_weights.apply(this.Dtarget.get(i,j)));

@@ -8,13 +8,13 @@ import java.util.Arrays;
  * @author Adrian Kuhn
  *
  */
-public class SymetricMatrix extends DenseMatrix {
+public class SymmetricMatrix extends DenseMatrix {
 
-    public SymetricMatrix(int size) {
+    public SymmetricMatrix(int size) {
     	super(size,size);
     }
     
-    public SymetricMatrix(double[][] values) {
+    public SymmetricMatrix(double[][] values) {
     	super(values);
     }
     
@@ -59,11 +59,11 @@ public class SymetricMatrix extends DenseMatrix {
 			assert square[i].length == square.length;
 			jagged[i] = Arrays.copyOf(square[i], i+1);
 		}
-		return new SymetricMatrix(jagged);
+		return new SymmetricMatrix(jagged);
 	}
 
 	public static DenseMatrix fromJagged(double[][] values) {
-		return new SymetricMatrix(values);
+		return new SymmetricMatrix(values);
 	}
 
 	@Override

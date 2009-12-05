@@ -6,7 +6,7 @@ import java.util.EventListener;
 import ch.akuhn.isomap.Isomap;
 import ch.akuhn.matrix.DenseMatrix;
 import ch.akuhn.matrix.Function;
-import ch.akuhn.matrix.SymetricMatrix;
+import ch.akuhn.matrix.SymmetricMatrix;
 import ch.akuhn.org.ggobi.plugins.ggvis.Mds;
 import ch.akuhn.org.ggobi.plugins.ggvis.Points;
 
@@ -30,7 +30,7 @@ public class MultidimensionalScaling {
     }
 
     public MultidimensionalScaling dissimilarities(double[][] matrix) {
-        fdistances = SymetricMatrix.fromSquare(matrix);
+        fdistances = SymmetricMatrix.fromSquare(matrix);
         return this;
     }
 
@@ -72,7 +72,7 @@ public class MultidimensionalScaling {
     }
 
     public MultidimensionalScaling similarities(double[][] matrix) {
-    	DenseMatrix d = SymetricMatrix.fromSquare(matrix);
+    	DenseMatrix d = SymmetricMatrix.fromSquare(matrix);
         d.apply(Function.COSINE_TO_DISSIMILARITY);
         fdistances = d;
         return this;

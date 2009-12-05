@@ -1,0 +1,466 @@
+{method} 
+VM option '+PrintOptoAssembly'
+ - klass: {other class}
+ - method holder:     'java/lang/Math'
+ - constants:         0x084e7fd4{constant pool}
+ - access:            0x81000009  public static 
+ - name:              'max'
+ - signature:         '(II)I'
+ - max stack:         2
+ - max locals:        2
+ - size of params:    2
+ - method size:       20
+ - vtable index:      -2
+ - code size:         11
+ - code start:        0x290ead30
+ - code end (excl):   0x290ead3b
+ - method data:       0x2920a568
+ - checked ex length: 0
+ - linenumber start:  0x290ead3b
+ - localvar length:   2
+ - localvar start:    0x290ead46
+#
+#  int ( int, int )
+#
+#r000 ecx   : parm 0: int
+#r005 edx   : parm 1: int
+# -- Old esp -- Framesize: 16 --
+#r045 esp+12: return address
+#r044 esp+ 8: pad2, in_preserve
+#r043 esp+ 4: pad2, in_preserve
+#r042 esp+ 0: Fixed slot 0
+#
+abababab   N1: #	B1 <- B1  Freq: 10000
+abababab
+000   B1: #	N1 <- BLOCK HEAD IS JUNK   Freq: 10000
+000   	PUSHL  EBP
+	SUB    ESP,8	# Create frame
+007   	CMP    ECX,EDX
+009   	MOV    EAX,ECX
+00b   	CMOVlt EAX,EDX
+00e   	ADD    ESP,8	# Destroy frame
+	POPL   EBP
+	TEST   PollPage,EAX	! Poll Safepoint
+	
+018   	RET
+018
+
+	(0)
+	(0) 0.004236571000000001
+{method} 
+ - klass: {other class}
+ - method holder:     'ch/akuhn/matrix/TwoDimensional'
+ - constants:         0x084e7fd4{constant pool}
+ - access:            0x81000001  public 
+ - name:              'get'
+ - signature:         '(II)D'
+ - max stack:         2
+ - max locals:        3
+ - size of params:    3
+ - method size:       20
+ - vtable index:      5
+ - code size:         9
+ - code start:        0x291f0a98
+ - code end (excl):   0x291f0aa1
+ - method data:       0x29237618
+ - checked ex length: 0
+ - linenumber start:  0x291f0aa1
+ - localvar length:   3
+ - localvar start:    0x291f0aaa
+#
+#  double/half ( ch/akuhn/matrix/TwoDimensional:NotNull *, int, int )
+#
+#r000 ecx   : parm 0: ch/akuhn/matrix/TwoDimensional:NotNull *
+#r005 edx   : parm 1: int
+#r047 esp+84: pad0, owned by CALLER
+#r046 esp+80: parm 2: int
+# -- Old esp -- Framesize: 80 --
+#r045 esp+76: return address
+#r044 esp+72: pad2, in_preserve
+#r043 esp+68: pad2, in_preserve
+#r042 esp+64: Fixed slot 0
+#r063 esp+60: spill
+#r062 esp+56: spill
+#r061 esp+52: spill
+#r060 esp+48: spill
+#r059 esp+44: spill
+#r058 esp+40: spill
+#r057 esp+36: spill
+#r056 esp+32: spill
+#r055 esp+28: spill
+#r054 esp+24: spill
+#r053 esp+20: spill
+#r052 esp+16: spill
+#r051 esp+12: spill
+#r050 esp+ 8: spill
+#r049 esp+ 4: spill
+#r048 esp+ 0: spill
+#
+000   N81: #	B1 <- BLOCK HEAD IS JUNK   Freq: 10000
+000   	CMP    EAX,[ECX+4]	# Inline cache check
+	JNE    SharedRuntime::handle_ic_miss_stub
+	NOP
+	NOP
+	NOP
+
+000
+00c   B1: #	B9 B2 <- BLOCK HEAD IS JUNK   Freq: 10000
+00c   	# stack bang
+	PUSHL  EBP
+	SUB    ESP,72	# Create frame
+01a   	MOV    EDI,[ECX + #8] ! Field ch/akuhn/matrix/TwoDimensional.a
+01d   	MOV    ECX,[EDI + #8]
+020   	NullCheck EDI
+020
+020   B2: #	B8 B3 <- B1  Freq: 9999.99
+020   	CMPu   EDX,ECX
+022   	Jge,us B8  P=0.000001 C=-1.000000
+022
+024   B3: #	B7 B4 <- B2  Freq: 9999.98
+024   	MOV    EBX,[EDI + #12 + EDX << #2]
+028   	MOV    EBP,[EBX + #8]
+02b   	NullCheck EBX
+02b
+02b   B4: #	B6 B5 <- B3  Freq: 9999.97
+02b   	MOV    EAX,[ESP + #80]
+02f   	CMPu   EAX,EBP
+031   	Jge,us B6  P=0.000001 C=-1.000000
+031
+033   B5: #	N81 <- B4  Freq: 9999.96
+033   	MOVSD  XMM0a,[EBX + #16 + EAX << #3]
+039   	ADD    ESP,72	# Destroy frame
+	POPL   EBP
+	TEST   PollPage,EAX	! Poll Safepoint
+	
+043   	RET
+043
+044   B6: #	N81 <- B4  Freq: 1e-006
+044   	MOV    ECX,#-28
+049   	MOV    EBP,EBX
+04b   	CALL,static  wrapper for: uncommon_trap(reason='range_check' action='make_not_entrant')
+        # ch.akuhn.matrix.TwoDimensional::get @ bci:7  L[0]=_ L[1]=_ L[2]=_ STK[0]=EBP STK[1]=esp + #80
+        # AllocatedObj(0x0409e7f4)
+
+050   	INT3   ; ShouldNotReachHere
+050
+051   B7: #	N81 <- B3  Freq: 1e-006
+051   	MOV    ECX,#-10
+056   	MOV    EBP,EBX
+058   	NOP 	# 3 bytes pad for loops and calls
+05b   	CALL,static  wrapper for: uncommon_trap(reason='null_check' action='maybe_recompile')
+        # ch.akuhn.matrix.TwoDimensional::get @ bci:7  L[0]=_ L[1]=_ L[2]=_ STK[0]=EBP STK[1]=esp + #80
+        # AllocatedObj(0x0409e7f4)
+
+060   	INT3   ; ShouldNotReachHere
+060
+061   B8: #	N81 <- B2  Freq: 1e-006
+061   	MOV    ECX,#-28
+066   	MOV    EBP,[ESP + #80]
+06a   	MOV    [ESP + #80],EDI
+06e   	MOV    [ESP + #0],EDX
+071   	NOP 	# 2 bytes pad for loops and calls
+073   	CALL,static  wrapper for: uncommon_trap(reason='range_check' action='make_not_entrant')
+        # ch.akuhn.matrix.TwoDimensional::get @ bci:5  L[0]=_ L[1]=_ L[2]=EBP STK[0]=esp + #80 STK[1]=esp + #0
+        # AllocatedObj(0x0409e7f4)
+
+078   	INT3   ; ShouldNotReachHere
+078
+079   B9: #	N81 <- B1  Freq: 1e-006
+079   	MOV    ECX,#-10
+07e   	MOV    EBP,EDI
+080   	MOV    [ESP + #80],EDX
+084   	NOP 	# 3 bytes pad for loops and calls
+087   	CALL,static  wrapper for: uncommon_trap(reason='null_check' action='maybe_recompile')
+        # ch.akuhn.matrix.TwoDimensional::get @ bci:5  L[0]=_ L[1]=_ L[2]=_ STK[0]=EBP STK[1]=esp + #80
+        # AllocatedObj(0x0409e7f4)
+
+08c   	INT3   ; ShouldNotReachHere
+08c
+
+{method} 
+ - klass: {other class}
+ - method holder:     'ch/akuhn/matrix/PerformanceTest'
+ - constants:         0x084e7fd4{constant pool}
+ - access:            0xc1000002  private 
+ - name:              'opto'
+ - signature:         '()D'
+ - max stack:         5
+ - max locals:        5
+ - size of params:    1
+ - method size:       20
+ - vtable index:      6
+ - code size:         49
+ - code start:        0x291f01b8
+ - code end (excl):   0x291f01e9
+ - method data:       0x29237578
+ - checked ex length: 0
+ - linenumber start:  0x291f01e9
+ - localvar length:   4
+ - localvar start:    0x291f01fe
+#
+#  double/half ( rawptr:BotPTR )
+#
+#r000 ecx   : parm 0: rawptr:BotPTR
+# -- Old esp -- Framesize: 80 --
+#r045 esp+76: return address
+#r044 esp+72: pad2, in_preserve
+#r043 esp+68: pad2, in_preserve
+#r042 esp+64: Fixed slot 0
+#r061 esp+60: spill
+#r060 esp+56: spill
+#r059 esp+52: spill
+#r058 esp+48: spill
+#r057 esp+44: spill
+#r056 esp+40: spill
+#r055 esp+36: spill
+#r054 esp+32: spill
+#r053 esp+28: spill
+#r052 esp+24: spill
+#r051 esp+20: spill
+#r050 esp+16: spill
+#r049 esp+12: spill
+#r048 esp+ 8: spill
+#r047 esp+ 4: spill
+#r046 esp+ 0: outgoing argument
+#
+000   N334: #	B1 <- BLOCK HEAD IS JUNK   Freq: 1
+000   	INT3
+      	NOP 	# 3 bytes pad for loops and calls
+
+004   B1: #	B24 B2 <- BLOCK HEAD IS JUNK   Freq: 1
+004   	# stack bang
+	PUSHL  EBP
+	SUB    ESP,72	# Create frame
+012   	MOV    EBX,[ECX]
+014   	MOV    EDI,[ECX + #16]
+017   	MOVSD  XMM0a,[ECX + #8]
+01c   	MOVSD  [ESP + #8],XMM0a
+022   	MOV    ESI,[ECX + #4]
+025   	MOV    [ESP + #0],ECX
+028   	CALL_LEAF,runtime  OSR_migration_end
+        No JVM State Info
+        # 
+02d   	TEST   EDI,EDI
+02f   	Jeq    B24  P=0.001000 C=-1.000000
+02f
+035   B2: #	B23 B3 <- B1  Freq: 0.999
+035   	MOV    EBP,[EDI + #4]
+038   	CMPu   EBP,precise klass ch/akuhn/matrix/PerformanceTest: 0x04195830:Constant:exact *
+03e   	Jne,u  B23  P=0.100000 C=-1.000000
+03e
+044   B3: #	B4 <- B2  Freq: 0.8991
+044   	#checkcastPP of EDI
+044   	LEA    EAX,[EDI + #8]
+044
+047   B4: #	B5 <- B3 B24  Freq: 0.9001
+047   	XOR    EDX,EDX
+049
+049   B5: #	B32 B6 <- B4 B21 	Loop: B5-B21 stride: not constant  Freq: 8.87635
+049   	TEST   EDI,EDI
+04b   	Jeq    B32  P=0.000001 C=-1.000000
+04b
+051   B6: #	B31 B7 <- B5  Freq: 8.87634
+051   	MOV    [ESP + #24],ESI
+055   	MOV    [ESP + #20],EDI
+059   	MOV    ECX,[EAX] ! Field ch/akuhn/matrix/PerformanceTest.a
+05b   	MOV    [ESP + #4],ECX
+05f   	MOV    EBP,[ECX + #8] ! Field ch/akuhn/matrix/TwoDimensional.a
+062   	NullCheck ECX
+062
+062   B7: #	B30 B8 <- B6  Freq: 8.87633
+062   	MOV    ECX,[EBP + #8]
+065   	NullCheck EBP
+065
+065   B8: #	B29 B9 <- B7  Freq: 8.87632
+065   	CMPu   ESI,ECX
+067   	Jge,u  B29  P=0.000001 C=-1.000000
+067
+06d   B9: #	B28 B10 <- B8  Freq: 8.87631
+06d   	MOV    EDI,[EBP + #12 + ESI << #2]
+071   	MOV    ECX,[EDI + #8]
+074   	NullCheck EDI
+074
+074   B10: #	B26 B11 <- B9  Freq: 8.8763
+074   	CMPu   EBX,ECX
+076   	Jge,u  B26  P=0.000001 C=-1.000000
+076
+07c   B11: #	B20 B12 <- B10  Freq: 8.8763
+07c   	MOVSD  XMM0a,[ESP + #8]
+082   	MULSD  XMM0a,[EDI + #16 + EBX << #3]
+088   	MOV    ESI,EBX
+08a   	INC    ESI
+08b   	CMP    ESI,#1000
+091   	Jge    B20	# Loop end  P=0.000976 C=11275.000000
+091
+097   B12: #	B13 <- B11  Freq: 8.86764
+097   	ADD    EBX,#2
+09a   	MAX    EBX,EDX
+0a0
+0a0   B13: #	B25 B14 <- B12 B14 	Loop: B13-B14 inner stride: not constant pre of N266 Freq: 9079.91
+0a0   	CMPu   ESI,ECX
+0a2   	Jge,u  B25  P=0.000001 C=-1.000000
+0a2
+0a8   B14: #	B13 B15 <- B13  Freq: 9079.9
+0a8   	MULSD  XMM0a,[EDI + #16 + ESI << #3]
+0ae   	INC    ESI
+0af   	CMP    ESI,EBX
+0b1   	Jlt,s  B13  P=0.999024 C=11275.000000
+0b1
+0b3   B15: #	B17 B16 <- B14  Freq: 8.85843
+0b3   	MOV    EBP,#1000
+0b8   	MIN    EBP,ECX
+0be   	SUB    EBP,ESI
+0c0   	AND    EBP,#-16
+0c3   	ADD    EBP,ESI
+0c5   	CMP    ESI,EBP
+0c7   	Jge    B17  P=0.500000 C=-1.000000
+      	NOP 	# 3 bytes pad for loops and calls
+
+0d0   B16: #	B16 B17 <- B15 B16 	Loop: B16-B16 inner stride: not constant main of N124 Freq: 4539.95
+0d0   	MULSD  XMM0a,[EDI + #16 + ESI << #3]
+0d6   	MULSD  XMM0a,[EDI + #24 + ESI << #3]
+0dc   	MULSD  XMM0a,[EDI + #32 + ESI << #3]
+0e2   	MULSD  XMM0a,[EDI + #40 + ESI << #3]
+0e8   	MULSD  XMM0a,[EDI + #48 + ESI << #3]
+0ee   	MULSD  XMM0a,[EDI + #56 + ESI << #3]
+0f4   	MULSD  XMM0a,[EDI + #64 + ESI << #3]
+0fa   	MULSD  XMM0a,[EDI + #72 + ESI << #3]
+100   	MULSD  XMM0a,[EDI + #80 + ESI << #3]
+106   	MULSD  XMM0a,[EDI + #88 + ESI << #3]
+10c   	MULSD  XMM0a,[EDI + #96 + ESI << #3]
+112   	MULSD  XMM0a,[EDI + #104 + ESI << #3]
+118   	MULSD  XMM0a,[EDI + #112 + ESI << #3]
+11e   	MULSD  XMM0a,[EDI + #120 + ESI << #3]
+124   	MULSD  XMM0a,[EDI + #128 + ESI << #3]
+12d   	MULSD  XMM0a,[EDI + #136 + ESI << #3]
+136   	ADD    ESI,#16
+139   	CMP    ESI,EBP
+13b   	Jlt,s  B16  P=0.999024 C=11275.000000
+13b
+13d   B17: #	B20 B18 <- B15 B16  Freq: 8.85843
+13d   	CMP    ESI,#1000
+143   	Jge,s  B20  P=0.500000 C=-1.000000
+      	NOP 	# 3 bytes pad for loops and calls
+
+148   B18: #	B25 B19 <- B17 B19 	Loop: B18-B19 inner stride: not constant post of N266 Freq: 4535.25
+148   	CMPu   ESI,ECX
+14a   	Jge,us B25  P=0.000001 C=-1.000000
+14a
+14c   B19: #	B18 B20 <- B18  Freq: 4535.24
+14c   	MULSD  XMM0a,[EDI + #16 + ESI << #3]
+152   	INC    ESI
+153   	CMP    ESI,#1000
+159   	Jlt,s  B18  P=0.999024 C=11275.000000
+159
+15b   B20: #	B22 B21 <- B11 B19 B17  Freq: 8.8625
+15b   	MOV    ESI,[ESP + #24]
+15f   	INC    ESI
+160   	CMP    ESI,#1000
+166   	Jge,s  B22  P=0.100000 C=-1.000000
+166
+168   B21: #	B5 <- B20  Freq: 7.97625
+168   	XOR    EBX,EBX
+16a   	MOV    EDI,[ESP + #20]
+16e   	MOVSD  [ESP + #8],XMM0a
+174   	JMP    B5
+174
+179   B22: #	N334 <- B20  Freq: 0.88625
+179   	ADD    ESP,72	# Destroy frame
+	POPL   EBP
+	TEST   PollPage,EAX	! Poll Safepoint
+	
+183   	RET
+183
+184   B23: #	N334 <- B2  Freq: 1e-006
+184   	MOV    ECX,#-75
+189   	MOV    EBP,EBX
+18b   	MOV    [ESP + #4],EDI
+18f   	MOV    [ESP + #16],ESI
+193   	CALL,static  wrapper for: uncommon_trap(reason='unreached' action='reinterpret')
+        # ch.akuhn.matrix.PerformanceTest::opto @ bci:13  L[0]=esp + #4 L[1]=esp + #8 L[2]=_ L[3]=esp + #16 L[4]=EBP
+        # AllocatedObj(0x03f9e974)
+
+198   	INT3   ; ShouldNotReachHere
+198
+199   B24: #	B4 <- B1  Freq: 0.000999987
+199   	MOV    EAX,NULL+8
+19e   	MOV    EDI,NULL
+1a3   	JMP    B4
+1a3
+1a8   B25: #	B27 <- B18 B13  Freq: 1e-006
+1a8   	MOVSD  [ESP + #8],XMM0a
+1ae   	JMP,s  B27
+1ae
+1b0   B26: #	B27 <- B10  Freq: 1e-006
+1b0   	MOV    ESI,EBX
+1b0
+1b2   B27: #	N334 <- B26 B25  Freq: 1e-006
+1b2   	MOV    ECX,#-28
+1b7   	MOV    EBP,ESI
+1b9   	MOV    [ESP + #4],EDI
+1bd   	NOP 	# 2 bytes pad for loops and calls
+1bf   	CALL,static  wrapper for: uncommon_trap(reason='range_check' action='make_not_entrant')
+        # ch.akuhn.matrix.TwoDimensional::get @ bci:7  L[0]=_ L[1]=_ L[2]=_ STK[0]=esp + #4 STK[1]=EBP
+        # ch.akuhn.matrix.PerformanceTest::opto @ bci:21  L[0]=esp + #20 L[1]=_ L[2]=_ L[3]=esp + #24 L[4]=EBP STK[0]=esp + #8 STK[1]=_
+        # AllocatedObj(0x03f9e974)
+AllocatedObj(0x03f9e974)
+
+1c4   	INT3   ; ShouldNotReachHere
+1c4
+1c5   B28: #	N334 <- B9  Freq: 1e-006
+1c5   	MOV    ECX,#-10
+1ca   	MOV    EBP,EDI
+1cc   	MOV    [ESP + #4],EBX
+1d0   	NOP 	# 3 bytes pad for loops and calls
+1d3   	CALL,static  wrapper for: uncommon_trap(reason='null_check' action='maybe_recompile')
+        # ch.akuhn.matrix.TwoDimensional::get @ bci:7  L[0]=_ L[1]=_ L[2]=_ STK[0]=EBP STK[1]=esp + #4
+        # ch.akuhn.matrix.PerformanceTest::opto @ bci:21  L[0]=_ L[1]=_ L[2]=_ L[3]=_ L[4]=_ STK[0]=_ STK[1]=_
+        # AllocatedObj(0x03f9e974)
+
+1d8   	INT3   ; ShouldNotReachHere
+1d8
+1d9   B29: #	N334 <- B8  Freq: 1e-006
+1d9   	MOV    ECX,#-28
+1de   	MOV    [ESP + #4],EBX
+1e2   	NOP 	# 1 bytes pad for loops and calls
+1e3   	CALL,static  wrapper for: uncommon_trap(reason='range_check' action='make_not_entrant')
+        # ch.akuhn.matrix.TwoDimensional::get @ bci:5  L[0]=_ L[1]=_ L[2]=esp + #4 STK[0]=EBP STK[1]=esp + #24
+        # ch.akuhn.matrix.PerformanceTest::opto @ bci:21  L[0]=esp + #20 L[1]=_ L[2]=_ L[3]=esp + #24 L[4]=esp + #4 STK[0]=esp + #8 STK[1]=_
+        # AllocatedObj(0x03f9e974)
+AllocatedObj(0x03f9e974)
+
+1e8   	INT3   ; ShouldNotReachHere
+1e8
+1e9   B30: #	N334 <- B7  Freq: 1e-006
+1e9   	MOV    ECX,#-10
+1ee   	NOP 	# 1 bytes pad for loops and calls
+1ef   	CALL,static  wrapper for: uncommon_trap(reason='null_check' action='maybe_recompile')
+        # ch.akuhn.matrix.TwoDimensional::get @ bci:5  L[0]=_ L[1]=_ L[2]=_ STK[0]=EBP STK[1]=esp + #24
+        # ch.akuhn.matrix.PerformanceTest::opto @ bci:21  L[0]=_ L[1]=_ L[2]=_ L[3]=_ L[4]=_ STK[0]=_ STK[1]=_
+        # AllocatedObj(0x03f9e974)
+
+1f4   	INT3   ; ShouldNotReachHere
+1f4
+1f5   B31: #	N334 <- B6  Freq: 1e-006
+1f5   	MOV    ECX,#-10
+1fa   	MOV    EBP,EBX
+1fc   	NOP 	# 3 bytes pad for loops and calls
+1ff   	CALL,static  wrapper for: uncommon_trap(reason='null_check' action='maybe_recompile')
+        # ch.akuhn.matrix.PerformanceTest::opto @ bci:21  L[0]=_ L[1]=_ L[2]=_ L[3]=_ L[4]=_ STK[0]=_ STK[1]=_ STK[2]=esp + #4 STK[3]=esp + #24 STK[4]=EBP
+        # AllocatedObj(0x03f9e974)
+
+204   	INT3   ; ShouldNotReachHere
+204
+205   B32: #	N334 <- B5  Freq: 1e-006
+205   	MOV    ECX,#-10
+20a   	MOV    EBP,EDI
+20c   	NOP 	# 3 bytes pad for loops and calls
+20f   	CALL,static  wrapper for: uncommon_trap(reason='null_check' action='maybe_recompile')
+        # ch.akuhn.matrix.PerformanceTest::opto @ bci:15  L[0]=_ L[1]=_ L[2]=_ L[3]=_ L[4]=_ STK[0]=_ STK[1]=_ STK[2]=EBP
+        # AllocatedObj(0x03f9e974)
+
+214   	INT3   ; ShouldNotReachHere
+214
+
+	(0) 6.743045906000001
+0.0

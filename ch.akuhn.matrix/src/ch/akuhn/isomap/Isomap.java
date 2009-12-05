@@ -4,7 +4,7 @@ import ch.akuhn.graph.DijkstraAlgorithm2;
 import ch.akuhn.graph.Graph;
 import ch.akuhn.matrix.DenseMatrix;
 import ch.akuhn.matrix.Function;
-import ch.akuhn.matrix.SymetricMatrix;
+import ch.akuhn.matrix.SymmetricMatrix;
 import ch.akuhn.matrix.eigenvalues.Eigenvalues;
 import ch.akuhn.org.ggobi.plugins.ggvis.Points;
 
@@ -56,7 +56,7 @@ public abstract class Isomap {
     }
     
     private void constructCloserThanEpsilonNeighborhoodGraph() {
-        graph = new SymetricMatrix(n);
+        graph = new SymmetricMatrix(n);
         graph.fill(Double.POSITIVE_INFINITY);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < i; j++) {
@@ -66,7 +66,7 @@ public abstract class Isomap {
     }
     
     private void constructKayNearestNeighborhoodGraph() {
-        graph = new SymetricMatrix(n);
+        graph = new SymmetricMatrix(n);
         graph.fill(Double.POSITIVE_INFINITY);
         for (int i = 0; i < n; i++) {
             double[] data = new double[n];
