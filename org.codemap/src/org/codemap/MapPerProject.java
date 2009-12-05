@@ -28,7 +28,6 @@ import ch.deif.meander.Configuration;
 import ch.deif.meander.MapSelection;
 import ch.deif.meander.Point;
 import ch.deif.meander.Configuration.Builder;
-import ch.deif.meander.map.MapVisualization;
 
 /**
  * Holds corpus, map and visualization of a project. Use this class to store project specific information.

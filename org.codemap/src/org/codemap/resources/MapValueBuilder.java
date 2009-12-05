@@ -4,6 +4,11 @@ import java.util.Collection;
 import java.util.List;
 
 import org.codemap.CodemapCore;
+import org.codemap.tasks.ComputeBackgroundTask;
+import org.codemap.tasks.ComputeConfigurationTask;
+import org.codemap.tasks.ComputeHillShadingTask;
+import org.codemap.tasks.ComputeLabelingTask;
+import org.codemap.tasks.ComputeMapInstanceTask;
 import org.codemap.util.MColor;
 import org.codemap.util.MapScheme;
 import org.eclipse.swt.graphics.Image;
@@ -21,11 +26,6 @@ import ch.deif.meander.HillShading;
 import ch.deif.meander.Labeling;
 import ch.deif.meander.MapInstance;
 import ch.deif.meander.MapSelection;
-import ch.deif.meander.map.ComputeBackgroundTask;
-import ch.deif.meander.map.ComputeConfigurationTask;
-import ch.deif.meander.map.ComputeHillShadingTask;
-import ch.deif.meander.map.ComputeLabelingTask;
-import ch.deif.meander.map.ComputeMapInstanceTask;
 
 public class MapValueBuilder {
 

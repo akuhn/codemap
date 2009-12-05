@@ -3,6 +3,7 @@ package org.codemap.resources;
 import java.io.InputStream;
 import java.util.Collection;
 
+import org.codemap.tasks.ComputeIndexTask;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -10,7 +11,6 @@ import org.eclipse.core.runtime.CoreException;
 
 import ch.akuhn.hapax.CorpusBuilder;
 import ch.akuhn.values.Value;
-import ch.deif.meander.map.ComputeIndexTask;
 
 public class ComputeEclipseIndexTask extends ComputeIndexTask {
 

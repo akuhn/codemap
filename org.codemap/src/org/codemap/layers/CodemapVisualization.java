@@ -18,6 +18,11 @@ import ch.deif.meander.MapInstance;
 
 
 public final class CodemapVisualization extends CompositeLayer implements PaintListener {
+    
+
+    private int offsetX;
+    private int offsetY;
+    private MapValues mapValues;    
 
     public CodemapVisualization(MapValues values) {
         this.mapValues = values;
@@ -60,10 +65,6 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
         return (CodemapVisualization) super.remove(layer);
     }
 
-    private int offsetX;
-    private int offsetY;
-    private MapValues mapValues;
-
     private void addOffsetAndThisToEvent(MouseEvent e) {
         e.x -= offsetX;
         e.y -= offsetY;
@@ -87,7 +88,6 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
         ((Canvas) e.widget).setToolTipText(name);
     }
 
-
     @Override
     public void dragDetected(DragDetectEvent e) {
         this.addOffsetAndThisToEvent(e);
@@ -100,13 +100,11 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
         super.mouseDoubleClick(e);
     }
 
-
     @Override
     public void mouseDown(MouseEvent e) {
         this.addOffsetAndThisToEvent(e);
         super.mouseDown(e);
     }
-
 
     @Override
     public void mouseEnter(MouseEvent e) {
@@ -114,13 +112,11 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
         super.mouseEnter(e);
     }
 
-
     @Override
     public void mouseExit(MouseEvent e) {
         this.addOffsetAndThisToEvent(e);
         super.mouseExit(e);
     }
-
 
     @Override
     public void mouseHover(MouseEvent e) {
@@ -128,13 +124,11 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
         super.mouseHover(e);
     }
 
-
     @Override
     public void mouseScrolled(MouseEvent e) {
         this.addOffsetAndThisToEvent(e);
         super.mouseScrolled(e);
     }
-
 
     @Override
     public void mouseUp(MouseEvent e) {
