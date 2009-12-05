@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
-import org.codemap.callhierarchy.CallHierarchyTracker;
 import org.codemap.layers.CodemapVisualization;
 import org.codemap.mapview.action.CodemapAction;
 import org.codemap.mapview.action.ColorDropDownAction;
@@ -18,8 +17,6 @@ import org.codemap.mapview.action.ReloadMapAction;
 import org.codemap.mapview.action.SaveAsPNGAction;
 import org.codemap.mapview.action.SaveHapaxDataAction;
 import org.codemap.mapview.action.ShowTestsAction;
-import org.codemap.marker.MarkerController;
-import org.codemap.search.SearchResultController;
 import org.codemap.util.ExtensionPoints;
 import org.codemap.util.Log;
 import org.codemap.util.MColor;
@@ -61,15 +58,12 @@ public class MapView extends ViewPart {
     public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
     private static final String ATTR_CLASS = "class";
 
-    private CallHierarchyTracker callHierarchyTracker;
     private final MapController theController;
     private MapSelectionProvider selectionProvider;
     private SelectionTracker selectionTracker;
     private int currentSize;
     private Canvas canvas;
     private Composite container;
-
-    private CodemapVisualization currentViz;
 
     private CanvasListener canvasListener;
 
@@ -78,10 +72,6 @@ public class MapView extends ViewPart {
     private ForceSelectionAction forceSelection;
 
     private IMemento memento;
-
-    private SearchResultController searchResultController;
-
-    private MarkerController markerController;
 
     class ViewLabelProvider extends LabelProvider implements
             ITableLabelProvider {
@@ -103,9 +93,6 @@ public class MapView extends ViewPart {
 
     public MapView() {
         theController = new MapController(this);
-        callHierarchyTracker = new CallHierarchyTracker();
-        searchResultController = new SearchResultController();
-        markerController = new MarkerController();
     }
 
     @Override
@@ -174,7 +161,7 @@ public class MapView extends ViewPart {
         tbm.add(new Separator());
 
         tbm.add(registerAction(new ColorDropDownAction(theController)));
-        tbm.add(registerAction(new LayerDropDownAction(callHierarchyTracker, searchResultController, markerController)));
+        tbm.add(registerAction(new LayerDropDownAction(theController)));
         tbm.add(registerAction(new LabelDrowDownAction()));
 
         tbm.add(linkWithSelection = new LinkWithSelectionAction(selectionTracker, memento));
@@ -197,10 +184,8 @@ public class MapView extends ViewPart {
     @Override
     public void dispose() {
         CodemapCore.getPlugin().setMapView(null);
-        callHierarchyTracker.dispose();        
+        theController.dispose();        
         selectionTracker.dispose();
-        searchResultController.dispose();
-        markerController.dispose();
     }
     
     @Override
@@ -239,7 +224,7 @@ public class MapView extends ViewPart {
     }
 
     private void updateMapVisualization(CodemapVisualization viz) {
-        canvasListener.setVisualization(currentViz = viz);
+        canvasListener.setVisualization(viz);
         redrawAsync();
     }
 

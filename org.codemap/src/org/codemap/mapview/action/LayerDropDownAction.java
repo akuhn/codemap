@@ -4,6 +4,7 @@ import static org.codemap.util.CodemapIcons.LAYERS;
 
 import org.codemap.callhierarchy.CallHierarchyTracker;
 import org.codemap.callhierarchy.LinkWithCallHierarchyAction;
+import org.codemap.mapview.MapController;
 import org.codemap.marker.MarkerController;
 import org.codemap.marker.ShowMarkersAction;
 import org.codemap.search.SearchResultController;
@@ -14,22 +15,18 @@ import org.eclipse.swt.widgets.Menu;
 
 public class LayerDropDownAction extends ExtensionPointDropDownAction {
     
-	private CallHierarchyTracker callHierarchyTracker;
-    private SearchResultController searchResultController;
-    private MarkerController markerController;
+    private MapController theController;
 
-    public LayerDropDownAction(CallHierarchyTracker callHierarchyTracker, SearchResultController searchResultController, MarkerController markerController) {
-	    this.callHierarchyTracker = callHierarchyTracker;
-	    this.searchResultController = searchResultController;
-	    this.markerController = markerController;
+    public LayerDropDownAction(MapController controller) {
+        theController = controller;
     }
 
     @Override
     protected void createMenu(Menu menu) {
         super.createMenu(menu);
-        addActionToMenu(menu, new ShowSearchResultsAction(searchResultController));
-        addActionToMenu(menu, new LinkWithCallHierarchyAction(callHierarchyTracker));
-        addActionToMenu(menu, new ShowMarkersAction(markerController));
+        addActionToMenu(menu, new ShowSearchResultsAction(theController));
+        addActionToMenu(menu, new LinkWithCallHierarchyAction(theController));
+        addActionToMenu(menu, new ShowMarkersAction(theController));
     }
 
     @Override

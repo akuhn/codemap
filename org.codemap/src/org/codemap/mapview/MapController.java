@@ -5,6 +5,9 @@ import java.util.Collection;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapSelection;
+import org.codemap.callhierarchy.CallHierarchyTracker;
+import org.codemap.marker.MarkerController;
+import org.codemap.search.SearchResultController;
 import org.codemap.util.Resources;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
@@ -15,9 +18,16 @@ public class MapController {
 
     private MapView view;
     private IJavaProject currentProject;
+    private CallHierarchyTracker callHierarchyTracker;
+    private SearchResultController searchResultController;
+    private MarkerController markerController;
+        
 
     public MapController(MapView view) {
         this.view = view;
+        callHierarchyTracker = new CallHierarchyTracker();
+        searchResultController = new SearchResultController();
+        markerController = new MarkerController();
     }
 
     public MapView getView() {
@@ -39,7 +49,6 @@ public class MapController {
 
     public void onProjectSelected(IJavaProject javaProject) {
         if (currentProject == javaProject) return;
-        // TODO show 'Create map...' button of there is not default.map
         currentProject = javaProject;
         view.newProjectSelected();
     }
@@ -58,6 +67,24 @@ public class MapController {
 
     public IJavaProject getCurrentProject() {
         return currentProject;
+    }
+
+    public void dispose() {
+        callHierarchyTracker.dispose();
+        searchResultController.dispose();
+        markerController.dispose();        
+    }
+
+    public CallHierarchyTracker getCallHierarchyTracker() {
+        return callHierarchyTracker;
+    }
+
+    public SearchResultController getSearchResultController() {
+        return searchResultController;
+    }
+
+    public MarkerController getMarkerController() {
+        return markerController;
     }	
 
 }

@@ -2,16 +2,17 @@ package org.codemap.search;
 
 import static org.codemap.util.CodemapIcons.SEARCH;
 
+import org.codemap.mapview.MapController;
 import org.codemap.mapview.action.MenuAction;
 import org.codemap.util.CodemapIcons;
 import org.eclipse.jface.action.IAction;
 
 public class ShowSearchResultsAction extends MenuAction {
 
-    public ShowSearchResultsAction(SearchResultController searchResultController) {
+    public ShowSearchResultsAction(MapController theController) {
         super("Search Results", IAction.AS_CHECK_BOX);
         setImageDescriptor(CodemapIcons.descriptor(SEARCH));
-        controller = searchResultController;
+        controller = theController.getSearchResultController();
         controller.registerAction(this);
     }
 

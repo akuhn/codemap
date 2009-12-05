@@ -115,7 +115,6 @@ public class MapInstance {
 
     public Location nearestNeighbor(int px, int py) {
         return kdTreeNearest(px, py);
-
     }
 
     public Location kdTreeNearest(int px, int py) {

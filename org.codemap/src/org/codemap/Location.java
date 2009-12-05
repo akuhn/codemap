@@ -14,6 +14,10 @@ public class Location implements Comparable<Location> {
     public final int px, py;
     private double elevation;
     private Point point;
+    
+    public Location(Location loc) {
+        this(loc.point, loc.elevation, loc.px, loc.py);
+    } 
 
     public String getDocument() {
         return point.getDocument();
@@ -38,10 +42,6 @@ public class Location implements Comparable<Location> {
         this.elevation = elevation;
         this.px = px;
         this.py = py;
-    }
-
-    public Location(Location loc) {
-        this(loc.point, loc.elevation, loc.px, loc.py);
     }
 
     public Location withElevation(double newElevation) {
