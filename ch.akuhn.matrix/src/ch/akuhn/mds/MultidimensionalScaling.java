@@ -5,7 +5,6 @@ import java.util.EventListener;
 
 import ch.akuhn.isomap.Isomap;
 import ch.akuhn.matrix.Function;
-import ch.akuhn.matrix.Matrix;
 import ch.akuhn.matrix.SymetricMatrix;
 import ch.akuhn.org.ggobi.plugins.ggvis.Mds;
 import ch.akuhn.org.ggobi.plugins.ggvis.Points;

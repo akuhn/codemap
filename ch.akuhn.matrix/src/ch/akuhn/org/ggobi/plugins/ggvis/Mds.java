@@ -4,7 +4,6 @@ import static java.lang.Math.abs;
 import static java.lang.Math.pow;
 import static java.lang.Math.sqrt;
 import ch.akuhn.matrix.Function;
-import ch.akuhn.matrix.Matrix;
 import ch.akuhn.matrix.SymetricMatrix;
 
 /** Multidimensional scaling.

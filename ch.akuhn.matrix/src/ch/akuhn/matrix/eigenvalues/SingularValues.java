@@ -6,7 +6,6 @@ import ch.akuhn.linalg.SVD;
 import ch.akuhn.matrix.Matrix;
 import ch.akuhn.matrix.SparseMatrix;
 import ch.akuhn.matrix.Vector;
-import ch.akuhn.util.Out;
 import ch.akuhn.util.Stopwatch;
 
 public class SingularValues {

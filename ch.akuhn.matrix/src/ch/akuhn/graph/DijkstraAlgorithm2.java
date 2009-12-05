@@ -3,7 +3,6 @@ package ch.akuhn.graph;
 import java.util.Arrays;
 
 import ch.akuhn.matrix.Matrix;
-import ch.akuhn.util.Out;
 
 public class DijkstraAlgorithm2 {
 

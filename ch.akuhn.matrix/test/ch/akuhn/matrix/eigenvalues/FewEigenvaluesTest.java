@@ -6,8 +6,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ch.akuhn.matrix.Matrix;
-import ch.akuhn.matrix.eigenvalues.FewEigenvalues;
-import ch.akuhn.util.Out;
 import ch.unibe.jexample.Given;
 import ch.unibe.jexample.Injection;
 import ch.unibe.jexample.InjectionPolicy;

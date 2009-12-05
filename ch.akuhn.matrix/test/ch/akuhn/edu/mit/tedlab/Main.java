@@ -1,9 +1,5 @@
 package ch.akuhn.edu.mit.tedlab;
 
-import ch.akuhn.edu.mit.tedlab.DMat;
-import ch.akuhn.edu.mit.tedlab.SMat;
-import ch.akuhn.edu.mit.tedlab.SVDRec;
-import ch.akuhn.edu.mit.tedlab.Svdlib;
 
 
 public class Main {

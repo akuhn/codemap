@@ -7,10 +7,6 @@ import java.io.FileNotFoundException;
 
 import org.junit.Test;
 
-import ch.akuhn.edu.mit.tedlab.SMat;
-import ch.akuhn.edu.mit.tedlab.SVDRec;
-import ch.akuhn.edu.mit.tedlab.Svdlib;
-
 public class RegressionTest {
 
     private static final double KAPPA = 1e-6;

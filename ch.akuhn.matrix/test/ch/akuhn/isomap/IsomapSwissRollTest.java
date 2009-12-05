@@ -2,7 +2,6 @@ package ch.akuhn.isomap;
 
 import org.junit.Test;
 
-import ch.akuhn.util.Out;
 import ch.akuhn.util.Stopwatch;
 
 public class IsomapSwissRollTest {

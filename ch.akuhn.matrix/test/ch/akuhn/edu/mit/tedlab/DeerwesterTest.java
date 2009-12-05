@@ -5,11 +5,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import ch.akuhn.edu.mit.tedlab.DMat;
-import ch.akuhn.edu.mit.tedlab.SMat;
-import ch.akuhn.edu.mit.tedlab.SVDRec;
-import ch.akuhn.edu.mit.tedlab.Svdlib;
-
 public class DeerwesterTest {
 
     private static SMat input;

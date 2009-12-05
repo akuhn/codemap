@@ -7,7 +7,6 @@ import org.netlib.util.intW;
 
 import ch.akuhn.matrix.Matrix;
 import ch.akuhn.matrix.Vector;
-import ch.akuhn.util.Out;
 
 
 /**
@@ -93,8 +92,8 @@ public class AllEigenvalues extends Eigenvalues {
 		value = new double[nev];
 		vector = new Vector[nev];
 		for (int i = 0; i < nev; i++) {
-			value[i] = eigen[n-i-1].value;
-			vector[i] = eigen[n-i-1].vector;
+			value[i] = eigen[n-nev+i].value;
+			vector[i] = eigen[n-nev+i].vector;
 		}
 	}
 
