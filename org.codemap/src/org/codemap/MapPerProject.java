@@ -137,8 +137,8 @@ public class MapPerProject {
     }
 
     public MapPerProject updateSize(int size) {
-        int size0 = Math.max(size, MINIMAL_SIZE);
-        mapValues.mapSize.setValue(size0);
+        int actualsize = Math.max(size, MINIMAL_SIZE);
+        mapValues.mapSize.setValue(actualsize);
         mapValues.mapInstance.getValue(); // trigger computation
         return this;
     }

@@ -57,7 +57,6 @@ public class MapView extends ViewPart {
 
     public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
     private static final String ATTR_CLASS = "class";
-    private int currentSize;
 
     private MapController theController;
     private Canvas canvas;
@@ -188,17 +187,6 @@ public class MapView extends ViewPart {
         super.init(site, memento);
         this.memento = memento;
     }
-    
-    protected void newProjectSelected() {
-        MapPerProject activeMap = theController.getActiveMap();
-        configureActions(activeMap);
-        CodemapVisualization viz = activeMap
-                .updateSize(currentSize)
-                .getVisualization();
-        if (viz == null)
-            return;
-        updateMapVisualization(viz);
-    }
 
     protected void configureActions(MapPerProject activeMap) {
         for (CodemapAction each: actions) {
@@ -206,21 +194,9 @@ public class MapView extends ViewPart {
         }
     }
 
-    private void updateMapVisualization(CodemapVisualization viz) {
+    /*default*/ void updateMapVisualization(CodemapVisualization viz) {
         canvasListener.setVisualization(viz);
         redrawAsync();
-    }
-
-    protected void updateMapdimension(int newDimension) {
-        currentSize = newDimension;
-        IJavaProject project = theController.getCurrentProject();
-        if (project == null) return;
-        CodemapVisualization viz = theController.mapForProject(project)
-                .updateSize(currentSize)
-                .getVisualization();
-        if (viz != null) {
-            updateMapVisualization(viz);
-        }
     }
 
     private void redrawAsync() {

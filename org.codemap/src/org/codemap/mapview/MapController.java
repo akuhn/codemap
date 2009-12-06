@@ -8,6 +8,7 @@ import org.codemap.MapPerProject;
 import org.codemap.MapPerProjectCache;
 import org.codemap.MapSelection;
 import org.codemap.callhierarchy.CallHierarchyTracker;
+import org.codemap.layers.CodemapVisualization;
 import org.codemap.marker.MarkerController;
 import org.codemap.search.SearchResultController;
 import org.codemap.util.Resources;
@@ -38,6 +39,7 @@ public class MapController {
     private ControllerUtils utils;
     private MapSelectionProvider selectionProvider;
     private ResizeListener resizeListener;
+    private int currentSize;
 
     public MapController(MapView view) {
         CodemapCore.getPlugin().register(this);        
@@ -55,10 +57,6 @@ public class MapController {
         return view;
     }
 
-    public void onResize(Point dimension) {		
-        int size =  Math.min(dimension.x, dimension.y);
-        view.updateMapdimension(size);
-    }
 
     public void onOpenView() {
         resizeListener = new ResizeListener(view.getContainer(), this);
@@ -115,13 +113,30 @@ public class MapController {
     }
 
     public void onNewProjectSelected() {
-        view.newProjectSelected();
+        view.configureActions(getActiveMap());
+        updateVisualization();        
+    }
+
+    public void onResize(Point dimension) {     
+        currentSize =  Math.min(dimension.x, dimension.y);
+        updateVisualization();
+    }
+    
+    private void updateVisualization() {
+        MapPerProject activeMap = getActiveMap();
+        if (activeMap == null) return;
+        
+        CodemapVisualization viz = activeMap
+                .updateSize(currentSize)
+                .getVisualization();
+        if (viz == null) return;
+        
+        view.updateMapVisualization(viz);
     }
     
     public MapPerProject getActiveMap() {
         return mapForProject(getCurrentProject());
     }
-    
 
     public MapPerProject mapForProject(IJavaProject project) {
         return cache.forProject(project);
