@@ -51,7 +51,6 @@ public class CodemapCore extends AbstractUIPlugin {
 
     @Override
     public void stop(BundleContext context) throws Exception {
-        theController.onStop();
         THE_PLUGIN = null;
         super.stop(context);
     }
@@ -77,7 +76,7 @@ public class CodemapCore extends AbstractUIPlugin {
         setMapController(mapController);
     }
 
-    public void unregister(MapController mapController) {
+    public void unregister(MapController mapController) {  
         setMapController(null);
     }
 

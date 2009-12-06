@@ -3,14 +3,15 @@ package org.codemap.mapview.action;
 import static org.codemap.util.CodemapIcons.GREEN_CIRCLE;
 
 import org.codemap.CodemapCore;
+import org.codemap.mapview.MapController;
 import org.codemap.util.CodemapIcons;
 
 public class ShowDefaultColorsAction extends MenuAction {
 	
 	private static final boolean DEFAULT_VALUE = true;
 
-	public ShowDefaultColorsAction(int style) {
-		super("Show default colors", style);
+	public ShowDefaultColorsAction(int style, MapController theController) {
+		super("Show default colors", style, theController);
 		setChecked(DEFAULT_VALUE);
 		setImageDescriptor(CodemapIcons.descriptor(GREEN_CIRCLE));
 	}
@@ -23,8 +24,7 @@ public class ShowDefaultColorsAction extends MenuAction {
 	}
 
 	private void enable() {
-		CodemapCore core = CodemapCore.getPlugin();
-		core.getActiveMap().getValues().colorScheme.setValue(core.getDefaultColorScheme());
+	    getController().getActiveMap().getValues().colorScheme.setValue(CodemapCore.getPlugin().getDefaultColorScheme());
 	}
 
 	@Override

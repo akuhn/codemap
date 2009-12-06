@@ -128,12 +128,12 @@ public class MapController {
         return cache.forProject(project);
     }
 
-    public void onStop() {
-        cache.saveMapState();
-    }
-
     public ControllerUtils utils() {
         return utils;
+    }
+
+    public void onSaveState() {
+        cache.saveMapState();
     }    
 
 }

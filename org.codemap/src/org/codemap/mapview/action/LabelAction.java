@@ -3,34 +3,30 @@
  */
 package org.codemap.mapview.action;
 
-import org.codemap.CodemapCore;
 import org.codemap.DefaultLabelScheme;
+import org.codemap.mapview.MapController;
 import org.codemap.util.MapScheme;
 import org.eclipse.jface.action.IAction;
 
 
 abstract class LabelAction extends MenuAction {
 
-	public LabelAction(String text) {
-		super(text, IAction.AS_RADIO_BUTTON);
+	public LabelAction(String text, MapController theController) {
+		super(text, IAction.AS_RADIO_BUTTON, theController);
 		setChecked(isDefaultChecked());
-	}
-
-	protected CodemapCore getCore() {
-		return CodemapCore.getPlugin();
 	}
 
 	public static class NoLabelAction extends LabelAction {
 
-		public NoLabelAction() {
-			super("No Labels");
+		public NoLabelAction(MapController theController) {
+			super("No Labels", theController);
 		}
 
 		@Override
 		public void run() {
 			super.run();
 			if (!isChecked()) return;
-			getCore().getActiveMap().getValues().labelScheme.setValue(new MapScheme<String>(null));
+			getController().getActiveMap().getValues().labelScheme.setValue(new MapScheme<String>(null));
 
 		}
 
@@ -42,15 +38,15 @@ abstract class LabelAction extends MenuAction {
 
 	public static class IdentifierLabelAction extends LabelAction {
 
-		public IdentifierLabelAction() {
-			super("Class Name");
+		public IdentifierLabelAction(MapController theController) {
+			super("Class Name", theController);
 		}
 
 		@Override
 		public void run() {
 			super.run();
 			if (!isChecked()) return;
-            getCore().getActiveMap().getValues().labelScheme.setValue(new DefaultLabelScheme());			
+            getController().getActiveMap().getValues().labelScheme.setValue(new DefaultLabelScheme());			
 		}
 
 		@Override
@@ -66,8 +62,8 @@ abstract class LabelAction extends MenuAction {
 
 	public static class LogLHLabelAction extends LabelAction {
 
-		public LogLHLabelAction() {
-			super("Log-likelihood");
+		public LogLHLabelAction(MapController theController) {
+			super("Log-likelihood", theController);
 		}
 
 		@Override

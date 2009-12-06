@@ -11,6 +11,7 @@ import org.codemap.util.CodemapIcons;
 import org.codemap.util.ColorBrewer;
 import org.codemap.util.Log;
 import org.codemap.util.MColor;
+import org.codemap.util.MapScheme;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -24,11 +25,8 @@ import org.eclipse.jdt.core.JavaModelException;
 
 public class ShowPackageColorsAction extends MenuAction {
 	
-	private final MapController theController;
-
-	public ShowPackageColorsAction(MapController controller, int style) {
-		super("Color by Package", style);
-		this.theController = controller;
+	public ShowPackageColorsAction(int style, MapController theController) {
+		super("Color by Package", style, theController);
 		setChecked(isDefaultChecked());
 		setImageDescriptor(CodemapIcons.descriptor(PACKAGES));
 	}
@@ -45,12 +43,15 @@ public class ShowPackageColorsAction extends MenuAction {
 	}
 
 	private void disable() {
-	    CodemapCore core = CodemapCore.getPlugin();
-	    core.getActiveMap().getValues().colorScheme.setValue(core.getDefaultColorScheme());
+	    getController().getActiveMap().getValues().colorScheme.setValue(getDefaultColorScheme());
 	}
 
-	private void enable() {
-		MapPerProject mapForProject = theController.getActiveMap();
+	private MapScheme<MColor> getDefaultColorScheme() {
+	    return CodemapCore.getPlugin().getDefaultColorScheme();
+    }
+
+    private void enable() {
+		MapPerProject mapForProject = getController().getActiveMap();
 		
 		ColorBrewer brewer = new ColorBrewer();
 		CodemapColors colorScheme = new CodemapColors();
@@ -77,7 +78,7 @@ public class ShowPackageColorsAction extends MenuAction {
 				Log.error(e);
 			}
 		}
-		theController.getActiveMap().getValues().colorScheme.setValue(colorScheme);
+		getController().getActiveMap().getValues().colorScheme.setValue(colorScheme);
 	}
 
 	@Override

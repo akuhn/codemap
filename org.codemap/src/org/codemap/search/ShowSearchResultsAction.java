@@ -10,13 +10,14 @@ import org.eclipse.jface.action.IAction;
 public class ShowSearchResultsAction extends MenuAction {
 
     public ShowSearchResultsAction(MapController theController) {
-        super("Search Results", IAction.AS_CHECK_BOX);
+        super("Search Results", IAction.AS_CHECK_BOX, theController);
         setImageDescriptor(CodemapIcons.descriptor(SEARCH));
-        controller = theController.getSearchResultController();
-        controller.registerAction(this);
+        theController.getSearchResultController().registerAction(this);
     }
-
-	private SearchResultController controller;
+    
+    protected SearchResultController getSearchResultController() {
+        return getController().getSearchResultController();
+    }
 
 	@Override
 	public void run() {
@@ -31,11 +32,11 @@ public class ShowSearchResultsAction extends MenuAction {
 	}
 
 	private void hideSearchResults() {
-		controller.onLayerDeactivated();
+		getSearchResultController().onLayerDeactivated();
 	}
 
 	private void showSearchResults() {
-		controller.onLayerActivated();
+		getSearchResultController().onLayerActivated();
 	}
 
     @Override

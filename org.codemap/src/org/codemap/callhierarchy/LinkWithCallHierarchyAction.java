@@ -9,13 +9,9 @@ import org.eclipse.jface.action.IAction;
 
 public class LinkWithCallHierarchyAction extends MenuAction {
 
-
-    private CallHierarchyTracker callHierarchyTracker;
-
-    public LinkWithCallHierarchyAction(MapController controller) {
-	    super("Link with Call Hierarchy", IAction.AS_CHECK_BOX);
+    public LinkWithCallHierarchyAction(MapController theController) {
+	    super("Link with Call Hierarchy", IAction.AS_CHECK_BOX, theController);
 	    setImageDescriptor(CodemapIcons.descriptor(CALL_HIERARCHY));
-	    callHierarchyTracker = controller.getCallHierarchyTracker();
 	}
 
     @Override
@@ -26,11 +22,15 @@ public class LinkWithCallHierarchyAction extends MenuAction {
 	}
 	
 	private void showFLow() {
-	    callHierarchyTracker.enable();
+	    getCallHierarchyTracker().enable();
 	}
 
-	private void hideFlow() {
-	    callHierarchyTracker.disable();
+	private CallHierarchyTracker getCallHierarchyTracker() {
+	    return getController().getCallHierarchyTracker();
+    }
+
+    private void hideFlow() {
+	    getCallHierarchyTracker().disable();
 	}
 
     @Override

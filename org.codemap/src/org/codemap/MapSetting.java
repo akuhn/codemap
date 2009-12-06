@@ -8,7 +8,7 @@ package org.codemap;
  *
  * @param <V> type of property value.
  */
-public class MapSetting<V> implements  Cloneable {
+public class MapSetting<V> implements Cloneable {
 	
 	public final String key;
 	public final V defaultValue;

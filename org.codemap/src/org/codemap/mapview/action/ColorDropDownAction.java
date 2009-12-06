@@ -9,10 +9,8 @@ import org.eclipse.swt.widgets.Menu;
 
 public class ColorDropDownAction extends ExtensionPointDropDownAction {
 
-	private MapController theController;
-
-	public ColorDropDownAction(MapController controller) {
-		theController = controller;
+	public ColorDropDownAction(MapController theController) {
+	    super(theController);
 	}
 
 	@Override
@@ -23,8 +21,8 @@ public class ColorDropDownAction extends ExtensionPointDropDownAction {
 
 	@Override
 	protected void createDefaultMenu(Menu menu) {
-		addActionToMenu(menu, new ShowDefaultColorsAction(getActionStyle()));		
-		addActionToMenu(menu, new ShowPackageColorsAction(theController, getActionStyle()));
+		addActionToMenu(menu, new ShowDefaultColorsAction(getActionStyle(), getController()));		
+		addActionToMenu(menu, new ShowPackageColorsAction(getActionStyle(), getController()));
 	}
 
 	@Override

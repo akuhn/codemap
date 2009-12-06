@@ -9,13 +9,14 @@ import org.eclipse.jface.action.IAction;
 
 public class ShowMarkersAction extends MenuAction {
 
-	private MarkerController controller;
-
 	public ShowMarkersAction(MapController theController) {
-	    super("Markers", IAction.AS_CHECK_BOX);
-	    controller = theController.getMarkerController();
-		controller.register(this);
+	    super("Markers", IAction.AS_CHECK_BOX, theController);
+	    getMarkerController().register(this);
 		setImageDescriptor(CodemapIcons.descriptor(MARKER));
+	}
+	
+	protected MarkerController getMarkerController() {
+	    return getController().getMarkerController();
 	}
 
 	@Override
@@ -26,11 +27,11 @@ public class ShowMarkersAction extends MenuAction {
 	}
 
 	private void showMarkers() {
-		controller.onLayerActivated();
+		getMarkerController().onLayerActivated();
 	}
 
 	private void hideMarkers() {
-		controller.onLayerDeactivated();
+		getMarkerController().onLayerDeactivated();
 	}
 
     @Override

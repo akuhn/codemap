@@ -12,18 +12,16 @@ import org.eclipse.swt.widgets.Menu;
 
 public class LayerDropDownAction extends ExtensionPointDropDownAction {
     
-    private MapController theController;
-
-    public LayerDropDownAction(MapController controller) {
-        theController = controller;
+    public LayerDropDownAction(MapController theController) {
+        super(theController);
     }
 
     @Override
     protected void createMenu(Menu menu) {
         super.createMenu(menu);
-        addActionToMenu(menu, new ShowSearchResultsAction(theController));
-        addActionToMenu(menu, new LinkWithCallHierarchyAction(theController));
-        addActionToMenu(menu, new ShowMarkersAction(theController));
+        addActionToMenu(menu, new ShowSearchResultsAction(getController()));
+        addActionToMenu(menu, new LinkWithCallHierarchyAction(getController()));
+        addActionToMenu(menu, new ShowMarkersAction(getController()));
     }
 
     @Override

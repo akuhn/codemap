@@ -125,7 +125,7 @@ public class MapView extends ViewPart {
         viewMenu.add(new SaveAsPNGAction(theController));
         viewMenu.add(new ReloadMapAction(theController));
         viewMenu.add(new SaveHapaxDataAction(theController));        
-        viewMenu.add(registerAction(new ShowTestsAction()));
+        viewMenu.add(registerAction(new ShowTestsAction(theController)));
 //        viewMenu.add(new DebugLocationsAction());
         
         IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CodemapCore.PLUGIN_ID, ExtensionPoints.ACTION_BAR);
@@ -155,7 +155,7 @@ public class MapView extends ViewPart {
 
         tbm.add(registerAction(new ColorDropDownAction(theController)));
         tbm.add(registerAction(new LayerDropDownAction(theController)));
-        tbm.add(registerAction(new LabelDrowDownAction()));
+        tbm.add(registerAction(new LabelDrowDownAction(theController)));
 
         tbm.add(linkWithSelection = new LinkWithSelectionAction(theController, memento));
         tbm.add(forceSelection = new ForceSelectionAction(selectionProvider, memento));
@@ -176,7 +176,8 @@ public class MapView extends ViewPart {
      */
     @Override
     public void dispose() {
-        theController.dispose();        
+        theController.dispose();
+        super.dispose();
     }
     
     @Override
@@ -187,6 +188,7 @@ public class MapView extends ViewPart {
     
     @Override
     public void saveState(IMemento memento) {
+        theController.onSaveState();
         linkWithSelection.saveState(memento);
         forceSelection.saveState(memento);
     }
@@ -198,7 +200,7 @@ public class MapView extends ViewPart {
     }
     
     protected void newProjectSelected() {
-        MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
+        MapPerProject activeMap = theController.getActiveMap();
         configureActions(activeMap);
         CodemapVisualization viz = activeMap
                 .updateSize(currentSize)

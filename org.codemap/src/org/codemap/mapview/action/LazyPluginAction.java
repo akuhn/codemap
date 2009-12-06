@@ -1,5 +1,6 @@
 package org.codemap.mapview.action;
 
+import org.codemap.mapview.MapController;
 import org.codemap.util.Log;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -19,8 +20,8 @@ public class LazyPluginAction extends MenuAction {
 	private String key;
 	private boolean isDefaultChecked = false;
 
-	public LazyPluginAction(IConfigurationElement elem, int style) {
-		super("", style); // lol, we can't set the style value some other way ...
+	public LazyPluginAction(IConfigurationElement elem, int style, MapController mapController) {
+		super("", style, mapController); // lol, we can't set the style value some other way ...
 		configElement = elem;
 		initFromConfigElement();
 	}

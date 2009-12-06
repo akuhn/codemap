@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.codemap.MapPerProject;
+import org.codemap.mapview.MapController;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.swt.widgets.Control;
@@ -21,8 +22,8 @@ public abstract class DropDownAction extends CodemapAction implements IMenuCreat
 		}
 	}
 
-	public DropDownAction() {
-		super("", AS_DROP_DOWN_MENU);
+	public DropDownAction(MapController theController) {
+		super("", AS_DROP_DOWN_MENU, theController);
 		setMenuCreator(this);
 		setup();
 	}

@@ -49,10 +49,10 @@ public class MapPerProject {
     /*default*/ MapPerProject(IJavaProject project, MapPerProjectCache mapPerProjectCache) {
         this.project = project;
         this.cache = mapPerProjectCache;
+        readPreviousProperties();
     }
 
     /*default*/ void initialize() {
-        
         MapValueBuilder builder = new MapValueBuilder();
         builder.setName("default.map");
         builder.setProjects(Arrays.asList(Resources.asPath(project)));
@@ -159,14 +159,16 @@ public class MapPerProject {
     
     private void writeProperties() {
         IEclipsePreferences node = getProjectPreferences(UI_STATE_NODE_ID);   
-        for (Entry<String, String> entry : properties.entrySet()) {
-            node.put(entry.getKey(), entry.getValue());
-        }
         try {
+            // remove any old entries
+            node.clear();
+            for (Entry<String, String> entry : properties.entrySet()) {
+                node.put(entry.getKey(), entry.getValue());
+            }
             node.flush();
         } catch (BackingStoreException e) {
             Log.error(e);
-        }           
+        }
     }    
 
     private IEclipsePreferences getProjectPreferences(String nodeId) {

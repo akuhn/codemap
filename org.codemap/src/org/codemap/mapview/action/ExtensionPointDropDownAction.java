@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.codemap.CodemapCore;
+import org.codemap.mapview.MapController;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
@@ -13,7 +14,11 @@ import org.eclipse.swt.widgets.Menu;
 
 public abstract class ExtensionPointDropDownAction extends DropDownAction {
 	
-	@Override
+	public ExtensionPointDropDownAction(MapController theController) {
+        super(theController);
+    }
+
+    @Override
 	protected void createMenu(Menu menu) {
 		createDefaultMenu(menu);
 		createExtensionMenu(menu);
@@ -35,7 +40,7 @@ public abstract class ExtensionPointDropDownAction extends DropDownAction {
 	private void parseConfig(IConfigurationElement[] configurationElements, Menu menu) {
 		List<IConfigurationElement> configelems = Arrays.asList(configurationElements);
 		for (IConfigurationElement each: configelems) {
-			addActionToMenu(menu, new LazyPluginAction(each, getActionStyle()));
+			addActionToMenu(menu, new LazyPluginAction(each, getActionStyle(), getController()));
 		}
 	}
 
