@@ -227,7 +227,6 @@ public class LatentSemanticIndex implements Serializable {
         return documentLength[index];
     }
     
-    
     private void assertInvariant() {
         if (documentLength != null && documentLength.length != documents.size()) throw new AssertionError();
         if (svd.columnCount() != documents.size()) throw new AssertionError();
