@@ -57,10 +57,9 @@ public class MapView extends ViewPart {
 
     public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
     private static final String ATTR_CLASS = "class";
+    private int currentSize;
 
     private MapController theController;
-    private MapSelectionProvider selectionProvider;
-    private int currentSize;
     private Canvas canvas;
     private Composite container;
 
@@ -95,28 +94,19 @@ public class MapView extends ViewPart {
         
         container = new Composite(parent, SWT.NONE);
         container.setLayout(new FillLayout(SWT.LEFT));
-
         Color swtColor = MColor.WATER.asSWTColor(parent.getDisplay());
         container.setBackground(swtColor);
 
         canvas = new Canvas(container, SWT.DOUBLE_BUFFERED);
         canvasListener = new CanvasListener(canvas);
         container.layout();
-
-        selectionProvider = new MapSelectionProvider(this);
         
         configureToolbar();
         configureActionBar();
 
-        showMap();
         theController.onOpenView();
     }
 
-
-    private void showMap() {
-        new ResizeListener(container, theController);
-        theController.onShowMap();
-    }
     
     private void configureActionBar() {
         IActionBars actionBars = getViewSite().getActionBars();
@@ -158,7 +148,7 @@ public class MapView extends ViewPart {
         tbm.add(registerAction(new LabelDrowDownAction(theController)));
 
         tbm.add(linkWithSelection = new LinkWithSelectionAction(theController, memento));
-        tbm.add(forceSelection = new ForceSelectionAction(selectionProvider, memento));
+        tbm.add(forceSelection = new ForceSelectionAction(theController, memento));
     }
 
     private IAction registerAction(CodemapAction action) {
@@ -221,10 +211,6 @@ public class MapView extends ViewPart {
         redrawAsync();
     }
 
-    protected void setCurrentSize(int newDimension) {
-        currentSize = newDimension;
-    }
-
     protected void updateMapdimension(int newDimension) {
         currentSize = newDimension;
         IJavaProject project = theController.getCurrentProject();
@@ -247,7 +233,6 @@ public class MapView extends ViewPart {
             }
         });
     }
-    
 
     protected Image newCodemapImage() {
         if (canvas == null) return null;
@@ -259,7 +244,14 @@ public class MapView extends ViewPart {
         return image;
     }
 
-    protected MapSelectionProvider getSelectionProvider() {
-        return selectionProvider;
+    /**
+     * Redraw request from the controller
+     */
+    protected void redraw() {
+        redrawAsync();
+    }
+
+    /*default*/ Composite getContainer() {
+        return container;
     }
 }

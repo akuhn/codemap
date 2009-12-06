@@ -2,6 +2,7 @@ package org.codemap.mapview.action;
 
 import static org.codemap.util.CodemapIcons.FORCE_SELECTION;
 
+import org.codemap.mapview.MapController;
 import org.codemap.mapview.MapSelectionProvider;
 import org.codemap.util.CodemapIcons;
 import org.codemap.util.Tag;
@@ -13,9 +14,9 @@ public class ForceSelectionAction extends Action {
 	public static final boolean DEFAULT_CHECKED = true;
 	private MapSelectionProvider selectionProvider;
 
-	public ForceSelectionAction(MapSelectionProvider provider, IMemento memento) {
+	public ForceSelectionAction(MapController theController, IMemento memento) {
 		super("Force Package Explorer Selection", AS_CHECK_BOX);
-		selectionProvider = provider;
+		selectionProvider = theController.getSelectionProvider();
 		setChecked(DEFAULT_CHECKED);
 		setImageDescriptor(CodemapIcons.descriptor(FORCE_SELECTION));
 		init(memento);

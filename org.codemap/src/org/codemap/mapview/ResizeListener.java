@@ -8,6 +8,14 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
+/**
+ * Used to detect when the mapview was resized and to trigger
+ * the redraw/resize events.
+ * When the window is dragged it delays resizing until the
+ * dragging has stopped. 
+ *  
+ * @author deif
+ */
 public class ResizeListener implements ControlListener {
 	
 	private Composite eventsource;

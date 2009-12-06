@@ -36,6 +36,8 @@ public class MapController {
     private SelectionTracker selectionTracker;
     private MapPerProjectCache cache;
     private ControllerUtils utils;
+    private MapSelectionProvider selectionProvider;
+    private ResizeListener resizeListener;
 
     public MapController(MapView view) {
         CodemapCore.getPlugin().register(this);        
@@ -45,6 +47,7 @@ public class MapController {
         searchResultController = new SearchResultController();
         markerController = new MarkerController();
         selectionTracker = new SelectionTracker(this);
+        selectionProvider = new MapSelectionProvider(view);        
         utils = new ControllerUtils(this);
     }
 
@@ -58,17 +61,13 @@ public class MapController {
     }
 
     public void onOpenView() {
-        //
-    }
-
-    public void onShowMap() {
-        //
+        resizeListener = new ResizeListener(view.getContainer(), this);
     }
 
     public void onProjectSelected(IJavaProject javaProject) {
         if (currentProject == javaProject) return;
         currentProject = javaProject;
-        view.newProjectSelected();
+        onNewProjectSelected();
     }
 
     public void onSelectionChanged(Collection<ICompilationUnit> units) {
@@ -112,7 +111,7 @@ public class MapController {
     }
 
     public MapSelectionProvider getSelectionProvider() {
-        return view.getSelectionProvider();
+        return selectionProvider;
     }
 
     public void onNewProjectSelected() {
@@ -134,6 +133,10 @@ public class MapController {
 
     public void onSaveState() {
         cache.saveMapState();
+    }
+
+    public void onRedraw() {
+        view.redraw();
     }    
 
 }

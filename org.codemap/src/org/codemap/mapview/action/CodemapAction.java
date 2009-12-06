@@ -12,7 +12,6 @@ public abstract class CodemapAction extends Action {
 		super(text, style);
 		this.theController = theController;
 	}
-	
 
     public MapController getController() {
         return theController;

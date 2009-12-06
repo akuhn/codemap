@@ -76,7 +76,7 @@ public class MapPerProject {
                 if (plugin == null) return null;
                 MapController controller = plugin.getController();
                 if (controller == null) return null;
-                controller.onNewProjectSelected();
+                controller.onRedraw();
                 return null;
             }
         };
