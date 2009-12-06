@@ -31,10 +31,12 @@ public class ComputeMapInstanceTask extends TaskValue<MapInstance> {
         return configuration.withSize(size, new MapScheme<Double>() {
             @Override
             public Double forLocation(Point location) {
+//                return Math.max(1, Math.log(index.getDocumentLength(location.getDocument())));
+//                return Math.cbrt(index.getDocumentLength(location.getDocument()));
                 return Math.sqrt(index.getDocumentLength(location.getDocument()));
-
             }
         });
     }
-    
 }
+
+

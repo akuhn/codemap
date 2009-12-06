@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.codemap.CodemapCore;
+import org.codemap.Commands;
 import org.codemap.Configuration;
 import org.codemap.DigitalElevationModel;
 import org.codemap.HillShading;
@@ -34,6 +35,7 @@ public class MapValueBuilder {
     private Value<Collection<String>> fileExtensions;
     private String name;
     private BooleanValue showTestsValue;
+    private Commands commands;
     
     public Value<Collection<String>> projectsValue() {
         if (projects == null) projects = Values.of(null);
@@ -74,7 +76,9 @@ public class MapValueBuilder {
     }
 
     public Value<MapScheme<String>> labelsValue() {
-        return new ReferenceValue<MapScheme<String>>();
+        ReferenceValue<MapScheme<String>> labelsValue = new ReferenceValue<MapScheme<String>>();
+        commands.getLabelingCommand().apply(labelsValue);
+        return labelsValue;
     }
 
     public Value<LatentSemanticIndex> indexValue(Value<Collection<String>> elements) {
@@ -82,8 +86,7 @@ public class MapValueBuilder {
     }
 
     public Value<Configuration> configurationValue(Value<LatentSemanticIndex> index) {
-        return new ComputeConfigurationTask(index)
-                .initialConfiguration(initialConfiguration);
+        return new ComputeConfigurationTask(index).initialConfiguration(initialConfiguration);
     }
 
     public Value<MapInstance> mapInstanceValue(Value<Integer> mapSize, Value<LatentSemanticIndex> index, Value<Configuration> configuration) {
@@ -139,10 +142,6 @@ public class MapValueBuilder {
         }
         return value;
     }
-    
-    public CollectionValue<Value> addonsValue() {
-        return new CollectionValue<Value>();
-    }
 
     public Value<Boolean> showTestsValue() {
         if (showTestsValue == null) {
@@ -154,7 +153,9 @@ public class MapValueBuilder {
     public MapValueBuilder setFileExtensions(List<String> extensions) {
         extensionsValue().setValue(extensions);
         return this;
-    }    
-       
+    }
 
+    public void setCommands(Commands commands) {
+        this.commands = commands; 
+    }    
 }

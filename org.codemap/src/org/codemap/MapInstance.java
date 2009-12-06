@@ -33,6 +33,7 @@ public class MapInstance {
         this.locations = locations;
         this.width = this.height = size;
     }
+    
     public MapInstance(Configuration map, int size, MapScheme<Double> elevation) {
         locations = makeLocationsWithSize(map, size, elevation);
         kdTree = makeKdTree();

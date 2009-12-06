@@ -114,7 +114,9 @@ public class Configuration implements Serializable {
 
 	public Map<String, Point> asMap() {
 		Map<String, Point> map = new HashMap<String, Point>();
-		for (Point p: points) map.put(p.getDocument(), p);
+		for (Point p: points) {
+		    map.put(p.getDocument(), p);
+		}
 		return map;
 	}
 	

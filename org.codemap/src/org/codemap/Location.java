@@ -5,10 +5,6 @@ import org.codemap.layers.Label;
 /**
  * Location of a document on a map instance. Coordinates are in pixels. When
  * normalized, elevation is between 0 and 100.
- *<P>
- * Instances of this class are immutable.
- * 
- * @author Adrian Kuhn
  * 
  */
 public class Location implements Comparable<Location> {
@@ -17,10 +13,20 @@ public class Location implements Comparable<Location> {
     private double elevation;
     private Point point;
     private Label label;
-    
-    public Location(Location loc) {
-        this(loc.point, loc.elevation, loc.px, loc.py, loc.label);
-    } 
+
+    private Location(Point point, double elevation, int px, int py, Label label) {
+        if (Double.isNaN(elevation))
+            throw new AssertionError();
+        this.point = point;
+        this.elevation = elevation;
+        this.px = px;
+        this.py = py;
+        this.label = label;
+    }
+
+    public Location(Point point, double elevation, int px, int py) {
+        this(point, elevation, px, py, null);
+    }    
 
     public String getDocument() {
         return point.getDocument();
@@ -36,20 +42,6 @@ public class Location implements Comparable<Location> {
         int begin = path.lastIndexOf('/');
         int end = path.indexOf('.', begin);
         return path.substring(begin + 1, end < 0 ? path.length() : end);
-    }
-
-    public Location(Point point, double elevation, int px, int py, Label label) {
-        if (Double.isNaN(elevation))
-            throw new AssertionError();
-        this.point = point;
-        this.elevation = elevation;
-        this.px = px;
-        this.py = py;
-        this.label = label;
-    }
-
-    public Location(Point point, double elevation, int px, int py) {
-        this(point, elevation, px, py, null);
     }
 
     public Location withElevation(double newElevation) {
@@ -94,5 +86,4 @@ public class Location implements Comparable<Location> {
     public Label getLabel() {
         return label;
     }
-
 }

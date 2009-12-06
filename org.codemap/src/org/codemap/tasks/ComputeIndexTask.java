@@ -4,6 +4,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Collection;
 
+import org.codemap.util.Log;
+
 import ch.akuhn.hapax.CorpusBuilder;
 import ch.akuhn.hapax.Hapax;
 import ch.akuhn.hapax.index.LatentSemanticIndex;
@@ -39,8 +41,8 @@ public class ComputeIndexTask extends TaskValue<LatentSemanticIndex> {
     protected void parseElement(CorpusBuilder builder, String path) {
         try {
             builder.addDocument(path, new FileInputStream(path));
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
+        } catch (FileNotFoundException e) {
+            Log.error(e);
         }
     }
 }

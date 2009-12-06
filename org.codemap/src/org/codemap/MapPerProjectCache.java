@@ -7,26 +7,25 @@ import org.eclipse.jdt.core.IJavaProject;
 
 public class MapPerProjectCache {
 
-    private Map<IJavaProject,MapPerProject> mapPerProjectCache = new HashMap<IJavaProject,MapPerProject>();
+    private Map<IJavaProject,MapPerProject> cache = new HashMap<IJavaProject,MapPerProject>();
 
     public MapPerProject forProject(IJavaProject project) {
         if (project == null) return null;
-        MapPerProject map = mapPerProjectCache.get(project);
+        MapPerProject map = cache.get(project);
         if (map != null) return map;
-        mapPerProjectCache.put(project, map = new MapPerProject(project, this));
-        map.initialize();
+        cache.put(project, map = new MapPerProject(project, this));
         return map;
     }
 
     public void saveMapState() {
-        for (MapPerProject each: mapPerProjectCache.values()) {
+        for (MapPerProject each: cache.values()) {
             each.saveState();
         }
     }
 
     /*default*/ void reload(MapPerProject mapPerProject) {
         IJavaProject project = mapPerProject.getJavaProject();
-        mapPerProjectCache.remove(project);
-        forProject(project);
+        cache.remove(project);
+        this.forProject(project);
     }
 }

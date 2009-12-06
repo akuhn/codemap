@@ -45,15 +45,20 @@ public class MapPerProject {
 
     private ActionValue<Void> redrawAction;
 
+    private Commands commands;
+
 
     /*default*/ MapPerProject(IJavaProject project, MapPerProjectCache mapPerProjectCache) {
         this.project = project;
         this.cache = mapPerProjectCache;
         readPreviousProperties();
+        commands = new Commands(this);
+        initialize();
     }
 
-    /*default*/ void initialize() {
+    private void initialize() {
         MapValueBuilder builder = new MapValueBuilder();
+        builder.setCommands(commands);
         builder.setName("default.map");
         builder.setProjects(Arrays.asList(Resources.asPath(project)));
         builder.setFileExtensions(Arrays.asList("*.java"));
@@ -252,5 +257,9 @@ public class MapPerProject {
 
     public void reloadFromScratch() {
         cache.reload(this);
+    }
+
+    public Commands getCommands() {
+        return commands;
     }
 }
