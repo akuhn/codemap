@@ -78,6 +78,15 @@ class FindElementsVisitor implements IResourceVisitor {
     }
     
     private boolean isJavaTestFile(IResource resource) {
+    	/*
+    	 * If the resource contains compilation errors, it maybe that
+    	 * we get a false positive. As a work around we could look at 
+    	 * the path (does it include test) and at the name (does it end
+    	 * with Test).
+    	 * 
+    	 * This is a TODO for a world where days have more than 24h.
+    	 * 
+    	 */
         IJavaElement javaElement = Resources.asJavaElement(resource);
         if (javaElement == null) return false;
         // find all tests for the given file
@@ -85,9 +94,9 @@ class FindElementsVisitor implements IResourceVisitor {
         try {
             findTestTypes = JUnitCore.findTestTypes(javaElement, null);
         } catch (OperationCanceledException e) {
-            return true;
+            return false; // be conservative
         } catch (CoreException e) {
-            return true;
+            return false; // be conservative
         }
         // if we found one (or maybe more) then we have a java test file
         return findTestTypes.length > 0;
