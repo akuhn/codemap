@@ -59,10 +59,10 @@ public abstract class Matrix {
     public abstract int columnCount();
 
     public double density() {
-        return (double) used() / size();
+        return (double) used() / elementCount();
     }
     
-    public int size() {
+    public int elementCount() {
     	return rowCount() * columnCount();
     }
     

@@ -17,19 +17,19 @@ public class Eigenvalues {
 	}
 
 	public static Eigenvalues of(Matrix A) {
-		if (A.size() == 0) {
+		if (A.columnCount() == 0) {
 			Eigenvalues eigen = new Eigenvalues(0);
 			eigen.value = new double[0];
 			eigen.vector = new Vector[0];
 			return eigen;
 		}
-		if (A.size() == 1) {
+		if (A.columnCount() == 1) {
 			Eigenvalues eigen = new Eigenvalues(0);
 			eigen.value = new double[] { A.get(0, 0) };
 			eigen.vector = new Vector[] { Vector.from(1.0) };
 			return eigen;
 		}
-		if (A.size() < 10) return new AllEigenvalues(A);
+		if (A.columnCount() < 10) return new AllEigenvalues(A);
 		return FewEigenvalues.of(A);
 	}
 
