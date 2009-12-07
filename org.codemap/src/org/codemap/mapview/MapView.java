@@ -16,7 +16,6 @@ import org.codemap.mapview.action.LinkWithSelectionAction;
 import org.codemap.mapview.action.ReloadMapAction;
 import org.codemap.mapview.action.SaveAsPNGAction;
 import org.codemap.mapview.action.SaveHapaxDataAction;
-import org.codemap.mapview.action.ShowTestsAction;
 import org.codemap.util.ExtensionPoints;
 import org.codemap.util.Log;
 import org.codemap.util.MColor;
@@ -113,7 +112,6 @@ public class MapView extends ViewPart {
         viewMenu.add(new SaveAsPNGAction(theController));
         viewMenu.add(new ReloadMapAction(theController));
         viewMenu.add(new SaveHapaxDataAction(theController));        
-        viewMenu.add(registerAction(new ShowTestsAction(theController)));
 //        viewMenu.add(new DebugLocationsAction());
         
         IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CodemapCore.PLUGIN_ID, ExtensionPoints.ACTION_BAR);

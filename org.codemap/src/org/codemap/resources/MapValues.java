@@ -41,7 +41,6 @@ public class MapValues {
     public final Value<Collection<String>> projects;
     public final Value<Collection<String>> extensions;
     public final CollectionValue<MapSelection> selections;
-    public final Value<Boolean> showTests;    
 
     public MapValues(MapValueBuilder make) {
 
@@ -63,7 +62,6 @@ public class MapValues {
         background = make.backgroundValue(mapInstance, elevationModel, shading, colorScheme);
         labeling = make.labelingValue(mapInstance, labelScheme);
         
-        showTests = make.showTestsValue();
         projects = make.projectsValue();
         extensions = make.extensionsValue();
         selections = make.selectionsValue(currentSelection, openFilesSelection, youAreHereSelection);        

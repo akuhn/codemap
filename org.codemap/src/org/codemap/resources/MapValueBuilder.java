@@ -15,6 +15,7 @@ import org.codemap.tasks.ComputeBackgroundTask;
 import org.codemap.tasks.ComputeConfigurationTask;
 import org.codemap.tasks.ComputeEclipseIndexTask;
 import org.codemap.tasks.ComputeElementsTask;
+import org.codemap.tasks.ComputeElevationModelTask;
 import org.codemap.tasks.ComputeFilteredElevationTask;
 import org.codemap.tasks.ComputeHillShadingTask;
 import org.codemap.tasks.ComputeLabelingTask;
@@ -38,7 +39,6 @@ public class MapValueBuilder {
     private Value<Collection<String>> projects;
     private Value<Collection<String>> fileExtensions;
     private String name;
-    private BooleanValue showTestsValue;
     private Commands commands;
     
     public Value<Collection<String>> projectsValue() {
@@ -100,7 +100,7 @@ public class MapValueBuilder {
     }
 
     public Value<DigitalElevationModel> elevationModelValue(Value<MapInstance> mapInstance, Value<MapScheme<Boolean>> hills) {
-        return new ComputeFilteredElevationTask(mapInstance, hills, showTestsValue());
+        return new ComputeElevationModelTask(mapInstance, hills);
     }
 
     public Value<HillShading> hillShadingValue(Value<MapInstance> mapInstance, 
@@ -147,13 +147,6 @@ public class MapValueBuilder {
             value.add(each);
         }
         return value;
-    }
-
-    public Value<Boolean> showTestsValue() {
-        if (showTestsValue == null) {
-            showTestsValue = new BooleanValue(true);
-        }
-        return showTestsValue;
     }
 
     public MapValueBuilder setFileExtensions(List<String> extensions) {

@@ -3,12 +3,18 @@ package org.codemap.tasks;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
+import org.codemap.Location;
 import org.codemap.util.Log;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.junit.JUnitCore;
 
 import ch.akuhn.util.Files;
 import ch.akuhn.util.ProgressMonitor;
@@ -63,9 +69,27 @@ class FindElementsVisitor implements IResourceVisitor {
         if (resource.getType() == IResource.FILE) {
             for (String pattern: extensions) {
                 if (!Files.match(pattern, resource.getName())) continue;
+                if (isJavaTestFile(resource)) continue;
+                
                 myResult.add(Resources.asPath(resource));
             }
         }
         return true;
+    }
+    
+    private boolean isJavaTestFile(IResource resource) {
+        IJavaElement javaElement = Resources.asJavaElement(resource);
+        if (javaElement == null) return false;
+        // find all tests for the given file
+        IType[] findTestTypes;
+        try {
+            findTestTypes = JUnitCore.findTestTypes(javaElement, null);
+        } catch (OperationCanceledException e) {
+            return true;
+        } catch (CoreException e) {
+            return true;
+        }
+        // if we found one (or maybe more) then we have a java test file
+        return findTestTypes.length > 0;
     }
 }
