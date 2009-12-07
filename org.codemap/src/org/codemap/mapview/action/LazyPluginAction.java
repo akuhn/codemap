@@ -1,5 +1,6 @@
 package org.codemap.mapview.action;
 
+import org.codemap.MapPerProject;
 import org.codemap.mapview.MapController;
 import org.codemap.util.Log;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -73,13 +74,9 @@ public class LazyPluginAction extends MenuAction {
 		}
 	}
 
-	@Override
-	protected String getKey() {
-		return key;
-	}
-
-	@Override
-	protected boolean isDefaultChecked() {
-		return isDefaultChecked;
-	}
+    @Override
+    public void configureAction(MapPerProject map) {
+        // TODO Auto-generated method stub
+        
+    }
 }

@@ -1,11 +1,10 @@
-package org.codemap.resources;
+package org.codemap.tasks;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.codemap.Location;
 import org.codemap.MapInstance;
-import org.codemap.tasks.ComputeElevationModelTask;
 import org.codemap.util.MapScheme;
 import org.codemap.util.Resources;
 import org.eclipse.core.runtime.CoreException;

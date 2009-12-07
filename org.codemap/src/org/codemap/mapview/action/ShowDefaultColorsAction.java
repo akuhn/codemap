@@ -2,17 +2,18 @@ package org.codemap.mapview.action;
 
 import static org.codemap.util.CodemapIcons.GREEN_CIRCLE;
 
-import org.codemap.CodemapCore;
+import org.codemap.MapPerProject;
+import org.codemap.commands.ColoringCommand;
+import org.codemap.commands.ColoringCommand.Coloring;
 import org.codemap.mapview.MapController;
 import org.codemap.util.CodemapIcons;
 
 public class ShowDefaultColorsAction extends MenuAction {
 	
-	private static final boolean DEFAULT_VALUE = true;
+    private ColoringCommand coloringCommand;
 
 	public ShowDefaultColorsAction(int style, MapController theController) {
 		super("Show default colors", style, theController);
-		setChecked(DEFAULT_VALUE);
 		setImageDescriptor(CodemapIcons.descriptor(GREEN_CIRCLE));
 	}
 	
@@ -20,21 +21,21 @@ public class ShowDefaultColorsAction extends MenuAction {
 	public void run() {
 		super.run();
 		if (!isChecked()) return;
-		enable();
+		coloringCommand.setCurrentColoring(getMyColoring());
 	}
 
-	private void enable() {
-	    getController().getActiveMap().getValues().colorScheme.setValue(CodemapCore.getPlugin().getDefaultColorScheme());
-	}
+    @Override
+    public void configureAction(MapPerProject map) {
+        coloringCommand = map.getCommands().getColoringCommand();
+        setChecked(isMyColoring(coloringCommand.getCurrentColoring()));
+    }
 
-	@Override
-	protected String getKey() {
-		return "show_default_colors";
-	}
+    private boolean isMyColoring(Coloring currentColoring) {
+       return currentColoring.equals(getMyColoring());
+    }
 
-	@Override
-	protected boolean isDefaultChecked() {
-		return true;
-	}	
+    private Coloring getMyColoring() {
+        return ColoringCommand.Coloring.GREEN;
+    }
 
 }

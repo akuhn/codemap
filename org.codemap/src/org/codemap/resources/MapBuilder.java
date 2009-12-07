@@ -1,4 +1,4 @@
-package org.codemap.tasks;
+package org.codemap.resources;
 
 import java.io.File;
 import java.util.ArrayList;

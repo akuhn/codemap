@@ -1,6 +1,7 @@
 package org.codemap.mapview.action;
 
 import org.codemap.CodemapCore;
+import org.codemap.MapPerProject;
 import org.codemap.mapview.MapController;
 import org.codemap.resources.MapValues;
 import org.eclipse.jface.action.IAction;
@@ -21,12 +22,8 @@ public class ShowTestsAction extends MenuAction {
     }
 
     @Override
-    protected String getKey() {
-        return "show_tests";
-    }
-
-    @Override
-    protected boolean isDefaultChecked() {
-        return true;
+    public void configureAction(MapPerProject map) {
+        // TODO Auto-generated method stub
+        
     }
 }

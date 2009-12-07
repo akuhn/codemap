@@ -1,6 +1,7 @@
 package org.codemap.tasks;
 
 import org.codemap.Configuration;
+import org.codemap.resources.MapBuilder;
 
 import ch.akuhn.hapax.index.LatentSemanticIndex;
 import ch.akuhn.util.ProgressMonitor;

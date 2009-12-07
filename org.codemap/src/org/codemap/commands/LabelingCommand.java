@@ -1,16 +1,18 @@
-package org.codemap;
+package org.codemap.commands;
 
-import static org.codemap.Commands.makeCommandId;
+import static org.codemap.commands.Commands.makeCommandId;
 
+import org.codemap.DefaultLabelScheme;
+import org.codemap.MapPerProject;
+import org.codemap.commands.Commands.Command;
 import org.codemap.util.MapScheme;
 
 import ch.akuhn.values.Value;
 
-public class LabelingCommand {
+public class LabelingCommand extends Command {
 
     private static final String LABELING_KEY = makeCommandId("labeling");
     private Labeling labeling = Labeling.DEFAULT;
-    private MapPerProject myMap;
     
     public static enum Labeling {
         DEFAULT, 
@@ -18,7 +20,7 @@ public class LabelingCommand {
     }
 
     public LabelingCommand(MapPerProject mapPerProject) {
-        myMap = mapPerProject;
+        super(mapPerProject);
         String setting = mapPerProject.getPropertyOrDefault(LABELING_KEY, Labeling.DEFAULT.toString());
         labeling = Labeling.valueOf(setting);
     }
@@ -38,7 +40,8 @@ public class LabelingCommand {
 
     public void setCurrentLabeling(Labeling newLabeling) {
         labeling = newLabeling;
-        myMap.setProperty(LABELING_KEY, labeling.toString());
-        apply(myMap.getValues().labelScheme);
+        getMyMap().setProperty(LABELING_KEY, labeling.toString());
+        apply(getMyMap().getValues().labelScheme);
     }
+
 }

@@ -4,18 +4,22 @@ import java.util.Collection;
 import java.util.List;
 
 import org.codemap.CodemapCore;
-import org.codemap.Commands;
 import org.codemap.Configuration;
 import org.codemap.DigitalElevationModel;
 import org.codemap.HillShading;
 import org.codemap.Labeling;
 import org.codemap.MapInstance;
 import org.codemap.MapSelection;
+import org.codemap.commands.Commands;
 import org.codemap.tasks.ComputeBackgroundTask;
 import org.codemap.tasks.ComputeConfigurationTask;
+import org.codemap.tasks.ComputeEclipseIndexTask;
+import org.codemap.tasks.ComputeElementsTask;
+import org.codemap.tasks.ComputeFilteredElevationTask;
 import org.codemap.tasks.ComputeHillShadingTask;
 import org.codemap.tasks.ComputeLabelingTask;
 import org.codemap.tasks.ComputeMapInstanceTask;
+import org.codemap.tasks.MapSelectionsValue;
 import org.codemap.util.MColor;
 import org.codemap.util.MapScheme;
 import org.eclipse.swt.graphics.Image;
@@ -72,7 +76,9 @@ public class MapValueBuilder {
     }
 
     public Value<MapScheme<MColor>> colorsValue() {
-        return new ReferenceValue<MapScheme<MColor>>();
+        ReferenceValue<MapScheme<MColor>> colorsValue = new ReferenceValue<MapScheme<MColor>>();
+        commands.getColoringCommand().apply(colorsValue);
+        return colorsValue;
     }
 
     public Value<MapScheme<String>> labelsValue() {

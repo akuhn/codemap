@@ -2,93 +2,41 @@ package org.codemap.mapview.action;
 
 import static org.codemap.util.CodemapIcons.PACKAGES;
 
-import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
-import org.codemap.Point;
+import org.codemap.commands.ColoringCommand;
+import org.codemap.commands.ColoringCommand.Coloring;
 import org.codemap.mapview.MapController;
-import org.codemap.util.CodemapColors;
 import org.codemap.util.CodemapIcons;
-import org.codemap.util.ColorBrewer;
-import org.codemap.util.Log;
-import org.codemap.util.MColor;
-import org.codemap.util.MapScheme;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IPackageDeclaration;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
 
 
 public class ShowPackageColorsAction extends MenuAction {
-	
-	public ShowPackageColorsAction(int style, MapController theController) {
-		super("Color by Package", style, theController);
-		setChecked(isDefaultChecked());
-		setImageDescriptor(CodemapIcons.descriptor(PACKAGES));
-	}
 
-	@Override
-	public void run() {
-		super.run();
-		
-		if (isChecked()) {
-			enable();
-		} else {
-			disable();
-		}
-	}
+    private ColoringCommand coloringCommand;
 
-	private void disable() {
-	    getController().getActiveMap().getValues().colorScheme.setValue(getDefaultColorScheme());
-	}
-
-	private MapScheme<MColor> getDefaultColorScheme() {
-	    return CodemapCore.getPlugin().getDefaultColorScheme();
+    public ShowPackageColorsAction(int style, MapController theController) {
+        super("Color by Package", style, theController);
+        setImageDescriptor(CodemapIcons.descriptor(PACKAGES));
+    }
+    
+    @Override
+    public void run() {
+        super.run();
+        if (!isChecked()) return;
+        coloringCommand.setCurrentColoring(getMyColoring());
     }
 
-    private void enable() {
-		MapPerProject mapForProject = getController().getActiveMap();
-		
-		ColorBrewer brewer = new ColorBrewer();
-		CodemapColors colorScheme = new CodemapColors();
-		
-		for(Point each: mapForProject.getConfiguration().points()) {
-			
-			String fileName = each.getDocument();
-			IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-			IResource resource = root.findMember(new Path(fileName));
-			IJavaElement create = JavaCore.create(resource);
-			
-			if (!(create instanceof ICompilationUnit)) return;
-			ICompilationUnit unit = (ICompilationUnit) create;
-			try {
-				IPackageDeclaration[] packageDeclarations = unit.getPackageDeclarations();
-				if (packageDeclarations.length != 1) return;
-				
-				IPackageDeclaration pack = packageDeclarations[0];
-				String packageName = pack.getElementName();
-				MColor color = brewer.forPackage(packageName);
-				colorScheme.setColor(fileName, color);
+    @Override
+    public void configureAction(MapPerProject map) {
+        coloringCommand = map.getCommands().getColoringCommand();
+        setChecked(isMyColoring(coloringCommand.getCurrentColoring()));
+    }
 
-			} catch (JavaModelException e) {
-				Log.error(e);
-			}
-		}
-		getController().getActiveMap().getValues().colorScheme.setValue(colorScheme);
-	}
+    private boolean isMyColoring(Coloring currentColoring) {
+       return currentColoring.equals(getMyColoring());
+    }
 
-	@Override
-	protected String getKey() {
-		return "show_package_colors";
-	}
-
-	@Override
-	protected boolean isDefaultChecked() {
-		return false;
-	}
+    private Coloring getMyColoring() {
+        return ColoringCommand.Coloring.BY_PACKAGE;
+    }
 
 }

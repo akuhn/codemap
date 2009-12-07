@@ -51,8 +51,8 @@ public class GraphConversionVisitor {
        }
        
        Graph graph = new Graph();
-       
        Location rootLocation = locations.get(rootPath);
+       if (rootLocation == null) return;
        Node rootNode = new Node(rootLocation.px, rootLocation.py, 1, rootLocation.getDocument());
        graph.addNode(rootNode);
        graph.setRootNode(rootNode);

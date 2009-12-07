@@ -17,7 +17,7 @@ public abstract class DropDownAction extends CodemapAction implements IMenuCreat
 	
 	@Override
 	public void configureAction(MapPerProject map) {
-		for(MenuAction each: actions) {
+		for(CodemapAction each: actions) {
 			each.configureAction(map);
 		}
 	}

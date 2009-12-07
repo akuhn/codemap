@@ -39,7 +39,6 @@ public class ComputeLabelingTask extends TaskValue<Labeling> {
         return computeValue(monitor, mapInstance, labelScheme);
     }
 
-
     private Labeling computeValue(ProgressMonitor monitor, MapInstance mapInstance, MapScheme<String> labelScheme) {
         Device device = Display.getDefault();
         Image image = new Image(device, 8, 8); // to get a GC
@@ -50,7 +49,6 @@ public class ComputeLabelingTask extends TaskValue<Labeling> {
         image.dispose();
         return new Labeling(labels);
     }
-
 
     private Iterable<Label> makeLabels(ProgressMonitor monitor, GC gc, MapInstance map, MapScheme<String> labelScheme) {
         Collection<Label> labels = new ArrayList<Label>();
@@ -94,7 +92,6 @@ public class ComputeLabelingTask extends TaskValue<Labeling> {
             for (Label each: layout) if (label.intersects(each)) return true;
             return false;
         }
-
     }
 
     private static final double[][] ORIENTATION = new double[][] {
@@ -109,7 +106,4 @@ public class ComputeLabelingTask extends TaskValue<Labeling> {
         {-.75d,0d},
         {0d,-.5d}, 
         {-1d,-.5d}};
-
-    
-    
 }

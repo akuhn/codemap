@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import org.codemap.Configuration.Builder;
 import org.codemap.callhierarchy.CallOverlay;
+import org.codemap.commands.Commands;
 import org.codemap.layers.CodemapVisualization;
 import org.codemap.layers.Layer;
 import org.codemap.mapview.MapController;

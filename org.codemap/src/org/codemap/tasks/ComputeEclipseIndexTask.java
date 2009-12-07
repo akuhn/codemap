@@ -1,9 +1,8 @@
-package org.codemap.resources;
+package org.codemap.tasks;
 
 import java.io.InputStream;
 import java.util.Collection;
 
-import org.codemap.tasks.ComputeIndexTask;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;

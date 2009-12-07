@@ -1,4 +1,4 @@
-package org.codemap.resources;
+package org.codemap.tasks;
 
 import java.util.Collection;
 import java.util.EventObject;

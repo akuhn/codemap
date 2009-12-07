@@ -3,9 +3,9 @@
  */
 package org.codemap.mapview.action;
 
-import org.codemap.LabelingCommand;
 import org.codemap.MapPerProject;
-import org.codemap.LabelingCommand.Labeling;
+import org.codemap.commands.LabelingCommand;
+import org.codemap.commands.LabelingCommand.Labeling;
 import org.codemap.mapview.MapController;
 import org.eclipse.jface.action.IAction;
 
@@ -16,7 +16,6 @@ abstract class LabelAction extends MenuAction {
 
     public LabelAction(String text, MapController theController) {
 		super(text, IAction.AS_RADIO_BUTTON, theController);
-		configureAction(theController.getActiveMap());
 	}
 	
 	@Override
@@ -30,20 +29,10 @@ abstract class LabelAction extends MenuAction {
     }
 	
 	@Override
-	protected String getKey() {
-	    return "unusedSoPleaseDeactivateASAP";
-	}
-	
-	@Override
 	public void run() {
 	    if (!isChecked()) return;
 	    labelingCommand.setCurrentLabeling(getMyLabeling());
 	}
-
-    @Override
-    protected boolean isDefaultChecked() {
-        return false;
-    }	
 
     protected abstract Labeling getMyLabeling();
 
