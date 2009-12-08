@@ -40,6 +40,7 @@ public class MapController {
     private MapSelectionProvider selectionProvider;
     private ResizeListener resizeListener;
     private int currentSize;
+    private AllTextUpdater textUpdater;
 
     public MapController(MapView view) {
         CodemapCore.getPlugin().register(this);        
@@ -50,6 +51,7 @@ public class MapController {
         markerController = new MarkerController();
         selectionTracker = new SelectionTracker(this);
         selectionProvider = new MapSelectionProvider(view);        
+        textUpdater = new AllTextUpdater(view);
         utils = new ControllerUtils(this);
     }
 
@@ -114,6 +116,8 @@ public class MapController {
 
     public void onNewProjectSelected() {
         view.configureActions(getActiveMap());
+        String projectName = getActiveMap().getProject().getName();
+        view.updateProjectName(projectName);
         updateVisualization();        
     }
 
@@ -129,8 +133,7 @@ public class MapController {
         CodemapVisualization viz = activeMap
                 .updateSize(currentSize)
                 .getVisualization();
-        if (viz == null) return;
-        
+        textUpdater.setVisualization(viz);
         view.updateMapVisualization(viz);
     }
     

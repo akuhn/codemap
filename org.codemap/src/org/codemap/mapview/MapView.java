@@ -67,6 +67,8 @@ public class MapView extends ViewPart {
 
     private IMemento memento;
 
+    private String contentDescriptionPrefix = "";
+
     class ViewLabelProvider extends LabelProvider implements
             ITableLabelProvider {
 
@@ -87,8 +89,8 @@ public class MapView extends ViewPart {
 
     @Override
     public void createPartControl(final Composite parent) {
-        theController = new MapController(this);     
-        
+        theController = new MapController(this);
+
         container = new Composite(parent, SWT.NONE);
         container.setLayout(new FillLayout(SWT.LEFT));
         Color swtColor = MColor.WATER.asSWTColor(parent.getDisplay());
@@ -98,9 +100,10 @@ public class MapView extends ViewPart {
         canvasListener = new CanvasListener(canvas);
         container.layout();
         
+        updateContentDescription("Please Select a Project.");
+        
         configureToolbar();
         configureActionBar();
-
         theController.onOpenView();
     }
 
@@ -227,4 +230,18 @@ public class MapView extends ViewPart {
     /*default*/ Composite getContainer() {
         return container;
     }
+
+    public void updateToolTip(String name) {
+        canvas.setToolTipText(name);
+    }
+
+    public void updateContentDescription(String name) {
+        setContentDescription(contentDescriptionPrefix + name);
+    }
+
+    public void updateProjectName(String projectName) {
+        contentDescriptionPrefix = projectName + ": ";
+        setContentDescription(contentDescriptionPrefix);
+    }
+
 }

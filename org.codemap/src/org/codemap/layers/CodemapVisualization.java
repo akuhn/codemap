@@ -2,6 +2,7 @@ package org.codemap.layers;
 
 import org.codemap.Location;
 import org.codemap.MapInstance;
+import org.codemap.mapview.TextUpdater;
 import org.codemap.resources.MapValues;
 import org.codemap.util.MColor;
 import org.eclipse.swt.events.DragDetectEvent;
@@ -23,6 +24,7 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
     private int offsetX;
     private int offsetY;
     private MapValues mapValues;
+    private TextUpdater textUpdater;
 
     public CodemapVisualization(MapValues values) {
         this.mapValues = values;
@@ -85,8 +87,7 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
         
         boolean noName = map.isEmpty() || !map.containsPoint(e.x, e.y) || nearestNeighbor == null;
         String name = noName ? null : nearestNeighbor.getName();
-        ((Canvas) e.widget).setToolTipText(name);
-        redraw(e);
+        textUpdater.updateNearestNeighbor(name);
     }
 
     @Override
@@ -139,6 +140,14 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
 
     protected static MapValues mapValues(MouseEvent e) {
         return ((CodemapVisualization) e.data).mapValues;
+    }
+
+    public void removeUpdater() {
+        textUpdater = new NullTextUpdater();
+    }
+
+    public void setUpdater(TextUpdater updater) {
+        textUpdater = updater;
     }
 
 }
