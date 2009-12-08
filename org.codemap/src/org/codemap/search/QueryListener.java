@@ -30,7 +30,7 @@ public class QueryListener implements IQueryListener {
 
     @Override
     public void queryRemoved(ISearchQuery query) {
-        // TODO remove search results from map?
+        theController.onQueryRemoved(query);
     }
 
     @Override

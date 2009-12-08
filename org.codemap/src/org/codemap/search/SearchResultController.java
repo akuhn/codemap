@@ -1,12 +1,15 @@
 package org.codemap.search;
 
-import java.util.Arrays;
+import static java.util.Arrays.asList;
+import static org.codemap.util.ArrayUtil.isEmpty;
+
 import java.util.Collection;
 import java.util.HashSet;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
 import org.codemap.MapSelection;
+import org.codemap.util.ArrayUtil;
 import org.codemap.util.Resources;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.ISearchResult;
@@ -38,7 +41,7 @@ public class SearchResultController {
 
     public void onLayerActivated() {
         ISearchQuery[] queries = NewSearchUI.getQueries();
-        if (queries.length == 0) return;
+        if (isEmpty(queries)) return;
 
         // TODO check if this is necessary.
         addListener(queries);
@@ -83,7 +86,7 @@ public class SearchResultController {
         ISearchResult searchResult = query.getSearchResult();
         if (searchResult instanceof AbstractTextSearchResult) {
             AbstractTextSearchResult res = (AbstractTextSearchResult) searchResult;
-            onElementsAdded(Arrays.asList(res.getElements()));
+            onElementsAdded(asList(res.getElements()));
         }		
     }
 
@@ -119,4 +122,11 @@ public class SearchResultController {
         unregisterQueryListener();
     }
 
+    public void onQueryRemoved(ISearchQuery query) {
+        ISearchResult searchResult = query.getSearchResult();
+        if (searchResult instanceof AbstractTextSearchResult) {
+            AbstractTextSearchResult res = (AbstractTextSearchResult) searchResult;
+            onElementsRemoved(asList(res.getElements()));
+        }               
+    }
 }

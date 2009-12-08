@@ -16,6 +16,7 @@ import org.codemap.mapview.action.LinkWithSelectionAction;
 import org.codemap.mapview.action.ReloadMapAction;
 import org.codemap.mapview.action.SaveAsPNGAction;
 import org.codemap.mapview.action.SaveHapaxDataAction;
+import org.codemap.search.SearchBar;
 import org.codemap.util.ExtensionPoints;
 import org.codemap.util.Log;
 import org.codemap.util.MColor;
@@ -38,19 +39,42 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.accessibility.ACC;
+import org.eclipse.swt.accessibility.AccessibleAdapter;
+import org.eclipse.swt.accessibility.AccessibleControlAdapter;
+import org.eclipse.swt.accessibility.AccessibleControlEvent;
+import org.eclipse.swt.accessibility.AccessibleEvent;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.events.MouseTrackListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISharedImages;
@@ -60,24 +84,24 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionContext;
 import org.eclipse.ui.actions.ActionGroup;
+import org.eclipse.ui.internal.WorkbenchMessages;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 
 public class MapView extends ViewPart {
     
-    CompositeActionGroup fActionGroups;
+    CompositeActionGroup menuActionGroups;
     
     private IMenuListener menuListener = new IMenuListener() {
         
         @Override
         public void menuAboutToShow(IMenuManager menu) {
-//            System.out.println("menu about to show");
-//            System.out.println(theController.getSelectionProvider().getSelection());
             ISelection selection = theController.getSelectionProvider().getSelection();
             JavaPlugin.createStandardGroups(menu);
-            fActionGroups.setContext(new ActionContext(selection));
-            fActionGroups.fillContextMenu(menu);
-            fActionGroups.setContext(null);            
+            menuActionGroups.setContext(new ActionContext(selection));
+            menuActionGroups.fillContextMenu(menu);
+            menuActionGroups.setContext(null);            
         }
     };
     
@@ -88,7 +112,7 @@ public class MapView extends ViewPart {
 
     private MapController theController;
     private Canvas canvas;
-    private Composite container;
+    private Composite mapContainer;
 
     private CanvasListener canvasListener;
 
@@ -121,7 +145,7 @@ public class MapView extends ViewPart {
     public void createPartControl(final Composite parent) {
         theController = new MapController(this);
         
-        fActionGroups = new CompositeActionGroup(new ActionGroup[] {
+        menuActionGroups = new CompositeActionGroup(new ActionGroup[] {
                 new OpenEditorActionGroup(this),
                 new OpenViewActionGroup(this),
                 new CCPActionGroup(this),
@@ -129,13 +153,35 @@ public class MapView extends ViewPart {
                 new RefactorActionGroup(this),
                 new JavaSearchActionGroup(this)
         });            
+        
+        Composite composite = new Composite(parent, SWT.NONE);
+        composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+        
+        GridLayout layout = new GridLayout();
+        layout.marginHeight = 0;
+        layout.marginWidth = 0;
+        layout.marginLeft = 0;
+        layout.marginRight = 0;
+        layout.marginTop = 0;
+        layout.marginBottom = 0;
+        layout.horizontalSpacing = 0;
+        layout.verticalSpacing = 0;
+        composite.setLayout(layout);
+        
+        SearchBar searchBar = new SearchBar(composite, theController);
+        searchBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-        container = new Composite(parent, SWT.NONE);
-        container.setLayout(new FillLayout(SWT.LEFT));
+//        new TextFilter(composite);
+//        Button button = new Button(composite, SWT.NONE);
+//        button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));        
+        
+        mapContainer = new Composite(composite, SWT.NONE);
+        mapContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
+        mapContainer.setLayout(new FillLayout(SWT.LEFT));
         Color swtColor = MColor.WATER.asSWTColor(parent.getDisplay());
-        container.setBackground(swtColor);
+        mapContainer.setBackground(swtColor);
 
-        canvas = new Canvas(container, SWT.DOUBLE_BUFFERED);
+        canvas = new Canvas(mapContainer, SWT.DOUBLE_BUFFERED);
         
         MenuManager menuMgr= new MenuManager();
         menuMgr.setRemoveAllWhenShown(true);
@@ -144,10 +190,8 @@ public class MapView extends ViewPart {
         canvas.setMenu(menu);
         getSite().registerContextMenu(menuMgr, theController.getSelectionProvider());        
         
-//        canvas.addMenuDetectListener(menuDetect);
-        
         canvasListener = new CanvasListener(canvas);
-        container.layout();
+        composite.layout();
         
         updateContentDescription("Please Select a Project.");
         
@@ -155,6 +199,7 @@ public class MapView extends ViewPart {
         configureActionBar();
         theController.onOpenView();
     }
+    
 
     
     private void configureActionBar() {
@@ -221,7 +266,7 @@ public class MapView extends ViewPart {
     @Override
     public void setFocus() {
         // FIXME: correct?
-        container.setFocus();
+        mapContainer.setFocus();
     }
     
     @Override
@@ -252,8 +297,8 @@ public class MapView extends ViewPart {
         Display.getDefault().asyncExec(new Runnable() {
             @Override
             public void run() {
-                if (container.isDisposed()) return;
-                container.redraw();
+                if (mapContainer.isDisposed()) return;
+                mapContainer.redraw();
                 canvas.redraw(); // needs both!
             }
         });
@@ -277,7 +322,7 @@ public class MapView extends ViewPart {
     }
 
     /*default*/ Composite getContainer() {
-        return container;
+        return mapContainer;
     }
 
     public void updateToolTip(String name) {
@@ -285,6 +330,10 @@ public class MapView extends ViewPart {
     }
 
     public void updateContentDescription(String name) {
+        // FIXME: NN search is triggered for composite outside the map
+        // and this name might be null which displays null in the content
+        // description as well.
+        if (name == null) return;
         setContentDescription(contentDescriptionPrefix + name);
     }
 
