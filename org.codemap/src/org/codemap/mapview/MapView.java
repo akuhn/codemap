@@ -24,8 +24,13 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
-import org.eclipse.jdt.internal.ui.refactoring.reorg.PasteAction;
-import org.eclipse.jdt.ui.IContextMenuConstants;
+import org.eclipse.jdt.internal.ui.actions.CompositeActionGroup;
+import org.eclipse.jdt.ui.actions.CCPActionGroup;
+import org.eclipse.jdt.ui.actions.GenerateActionGroup;
+import org.eclipse.jdt.ui.actions.JavaSearchActionGroup;
+import org.eclipse.jdt.ui.actions.OpenEditorActionGroup;
+import org.eclipse.jdt.ui.actions.OpenViewActionGroup;
+import org.eclipse.jdt.ui.actions.RefactorActionGroup;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuListener;
@@ -33,6 +38,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
@@ -53,16 +59,25 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionContext;
+import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.part.ViewPart;
 
 
 public class MapView extends ViewPart {
     
+    CompositeActionGroup fActionGroups;
+    
     private IMenuListener menuListener = new IMenuListener() {
         
         @Override
-        public void menuAboutToShow(IMenuManager manager) {
-            System.out.println("menu about to show");
+        public void menuAboutToShow(IMenuManager menu) {
+//            System.out.println("menu about to show");
+//            System.out.println(theController.getSelectionProvider().getSelection());
+            ISelection selection = theController.getSelectionProvider().getSelection();
+            JavaPlugin.createStandardGroups(menu);
+            fActionGroups.setContext(new ActionContext(selection));
+            fActionGroups.fillContextMenu(menu);
+            fActionGroups.setContext(null);            
         }
     };
     
@@ -105,6 +120,15 @@ public class MapView extends ViewPart {
     @Override
     public void createPartControl(final Composite parent) {
         theController = new MapController(this);
+        
+        fActionGroups = new CompositeActionGroup(new ActionGroup[] {
+                new OpenEditorActionGroup(this),
+                new OpenViewActionGroup(this),
+                new CCPActionGroup(this),
+                new GenerateActionGroup(this),
+                new RefactorActionGroup(this),
+                new JavaSearchActionGroup(this)
+        });            
 
         container = new Composite(parent, SWT.NONE);
         container.setLayout(new FillLayout(SWT.LEFT));
@@ -116,10 +140,9 @@ public class MapView extends ViewPart {
         MenuManager menuMgr= new MenuManager();
         menuMgr.setRemoveAllWhenShown(true);
         menuMgr.addMenuListener(menuListener);
-        Menu menu= menuMgr.createContextMenu(canvas);
+        Menu menu = menuMgr.createContextMenu(canvas);
         canvas.setMenu(menu);
         getSite().registerContextMenu(menuMgr, theController.getSelectionProvider());        
-        
         
 //        canvas.addMenuDetectListener(menuDetect);
         
