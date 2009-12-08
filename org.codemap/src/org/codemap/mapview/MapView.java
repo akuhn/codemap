@@ -23,10 +23,15 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.internal.ui.JavaPlugin;
+import org.eclipse.jdt.internal.ui.refactoring.reorg.PasteAction;
+import org.eclipse.jdt.ui.IContextMenuConstants;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -39,6 +44,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISharedImages;
@@ -46,11 +52,20 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.actions.ActionContext;
 import org.eclipse.ui.part.ViewPart;
 
 
 public class MapView extends ViewPart {
-
+    
+    private IMenuListener menuListener = new IMenuListener() {
+        
+        @Override
+        public void menuAboutToShow(IMenuManager manager) {
+            System.out.println("menu about to show");
+        }
+    };
+    
     private List<CodemapAction> actions = new ArrayList<CodemapAction>();
 
     public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
@@ -97,6 +112,17 @@ public class MapView extends ViewPart {
         container.setBackground(swtColor);
 
         canvas = new Canvas(container, SWT.DOUBLE_BUFFERED);
+        
+        MenuManager menuMgr= new MenuManager();
+        menuMgr.setRemoveAllWhenShown(true);
+        menuMgr.addMenuListener(menuListener);
+        Menu menu= menuMgr.createContextMenu(canvas);
+        canvas.setMenu(menu);
+        getSite().registerContextMenu(menuMgr, theController.getSelectionProvider());        
+        
+        
+//        canvas.addMenuDetectListener(menuDetect);
+        
         canvasListener = new CanvasListener(canvas);
         container.layout();
         
