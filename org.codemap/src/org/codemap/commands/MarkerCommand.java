@@ -45,7 +45,4 @@ public class MarkerCommand extends Command {
     protected MarkerController getMarkerController() {
         return CodemapCore.getPlugin().getController().getMarkerController();
     }    
-    
-    
-
 }

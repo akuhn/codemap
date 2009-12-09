@@ -39,6 +39,8 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -85,6 +87,9 @@ public class MapView extends ViewPart {
 
     public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
     private static final String ATTR_CLASS = "class";
+    
+    private static final String SEARCHBOX_MESSAGE_NO_PROJECT = "select a project to enable searching ...";
+    private static final String SEARCHBOX_MESSAGE = "type text to search in ";
 
     private MapController theController;
     private Canvas canvas;
@@ -97,7 +102,9 @@ public class MapView extends ViewPart {
 
     private IMemento memento;
 
-    private String contentDescriptionPrefix = "";
+    private String projectName = "";
+
+    private SearchBar searchBar;
 
     class ViewLabelProvider extends LabelProvider implements
             ITableLabelProvider {
@@ -120,7 +127,6 @@ public class MapView extends ViewPart {
     @Override
     public void createPartControl(final Composite parent) {
         theController = new MapController(this);
-        
         menuActionGroups = new CompositeActionGroup(new ActionGroup[] {
                 new OpenEditorActionGroup(this),
                 new OpenViewActionGroup(this),
@@ -131,52 +137,33 @@ public class MapView extends ViewPart {
         });            
         
         Composite composite = new Composite(parent, SWT.NONE);
-        composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+        composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        GridLayoutFactory.fillDefaults().spacing(0, 0).applyTo(composite);
         
-        GridLayout layout = new GridLayout();
-        layout.marginHeight = 0;
-        layout.marginWidth = 0;
-        layout.marginLeft = 0;
-        layout.marginRight = 0;
-        layout.marginTop = 0;
-        layout.marginBottom = 0;
-        layout.horizontalSpacing = 0;
-        layout.verticalSpacing = 0;
-        composite.setLayout(layout);
-        
-        SearchBar searchBar = new SearchBar(composite, theController);
+        searchBar = new SearchBar(composite, theController);
+        updateSearchMessage();
         searchBar.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-
-//        new TextFilter(composite);
-//        Button button = new Button(composite, SWT.NONE);
-//        button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));        
         
         mapContainer = new Composite(composite, SWT.NONE);
-        mapContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
         mapContainer.setLayout(new FillLayout(SWT.LEFT));
-        Color swtColor = MColor.WATER.asSWTColor(parent.getDisplay());
-        mapContainer.setBackground(swtColor);
+        mapContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
+        mapContainer.setBackground(MColor.WATER.asSWTColor(parent.getDisplay()));
 
         canvas = new Canvas(mapContainer, SWT.DOUBLE_BUFFERED);
-        
         MenuManager menuMgr= new MenuManager();
         menuMgr.setRemoveAllWhenShown(true);
         menuMgr.addMenuListener(menuListener);
         Menu menu = menuMgr.createContextMenu(canvas);
         canvas.setMenu(menu);
         getSite().registerContextMenu(menuMgr, theController.getSelectionProvider());        
-        
         canvasListener = new CanvasListener(canvas);
+        
         composite.layout();
-        
-        updateContentDescription("Please Select a Project.");
-        
+        updateContentDescription(" ");
         configureToolbar();
         configureActionBar();
         theController.onOpenView();
     }
-    
-
     
     private void configureActionBar() {
         IActionBars actionBars = getViewSite().getActionBars();
@@ -310,12 +297,21 @@ public class MapView extends ViewPart {
         // and this name might be null which displays null in the content
         // description as well.
         if (name == null) return;
-        setContentDescription(contentDescriptionPrefix + name);
+        setContentDescription(name);
     }
 
     public void updateProjectName(String projectName) {
-        contentDescriptionPrefix = projectName + ": ";
-        setContentDescription(contentDescriptionPrefix);
+        this.projectName = projectName.trim();
+        updateSearchMessage();
+    }
+
+    private void updateSearchMessage() {
+        if (projectName.equals("")) {
+            searchBar.setMessage(SEARCHBOX_MESSAGE_NO_PROJECT);
+        } else {
+            searchBar.setMessage(SEARCHBOX_MESSAGE + projectName);
+        }
+        
     }
 
 }

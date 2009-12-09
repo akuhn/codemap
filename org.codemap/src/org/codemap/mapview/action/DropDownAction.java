@@ -1,7 +1,7 @@
 package org.codemap.mapview.action;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.codemap.MapPerProject;
 import org.codemap.mapview.MapController;
@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Menu;
 public abstract class DropDownAction extends CodemapAction implements IMenuCreator {
 	
 	private Menu menu;
-	private List<MenuAction> actions = new ArrayList<MenuAction>();
+	private Set<MenuAction> actions = new HashSet<MenuAction>();
 	
 	@Override
 	public void configureAction(MapPerProject map) {
@@ -48,8 +48,15 @@ public abstract class DropDownAction extends CodemapAction implements IMenuCreat
 		return null;
 	}
 	
+	/**
+	 * registers the given action. has no effect if the action is
+	 * already registered.
+	 */
+	protected void registerAction(MenuAction action) {
+	    actions.add(action);
+	}
+	
     public void addActionToMenu(Menu parent, MenuAction action) {
-    	actions.add(action);
         ActionContributionItem item = new ActionContributionItem(action);
         item.fill(parent, -1);
     }

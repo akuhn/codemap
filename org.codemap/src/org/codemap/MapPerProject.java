@@ -45,7 +45,6 @@ public class MapPerProject {
     private MapPerProjectCache cache;
 
     private ActionValue<Void> redrawAction;
-
     private Commands commands;
 
 
@@ -238,7 +237,7 @@ public class MapPerProject {
         writeProperties();
     }
 
-    public void remove(Class<?> layerClass) {
+    public void removeLayer(Class<?> layerClass) {
         for (Layer each: mapVisualization.getSharedLayer()) {
             if (each.getClass().equals(layerClass)) {
                 mapVisualization.getSharedLayer().remove(each);
