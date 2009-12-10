@@ -26,7 +26,8 @@ public class CodemapIcons extends IconFactory {
     public static final String FLOW = makeIdentifier("flow.gif");
     public static final String CALL_HIERARCHY = makeIdentifier("call_hierarchy.gif");
     public static final String SEARCH = makeIdentifier("search.gif");
-    public static final String MARKER = makeIdentifier("markers.gif");        
+    public static final String MARKER = makeIdentifier("markers.gif");
+    public static final String TRACE = makeIdentifier("trace.gif");     
     
     public static final String INFO = makeIdentifier("info_obj.gif");
     public static final String WARNING = makeIdentifier("warning_obj.gif");

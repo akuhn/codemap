@@ -2,6 +2,7 @@ package org.codemap.mapview;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.codemap.MapSelection;
 import org.codemap.util.Resources;
@@ -20,10 +21,12 @@ public class EditorPartListener implements IPartListener {
 
 	private MapSelection editorSelection;
 	private MapSelection youAreHereSelection;
+    private OpenFilesTrace trace;
 
-	public EditorPartListener(MapSelection editorSelection, MapSelection youAreHereSelection) {
+	public EditorPartListener(MapSelection editorSelection, MapSelection youAreHereSelection, MapController theController) {
 		this.editorSelection = editorSelection;
 		this.youAreHereSelection = youAreHereSelection;
+		trace = new OpenFilesTrace(theController);
 	}
 
 	@Override
@@ -66,9 +69,9 @@ public class EditorPartListener implements IPartListener {
 	}
 	
 	@SuppressWarnings("deprecation")
-	private IFile[] getFiles(IWorkbenchPart each) {
-		if (!(each instanceof IEditorPart)) return new IFile[] {};
-		IEditorInput input = ((IEditorPart) each).getEditorInput();
+	private IFile[] getFiles(IWorkbenchPart part) {
+		if (!(part instanceof IEditorPart)) return new IFile[] {};
+		IEditorInput input = ((IEditorPart) part).getEditorInput();
 		if (!(input instanceof IPathEditorInput)) return new IFile[] {};
 		IPathEditorInput pathInput = (IPathEditorInput) input;
 //		System.out.println(pathInput.getPath());
@@ -77,11 +80,16 @@ public class EditorPartListener implements IPartListener {
 	}
 
 	private void updateYouAreHereSelection(IWorkbenchPart part) {
-		Collection<String> selection = new ArrayList<String>();
+		List<String> selection = new ArrayList<String>();
 		for (IFile file: getFiles(part)) {
 			selection.add(Resources.asPath(file));
 		}
 		youAreHereSelection.replaceAll(selection);
+		trace.append(selection);
 	}
+
+    public OpenFilesTrace getTrace() {
+        return trace;
+    }
 
 }

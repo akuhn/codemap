@@ -18,7 +18,8 @@ public class ColoringCommand extends Command {
     
     public static enum Coloring {
         GREEN, 
-        BY_PACKAGE;
+        BY_PACKAGE,
+        HEATMAP,
     }    
 
     public ColoringCommand(MapPerProject mapPerProject) {
@@ -30,9 +31,16 @@ public class ColoringCommand extends Command {
     public void apply(Value<MapScheme<MColor>> colorScheme) {
         switch(coloring){
         case GREEN:
-            colorScheme.setValue(CodemapCore.getPlugin().getDefaultColorScheme()); break;
+            CodemapCore.getPlugin().getController().utils().disableHeatMap();            
+            colorScheme.setValue(CodemapCore.getPlugin().getDefaultColorScheme());
+            break;
         case BY_PACKAGE:
+            CodemapCore.getPlugin().getController().utils().disableHeatMap();
             colorScheme.setValue(new ByPackageColorScheme(getMyMap()));
+            break;            
+        case HEATMAP:
+            CodemapCore.getPlugin().getController().utils().enableHeatMap();
+            break;
         }
     }    
 

@@ -11,11 +11,13 @@ public class ColorDropDownAction extends ExtensionPointDropDownAction {
 
 	private ShowDefaultColorsAction showDefaultColorsAction;
     private ShowPackageColorsAction showPackageColorsAction;
+    private ShowHeatMapColorsAction showHeatmapColorsAction;
 
     public ColorDropDownAction(MapController theController) {
 	    super(theController);
 	    registerAction(showDefaultColorsAction = new ShowDefaultColorsAction(getActionStyle(), getController()));
 	    registerAction(showPackageColorsAction = new ShowPackageColorsAction(getActionStyle(), getController()));
+        registerAction(showHeatmapColorsAction = new ShowHeatMapColorsAction(getActionStyle(), getController()));	    
 	}
 
 	@Override
@@ -28,6 +30,7 @@ public class ColorDropDownAction extends ExtensionPointDropDownAction {
 	protected void createDefaultMenu(Menu menu) {
 		addActionToMenu(menu, showDefaultColorsAction);		
 		addActionToMenu(menu, showPackageColorsAction);
+		addActionToMenu(menu, showHeatmapColorsAction);
 	}
 
 	@Override

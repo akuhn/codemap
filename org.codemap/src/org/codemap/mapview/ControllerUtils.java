@@ -33,6 +33,15 @@ public class ControllerUtils {
      */
     public String activeProjectName() {
         return theController.getActiveMap().getProject().getName();
+    }
+
+    public void enableHeatMap() {
+        theController.getSelectionTracker().getEditorPartListener().getTrace().enable();
+        
+    }
+
+    public void disableHeatMap() {
+        theController.getSelectionTracker().getEditorPartListener().getTrace().disable();
     }    
 
 }

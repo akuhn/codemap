@@ -1,6 +1,6 @@
 package org.codemap.mapview.action;
 
-import static org.codemap.util.CodemapIcons.PACKAGES;
+import static org.codemap.util.CodemapIcons.TRACE;
 import static org.codemap.util.CodemapIcons.descriptor;
 
 import org.codemap.MapPerProject;
@@ -8,14 +8,13 @@ import org.codemap.commands.ColoringCommand;
 import org.codemap.commands.ColoringCommand.Coloring;
 import org.codemap.mapview.MapController;
 
-
-public class ShowPackageColorsAction extends MenuAction {
+public class ShowHeatMapColorsAction extends MenuAction {
 
     private ColoringCommand coloringCommand;
 
-    public ShowPackageColorsAction(int style, MapController theController) {
-        super("Color by Package", style, theController);
-        setImageDescriptor(descriptor(PACKAGES));
+    public ShowHeatMapColorsAction(int style, MapController theController) {
+        super("Show Heatmap Colors", style, theController);
+        setImageDescriptor(descriptor(TRACE));        
     }
     
     @Override
@@ -23,20 +22,20 @@ public class ShowPackageColorsAction extends MenuAction {
         super.run();
         if (!isChecked()) return;
         coloringCommand.setCurrentColoring(getMyColoring());
-    }
+    }    
 
     @Override
     public void configureAction(MapPerProject map) {
         coloringCommand = map.getCommands().getColoringCommand();
         setChecked(isMyColoring(coloringCommand.getCurrentColoring()));
     }
-
+    
     private boolean isMyColoring(Coloring currentColoring) {
-       return currentColoring.equals(getMyColoring());
+        return currentColoring.equals(getMyColoring());
     }
-
+    
     private Coloring getMyColoring() {
-        return ColoringCommand.Coloring.BY_PACKAGE;
-    }
+        return ColoringCommand.Coloring.HEATMAP;
+    }    
 
 }

@@ -114,6 +114,7 @@ public class HoverShell {
     public void setText(String name) {
         if (name == null || name.equals("")) {
             showHover = false;
+            return;
         }
         showHover = true;
         textLabel.setText(name);

@@ -44,13 +44,14 @@ public class SelectionTracker {
 	private boolean enabled;
 	MapController theController;
 
-	private IPartListener partListener;	
+	private EditorPartListener partListener;	
 	
 	public SelectionTracker(MapController controller) {
 		theController = controller;
 		partListener = new EditorPartListener(
 				CodemapCore.getPlugin().getOpenFilesSelection(),
-				CodemapCore.getPlugin().getYouAreHereSelection()); 
+				CodemapCore.getPlugin().getYouAreHereSelection(), 
+				theController); 
 		addListeners();
 	}
 
@@ -140,5 +141,9 @@ public class SelectionTracker {
 	private void compilationUnitsSelected(Collection<ICompilationUnit> units) {
 		theController.onSelectionChanged(units);
 	}
+
+    public EditorPartListener getEditorPartListener() {
+        return partListener;
+    }
 
 }
