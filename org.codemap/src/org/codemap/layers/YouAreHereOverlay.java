@@ -23,17 +23,17 @@ public class YouAreHereOverlay extends SelectionOverlay {
     @Override
     public void paintBefore(MapValues map, GC gc) {
         Device device = gc.getDevice();
+        gc.setLineWidth(1);
+        gc.setAlpha(255);
         gc.setForeground(device.getSystemColor(SWT.COLOR_INFO_FOREGROUND));
         gc.setBackground(device.getSystemColor(SWT.COLOR_INFO_BACKGROUND));
-        gc.setAlpha(255);
-        gc.setLineWidth(1);
     }
 
     @Override
-    public void paintChild(MapValues map, GC gc, Location each) {
+    public void paintChild(MapValues map, GC gc, Location location) {
         Device device = gc.getDevice();
         gc.setFont(device.getSystemFont());
-        String name = each.getName();
+        String name = location.getName();
         Point e = gc.stringExtent(name);
         e.x += PADDING_X * 2;
         e.y += PADDING_Y * 2;
@@ -49,7 +49,7 @@ public class YouAreHereOverlay extends SelectionOverlay {
         gc.getTransform(save);
         Transform t = new Transform(device);
         gc.getTransform(t);
-        t.translate(each.px - e.x/2, each.py - e.y - ARROW_HEIGHT - GAP);
+        t.translate(location.px - e.x/2, location.py - e.y - ARROW_HEIGHT - GAP);
         gc.setTransform(t);
         gc.fillPolygon(polygon);
         gc.drawPolygon(polygon);

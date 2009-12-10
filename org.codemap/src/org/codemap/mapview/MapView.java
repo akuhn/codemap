@@ -106,6 +106,8 @@ public class MapView extends ViewPart {
 
     private SearchBar searchBar;
 
+    private HoverShell hoverShell;
+
     class ViewLabelProvider extends LabelProvider implements
             ITableLabelProvider {
 
@@ -134,7 +136,8 @@ public class MapView extends ViewPart {
                 new GenerateActionGroup(this),
                 new RefactorActionGroup(this),
                 new JavaSearchActionGroup(this)
-        });            
+        });
+        
         
         Composite composite = new Composite(parent, SWT.NONE);
         composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -150,6 +153,7 @@ public class MapView extends ViewPart {
         mapContainer.setBackground(MColor.WATER.asSWTColor(parent.getDisplay()));
 
         canvas = new Canvas(mapContainer, SWT.DOUBLE_BUFFERED);
+        hoverShell = new HoverShell(canvas);
         MenuManager menuMgr= new MenuManager();
         menuMgr.setRemoveAllWhenShown(true);
         menuMgr.addMenuListener(menuListener);
@@ -289,7 +293,7 @@ public class MapView extends ViewPart {
     }
 
     public void updateToolTip(String name) {
-        canvas.setToolTipText(name);
+        hoverShell.setText(name);
     }
 
     public void updateContentDescription(String name) {
@@ -311,7 +315,5 @@ public class MapView extends ViewPart {
         } else {
             searchBar.setMessage(SEARCHBOX_MESSAGE + projectName);
         }
-        
     }
-
 }
