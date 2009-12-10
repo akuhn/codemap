@@ -91,10 +91,13 @@ public class CurrentSelectionOverlay extends SelectionOverlay {
     }    
 
     private void handleSingleClick(MouseEvent e) {
+        // only update selection for clicks with primary mouse button
+        if (e.button != 1) return;
+        
         Value<MapInstance> mapInstance = mapValues(e).mapInstance;
         Location neighbor = mapInstance.getValueOrFail().nearestNeighbor(e.x, e.y);
         if (neighbor == null) return;
-        if ((e.stateMask & SWT.SHIFT) != 0) {
+        if ((e.stateMask & SWT.SHIFT) != 0 || (e.stateMask & SWT.CTRL) != 0) {
             handleMultipleSelect(neighbor, getSelection(mapValues(e)));
         }
         else {
