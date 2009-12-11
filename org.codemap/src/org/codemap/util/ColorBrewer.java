@@ -9,49 +9,67 @@ public class ColorBrewer {
 	private ArrayList<MColor> colors;
 	private int currentPosition;
 	private TreeMap<String,MColor> forPackage;
+	
+//  disabled for scheme with higher contrast
+//  int[][] rgb = { { 141, 211, 199 },
+//          { 255, 255, 179 },
+//          { 190, 186, 218 },
+//          { 254, 128, 114 },
+//          { 128, 177, 211 },
+//          { 253, 180, 98 },
+//          { 179, 222, 105 },
+//          { 252, 205, 229 },
+//          { 217, 217, 217 },
+//          { 188, 128, 189 },
+//          { 204, 235, 197 },
+//          { 255, 237, 111 } };	
+	// used for color by package
+	private static int[][] diverging = {
+	    { 106, 61, 154 },
+	    { 255, 255, 153 },
+	    { 166, 206, 227 },
+	    { 31, 120, 180 },
+	    { 178, 223, 138 },
+	    { 51, 160, 44 },
+	    { 251, 154, 153 },
+	    { 227, 26, 28 },
+	    { 253, 191, 111 },
+	    { 255, 127, 0 },
+	    { 202, 178, 214 }
+	};    
 
-	/**
+    private static int[][] heat_yellow = {
+        { 255, 255, 217 },
+        { 237, 248, 177 },
+        { 199, 233, 180 },
+        { 127, 205, 187 },
+        { 65, 182, 196 },
+        { 51, 160, 44 },
+        { 29, 145, 192 }
+    };        
+
+	public static ColorBrewer heatMapColors() {
+	    return new ColorBrewer().withColors(heat_yellow);
+	}
+	
+    public static ColorBrewer divergingColors() {
+        return new ColorBrewer().withColors(diverging);
+    }	
+
+	private ColorBrewer withColors(int[][] rgb) {
+        for (int[] color: rgb) {
+            addColor(color);
+        }
+        return this;
+    }
+
+    /**
 	 * Color codes according to http://www.personal.psu.edu/cab38/ColorBrewer/ColorBrewer.html
 	 */
 	public ColorBrewer() {
 		currentPosition = 0;
-		forPackage = new TreeMap<String,MColor>();
-		initColors();
-	}
-
-	private void initColors() {
 		colors = new ArrayList<MColor>();
-//		disabled for scheme with higher contrast
-//		int[][] rgb = { { 141, 211, 199 },
-//				{ 255, 255, 179 },
-//				{ 190, 186, 218 },
-//				{ 254, 128, 114 },
-//				{ 128, 177, 211 },
-//				{ 253, 180, 98 },
-//				{ 179, 222, 105 },
-//				{ 252, 205, 229 },
-//				{ 217, 217, 217 },
-//				{ 188, 128, 189 },
-//				{ 204, 235, 197 },
-//				{ 255, 237, 111 } };
-		
-		int[][] rgb = {
-		        { 106, 61, 154 },
-		        { 255, 255, 153 },
-		        { 166, 206, 227 },
-		        { 31, 120, 180 },
-		        { 178, 223, 138 },
-		        { 51, 160, 44 },
-		        { 251, 154, 153 },
-		        { 227, 26, 28 },
-		        { 253, 191, 111 },
-		        { 255, 127, 0 },
-		        { 202, 178, 214 }
-		};		
-		
-		for (int[] color: rgb) {
-			addColor(color);
-		}
+		forPackage = new TreeMap<String,MColor>();
 	}
 
 	private void addColor(int[] color) {
@@ -74,4 +92,7 @@ public class ColorBrewer {
 		return packageColor;
 	}
 
+    public MColor next() {
+        return nextColor();
+    }
 }

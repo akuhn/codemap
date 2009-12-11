@@ -18,7 +18,7 @@ import ch.akuhn.values.Value;
  */
 public class VisitedFilesHistory {
 
-	private static final int HISTORY_LENGTH = 24;
+	private static final int HISTORY_LENGTH = 12;
 
 	private List<String> history;
 	private MapController theController;
@@ -40,8 +40,8 @@ public class VisitedFilesHistory {
 		if (!enabled) return;
 		Value<MapScheme<MColor>> colorValue = theController.getActiveMap().getValues().colorScheme;
 
-		MColor cold = new MColor(0,0,180);
-		MColor hot = new MColor(255,180,0);
+		MColor cold = new MColor(34,94,168);
+		MColor hot = new MColor(255,255,0);
 		CodemapColors colorScheme = new CodemapColors(cold);
 		double factor = 1.0;
 		for(String each: history) { // from hottest to cold

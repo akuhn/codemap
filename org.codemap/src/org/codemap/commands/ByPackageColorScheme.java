@@ -35,11 +35,10 @@ public class ByPackageColorScheme extends MapScheme<MColor> {
     }
     
     private void init() {
-        ColorBrewer brewer = new ColorBrewer();
+        ColorBrewer brewer = ColorBrewer.divergingColors();
         colorScheme = new CodemapColors();
         
         for(Point each: mapPerProject.getConfiguration().points()) {
-            
             String fileName = each.getDocument();
             IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
             IResource resource = root.findMember(new Path(fileName));
