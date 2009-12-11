@@ -8,6 +8,7 @@ import org.codemap.MapPerProject;
 import org.codemap.MapPerProjectCache;
 import org.codemap.MapSelection;
 import org.codemap.callhierarchy.CallHierarchyTracker;
+import org.codemap.eclemma.CoverageListener;
 import org.codemap.layers.CodemapVisualization;
 import org.codemap.marker.MarkerController;
 import org.codemap.search.SearchResultController;
@@ -15,6 +16,8 @@ import org.codemap.util.Resources;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.swt.graphics.Point;
+
+import com.mountainminds.eclemma.core.CoverageTools;
 
 /**
  * Single instance of the MapController for the Codemap plug-in.
@@ -41,6 +44,7 @@ public class MapController {
     private ResizeListener resizeListener;
     private int currentSize;
     private AllTextUpdater textUpdater;
+    private CoverageListener coverageListener;
 
     public MapController(MapView view) {
         CodemapCore.getPlugin().register(this);        
@@ -53,6 +57,12 @@ public class MapController {
         selectionProvider = new MapSelectionProvider(view);        
         textUpdater = new AllTextUpdater(view);
         utils = new ControllerUtils(this);
+        try {
+            coverageListener = new CoverageListener(this);
+            CoverageTools.addJavaCoverageListener(coverageListener);            
+        } catch (NoClassDefFoundError e) {
+            
+        }        
     }
 
     public MapView getView() {
@@ -155,6 +165,10 @@ public class MapController {
 
     public void onRedraw() {
         view.redraw();
+    }
+
+    public CoverageListener getCoverageListener() {
+        return coverageListener;
     }    
 
 }

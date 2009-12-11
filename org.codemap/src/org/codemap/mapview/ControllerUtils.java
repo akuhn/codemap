@@ -35,13 +35,12 @@ public class ControllerUtils {
         return theController.getActiveMap().getProject().getName();
     }
 
-    public void enableHeatMap() {
-        theController.getSelectionTracker().getEditorPartListener().getTrace().enable();
-        
+    public void setHeatmapEnabled(boolean b) {
+        theController.getSelectionTracker().getEditorPartListener().getTrace().setEnabled(b);
     }
 
-    public void disableHeatMap() {
-        theController.getSelectionTracker().getEditorPartListener().getTrace().disable();
+    public void setCoverageEnabled(boolean b) {
+        theController.getCoverageListener().setEnabled(b);
     }    
 
 }

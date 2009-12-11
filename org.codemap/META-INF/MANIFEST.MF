@@ -16,7 +16,8 @@ Require-Bundle: ch.akuhn.hapax,
  ch.akuhn.util;bundle-version="2.1.5",
  org.eclipse.jdt.junit;bundle-version="3.5.0",
  org.eclipse.search,
- org.eclipse.ui.navigator
+ org.eclipse.ui.navigator,
+ com.mountainminds.eclemma.core;bundle-version="1.4.3";resolution:=optional
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Adrian Kuhn and David Erni
 Export-Package: ch.deif.meander,

@@ -2,6 +2,7 @@ package org.codemap.mapview.action;
 
 import static org.codemap.util.CodemapIcons.PALETTE;
 
+import org.codemap.eclemma.ShowCoverageAction;
 import org.codemap.mapview.MapController;
 import org.codemap.util.CodemapIcons;
 import org.codemap.util.ExtensionPoints;
@@ -12,12 +13,14 @@ public class ColorDropDownAction extends ExtensionPointDropDownAction {
 	private ShowDefaultColorsAction showDefaultColorsAction;
     private ShowPackageColorsAction showPackageColorsAction;
     private ShowHeatMapColorsAction showHeatmapColorsAction;
+    private ShowCoverageAction showCoverageAction;
 
     public ColorDropDownAction(MapController theController) {
 	    super(theController);
 	    registerAction(showDefaultColorsAction = new ShowDefaultColorsAction(getActionStyle(), getController()));
 	    registerAction(showPackageColorsAction = new ShowPackageColorsAction(getActionStyle(), getController()));
-        registerAction(showHeatmapColorsAction = new ShowHeatMapColorsAction(getActionStyle(), getController()));	    
+        registerAction(showHeatmapColorsAction = new ShowHeatMapColorsAction(getActionStyle(), getController()));
+        registerAction(showCoverageAction = new ShowCoverageAction(getActionStyle(), getController()));
 	}
 
 	@Override
@@ -31,6 +34,7 @@ public class ColorDropDownAction extends ExtensionPointDropDownAction {
 		addActionToMenu(menu, showDefaultColorsAction);		
 		addActionToMenu(menu, showPackageColorsAction);
 		addActionToMenu(menu, showHeatmapColorsAction);
+		addActionToMenu(menu, showCoverageAction);
 	}
 
 	@Override
@@ -42,5 +46,4 @@ public class ColorDropDownAction extends ExtensionPointDropDownAction {
 	protected int getActionStyle() {
 		return AS_RADIO_BUTTON;
 	}
-
 }

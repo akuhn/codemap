@@ -48,12 +48,8 @@ public class OpenFilesTrace {
         colorValue.setValue(colorScheme);
     }
 
-    public void enable() {
-        enabled = true;
+    public void setEnabled(boolean b) {
+        enabled = b;
         updateColors();
-    }
-
-    public void disable() {
-        enabled = false;
     }
 }
