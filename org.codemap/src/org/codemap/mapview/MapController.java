@@ -49,7 +49,7 @@ public class MapController {
     public MapController(MapView view) {
         CodemapCore.getPlugin().register(this);        
         this.view = view;
-        cache = new MapPerProjectCache();
+        cache = new MapPerProjectCache(this);
         callHierarchyTracker = new CallHierarchyTracker();
         searchResultController = new SearchResultController();
         markerController = new MarkerController();

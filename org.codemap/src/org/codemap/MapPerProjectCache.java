@@ -3,11 +3,17 @@ package org.codemap;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.codemap.mapview.MapController;
 import org.eclipse.jdt.core.IJavaProject;
 
 public class MapPerProjectCache {
 
     private Map<IJavaProject,MapPerProject> cache = new HashMap<IJavaProject,MapPerProject>();
+    private MapController theController;
+
+    public MapPerProjectCache(MapController mapController) {
+        theController = mapController;
+    }
 
     public MapPerProject forProject(IJavaProject project) {
         if (project == null) return null;
@@ -28,6 +34,6 @@ public class MapPerProjectCache {
     /*default*/ void reload(MapPerProject mapPerProject) {
         IJavaProject project = mapPerProject.getJavaProject();
         cache.remove(project);
-        this.forProject(project);
+        theController.onNewProjectSelected();
     }
 }
