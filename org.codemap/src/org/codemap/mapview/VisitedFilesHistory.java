@@ -41,7 +41,7 @@ public class VisitedFilesHistory {
 		Value<MapScheme<MColor>> colorValue = theController.getActiveMap().getValues().colorScheme;
 
 		MColor cold = new MColor(34,94,168);
-		MColor hot = new MColor(255,255,0);
+		MColor hot = new MColor(255,192,0);
 		CodemapColors colorScheme = new CodemapColors(cold);
 		double factor = 1.0;
 		for(String each: history) { // from hottest to cold
