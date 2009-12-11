@@ -178,12 +178,12 @@ public class MapView extends ViewPart {
         viewMenu.add(new SaveHapaxDataAction(theController));        
 //        viewMenu.add(new DebugLocationsAction());
         
-        IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CodemapCore.PLUGIN_ID, ExtensionPoints.ACTION_BAR);
-        IExtension[] extensions_arr = extensionPoint.getExtensions();
-        List<IExtension> extensions = Arrays.asList(extensions_arr);
-        for (IExtension extension: extensions) {
-            parseActionbarExtensionPoint(extension.getConfigurationElements(), viewMenu);
-        }        
+//        IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CodemapCore.PLUGIN_ID, ExtensionPoints.ACTION_BAR);
+//        IExtension[] extensions_arr = extensionPoint.getExtensions();
+//        List<IExtension> extensions = Arrays.asList(extensions_arr);
+//        for (IExtension extension: extensions) {
+//            parseActionbarExtensionPoint(extension.getConfigurationElements(), viewMenu);
+//        }        
     }
 
     private void parseActionbarExtensionPoint(IConfigurationElement[] configurationElements, IMenuManager viewMenu) {

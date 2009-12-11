@@ -21,7 +21,7 @@ public abstract class ExtensionPointDropDownAction extends DropDownAction {
     @Override
 	protected void createMenu(Menu menu) {
 		createDefaultMenu(menu);
-		createExtensionMenu(menu);
+//		createExtensionMenu(menu);
 	}
 	
 	protected void createDefaultMenu(Menu menu) {

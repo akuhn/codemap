@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="layers" name="layers" schema="schema/layers.exsd"/>
-   <extension-point id="colors" name="colors" schema="schema/colors.exsd"/>
-   <extension-point id="actionbar" name="actionbar" schema="schema/actionbar.exsd"/>
    <extension
          point="org.eclipse.ui.views">
       <category
