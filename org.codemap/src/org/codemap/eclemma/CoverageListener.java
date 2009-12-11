@@ -4,12 +4,12 @@ import static java.util.Collections.emptySet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.codemap.mapview.MapController;
+import org.codemap.resources.MapValues;
 import org.codemap.util.CodemapColors;
 import org.codemap.util.Log;
 import org.codemap.util.MColor;
@@ -33,7 +33,7 @@ import com.mountainminds.eclemma.core.analysis.IJavaCoverageListener;
 import com.mountainminds.eclemma.core.analysis.IJavaElementCoverage;
 import com.mountainminds.eclemma.core.analysis.IJavaModelCoverage;
 
-public class CoverageListener implements IJavaCoverageListener {
+public class CoverageListener implements IJavaCoverageListener, ICodemapCoverage {
 
     protected final class CoverageResourceVisitor implements IResourceVisitor {
         private final List<Pair<String, Double>> identifiers;
@@ -77,7 +77,12 @@ public class CoverageListener implements IJavaCoverageListener {
         theController = mapController;
         enabled = false;
         lastCoverageInfo = emptySet();
+        CoverageTools.addJavaCoverageListener(this);        
     }
+    
+    public void dispose() {
+        CoverageTools.removeJavaCoverageListener(this);
+    }    
 
     @Override
     public void coverageChanged() {
@@ -102,8 +107,9 @@ public class CoverageListener implements IJavaCoverageListener {
 
     private void maybeDisplayCoverage() {
         if (!enabled) return;
-        Value<MapScheme<MColor>> colorValue = theController.getActiveMap()
-                .getValues().colorScheme;
+        MapValues values = theController.getActiveMap().getValues();
+        if (values == null) return;
+        Value<MapScheme<MColor>> colorValue = values.colorScheme;
         CodemapColors colorScheme = new CodemapColors(MColor.GRAY_204);
         for (Pair<String, Double> pair : lastCoverageInfo) {
             String identifier = pair.fst;
@@ -136,5 +142,10 @@ public class CoverageListener implements IJavaCoverageListener {
     public void setEnabled(boolean b) {
         enabled = b;
         maybeDisplayCoverage();
+    }
+
+    @Override
+    public boolean isEclemmaPluginAvailable() {
+        return true;
     }
 }

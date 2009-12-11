@@ -53,17 +53,16 @@ public class MapPerProject {
         this.cache = mapPerProjectCache;
         readPreviousProperties();
         commands = new Commands(this);
-        initialize();
     }
 
-    private void initialize() {
+    public void initialize() {
         MapValueBuilder builder = new MapValueBuilder();
-        builder.setCommands(commands);
         builder.setName("default.map");
         builder.setProjects(Arrays.asList(Resources.asPath(project)));
         builder.setFileExtensions(Arrays.asList("*.java"));
         builder.setInitialConfiguration(readPreviousMapState());
         mapValues = new MapValues(builder);
+        mapValues.applyCommands(commands);
         mapVisualization = new MapVisualization(mapValues);
         mapVisualization.getSharedLayer().add(makeOpenFilesLayer());
 

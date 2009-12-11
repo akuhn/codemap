@@ -14,6 +14,8 @@ public class ShowCoverageAction extends ShowColorsAction {
     public ShowCoverageAction(int style, MapController theController) {
         super("Color by Coverage", style, theController);
         setImageDescriptor(descriptor(COVERAGE));
+        boolean enabled = theController.utils().isEclemmaPluginAvailable();
+        setEnabled(enabled);
     }
    
     protected Coloring getMyColoring() {

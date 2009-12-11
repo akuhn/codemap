@@ -10,13 +10,11 @@ import org.codemap.HillShading;
 import org.codemap.Labeling;
 import org.codemap.MapInstance;
 import org.codemap.MapSelection;
-import org.codemap.commands.Commands;
 import org.codemap.tasks.ComputeBackgroundTask;
 import org.codemap.tasks.ComputeConfigurationTask;
 import org.codemap.tasks.ComputeEclipseIndexTask;
 import org.codemap.tasks.ComputeElementsTask;
 import org.codemap.tasks.ComputeElevationModelTask;
-import org.codemap.tasks.ComputeFilteredElevationTask;
 import org.codemap.tasks.ComputeHillShadingTask;
 import org.codemap.tasks.ComputeLabelingTask;
 import org.codemap.tasks.ComputeMapInstanceTask;
@@ -26,7 +24,6 @@ import org.codemap.util.MapScheme;
 import org.eclipse.swt.graphics.Image;
 
 import ch.akuhn.hapax.index.LatentSemanticIndex;
-import ch.akuhn.values.BooleanValue;
 import ch.akuhn.values.CollectionValue;
 import ch.akuhn.values.IntegerValue;
 import ch.akuhn.values.ReferenceValue;
@@ -39,7 +36,6 @@ public class MapValueBuilder {
     private Value<Collection<String>> projects;
     private Value<Collection<String>> fileExtensions;
     private String name;
-    private Commands commands;
     
     public Value<Collection<String>> projectsValue() {
         if (projects == null) projects = Values.of(null);
@@ -77,13 +73,11 @@ public class MapValueBuilder {
 
     public Value<MapScheme<MColor>> colorsValue() {
         ReferenceValue<MapScheme<MColor>> colorsValue = new ReferenceValue<MapScheme<MColor>>();
-        commands.getColoringCommand().apply(colorsValue);
         return colorsValue;
     }
 
     public Value<MapScheme<String>> labelsValue() {
         ReferenceValue<MapScheme<String>> labelsValue = new ReferenceValue<MapScheme<String>>();
-        commands.getLabelingCommand().apply(labelsValue);
         return labelsValue;
     }
 
@@ -153,8 +147,4 @@ public class MapValueBuilder {
         extensionsValue().setValue(extensions);
         return this;
     }
-
-    public void setCommands(Commands commands) {
-        this.commands = commands; 
-    }    
 }

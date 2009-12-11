@@ -13,7 +13,9 @@ public class MapPerProjectCache {
         if (project == null) return null;
         MapPerProject map = cache.get(project);
         if (map != null) return map;
-        cache.put(project, map = new MapPerProject(project, this));
+        map = new MapPerProject(project, this);
+        cache.put(project, map);
+        map.initialize(); // breaks circular setup dependencies
         return map;
     }
 

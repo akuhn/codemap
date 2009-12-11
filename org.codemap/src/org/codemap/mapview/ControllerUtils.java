@@ -41,6 +41,10 @@ public class ControllerUtils {
 
     public void setCoverageEnabled(boolean b) {
         theController.getCoverageListener().setEnabled(b);
+    }
+
+    public boolean isEclemmaPluginAvailable() {
+        return theController.getCoverageListener().isEclemmaPluginAvailable();
     }    
 
 }

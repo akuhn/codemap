@@ -8,6 +8,7 @@ import org.codemap.HillShading;
 import org.codemap.Labeling;
 import org.codemap.MapInstance;
 import org.codemap.MapSelection;
+import org.codemap.commands.Commands;
 import org.codemap.util.MColor;
 import org.codemap.util.MapScheme;
 import org.eclipse.swt.graphics.Image;
@@ -43,7 +44,6 @@ public class MapValues {
     public final CollectionValue<MapSelection> selections;
 
     public MapValues(MapValueBuilder make) {
-
         mapSize = make.mapSizeValue();
         elements  = make.elementsValue();
         hills  = make.hillsValue();
@@ -64,10 +64,14 @@ public class MapValues {
         
         projects = make.projectsValue();
         extensions = make.extensionsValue();
-        selections = make.selectionsValue(currentSelection, openFilesSelection, youAreHereSelection);        
-
+        selections = make.selectionsValue(currentSelection, openFilesSelection, youAreHereSelection);  
     }
     
+    public void applyCommands(Commands commands) {
+        commands.getColoringCommand().apply(colorScheme);
+        commands.getLabelingCommand().apply(labelScheme);        
+    }
+
     /** Returns current visualization size in pixels.
      * 
      */

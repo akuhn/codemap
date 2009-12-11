@@ -20,7 +20,7 @@ public class ColorDropDownAction extends ExtensionPointDropDownAction {
 	    registerAction(showDefaultColorsAction = new ShowDefaultColorsAction(getActionStyle(), getController()));
 	    registerAction(showPackageColorsAction = new ShowPackageColorsAction(getActionStyle(), getController()));
         registerAction(showHeatmapColorsAction = new ShowHeatMapColorsAction(getActionStyle(), getController()));
-        registerAction(showCoverageAction = new ShowCoverageAction(getActionStyle(), getController()));
+        registerAction(showCoverageAction = new ShowCoverageAction(getActionStyle(), getController()));            
 	}
 
 	@Override

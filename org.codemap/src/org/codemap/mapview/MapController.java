@@ -9,6 +9,8 @@ import org.codemap.MapPerProjectCache;
 import org.codemap.MapSelection;
 import org.codemap.callhierarchy.CallHierarchyTracker;
 import org.codemap.eclemma.CoverageListener;
+import org.codemap.eclemma.ICodemapCoverage;
+import org.codemap.eclemma.NullCodemapCoverage;
 import org.codemap.layers.CodemapVisualization;
 import org.codemap.marker.MarkerController;
 import org.codemap.search.SearchResultController;
@@ -16,8 +18,6 @@ import org.codemap.util.Resources;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.swt.graphics.Point;
-
-import com.mountainminds.eclemma.core.CoverageTools;
 
 /**
  * Single instance of the MapController for the Codemap plug-in.
@@ -44,7 +44,7 @@ public class MapController {
     private ResizeListener resizeListener;
     private int currentSize;
     private AllTextUpdater textUpdater;
-    private CoverageListener coverageListener;
+    private ICodemapCoverage coverageListener;
 
     public MapController(MapView view) {
         CodemapCore.getPlugin().register(this);        
@@ -59,9 +59,8 @@ public class MapController {
         utils = new ControllerUtils(this);
         try {
             coverageListener = new CoverageListener(this);
-            CoverageTools.addJavaCoverageListener(coverageListener);            
         } catch (NoClassDefFoundError e) {
-            
+            coverageListener = new NullCodemapCoverage();
         }        
     }
 
@@ -101,7 +100,10 @@ public class MapController {
         selectionTracker.dispose();
         callHierarchyTracker.dispose();
         searchResultController.dispose();
-        markerController.dispose();        
+        markerController.dispose();
+        if (coverageListener != null) {
+            coverageListener.dispose();
+        }
     }
 
     public CallHierarchyTracker getCallHierarchyTracker() {
@@ -167,7 +169,7 @@ public class MapController {
         view.redraw();
     }
 
-    public CoverageListener getCoverageListener() {
+    public ICodemapCoverage getCoverageListener() {
         return coverageListener;
     }    
 

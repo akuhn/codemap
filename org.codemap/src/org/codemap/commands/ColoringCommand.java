@@ -1,19 +1,16 @@
 package org.codemap.commands;
 
 import static org.codemap.commands.ColoringCommand.Coloring.COVERAGE;
+import static org.codemap.commands.ColoringCommand.Coloring.GREEN;
+import static org.codemap.commands.ColoringCommand.Coloring.HEATMAP;
 import static org.codemap.commands.Commands.makeCommandId;
-
-import java.util.List;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
 import org.codemap.commands.Commands.Command;
-import org.codemap.eclemma.CoverageListener;
-import org.codemap.util.CodemapColors;
 import org.codemap.util.MColor;
 import org.codemap.util.MapScheme;
 
-import ch.akuhn.util.Pair;
 import ch.akuhn.values.Value;
 
 public class ColoringCommand extends Command {
@@ -22,8 +19,6 @@ public class ColoringCommand extends Command {
 
     private Coloring coloring;
 
-    private List<Pair<String, Double>> lastCoverageInfo;
-    
     public static enum Coloring {
         GREEN, 
         BY_PACKAGE,
@@ -33,13 +28,14 @@ public class ColoringCommand extends Command {
 
     public ColoringCommand(MapPerProject mapPerProject) {
         super(mapPerProject);
-        String setting = mapPerProject.getPropertyOrDefault(COLORING_KEY, Coloring.GREEN.toString());        
+        String setting = mapPerProject.getPropertyOrDefault(COLORING_KEY, GREEN.toString());        
         coloring = Coloring.valueOf(setting);
     }
 
     public void apply(Value<MapScheme<MColor>> colorScheme) {
-        CodemapCore.getPlugin().getController().utils().setHeatmapEnabled(coloring.equals(Coloring.HEATMAP));
-        CodemapCore.getPlugin().getController().utils().setCoverageEnabled(coloring.equals(Coloring.COVERAGE));
+        // TODO fixme
+        CodemapCore.getPlugin().getController().utils().setHeatmapEnabled(coloring.equals(HEATMAP));
+        CodemapCore.getPlugin().getController().utils().setCoverageEnabled(coloring.equals(COVERAGE));
         switch(coloring){
         case GREEN:
             colorScheme.setValue(CodemapCore.getPlugin().getDefaultColorScheme());
