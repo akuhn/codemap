@@ -21,12 +21,12 @@ public class EditorPartListener implements IPartListener {
 
 	private MapSelection editorSelection;
 	private MapSelection youAreHereSelection;
-    private OpenFilesTrace trace;
+    private VisitedFilesHistory trace;
 
 	public EditorPartListener(MapSelection editorSelection, MapSelection youAreHereSelection, MapController theController) {
 		this.editorSelection = editorSelection;
 		this.youAreHereSelection = youAreHereSelection;
-		trace = new OpenFilesTrace(theController);
+		trace = new VisitedFilesHistory(theController);
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public class EditorPartListener implements IPartListener {
 		trace.append(selection);
 	}
 
-    public OpenFilesTrace getTrace() {
+    public VisitedFilesHistory getTrace() {
         return trace;
     }
 
