@@ -6,7 +6,7 @@ package org.codemap.eclemma;
  * 
  * @author deif
  */
-public class NullCodemapCoverage implements ICodemapCoverage {
+public class NullCoverageListener implements ICodemapCoverage {
 
     @Override
     public void dispose() {

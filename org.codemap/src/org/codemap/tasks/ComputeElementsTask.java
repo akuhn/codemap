@@ -3,9 +3,7 @@ package org.codemap.tasks;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 
-import org.codemap.Location;
 import org.codemap.util.Log;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IResource;

@@ -29,6 +29,7 @@ public class CodemapIcons extends IconFactory {
     public static final String MARKER = makeIdentifier("markers.gif");
     public static final String TRACE = makeIdentifier("trace.gif");     
     public static final String COVERAGE = makeIdentifier("coverage.gif");
+    public static final String YOU_ARE_HERE= makeIdentifier("youarehere.gif");    
     
     public static final String INFO = makeIdentifier("info_obj.gif");
     public static final String WARNING = makeIdentifier("warning_obj.gif");

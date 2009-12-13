@@ -1,7 +1,5 @@
-package org.codemap.commands;
+package org.codemap;
 
-import org.codemap.MapPerProject;
-import org.codemap.Point;
 import org.codemap.util.CodemapColors;
 import org.codemap.util.ColorBrewer;
 import org.codemap.util.Log;

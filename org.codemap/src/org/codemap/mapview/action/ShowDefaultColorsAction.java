@@ -1,21 +1,19 @@
 package org.codemap.mapview.action;
 
 import static org.codemap.util.CodemapIcons.GREEN_CIRCLE;
+import static org.codemap.util.CodemapIcons.descriptor;
 
-import org.codemap.commands.ColoringCommand;
-import org.codemap.commands.ColoringCommand.Coloring;
-import org.codemap.mapview.MapController;
-import org.codemap.util.CodemapIcons;
+import org.eclipse.jface.resource.ImageDescriptor;
 
-public class ShowDefaultColorsAction extends ShowColorsAction {
+public class ShowDefaultColorsAction extends RadioButtonAction {
 	
-	public ShowDefaultColorsAction(int style, MapController theController) {
-		super("Show default colors", style, theController);
-		setImageDescriptor(CodemapIcons.descriptor(GREEN_CIRCLE));
+	public ShowDefaultColorsAction(ActionStore actionStore) {
+		super("Show default colors", actionStore);
 	}
 
-    protected Coloring getMyColoring() {
-        return ColoringCommand.Coloring.GREEN;
+    @Override
+    protected ImageDescriptor getImage() {
+        return descriptor(GREEN_CIRCLE);
     }
 
 }

@@ -3,19 +3,16 @@ package org.codemap.mapview.action;
 import static org.codemap.util.CodemapIcons.TRACE;
 import static org.codemap.util.CodemapIcons.descriptor;
 
-import org.codemap.commands.ColoringCommand;
-import org.codemap.commands.ColoringCommand.Coloring;
-import org.codemap.mapview.MapController;
+import org.eclipse.jface.resource.ImageDescriptor;
 
-public class ShowHeatMapColorsAction extends ShowColorsAction {
-
-    public ShowHeatMapColorsAction(int style, MapController theController) {
-        super("Show Heatmap Colors", style, theController);
-        setImageDescriptor(descriptor(TRACE));        
+public class ShowHeatMapColorsAction extends RadioButtonAction {
+    
+    public ShowHeatMapColorsAction(ActionStore actionStore) {
+        super("Show Heatmap Colors", actionStore);
     }
     
-    protected Coloring getMyColoring() {
-        return ColoringCommand.Coloring.HEATMAP;
+    @Override
+    protected ImageDescriptor getImage() {
+        return descriptor(TRACE);
     }    
-
 }

@@ -8,32 +8,19 @@ import org.codemap.util.Log;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.ISearchResult;
 import org.eclipse.search.ui.ISearchResultListener;
-import org.eclipse.search.ui.ISearchResultPage;
-import org.eclipse.search.ui.ISearchResultViewPart;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.search.ui.SearchResultEvent;
 import org.eclipse.search.ui.text.TextSearchQueryProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.IMemento;
-import org.eclipse.ui.IPropertyListener;
-import org.eclipse.ui.IViewSite;
-import org.eclipse.ui.IWorkbenchPartSite;
-import org.eclipse.ui.PartInitException;
-
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 public class SearchBar extends Composite {
     

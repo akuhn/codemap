@@ -9,7 +9,7 @@ import java.util.HashSet;
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
 import org.codemap.MapSelection;
-import org.codemap.util.ArrayUtil;
+import org.codemap.commands.SearchResultCommand;
 import org.codemap.util.Resources;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.ISearchResult;
@@ -20,9 +20,9 @@ import org.eclipse.search.ui.text.AbstractTextSearchResult;
 public class SearchResultController {
 
     private SearchResultListener searchListener;
-    private ShowSearchResultsAction action;
     private MapSelection mapSelection;
     private QueryListener theQueryListener;
+    private SearchResultCommand currentCommand;
 
     public SearchResultController() {
         searchListener = new SearchResultListener(this);
@@ -50,8 +50,8 @@ public class SearchResultController {
     }
 
     private boolean isActive() {
-        if (action == null) return false;
-        return action.isChecked();
+        if (currentCommand == null) return false;
+        return currentCommand.isEnabled();
     }
 
     public void onLayerDeactivated() {
@@ -114,10 +114,6 @@ public class SearchResultController {
         return idents;		
     }
 
-    public void registerAction(ShowSearchResultsAction showSearchResultsAction) {
-        action = showSearchResultsAction;
-    }
-
     public void dispose() {
         unregisterQueryListener();
     }
@@ -128,5 +124,9 @@ public class SearchResultController {
             AbstractTextSearchResult res = (AbstractTextSearchResult) searchResult;
             onElementsRemoved(asList(res.getElements()));
         }               
+    }
+
+    public void setCurrentCommand(SearchResultCommand searchResultCommand) {
+        currentCommand = searchResultCommand;
     }
 }

@@ -24,7 +24,6 @@ public class LinkWithSelectionAction extends Action {
 		init(memento);
 	}
 
-
     @Override
 	public void setChecked(boolean checked) {
 		selectionTracker.setEnabled(checked);
@@ -46,5 +45,4 @@ public class LinkWithSelectionAction extends Action {
     public void saveState(IMemento memento) {
         memento.putBoolean(Tag.LINK_SELECTION, isChecked());
     }
-
 }

@@ -1,58 +1,136 @@
 package org.codemap.commands;
 
-import static org.codemap.commands.ColoringCommand.Coloring.COVERAGE;
-import static org.codemap.commands.ColoringCommand.Coloring.GREEN;
-import static org.codemap.commands.ColoringCommand.Coloring.HEATMAP;
-import static org.codemap.commands.Commands.makeCommandId;
-
+import org.codemap.ByPackageColorScheme;
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
-import org.codemap.commands.Commands.Command;
-import org.codemap.util.MColor;
-import org.codemap.util.MapScheme;
+import org.codemap.mapview.action.CommandAction;
+import org.codemap.mapview.action.ShowCoverageAction;
+import org.codemap.mapview.action.ShowDefaultColorsAction;
+import org.codemap.mapview.action.ShowHeatMapColorsAction;
+import org.codemap.mapview.action.ShowPackageColorsAction;
+import org.codemap.resources.MapValues;
 
-import ch.akuhn.values.Value;
-
-public class ColoringCommand extends Command {
+public class ColoringCommand extends DropDownCommand<AbstractColoringCommand> implements IConfigureMapValues {
     
     private static final String COLORING_KEY = makeCommandId("coloring");
 
-    private Coloring coloring;
-
-    public static enum Coloring {
-        GREEN, 
-        BY_PACKAGE,
-        HEATMAP,
-        COVERAGE,
-    }    
-
     public ColoringCommand(MapPerProject mapPerProject) {
         super(mapPerProject);
-        String setting = mapPerProject.getPropertyOrDefault(COLORING_KEY, GREEN.toString());        
-        coloring = Coloring.valueOf(setting);
+        add(new DefaultColoring(this));
+        add(new ByPackageColoring(this, getMyMap()));
+        add(new HeatMapColoring(this));
+        add(new CoverageColoring(this));
     }
 
-    public void apply(Value<MapScheme<MColor>> colorScheme) {
-        // TODO fixme
-        CodemapCore.getPlugin().getController().utils().setHeatmapEnabled(coloring.equals(HEATMAP));
-        CodemapCore.getPlugin().getController().utils().setCoverageEnabled(coloring.equals(COVERAGE));
-        switch(coloring){
-        case GREEN:
-            colorScheme.setValue(CodemapCore.getPlugin().getDefaultColorScheme());
-            break;
-        case BY_PACKAGE:
-            colorScheme.setValue(new ByPackageColorScheme(getMyMap()));
-            break;
-        }
-    }    
+    @Override
+    protected String getKey() {
+        return COLORING_KEY;
+    }
 
-    public Coloring getCurrentColoring() {
+    @Override
+    protected Class<?> getDefaultCommandClass() {
+        return DefaultColoring.class;
+    }
+}
+
+abstract class AbstractColoringCommand extends Command {
+
+    private ColoringCommand coloring;
+
+    public AbstractColoringCommand(ColoringCommand coloringCommand) {
+        coloring = coloringCommand;
+        enabled = getColoring().getEnabled(this);
+    }
+
+    protected ColoringCommand getColoring() {
         return coloring;
     }
 
-    public void setCurrentColoring(Coloring newColoring) {
-        coloring = newColoring;
-        getMyMap().setProperty(COLORING_KEY, coloring.toString());
-        apply(getMyMap().getValues().colorScheme);
+    @Override
+    protected void applyState() {
+        if (isEnabled()) {
+            getColoring().setEnabled(this);
+        }
+        getColoring().applyState();
+    }
+
+    @Override
+    protected boolean initEnabled() {
+        return false;
     }
 }
+
+class DefaultColoring extends AbstractColoringCommand {
+
+    public DefaultColoring(ColoringCommand coloringCommand) {
+        super(coloringCommand);
+    }
+
+    @Override
+    public void configure(MapValues mapValues) {
+        if (!isEnabled()) return;
+        mapValues.colorScheme.setValue(CodemapCore.getPlugin().getDefaultColorScheme());        
+    }
+
+    @Override
+    protected Class<? extends CommandAction> getActionID() {
+        return ShowDefaultColorsAction.class;
+    }
+}
+
+class ByPackageColoring extends AbstractColoringCommand {
+
+    private MapPerProject map;
+
+    public ByPackageColoring(ColoringCommand coloringCommand, MapPerProject mapPerProject) {
+        super(coloringCommand);
+        map = mapPerProject;
+    }
+
+    @Override
+    public void configure(MapValues mapValues) {
+        if (!isEnabled()) return;
+        mapValues.colorScheme.setValue(new ByPackageColorScheme(map));
+        
+    }
+
+    @Override
+    protected Class<? extends CommandAction> getActionID() {
+        return ShowPackageColorsAction.class;
+    }
+}
+
+class HeatMapColoring extends AbstractColoringCommand {
+
+    public HeatMapColoring(ColoringCommand coloringCommand) {
+        super(coloringCommand);
+    }
+
+    @Override
+    public void configure(MapValues mapValues) {
+        CodemapCore.getPlugin().getController().utils().setHeatmapEnabled(isEnabled());
+    }
+
+    @Override
+    protected Class<? extends CommandAction> getActionID() {
+        return ShowHeatMapColorsAction.class;
+    }
+}
+
+class CoverageColoring extends AbstractColoringCommand {
+
+    public CoverageColoring(ColoringCommand coloringCommand) {
+        super(coloringCommand);
+    }
+
+    @Override
+    public void configure(MapValues mapValues) {
+        CodemapCore.getPlugin().getController().utils().setCoverageEnabled(isEnabled());
+    }
+
+    @Override
+    protected Class<? extends CommandAction> getActionID() {
+        return ShowCoverageAction.class;
+    }
+}
+

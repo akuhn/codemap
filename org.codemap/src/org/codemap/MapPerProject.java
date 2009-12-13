@@ -6,10 +6,11 @@ import java.util.Map.Entry;
 
 import org.codemap.Configuration.Builder;
 import org.codemap.callhierarchy.CallOverlay;
-import org.codemap.commands.Commands;
+import org.codemap.commands.MapCommands;
 import org.codemap.layers.CodemapVisualization;
 import org.codemap.layers.Layer;
 import org.codemap.mapview.MapController;
+import org.codemap.mapview.MapView;
 import org.codemap.resources.MapValueBuilder;
 import org.codemap.resources.MapValues;
 import org.codemap.util.Log;
@@ -45,14 +46,14 @@ public class MapPerProject {
     private MapPerProjectCache cache;
 
     private ActionValue<Void> redrawAction;
-    private Commands commands;
+    private MapCommands commands;
 
 
     /*default*/ MapPerProject(IJavaProject project, MapPerProjectCache mapPerProjectCache) {
         this.project = project;
         this.cache = mapPerProjectCache;
         readPreviousProperties();
-        commands = new Commands(this);
+        commands = new MapCommands(this);
     }
 
     public void initialize() {
@@ -62,7 +63,6 @@ public class MapPerProject {
         builder.setFileExtensions(Arrays.asList("*.java"));
         builder.setInitialConfiguration(readPreviousMapState());
         mapValues = new MapValues(builder);
-        mapValues.applyCommands(commands);
         mapVisualization = new MapVisualization(mapValues);
         mapVisualization.getSharedLayer().add(makeOpenFilesLayer());
 
@@ -84,6 +84,8 @@ public class MapPerProject {
                 return null;
             }
         };
+        
+        commands.applyOn(getValues());
     }
 
     private Layer makeOpenFilesLayer() {
@@ -143,6 +145,7 @@ public class MapPerProject {
     public MapPerProject updateSize(int size) {
         int actualsize = Math.max(size, MINIMAL_SIZE);
         mapValues.mapSize.setValue(actualsize);
+        // FIXME deif set dependency in mapValueBuilder and trigger this automatically
         mapValues.mapInstance.getValue(); // trigger computation
         return this;
     }
@@ -258,7 +261,12 @@ public class MapPerProject {
         cache.reload(this);
     }
 
-    public Commands getCommands() {
-        return commands;
+    public void configureOn(MapView view) {
+        commands.configure(view);
+        view.updateProjectName(getName());
+    }
+
+    public String getName() {
+        return getProject().getName();
     }
 }

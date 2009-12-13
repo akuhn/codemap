@@ -1,14 +1,10 @@
 package org.codemap.mapview;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.codemap.CodemapCore;
-import org.codemap.MapPerProject;
 import org.codemap.layers.CodemapVisualization;
-import org.codemap.mapview.action.CodemapAction;
+import org.codemap.mapview.action.ActionStore;
 import org.codemap.mapview.action.ColorDropDownAction;
+import org.codemap.mapview.action.CommandAction;
 import org.codemap.mapview.action.ForceSelectionAction;
 import org.codemap.mapview.action.LabelDrowDownAction;
 import org.codemap.mapview.action.LayerDropDownAction;
@@ -19,39 +15,28 @@ import org.codemap.mapview.action.SaveHapaxDataAction;
 import org.codemap.search.SearchBar;
 import org.codemap.util.CompositeActionGroup;
 import org.codemap.util.EclipseUtil;
-import org.codemap.util.ExtensionPoints;
-import org.codemap.util.Log;
 import org.codemap.util.MColor;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.ui.actions.CCPActionGroup;
 import org.eclipse.jdt.ui.actions.GenerateActionGroup;
 import org.eclipse.jdt.ui.actions.JavaSearchActionGroup;
 import org.eclipse.jdt.ui.actions.OpenEditorActionGroup;
 import org.eclipse.jdt.ui.actions.OpenViewActionGroup;
 import org.eclipse.jdt.ui.actions.RefactorActionGroup;
-import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -83,7 +68,7 @@ public class MapView extends ViewPart {
         }
     };
     
-    private List<CodemapAction> actions = new ArrayList<CodemapAction>();
+    private ActionStore actionStore = new ActionStore();
 
     public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
     private static final String ATTR_CLASS = "class";
@@ -138,7 +123,6 @@ public class MapView extends ViewPart {
                 new JavaSearchActionGroup(this)
         });
         
-        
         Composite composite = new Composite(parent, SWT.NONE);
         composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         GridLayoutFactory.fillDefaults().spacing(0, 0).applyTo(composite);
@@ -177,25 +161,6 @@ public class MapView extends ViewPart {
         viewMenu.add(new ReloadMapAction(theController));
         viewMenu.add(new SaveHapaxDataAction(theController));        
 //        viewMenu.add(new DebugLocationsAction());
-        
-//        IExtensionPoint extensionPoint = Platform.getExtensionRegistry().getExtensionPoint(CodemapCore.PLUGIN_ID, ExtensionPoints.ACTION_BAR);
-//        IExtension[] extensions_arr = extensionPoint.getExtensions();
-//        List<IExtension> extensions = Arrays.asList(extensions_arr);
-//        for (IExtension extension: extensions) {
-//            parseActionbarExtensionPoint(extension.getConfigurationElements(), viewMenu);
-//        }        
-    }
-
-    private void parseActionbarExtensionPoint(IConfigurationElement[] configurationElements, IMenuManager viewMenu) {
-        List<IConfigurationElement> configelems = Arrays.asList(configurationElements);
-        for (IConfigurationElement each: configelems) {
-            try {
-                IContributionItem item = (IContributionItem) each.createExecutableExtension(ATTR_CLASS);
-                viewMenu.add(item);
-            } catch (Exception e) {
-                Log.instantiatePluginError(e, each, ATTR_CLASS);
-            }            
-        }
     }
 
     private void configureToolbar() {
@@ -203,17 +168,12 @@ public class MapView extends ViewPart {
         tbm.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
         tbm.add(new Separator());
 
-        tbm.add(registerAction(new ColorDropDownAction(theController)));
-        tbm.add(registerAction(new LayerDropDownAction(theController)));
-        tbm.add(registerAction(new LabelDrowDownAction(theController)));
+        tbm.add(new ColorDropDownAction(actionStore));
+        tbm.add(new LayerDropDownAction(actionStore));
+        tbm.add(new LabelDrowDownAction(actionStore));
 
         tbm.add(linkWithSelection = new LinkWithSelectionAction(theController, memento));
         tbm.add(forceSelection = new ForceSelectionAction(theController, memento));
-    }
-
-    private IAction registerAction(CodemapAction action) {
-        actions.add(action);
-        return action;
     }
 
     protected IToolBarManager getToolBarManager() {
@@ -247,12 +207,6 @@ public class MapView extends ViewPart {
     public void init(IViewSite site, IMemento memento) throws PartInitException {
         super.init(site, memento);
         this.memento = memento;
-    }
-
-    protected void configureActions(MapPerProject activeMap) {
-        for (CodemapAction each: actions) {
-            each.configureAction(activeMap);
-        }
     }
 
     /*default*/ void updateMapVisualization(CodemapVisualization viz) {
@@ -315,5 +269,9 @@ public class MapView extends ViewPart {
         } else {
             searchBar.setMessage(SEARCHBOX_MESSAGE + projectName);
         }
+    }
+
+    public CommandAction getAction(Class<? extends CommandAction> clazz) {
+        return actionStore.get(clazz);
     }
 }

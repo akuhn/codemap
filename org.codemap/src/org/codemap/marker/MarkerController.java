@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
+import org.codemap.commands.MarkerCommand;
 import org.codemap.util.Log;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IMarker;
@@ -71,25 +72,15 @@ public class MarkerController {
 		}
 	};
 	
-	private ShowMarkersAction showMarkersAction;
 	private Map<MapPerProject, MarkerSelection> selectionCache = new HashMap<MapPerProject, MarkerSelection>();
-	
+    private MarkerCommand currentCommand;
+
 	public MarkerController() {
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener);
 	}
 
 	public void dispose() {
 		ResourcesPlugin.getWorkspace().removeResourceChangeListener(resourceChangeListener);
-	}
-	
-	/**
-	 * Loads all markers of the current workspace as soon as the markers action runs for the
-	 * first time.
-	 * 
-	 * @param showMarkersAction
-	 */
-	public void register(ShowMarkersAction action) {
-		showMarkersAction = action;
 	}
 	
 	/**
@@ -181,8 +172,8 @@ public class MarkerController {
 	}
 	
 	private boolean isActive() {
-		if (showMarkersAction == null) return false;
-		return showMarkersAction.isChecked();
+		if (currentCommand == null) return false;
+		return currentCommand.isEnabled();
 	}	
 
 	public void onLayerActivated() {
@@ -212,5 +203,9 @@ public class MarkerController {
             activeMap.addSelectionLayer(markersOverlay, selection.getSelection());
         }
         return selection;
-	}	
+	}
+
+    public void setCurrentCommand(MarkerCommand markerCommand) {
+        currentCommand = markerCommand;
+    }	
 }

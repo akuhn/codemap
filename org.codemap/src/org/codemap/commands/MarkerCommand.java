@@ -1,37 +1,27 @@
 package org.codemap.commands;
 
-import static org.codemap.commands.Commands.makeCommandId;
+import static org.codemap.commands.CompositeCommand.makeCommandId;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
-import org.codemap.commands.Commands.Command;
+import org.codemap.mapview.MapView;
+import org.codemap.mapview.action.CommandAction;
+import org.codemap.mapview.action.ShowMarkersAction;
 import org.codemap.marker.MarkerController;
-import org.codemap.marker.ShowMarkersAction;
+import org.codemap.resources.MapValues;
 
-public class MarkerCommand extends Command {
+public class MarkerCommand extends CheckedCommand {
 
     private static final String MARKER_KEY = makeCommandId("marker");
-    private boolean showMarkers;
 
     public MarkerCommand(MapPerProject mapPerProject) {
         super(mapPerProject);
-        showMarkers = getMyMap().getPropertyOrDefault(MARKER_KEY, false);
     }
 
-    public void setShowMarkers(boolean checked) {
-        showMarkers = checked;
-        applyState();
-    }
-
-    public void apply(ShowMarkersAction action) {
-        action.setChecked(showMarkers);
-        applyState();
-    }
-
-    private void applyState() {
-        if (showMarkers) showMarkers();
+    @Override
+    protected void applyState() {
+        if (isEnabled()) showMarkers();
         else hideMarkers();
-        getMyMap().setProperty(MARKER_KEY, showMarkers);
     }
 
     private void showMarkers() {
@@ -40,9 +30,30 @@ public class MarkerCommand extends Command {
 
     private void hideMarkers() {
         getMarkerController().onLayerDeactivated();
-    }    
-    
+    }
+
     protected MarkerController getMarkerController() {
         return CodemapCore.getPlugin().getController().getMarkerController();
-    }    
+    }
+
+    @Override
+    protected String getKey() {
+        return MARKER_KEY;
+    }
+
+    @Override
+    protected Class<? extends CommandAction> getActionID() {
+        return ShowMarkersAction.class;
+    }
+
+    @Override
+    public void configure(MapValues mapValues) {
+        applyState();
+    }
+    
+    @Override
+    public void configure(MapView view) {
+        getMarkerController().setCurrentCommand(this);
+        super.configure(view);
+    }
 }

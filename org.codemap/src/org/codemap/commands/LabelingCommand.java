@@ -1,47 +1,93 @@
 package org.codemap.commands;
 
-import static org.codemap.commands.Commands.makeCommandId;
-
 import org.codemap.DefaultLabelScheme;
 import org.codemap.MapPerProject;
-import org.codemap.commands.Commands.Command;
+import org.codemap.mapview.action.CommandAction;
+import org.codemap.mapview.action.ShowClassNameLabelAction;
+import org.codemap.mapview.action.ShowNoLabelAction;
+import org.codemap.resources.MapValues;
 import org.codemap.util.MapScheme;
 
-import ch.akuhn.values.Value;
-
-public class LabelingCommand extends Command {
+public class LabelingCommand extends DropDownCommand<AbstractLabelingCommand> implements IConfigureMapValues {
 
     private static final String LABELING_KEY = makeCommandId("labeling");
-    private Labeling labeling = Labeling.DEFAULT;
     
-    public static enum Labeling {
-        DEFAULT, 
-        NONE;
-    }
-
     public LabelingCommand(MapPerProject mapPerProject) {
         super(mapPerProject);
-        String setting = mapPerProject.getPropertyOrDefault(LABELING_KEY, Labeling.DEFAULT.toString());
-        labeling = Labeling.valueOf(setting);
+        add(new ClassNameLabeling(this));
+        add(new NoLabeling(this));
     }
 
-    public void apply(Value<MapScheme<String>> labelScheme) {
-        switch (labeling) {
-        case NONE:
-            labelScheme.setValue(new MapScheme<String>(null)); break;
-        case DEFAULT:
-            labelScheme.setValue(new DefaultLabelScheme()); break;
-        }
+    @Override
+    protected String getKey() {
+        return LABELING_KEY;
     }
 
-    public Labeling getCurrentLabeling() {
+    @Override
+    protected Class<?> getDefaultCommandClass() {
+        return ClassNameLabeling.class;
+    }
+}
+
+abstract class AbstractLabelingCommand extends Command {
+
+    private LabelingCommand labeling;
+
+    public AbstractLabelingCommand(LabelingCommand labelingCommand) {
+        labeling = labelingCommand;
+        enabled = getLabeling().getEnabled(this);
+    }
+
+    protected LabelingCommand getLabeling() {
         return labeling;
     }
 
-    public void setCurrentLabeling(Labeling newLabeling) {
-        labeling = newLabeling;
-        getMyMap().setProperty(LABELING_KEY, labeling.toString());
-        apply(getMyMap().getValues().labelScheme);
+    @Override
+    protected void applyState() {
+        if (isEnabled()) {
+            getLabeling().setEnabled(this);
+        }
+        getLabeling().applyState();
     }
 
+    @Override
+    protected boolean initEnabled() {
+        return false;
+    }
+}
+
+class NoLabeling extends AbstractLabelingCommand {
+
+    public NoLabeling(LabelingCommand labelingCommand) {
+        super(labelingCommand);
+    }
+
+    @Override
+    protected Class<? extends CommandAction> getActionID() {
+        return ShowNoLabelAction.class;
+    }
+
+    @Override
+    public void configure(MapValues mapValues) {
+        if (!isEnabled()) return;
+        mapValues.labelScheme.setValue(new MapScheme<String>(null));
+    }
+}
+
+class ClassNameLabeling extends AbstractLabelingCommand {
+
+    public ClassNameLabeling(LabelingCommand labelingCommand) {
+        super(labelingCommand);
+    }
+
+    @Override
+    protected Class<? extends CommandAction> getActionID() {
+        return ShowClassNameLabelAction.class;
+    }
+
+    @Override
+    public void configure(MapValues mapValues) {
+        if (!isEnabled()) return;
+        mapValues.labelScheme.setValue(new DefaultLabelScheme());
+    }
 }

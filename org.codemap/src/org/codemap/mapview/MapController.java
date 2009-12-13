@@ -10,7 +10,7 @@ import org.codemap.MapSelection;
 import org.codemap.callhierarchy.CallHierarchyTracker;
 import org.codemap.eclemma.CoverageListener;
 import org.codemap.eclemma.ICodemapCoverage;
-import org.codemap.eclemma.NullCodemapCoverage;
+import org.codemap.eclemma.NullCoverageListener;
 import org.codemap.layers.CodemapVisualization;
 import org.codemap.marker.MarkerController;
 import org.codemap.search.SearchResultController;
@@ -54,13 +54,14 @@ public class MapController {
         searchResultController = new SearchResultController();
         markerController = new MarkerController();
         selectionTracker = new SelectionTracker(this);
-        selectionProvider = new MapSelectionProvider(view);        
+        selectionProvider = new MapSelectionProvider(view);
+        // FIXME deif, move textUpdater to MapView, it should not be in the controller        
         textUpdater = new AllTextUpdater(view);
         utils = new ControllerUtils(this);
         try {
             coverageListener = new CoverageListener(this);
         } catch (NoClassDefFoundError e) {
-            coverageListener = new NullCodemapCoverage();
+            coverageListener = new NullCoverageListener();
         }        
     }
 
@@ -127,9 +128,7 @@ public class MapController {
     }
 
     public void onNewProjectSelected() {
-        view.configureActions(getActiveMap());
-        String projectName = getActiveMap().getProject().getName();
-        view.updateProjectName(projectName);
+        getActiveMap().configureOn(view);
         updateVisualization();        
     }
 

@@ -1,29 +1,17 @@
 package org.codemap.mapview.action;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.codemap.MapPerProject;
-import org.codemap.mapview.MapController;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 
-public abstract class DropDownAction extends CodemapAction implements IMenuCreator {
+public abstract class DropDownAction extends Action implements IMenuCreator {
 	
 	private Menu menu;
-	private Set<MenuAction> actions = new HashSet<MenuAction>();
-	
-	@Override
-	public void configureAction(MapPerProject map) {
-		for(CodemapAction each: actions) {
-			each.configureAction(map);
-		}
-	}
 
-	public DropDownAction(MapController theController) {
-		super("", AS_DROP_DOWN_MENU, theController);
+	public DropDownAction() {
+		super("", AS_DROP_DOWN_MENU);
 		setMenuCreator(this);
 		setup();
 	}
@@ -48,15 +36,7 @@ public abstract class DropDownAction extends CodemapAction implements IMenuCreat
 		return null;
 	}
 	
-	/**
-	 * registers the given action. has no effect if the action is
-	 * already registered.
-	 */
-	protected void registerAction(MenuAction action) {
-	    actions.add(action);
-	}
-	
-    public void addActionToMenu(Menu parent, MenuAction action) {
+    public void addActionToMenu(Menu parent, Action action) {
         ActionContributionItem item = new ActionContributionItem(action);
         item.fill(parent, -1);
     }
@@ -65,6 +45,5 @@ public abstract class DropDownAction extends CodemapAction implements IMenuCreat
 		// maybe do stuff ...
 	}
 	
-	protected abstract void createMenu(Menu newMenu);    
-
+	protected abstract void createMenu(Menu newMenu); 
 }
