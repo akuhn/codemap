@@ -10,6 +10,7 @@ import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
 import org.codemap.MapSelection;
 import org.codemap.commands.SearchResultCommand;
+import org.codemap.layers.SearchResultsOverlay;
 import org.codemap.util.Resources;
 import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.ISearchResult;
@@ -96,7 +97,7 @@ public class SearchResultController {
         }
     }
 
-    protected MapSelection getSearchSelection() {
+    public MapSelection getSearchSelection() {
         MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
         if (! activeMap.containsLayer(SearchResultsOverlay.class)) {
             SearchResultsOverlay searchOverlay = new SearchResultsOverlay(this);

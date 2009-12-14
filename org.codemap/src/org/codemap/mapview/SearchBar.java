@@ -1,9 +1,8 @@
-package org.codemap.search;
+package org.codemap.mapview;
 
 import static org.codemap.util.ArrayUtil.asArray;
 import static org.codemap.util.ArrayUtil.isEmpty;
 
-import org.codemap.mapview.MapController;
 import org.codemap.util.Log;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;

@@ -30,7 +30,7 @@ public class ComputeElementsTask extends TaskValue<Collection<String>> {
     protected Collection<String> computeValue(ProgressMonitor monitor, Arguments args) {
         Collection<String> projects = args.nextOrFail();
         final Collection<String> extensions = args.nextOrFail();
-        final Collection<String> result = new HashSet<String>();
+        final Collection<IResource> result = new HashSet<IResource>();
         
         for (String path: projects) {
             IResource resource = Resources.asResource(path);
@@ -44,47 +44,40 @@ public class ComputeElementsTask extends TaskValue<Collection<String>> {
             }
             visitor.storeResult(result);
         }
-        return new ArrayList<String>(result);
+        return new TestFileFilter(result).run(monitor);
     }
 }
 
-class FindElementsVisitor implements IResourceVisitor {
+class TestFileFilter {
 
-    private Collection<String> extensions;
-    private Collection<String> myResult;
+    private Collection<IResource> elements;
 
-    public FindElementsVisitor(Collection<String> extensions) {
-        this.extensions = extensions;
-        this.myResult = new ArrayList<String>();
-    }
-
-    public void storeResult(Collection<String> result) {
-        result.addAll(myResult);
-    }
-
-    @Override
-    public boolean visit(IResource resource) throws CoreException {
-        if (resource.getType() == IResource.FILE) {
-            for (String pattern: extensions) {
-                if (!Files.match(pattern, resource.getName())) continue;
-                if (isJavaTestFile(resource)) continue;
-                
-                myResult.add(Resources.asPath(resource));
-            }
-        }
-        return true;
+    public TestFileFilter(Collection<IResource> elements) {
+        this.elements = elements;
     }
     
+    public Collection<String> run(ProgressMonitor monitor) {
+        monitor.begin(elements.size());
+        Collection<String> result = new HashSet<String>();
+        for(IResource each: elements) {
+            if (!isJavaTestFile(each)) {
+                result.add(Resources.asPath(each));
+            }
+            monitor.worked(1);
+        }
+        return new ArrayList<String>(result);
+    }
+
     private boolean isJavaTestFile(IResource resource) {
-    	/*
-    	 * If the resource contains compilation errors, it maybe that
-    	 * we get a false positive. As a work around we could look at 
-    	 * the path (does it include test) and at the name (does it end
-    	 * with Test).
-    	 * 
-    	 * This is a TODO for a world where days have more than 24h.
-    	 * 
-    	 */
+        /*
+         * If the resource contains compilation errors, it maybe that
+         * we get a false positive. As a work around we could look at 
+         * the path (does it include test) and at the name (does it end
+         * with Test).
+         * 
+         * This is a TODO for a world where days have more than 24h.
+         * 
+         */
         IJavaElement javaElement = Resources.asJavaElement(resource);
         if (javaElement == null) return false;
         // find all tests for the given file
@@ -98,5 +91,32 @@ class FindElementsVisitor implements IResourceVisitor {
         }
         // if we found one (or maybe more) then we have a java test file
         return findTestTypes.length > 0;
+    }    
+}
+
+class FindElementsVisitor implements IResourceVisitor {
+
+    private Collection<String> extensions;
+    private Collection<IResource> myResult;
+
+    public FindElementsVisitor(Collection<String> extensions) {
+        this.extensions = extensions;
+        this.myResult = new ArrayList<IResource>();
+    }
+
+    public void storeResult(Collection<IResource> result) {
+        result.addAll(myResult);
+    }
+
+    @Override
+    public boolean visit(IResource resource) throws CoreException {
+        if (resource.getType() == IResource.FILE) {
+            for (String pattern: extensions) {
+                if (!Files.match(pattern, resource.getName())) continue;
+                
+                myResult.add(resource);
+            }
+        }
+        return true;
     }
 }

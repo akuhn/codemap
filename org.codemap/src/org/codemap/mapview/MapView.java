@@ -12,7 +12,6 @@ import org.codemap.mapview.action.LinkWithSelectionAction;
 import org.codemap.mapview.action.ReloadMapAction;
 import org.codemap.mapview.action.SaveAsPNGAction;
 import org.codemap.mapview.action.SaveHapaxDataAction;
-import org.codemap.search.SearchBar;
 import org.codemap.util.CompositeActionGroup;
 import org.codemap.util.EclipseUtil;
 import org.codemap.util.MColor;

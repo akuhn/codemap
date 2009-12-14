@@ -1,9 +1,9 @@
-package org.codemap.search;
+package org.codemap.layers;
 
 import org.codemap.Location;
 import org.codemap.MapSelection;
-import org.codemap.layers.SelectionOverlay;
 import org.codemap.resources.MapValues;
+import org.codemap.search.SearchResultController;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
