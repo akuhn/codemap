@@ -1,5 +1,6 @@
 package org.codemap;
 
+import org.codemap.communication.ECFContribution;
 import org.codemap.mapview.MapController;
 import org.codemap.util.EclipseTaskFactory;
 import org.codemap.util.MColor;
@@ -23,6 +24,7 @@ public class CodemapCore extends AbstractUIPlugin {
     public final MapSelection youAreHereSelection;
     public final MapSelection openFilesSelection;
     public final MapSelection currentSelection;
+    private ECFContribution ecfContrib;
 
     public MapSelection getYouAreHereSelection() {
         return youAreHereSelection;
@@ -47,10 +49,18 @@ public class CodemapCore extends AbstractUIPlugin {
     public void start(BundleContext context) throws Exception {
         super.start(context);
         THE_PLUGIN = this;
+        try {
+            ecfContrib = new ECFContribution().start(context);            
+        } catch (NoClassDefFoundError e) {
+            // nothing
+        }
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
+        if (ecfContrib != null) {
+            ecfContrib.stop();
+        }
         THE_PLUGIN = null;
         super.stop(context);
     }

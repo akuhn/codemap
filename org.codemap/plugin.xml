@@ -68,6 +68,12 @@
       </configExtension>
 -->
    </extension>
+   <extension
+         point="org.eclipse.ecf.start">
+      <run
+            class="org.codemap.communication.CodemapECFStart">
+      </run>
+   </extension>
    
 
 </plugin>

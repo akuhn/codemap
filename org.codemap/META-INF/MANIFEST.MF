@@ -17,7 +17,14 @@ Require-Bundle: ch.akuhn.hapax,
  org.eclipse.jdt.junit;bundle-version="3.5.0",
  org.eclipse.search,
  org.eclipse.ui.navigator,
- com.mountainminds.eclemma.core;bundle-version="1.4.3";resolution:=optional
+ com.mountainminds.eclemma.core;bundle-version="1.4.3";resolution:=optional,
+ org.eclipse.ecf;bundle-version="3.0.0";resolution:=optional,
+ org.eclipse.ecf.datashare;bundle-version="2.0.0";resolution:=optional,
+ org.eclipse.ecf.presence;bundle-version="2.0.0";resolution:=optional,
+ org.eclipse.ecf.presence.ui;bundle-version="2.0.0";resolution:=optional,
+ org.eclipse.ecf.sync;bundle-version="2.0.0";resolution:=optional,
+ org.eclipse.ecf.provider;bundle-version="2.0.0";resolution:=optional,
+ org.eclipse.ecf.provider.xmpp;bundle-version="3.0.0";resolution:=optional
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Adrian Kuhn and David Erni
 Export-Package: ch.deif.meander,

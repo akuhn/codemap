@@ -39,6 +39,10 @@ public class Log {
 	public static void error(String message, Throwable exception) {
 		log(IStatus.ERROR, IStatus.OK, message, exception);
 	}
+	
+	public static void warning(String message, Throwable exception) {
+	    log(IStatus.WARNING, IStatus.OK, message, exception);
+	}
 
 	/**
 	 * Log the specified information.

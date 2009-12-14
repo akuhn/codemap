@@ -1,6 +1,7 @@
 package org.codemap.mapview;
 
 import org.codemap.CodemapCore;
+import org.codemap.communication.views.CodemapRosterMenuItem;
 import org.codemap.layers.CodemapVisualization;
 import org.codemap.mapview.action.ActionStore;
 import org.codemap.mapview.action.ColorDropDownAction;
@@ -158,6 +159,11 @@ public class MapView extends ViewPart {
         viewMenu.add(new SaveAsPNGAction(theController));
         viewMenu.add(new ReloadMapAction(theController));
         viewMenu.add(new SaveHapaxDataAction(theController));        
+        try {
+            viewMenu.add(new CodemapRosterMenuItem());
+        } catch (NoClassDefFoundError e) {
+            
+        }
 //        viewMenu.add(new DebugLocationsAction());
     }
 
