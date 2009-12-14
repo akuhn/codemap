@@ -18,7 +18,8 @@ import org.osgi.util.tracker.ServiceTracker;
 
 
 /**
- * The activator class controls the plug-in life cycle
+ * This was a plugin once but is now merged back into the main codemap 
+ * plugin.
  */
 public class ECFContribution {
 
@@ -37,10 +38,6 @@ public class ECFContribution {
     private Layer openFilesLayer;
     private MapSelection communicationSelection;
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-	 */
 	public ECFContribution start(BundleContext context) {
 	    this.context = context;
 		communicationSelection = new MapSelection();
@@ -49,10 +46,6 @@ public class ECFContribution {
 		return this;
 	}
 
-    /*
-	 * (non-Javadoc)
-	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-	 */
 	public void stop() throws Exception {
 	    if (syncStrategyFactoryServiceTracker != null)
 	        syncStrategyFactoryServiceTracker.close();
