@@ -1,7 +1,5 @@
 package org.codemap.commands;
 
-import static org.codemap.commands.CompositeCommand.makeCommandId;
-
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
 import org.codemap.mapview.MapView;
@@ -20,6 +18,7 @@ public class SearchResultCommand extends CheckedCommand {
 
     @Override
     protected void applyState() {
+        super.applyState();
         if (isEnabled()) showSearchResults();
         else hideSearchResults();
     }

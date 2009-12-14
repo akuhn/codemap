@@ -2,7 +2,7 @@ package org.codemap.mapview;
 
 import org.codemap.layers.CodemapVisualization;
 
-public class AllTextUpdater implements TextUpdater {
+public class AllTextUpdater implements ITextUpdater {
 
     private MapView mapView;
     private CodemapVisualization currentViz;

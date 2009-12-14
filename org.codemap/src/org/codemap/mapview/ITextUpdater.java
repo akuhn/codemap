@@ -1,7 +1,7 @@
 package org.codemap.mapview;
 
 
-public interface TextUpdater {
+public interface ITextUpdater {
 
     void updateNearestNeighbor(String name);
 

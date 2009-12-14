@@ -1,7 +1,5 @@
 package org.codemap.commands;
 
-import static org.codemap.commands.CompositeCommand.makeCommandId;
-
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
 import org.codemap.callhierarchy.CallHierarchyTracker;
@@ -19,6 +17,7 @@ public class CallHierarchyCommand extends CheckedCommand {
 
     @Override
     protected void applyState() {
+        super.applyState();
         if (isEnabled()) showFLow();
         else hideFlow();
     }

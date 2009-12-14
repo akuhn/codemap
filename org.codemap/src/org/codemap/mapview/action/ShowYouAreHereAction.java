@@ -8,7 +8,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 public class ShowYouAreHereAction extends CheckBoxAction {
 
     public ShowYouAreHereAction(ActionStore actionStore) {
-        super("Show You Are Here", actionStore);
+        super("Show active File", actionStore);
     }
 
     @Override

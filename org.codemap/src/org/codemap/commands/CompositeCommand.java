@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
 import org.codemap.mapview.MapView;
 
@@ -12,10 +11,6 @@ public class CompositeCommand<E extends IConfigureMapView> implements IConfigure
 
     private Set<E> commands = new HashSet<E>();
     private MapPerProject map;
-    
-    public static String makeCommandId(String command) {
-        return CodemapCore.PLUGIN_ID + "." + command;
-    }
 
     public CompositeCommand(MapPerProject mapPerProject) {
         map = mapPerProject;

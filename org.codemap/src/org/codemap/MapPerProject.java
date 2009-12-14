@@ -8,19 +8,22 @@ import org.codemap.Configuration.Builder;
 import org.codemap.callhierarchy.CallOverlay;
 import org.codemap.commands.MapCommands;
 import org.codemap.layers.CodemapVisualization;
+import org.codemap.layers.CurrentSelectionOverlay;
 import org.codemap.layers.Layer;
+import org.codemap.layers.OpenFileIconsLayer;
+import org.codemap.layers.YouAreHereOverlay;
 import org.codemap.mapview.MapController;
 import org.codemap.mapview.MapView;
 import org.codemap.resources.MapValueBuilder;
 import org.codemap.resources.MapValues;
 import org.codemap.util.Log;
-import org.codemap.util.OpenFileIconsLayer;
 import org.codemap.util.Resources;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jface.action.Action;
 import org.osgi.service.prefs.BackingStoreException;
 
 import ch.akuhn.util.Arrays;
@@ -64,7 +67,6 @@ public class MapPerProject {
         builder.setInitialConfiguration(readPreviousMapState());
         mapValues = new MapValues(builder);
         mapVisualization = new MapVisualization(mapValues);
-        mapVisualization.getSharedLayer().add(makeOpenFilesLayer());
 
         redrawAction = new ActionValue<Void>(
                 mapValues.mapInstance, 
@@ -86,10 +88,6 @@ public class MapPerProject {
         };
         
         commands.applyOn(getValues());
-    }
-
-    private Layer makeOpenFilesLayer() {
-        return new OpenFileIconsLayer();
     }
 
     public CodemapVisualization getVisualization() {
@@ -268,5 +266,17 @@ public class MapPerProject {
 
     public String getName() {
         return getProject().getName();
+    }
+
+    public YouAreHereOverlay getYouAreHereOverlay() {
+        return mapVisualization.getYouAreHere();
+    }
+    
+    public OpenFileIconsLayer getOpenFilesOverlay() {
+        return mapVisualization.getOpenFiles();
+    }
+
+    public CurrentSelectionOverlay getCurrentSelectionOverlay() {
+        return mapVisualization.getSelection();
     }
 }

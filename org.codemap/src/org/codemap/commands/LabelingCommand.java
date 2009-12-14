@@ -1,5 +1,7 @@
 package org.codemap.commands;
 
+import static org.codemap.commands.Command.makeCommandId;
+
 import org.codemap.DefaultLabelScheme;
 import org.codemap.MapPerProject;
 import org.codemap.mapview.action.CommandAction;

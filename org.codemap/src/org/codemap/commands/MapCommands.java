@@ -11,7 +11,10 @@ public class MapCommands extends CompositeCommand<IConfigureMapValues> {
         add(new ColoringCommand(mapPerProject));
         add(new CallHierarchyCommand(mapPerProject));
         add(new SearchResultCommand(mapPerProject));
-        add(new MarkerCommand(mapPerProject));        
+        add(new MarkerCommand(mapPerProject));
+        add(new YouAreHereCommand(mapPerProject));
+        add(new OpenFilesCommand(mapPerProject));
+        add(new SelectionCommand(mapPerProject));
     }
 
     public void applyOn(MapValues mapValues) {
@@ -19,5 +22,4 @@ public class MapCommands extends CompositeCommand<IConfigureMapValues> {
             each.configure(mapValues);
         }
     }
-
 }

@@ -23,5 +23,6 @@ public abstract class CheckedCommand extends Command {
         getMyMap().setProperty(getKey(), isEnabled());        
     }    
     
-    protected abstract String getKey();        
+    protected abstract String getKey();      
+    
 }

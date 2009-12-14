@@ -8,7 +8,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 public class ShowSearchResultsAction extends CheckBoxAction {
 
     public ShowSearchResultsAction(ActionStore actionStore) {
-        super("Search Results", actionStore);
+        super("Show Search Results", actionStore);
     }
 
     @Override

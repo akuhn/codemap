@@ -9,11 +9,15 @@ import org.eclipse.swt.graphics.GC;
 
 public abstract class SelectionOverlay extends Layer {
 
+    private boolean enabled = true;
+
     public abstract MapSelection getSelection(MapValues map);
 
     @Override
     public final void paintMap(MapValues map, GC gc) {
+        if (!enabled) return;
         if (map.mapInstance.getValue() == null) return;
+        
         paintBefore(map, gc);
         paintChildren(map, gc);
         paintAfter(map, gc);
@@ -40,9 +44,12 @@ public abstract class SelectionOverlay extends Layer {
         for (Location each: selection.locationsOn(map)) {
             paintChild(map, gc, each);
         }
-    }	
+    }
+    
+    public void setEnabled(boolean b) {
+        enabled  = b;
+    }
 
     public abstract void paintChild(MapValues map, GC gc, Location each);
-
 
 }

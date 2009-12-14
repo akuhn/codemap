@@ -2,7 +2,8 @@ package org.codemap.layers;
 
 import org.codemap.Location;
 import org.codemap.MapInstance;
-import org.codemap.mapview.TextUpdater;
+import org.codemap.mapview.NullTextUpdater;
+import org.codemap.mapview.ITextUpdater;
 import org.codemap.resources.MapValues;
 import org.codemap.util.MColor;
 import org.eclipse.swt.events.DragDetectEvent;
@@ -24,7 +25,7 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
     private int offsetX;
     private int offsetY;
     private MapValues mapValues;
-    private TextUpdater textUpdater;
+    private ITextUpdater textUpdater;
 
     public CodemapVisualization(MapValues values) {
         this.mapValues = values;
@@ -146,7 +147,7 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
         textUpdater = new NullTextUpdater();
     }
 
-    public void setUpdater(TextUpdater updater) {
+    public void setUpdater(ITextUpdater updater) {
         textUpdater = updater;
     }
 

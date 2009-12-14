@@ -1,5 +1,7 @@
 package org.codemap.commands;
 
+import static org.codemap.commands.Command.makeCommandId;
+
 import org.codemap.ByPackageColorScheme;
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;

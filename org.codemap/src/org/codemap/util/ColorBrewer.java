@@ -38,23 +38,9 @@ public class ColorBrewer {
 	    { 202, 178, 214 }
 	};    
 
-    private static int[][] heat_yellow = {
-        { 255, 255, 217 },
-        { 237, 248, 177 },
-        { 199, 233, 180 },
-        { 127, 205, 187 },
-        { 65, 182, 196 },
-        { 51, 160, 44 },
-        { 29, 145, 192 }
-    };        
-
-	public static ColorBrewer heatMapColors() {
-	    return new ColorBrewer().withColors(heat_yellow);
-	}
-	
     public static ColorBrewer divergingColors() {
         return new ColorBrewer().withColors(diverging);
-    }	
+    }
 
 	private ColorBrewer withColors(int[][] rgb) {
         for (int[] color: rgb) {

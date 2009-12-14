@@ -71,7 +71,6 @@ public class MapView extends ViewPart {
     private ActionStore actionStore = new ActionStore();
 
     public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
-    private static final String ATTR_CLASS = "class";
     
     private static final String SEARCHBOX_MESSAGE_NO_PROJECT = "select a project to enable searching ...";
     private static final String SEARCHBOX_MESSAGE = "type text to search in ";

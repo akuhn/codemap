@@ -1,11 +1,12 @@
-package org.codemap.util;
+package org.codemap.layers;
 
 import static org.codemap.util.CodemapIcons.FILE;
 
 import org.codemap.Location;
 import org.codemap.MapSelection;
-import org.codemap.layers.SelectionOverlay;
 import org.codemap.resources.MapValues;
+import org.codemap.util.CodemapIcons;
+import org.codemap.util.Resources;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -67,5 +68,4 @@ public class OpenFileIconsLayer extends SelectionOverlay {
         //draw image
         gc.drawImage(image, each.px - b.width/2, each.py - b.height/2);
     }
-
 }

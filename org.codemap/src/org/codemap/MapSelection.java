@@ -48,4 +48,8 @@ public class MapSelection extends CollectionValue<String> {
         }
         return result;
     }
+    
+    public void triggerChange() {
+        changed();
+    }
 }

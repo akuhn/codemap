@@ -11,6 +11,8 @@ public class LayerDropDownAction extends DropDownAction {
     private LinkWithCallHierarchyAction linkWithCallHierarchyAction;
     private ShowMarkersAction showMarkersAction;
     private ShowYouAreHereAction showYouAreHere;
+    private ShowOpenFilesAction showOpenFiles;
+    private ShowSelectionAction showSelection;
 
     public LayerDropDownAction(ActionStore actionStore) {
         super();
@@ -18,6 +20,8 @@ public class LayerDropDownAction extends DropDownAction {
         linkWithCallHierarchyAction = new LinkWithCallHierarchyAction(actionStore);
         showMarkersAction = new ShowMarkersAction(actionStore);
         showYouAreHere = new ShowYouAreHereAction(actionStore);
+        showOpenFiles = new ShowOpenFilesAction(actionStore);
+        showSelection = new ShowSelectionAction(actionStore);
     }
 
     @Override
@@ -26,6 +30,8 @@ public class LayerDropDownAction extends DropDownAction {
         addActionToMenu(menu, linkWithCallHierarchyAction);
         addActionToMenu(menu, showMarkersAction);
         addActionToMenu(menu, showYouAreHere);
+        addActionToMenu(menu, showOpenFiles);
+        addActionToMenu(menu, showSelection);
     }
 
     @Override

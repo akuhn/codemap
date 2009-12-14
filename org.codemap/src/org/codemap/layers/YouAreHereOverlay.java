@@ -18,7 +18,6 @@ public class YouAreHereOverlay extends SelectionOverlay {
     private static final int PADDING_X = 6;
     private static final int PADDING_Y = 1;
 
-
     @Override
     public void paintBefore(MapValues map, GC gc) {
         Device device = gc.getDevice();
@@ -65,6 +64,4 @@ public class YouAreHereOverlay extends SelectionOverlay {
     public MapSelection getSelection(MapValues map) {
         return map.youAreHereSelection;
     }
-
-
 }
