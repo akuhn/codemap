@@ -8,7 +8,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 public class ShowDefaultColorsAction extends RadioButtonAction {
 	
 	public ShowDefaultColorsAction(ActionStore actionStore) {
-		super("Show default colors", actionStore);
+		super("Show default Colors", actionStore);
 	}
 
     @Override
