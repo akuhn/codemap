@@ -5,6 +5,7 @@ import org.eclipse.jdt.ui.IContextMenuConstants;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
@@ -13,6 +14,15 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
 
 public class EclipseUtil {
+    
+    public static final ISelection EMPTY_SELECTION = new EmptySelection();  
+    
+    private static class EmptySelection implements ISelection {
+
+        public boolean isEmpty() {
+            return true;
+        }
+    }    
 
 	/** 
 	 * Displays save dialog and asks user for filename.

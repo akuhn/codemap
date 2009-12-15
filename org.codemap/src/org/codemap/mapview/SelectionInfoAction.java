@@ -10,9 +10,16 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 public class SelectionInfoAction extends Action {
     
     private static final String PREFIX = "selection: ";
+    private static final String EMPTY = "<empty>";    
     
     public SelectionInfoAction(ISelection selection) {
-        if (!(selection instanceof IStructuredSelection)) return;
+        if (!(selection instanceof IStructuredSelection)) {
+            // only structured selections make sense in our context.
+            // thus if it is not a structured selection, it must be an empty one.
+            setText(PREFIX + EMPTY);
+            return;
+        }
+        
         IStructuredSelection structuredSelection = (IStructuredSelection) selection;
         ArrayList<ICompilationUnit> compilationUnits = new ArrayList<ICompilationUnit>();
         for(Object entry: structuredSelection.toList()) {
@@ -24,7 +31,7 @@ public class SelectionInfoAction extends Action {
 
     private String makeText(ArrayList<ICompilationUnit> compilationUnits) {
         if (compilationUnits.isEmpty()) {
-            return "<empty>";
+            return EMPTY;
         }
         if (compilationUnits.size() == 1) {
             ICompilationUnit unit = compilationUnits.get(0);
