@@ -88,6 +88,11 @@ class TestFileFilter {
             return false; // be conservative
         } catch (CoreException e) {
             return false; // be conservative
+        } catch (NullPointerException e){
+            // JunitCore might throw some nullpointers from time to time if
+            // the project is not set-up correctly, especially if a java file is
+            // not on the build path.
+            return false;
         }
         // if we found one (or maybe more) then we have a java test file
         return findTestTypes.length > 0;

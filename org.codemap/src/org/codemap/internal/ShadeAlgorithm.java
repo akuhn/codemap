@@ -4,6 +4,7 @@ import static java.lang.Math.PI;
 import static java.lang.Math.atan;
 import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
+import static java.lang.Math.min;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 
@@ -66,7 +67,7 @@ public class ShadeAlgorithm extends MapAlgorithm<double[][]> {
                 double aspectRad = atan2(dy, -dx);
                 double shading = (cos(zenithRad) * cos(slopeRad) + (sin(zenithRad) * sin(slopeRad) * cos(azimuthRad
                         - aspectRad)));
-                hillshade[x][y] = shading;
+                hillshade[x][y] = shading; //min(0.5, shading);
                 
                 // calculate contourlines
                 int topHeight = (int) Math.floor(top / step);
