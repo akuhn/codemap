@@ -159,7 +159,7 @@ public class MarkerController {
 	}
 
 	private void handleClosedProject(IResource project) {
-	    // FIXME: what the fuck is this?
+	    // FIXME: what the *** is this?
 		// TODO: iterate over the list of markers and delete the ones from the closed project
 //		Enumeration breakpoints= ((Vector)getBreakpoints0().clone()).elements();
 //		while (breakpoints.hasMoreElements()) {

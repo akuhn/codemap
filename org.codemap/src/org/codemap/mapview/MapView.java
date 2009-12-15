@@ -196,7 +196,6 @@ public class MapView extends ViewPart {
     
     @Override
     public void setFocus() {
-        // FIXME: correct?
         mapContainer.setFocus();
     }
     

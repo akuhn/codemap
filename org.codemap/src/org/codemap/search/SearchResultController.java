@@ -78,7 +78,6 @@ public class SearchResultController {
 
     public void onElementsRemoved(Collection<Object> elements) {
         getSearchSelection().removeAll(extractMatches(elements));
-        // FIXME might cause redraws even when not enabled?!?
     }
 
     private void loadNewestQueryResult(ISearchQuery[] queries) {

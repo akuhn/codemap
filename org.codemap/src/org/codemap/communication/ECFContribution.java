@@ -110,7 +110,7 @@ public class ECFContribution {
 
     private void registerSelectionWithActiveMap() {
         MapPerProject activeMap = CodemapCore.getPlugin().getActiveMap();
-        // FIXME: find a way to queue incoming selections as long as there is no map selected
+        // TODO: find a way to queue incoming selections as long as there is no map selected
         if (activeMap == null) return;
         if (! activeMap.containsLayer(openFilesLayer)){
             activeMap.addSelectionLayer(openFilesLayer, communicationSelection);
