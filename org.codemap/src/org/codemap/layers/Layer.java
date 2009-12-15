@@ -3,6 +3,8 @@ package org.codemap.layers;
 import org.codemap.resources.MapValues;
 import org.eclipse.swt.events.DragDetectEvent;
 import org.eclipse.swt.events.DragDetectListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
@@ -17,7 +19,8 @@ public abstract class Layer implements
         MouseMoveListener, 
         MouseTrackListener, 
         MouseWheelListener,
-        DragDetectListener {
+        DragDetectListener, 
+        KeyListener {
 
     private CodemapVisualization root;
 
@@ -79,5 +82,15 @@ public abstract class Layer implements
     protected void redraw(MouseEvent e) {
         if (e.widget instanceof Control) ((Control) e.widget).redraw();
     }
+    
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // do nothing        
+    }
+    
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // do nothing
+    }    
 
 }

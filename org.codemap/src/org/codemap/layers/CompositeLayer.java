@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.codemap.resources.MapValues;
 import org.eclipse.swt.events.DragDetectEvent;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.GC;
 
@@ -92,5 +93,15 @@ public class CompositeLayer extends Layer implements Iterable<Layer> {
     public Iterator<Layer> iterator() {
         return children.iterator();
     }
+    
+    @Override
+    public void keyReleased(KeyEvent e) {
+        for (Layer each: children ) each.keyReleased(e);              
+    }
+    
+    @Override
+    public void keyPressed(KeyEvent e) {
+        for (Layer each: children ) each.keyPressed(e);
+    }  
 
 }

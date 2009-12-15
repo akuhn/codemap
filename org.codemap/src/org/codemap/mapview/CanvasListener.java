@@ -3,6 +3,8 @@ package org.codemap.mapview;
 import org.codemap.layers.CodemapVisualization;
 import org.eclipse.swt.events.DragDetectEvent;
 import org.eclipse.swt.events.DragDetectListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
@@ -15,7 +17,7 @@ import org.eclipse.swt.widgets.Canvas;
 
 public class CanvasListener implements PaintListener, MouseListener,
         MouseMoveListener, MouseTrackListener, MouseWheelListener,
-        DragDetectListener {
+        DragDetectListener, KeyListener {
 
     private CodemapVisualization visualization;
 
@@ -26,6 +28,7 @@ public class CanvasListener implements PaintListener, MouseListener,
         newCanvas.addMouseTrackListener(this);
         newCanvas.addMouseWheelListener(this);
         newCanvas.addDragDetectListener(this);
+        newCanvas.addKeyListener(this);
     }
 
     public void setVisualization(CodemapVisualization visualization) {
@@ -94,5 +97,17 @@ public class CanvasListener implements PaintListener, MouseListener,
     public void dragDetected(DragDetectEvent e) {
         if (visualization != null)
             visualization.dragDetected(e);
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (visualization != null)
+            visualization.keyPressed(e);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (visualization != null)
+            visualization.keyReleased(e);
     }
 }

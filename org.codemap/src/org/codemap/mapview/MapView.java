@@ -61,7 +61,11 @@ public class MapView extends ViewPart {
         @Override
         public void menuAboutToShow(IMenuManager menu) {
             ISelection selection = theController.getSelectionProvider().getSelection();
+            menu.add(new Separator(GROUP_CODEMAP_SELECTIONINFO));
+            menu.appendToGroup(GROUP_CODEMAP_SELECTIONINFO, new SelectionInfoAction(selection));
+            
             EclipseUtil.createStandardGroups(menu);
+            
             menuActionGroups.setContext(new ActionContext(selection));
             menuActionGroups.fillContextMenu(menu);
             menuActionGroups.setContext(null);            
@@ -71,6 +75,7 @@ public class MapView extends ViewPart {
     private ActionStore actionStore = new ActionStore();
 
     public static final String MAP_VIEW_ID = CodemapCore.makeID(MapView.class);
+    public static final String GROUP_CODEMAP_SELECTIONINFO = "codemap.selectioninfo";
     
     private static final String SEARCHBOX_MESSAGE_NO_PROJECT = "select a project to enable searching ...";
     private static final String SEARCHBOX_MESSAGE = "type text to search in ";

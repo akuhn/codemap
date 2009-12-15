@@ -63,9 +63,6 @@ public class EclipseUtil {
      * @param menu the menu manager to be populated
      */
     public static void createStandardGroups(IMenuManager menu) {
-        if (!menu.isEmpty())
-            return;
-
         menu.add(new Separator(IContextMenuConstants.GROUP_NEW));
         menu.add(new GroupMarker(IContextMenuConstants.GROUP_GOTO));
         menu.add(new Separator(IContextMenuConstants.GROUP_OPEN));

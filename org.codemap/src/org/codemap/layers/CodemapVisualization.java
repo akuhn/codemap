@@ -7,6 +7,7 @@ import org.codemap.mapview.ITextUpdater;
 import org.codemap.resources.MapValues;
 import org.codemap.util.MColor;
 import org.eclipse.swt.events.DragDetectEvent;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
@@ -150,5 +151,4 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
     public void setUpdater(ITextUpdater updater) {
         textUpdater = updater;
     }
-
 }

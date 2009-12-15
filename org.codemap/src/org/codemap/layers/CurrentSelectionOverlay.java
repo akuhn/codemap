@@ -21,6 +21,7 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DragDetectEvent;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.GC;
@@ -161,6 +162,14 @@ public class CurrentSelectionOverlay extends SelectionOverlay {
     @Override
     public MapSelection getSelection(MapValues map) {
         return map.currentSelection;
+    }
+    
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (!(e.keyCode == SWT.ESC)) return;
+        MapSelection selection = getSelection(CodemapCore.getPlugin().getActiveMap().getValues());
+        selection.clear();
+        selectionChanged(selection);
     }
 
 }

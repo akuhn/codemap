@@ -15,7 +15,7 @@ public class GoodColorGenerator {
     public GoodColorGenerator(int n) {
         cols = new ArrayList<MColor>(n);
         for(int i = 0; i < n; i++) {
-            cols.add(i, HSBtoRGB((float) i / (float) n, SATURATION, BRIGHTNESS));
+            cols.add(HSBtoRGB((float) i / (float) n, SATURATION, BRIGHTNESS));
         }
         size = n;
         currentPos = 0;
@@ -42,35 +42,35 @@ public class GoodColorGenerator {
             float t = brightness * (1.0f - (saturation * (1.0f - f)));
             switch ((int) h) {
             case 0:
-            r = (int) (brightness * 255.0f + 0.5f);
-            g = (int) (t * 255.0f + 0.5f);
-            b = (int) (p * 255.0f + 0.5f);
-            break;
+                r = (int) (brightness * 255.0f + 0.5f);
+                g = (int) (t * 255.0f + 0.5f);
+                b = (int) (p * 255.0f + 0.5f);
+                break;
             case 1:
-            r = (int) (q * 255.0f + 0.5f);
-            g = (int) (brightness * 255.0f + 0.5f);
-            b = (int) (p * 255.0f + 0.5f);
-            break;
+                r = (int) (q * 255.0f + 0.5f);
+                g = (int) (brightness * 255.0f + 0.5f);
+                b = (int) (p * 255.0f + 0.5f);
+                break;
             case 2:
-            r = (int) (p * 255.0f + 0.5f);
-            g = (int) (brightness * 255.0f + 0.5f);
-            b = (int) (t * 255.0f + 0.5f);
-            break;
+                r = (int) (p * 255.0f + 0.5f);
+                g = (int) (brightness * 255.0f + 0.5f);
+                b = (int) (t * 255.0f + 0.5f);
+                break;
             case 3:
-            r = (int) (p * 255.0f + 0.5f);
-            g = (int) (q * 255.0f + 0.5f);
-            b = (int) (brightness * 255.0f + 0.5f);
-            break;
+                r = (int) (p * 255.0f + 0.5f);
+                g = (int) (q * 255.0f + 0.5f);
+                b = (int) (brightness * 255.0f + 0.5f);
+                break;
             case 4:
-            r = (int) (t * 255.0f + 0.5f);
-            g = (int) (p * 255.0f + 0.5f);
-            b = (int) (brightness * 255.0f + 0.5f);
-            break;
+                r = (int) (t * 255.0f + 0.5f);
+                g = (int) (p * 255.0f + 0.5f);
+                b = (int) (brightness * 255.0f + 0.5f);
+                break;
             case 5:
-            r = (int) (brightness * 255.0f + 0.5f);
-            g = (int) (p * 255.0f + 0.5f);
-            b = (int) (q * 255.0f + 0.5f);
-            break;
+                r = (int) (brightness * 255.0f + 0.5f);
+                g = (int) (p * 255.0f + 0.5f);
+                b = (int) (q * 255.0f + 0.5f);
+                break;
             }
         }
         return new MColor(r, g, b);
