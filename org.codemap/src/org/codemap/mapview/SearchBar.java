@@ -64,8 +64,8 @@ public class SearchBar extends Composite {
      * @param text to search for
      */
     protected void handleSearchPerformed(String text) {
-        TextSearchQueryProvider queryProvider = TextSearchQueryProvider.getPreferred();
         try {
+            TextSearchQueryProvider queryProvider = TextSearchQueryProvider.getPreferred();
             IJavaProject currentJavaProject = theController.getCurrentProject();
             if (currentJavaProject == null) return;
             
