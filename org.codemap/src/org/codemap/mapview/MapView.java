@@ -22,16 +22,21 @@ import org.eclipse.jdt.ui.actions.JavaSearchActionGroup;
 import org.eclipse.jdt.ui.actions.OpenEditorActionGroup;
 import org.eclipse.jdt.ui.actions.OpenViewActionGroup;
 import org.eclipse.jdt.ui.actions.RefactorActionGroup;
+import org.eclipse.jface.action.ActionContributionItem;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -40,7 +45,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISharedImages;
@@ -176,10 +184,10 @@ public class MapView extends ViewPart {
         IToolBarManager tbm = getToolBarManager();
         tbm.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
         tbm.add(new Separator());
-
-        tbm.add(new ColorDropDownAction(actionStore));
-        tbm.add(new LayerDropDownAction(actionStore));
-        tbm.add(new LabelDrowDownAction(actionStore));
+        tbm.add(new ColorDropDownAction(actionStore).listenToMouseOn(tbm));
+        
+        tbm.add(new LayerDropDownAction(actionStore).listenToMouseOn(tbm));
+        tbm.add(new LabelDrowDownAction(actionStore).listenToMouseOn(tbm));
 
         tbm.add(linkWithSelection = new LinkWithSelectionAction(theController, memento));
         tbm.add(forceSelection = new ForceSelectionAction(theController, memento));
