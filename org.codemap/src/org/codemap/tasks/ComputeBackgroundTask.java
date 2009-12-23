@@ -158,7 +158,11 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
             this.device = device;
             this.colors = colors;
         }
-
+        
+        /**
+         * Performance optimized rendering,
+         * uses byte[] for RGB color information and transparency. 
+         */
         public Image render() {
             // 1 byte per color, we fill 24bit per pixel
             byte[] imageBytes = new byte[mapSize*mapSize*3];
@@ -220,7 +224,5 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
             imageData.alphaData = alphaBytes;
             return new Image(device, imageData);            
         }
-        
     }
-    
 }
