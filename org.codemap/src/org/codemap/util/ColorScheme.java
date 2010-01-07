@@ -24,5 +24,7 @@ public abstract class ColorScheme {
     public abstract void renderLabel(GC gc, String text, Rectangle bounds);
 
     public abstract double getLabelHeightFactor();
+
+    public abstract MColor getArrowColor();
     
 }

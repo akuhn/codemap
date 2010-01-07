@@ -1,16 +1,20 @@
 package org.codemap.callhierarchy;
 
+import static org.codemap.CodemapCore.colorScheme;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codemap.CodemapCore;
 import org.codemap.Location;
 import org.codemap.MapInstance;
 import org.codemap.callhierarchy.vizualization.EdgeRenderer;
 import org.codemap.callhierarchy.vizualization.Options;
 import org.codemap.layers.Layer;
 import org.codemap.resources.MapValues;
+import org.codemap.util.MColor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
@@ -48,9 +52,9 @@ public class CallOverlay extends Layer {
         }
         
         gc.setAlpha(255);
-        Color white = gc.getDevice().getSystemColor(SWT.COLOR_WHITE);
-        gc.setForeground(white);
-        gc.setBackground(white);
+        Color arrow = colorScheme().getArrowColor().asSWTColor(gc.getDevice());
+        gc.setForeground(arrow);
+        gc.setBackground(arrow);
         for (RenderHelper each: renderers) {
             each.renderEdges(gc);
         }

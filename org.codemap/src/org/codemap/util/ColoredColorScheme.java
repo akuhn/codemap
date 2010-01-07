@@ -45,4 +45,9 @@ public class ColoredColorScheme extends ColorScheme {
         return 2.0;
     }
 
+    @Override
+    public MColor getArrowColor() {
+        return MColor.WHITE;
+    }
+
 }

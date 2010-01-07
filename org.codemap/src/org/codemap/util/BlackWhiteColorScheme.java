@@ -37,4 +37,9 @@ public class BlackWhiteColorScheme extends ColorScheme {
         return 3.0;
     }
 
+    @Override
+    public MColor getArrowColor() {
+        return MColor.BLACK;
+    }
+
 }

@@ -15,6 +15,7 @@ public final class MColor {
 	public static final MColor GRAY_HILL = new MColor(185, 185, 185);
 	public static final MColor GRAY_SHORE = new MColor(213, 213, 213);
     public static final MColor WHITE = new MColor(255, 255, 255);
+    public static final MColor BLACK = new MColor(0, 0, 0);
 
 	private final int red, green, blue, rgb;
 
