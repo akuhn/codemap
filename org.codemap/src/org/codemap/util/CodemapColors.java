@@ -1,5 +1,7 @@
 package org.codemap.util;
 
+import static org.codemap.CodemapCore.colorScheme;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +13,7 @@ public class CodemapColors extends MapScheme<MColor> {
     private Map<String, MColor> forLocation;
 
     public CodemapColors() {
-        this(MColor.HILLGREEN);
+        this(colorScheme().getHillColor());
     }
 
     public CodemapColors(MColor defaultColor) {

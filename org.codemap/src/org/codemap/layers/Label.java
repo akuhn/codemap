@@ -3,6 +3,7 @@
  */
 package org.codemap.layers;
 
+import org.codemap.CodemapCore;
 import org.codemap.Location;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Device;
@@ -58,16 +59,7 @@ public class Label implements Comparable<Label> {
         }
         Font font = new Font(gc.getDevice(), fontData);
         gc.setFont(font);
-        
-        Device device = gc.getDevice();
-        gc.setAlpha(128);
-        gc.setForeground(device.getSystemColor(SWT.COLOR_BLACK));
-        gc.drawText(text, bounds.x + 1, bounds.y + 1, SWT.DRAW_TRANSPARENT);
-        gc.setAlpha(255);
-        
-        gc.setForeground(device.getSystemColor(SWT.COLOR_WHITE));
-        gc.drawText(text, bounds.x, bounds.y, SWT.DRAW_TRANSPARENT);
-        
+        CodemapCore.colorScheme().renderLabel(gc, text, bounds);
         font.dispose();
     }
 

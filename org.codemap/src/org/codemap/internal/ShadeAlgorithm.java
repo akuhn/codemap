@@ -4,10 +4,11 @@ import static java.lang.Math.PI;
 import static java.lang.Math.atan;
 import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
-import static java.lang.Math.min;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
+import static org.codemap.CodemapCore.colorScheme;
 
+import org.codemap.CodemapCore;
 import org.codemap.MapAlgorithm;
 import org.codemap.MapSetting;
 import org.codemap.util.StopWatch;
@@ -20,8 +21,7 @@ import org.codemap.util.StopWatch;
  */
 public class ShadeAlgorithm extends MapAlgorithm<double[][]> {
 
-    private static final double Z_FACTOR = 0.6e-3;
-    private static final double CONTOUR_DARKEN_FACTOR = 0.5;
+    private static final double Z_FACTOR_MULT = 1e-3;
     public static final MapSetting<Integer> CONTOUR_STEP = MapSetting.define("CONTOUR_STEP", 10);
 
     @Override
@@ -32,7 +32,11 @@ public class ShadeAlgorithm extends MapAlgorithm<double[][]> {
         double zenithRad = 45 * PI / 180;
         // azimuth: direction of sun on x-y-plane
         double azimuthRad = (315 - 180) * PI / 180;
-        double z_factor = Z_FACTOR * map.getWidth();
+        
+        
+        // generate magic factor that takes darken factor of color scheme into account
+        // furthermore, it adapts to the map-size
+        double z_factor = (1.1 - colorScheme().getDarkenFactor()) * Z_FACTOR_MULT * map.getWidth();
         
         int step = map.get(CONTOUR_STEP);
         
@@ -40,6 +44,9 @@ public class ShadeAlgorithm extends MapAlgorithm<double[][]> {
         float[][] DEM = map.getDEM();
         
         int width = map.width;
+        
+        double contour_darken_factor = colorScheme().getDarkenFactor();
+        
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < width; y++) {
                 float here = DEM[x][y];
@@ -76,7 +83,7 @@ public class ShadeAlgorithm extends MapAlgorithm<double[][]> {
                 boolean isCoastline = topHeight == 0 || leftHeight == 0 || hereHeight == 0;
                 boolean isContourLine = (topHeight != hereHeight || leftHeight != hereHeight) && !isCoastline;
                 if (isContourLine) {
-                    hillshade[x][y] *= CONTOUR_DARKEN_FACTOR;
+                    hillshade[x][y] *= contour_darken_factor;
                 }
             }
         }

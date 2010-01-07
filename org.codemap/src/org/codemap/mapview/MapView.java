@@ -146,7 +146,8 @@ public class MapView extends ViewPart {
         mapContainer = new Composite(composite, SWT.NONE);
         mapContainer.setLayout(new FillLayout(SWT.LEFT));
         mapContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
-        mapContainer.setBackground(MColor.WATER.asSWTColor(parent.getDisplay()));
+        
+        updateBackgroundColors();
 
         canvas = new Canvas(mapContainer, SWT.DOUBLE_BUFFERED);
         hoverShell = new HoverShell(canvas);
@@ -165,6 +166,10 @@ public class MapView extends ViewPart {
         theController.onOpenView();
     }
     
+    public void updateBackgroundColors() {
+        mapContainer.setBackground(CodemapCore.getPlugin().getColorScheme().getWaterColor().asSWTColor(Display.getDefault()));
+    }
+
     private void configureActionBar() {
         IActionBars actionBars = getViewSite().getActionBars();
         IMenuManager viewMenu = actionBars.getMenuManager();

@@ -2,6 +2,7 @@ package org.codemap;
 
 import org.codemap.communication.ECFContribution;
 import org.codemap.mapview.MapController;
+import org.codemap.util.ColorScheme;
 import org.codemap.util.EclipseTaskFactory;
 import org.codemap.util.MColor;
 import org.codemap.util.MapScheme;
@@ -25,6 +26,7 @@ public class CodemapCore extends AbstractUIPlugin {
     public final MapSelection openFilesSelection;
     public final MapSelection currentSelection;
     private ECFContribution ecfContrib;
+    private ColorScheme colorScheme;
 
     public MapSelection getYouAreHereSelection() {
         return youAreHereSelection;
@@ -43,6 +45,7 @@ public class CodemapCore extends AbstractUIPlugin {
         youAreHereSelection = new MapSelection();
         openFilesSelection = new MapSelection();
         currentSelection = new MapSelection();
+        colorScheme = ColorScheme.blackWhite();
     }
 
     @Override
@@ -79,7 +82,7 @@ public class CodemapCore extends AbstractUIPlugin {
     }
 
     public MapScheme<MColor> getDefaultColorScheme() {
-        return new MapScheme<MColor>(MColor.HILLGREEN);
+        return new MapScheme<MColor>(getColorScheme().getHillColor());
     }
 
     public void register(MapController mapController) {
@@ -96,6 +99,14 @@ public class CodemapCore extends AbstractUIPlugin {
 
     public MapController getController() {
         return theController;
+    }
+    
+    public ColorScheme getColorScheme() {
+        return colorScheme;
+    }
+    
+    public static ColorScheme colorScheme() {
+        return CodemapCore.getPlugin().getColorScheme();
     }    
     
 }

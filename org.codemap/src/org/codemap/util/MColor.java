@@ -10,8 +10,11 @@ public final class MColor {
 
 	public static final MColor HILLGREEN = new MColor(196, 236, 0);
 	public static final MColor SHORE = new MColor(116, 169, 207);	
-	public static final MColor WATER = new MColor(5, 112, 176);      	
+	public static final MColor WATER = new MColor(5, 112, 176);
 	public static final MColor GRAY_204 = new MColor(204, 204, 204);
+	public static final MColor GRAY_HILL = new MColor(185, 185, 185);
+	public static final MColor GRAY_SHORE = new MColor(213, 213, 213);
+    public static final MColor WHITE = new MColor(255, 255, 255);
 
 	private final int red, green, blue, rgb;
 

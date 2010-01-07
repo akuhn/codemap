@@ -3,12 +3,14 @@ package org.codemap.tasks;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.codemap.CodemapCore;
 import org.codemap.DefaultLabelScheme;
 import org.codemap.Labeling;
 import org.codemap.Location;
 import org.codemap.MapInstance;
 import org.codemap.layers.Label;
 import org.codemap.layers.LabelOverlay;
+import org.codemap.util.ColorScheme;
 import org.codemap.util.MapScheme;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Device;
@@ -57,7 +59,7 @@ public class ComputeLabelingTask extends TaskValue<Labeling> {
             String text = labelScheme.forLocation(each.getPoint());
             if (text == null) continue;
             FontData[] fontData = basefont.getFontData();
-            int height = (int) (Math.sqrt(each.getElevation()) * 2);
+            int height = (int) (Math.sqrt(each.getElevation()) * CodemapCore.colorScheme().getLabelHeightFactor());
             for (FontData fd: fontData) fd.setHeight(height);
             Font font = new Font(gc.getDevice(), fontData);
             gc.setFont(font);

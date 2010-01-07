@@ -1,11 +1,15 @@
 package org.codemap.tasks;
 
+import static org.codemap.CodemapCore.colorScheme;
+
+import org.codemap.CodemapCore;
 import org.codemap.DigitalElevationModel;
 import org.codemap.HillShading;
 import org.codemap.Location;
 import org.codemap.MapInstance;
 import org.codemap.MapSetting;
 import org.codemap.internal.DEMAlgorithm;
+import org.codemap.util.ColorScheme;
 import org.codemap.util.MColor;
 import org.codemap.util.MapScheme;
 import org.codemap.util.StopWatch;
@@ -94,7 +98,8 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
 
     private void paintWater(ProgressMonitor monitor, GC gc) {
             if (monitor.isCanceled()) return;
-            Color blue = MColor.WATER.asSWTColor(gc.getDevice());
+            
+            Color blue = colorScheme().getWaterColor().asSWTColor(gc.getDevice());
             gc.setBackground(blue);
             gc.fillRectangle(gc.getClipping());
             blue.dispose();
@@ -104,7 +109,7 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
         if (monitor.isCanceled()) return;
         if (map == null) return;
         
-        Color shore = MColor.SHORE.asSWTColor(gc.getDevice());
+        Color shore = colorScheme().getShoreColor().asSWTColor(gc.getDevice());
         gc.setForeground(shore);
         gc.setLineWidth(2);
         for (Location each: map.locations()) {
@@ -169,8 +174,8 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
             byte[] alphaBytes = new byte[mapSize*mapSize];
             
             // colors needed later
-            byte[] waterColor = MColor.WATER.asByte();
-            byte[] shoreColor = MColor.SHORE.asByte();
+            byte[] waterColor = colorScheme().getWaterColor().asByte();
+            byte[] shoreColor = colorScheme().getShoreColor().asByte();
             
             int shorelineHeight = map.get(SHORELINE_HEIGHT);
             int hillineHeight = map.get(HILLLINE_HEIGHT);
@@ -196,7 +201,7 @@ public class ComputeBackgroundTask extends TaskValue<Image> {
                 Location nearestNeighbor = map.nearestNeighbor(x, y);
                 MColor mcolor;
                 if (nearestNeighbor == null) {
-                    mcolor = MColor.HILLGREEN;
+                    mcolor = colorScheme().getHillColor();
                 } else {
                     mcolor = colors.forLocation(nearestNeighbor.getPoint());                    
                 }

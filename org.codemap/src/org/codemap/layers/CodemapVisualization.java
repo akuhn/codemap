@@ -1,5 +1,8 @@
 package org.codemap.layers;
 
+import static org.codemap.CodemapCore.colorScheme;
+
+import org.codemap.CodemapCore;
 import org.codemap.Location;
 import org.codemap.MapInstance;
 import org.codemap.mapview.NullTextUpdater;
@@ -38,7 +41,7 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
         try {
             GC gc = e.gc;
             Device device = gc.getDevice();
-            Color waterColor = MColor.WATER.asSWTColor(device);
+            Color waterColor = colorScheme().getWaterColor().asSWTColor(device);
             gc.setBackground(waterColor);
             gc.fillRectangle(gc.getClipping());
             
