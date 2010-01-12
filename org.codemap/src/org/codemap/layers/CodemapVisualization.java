@@ -30,10 +30,47 @@ public final class CodemapVisualization extends CompositeLayer implements PaintL
     private int offsetY;
     private MapValues mapValues;
     private ITextUpdater textUpdater;
+    
+    private CodemapVisualization viz;
+    private CompositeLayer shared;
+    private YouAreHereOverlay youAreHere;
+    private OpenFileIconsLayer openFiles;
+    private CurrentSelectionOverlay selection;
 
     public CodemapVisualization(MapValues values) {
         this.mapValues = values;
+        this.initializeVisualization();
     }
+    
+    private void initializeVisualization() {
+
+        CompositeLayer foreground = new CompositeLayer();
+        foreground.add(new LabelOverlay());
+        foreground.add(selection = new CurrentSelectionOverlay());
+        // TODO add methods to CompositeLayer to replace layers by eg an ID
+        foreground.add(shared = new CompositeLayer());
+        foreground.add(youAreHere = new YouAreHereOverlay());
+        foreground.add(openFiles = new OpenFileIconsLayer());
+
+        add(new Background());
+        add(foreground);
+    }
+        
+    public CompositeLayer getSharedLayer() {
+        return shared;
+    }
+
+    public YouAreHereOverlay getYouAreHere() {
+        return youAreHere;
+    }
+
+    public OpenFileIconsLayer getOpenFiles() {
+        return openFiles;
+    }
+
+    public CurrentSelectionOverlay getSelection() {
+        return selection;
+    }    
 
     @Override
     public void paintControl(PaintEvent e) {

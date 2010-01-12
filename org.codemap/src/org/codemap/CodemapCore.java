@@ -45,7 +45,7 @@ public class CodemapCore extends AbstractUIPlugin {
         youAreHereSelection = new MapSelection();
         openFilesSelection = new MapSelection();
         currentSelection = new MapSelection();
-        colorScheme = ColorScheme.blackWhite();
+        colorScheme = ColorScheme.colors();
     }
 
     @Override

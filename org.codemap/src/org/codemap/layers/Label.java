@@ -52,6 +52,8 @@ public class Label implements Comparable<Label> {
     }
 
     public void render(GC gc, FontData[] fontData) {
+        if (fontHeight < 11) return;
+            
         int fontStyle = hasFocus ? SWT.BOLD : SWT.NORMAL;
         for (FontData fd: fontData) {
             fd.setHeight(fontHeight);

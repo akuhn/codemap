@@ -45,7 +45,7 @@ public class MapPerProject {
 
     private final IJavaProject project;
     private MapValues mapValues;
-    private MapVisualization mapVisualization;
+    private CodemapVisualization mapVisualization;
     private MapPerProjectCache cache;
 
     private ActionValue<Void> redrawAction;
@@ -66,7 +66,7 @@ public class MapPerProject {
         builder.setFileExtensions(Arrays.asList("*.java"));
         builder.setInitialConfiguration(readPreviousMapState());
         mapValues = new MapValues(builder);
-        mapVisualization = new MapVisualization(mapValues);
+        mapVisualization = new CodemapVisualization(mapValues);
 
         redrawAction = new ActionValue<Void>(
                 mapValues.mapInstance, 
@@ -91,7 +91,7 @@ public class MapPerProject {
     }
 
     public CodemapVisualization getVisualization() {
-        return mapVisualization.getVisualization();		
+        return mapVisualization;		
     }
 
     public IProject getProject() {
