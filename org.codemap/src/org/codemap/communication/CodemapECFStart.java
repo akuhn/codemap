@@ -17,7 +17,6 @@ import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.start.IECFStart;
 import org.eclipse.ecf.core.util.ECFException;
 import org.eclipse.ecf.datashare.IChannelContainerAdapter;
-import org.eclipse.osgi.util.NLS;
 
 public class CodemapECFStart implements IECFStart {
     

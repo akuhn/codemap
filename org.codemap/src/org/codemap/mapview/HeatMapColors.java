@@ -4,7 +4,6 @@ import static java.lang.Math.min;
 import static java.lang.Math.round;
 import static org.codemap.util.ArrayUtil.last;
 
-import org.codemap.util.ArrayUtil;
 import org.codemap.util.MColor;
 
 /**

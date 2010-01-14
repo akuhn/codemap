@@ -7,15 +7,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.codemap.CodemapCore;
 import org.codemap.Location;
 import org.codemap.MapInstance;
 import org.codemap.callhierarchy.vizualization.EdgeRenderer;
 import org.codemap.callhierarchy.vizualization.Options;
 import org.codemap.layers.Layer;
 import org.codemap.resources.MapValues;
-import org.codemap.util.MColor;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 

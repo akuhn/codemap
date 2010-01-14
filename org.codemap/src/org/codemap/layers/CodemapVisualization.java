@@ -2,15 +2,12 @@ package org.codemap.layers;
 
 import static org.codemap.CodemapCore.colorScheme;
 
-import org.codemap.CodemapCore;
 import org.codemap.Location;
 import org.codemap.MapInstance;
-import org.codemap.mapview.NullTextUpdater;
 import org.codemap.mapview.ITextUpdater;
+import org.codemap.mapview.NullTextUpdater;
 import org.codemap.resources.MapValues;
-import org.codemap.util.MColor;
 import org.eclipse.swt.events.DragDetectEvent;
-import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;

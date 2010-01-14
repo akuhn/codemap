@@ -16,12 +16,9 @@ import org.codemap.eclemma.NullCoverageListener;
 import org.codemap.layers.CodemapVisualization;
 import org.codemap.marker.MarkerController;
 import org.codemap.search.SearchResultController;
-import org.codemap.util.EclipseUtil;
 import org.codemap.util.Resources;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.graphics.Point;
 
 /**

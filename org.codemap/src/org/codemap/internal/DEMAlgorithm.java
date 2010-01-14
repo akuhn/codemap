@@ -66,13 +66,14 @@ public class DEMAlgorithm extends MapAlgorithm<float[][]> {
         double distFactor2 = -1.0 
         / (elevationFactor * elevationFactor) 
         * (MAGIC_VALUE * MAGIC_VALUE)
-        / ((DEM.length * DEM.length))
+        / (DEM.length * DEM.length) // bigger hill when there are more pixels
         / 2;
         radius = computePieLoop(pie, elevationFactor, distFactor2);
         return pie;
     }
 
     private int computePieLoop(float[][] pie, double elevationFactor, double distFactor2) {
+        // generate square numbers by summing up all the odd numbers
         for (int n = 0, n2 = 0; n < pie.length; n2 += (++n)+n-1) {
             pie[n] = new float[n+1];
             for (int m = 0, dist2 = n2; m <= n; dist2 += (++m)+m-1) {

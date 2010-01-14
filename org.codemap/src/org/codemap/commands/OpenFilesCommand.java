@@ -2,7 +2,6 @@ package org.codemap.commands;
 
 import org.codemap.CodemapCore;
 import org.codemap.MapPerProject;
-import org.codemap.layers.OpenFilesOverlay;
 import org.codemap.mapview.action.CommandAction;
 import org.codemap.mapview.action.ShowOpenFilesAction;
 import org.codemap.resources.MapValues;

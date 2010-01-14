@@ -8,7 +8,6 @@ import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 import static org.codemap.CodemapCore.colorScheme;
 
-import org.codemap.CodemapCore;
 import org.codemap.MapAlgorithm;
 import org.codemap.MapSetting;
 import org.codemap.util.StopWatch;

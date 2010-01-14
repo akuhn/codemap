@@ -10,7 +10,6 @@ import org.codemap.Location;
 import org.codemap.MapInstance;
 import org.codemap.layers.Label;
 import org.codemap.layers.LabelOverlay;
-import org.codemap.util.ColorScheme;
 import org.codemap.util.MapScheme;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Device;

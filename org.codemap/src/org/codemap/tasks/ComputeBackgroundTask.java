@@ -2,14 +2,12 @@ package org.codemap.tasks;
 
 import static org.codemap.CodemapCore.colorScheme;
 
-import org.codemap.CodemapCore;
 import org.codemap.DigitalElevationModel;
 import org.codemap.HillShading;
 import org.codemap.Location;
 import org.codemap.MapInstance;
 import org.codemap.MapSetting;
 import org.codemap.internal.DEMAlgorithm;
-import org.codemap.util.ColorScheme;
 import org.codemap.util.MColor;
 import org.codemap.util.MapScheme;
 import org.codemap.util.StopWatch;
