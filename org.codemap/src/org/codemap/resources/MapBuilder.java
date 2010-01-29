@@ -41,13 +41,24 @@ public class MapBuilder {
         double[] y = new double[lsi.documentCount()];
         Map<String, Point> cachedPoints = initialConfiguration.asMap();
         int n = 0;
+        
+        boolean doLayout = false;
         for (String document: lsi.documents()) {
             Point p = cachedPoints.get(document);
-            if (p == null) p = Point.newRandom(document);
+            if (p == null) {
+                p = Point.newRandom(document);
+                doLayout = true;
+            }
             x[n] = p.x;
             y[n] = p.y;
             n++;
         }
+        
+        Collection<Point> locations = doLayout ? runLayout(lsi, x, y) : loadCached(lsi, x, y);
+        return new Configuration(locations).normalize();
+    }
+
+    private Collection<Point> runLayout(LatentSemanticIndex lsi, double[] x, double[] y) {
         LayoutAlgorithm mds = LayoutAlgorithm.fromCorrelationMatrix(lsi, x, y);
         mds.normalize();
         Collection<Point> locations = new ArrayList<Point>();
@@ -56,7 +67,17 @@ public class MapBuilder {
             locations.add(new Point(mds.x[index], mds.y[index], each));
             index++;
         }
-        return new Configuration(locations).normalize();
+        return locations;
+    }
+
+    private Collection<Point> loadCached(LatentSemanticIndex lsi2, double[] x, double[] y) {
+        Collection<Point> locations = new ArrayList<Point>();
+        int index = 0;
+        for (String each: lsi.documents()) {
+            locations.add(new Point(x[index], y[index], each));
+            index++;
+        }
+        return locations;        
     }
 
     public MapBuilder addCorpus(LatentSemanticIndex index) {
