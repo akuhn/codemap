@@ -6,11 +6,13 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import ch.akuhn.util.Jason;
+
 public class SparseVector extends Vector {
 
-	/* default */int[] keys;
-	/* default */int size, used;
-	/* default */double[] values;
+	/*default*/ int[] keys;
+	/*default*/ int size, used;
+	/*default*/ double[] values;
 
 	protected SparseVector(double[] values) {
 		this(values.length);
@@ -76,7 +78,10 @@ public class SparseVector extends Vector {
 	}
 
 	public boolean equals(SparseVector v) {
-		return size == v.size && used == v.used && Arrays.equals(keys, v.keys) && Arrays.equals(values, values);
+		return size == v.size &&
+				used == v.used && 
+				Arrays.equals(keys, v.keys) &&
+				Arrays.equals(values, values);
 	}
 
 	@Override
@@ -99,10 +104,8 @@ public class SparseVector extends Vector {
 	public double put(int key, double value) {
 		if (key < 0 || key >= size) throw new IndexOutOfBoundsException(Integer.toString(key));
 		int spot = Arrays.binarySearch(keys, 0, used, key);
-		if (spot >= 0)
-			return values[spot] = (float) value;
-		else
-			return update(-1 - spot, key, value);
+		if (spot >= 0) return values[spot] = (float) value;
+		else return update(-1 - spot, key, value);
 	}
 
 	public void resizeTo(int newSize) {
@@ -145,15 +148,13 @@ public class SparseVector extends Vector {
 	@Override
 	public double dot(Vector x) {
 		double product = 0;
-		for (int k = 0; k < used; k++)
-			product += x.get(keys[k]) * values[k];
+		for (int k = 0; k < used; k++) product += x.get(keys[k]) * values[k];
 		return product;
 	}
 
 	@Override
 	public void scaleAndAddTo(double a, Vector y) {
-		for (int k = 0; k < used; k++)
-			y.add(keys[k], a * values[k]);
+		for (int k = 0; k < used; k++) y.add(keys[k], a * values[k]);
 	}
 
 	@Override
@@ -166,16 +167,23 @@ public class SparseVector extends Vector {
 		SparseVector y = new SparseVector(size);
 		y.keys = Arrays.copyOf(keys, size);
 		y.values = Arrays.copyOf(values, size);
-		for (int i = 0; i < values.length; i++)
-			values[i] *= scalar;
+		for (int i = 0; i < values.length; i++) values[i] *= scalar;
 		return y;
 	}
-
+	
+	public void toJason(Jason j) {
+		j.begin(Vector.class)
+			.put("length", size)
+			.put("sparse", true)
+			.put("keys", keys, used)
+			.put("values", values, used)
+			.end();
+	}
+	
 	@Override
 	public void apply(Function f) {
 		assert f.apply(0) == 0; // assume zero is fixpoint
-		for (int n = 0; n < used; n++)
-			values[n] = f.apply(values[n]);
+		for (int n = 0; n < used; n++) values[n] = f.apply(values[n]);
 	}
-
+	
 }
