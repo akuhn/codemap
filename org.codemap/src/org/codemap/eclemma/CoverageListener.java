@@ -30,7 +30,7 @@ import ch.akuhn.values.Value;
 
 import com.mountainminds.eclemma.core.CoverageTools;
 import com.mountainminds.eclemma.core.analysis.IJavaCoverageListener;
-import com.mountainminds.eclemma.core.analysis.IJavaElementCoverage;
+// import com.mountainminds.eclemma.core.analysis.IJavaElementCoverage;
 import com.mountainminds.eclemma.core.analysis.IJavaModelCoverage;
 
 public class CoverageListener implements IJavaCoverageListener, ICodemapCoverage {
@@ -56,15 +56,17 @@ public class CoverageListener implements IJavaCoverageListener, ICodemapCoverage
 
         private boolean visit(ICompilationUnit compilationUnit) {
 
-            String identifier = Resources.asPath(compilationUnit);
-            IJavaElementCoverage coverageInfo = CoverageTools
-                    .getCoverageInfo(compilationUnit);
-            if (coverageInfo == null) {
-                // for interfaces where we do not have coverage information
-                return false;
-            }
-            identifiers.add(new Pair<String, Double>(identifier, coverageInfo
-                    .getLineCounter().getRatio()));
+// XXX commented this out to make it run!        	
+        	
+//            String identifier = Resources.asPath(compilationUnit);
+//            IJavaElementCoverage coverageInfo = CoverageTools
+//                    .getCoverageInfo(compilationUnit);
+//            if (coverageInfo == null) {
+//                // for interfaces where we do not have coverage information
+//                return false;
+//            }
+//            identifiers.add(new Pair<String, Double>(identifier, coverageInfo
+//                    .getLineCounter().getRatio()));
             return false;
         }
     }
@@ -86,18 +88,21 @@ public class CoverageListener implements IJavaCoverageListener, ICodemapCoverage
 
     @Override
     public void coverageChanged() {
-        IJavaModelCoverage coverage = CoverageTools.getJavaModelCoverage();
-        if (coverage == null) return;
-
-        Set<Pair<String, Double>> coverageInfo = new HashSet<Pair<String, Double>>();
-        List<IJavaProject> projects = Arrays.asList(coverage
-                .getInstrumentedProjects());
-        for (IJavaProject each : projects) {
-            if (!each.isOpen())
-                continue;
-            coverageInfo.addAll(compilationUnitCoverage(each));
-        }
-        updateCoverageInfo(coverageInfo);
+    	
+// XXX commented this out to make it run!    	
+    	
+//        IJavaModelCoverage coverage = CoverageTools.getJavaModelCoverage();
+//        if (coverage == null) return;
+//
+//        Set<Pair<String, Double>> coverageInfo = new HashSet<Pair<String, Double>>();
+//        List<IJavaProject> projects = Arrays.asList(coverage
+//                .getInstrumentedProjects());
+//        for (IJavaProject each : projects) {
+//            if (!each.isOpen())
+//                continue;
+//            coverageInfo.addAll(compilationUnitCoverage(each));
+//        }
+//        updateCoverageInfo(coverageInfo);
     }
 
     private void updateCoverageInfo(Set<Pair<String, Double>> coverageInfo) {
