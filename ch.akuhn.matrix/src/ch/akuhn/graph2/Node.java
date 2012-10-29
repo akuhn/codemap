@@ -11,15 +11,6 @@ public class Node {
 
 	public static int NIL = Integer.MAX_VALUE;
 
-	int n;
-	int[] cost;
-
-	public Node(int n, int size) {
-		this.n = n;
-		this.cost = new int[size];
-		Arrays.fill(cost, NIL);
-	}
-
 	public static Node[] parse(String s) {
 		Scanner in = new Scanner(s);
 		int N = in.nextInt();
@@ -36,6 +27,15 @@ public class Node {
 			nodes[b].cost[a] = c;
 		}
 		return nodes;
+	}
+	int n;
+
+	int[] cost;
+
+	public Node(int n, int size) {
+		this.n = n;
+		this.cost = new int[size];
+		Arrays.fill(cost, NIL);
 	}
 
 	public static class Examples {

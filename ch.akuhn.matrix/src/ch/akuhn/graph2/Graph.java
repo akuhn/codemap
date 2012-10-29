@@ -35,16 +35,16 @@ public class Graph {
 		}
 	}
 
-	public int size() {
-		return cost.length;
-	}
-
 	public Graph clone() {
 		Graph g = new Graph(this.size());
 		for (int n = 0; n < cost.length; n++) {
 			g.cost[n] = Arrays.copyOf(cost[n], cost[n].length);
 		}
 		return g;
+	}
+
+	public int size() {
+		return cost.length;
 	}
 
 	public static class Examples {

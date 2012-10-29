@@ -32,15 +32,15 @@ public class MergeFind {
 		parent[a] = b;
 	}
 
-	public int size() {
-		return parent.length;
-	}
-
 	public int setCount() {
 		int count = 0;
 		for (int n = 0; n < parent.length; n++)
 			if (parent[n] == n) count++;
 		return count;
+	}
+
+	public int size() {
+		return parent.length;
 	}
 
 	public String toString() {

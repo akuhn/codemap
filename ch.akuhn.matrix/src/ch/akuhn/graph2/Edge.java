@@ -8,7 +8,21 @@ import org.junit.Test;
 
 public class Edge implements Comparable<Edge> {
 
+	public static Edge[] parse(String s) {
+		Scanner in = new Scanner(s);
+		in.nextInt(); // unused
+		int M = in.nextInt();
+		Edge[] edges = new Edge[M];
+		for (int m = 0; m < M; m++) {
+			int a = in.nextInt() - 1;
+			int b = in.nextInt() - 1;
+			int c = in.nextInt();
+			edges[m] = new Edge(a, b, c);
+		}
+		return edges;
+	}
 	int a, b;
+
 	int cost;
 
 	public Edge(int a, int b, int cost) {
@@ -26,20 +40,6 @@ public class Edge implements Comparable<Edge> {
 	@Override
 	public String toString() {
 		return String.format("cost(%d,%d) = %d", a, b, cost);
-	}
-
-	public static Edge[] parse(String s) {
-		Scanner in = new Scanner(s);
-		in.nextInt(); // unused
-		int M = in.nextInt();
-		Edge[] edges = new Edge[M];
-		for (int m = 0; m < M; m++) {
-			int a = in.nextInt() - 1;
-			int b = in.nextInt() - 1;
-			int c = in.nextInt();
-			edges[m] = new Edge(a, b, c);
-		}
-		return edges;
 	}
 
 	public static class Examples {

@@ -1,5 +1,7 @@
 package ch.akuhn.graph2;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -80,6 +82,7 @@ public class DijkstrasAlgorithm {
 			String s = "6 7\n1 2 20\n1 3 5\n1 4 10\n2 3 8\n2 4 15\n3 4 2\n5 6 9";
 			Node[] nodes = Node.parse(s);
 			int[][] dist = new DijkstrasAlgorithm().apply(nodes);
+			assertEquals(6, dist.length);
 		}
 	}
 
