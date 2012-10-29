@@ -1,6 +1,7 @@
 package ch.akuhn.graph2;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,14 +31,14 @@ public class KruskalsAlgorithm {
 		@Test
 		public void shouldFindMinimalSpanningTree() {
 			String s = "6 7\n1 2 20\n1 3 5\n1 4 10\n2 3 8\n2 4 15\n3 4 2\n5 6 9";
-			Edge[] edges = Graph.parse(s);
+			Edge[] edges = Edge.parse(s);
 			Edge[] mst = new KruskalsAlgorithm().apply(edges);
 			String out = Arrays.asList(mst).toString();
 			assertEquals(4, mst.length);
-			assertEquals(true, out.contains("(3,4)"));
-			assertEquals(true, out.contains("(1,3)"));
-			assertEquals(true, out.contains("(2,3)"));
-			assertEquals(true, out.contains("(5,6)"));
+			assertTrue(out.contains("(2,3)"));
+			assertTrue(out.contains("(0,2)"));
+			assertTrue(out.contains("(1,2)"));
+			assertTrue(out.contains("(4,5)"));
 		}
 
 	}
