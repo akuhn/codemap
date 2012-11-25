@@ -1,0 +1,10 @@
+---------------------------------------------------------------------------
+JARPACK 0.1 released June 30, 2008
+
+  This is the first release of the automatic Java translation of ARPACK.
+  It should be considered beta quality since it hasn't been extensively
+  tested yet.  For information about the original code, see:
+
+     http://www.caam.rice.edu/software/ARPACK
+
+---------------------------------------------------------------------------

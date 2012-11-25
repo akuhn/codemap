@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Codemap Markers Overlay
+Bundle-SymbolicName: org.codemap.plugin.marker;singleton:=true
+Bundle-Version: 0.7.746.qualifier
+Bundle-Activator: org.codemap.plugin.marker.MarkerPlugin
+Require-Bundle: ch.deif.meander,
+ ch.akuhn.util;bundle-version="2.1.264",
+ org.codemap,
+ org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.search,
+ org.eclipse.core.resources,
+ org.eclipse.jdt.core,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.editors
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: org.eclipse.jface.text

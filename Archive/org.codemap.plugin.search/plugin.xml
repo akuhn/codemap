@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+    <extension
+          point="org.codemap.layers">
+       <toolbar
+             class="org.codemap.plugin.search.ShowSearchResultsAction"
+             icon="icons/eclipse/search.gif"
+             text="Search Results">
+       </toolbar>
+    </extension>
+
+</plugin>

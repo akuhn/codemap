@@ -1,0 +1,16 @@
+<body>
+The force package contains a complete physics simulation engine for using physical
+force calculations to layout and animate graph elements. Force simulations
+consist of a series of force functions that calculate forces acting on
+various graph elements, and an integrator that determines how these calculated
+forces effect the position and velocity of these elements over time. The
+ForceSimulation class keeps track of which elements should be included in the
+simulation, as well as which force functions and integrator are used.
+
+To create your own custom simulations, create a new ForceSimulation instance
+and add the desired force functions. Custom force functions can be introduced
+by subclassing AbstractForce or implementing the Force interface. Additionally,
+the ForcePanel user interface component can be used during development to
+explore different parameterizations of the various force functions until a
+desired behavior is found.
+</body>

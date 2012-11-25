@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/lwjgl-2.1.0/jar/jinput.jar"/>
+	<classpathentry kind="lib" path="lib/lwjgl-2.1.0/jar/lwjgl_test.jar" sourcepath="lib/lwjgl-2.1.0/src/java"/>
+	<classpathentry kind="lib" path="lib/lwjgl-2.1.0/jar/lwjgl_util_applet.jar" sourcepath="lib/lwjgl-2.1.0/src/java"/>
+	<classpathentry kind="lib" path="lib/lwjgl-2.1.0/jar/lwjgl_util.jar" sourcepath="lib/lwjgl-2.1.0/src/java"/>
+	<classpathentry kind="lib" path="lib/lwjgl-2.1.0/jar/lwjgl-debug.jar" sourcepath="lib/lwjgl-2.1.0/src/java"/>
+	<classpathentry kind="lib" path="lib/lwjgl-2.1.0/jar/lwjgl.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Users/deif/Applications/eclipse-galileo-macosx-cocoa-x86_64/plugins/org.eclipse.swt.cocoa.macosx.x86_64_3.5.1.v3555a.jar" sourcepath="/Users/deif/Applications/eclipse-galileo-macosx-cocoa-x86_64/plugins/org.eclipse.swt.cocoa.macosx.x86_64.source_3.5.1.v3555a.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ch.deif.meander"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.codemap.feature_0.7.746.qualifier.jar" id="org.codemap.feature" version="0.7.746.qualifier">
+      <category name="Codemap"/>
+   </feature>
+   <category-def name="Codemap" label="Codemap">
+      <description>
+         Software Cartography, your roadmap to software.
+      </description>
+   </category-def>
+</site>

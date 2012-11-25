@@ -1,0 +1,11 @@
+a#codmeapIntroLink img {
+	background-image: url(../images/codemap_shadow.png);
+}
+
+a#codmeapIntroLink:hover img {
+	background-image: url(../images/codemap_noshadow.png);
+}
+
+#codmeapIntroLinkGroup {
+	background-color: #FEF7DA;
+}

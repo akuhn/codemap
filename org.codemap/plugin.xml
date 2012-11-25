@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.codemap"
+            name="Codemap">
+      </category>
+      <view
+            category="org.codemap"
+            class="org.codemap.mapview.MapView"
+            icon="icons/sample.gif"
+            id="ch.unibe.softwaremap.MapView"
+            name="Codemap View"
+            restorable="true">
+      </view>
+      <view
+            category="org.codemap"
+            class="org.codemap.util.SelectionView"
+            id="ch.unibe.softwaremap.SelectionView"
+            name="Selection View"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.codemap.editors.CodemapEditor"
+            default="true"
+            extensions="map"
+            icon="icons/sample.gif"
+            id="org.codemap.mapeditor"
+            name="Codemap editor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.codemap"
+            name="Software Cartography">
+      </category>
+      <wizard
+            category="org.codemap"
+            class="org.codemap.wizards.NewCodemapCreationWizard"
+            icon="icons/sample.gif"
+            id="org.codemap.wizards.NewCodemapCreationWizard"
+            name="Codemap">
+      </wizard>
+   </extension>
+   
+<!-- ============================================================================= -->
+<!-- Eclipse Welcome                                                               -->
+<!-- ============================================================================= -->   
+   <extension point="org.eclipse.ui.intro.configExtension">
+      <configExtension
+         configId="org.eclipse.ui.intro.universalConfig"
+         content="intro/overviewExtensionContent.xml">
+      </configExtension>
+<!--      
+      <configExtension
+         configId="org.eclipse.ui.intro.universalConfig"
+         content="intro/whatsnewExtensionContent.xml">
+      </configExtension>
+      <configExtension
+         configId="org.eclipse.ui.intro.universalConfig"
+         content="intro/tutorialsExtensionContent.xml">
+      </configExtension>
+-->
+   </extension>
+   <extension
+         point="org.eclipse.ecf.start">
+      <run
+            class="org.codemap.communication.CodemapECFStart">
+      </run>
+   </extension>
+   
+
+</plugin>
