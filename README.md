@@ -1,6 +1,1 @@
-*Codemap is your roadmap to software!* 
-
-Please find more information in the `/Readme` folder.
-
--- akuhn and deif, Nov 26, 2009
-
+The idea of prototyping is that you are willing to throw away work you have done so you can learn.
