@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Hapax (software vocabulary search)
+Bundle-SymbolicName: ch.akuhn.hapax
+Bundle-Vendor: Adrian Kuhn
+Bundle-Version: 0.7.264.qualifier
+Export-Package: ch.akuhn.hapax,
+ ch.akuhn.hapax.cluster,
+ ch.akuhn.hapax.corpus,
+ ch.akuhn.hapax.index,
+ ch.akuhn.hapax.linalg,
+ ch.akuhn.hapax.resources
+Bundle-ClassPath: .,
+ lib/snowball.jar,
+ lib/svdlib-r50M.jar
+Require-Bundle: ch.akuhn.util;bundle-version="2.1.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+
